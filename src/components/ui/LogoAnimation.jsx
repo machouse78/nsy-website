@@ -70,8 +70,6 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
         this.size = Math.random() * 3 + 1
         this.opacity = Math.random() * 0.8 + 0.2
         this.color = Math.random() > 0.5 ? '#f97316' : '#fbbf24' // Couleurs logo NSY
-        this.life = 0
-        this.maxLife = Math.random() * 200 + 100
         this.baseColor = Math.random() > 0.5 ? '#f97316' : '#fbbf24' // Couleurs de base NSY
         this.targetColorR = 249 // Orange par défaut
         this.targetColorG = 115
@@ -84,13 +82,10 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
       update(mouseX, mouseY, isHovering) {
         this.x += this.vx
         this.y += this.vy
-        this.life++
         
-        // Fade out avec le temps
-        this.opacity = Math.max(0, 1 - (this.life / this.maxLife))
-        
-        if (this.life > this.maxLife) {
-          this.reset()
+        // Garder l'opacité stable (pas de fade out automatique)
+        if (this.opacity < 0.5) {
+          this.opacity = 0.8 // Réinitialiser l'opacité si trop faible
         }
         
         // Gravitation et effet aimant
@@ -130,6 +125,16 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
         // Friction
         this.vx *= 0.95
         this.vy *= 0.95
+        
+        // Rebond aux bordures pour maintenir les particules dans le canvas
+        if (this.x < 0 || this.x > canvas.width) {
+          this.vx *= -0.5
+          this.x = Math.max(0, Math.min(canvas.width, this.x))
+        }
+        if (this.y < 0 || this.y > canvas.height) {
+          this.vy *= -0.5
+          this.y = Math.max(0, Math.min(canvas.height, this.y))
+        }
       }
       
       draw(isHovering, mouseX, mouseY) {
@@ -367,16 +372,7 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
         </motion.h3>
         
         {/* Indicateur interaction */}
-        {isHovering && (
-          <motion.p
-            className="text-xs text-yellow-300 mt-2"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-          >
-            🧲 Effet magnétique actif
-          </motion.p>
-        )}
+
       </motion.div>
     </div>
   )
