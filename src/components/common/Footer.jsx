@@ -198,7 +198,7 @@ const Footer = () => {
                 
                 <motion.a
                   href={`tel:${siteContent.contact.phone}`}
-                  className="w-10 h-10 bg-white/5 hover:bg-cyber-500/20 border border-white/10 hover:border-cyber-500/30 rounded-lg flex items-center justify-center transition-all duration-300"
+                  className="w-10 h-10 bg-white/5 hover:bg-cyan-500/20 border border-white/10 hover:border-cyan-500/30 rounded-lg flex items-center justify-center transition-all duration-300"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                 >
