@@ -19,19 +19,16 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
     const x = e.clientX - rect.left
     const y = e.clientY - rect.top
     
-    console.log('Mouse move:', x, y, 'hovering:', isHoveringRef.current) // Debug
     setMousePos({ x, y })
     mousePosRef.current = { x, y }
   }
 
   const handleMouseEnter = () => {
-    console.log('Mouse enter') // Debug
     setIsHovering(true)
     isHoveringRef.current = true
   }
 
   const handleMouseLeave = () => {
-    console.log('Mouse leave') // Debug
     setIsHovering(false)
     isHoveringRef.current = false
   }
@@ -56,6 +53,12 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
     let colorTransition = 0 // 0 = couleur normale, 1 = couleur hover
     const transitionSpeed = 0.05
     
+    // Variables pour contrôler la stabilité du réseau
+    const animationState = {
+      lastMouseMove: Date.now(),
+      isMouseMoving: false
+    }
+    
     // Classe particule IA
     class AIParticle {
       constructor() {
@@ -70,6 +73,8 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
         this.size = Math.random() * 3 + 1
         this.opacity = Math.random() * 0.8 + 0.2
         this.color = Math.random() > 0.5 ? '#f97316' : '#fbbf24' // Couleurs logo NSY
+        this.life = 0
+        this.maxLife = Math.random() * 300 + 200 // Vie plus longue
         this.baseColor = Math.random() > 0.5 ? '#f97316' : '#fbbf24' // Couleurs de base NSY
         this.targetColorR = 249 // Orange par défaut
         this.targetColorG = 115
@@ -82,10 +87,21 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
       update(mouseX, mouseY, isHovering) {
         this.x += this.vx
         this.y += this.vy
+        this.life++
         
-        // Garder l'opacité stable (pas de fade out automatique)
-        if (this.opacity < 0.5) {
-          this.opacity = 0.8 // Réinitialiser l'opacité si trop faible
+        // Animation continue même sans survol
+        this.vx += (Math.random() - 0.5) * 0.01
+        this.vy += (Math.random() - 0.5) * 0.01
+        
+        // Fade out progressif mais lent
+        this.opacity = Math.max(0.2, 1 - (this.life / this.maxLife))
+        
+        // Reset seulement quand vraiment nécessaire et pas pendant mouvement souris
+        const now = Date.now()
+        const timeSinceMouseMove = now - animationState.lastMouseMove
+        
+        if ((this.life > this.maxLife || this.opacity <= 0.2) && timeSinceMouseMove > 1000) {
+          this.reset()
         }
         
         // Gravitation et effet aimant
@@ -115,11 +131,15 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
             this.vy += dy * 0.0001
           }
         } else {
-          // Gravitation normale vers le centre
+          // Gravitation normale vers le centre + mouvement continu
           const dx = centerX - this.x
           const dy = centerY - this.y
           this.vx += dx * 0.0001
           this.vy += dy * 0.0001
+          
+          // Ajouter une force de mouvement aléatoire pour animation continue
+          this.vx += Math.sin(this.life * 0.02) * 0.005
+          this.vy += Math.cos(this.life * 0.02) * 0.005
         }
         
         // Friction
@@ -193,6 +213,13 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
       // Clear avec effet de traînée
       ctx.fillStyle = 'rgba(15, 23, 42, 0.1)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
+      
+      // Mettre à jour le timestamp si la souris bouge
+      const currentMouseX = mousePosRef.current.x
+      const currentMouseY = mousePosRef.current.y
+      if (isHoveringRef.current && (currentMouseX !== 0 || currentMouseY !== 0)) {
+        animationState.lastMouseMove = Date.now()
+      }
       
       // Transition progressive de la couleur des connexions
       if (isHoveringRef.current && colorTransition < 1) {
