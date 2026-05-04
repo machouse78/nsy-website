@@ -63,34 +63,39 @@ const Hero = () => {
 
       {/* Content */}
       <div className="container relative z-10">
-        <div className="grid lg:grid-cols-2 gap-12 items-center pt-20">
-          {/* Logo Animation - Colonne gauche */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="order-2 lg:order-1"
-          >
-            <LogoAnimation autoPlay={true} />
-          </motion.div>
-
-          {/* Contenu principal - Colonne droite */}
-          <motion.div
-            variants={containerVariants}
+        <div className="flex flex-col items-center pt-20 space-y-12">
+          {/* Main Title - Au dessus de tout */}
+          <motion.div 
+            variants={itemVariants}
             initial="hidden"
             animate="visible"
-            className="space-y-8 order-1 lg:order-2"
+            className="text-center space-y-4"
           >
+            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
+              <span className="block text-white">Transformez vos</span>
+              <span className="block gradient-text">idées en solutions</span>
+              <span className="block text-white">numériques</span>
+            </h1>
+          </motion.div>
 
-
-            {/* Main Title */}
-            <motion.div variants={itemVariants} className="space-y-4">
-              <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-                <span className="block text-white">Transformez vos</span>
-                <span className="block gradient-text">idées en solutions</span>
-                <span className="block text-white">numériques</span>
-              </h1>
+          <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+            {/* Logo Animation - Colonne gauche */}
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 1, delay: 0.5 }}
+              className="order-2 lg:order-1"
+            >
+              <LogoAnimation autoPlay={true} />
             </motion.div>
+
+            {/* Contenu principal - Colonne droite */}
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="space-y-8 order-1 lg:order-2"
+            >
 
             {/* Subtitle with typing effect */}
             <motion.div variants={itemVariants}>
@@ -171,7 +176,8 @@ const Hero = () => {
                 ))}
               </div>
             </motion.div>
-          </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
