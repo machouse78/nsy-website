@@ -203,7 +203,7 @@ const Hero = () => {
             ease: "easeInOut",
             delay: 2
           }}
-          className="absolute bottom-1/3 right-1/6 text-cyber-400/20"
+          className="absolute bottom-1/3 right-1/6 text-cyan-400/20"
         >
           <Code className="w-16 h-16" />
         </motion.div>

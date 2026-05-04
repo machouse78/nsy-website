@@ -41,7 +41,7 @@
 
   .glow-card::before {
     content: '';
-    @apply absolute inset-0 bg-gradient-to-r from-primary-500/20 via-cyber-500/20 to-ai-500/20 opacity-0 transition-opacity duration-300;
+    @apply absolute inset-0 bg-gradient-to-r from-primary-500/20 via-cyan-500/20 to-ai-500/20 opacity-0 transition-opacity duration-300;
   }
 
   .glow-card:hover::before {

@@ -44,7 +44,7 @@ const AI = () => {
       {/* Background Effects */}
       <div className="absolute inset-0">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-ai-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyber-500/5 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/5 rounded-full blur-3xl"></div>
       </div>
 
       <div className="container relative z-10">
@@ -85,7 +85,7 @@ const AI = () => {
                 >
                   <div className="glass-card p-8 h-full glow-card relative overflow-hidden">
                     {/* Gradient Background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-ai-500/5 to-cyber-500/5 group-hover:from-ai-500/10 group-hover:to-cyber-500/10 transition-all duration-500"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-ai-500/5 to-cyan-500/5 group-hover:from-ai-500/10 group-hover:to-cyan-500/10 transition-all duration-500"></div>
                     
                     <div className="relative z-10">
                       {/* Icon */}
@@ -164,7 +164,7 @@ const AI = () => {
 
                 {/* Right - Visual */}
                 <div className="relative">
-                  <div className="bg-gradient-to-br from-ai-500/20 to-cyber-500/20 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
+                  <div className="bg-gradient-to-br from-ai-500/20 to-cyan-500/20 rounded-2xl p-8 backdrop-blur-sm border border-white/10">
                     <div className="space-y-6">
                       {/* Code-like visualization */}
                       <div className="font-mono text-sm space-y-2">
