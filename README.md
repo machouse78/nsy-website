@@ -17,12 +17,18 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 - **Thème sombre élégant** avec palette NSY personnalisée (orange/rouge/doré/cyan)
 - **Design 100% responsive** optimisé mobile-first
 - **Glassmorphisme** et effets de blur modernes
-- **Logo NSY animé** avec système de particules interactives
-- **Effets magnétiques** au survol (particules attirées vers la souris)
+- **Logo NSY animé** avec réseau neuronal de 50 particules interactives
+- **Effets magnétiques intelligents** avec fondu de couleur progressif
+- **Interface épurée** sans éléments perturbants
+- **Hiérarchie visuelle optimisée** avec titre centré au-dessus de l'animation
 
 ### ⚡ **Animations Avancées**
 - **Framer Motion** pour des transitions fluides 60fps
-- **Animation typing** dans la section Hero
+- **Animation typing** dans la section Hero avec effet machine à écrire
+- **Réseau neuronal interactif** avec 50 particules et connexions dynamiques
+- **Fondu de couleur progressif** (orange ↔ bleu) avec interpolation RGB
+- **Forces magnétiques** et attraction vers la souris
+- **Animation continue** avec mouvements sinusoïdaux organiques
 - **Timeline interactive** pour la méthodologie
 - **Effets de parallaxe** et animations au scroll
 - **Micro-interactions** sur tous les éléments
@@ -68,7 +74,7 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 ### Installation
 ```bash
 # Cloner le repository
-git clone https://github.com/VOTRE-USERNAME/nsy-website.git
+git clone https://github.com/machouse78/nsy-website.git
 
 # Aller dans le dossier
 cd nsy-website
@@ -163,10 +169,15 @@ colors: {
 }
 ```
 
-### Animations
-- **60fps** garantis avec Framer Motion
-- **Particules interactives** Canvas natif
+### Animations & Interactions
+- **60fps** garantis avec Framer Motion et Canvas natif
+- **Réseau neuronal stable** avec 50 particules permanentes
+- **Animation continue** même sans interaction utilisateur
+- **Fondu RGB progressif** (orange #f97316 ↔ bleu #3b82f6)
+- **Forces physiques** : gravitation, magnétisme, mouvement sinusoïdal
+- **Régénération intelligente** avec contrôle temporel anti-spam
 - **Timeline responsive** avec breakpoints
+- **Interface sans distraction** (suppression des textes perturbants)
 
 ## 🎨 Personnalisation
 
@@ -211,25 +222,52 @@ Optimisations incluses :
 - Cache optimisé
 - Images optimisées
 
+## 🔧 Améliorations Récentes
+
+### Interface & UX
+- **Repositionnement du titre principal** au-dessus de l'animation NSY pour un impact visuel maximal
+- **Centrage du sous-titre** "Expert indépendant..." pour une parfaite lisibilité
+- **Alignement vertical optimisé** entre l'animation et le contenu textuel
+- **Suppression des éléments perturbants** (texte "Effet magnétique actif")
+
+### Animation du Réseau Neuronal
+- **Stabilisation complète** : plus de recréation lors des mouvements de souris
+- **Animation continue** avec forces sinusoïdales pour un mouvement organique
+- **Fondu de couleur progressif** avec interpolation RGB mathématique précise
+- **Système de régénération intelligent** avec contrôle temporel (1s minimum)
+- **50 particules permanentes** formant un réseau neuronal cohérent
+- **Transitions fluides** orange (#f97316) ↔ bleu (#3b82f6) sans cassure visuelle
+
+### Corrections Techniques
+- **Couleurs Tailwind CSS** : résolution des erreurs `cyber-500` avec palette cyan
+- **Build optimisé** : installation automatique de `terser` pour la minification
+- **Repository Git** : initialisation et synchronisation avec GitHub
+- **Documentation complète** : README professionnel avec badges et instructions
+
 ## 📈 Processus de Développement
 
 ### Approche Innovante
 - **Développement assisté par IA** avec transparence totale
-- **IDE** : Cursor avec intégration IA native
+- **IDE** : Cursor avec intégration IA native et synchronisation Git
 - **Assistant** : Claude 4 Sonnet (Anthropic via OpenRouter)
-- **Temps de développement** : ~2 heures pour l'ensemble
-- **Documentation complète** : 50+ fichiers MD détaillant chaque étape
+- **Temps de développement** : ~3 heures avec itérations d'amélioration
+- **Documentation complète** : 50+ fichiers MD + commits Git détaillés
+- **Processus itératif** : corrections UX et optimisations animation en temps réel
 
 ### Philosophie
 Transparence sur l'utilisation de l'IA dans le processus de création, démontrant comment l'expertise humaine et l'IA peuvent collaborer efficacement.
 
 ## 🚦 Statut du Projet
 
-- ✅ **Build fonctionnel** - Aucune erreur
+- ✅ **Build fonctionnel** - Aucune erreur de compilation
+- ✅ **Animation stable** - Réseau neuronal fluide sans recréation intempestive
+- ✅ **Interface optimisée** - Hiérarchie visuelle parfaite (titre → sous-titre → animation)
+- ✅ **Interactions fluides** - Fondu de couleur progressif et forces magnétiques
 - ✅ **Responsive design** - Testé sur mobile/tablet/desktop  
-- ✅ **Performance optimisée** - Vite + code splitting
+- ✅ **Performance optimisée** - Vite + code splitting + Canvas 60fps
 - ✅ **SEO ready** - Meta tags et structure HTML
-- ✅ **Production ready** - Prêt pour déploiement
+- ✅ **Git configuré** - Repository synchronisé avec GitHub
+- ✅ **Production ready** - Prêt pour déploiement Infomaniak
 
 ## 👤 Auteur
 
