@@ -459,7 +459,7 @@ Le site doit démontrer l'expertise NSY en IA/automatisation tout en restant pro
     resources: {
       title: "Code source et ressources",
       github: {
-        url: "https://github.com/cedricbarme/nsy-website",
+        url: "https://github.com/machouse78/nsy-website",
         description: "Code source complet du projet NSY disponible sur GitHub",
         features: [
           "Code ReactJS complet avec Vite",
