@@ -181,11 +181,13 @@ if (timeSinceMouseMove > 1000 && this.life > this.maxLife) {
 3. **Optimisations UX** (~1h) : Repositionnement + alignement  
 4. **Améliorations animation** (~30min) : Stabilisation réseau neuronal
 5. **Documentation finale** (~30min) : README + prompt complet
+6. **Finitions** (~15min) : Liens GitHub + mention IA élégante
 
 ### Philosophie Transparence
 - **Documentation complète** de chaque étape
 - **Commits explicites** avec détail des modifications  
 - **Processus ouvert** montrant la collaboration humain-IA
+- **Mention élégante** : "Développé en collaboration avec l'IA • Cursor IDE + Claude Assistant • Transparence totale"
 - **Résultat professionnel** malgré l'assistance IA
 
 ## 🏆 **Résultat Final**
