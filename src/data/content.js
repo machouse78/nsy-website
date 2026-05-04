@@ -433,7 +433,7 @@ MENTIONS ET TRANSPARENCE :
 - Chronologie de développement (~2 heures)
 - Outils utilisés : Cursor IDE + Claude AI
 - Badge transparence dans Hero section
-- Mention Footer : "Site généré avec l'aide de l'intelligence artificielle, conçu avec Cursor comme IDE et Claude comme assistant IA."
+- Mention Footer : "Développé en collaboration avec l'IA • Cursor IDE + Claude Assistant • Transparence totale"
 
 CHATBOT IA INTÉGRÉ :
 - Assistant IA flottant en bas à droite
@@ -493,7 +493,7 @@ Le site doit démontrer l'expertise NSY en IA/automatisation tout en restant pro
 
   // Footer
   footer: {
-    aiMention: "Site généré avec l'aide de l'intelligence artificielle, conçu avec Cursor comme IDE et Claude comme assistant IA.",
+    aiMention: "Développé en collaboration avec l'IA • Cursor IDE + Claude Assistant • Transparence totale",
     copyright: "Copyright © 2024 NSY. Tous droits réservés.",
     links: []
   }
