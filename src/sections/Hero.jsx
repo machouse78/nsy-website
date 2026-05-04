@@ -63,7 +63,7 @@ const Hero = () => {
 
       {/* Content */}
       <div className="container relative z-10">
-        <div className="flex flex-col items-center pt-20 space-y-12">
+        <div className="flex flex-col pt-20 space-y-8">
           {/* Main Title - Au dessus de tout */}
           <motion.div 
             variants={itemVariants}
@@ -76,6 +76,21 @@ const Hero = () => {
               <span className="block gradient-text">idées en solutions</span>
               <span className="block text-white">numériques</span>
             </h1>
+          </motion.div>
+
+          {/* Subtitle with typing effect - Aligné à gauche */}
+          <motion.div 
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            transition={{ delay: 0.5 }}
+            className="text-left"
+          >
+            <div className="text-xl md:text-2xl text-gray-300 font-light flex items-center">
+              <span className="typing-animation whitespace-nowrap overflow-hidden">
+                {typedText}
+              </span>
+            </div>
           </motion.div>
 
           <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
@@ -96,15 +111,6 @@ const Hero = () => {
               animate="visible"
               className="space-y-8 order-1 lg:order-2"
             >
-
-            {/* Subtitle with typing effect */}
-            <motion.div variants={itemVariants}>
-              <div className="text-xl md:text-2xl text-gray-300 font-light h-16 flex items-center">
-                <span className="typing-animation whitespace-nowrap overflow-hidden">
-                  {typedText}
-                </span>
-              </div>
-            </motion.div>
 
             {/* Description */}
             <motion.div variants={itemVariants}>
