@@ -52,7 +52,9 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
     const particles = []
     const particleCount = 50
     
-
+    // Variables pour le fondu de couleur progressif
+    let colorTransition = 0 // 0 = couleur normale, 1 = couleur hover
+    const transitionSpeed = 0.05
     
     // Classe particule IA
     class AIParticle {
@@ -71,6 +73,12 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
         this.life = 0
         this.maxLife = Math.random() * 200 + 100
         this.baseColor = Math.random() > 0.5 ? '#f97316' : '#fbbf24' // Couleurs de base NSY
+        this.targetColorR = 249 // Orange par défaut
+        this.targetColorG = 115
+        this.targetColorB = 22
+        this.currentColorR = 249
+        this.currentColorG = 115
+        this.currentColorB = 22
       }
       
       update(mouseX, mouseY, isHovering) {
@@ -127,18 +135,39 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
       draw(isHovering, mouseX, mouseY) {
         ctx.globalAlpha = this.opacity
         
-        // Changement de couleur vers bleu NSY si proche de la souris
-        let particleColor = this.baseColor
+        // Fondu de couleur progressif basé sur la distance à la souris et l'état hover
+        let targetR, targetG, targetB
+        
         if (isHovering && mouseX !== undefined && mouseY !== undefined) {
           const distance = Math.sqrt((mouseX - this.x) ** 2 + (mouseY - this.y) ** 2)
           if (distance < 80) {
-            particleColor = '#3b82f6' // Bleu NSY
+            // Couleur bleue pour les particules proches de la souris
+            targetR = 59  // #3b82f6
+            targetG = 130
+            targetB = 246
             // Particule plus grosse quand attirée
-            this.size = Math.min(5, this.size * 1.5)
+            this.size = Math.min(5, this.size * 1.02)
           } else {
-            this.size = Math.max(1, this.size * 0.95) // Retour taille normale
+            // Couleur orange normale
+            targetR = this.baseColor === '#f97316' ? 249 : 251
+            targetG = this.baseColor === '#f97316' ? 115 : 191
+            targetB = this.baseColor === '#f97316' ? 22 : 36
+            this.size = Math.max(1, this.size * 0.98)
           }
+        } else {
+          // Couleur orange normale
+          targetR = this.baseColor === '#f97316' ? 249 : 251
+          targetG = this.baseColor === '#f97316' ? 115 : 191
+          targetB = this.baseColor === '#f97316' ? 22 : 36
         }
+        
+        // Interpolation progressive des couleurs
+        const lerpSpeed = 0.1
+        this.currentColorR += (targetR - this.currentColorR) * lerpSpeed
+        this.currentColorG += (targetG - this.currentColorG) * lerpSpeed
+        this.currentColorB += (targetB - this.currentColorB) * lerpSpeed
+        
+        const particleColor = `rgb(${Math.round(this.currentColorR)}, ${Math.round(this.currentColorG)}, ${Math.round(this.currentColorB)})`
         
         ctx.fillStyle = particleColor
         ctx.beginPath()
@@ -160,10 +189,26 @@ const LogoAnimation = ({ autoPlay = true, duration = 5000 }) => {
       ctx.fillStyle = 'rgba(15, 23, 42, 0.1)'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       
-      // Dessiner les connexions entre particules (couleur adaptative)
-      const connectionColor = isHoveringRef.current ? 'rgba(59, 130, 246, 0.4)' : 'rgba(249, 115, 22, 0.3)'
+      // Transition progressive de la couleur des connexions
+      if (isHoveringRef.current && colorTransition < 1) {
+        colorTransition = Math.min(1, colorTransition + transitionSpeed)
+      } else if (!isHoveringRef.current && colorTransition > 0) {
+        colorTransition = Math.max(0, colorTransition - transitionSpeed)
+      }
+      
+      // Interpolation des couleurs des connexions (orange vers bleu)
+      const orangeR = 249, orangeG = 115, orangeB = 22
+      const blueR = 59, blueG = 130, blueB = 246
+      
+      const currentR = Math.round(orangeR + (blueR - orangeR) * colorTransition)
+      const currentG = Math.round(orangeG + (blueG - orangeG) * colorTransition)
+      const currentB = Math.round(orangeB + (blueB - orangeB) * colorTransition)
+      
+      const baseOpacity = 0.3 + colorTransition * 0.1
+      const connectionColor = `rgba(${currentR}, ${currentG}, ${currentB}, ${baseOpacity})`
+      
       ctx.strokeStyle = connectionColor
-      ctx.lineWidth = isHoveringRef.current ? 2 : 1
+      ctx.lineWidth = 1 + colorTransition * 1
       
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
