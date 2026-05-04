@@ -340,7 +340,7 @@ const Construction = () => {
                 </div>
                 
                 <button 
-                  onClick={() => window.open('https://github.com/cedricbarme/nsy-website', '_blank')}
+                  onClick={() => window.open('https://github.com/machouse78/nsy-website', '_blank')}
                   className="bg-gray-700 hover:bg-gray-600 text-white px-6 py-3 rounded-lg w-full flex items-center justify-center space-x-2 hover:scale-105 transition-all duration-200"
                 >
                   <Github className="w-5 h-5" />
