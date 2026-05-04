@@ -78,28 +78,28 @@ const Hero = () => {
             </h1>
           </motion.div>
 
-          {/* Subtitle with typing effect - Aligné à gauche */}
+          {/* Subtitle with typing effect - Centré */}
           <motion.div 
             variants={itemVariants}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.5 }}
-            className="text-left"
+            className="text-center"
           >
-            <div className="text-xl md:text-2xl text-gray-300 font-light flex items-center">
+            <div className="text-xl md:text-2xl text-gray-300 font-light flex justify-center items-center">
               <span className="typing-animation whitespace-nowrap overflow-hidden">
                 {typedText}
               </span>
             </div>
           </motion.div>
 
-          <div className="grid lg:grid-cols-2 gap-12 items-center w-full">
+          <div className="grid lg:grid-cols-2 gap-12 items-start w-full">
             {/* Logo Animation - Colonne gauche */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 1, delay: 0.5 }}
-              className="order-2 lg:order-1"
+              className="order-2 lg:order-1 flex justify-center"
             >
               <LogoAnimation autoPlay={true} />
             </motion.div>
