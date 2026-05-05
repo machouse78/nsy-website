@@ -223,7 +223,18 @@ Le projet intègre un **skill frontend-design** avancé qui guide la création d
 .claude/skills/frontend-design/SKILL.md
 ```
 
-Le skill est automatiquement pris en compte pour tous les développements d'interface, garantissant une qualité esthétique exceptionnelle et une différenciation créative.
+#### **🔄 Évolution du développement avec skill :**
+
+**PHASE 1 - Développement initial** (sans skill) :
+- Site fonctionnel mais design "correct" susceptible de clichés IA
+- Typographie générique (Inter), layouts prévisibles, animations basiques
+
+**PHASE 2 - Transformation skill** (avec frontend-design) :
+- **Refactoring intégral** guidé par les directives du skill
+- **Interface distinctive** évitant tous les pièges esthétiques IA
+- **Qualité production-grade** avec attention méticuleuse aux détails
+
+Le skill a **révolutionné l'approche esthétique** en transformant un site "correct" en interface **mémorable et anti-générique** de niveau expert.
 
 ## 🎨 Personnalisation
 
