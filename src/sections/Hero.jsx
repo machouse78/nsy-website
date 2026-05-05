@@ -73,23 +73,25 @@ const Hero = () => {
           >
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.85] tracking-tight">
               <span className="block text-white">TRANSFORMEZ VOS</span>
-              <span className="block gradient-text italic">IDÉES EN SOLUTIONS</span>
-              <span className="block text-white">NUMÉRIQUES</span>
+              <span className="block gradient-text italic transform rotate-1">IDÉES EN SOLUTIONS</span>
+              <span className="block text-white transform -translate-x-4">NUMÉRIQUES</span>
             </h1>
           </motion.div>
 
-          {/* Subtitle with typing effect - Centré */}
+          {/* Subtitle ASYMÉTRIQUE - Skill frontend-design */}
           <motion.div 
             variants={itemVariants}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.5 }}
-            className="text-center"
+            className="relative text-left ml-8 md:ml-16"
           >
-            <div className="text-xl md:text-2xl text-gray-300 font-light flex justify-center items-center">
-              <span className="typing-animation whitespace-nowrap overflow-hidden">
+            <div className="text-xl md:text-3xl text-gray-300 font-body font-medium transform rotate-1 bg-dark-800/60 backdrop-blur-sm px-6 py-3 rounded-lg border border-cyber-500/20 inline-block">
+              <span className="typing-animation whitespace-nowrap overflow-hidden tracking-wide">
                 {typedText}
               </span>
+              {/* DECORATIVE ACCENT */}
+              <div className="absolute -top-2 -right-2 w-3 h-3 bg-primary-500 rounded-full blur-sm"></div>
             </div>
           </motion.div>
 
