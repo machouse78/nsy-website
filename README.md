@@ -65,6 +65,14 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 - **Lucide React 0.363.0** - Bibliothèque d'icônes modernes
 - **Particules Canvas** personnalisées (50 particules interactives)
 
+### Skills IA Spécialisés
+- **frontend-design** - Skill avancé pour interfaces distinctives et production-grade
+  - Design thinking avec directions esthétiques audacieuses
+  - Typographie distinctive (évite les fonts génériques)
+  - Animations sophistiquées et micro-interactions
+  - Compositions spatiales créatives et layouts non-conventionnels
+  - Sites scroll-driven avec GSAP et zones de couleur
+
 ## 🚀 Installation et Utilisation
 
 ### Prérequis
@@ -144,6 +152,9 @@ Le fichier `.htaccess` est inclus et configuré pour :
 
 ```
 nsy-website/
+├── .claude/                    # Configuration IA et Skills
+│   └── skills/
+│       └── frontend-design/    # Skill interfaces distinctives production-grade
 ├── src/
 │   ├── components/          # Composants réutilisables
 │   │   ├── common/         # Header, Footer
@@ -153,7 +164,7 @@ nsy-website/
 │   ├── utils/              # Utilitaires (calculs dates)
 │   └── styles/             # Styles globaux
 ├── public/                 # Assets statiques
-├── dist/                   # Build de production
+├── dist/                   # Build de production (généré)
 └── docs/                   # Documentation développement (50+ fichiers)
 ```
 
@@ -178,6 +189,37 @@ colors: {
 - **Régénération intelligente** avec contrôle temporel anti-spam
 - **Timeline responsive** avec breakpoints
 - **Interface sans distraction** (suppression des textes perturbants)
+
+## 🧠 Skills IA Intégrés
+
+### Frontend-Design Skill
+Le projet intègre un **skill frontend-design** avancé qui guide la création d'interfaces distinctives :
+
+#### **🎯 Philosophie Design :**
+- **Anti-générique** : Évite les esthétiques IA clichées (fonts Inter/Roboto, gradients violets)
+- **Direction audacieuse** : Choix esthétiques intentionnels (minimalisme raffiné ou maximalisme créatif)
+- **Production-grade** : Code fonctionnel avec attention méticuleuse aux détails
+
+#### **🎨 Directives Esthétiques :**
+- **Typographie distinctive** : Fonts caractérielles, pas de choix génériques
+- **Couleurs cohérentes** : Palettes dominantes avec accents nets
+- **Animations sophistiquées** : CSS-only + Motion libraries, micro-interactions impactantes
+- **Compositions spatiales** : Layouts asymétriques, overlaps, flow diagonal
+- **Détails atmosphériques** : Textures, gradients mesh, effets de profondeur
+
+#### **📱 Sites Scroll-Driven :**
+- **Typography as Design** : Headings 6rem+, hiérarchie par taille/poids
+- **No Cards Policy** : Texte directement sur background, pas de containers glassmorphism
+- **Color Zones** : Transitions de couleur entre sections via GSAP
+- **Animation Choreography** : Entrées variées avec délais échelonnés
+- **Stats animées** : Compteurs GSAP, tailles 4rem+
+
+### Configuration du Skill
+```
+.claude/skills/frontend-design/SKILL.md
+```
+
+Le skill est automatiquement pris en compte pour tous les développements d'interface, garantissant une qualité esthétique exceptionnelle et une différenciation créative.
 
 ## 🎨 Personnalisation
 

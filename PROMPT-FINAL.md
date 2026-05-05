@@ -16,6 +16,9 @@ Créer un site web moderne et professionnel pour NSY (Cédric Barme), expert en 
 ### Structure du Projet
 ```
 nsy-website/
+├── .claude/                              # Configuration IA avancée
+│   └── skills/frontend-design/           # Skill interfaces production-grade
+│       └── SKILL.md                      # Directives esthétiques anti-générique
 ├── src/
 │   ├── components/ui/LogoAnimation.jsx    # Réseau neuronal Canvas
 │   ├── sections/Hero.jsx                 # Section principale optimisée
@@ -167,11 +170,52 @@ if (timeSinceMouseMove > 1000 && this.life > this.maxLife) {
 - **Branches** : `main` pour production
 - **Documentation** : README complet + 50+ fichiers MD
 
+## 🧠 **Skills IA Spécialisés**
+
+### Frontend-Design Skill Intégré
+Le projet bénéficie d'un **skill frontend-design** avancé (`.claude/skills/frontend-design/`) qui élève la qualité esthétique :
+
+#### **Philosophie Anti-Générique :**
+- **Évite les clichés IA** : fonts Inter/Roboto, gradients violets, layouts prévisibles
+- **Direction esthétique audacieuse** : choix intentionnels (minimalisme raffiné ↔ maximalisme créatif)
+- **Différenciation mémorable** : chaque interface doit avoir un élément distinctif inoubliable
+
+#### **Directives Techniques Avancées :**
+```javascript
+// Typographie distinctive
+fonts: "Éviter Arial/Inter → Choix caractériels + fonts display raffinées"
+
+// Couleurs dominantes
+palette: "Accents nets >> palettes tièdes uniformes"
+
+// Animations sophistiquées
+motion: "Révélations orchestrées + micro-interactions surprenantes"
+
+// Compositions créatives  
+layout: "Asymétrie + overlaps + flux diagonal + espaces généreux"
+```
+
+#### **Spécialisations Sites Scroll-Driven :**
+- **Typography as Design** : Headings 6rem+, poids 700-800, hiérarchie par taille
+- **No Cards Policy** : Texte direct sur background, pas de glassmorphism
+- **Color Zones** : Transitions light → dark → accent via GSAP
+- **Animation Choreography** : Entrées variées avec délais échelonnés (0.08-0.12s)
+- **Stats Dynamiques** : Compteurs GSAP 4rem+ avec suffixes animés
+
+#### **Impact sur NSY Website :**
+Le skill a guidé :
+- **Palette NSY distinctive** (orange #f97316, cyan #06b6d4, violet #d946ef)
+- **Animations Canvas sophistiquées** (réseau neuronal, forces physiques)
+- **Typographie hiérarchisée** (titres impact, sous-titres élégants)
+- **Compositions audacieuses** (titre centré au-dessus animation, alignements créatifs)
+- **Détails atmosphériques** (glassmorphisme, particules, fondus RGB)
+
 ## 🎯 **Processus de Développement IA**
 
 ### Outils Utilisés
 - **IDE** : Cursor avec intégration IA native
 - **Assistant** : Claude 4 Sonnet (Anthropic via OpenRouter)  
+- **Skills IA** : frontend-design pour interfaces distinctives production-grade
 - **Versioning** : Git avec synchronisation GitHub automatique
 - **Testing** : Build et preview en temps réel
 
@@ -182,6 +226,7 @@ if (timeSinceMouseMove > 1000 && this.life > this.maxLife) {
 4. **Améliorations animation** (~30min) : Stabilisation réseau neuronal
 5. **Documentation finale** (~30min) : README + prompt complet
 6. **Finitions** (~15min) : Liens GitHub + mention IA élégante
+7. **Skill intégration** (~10min) : Ajout frontend-design skill + documentation
 
 ### Philosophie Transparence
 - **Documentation complète** de chaque étape
