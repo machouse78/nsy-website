@@ -150,7 +150,7 @@ const Hero = () => {
             animate="visible"
             className="text-center space-y-4"
           >
-            <h1 ref={titleRef} className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.85] tracking-tight">
+            <h1 ref={titleRef} className="text-4xl md:text-6xl lg:text-7xl font-display font-black leading-[0.85] tracking-tight">
               <span className="hero-title-line block text-white">TRANSFORMEZ VOS</span>
               <span className="hero-title-line block gradient-text italic transform rotate-1">IDÉES EN SOLUTIONS</span>
               <span className="hero-title-line block text-white transform -translate-x-4">NUMÉRIQUES</span>
