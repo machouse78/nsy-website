@@ -248,8 +248,13 @@ const Hero = () => {
               </div>
             </motion.div>
 
-            {/* STATS ANIMÉES - Layout corrigé sans chevauchement */}
-            <motion.div variants={itemVariants} className="pt-12">
+            {/* STATS ANIMÉES - Espacement augmenté pour éviter confusion */}
+            <motion.div variants={itemVariants} className="pt-20 pb-16 border-t border-white/10 mt-16">
+              {/* Titre des stats pour séparation visuelle */}
+              <h3 className="text-center text-sm uppercase tracking-[0.2em] text-gray-500 font-sans font-medium mb-12">
+                Expertise & Réalisations
+              </h3>
+              
               {/* GRID ORGANISÉE mais avec asymétrie subtile */}
               <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-8 w-full">
                 {siteContent.stats.map((stat, index) => (
