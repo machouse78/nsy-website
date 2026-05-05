@@ -71,10 +71,10 @@ const Hero = () => {
             animate="visible"
             className="text-center space-y-4"
           >
-            <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-              <span className="block text-white">Transformez vos</span>
-              <span className="block gradient-text">idées en solutions</span>
-              <span className="block text-white">numériques</span>
+            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.85] tracking-tight">
+              <span className="block text-white">TRANSFORMEZ VOS</span>
+              <span className="block gradient-text italic">IDÉES EN SOLUTIONS</span>
+              <span className="block text-white">NUMÉRIQUES</span>
             </h1>
           </motion.div>
 

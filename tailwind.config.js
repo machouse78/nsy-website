@@ -64,8 +64,14 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'Menlo', 'Monaco', 'Consolas', 'monospace'],
+        // Display font distinctive pour les titres - Editorial/Magazine style
+        display: ['Playfair Display', 'Georgia', 'serif'],
+        // Sans moderne mais caractérielle pour le corps - évite Inter/Roboto
+        sans: ['Clash Display', 'Epilogue', 'system-ui', 'sans-serif'], 
+        // Body refined pour le texte - élégant et lisible
+        body: ['Satoshi', 'Source Sans Pro', 'sans-serif'],
+        // Mono technique pour le code
+        mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
