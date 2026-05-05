@@ -361,20 +361,23 @@ export const siteContent = {
     fullPrompt: {
       title: "Prompt complet de génération",
       description: "Voici l'intégralité du prompt utilisé pour créer ce site avec l'IA Claude :",
-      content: `PROMPT COMPLET - CRÉATION SITE NSY (Évolution avec Skill Frontend-Design)
+      content: `PROMPT COMPLET - CRÉATION SITE NSY (Évolution Multi-Skills Expert)
 
 Je suis le propriétaire du site https://NSY.fr. Je souhaite recréer entièrement ce site sous forme d'un nouveau site web moderne, élégant et professionnel, généré en ReactJS.
 
-ÉVOLUTION DU PROJET EN 2 PHASES :
+ÉVOLUTION DU PROJET EN 3 PHASES :
 
 PHASE 1 - Développement initial (approche classique) :
 Création d'un site fonctionnel avec animations et design correct.
 
-PHASE 2 - Transformation skill (niveau expert) :
+PHASE 2 - Transformation frontend-design (niveau expert) :
 Refactoring intégral avec skill frontend-design (.claude/skills/frontend-design/) pour créer une interface distinctive, anti-générique et mémorable évitant tous les clichés esthétiques IA.
 
-OBJECTIF FINAL AVEC SKILL :
-Créer un site web qui se démarque visuellement de 95% des interfaces web actuelles grâce à l'application rigoureuse du skill frontend-design : typographie distinctive, compositions asymétriques, animations orchestrées GSAP, détails atmosphériques et évitement total des patterns génériques (Inter/Roboto, grilles prévisibles, etc.).
+PHASE 3 - Optimisation motion-design (animations expertes) :
+Refactoring des animations avec skill motion-design-ui-animation (.claude/skills/motion-design-ui-animation/) pour des animations intentionnelles, performantes et respectueuses des bonnes pratiques UX.
+
+OBJECTIF FINAL AVEC SKILLS :
+Créer un site web qui se démarque visuellement ET en termes d'expérience utilisateur grâce à l'application rigoureuse de 2 skills experts : design distinctif (frontend-design) + animations intentionnelles (motion-design).
 
 CONTRAINTES TECHNIQUES :
 - ReactJS avec Vite (pas Next.js SSR)
@@ -383,6 +386,7 @@ CONTRAINTES TECHNIQUES :
 - Architecture modulaire avec composants réutilisables
 - Tailwind CSS + Framer Motion + GSAP pour animations
 - Skill frontend-design appliqué intégralement pour qualité expert
+- Skill motion-design-ui-animation pour animations optimisées UX
 - Fonts distinctives (Playfair Display + Satoshi) évitant générisme IA
 - Fichier .htaccess pour compatibilité React Router
 - Build optimisé dans dist/ 
@@ -466,7 +470,9 @@ OPTIMISATIONS SPÉCIFIQUES :
 - Cards simplifiées pour éviter conflits CSS sur les liens externes
 - Copyright et expérience auto-incrémentés chaque année
 
-SKILL FRONTEND-DESIGN APPLIQUÉ (TRANSFORMATION PHASE 2) :
+SKILLS APPLIQUÉS (TRANSFORMATIONS PHASES 2-3) :
+
+SKILL FRONTEND-DESIGN (PHASE 2) :
 - Intégration skill (.claude/skills/frontend-design/SKILL.md) pour interface distinctive
 - Refactoring intégral selon directives anti-générique :
   * Typographie caractérielle : Playfair Display + Satoshi (évite Inter/Roboto)
@@ -476,9 +482,18 @@ SKILL FRONTEND-DESIGN APPLIQUÉ (TRANSFORMATION PHASE 2) :
   * Color zones dynamiques : CSS variables + transitions automatiques
   * Détails atmosphériques : grain overlay + glow effects + patterns géométriques
 - Évitement total clichés IA : gradients violets, layouts prévisibles, fonts génériques
-- Résultat : Interface mémorable niveau production-grade expert
 
-Le site doit démontrer l'expertise NSY en IA/automatisation tout en étant visuellement distinctif et évitant tous les pièges esthétiques IA grâce au skill frontend-design.`
+SKILL MOTION-DESIGN-UI-ANIMATION (PHASE 3) :
+- Intégration skill (.claude/skills/motion-design-ui-animation/SKILL.md) pour animations expertes
+- Refactoring animations selon principes UX :
+  * Tokens d'animation : --dur-1 à --dur-5, --ease-out-quart, --ease-in-out-cubic
+  * Patterns respectés : enter/exit (ease-out), hover (subtil), button press (responsiveness)
+  * Performance : focus transform/opacity, suppression animations distrayantes
+  * Accessibilité : support prefers-reduced-motion
+  * Intention : chaque animation a un job précis (responsiveness, spatial continuity, etc.)
+- Résultat : Animations fluides, performantes et respectueuses UX
+
+Le site doit démontrer l'expertise NSY en IA/automatisation avec une interface distinctive (frontend-design) ET des animations optimisées (motion-design) pour une expérience utilisateur premium.`
     },
     
     // Ressources du projet
@@ -511,9 +526,11 @@ Le site doit démontrer l'expertise NSY en IA/automatisation tout en étant visu
         "ReactJS 18 + Vite 4",
         "Tailwind CSS 3 + PostCSS + Color zones custom",
         "GSAP 3 + ScrollTrigger (animations orchestrées)",
-        "Framer Motion 10 + Canvas interactions",
+        "Framer Motion 10 + Motion Design tokens",
         "Fonts distinctives : Playfair Display + Satoshi",
-        "Skill frontend-design (.claude/skills/)",
+        "Skill frontend-design (.claude/skills/frontend-design/)",
+        "Skill motion-design-ui-animation (.claude/skills/motion-design-ui-animation/)",
+        "Tokens d'animation CSS (durations, easing curves)",
         "Lucide React (icônes)",
         "Configuration ESM moderne"
       ]
