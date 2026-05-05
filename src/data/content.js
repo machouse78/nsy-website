@@ -361,19 +361,29 @@ export const siteContent = {
     fullPrompt: {
       title: "Prompt complet de génération",
       description: "Voici l'intégralité du prompt utilisé pour créer ce site avec l'IA Claude :",
-      content: `PROMPT COMPLET - CRÉATION SITE NSY (Synthèse avec améliorations)
+      content: `PROMPT COMPLET - CRÉATION SITE NSY (Évolution avec Skill Frontend-Design)
 
 Je suis le propriétaire du site https://NSY.fr. Je souhaite recréer entièrement ce site sous forme d'un nouveau site web moderne, élégant et professionnel, généré en ReactJS.
 
-OBJECTIF PRINCIPAL :
-Créer un site web moderne pour NSY (Cédric Barme), expert indépendant en développement et intelligence artificielle, en récupérant et enrichissant le contenu existant de NSY.fr.
+ÉVOLUTION DU PROJET EN 2 PHASES :
+
+PHASE 1 - Développement initial (approche classique) :
+Création d'un site fonctionnel avec animations et design correct.
+
+PHASE 2 - Transformation skill (niveau expert) :
+Refactoring intégral avec skill frontend-design (.claude/skills/frontend-design/) pour créer une interface distinctive, anti-générique et mémorable évitant tous les clichés esthétiques IA.
+
+OBJECTIF FINAL AVEC SKILL :
+Créer un site web qui se démarque visuellement de 95% des interfaces web actuelles grâce à l'application rigoureuse du skill frontend-design : typographie distinctive, compositions asymétriques, animations orchestrées GSAP, détails atmosphériques et évitement total des patterns génériques (Inter/Roboto, grilles prévisibles, etc.).
 
 CONTRAINTES TECHNIQUES :
 - ReactJS avec Vite (pas Next.js SSR)
 - Code propre, structuré, maintenable
 - Compatible hébergement Infomaniak (statique, FTP/SFTP)
 - Architecture modulaire avec composants réutilisables
-- Tailwind CSS + Framer Motion pour animations
+- Tailwind CSS + Framer Motion + GSAP pour animations
+- Skill frontend-design appliqué intégralement pour qualité expert
+- Fonts distinctives (Playfair Display + Satoshi) évitant générisme IA
 - Fichier .htaccess pour compatibilité React Router
 - Build optimisé dans dist/ 
 
@@ -414,12 +424,16 @@ FONCTIONNALITÉS SPÉCIALES :
 - Animations Framer Motion fluides sur tous les composants
 - ScrollToTop automatique et navigation smooth entre sections
 
-DESIGN ET UX :
-- Responsive parfait (mobile-first)
-- Performance optimisée (code splitting, lazy loading)
-- SEO optimisé avec meta tags
-- Glassmorphisme pour les cards
-- Dégradés orange/rouge/doré basés sur le logo
+DESIGN ET UX (AVEC SKILL FRONTEND-DESIGN APPLIQUÉ) :
+- Skill frontend-design intégré (.claude/skills/frontend-design/) pour interface distinctive
+- Typographie caractérielle : Playfair Display + Satoshi (évite Inter/Roboto génériques)
+- Compositions asymétriques : overlaps, diagonal flow, grid-breaking elements
+- Animations GSAP orchestrées : timeline chorégraphiée + ScrollTrigger + color zones
+- Stats animées 4rem+ : compteurs GSAP avec positioning asymétrique
+- Détails atmosphériques : grain overlay + glow effects + decorative patterns
+- Layout variety : centered → left-aligned → split → asymétrique (jamais répétition)
+- Responsive parfait (mobile-first) avec breakpoints intelligents
+- Performance optimisée (code splitting, lazy loading) + GSAP bundle
 - Animation Canvas 60 FPS du logo NSY avec 50 particules IA interactives
 - Effet magnétique au survol : particules attirées vers souris + changement couleur bleu
 - Logo NSY agrandi (192px desktop, 160px mobile) au centre de l'animation
@@ -452,7 +466,19 @@ OPTIMISATIONS SPÉCIFIQUES :
 - Cards simplifiées pour éviter conflits CSS sur les liens externes
 - Copyright et expérience auto-incrémentés chaque année
 
-Le site doit démontrer l'expertise NSY en IA/automatisation tout en restant professionnel, authentique et facilement maintenable.`
+SKILL FRONTEND-DESIGN APPLIQUÉ (TRANSFORMATION PHASE 2) :
+- Intégration skill (.claude/skills/frontend-design/SKILL.md) pour interface distinctive
+- Refactoring intégral selon directives anti-générique :
+  * Typographie caractérielle : Playfair Display + Satoshi (évite Inter/Roboto)
+  * Compositions asymétriques : overlaps + diagonal flow + grid-breaking elements
+  * Animations GSAP orchestrées : timeline + ScrollTrigger + révélations échelonnées
+  * Stats 4rem+ animées : compteurs GSAP avec positioning asymétrique
+  * Color zones dynamiques : CSS variables + transitions automatiques
+  * Détails atmosphériques : grain overlay + glow effects + patterns géométriques
+- Évitement total clichés IA : gradients violets, layouts prévisibles, fonts génériques
+- Résultat : Interface mémorable niveau production-grade expert
+
+Le site doit démontrer l'expertise NSY en IA/automatisation tout en étant visuellement distinctif et évitant tous les pièges esthétiques IA grâce au skill frontend-design.`
     },
     
     // Ressources du projet
@@ -483,8 +509,11 @@ Le site doit démontrer l'expertise NSY en IA/automatisation tout en restant pro
       },
       technologies: [
         "ReactJS 18 + Vite 4",
-        "Tailwind CSS 3 + PostCSS",
-        "Framer Motion 10",
+        "Tailwind CSS 3 + PostCSS + Color zones custom",
+        "GSAP 3 + ScrollTrigger (animations orchestrées)",
+        "Framer Motion 10 + Canvas interactions",
+        "Fonts distinctives : Playfair Display + Satoshi",
+        "Skill frontend-design (.claude/skills/)",
         "Lucide React (icônes)",
         "Configuration ESM moderne"
       ]
