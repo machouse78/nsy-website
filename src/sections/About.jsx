@@ -73,11 +73,11 @@ const About = () => {
   }
 
   return (
-    <section ref={aboutRef} id="about" className="section-padding relative overflow-hidden grain-overlay">
-      {/* ATMOSPHERIC DETAILS - Skill frontend-design */}
+    <section ref={aboutRef} id="about" className="section-padding relative overflow-hidden">
+      {/* ATMOSPHERIC DETAILS OPTIMISÉS - Skill frontend-design */}
       <div className="absolute inset-0 grain-overlay"></div>
-      <div className="absolute top-1/4 right-0 w-64 h-64 bg-cyber-500/5 rounded-full blur-3xl"></div>
-      <div className="absolute bottom-1/4 left-0 w-48 h-48 bg-ai-500/5 rounded-full blur-2xl"></div>
+      <div className="absolute top-1/4 right-0 w-32 h-32 bg-cyber-500/3 rounded-full blur-xl"></div>
+      <div className="absolute bottom-1/4 left-0 w-24 h-24 bg-ai-500/3 rounded-full blur-lg"></div>
       
       <div className="container relative z-10">
         <motion.div

@@ -164,10 +164,9 @@
   /* SKILL FRONTEND-DESIGN - Styles avancés */
   .grain-overlay {
     background: 
-      radial-gradient(circle at 20% 80%, rgba(249, 115, 22, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(217, 70, 239, 0.06) 0%, transparent 50%),
-      repeating-conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(255, 255, 255, 0.02) 2deg, transparent 4deg);
+      radial-gradient(circle at 30% 70%, rgba(249, 115, 22, 0.08) 0%, transparent 60%),
+      radial-gradient(circle at 70% 30%, rgba(6, 182, 212, 0.06) 0%, transparent 60%);
+    /* Suppression repeating-conic-gradient (très gourmand) et 3ème radial */
   }
 
   .atmospheric-glow {

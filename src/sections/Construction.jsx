@@ -62,8 +62,8 @@ const Construction = () => {
     <section id="construction" className="section-padding bg-gradient-to-br from-dark-900 via-purple-900/20 to-dark-900 relative overflow-hidden">
       {/* Background Effects */}
       <div className="absolute inset-0">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute top-1/4 left-1/4 w-32 h-32 bg-purple-500/8 rounded-full blur-xl"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-32 h-32 bg-cyan-500/8 rounded-full blur-xl"></div>
       </div>
 
       <div className="container relative z-10">
