@@ -68,7 +68,7 @@ export default {
         display: ['Playfair Display', 'Georgia', 'serif'],
         // Sans moderne mais caractérielle pour le corps - évite Inter/Roboto
         sans: ['Clash Display', 'Epilogue', 'system-ui', 'sans-serif'], 
-        // Body refined pour le texte - élégant et lisible
+        // Body refined pour le texte - élégant et lisible (générera font-body)
         body: ['Satoshi', 'Source Sans Pro', 'sans-serif'],
         // Mono technique pour le code
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
