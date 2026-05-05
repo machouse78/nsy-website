@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { gsap } from 'gsap'
 import { ArrowRight, Brain, Code, Zap, Users, ChevronDown } from 'lucide-react'
 import { siteContent } from '../data/content'
 import ParticlesBackground from '../components/ui/ParticlesBackground'
@@ -8,6 +9,12 @@ import LogoAnimation from '../components/ui/LogoAnimation'
 const Hero = () => {
   const [typedText, setTypedText] = useState('')
   const fullText = siteContent.hero.subtitle
+  
+  // Refs pour animations GSAP orchestrées
+  const heroRef = useRef(null)
+  const titleRef = useRef(null)
+  const subtitleRef = useRef(null)
+  const statsRef = useRef(null)
   
   useEffect(() => {
     let i = 0
@@ -22,6 +29,78 @@ const Hero = () => {
     
     return () => clearInterval(timer)
   }, [fullText])
+
+  // ANIMATIONS ORCHESTRÉES GSAP - Skill frontend-design
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Timeline principale - Révélations échelonnées
+      const tl = gsap.timeline({ delay: 0.5 })
+      
+      // Séquence orchestrée selon skill
+      tl.from('.hero-title-line', {
+        y: 100,
+        opacity: 0,
+        duration: 1.2,
+        ease: 'power4.out',
+        stagger: 0.12  // Délai échelonné entre lignes
+      })
+      .from('.hero-subtitle', {
+        x: -50,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out'
+      }, '-=0.6')
+      .from('.hero-content', {
+        y: 50,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power2.out',
+        stagger: 0.08
+      }, '-=0.4')
+      .from('.hero-stats', {
+        scale: 0.8,
+        opacity: 0,
+        duration: 0.6,
+        ease: 'back.out(1.7)',
+        stagger: 0.1
+      }, '-=0.2')
+      
+      // Animation continue des accents décoratifs
+      gsap.to('.decorative-accent', {
+        rotation: 360,
+        duration: 20,
+        ease: 'none',
+        repeat: -1
+      })
+      
+    }, heroRef)
+    
+    return () => ctx.revert()
+  }, [])
+
+  // STATS COUNTER - Animation selon skill
+  useEffect(() => {
+    const animateCounters = () => {
+      siteContent.stats.forEach((stat, index) => {
+        const value = parseInt(stat.value.replace(/\D/g, '')) || 0
+        gsap.fromTo(`.counter-${index}`, {
+          innerText: 0
+        }, {
+          innerText: value,
+          duration: 2,
+          delay: 2 + index * 0.2,
+          ease: 'power2.out',
+          snap: { innerText: 1 },
+          onUpdate: function() {
+            this.targets()[0].innerText = Math.ceil(this.targets()[0].innerText) + '+'
+          }
+        })
+      })
+    }
+    
+    const timer = setTimeout(animateCounters, 1000)
+    return () => clearTimeout(timer)
+  }, [])
 
   const handleNavClick = (href) => {
     const element = document.querySelector(href)
@@ -51,7 +130,7 @@ const Hero = () => {
   }
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center overflow-hidden">
+    <section ref={heroRef} id="home" className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0 neural-bg">
         <ParticlesBackground />
@@ -71,10 +150,10 @@ const Hero = () => {
             animate="visible"
             className="text-center space-y-4"
           >
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.85] tracking-tight">
-              <span className="block text-white">TRANSFORMEZ VOS</span>
-              <span className="block gradient-text italic transform rotate-1">IDÉES EN SOLUTIONS</span>
-              <span className="block text-white transform -translate-x-4">NUMÉRIQUES</span>
+            <h1 ref={titleRef} className="text-6xl md:text-8xl lg:text-9xl font-display font-black leading-[0.85] tracking-tight">
+              <span className="hero-title-line block text-white">TRANSFORMEZ VOS</span>
+              <span className="hero-title-line block gradient-text italic transform rotate-1">IDÉES EN SOLUTIONS</span>
+              <span className="hero-title-line block text-white transform -translate-x-4">NUMÉRIQUES</span>
             </h1>
           </motion.div>
 
@@ -86,12 +165,12 @@ const Hero = () => {
             transition={{ delay: 0.5 }}
             className="relative text-left ml-8 md:ml-16"
           >
-            <div className="text-xl md:text-3xl text-gray-300 font-body font-medium transform rotate-1 bg-dark-800/60 backdrop-blur-sm px-6 py-3 rounded-lg border border-cyber-500/20 inline-block">
+            <div className="hero-subtitle text-xl md:text-3xl text-gray-300 font-body font-medium transform rotate-1 bg-dark-800/60 backdrop-blur-sm px-6 py-3 rounded-lg border border-cyber-500/20 inline-block">
               <span className="typing-animation whitespace-nowrap overflow-hidden tracking-wide">
                 {typedText}
               </span>
-              {/* DECORATIVE ACCENT */}
-              <div className="absolute -top-2 -right-2 w-3 h-3 bg-primary-500 rounded-full blur-sm"></div>
+              {/* DECORATIVE ACCENT animé */}
+              <div className="decorative-accent absolute -top-2 -right-2 w-3 h-3 bg-primary-500 rounded-full blur-sm"></div>
             </div>
           </motion.div>
 
@@ -169,19 +248,64 @@ const Hero = () => {
               </div>
             </motion.div>
 
-            {/* Stats */}
-            <motion.div variants={itemVariants} className="pt-8 pb-16">
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {/* STATS ANIMÉES - Skill 4rem+ compliant */}
+            <motion.div variants={itemVariants} className="pt-12">
+              {/* LAYOUT ASYMÉTRIQUE - Diagonal flow */}
+              <div ref={statsRef} className="relative h-48 w-full">
                 {siteContent.stats.map((stat, index) => (
                   <motion.div
                     key={index}
-                    className="text-center"
-                    whileHover={{ y: -5 }}
+                    className={`hero-stats absolute transform ${
+                      index === 0 ? 'top-0 left-8 rotate-2' : 
+                      index === 1 ? 'top-12 right-1/4 -rotate-1' : 
+                      index === 2 ? 'bottom-12 left-1/3 rotate-1' : 
+                      'bottom-0 right-8 -rotate-2'
+                    }`}
+                    whileHover={{ 
+                      scale: 1.15, 
+                      rotate: 0,
+                      transition: { type: "spring", stiffness: 300 }
+                    }}
                   >
-                    <div className="text-3xl font-bold gradient-text">{stat.value}</div>
-                    <div className="text-sm text-gray-400 mt-1">{stat.label}</div>
+                    {/* Number - 4rem+ selon skill + Animation counter GSAP */}
+                    <div className={`text-5xl md:text-6xl lg:text-7xl font-display font-black leading-none ${
+                      index % 2 ? 'text-cyber-400' : 'gradient-text'
+                    }`}>
+                      <span className={`counter-${index}`}>0</span>
+                      <span className="text-2xl md:text-3xl opacity-60">+</span>
+                    </div>
+                    {/* Label - uppercase letterspaced selon skill */}
+                    <div className="text-xs uppercase tracking-[0.15em] text-gray-400 mt-2 font-body font-semibold">
+                      {stat.label}
+                    </div>
+                    
+                    {/* DECORATIVE BORDERS - Skill atmosphérique */}
+                    <div className={`absolute -bottom-1 left-0 right-0 h-0.5 ${
+                      index % 2 ? 'bg-gradient-to-r from-cyber-500/60 to-transparent' : 'bg-gradient-to-r from-primary-500/60 to-transparent'
+                    }`}></div>
                   </motion.div>
                 ))}
+                
+                {/* CONNECTING LINES - Geometric patterns */}
+                <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" viewBox="0 0 500 200">
+                  <motion.path
+                    d="M 50 20 Q 150 100 250 60 Q 350 20 450 80"
+                    stroke="url(#statsGradient)"
+                    strokeWidth="1"
+                    fill="none"
+                    strokeDasharray="5,5"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: 1 }}
+                    transition={{ delay: 2.5, duration: 3, ease: "power2.inOut" }}
+                  />
+                  <defs>
+                    <linearGradient id="statsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#f97316" stopOpacity="0.6" />
+                      <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#d946ef" stopOpacity="0.4" />
+                    </linearGradient>
+                  </defs>
+                </svg>
               </div>
             </motion.div>
             </motion.div>

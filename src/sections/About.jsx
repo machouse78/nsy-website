@@ -1,9 +1,17 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { gsap } from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { Code, Users, Lightbulb, Shield, Award, Target } from 'lucide-react'
 import { siteContent } from '../data/content'
 
+// Enregistrer le plugin GSAP
+gsap.registerPlugin(ScrollTrigger)
+
 const About = () => {
+  const aboutRef = useRef(null)
+  const titleRef = useRef(null)
+  
   const iconMap = {
     Code,
     Users,
@@ -12,6 +20,38 @@ const About = () => {
     Award,
     Target
   }
+
+  // ANIMATIONS GSAP - Skill frontend-design
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // COLOR ZONE TRANSITION - Section About vers accent
+      gsap.to(aboutRef.current, {
+        background: 'linear-gradient(135deg, var(--bg-accent) 0%, var(--bg-dark) 60%, #451a03 100%)',
+        scrollTrigger: {
+          trigger: aboutRef.current,
+          start: 'top center',
+          end: 'bottom center',
+          scrub: 1
+        }
+      })
+
+      // ORCHESTRATED REVEALS - Staggered animations
+      gsap.from('.about-element', {
+        y: 60,
+        opacity: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.12,
+        scrollTrigger: {
+          trigger: aboutRef.current,
+          start: 'top 80%'
+        }
+      })
+
+    }, aboutRef)
+
+    return () => ctx.revert()
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -33,29 +73,42 @@ const About = () => {
   }
 
   return (
-    <section id="about" className="section-padding bg-dark-800/50">
-      <div className="container">
+    <section ref={aboutRef} id="about" className="section-padding relative overflow-hidden grain-overlay">
+      {/* ATMOSPHERIC DETAILS - Skill frontend-design */}
+      <div className="absolute inset-0 grain-overlay"></div>
+      <div className="absolute top-1/4 right-0 w-64 h-64 bg-cyber-500/5 rounded-full blur-3xl"></div>
+      <div className="absolute bottom-1/4 left-0 w-48 h-48 bg-ai-500/5 rounded-full blur-2xl"></div>
+      
+      <div className="container relative z-10">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <div className="inline-flex items-center space-x-2 bg-primary-500/10 border border-primary-500/20 rounded-full px-6 py-2 mb-6">
-              <div className="w-2 h-2 bg-primary-500 rounded-full"></div>
-              <span className="text-primary-400 text-sm font-medium">À PROPOS</span>
+          {/* Section Header - LAYOUT ASYMÉTRIQUE */}
+          <div className="about-element relative mb-20">
+            {/* Section label - Skill compliant */}
+            <div className="absolute -top-4 left-8 text-xs uppercase tracking-[0.2em] text-primary-400/60 font-body font-bold">
+              002 / EXPERTISE
             </div>
-            <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              <span className="text-white">{siteContent.about.title}</span>
+            
+            {/* Titre - LEFT-ALIGNED selon skill variation */}
+            <h2 ref={titleRef} className="about-element text-5xl md:text-6xl lg:text-7xl font-display font-black leading-[0.9] text-left ml-8 mb-8 skill-shadow">
+              <span className="block text-white transform -rotate-1">{siteContent.about.title.split(' ')[0]}</span>
+              <span className="block gradient-text transform translate-x-8 rotate-1">{siteContent.about.title.split(' ').slice(1).join(' ')}</span>
             </h2>
-            <p className="text-xl text-gray-400 max-w-3xl mx-auto">
-              {siteContent.about.subtitle}
-            </p>
-          </motion.div>
+            
+            {/* Subtitle - RIGHT-ALIGNED contrast */}
+            <div className="about-element max-w-2xl ml-auto mr-16 text-right">
+              <p className="text-xl md:text-2xl text-gray-300 font-body leading-relaxed italic transform rotate-1">
+                {siteContent.about.subtitle}
+              </p>
+            </div>
+          </div>
 
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
+          {/* SPLIT LAYOUT - Text + Visual selon skill */}
+          <div className="relative flex flex-col lg:flex-row gap-20 items-start">
             {/* Left Column - Story */}
             <motion.div variants={itemVariants} className="space-y-8">
               <div className="glass-card p-8 glow-card">
