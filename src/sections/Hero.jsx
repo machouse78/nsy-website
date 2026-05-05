@@ -92,7 +92,7 @@ const Hero = () => {
           ease: 'power2.out',
           snap: { innerText: 1 },
           onUpdate: function() {
-            this.targets()[0].innerText = Math.ceil(this.targets()[0].innerText) + '+'
+            this.targets()[0].innerText = Math.ceil(this.targets()[0].innerText)
           }
         })
       })
@@ -248,31 +248,31 @@ const Hero = () => {
               </div>
             </motion.div>
 
-            {/* STATS ANIMÉES - Skill 4rem+ compliant */}
+            {/* STATS ANIMÉES - Layout corrigé sans chevauchement */}
             <motion.div variants={itemVariants} className="pt-12">
-              {/* LAYOUT ASYMÉTRIQUE - Diagonal flow */}
-              <div ref={statsRef} className="relative h-48 w-full">
+              {/* GRID ORGANISÉE mais avec asymétrie subtile */}
+              <div ref={statsRef} className="grid grid-cols-2 md:grid-cols-4 gap-8 w-full">
                 {siteContent.stats.map((stat, index) => (
                   <motion.div
                     key={index}
-                    className={`hero-stats absolute transform ${
-                      index === 0 ? 'top-0 left-8 rotate-2' : 
-                      index === 1 ? 'top-12 right-1/4 -rotate-1' : 
-                      index === 2 ? 'bottom-12 left-1/3 rotate-1' : 
-                      'bottom-0 right-8 -rotate-2'
+                    className={`hero-stats text-center transform ${
+                      index % 2 ? 'rotate-1' : '-rotate-1'
                     }`}
                     whileHover={{ 
-                      scale: 1.15, 
+                      scale: 1.1, 
                       rotate: 0,
                       transition: { type: "spring", stiffness: 300 }
                     }}
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 1.2 + index * 0.2 }}
                   >
                     {/* Number - 4rem+ selon skill + Animation counter GSAP */}
-                    <div className={`text-5xl md:text-6xl lg:text-7xl font-display font-black leading-none ${
+                    <div className={`text-4xl md:text-5xl font-display font-black leading-none ${
                       index % 2 ? 'text-cyber-400' : 'gradient-text'
                     }`}>
                       <span className={`counter-${index}`}>0</span>
-                      <span className="text-2xl md:text-3xl opacity-60">+</span>
+                      <span className="text-xl md:text-2xl opacity-60">+</span>
                     </div>
                     {/* Label - uppercase letterspaced selon skill */}
                     <div className="text-xs uppercase tracking-[0.15em] text-gray-400 mt-2 font-sans font-semibold">
@@ -280,32 +280,11 @@ const Hero = () => {
                     </div>
                     
                     {/* DECORATIVE BORDERS - Skill atmosphérique */}
-                    <div className={`absolute -bottom-1 left-0 right-0 h-0.5 ${
+                    <div className={`mt-2 mx-auto w-8 h-0.5 ${
                       index % 2 ? 'bg-gradient-to-r from-cyber-500/60 to-transparent' : 'bg-gradient-to-r from-primary-500/60 to-transparent'
                     }`}></div>
                   </motion.div>
                 ))}
-                
-                {/* CONNECTING LINES - Geometric patterns */}
-                <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-30" viewBox="0 0 500 200">
-                  <motion.path
-                    d="M 50 20 Q 150 100 250 60 Q 350 20 450 80"
-                    stroke="url(#statsGradient)"
-                    strokeWidth="1"
-                    fill="none"
-                    strokeDasharray="5,5"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: 1 }}
-                    transition={{ delay: 2.5, duration: 3, ease: "power2.inOut" }}
-                  />
-                  <defs>
-                    <linearGradient id="statsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#f97316" stopOpacity="0.6" />
-                      <stop offset="50%" stopColor="#06b6d4" stopOpacity="0.8" />
-                      <stop offset="100%" stopColor="#d946ef" stopOpacity="0.4" />
-                    </linearGradient>
-                  </defs>
-                </svg>
               </div>
             </motion.div>
             </motion.div>
