@@ -30,48 +30,45 @@ const Hero = () => {
     return () => clearInterval(timer)
   }, [fullText])
 
-  // ANIMATIONS ORCHESTRÉES GSAP - Skill frontend-design
+  // ANIMATIONS ORCHESTRÉES GSAP - Motion Design Optimized
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Timeline principale - Révélations échelonnées
-      const tl = gsap.timeline({ delay: 0.5 })
+      // Timeline principale - Révélations échelonnées selon motion design skill
+      const tl = gsap.timeline({ delay: 0.3 }) // Réduction du délai initial
       
-      // Séquence orchestrée selon skill
+      // Hero title - Enter pattern with optimized easing
       tl.from('.hero-title-line', {
-        y: 100,
+        y: 60, // Réduction amplitude
         opacity: 0,
-        duration: 1.2,
-        ease: 'power4.out',
-        stagger: 0.12  // Délai échelonné entre lignes
+        duration: 0.24, // --dur-3 equivalent
+        ease: 'cubic-bezier(0.165, 0.84, 0.44, 1)', // --ease-out-quart
+        stagger: 0.08  // Stagger plus rapide
       })
+      // Hero subtitle - Already on screen morph pattern
       .from('.hero-subtitle', {
-        x: -50,
+        y: 30, // Y au lieu de X pour plus naturel
         opacity: 0,
-        duration: 0.8,
-        ease: 'power3.out'
-      }, '-=0.6')
+        duration: 0.18, // --dur-2
+        ease: 'cubic-bezier(0.645, 0.045, 0.355, 1)' // --ease-in-out-cubic
+      }, '-=0.12')
+      // Hero content - Enter pattern
       .from('.hero-content', {
-        y: 50,
+        y: 40,
         opacity: 0,
-        duration: 0.8,
-        ease: 'power2.out',
-        stagger: 0.08
-      }, '-=0.4')
+        duration: 0.18, // --dur-2
+        ease: 'cubic-bezier(0.165, 0.84, 0.44, 1)', // --ease-out-quart
+        stagger: 0.06
+      }, '-=0.06')
+      // Stats - Enter pattern, no bounce (selon skill)
       .from('.hero-stats', {
-        scale: 0.8,
+        scale: 0.96, // Scale subtil selon skill (jamais 0)
         opacity: 0,
-        duration: 0.6,
-        ease: 'back.out(1.7)',
-        stagger: 0.1
-      }, '-=0.2')
+        duration: 0.18, // --dur-2
+        ease: 'cubic-bezier(0.165, 0.84, 0.44, 1)', // --ease-out-quart, no bounce
+        stagger: 0.04
+      }, '-=0.06')
       
-      // Animation continue des accents décoratifs
-      gsap.to('.decorative-accent', {
-        rotation: 360,
-        duration: 20,
-        ease: 'none',
-        repeat: -1
-      })
+      // Suppression animation décorative continue (trop distrayante selon skill)
       
     }, heroRef)
     
@@ -109,23 +106,28 @@ const Hero = () => {
     }
   }
 
+  // Motion Design optimized variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2,
-        delayChildren: 0.3
+        staggerChildren: 0.06, // Plus rapide selon skill
+        delayChildren: 0.18 // Réduction délai initial
       }
     }
   }
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 30, opacity: 0, scale: 0.98 }, // Ajout scale subtil
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6 }
+      scale: 1,
+      transition: { 
+        duration: 0.18, // --dur-2
+        ease: [0.165, 0.84, 0.44, 1] // --ease-out-quart
+      }
     }
   }
 
@@ -214,34 +216,46 @@ const Hero = () => {
               {/* AI Transparency Badge */}
               <motion.button
                 onClick={() => handleNavClick('#construction')}
-                className="inline-flex items-center space-x-2 bg-primary-500/10 hover:bg-primary-500/20 border border-primary-500/30 hover:border-primary-500/50 rounded-full px-4 py-2 transition-all duration-300 group"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center space-x-2 bg-primary-500/10 hover:bg-primary-500/20 border border-primary-500/30 hover:border-primary-500/50 rounded-full px-4 py-2 group motion-hover"
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                transition={{
+                  duration: 0.12, // --dur-1 for button feedback
+                  ease: [0.25, 0.46, 0.45, 0.94] // --ease-out-quad
+                }}
               >
                 <Brain className="w-4 h-4 text-primary-400" />
                 <span className="text-sm text-primary-300 group-hover:text-primary-200">Site créé avec IA • Transparence totale</span>
-                <ArrowRight className="w-3 h-3 text-primary-400 group-hover:translate-x-1 transition-transform" />
+                <ArrowRight className="w-3 h-3 text-primary-400 motion-hover" />
               </motion.button>
             </motion.div>
 
-            {/* CTA Buttons */}
+            {/* CTA Buttons - Optimized for responsiveness */}
             <motion.div variants={itemVariants}>
               <div className="flex flex-col sm:flex-row gap-4 pt-4">
                 <motion.button
                   onClick={() => handleNavClick('#contact')}
                   className="group btn-primary text-lg px-8 py-4 flex items-center justify-center space-x-2"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{
+                    duration: 0.12, // --dur-1 for button press feedback
+                    ease: [0.25, 0.46, 0.45, 0.94] // --ease-out-quad for responsiveness
+                  }}
                 >
                   <span>{siteContent.hero.cta.primary}</span>
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="w-5 h-5 motion-hover" />
                 </motion.button>
                 
                 <motion.button
                   onClick={() => handleNavClick('#services')}
                   className="btn-secondary text-lg px-8 py-4"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  transition={{
+                    duration: 0.12,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
                 >
                   {siteContent.hero.cta.secondary}
                 </motion.button>
@@ -297,69 +311,44 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Floating Icons */}
-      <div className="absolute inset-0 pointer-events-none">
-        <motion.div
-          animate={{
-            y: [0, -20, 0],
-            rotate: [0, 5, 0]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="absolute top-1/4 right-1/4 text-primary-400/20"
-        >
-          <Brain className="w-20 h-20" />
-        </motion.div>
+      {/* Subtle decorative elements - Motion design optimized */}
+      <div className="absolute inset-0 pointer-events-none opacity-20">
+        <div className="absolute top-1/4 right-1/4 text-primary-400/30">
+          <Brain className="w-16 h-16" />
+        </div>
         
-        <motion.div
-          animate={{
-            y: [0, 20, 0],
-            rotate: [0, -5, 0]
-          }}
-          transition={{
-            duration: 8,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 2
-          }}
-          className="absolute bottom-1/3 right-1/6 text-cyan-400/20"
-        >
-          <Code className="w-16 h-16" />
-        </motion.div>
+        <div className="absolute bottom-1/3 right-1/6 text-cyan-400/30">
+          <Code className="w-12 h-12" />
+        </div>
         
-        <motion.div
-          animate={{
-            y: [0, -15, 0],
-            rotate: [0, 3, 0]
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 4
-          }}
-          className="absolute top-2/3 left-1/6 text-ai-400/20"
-        >
-          <Zap className="w-12 h-12" />
-        </motion.div>
+        <div className="absolute top-2/3 left-1/6 text-primary-400/30">
+          <Zap className="w-10 h-10" />
+        </div>
       </div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll Indicator - Time-based pattern selon motion design skill */}
       <motion.div
         className="absolute bottom-4 left-1/2 transform -translate-x-1/2"
-        animate={{ y: [0, 10, 0] }}
-        transition={{ duration: 2, repeat: Infinity }}
+        animate={{ y: [0, 8, 0] }}
+        transition={{ 
+          duration: 2, 
+          repeat: Infinity,
+          ease: "linear" // Linear pour time-based selon skill
+        }}
       >
-        <button
+        <motion.button
           onClick={() => handleNavClick('#about')}
-          className="flex flex-col items-center text-gray-400 hover:text-white transition-colors"
+          className="flex flex-col items-center text-gray-400 hover:text-white motion-hover"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{
+            duration: 0.15,
+            ease: "ease"
+          }}
         >
           <span className="text-sm mb-2">Découvrir</span>
           <ChevronDown className="w-6 h-6" />
-        </button>
+        </motion.button>
       </motion.div>
     </section>
   )

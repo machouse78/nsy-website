@@ -15,6 +15,30 @@
     --text-on-dark: #ffffff;
     --text-on-accent: #e2e8f0;
     --text-on-light: #0f172a;
+
+    /* MOTION DESIGN TOKENS - Skill motion-design-ui-animation */
+    /* Durations */
+    --dur-1: 120ms;
+    --dur-2: 180ms;
+    --dur-3: 240ms;
+    --dur-4: 300ms;
+    --dur-5: 500ms;
+
+    /* Ease-out family (Enter/Exit, User-triggered) */
+    --ease-out-quad: cubic-bezier(.25, .46, .45, .94);
+    --ease-out-cubic: cubic-bezier(.215, .61, .355, 1);
+    --ease-out-quart: cubic-bezier(.165, .84, .44, 1);
+    --ease-out-quint: cubic-bezier(.23, 1, .32, 1);
+    --ease-out-expo: cubic-bezier(.19, 1, .22, 1);
+    --ease-out-circ: cubic-bezier(.075, .82, .165, 1);
+
+    /* Ease-in-out family (Reposition/Morph/Layout) */
+    --ease-in-out-quad: cubic-bezier(.455, .03, .515, .955);
+    --ease-in-out-cubic: cubic-bezier(.645, .045, .355, 1);
+    --ease-in-out-quart: cubic-bezier(.77, 0, .175, 1);
+    --ease-in-out-quint: cubic-bezier(.86, 0, .07, 1);
+    --ease-in-out-expo: cubic-bezier(1, 0, 0, 1);
+    --ease-in-out-circ: cubic-bezier(.785, .135, .15, .86);
   }
   
   body {
@@ -190,5 +214,55 @@
     z-index: -1;
     opacity: 0.7;
     filter: blur(8px);
+  }
+
+  /* MOTION DESIGN UTILITY CLASSES */
+  .motion-enter {
+    animation: motionEnter var(--dur-2) var(--ease-out-quart) both;
+  }
+
+  .motion-exit {
+    animation: motionExit calc(var(--dur-2) * 0.75) var(--ease-out-quart) both;
+  }
+
+  .motion-morph {
+    transition: transform var(--dur-3) var(--ease-in-out-cubic);
+  }
+
+  .motion-hover {
+    transition: all 150ms ease;
+  }
+
+  @keyframes motionEnter {
+    from {
+      opacity: 0;
+      transform: scale(0.96) translateY(-8px);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+  }
+
+  @keyframes motionExit {
+    from {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: scale(0.96) translateY(-8px);
+    }
+  }
+}
+
+/* ACCESSIBILITY - Respect reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

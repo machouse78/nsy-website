@@ -25,62 +25,39 @@ const Header = () => {
 
   return (
     <motion.header
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{
+        duration: 0.18, // --dur-2
+        ease: [0.165, 0.84, 0.44, 1] // --ease-out-quart
+      }}
+      className={`fixed top-0 left-0 right-0 z-50 ${
         isScrolled 
           ? 'bg-dark-900/95 backdrop-blur-md shadow-lg border-b border-white/10' 
           : 'bg-transparent'
       }`}
+      style={{
+        transition: 'background-color 150ms ease, backdrop-filter 150ms ease' // Subtle state change
+      }}
     >
       <nav className="container mx-auto px-4">
         <div className="flex justify-between items-center py-4">
           {/* Logo */}
           <motion.div 
             className="flex items-center space-x-6 cursor-pointer group"
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.02 }} // Subtle scale for hover
             whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.15, ease: "ease" }} // Built-in ease for hover
             onClick={() => handleNavClick('#home')}
           >
             <div className="relative">
               {/* Logo NSY original agrandi et sans fond */}
               <motion.div 
-                className="relative overflow-hidden"
+                className="relative overflow-hidden motion-hover"
                 whileHover={{
-                  filter: [
-                    "drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))",
-                    "drop-shadow(0 0 20px rgba(255, 140, 0, 0.4))",
-                    "drop-shadow(0 0 25px rgba(255, 69, 0, 0.3))",
-                    "drop-shadow(0 0 10px rgba(255, 215, 0, 0.3))"
-                  ],
-                  transition: {
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }
+                  filter: "drop-shadow(0 0 12px rgba(59, 130, 246, 0.4))" // Subtle glow NSY blue
                 }}
               >
-                {/* Effet de brillance au survol */}
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/30 to-transparent -skew-x-12 translate-x-[-100%]"
-                  animate={{
-                    translateX: ['-100%', '200%']
-                  }}
-                  transition={{
-                    duration: 0.6,
-                    ease: "easeInOut",
-                    repeat: 0
-                  }}
-                  style={{
-                    opacity: 0
-                  }}
-                  whileHover={{
-                    opacity: 1,
-                    transition: {
-                      duration: 0.1
-                    }
-                  }}
-                />
                 
                 <motion.img 
                   src="/nsy-logo.png" 
@@ -112,103 +89,45 @@ const Header = () => {
                 </div>
               </motion.div>
               
-              {/* Badge IA avec animation et couleurs du logo */}
+              {/* Badge IA - subtle hover selon motion design */}
               <motion.div 
-                className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center shadow-lg"
-                whileHover={{
-                  scale: [1, 1.4, 1.2],
-                  rotate: [0, 180, 360],
-                  background: [
-                    "linear-gradient(to right, rgb(249, 115, 22), rgb(239, 68, 68))",
-                    "linear-gradient(to right, rgb(255, 215, 0), rgb(255, 140, 0))",
-                    "linear-gradient(to right, rgb(255, 69, 0), rgb(220, 38, 127))",
-                    "linear-gradient(to right, rgb(249, 115, 22), rgb(239, 68, 68))"
-                  ]
-                }}
-                transition={{
-                  duration: 1.5,
-                  ease: "easeInOut",
-                  repeat: 0
-                }}
+                className="absolute -top-2 -right-2 w-5 h-5 bg-gradient-to-r from-primary-500 to-primary-600 rounded-full flex items-center justify-center shadow-lg motion-hover"
+                whileHover={{ scale: 1.1 }}
               >
                 <Zap className="w-3 h-3 text-white" />
               </motion.div>
               
-              {/* Particules dorées flottantes au survol */}
-              <motion.div
-                className="absolute inset-0 pointer-events-none"
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-              >
-                {[...Array(8)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="absolute w-1.5 h-1.5 rounded-full"
-                    style={{
-                      left: `${10 + (i * 10)}%`,
-                      top: `${20 + (i % 3) * 25}%`,
-                      background: i % 2 === 0 ? '#FFD700' : '#FF8C00'
-                    }}
-                    animate={{
-                      y: [-10, -25, -10],
-                      opacity: [0, 0.8, 0],
-                      scale: [0, 1.2, 0]
-                    }}
-                    transition={{
-                      duration: 2,
-                      delay: i * 0.15,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
-                ))}
-              </motion.div>
-              
-              {/* Halo lumineux subtil */}
-              <motion.div
-                className="absolute inset-0 pointer-events-none"
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 0.6 }}
-                transition={{ duration: 0.3 }}
-              >
-                <div className="absolute inset-0 bg-gradient-radial from-yellow-400/20 via-orange-400/10 to-transparent rounded-full scale-150 blur-sm"></div>
-              </motion.div>
+
             </div>
             
-            {/* Texte avec animation au survol - décalé plus à droite */}
-            <motion.div
-              className="ml-2"
-              whileHover={{
-                x: 5
-              }}
-              transition={{ type: "spring", stiffness: 300 }}
-            >
-              <motion.p 
-                className="text-lg font-medium text-gray-300 group-hover:text-yellow-300 transition-colors duration-300"
-              >
+            {/* Texte avec hover subtil */}
+            <div className="ml-2">
+              <p className="text-lg font-medium text-gray-300 group-hover:text-white motion-hover">
                 AI & Digital Solutions
-              </motion.p>
-            </motion.div>
+              </p>
+            </div>
           </motion.div>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
             {siteContent.navigation.map((item) => (
-              <motion.button
+              <button
                 key={item.name}
                 onClick={() => handleNavClick(item.href)}
-                className="text-gray-300 hover:text-white transition-colors duration-200 font-medium"
-                whileHover={{ y: -2 }}
-                whileTap={{ y: 0 }}
+                className="text-gray-300 hover:text-white motion-hover font-medium"
               >
                 {item.name}
-              </motion.button>
+              </button>
             ))}
             <motion.button
               onClick={() => handleNavClick('#contact')}
               className="btn-primary"
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              transition={{ 
+                duration: 0.12, // --dur-1 for button press feedback
+                ease: [0.25, 0.46, 0.45, 0.94] // --ease-out-quad for button press
+              }}
             >
               Me contacter
             </motion.button>
@@ -223,31 +142,51 @@ const Header = () => {
           </button>
         </div>
 
-        {/* Mobile Navigation */}
+        {/* Mobile Navigation - Enter/Exit pattern according to motion design skill */}
         <AnimatePresence>
           {isMenuOpen && (
             <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-white/10"
+              initial={{ 
+                opacity: 0, 
+                scale: 0.96,
+                height: 0 
+              }}
+              animate={{ 
+                opacity: 1, 
+                scale: 1,
+                height: 'auto' 
+              }}
+              exit={{ 
+                opacity: 0, 
+                scale: 0.96,
+                height: 0 
+              }}
+              transition={{
+                duration: 0.18, // --dur-2
+                ease: [0.165, 0.84, 0.44, 1] // --ease-out-quart for dropdown
+              }}
+              className="md:hidden border-t border-white/10 overflow-hidden"
+              style={{ transformOrigin: 'top center' }}
             >
               <div className="py-4 space-y-4">
                 {siteContent.navigation.map((item) => (
-                  <motion.button
+                  <button
                     key={item.name}
                     onClick={() => handleNavClick(item.href)}
-                    className="block w-full text-left text-gray-300 hover:text-white transition-colors duration-200 py-2"
-                    whileHover={{ x: 10 }}
+                    className="block w-full text-left text-gray-300 hover:text-white motion-hover py-2"
                   >
                     {item.name}
-                  </motion.button>
+                  </button>
                 ))}
                 <motion.button
                   onClick={() => handleNavClick('#contact')}
                   className="btn-primary w-full mt-4"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
+                  transition={{ 
+                    duration: 0.12,
+                    ease: [0.25, 0.46, 0.45, 0.94]
+                  }}
                 >
                   Me contacter
                 </motion.button>

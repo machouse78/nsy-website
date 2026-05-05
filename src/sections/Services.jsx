@@ -22,31 +22,40 @@ const Services = () => {
     GraduationCap
   }
 
+  // Motion Design optimized variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.2
+        staggerChildren: 0.06 // Plus rapide selon skill
       }
     }
   }
 
   const itemVariants = {
-    hidden: { y: 30, opacity: 0 },
+    hidden: { y: 30, opacity: 0, scale: 0.98 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.6 }
+      scale: 1,
+      transition: { 
+        duration: 0.18, // --dur-2
+        ease: [0.165, 0.84, 0.44, 1] // --ease-out-quart
+      }
     }
   }
 
   const cardVariants = {
-    hidden: { y: 50, opacity: 0 },
+    hidden: { y: 40, opacity: 0, scale: 0.97 },
     visible: {
       y: 0,
       opacity: 1,
-      transition: { duration: 0.8, ease: "easeOut" }
+      scale: 1,
+      transition: { 
+        duration: 0.18, // --dur-2 pour enter pattern
+        ease: [0.165, 0.84, 0.44, 1] // --ease-out-quart
+      }
     }
   }
 
