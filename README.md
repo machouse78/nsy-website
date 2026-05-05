@@ -13,25 +13,28 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 
 ## ✨ Fonctionnalités
 
-### 🎨 **Design & Interface**
-- **Thème sombre élégant** avec palette NSY personnalisée (orange/rouge/doré/cyan)
-- **Design 100% responsive** optimisé mobile-first
-- **Glassmorphisme** et effets de blur modernes
+### 🎨 **Design & Interface (Skill frontend-design appliqué)**
+- **Typographie distinctive** - Playfair Display + Satoshi (évite Inter/Roboto génériques)
+- **Compositions asymétriques** - Layouts audacieux avec overlaps et diagonal flow
+- **Color zones dynamiques** - Transitions CSS variables via GSAP ScrollTrigger
+- **Détails atmosphériques** - Grain overlay, gradient mesh, noise textures
+- **Grid-breaking elements** - Rotations subtiles, décalages créatifs, négative space
 - **Logo NSY animé** avec réseau neuronal de 50 particules interactives
-- **Effets magnétiques intelligents** avec fondu de couleur progressif
-- **Interface épurée** sans éléments perturbants
-- **Hiérarchie visuelle optimisée** avec titre centré au-dessus de l'animation
+- **Interface anti-générique** - Design mémorable évitant clichés IA
+- **Production-grade quality** - Chaque détail méticuleusement raffiné
 
-### ⚡ **Animations Avancées**
-- **Framer Motion** pour des transitions fluides 60fps
+### ⚡ **Animations Avancées (Skill frontend-design)**
+- **GSAP + ScrollTrigger** - Animations orchestrées avec révélations échelonnées
+- **Timeline chorégraphiée** - Stagger 0.12s entre éléments selon skill
+- **Color zones dynamiques** - Transitions background automatiques via scroll
+- **Stats animées GSAP** - Compteurs 4rem+ avec fromTo et snap precision
 - **Animation typing** dans la section Hero avec effet machine à écrire
 - **Réseau neuronal interactif** avec 50 particules et connexions dynamiques
 - **Fondu de couleur progressif** (orange ↔ bleu) avec interpolation RGB
 - **Forces magnétiques** et attraction vers la souris
 - **Animation continue** avec mouvements sinusoïdaux organiques
-- **Timeline interactive** pour la méthodologie
-- **Effets de parallaxe** et animations au scroll
-- **Micro-interactions** sur tous les éléments
+- **Geometric patterns animés** - SVG paths avec gradients et rotation continue
+- **Atmospheric glow effects** - Drop-shadows complexes et layered textures
 
 ### 🤖 **Fonctionnalités Interactives**
 - **ChatBot IA intégré** avec réponses contextuelles
@@ -57,8 +60,9 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 - **React Router DOM 6.8.1** - Routing côté client
 
 ### Styling & Animations
-- **Tailwind CSS 3.2.7** - Framework CSS utilitaire
+- **Tailwind CSS 3.2.7** - Framework CSS utilitaire avec color zones custom
 - **Framer Motion 10.0.0** - Animations et micro-interactions
+- **GSAP 3.x + ScrollTrigger** - Animations orchestrées et révélations échelonnées
 - **PostCSS 8.4.21** + **Autoprefixer 10.4.14**
 
 ### UI & Icons
