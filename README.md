@@ -23,18 +23,18 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 - **Interface anti-générique** - Design mémorable évitant clichés IA
 - **Production-grade quality** - Chaque détail méticuleusement raffiné
 
-### ⚡ **Animations Avancées (Skill frontend-design)**
+### ⚡ **Animations Expert (Skills frontend-design + motion-design)**
 - **GSAP + ScrollTrigger** - Animations orchestrées avec révélations échelonnées
-- **Timeline chorégraphiée** - Stagger 0.12s entre éléments selon skill
+- **Timeline chorégraphiée** - Stagger optimisé 0.06s selon motion-design skill
+- **Motion Design tokens** - CSS variables avec durées/easing standardisées
+- **Patterns intentionnels** - Enter/exit, hover subtils, button responsiveness
 - **Color zones dynamiques** - Transitions background automatiques via scroll
 - **Stats animées GSAP** - Compteurs 4rem+ avec fromTo et snap precision
 - **Animation typing** dans la section Hero avec effet machine à écrire
 - **Réseau neuronal interactif** avec 50 particules et connexions dynamiques
-- **Fondu de couleur progressif** (orange ↔ bleu) avec interpolation RGB
-- **Forces magnétiques** et attraction vers la souris
-- **Animation continue** avec mouvements sinusoïdaux organiques
-- **Geometric patterns animés** - SVG paths avec gradients et rotation continue
-- **Atmospheric glow effects** - Drop-shadows complexes et layered textures
+- **Animations performantes** - Focus transform/opacity, suppression complexité excessive
+- **Accessibilité motion** - Support prefers-reduced-motion natif
+- **UX-driven animations** - Chaque animation a un job précis (spatial continuity, responsiveness)
 
 ### 🤖 **Fonctionnalités Interactives**
 - **ChatBot IA intégré** avec réponses contextuelles
@@ -61,8 +61,9 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
 
 ### Styling & Animations
 - **Tailwind CSS 3.2.7** - Framework CSS utilitaire avec color zones custom
-- **Framer Motion 10.0.0** - Animations et micro-interactions
+- **Framer Motion 10.0.0** - Animations et micro-interactions avec motion design tokens
 - **GSAP 3.x + ScrollTrigger** - Animations orchestrées et révélations échelonnées
+- **Motion Design CSS Tokens** - Durées (--dur-1 à --dur-5), easing curves (--ease-out-*, --ease-in-out-*)
 - **PostCSS 8.4.21** + **Autoprefixer 10.4.14**
 
 ### UI & Icons
@@ -76,6 +77,32 @@ Site web professionnel présentant l'expertise en intelligence artificielle et d
   - Animations sophistiquées et micro-interactions
   - Compositions spatiales créatives et layouts non-conventionnels
   - Sites scroll-driven avec GSAP et zones de couleur
+
+- **motion-design-ui-animation** - Skill expert pour animations UX optimisées
+  - Tokens d'animation standardisés (durées, easing curves)
+  - Patterns d'animation respectés (enter/exit, hover, button press)
+  - Performance focus (transform/opacity uniquement)
+  - Accessibilité native (prefers-reduced-motion)
+  - Animations intentionnelles avec jobs précis (responsiveness, spatial continuity)
+
+## 🔄 Évolution du Projet
+
+### Phase 1 : Développement Initial
+- Création du site fonctionnel avec React + Vite
+- Design moderne et animations de base
+- Intégration des contenus NSY
+
+### Phase 2 : Skill Frontend-Design
+- Refactoring complet de l'interface avec le skill expert
+- Typographie distinctive (Playfair Display + Satoshi)
+- Compositions asymétriques et color zones
+- Animations GSAP orchestrées
+
+### Phase 3 : Skill Motion-Design-UI-Animation
+- Optimisation complète des animations selon les bonnes pratiques UX
+- Implémentation des tokens d'animation CSS standardisés
+- Patterns respectés : enter/exit, hover, button press
+- Performance et accessibilité native
 
 ## 🚀 Installation et Utilisation
 
@@ -156,17 +183,18 @@ Le fichier `.htaccess` est inclus et configuré pour :
 
 ```
 nsy-website/
-├── .claude/                    # Configuration IA et Skills
+├── .claude/                           # Configuration IA et Skills
 │   └── skills/
-│       └── frontend-design/    # Skill interfaces distinctives production-grade
+│       ├── frontend-design/          # Skill interfaces distinctives production-grade
+│       └── motion-design-ui-animation/  # Skill animations UX optimisées
 ├── src/
 │   ├── components/          # Composants réutilisables
-│   │   ├── common/         # Header, Footer
+│   │   ├── common/         # Header, Footer (motion design appliqué)
 │   │   └── ui/             # ChatBot, Animations, Particules
-│   ├── sections/           # Sections principales du site
-│   ├── data/               # Contenu centralisé
+│   ├── sections/           # Sections principales (animations optimisées)
+│   ├── data/               # Contenu centralisé + prompt complet
 │   ├── utils/              # Utilitaires (calculs dates)
-│   └── styles/             # Styles globaux
+│   └── styles/             # Styles globaux + motion design tokens
 ├── public/                 # Assets statiques
 ├── dist/                   # Build de production (généré)
 └── docs/                   # Documentation développement (50+ fichiers)
@@ -281,25 +309,29 @@ Optimisations incluses :
 
 ## 🔧 Améliorations Récentes
 
-### Interface & UX
+### Interface & UX (Skill frontend-design)
 - **Repositionnement du titre principal** au-dessus de l'animation NSY pour un impact visuel maximal
 - **Centrage du sous-titre** "Expert indépendant..." pour une parfaite lisibilité
 - **Alignement vertical optimisé** entre l'animation et le contenu textuel
-- **Suppression des éléments perturbants** (texte "Effet magnétique actif")
+- **Typographie distinctive** avec Playfair Display + Satoshi
 
-### Animation du Réseau Neuronal
+### Animation du Réseau Neuronal (Skills combinés)
 - **Stabilisation complète** : plus de recréation lors des mouvements de souris
 - **Animation continue** avec forces sinusoïdales pour un mouvement organique
 - **Fondu de couleur progressif** avec interpolation RGB mathématique précise
-- **Système de régénération intelligent** avec contrôle temporel (1s minimum)
 - **50 particules permanentes** formant un réseau neuronal cohérent
-- **Transitions fluides** orange (#f97316) ↔ bleu (#3b82f6) sans cassure visuelle
+
+### Motion Design Optimizations (Skill motion-design-ui-animation)
+- **Tokens CSS standardisés** : --dur-1 à --dur-5, --ease-out-*, --ease-in-out-*
+- **Patterns UX respectés** : enter/exit (ease-out), hover (subtil), button press (responsiveness)
+- **Performance optimisée** : focus transform/opacity, suppression animations complexes
+- **Accessibilité native** : support prefers-reduced-motion
+- **Intentions claires** : chaque animation a un job précis (spatial continuity, feedback)
 
 ### Corrections Techniques
-- **Couleurs Tailwind CSS** : résolution des erreurs `cyber-500` avec palette cyan
 - **Build optimisé** : installation automatique de `terser` pour la minification
 - **Repository Git** : initialisation et synchronisation avec GitHub
-- **Documentation complète** : README professionnel avec badges et instructions
+- **Documentation complète** : README professionnel avec skills détaillés
 
 ## 📈 Processus de Développement
 
