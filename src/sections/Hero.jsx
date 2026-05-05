@@ -165,7 +165,7 @@ const Hero = () => {
             transition={{ delay: 0.5 }}
             className="relative text-left ml-8 md:ml-16"
           >
-            <div className="hero-subtitle text-xl md:text-3xl text-gray-300 font-body font-medium transform rotate-1 bg-dark-800/60 backdrop-blur-sm px-6 py-3 rounded-lg border border-cyber-500/20 inline-block">
+            <div className="hero-subtitle text-xl md:text-3xl text-gray-300 font-sans font-medium transform rotate-1 bg-dark-800/60 backdrop-blur-sm px-6 py-3 rounded-lg border border-cyber-500/20 inline-block">
               <span className="typing-animation whitespace-nowrap overflow-hidden tracking-wide">
                 {typedText}
               </span>
@@ -275,7 +275,7 @@ const Hero = () => {
                       <span className="text-2xl md:text-3xl opacity-60">+</span>
                     </div>
                     {/* Label - uppercase letterspaced selon skill */}
-                    <div className="text-xs uppercase tracking-[0.15em] text-gray-400 mt-2 font-body font-semibold">
+                    <div className="text-xs uppercase tracking-[0.15em] text-gray-400 mt-2 font-sans font-semibold">
                       {stat.label}
                     </div>
                     

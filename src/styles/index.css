@@ -18,7 +18,7 @@
   }
   
   body {
-    @apply bg-dark-900 text-white font-body;
+    @apply bg-dark-900 text-white font-sans;
     background: linear-gradient(135deg, var(--bg-dark) 0%, var(--bg-accent) 40%, #451a03 70%, #7c2d12 100%);
     min-height: 100vh;
   }

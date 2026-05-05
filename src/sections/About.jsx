@@ -89,7 +89,7 @@ const About = () => {
           {/* Section Header - LAYOUT ASYMÉTRIQUE */}
           <div className="about-element relative mb-20">
             {/* Section label - Skill compliant */}
-            <div className="absolute -top-4 left-8 text-xs uppercase tracking-[0.2em] text-primary-400/60 font-body font-bold">
+            <div className="absolute -top-4 left-8 text-xs uppercase tracking-[0.2em] text-primary-400/60 font-sans font-bold">
               002 / EXPERTISE
             </div>
             
@@ -101,7 +101,7 @@ const About = () => {
             
             {/* Subtitle - RIGHT-ALIGNED contrast */}
             <div className="about-element max-w-2xl ml-auto mr-16 text-right">
-              <p className="text-xl md:text-2xl text-gray-300 font-body leading-relaxed italic transform rotate-1">
+              <p className="text-xl md:text-2xl text-gray-300 font-sans leading-relaxed italic transform rotate-1">
                 {siteContent.about.subtitle}
               </p>
             </div>
