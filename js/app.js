@@ -41,7 +41,7 @@ function initVideoHandling() {
         // Ensure video plays (Apple style - autoplay on load)
         heroVideo.addEventListener('loadedmetadata', () => {
             videoDuration = heroVideo.duration;
-            fadeStartTime = videoDuration - 2; // Start fade 2 seconds before end
+            fadeStartTime = videoDuration - 0.5; // Start fade 0.5 seconds before end
             
             heroVideo.play().catch(e => {
                 console.log('Autoplay prevented:', e);
@@ -54,8 +54,8 @@ function initVideoHandling() {
             const currentTime = heroVideo.currentTime;
             
             if (currentTime >= fadeStartTime && currentTime < videoDuration) {
-                // Calculate fade progress (0 to 1 over 2 seconds)
-                const fadeProgress = (currentTime - fadeStartTime) / 2;
+                // Calculate fade progress (0 to 1 over 0.5 seconds)
+                const fadeProgress = (currentTime - fadeStartTime) / 0.5;
                 
                 // Smooth easing function for more natural feel
                 const easedProgress = 1 - Math.pow(1 - fadeProgress, 3); // Cubic ease-out
