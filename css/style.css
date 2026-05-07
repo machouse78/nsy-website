@@ -189,13 +189,6 @@ body {
   height: 100%;
   object-fit: cover;
   object-position: center;
-  transition: opacity 0.5s ease, filter 0.5s ease;
-}
-
-/* Video fade-out effects */
-.video-fade-out {
-  filter: blur(0.5px) brightness(0.9);
-  transition: filter 2s ease, opacity 2s ease;
 }
 
 /* Content Hero Section - Under the video */
