@@ -359,8 +359,8 @@ function initNavigation() {
                     case 'services':    // Services - needs more buffer  
                         buffer = 200;   
                         break;
-                    case 'contact':     // Contact - needs more buffer
-                        buffer = 200;   
+                    case 'contact':     // Contact - needs much more buffer (end of page)
+                        buffer = 400;   
                         break;
                     case 'expertise':   // Expertise - perfect as is
                         buffer = 100;   
@@ -384,18 +384,143 @@ function initNavigation() {
     });
 }
 
-// CTA Button functionality
+// Contact Form and Chatbot functionality
 document.addEventListener('DOMContentLoaded', () => {
-    const ctaButton = document.querySelector('.cta-button');
-    if (ctaButton) {
-        ctaButton.addEventListener('click', () => {
-            window.open('mailto:contact@nsy.fr?subject=Demande de projet', '_blank');
-        });
-    }
-    
     // Initialize navigation after DOM is loaded
     initNavigation();
+    initContactForm();
+    initChatbot();
 });
+
+// Contact Form Handler
+function initContactForm() {
+    const contactForm = document.getElementById('contactForm');
+    
+    if (contactForm) {
+        contactForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const name = formData.get('name');
+            const email = formData.get('email');
+            const subject = formData.get('subject') || 'Nouveau projet';
+            const message = formData.get('message');
+            
+            // Create mailto link
+            const mailtoLink = `mailto:contact@nsy.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
+                `Bonjour,\n\nNom: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\nCordialement,\n${name}`
+            )}`;
+            
+            window.open(mailtoLink, '_blank');
+            
+            // Show success message
+            showFormSuccess();
+        });
+    }
+}
+
+function showFormSuccess() {
+    const submitBtn = document.querySelector('.form-submit');
+    const originalText = submitBtn.textContent;
+    
+    submitBtn.textContent = 'Message envoyé !';
+    submitBtn.style.background = '#10b981';
+    
+    setTimeout(() => {
+        submitBtn.textContent = originalText;
+        submitBtn.style.background = '';
+    }, 3000);
+}
+
+// Chatbot IA
+function initChatbot() {
+    const chatbotToggle = document.getElementById('chatbot-toggle');
+    const chatbotWindow = document.getElementById('chatbot-window');
+    const chatbotClose = document.getElementById('chatbot-close');
+    const chatbotInput = document.getElementById('chatbot-input');
+    const chatbotSend = document.getElementById('chatbot-send');
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    
+    // Toggle chatbot
+    chatbotToggle.addEventListener('click', () => {
+        chatbotWindow.classList.add('open');
+    });
+    
+    chatbotClose.addEventListener('click', () => {
+        chatbotWindow.classList.remove('open');
+    });
+    
+    // Send message
+    function sendMessage() {
+        const message = chatbotInput.value.trim();
+        if (!message) return;
+        
+        // Add user message
+        addMessage(message, 'user');
+        chatbotInput.value = '';
+        
+        // Simulate bot response
+        setTimeout(() => {
+            const response = getBotResponse(message);
+            addMessage(response, 'bot');
+        }, 1000);
+    }
+    
+    chatbotSend.addEventListener('click', sendMessage);
+    chatbotInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+}
+
+function addMessage(content, type) {
+    const chatbotMessages = document.getElementById('chatbot-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}-message`;
+    
+    const messageContent = document.createElement('div');
+    messageContent.className = 'message-content';
+    messageContent.textContent = content;
+    
+    messageDiv.appendChild(messageContent);
+    chatbotMessages.appendChild(messageDiv);
+    
+    // Scroll to bottom
+    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+}
+
+function getBotResponse(userMessage) {
+    const message = userMessage.toLowerCase();
+    
+    // Simple bot responses based on keywords
+    if (message.includes('service') || message.includes('développement')) {
+        return "NSY propose des services de développement web, mobile, intégration IA et automatisation. Souhaitez-vous plus d'informations sur un domaine spécifique ?";
+    }
+    
+    if (message.includes('ia') || message.includes('intelligence') || message.includes('ai')) {
+        return "Notre expertise en IA couvre : machine learning, automatisation des processus, chatbots, analyse de données et solutions personnalisées. Quel est votre projet ?";
+    }
+    
+    if (message.includes('prix') || message.includes('coût') || message.includes('tarif')) {
+        return "Nos tarifs sont personnalisés selon votre projet. Contactez-nous via le formulaire pour un devis gratuit adapté à vos besoins spécifiques.";
+    }
+    
+    if (message.includes('contact') || message.includes('email')) {
+        return "Vous pouvez nous contacter à : contact@nsy.fr ou utiliser le formulaire de contact sur cette page. Nous répondons sous 24h !";
+    }
+    
+    if (message.includes('expérience') || message.includes('portfolio')) {
+        return "NSY a plus de 12 ans d'expérience en développement et transformation digitale. Nous accompagnons entreprises et startups dans leurs projets technologiques.";
+    }
+    
+    if (message.includes('bonjour') || message.includes('salut') || message.includes('hello')) {
+        return "Bonjour ! Ravi de vous rencontrer. Je suis là pour répondre à vos questions sur NSY et nos services. Que puis-je vous expliquer ?";
+    }
+    
+    // Default response
+    return "Merci pour votre question ! Pour une réponse personnalisée, n'hésitez pas à nous contacter directement à contact@nsy.fr ou via le formulaire de contact.";
+}
 
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
