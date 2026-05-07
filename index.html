@@ -39,25 +39,28 @@
         </nav>
     </header>
 
-    <!-- Video Hero Section - Directly visible under header -->
+    <!-- Video Hero Section - Like Apple iPhone pages -->
     <section class="video-hero">
-        <!-- Canvas Container - Always visible -->
-        <div class="canvas-wrap">
-            <canvas id="canvas"></canvas>
+        <!-- Video Container - Auto-play, no loop -->
+        <div class="video-container">
+            <video id="hero-video" autoplay muted playsinline>
+                <source src="video.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
         </div>
-        
-        <!-- Video overlay content -->
-        <div class="video-overlay">
-            <div class="video-content">
-                <div class="section-label">001 / Innovation</div>
-                <h1 class="hero-heading">
-                    <span>Intelligence</span>
-                    <span>Artificielle</span>
-                    <span>&amp; Solutions</span>
-                    <span>Numériques</span>
-                </h1>
-                <p class="hero-tagline">ESN experte en nouvelles technologies, nous accompagnons votre transformation digitale avec l'IA au cœur de l'innovation.</p>
-            </div>
+    </section>
+
+    <!-- Content Section - Positioned under video -->
+    <section class="content-hero">
+        <div class="hero-content-wrapper">
+            <div class="section-label">001 / Innovation</div>
+            <h1 class="hero-heading">
+                <span>Intelligence</span>
+                <span>Artificielle</span>
+                <span>&amp; Solutions</span>
+                <span>Numériques</span>
+            </h1>
+            <p class="hero-tagline">ESN experte en nouvelles technologies, nous accompagnons votre transformation digitale avec l'IA au cœur de l'innovation.</p>
             
             <!-- Scroll Indicator -->
             <div class="scroll-indicator">
