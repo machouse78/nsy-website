@@ -360,7 +360,7 @@ function initNavigation() {
                         buffer = 200;   
                         break;
                     case 'contact':     // Contact - needs much more buffer (end of page)
-                        buffer = 400;   
+                        buffer = 600;   // Augmenté de 400px → 600px
                         break;
                     case 'expertise':   // Expertise - perfect as is
                         buffer = 100;   
@@ -390,7 +390,30 @@ document.addEventListener('DOMContentLoaded', () => {
     initNavigation();
     initContactForm();
     initChatbot();
+    initFooter();
 });
+
+// Footer functionality
+function initFooter() {
+    // Update copyright year automatically
+    const currentYearSpan = document.getElementById('current-year');
+    if (currentYearSpan) {
+        currentYearSpan.textContent = new Date().getFullYear();
+    }
+    
+    // Make footer navigation links work
+    const footerLinks = document.querySelectorAll('.footer-column a');
+    footerLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1);
+            const navLink = document.querySelector(`.nav-links a[href="#${targetId}"]`);
+            if (navLink) {
+                navLink.click(); // Reuse existing navigation logic
+            }
+        });
+    });
+}
 
 // Contact Form Handler
 function initContactForm() {
