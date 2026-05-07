@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap (à créer après mise en ligne)
+Sitemap: https://www.nsy.fr/sitemap.xml
+
+# Interdire l'indexation des fichiers techniques
+Disallow: /css/
+Disallow: /js/
+Disallow: /.htaccess
+Disallow: /frames/
+
+# Autoriser l'indexation des pages principales
+Allow: /index.html
+Allow: /public/

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NSY - Intelligence Artificielle & Solutions Numériques | ESN Experte</title>
+    <meta name="description" content="NSY, Entreprise de Services du Numérique experte en IA et nouvelles technologies. Développement web, mobile, automatisation et transformation digitale. 12+ ans d'expérience.">
+    <meta name="keywords" content="NSY, Intelligence Artificielle, IA, ESN, développement web, mobile, automatisation, transformation digitale, machine learning, solutions numériques">
+    <meta name="author" content="NSY - Cédric Barme">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="NSY - Intelligence Artificielle & Solutions Numériques">
+    <meta property="og:description" content="ESN experte en IA et nouvelles technologies. Accompagnement personnalisé dans la transformation digitale.">
+    <meta property="og:url" content="https://www.nsy.fr">
+    <meta property="og:image" content="https://www.nsy.fr/public/nsy-logo.png">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:title" content="NSY - Intelligence Artificielle & Solutions Numériques">
+    <meta property="twitter:description" content="ESN experte en IA et nouvelles technologies. Accompagnement personnalisé dans la transformation digitale.">
+    <meta property="twitter:image" content="https://www.nsy.fr/public/nsy-logo.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="public/nsy-logo.png">
+    <link rel="apple-touch-icon" href="public/nsy-logo.png">
+    
+    <!-- Fonts distinctives selon skill frontend-design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Loader -->
+    <div id="loader">
+        <div class="loader-brand">
+            <img src="public/nsy-logo.png" alt="NSY Logo" id="loader-logo">
+        </div>
+        <div id="loader-bar">
+            <div class="loader-fill"></div>
+        </div>
+        <div id="loader-percent">0%</div>
+    </div>
+
+    <!-- Fixed Header -->
+    <header class="site-header">
+        <nav>
+            <div class="nav-logo">
+                <span class="logo-text">NSY</span>
+                <span class="logo-subtitle">AI & Digital</span>
+            </div>
+            <div class="nav-links">
+                <a href="#about">La Société</a>
+                <a href="#services">Services</a>
+                <a href="#expertise">Expertise</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Video Hero Section - Like Apple iPhone pages -->
+    <section class="video-hero">
+        <!-- Video Container - Auto-play, no loop -->
+        <div class="video-container">
+            <video id="hero-video" autoplay muted playsinline>
+                <source src="public/video.mp4" type="video/mp4">
+                Votre navigateur ne supporte pas la lecture vidéo.
+            </video>
+        </div>
+    </section>
+
+    <!-- Content Section - Positioned under video -->
+    <section class="content-hero">
+        <div class="hero-content-wrapper">
+            <div class="section-label">001 / Innovation</div>
+            <p class="hero-tagline">ESN experte en nouvelles technologies, nous accompagnons votre transformation digitale avec l'IA au cœur de l'innovation.</p>
+            
+            <!-- Scroll Indicator -->
+            <div class="scroll-indicator">
+                <span>Découvrir</span>
+                <div class="scroll-arrow">↓</div>
+            </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- Canvas Container -->
+    <div class="canvas-wrap">
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <!-- Dark Overlay for Stats Section -->
+    <div id="dark-overlay"></div>
+
+    <!-- Marquee Elements -->
+    <div class="marquee-wrap" data-scroll-speed="-30" style="top: 25vh;">
+        <div class="marquee-text">NSY • INTELLIGENCE ARTIFICIELLE • INNOVATION •</div>
+    </div>
+
+    <div class="marquee-wrap" data-scroll-speed="25" style="top: 75vh;">
+        <div class="marquee-text">TRANSFORMATION DIGITALE • EXPERTISE • NSY •</div>
+    </div>
+
+    <!-- Scroll Container -->
+    <div id="scroll-container">
+        
+        <!-- About Section -->
+        <section class="scroll-section section-content align-left" id="about"
+                 data-enter="22" data-leave="38" data-animation="slide-left">
+            <div class="section-inner">
+                <span class="section-label">002 / La Société</span>
+                <h2 class="section-heading">NSY, votre partenaire technologique</h2>
+                <p class="section-body">Entreprise de Services du Numérique (ESN) experte dans le domaine des nouvelles technologies et de l'informatique. Notre mission évolue constamment : nous proposons à nos clients une expertise technique et de conseil pour les accompagner dans la transition de l'ère numérique.</p>
+                <p class="section-note">Une approche personnalisée alliant innovation et expertise technique pour réussir votre transformation digitale.</p>
+            </div>
+        </section>
+
+        <!-- Services Section -->
+        <section class="scroll-section section-content align-right" id="services"
+                 data-enter="40" data-leave="56" data-animation="slide-right">
+            <div class="section-inner">
+                <span class="section-label">003 / Services</span>
+                <h2 class="section-heading">Développement & Innovation</h2>
+                <p class="section-body">Développement d'applications web et mobiles, intégration d'intelligence artificielle, automatisation des processus métier. Nous créons des solutions sur-mesure adaptées à vos besoins spécifiques.</p>
+                <div class="service-list">
+                    <div class="service-item">• Applications Web & Mobile</div>
+                    <div class="service-item">• Intelligence Artificielle</div>
+                    <div class="service-item">• Automatisation</div>
+                    <div class="service-item">• Conseil & Expertise</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="scroll-section section-stats"
+                 data-enter="58" data-leave="72" data-animation="stagger-up">
+            <div class="stats-grid">
+                <div class="stat">
+                    <span class="stat-number" data-value="12" data-decimals="0">0</span>
+                    <span class="stat-suffix">ans</span>
+                    <span class="stat-label">D'expérience</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-value="89" data-decimals="0">0</span>
+                    <span class="stat-suffix">%</span>
+                    <span class="stat-label">D'internautes en France</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-number" data-value="80" data-decimals="0">0</span>
+                    <span class="stat-suffix">%</span>
+                    <span class="stat-label">Se connectent quotidiennement</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Expertise Section -->
+        <section class="scroll-section section-content align-left"
+                 data-enter="74" data-leave="88" data-animation="scale-up" id="expertise">
+            <div class="section-inner">
+                <span class="section-label">004 / Expertise</span>
+                <h2 class="section-heading">Technologies de pointe</h2>
+                <p class="section-body">Maîtrise des dernières technologies et frameworks. Spécialisation en intelligence artificielle, développement full-stack, et solutions cloud. Une veille technologique constante pour rester à la pointe de l'innovation.</p>
+                <p class="section-note">React, Node.js, Python, IA/ML, Cloud AWS/Azure, DevOps, et bien plus encore.</p>
+            </div>
+        </section>
+
+        <!-- Contact CTA Section -->
+        <section class="scroll-section section-cta align-right"
+                 data-enter="90" data-leave="100" data-animation="fade-up" data-persist="true" id="contact">
+            <div class="section-inner">
+                <span class="section-label">005 / Contact</span>
+                <h2 class="section-heading">Démarrons votre projet</h2>
+                <p class="section-body">Prêt à transformer votre vision en réalité ? Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous accompagner dans votre transformation digitale.</p>
+                
+                <!-- Formulaire de Contact -->
+                <form class="contact-form" id="contactForm">
+                    <div class="form-group">
+                        <input type="text" id="name" name="name" placeholder="Nom complet" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="email" id="email" name="email" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" id="subject" name="subject" placeholder="Sujet du projet">
+                    </div>
+                    <div class="form-group">
+                        <textarea id="message" name="message" placeholder="Décrivez votre projet..." rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="cta-button form-submit">Envoyer le message</button>
+                </form>
+                
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <span class="contact-label">Email</span>
+                        <span class="contact-value">contact@nsy.fr</span>
+                    </div>
+                    <div class="contact-item">
+                        <span class="contact-label">Innovation</span>
+                        <span class="contact-value">Intelligence Artificielle</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="footer-content">
+            <div class="footer-info">
+                <div class="footer-logo">
+                    <img src="public/nsy-logo.png" alt="NSY Logo" class="footer-logo-img">
+                    <span class="footer-brand">NSY</span>
+                </div>
+                <p class="footer-description">
+                    Entreprise de Services du Numérique spécialisée en Intelligence Artificielle et transformation digitale.
+                </p>
+            </div>
+            
+            <div class="footer-links">
+                <div class="footer-column">
+                    <h4>Navigation</h4>
+                    <ul>
+                        <li><a href="#about">La Société</a></li>
+                        <li><a href="#services">Services</a></li>
+                        <li><a href="#expertise">Expertise</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>contact@nsy.fr</li>
+                        <li>Intelligence Artificielle</li>
+                        <li>Solutions Numériques</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <p>&copy; <span id="current-year">2024</span> NSY. Tous droits réservés.</p>
+            <p class="footer-ai-mention">Site créé avec l'IA • Transparence totale</p>
+        </div>
+    </footer>
+
+    <!-- Chatbot IA -->
+    <div class="chatbot-container" id="chatbot">
+        <div class="chatbot-toggle" id="chatbot-toggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
+            </svg>
+        </div>
+        
+        <div class="chatbot-window" id="chatbot-window">
+            <div class="chatbot-header">
+                <div class="chatbot-title">
+                    <img src="public/nsy-logo.png" alt="NSY" class="chatbot-logo">
+                    <span>Assistant NSY</span>
+                </div>
+                <button class="chatbot-close" id="chatbot-close">×</button>
+            </div>
+            
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    <div class="message-content">
+                        Bonjour ! Je suis l'assistant virtuel de NSY. Comment puis-je vous aider avec vos projets d'IA et de transformation digitale ?
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chatbot-input-container">
+                <input type="text" id="chatbot-input" placeholder="Tapez votre question..." />
+                <button id="chatbot-send">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>
