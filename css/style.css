@@ -298,10 +298,11 @@ body {
 
 /* Scroll Container - Starts after video + content hero */
 #scroll-container {
-  height: 800vh;
+  height: 1000vh; /* Augmenté pour permettre scroll jusqu'en bas */
   position: relative;
   z-index: 50;
   background: var(--bg-dark);
+  padding-bottom: 10vh; /* Padding pour voir la dernière section */
 }
 
 /* Scroll Sections */
@@ -410,6 +411,12 @@ body {
 /* CTA Section */
 .section-cta .section-inner {
   max-width: 35vw;
+}
+
+/* Ensure contact section is fully visible */
+.section-cta[data-persist="true"] {
+  padding-bottom: 5vh;
+  min-height: 80vh;
 }
 
 .cta-button {

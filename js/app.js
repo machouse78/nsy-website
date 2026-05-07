@@ -104,6 +104,9 @@ function startExperience() {
     
     // Start hero animations immediately
     initHeroAnimations();
+    
+    // Initialize navigation
+    initNavigation();
 }
 
 // Video plays automatically, no frame binding needed
@@ -329,6 +332,34 @@ function initDarkOverlay() {
     });
 }
 
+// Navigation functionality
+function initNavigation() {
+    const navLinks = document.querySelectorAll('.nav-links a');
+    
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href').substring(1); // Remove #
+            const targetElement = document.getElementById(targetId);
+            
+            if (targetElement) {
+                // Calculate position accounting for video hero offset
+                const elementTop = targetElement.offsetTop;
+                const videoHeroHeight = document.querySelector('.video-hero').offsetHeight + 
+                                      document.querySelector('.content-hero').offsetHeight;
+                
+                // Scroll with Lenis smooth scroll
+                if (lenis) {
+                    lenis.scrollTo(elementTop + videoHeroHeight, {
+                        duration: 2,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                    });
+                }
+            }
+        });
+    });
+}
+
 // CTA Button functionality
 document.addEventListener('DOMContentLoaded', () => {
     const ctaButton = document.querySelector('.cta-button');
@@ -337,6 +368,9 @@ document.addEventListener('DOMContentLoaded', () => {
             window.open('mailto:contact@nsy.fr?subject=Demande de projet', '_blank');
         });
     }
+    
+    // Initialize navigation after DOM is loaded
+    initNavigation();
 });
 
 // Register ScrollTrigger
