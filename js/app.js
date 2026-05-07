@@ -19,7 +19,7 @@ const loaderBar = document.querySelector('.loader-fill');
 const loaderPercent = document.getElementById('loader-percent');
 const canvasWrap = document.querySelector('.canvas-wrap');
 const scrollContainer = document.getElementById('scroll-container');
-const heroSection = document.querySelector('.hero-standalone');
+const videoHero = document.querySelector('.video-hero');
 const darkOverlay = document.getElementById('dark-overlay');
 
 // Initialize everything
@@ -193,16 +193,18 @@ function startExperience() {
     initCounters();
     initMarquees();
     initDarkOverlay();
-    initHeroTransition();
     
-    // Draw first frame
+    // Draw first frame - video is immediately visible
     drawFrame(0);
+    
+    // Start hero animations immediately
+    initHeroAnimations();
 }
 
-// 7. FRAME-TO-SCROLL BINDING selon skill
+// 7. FRAME-TO-SCROLL BINDING - Video plays on entire page scroll
 function initScrollTriggers() {
     ScrollTrigger.create({
-        trigger: scrollContainer,
+        trigger: document.body,
         start: "top top",
         end: "bottom bottom",
         scrub: true,
@@ -218,21 +220,21 @@ function initScrollTriggers() {
     });
 }
 
-// 8. HERO ANIMATIONS (Word Split)
+// 8. HERO ANIMATIONS (Word Split) - Immediate on load
 function initHeroAnimations() {
     // Hero heading word animation
     const heroSpans = document.querySelectorAll('.hero-heading span');
     const heroTagline = document.querySelector('.hero-tagline');
     const scrollIndicator = document.querySelector('.scroll-indicator');
     
-    // Initial state is set in CSS, animate in
+    // Animate in immediately when video is visible
     gsap.to(heroSpans, {
         y: 0,
         opacity: 1,
         duration: 1.2,
         ease: "power3.out",
         stagger: 0.15,
-        delay: 0.5
+        delay: 0.3
     });
     
     gsap.to(heroTagline, {
@@ -240,7 +242,7 @@ function initHeroAnimations() {
         opacity: 1,
         duration: 0.8,
         ease: "power3.out",
-        delay: 1.2
+        delay: 1.0
     });
     
     gsap.to(scrollIndicator, {
@@ -248,30 +250,11 @@ function initHeroAnimations() {
         opacity: 1,
         duration: 0.6,
         ease: "power2.out",
-        delay: 1.8
+        delay: 1.5
     });
 }
 
-// 9. CIRCLE-WIPE HERO REVEAL selon skill
-function initHeroTransition() {
-    ScrollTrigger.create({
-        trigger: scrollContainer,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-            const p = self.progress;
-            
-            // Hero fades out as scroll begins
-            heroSection.style.opacity = Math.max(0, 1 - p * 15);
-            
-            // Canvas reveals via expanding circle clip-path
-            const wipeProgress = Math.min(1, Math.max(0, (p - 0.01) / 0.06));
-            const radius = wipeProgress * 75; // 0% to 75% of viewport
-            canvasWrap.style.clipPath = `circle(${radius}% at 50% 50%)`;
-        }
-    });
-}
+// No hero transition needed - video is immediately visible
 
 // 10. SECTION ANIMATION SYSTEM selon skill
 function initSectionAnimations() {
@@ -373,19 +356,24 @@ function setupSectionAnimation(section) {
             break;
     }
 
-    // ScrollTrigger for section animation
+    // ScrollTrigger for section animation - Account for video hero offset
     ScrollTrigger.create({
-        trigger: scrollContainer,
+        trigger: document.body,
         start: "top top",
         end: "bottom bottom",
         scrub: true,
         onUpdate: (self) => {
-            const p = self.progress;
+            // Adjust progress to account for video hero taking first 100vh
+            const totalHeight = document.body.scrollHeight;
+            const videoHeroHeight = window.innerHeight;
+            const contentScrollProgress = Math.max(0, (self.progress * totalHeight - videoHeroHeight) / (totalHeight - videoHeroHeight));
+            
+            const p = contentScrollProgress;
             
             if (p >= enter && p <= leave) {
                 const sectionProgress = (p - enter) / (leave - enter);
                 section.style.opacity = 1;
-                tl.progress(Math.min(sectionProgress * 2, 1)); // Animation completes at 50% of section
+                tl.progress(Math.min(sectionProgress * 2, 1));
             } else if (persist && p > leave) {
                 section.style.opacity = 1;
                 tl.progress(1);
