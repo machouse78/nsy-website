@@ -172,8 +172,23 @@ function setupSectionAnimation(section) {
     const leave = parseFloat(section.dataset.leave) / 100;
     
     const children = section.querySelectorAll(
-        ".section-label, .section-heading, .section-body, .section-note, .cta-button, .contact-info, .service-list, .stat"
+        ".section-label, .section-heading, .section-body, .section-note, .contact-info, .service-list, .stat"
     );
+    
+    // Force formulaire visibility for contact section
+    if (section.id === 'contact') {
+        const form = section.querySelector('.contact-form');
+        const submitBtn = section.querySelector('.form-submit');
+        if (form) {
+            form.style.opacity = '1';
+            form.style.visibility = 'visible';
+        }
+        if (submitBtn) {
+            submitBtn.style.opacity = '1';
+            submitBtn.style.visibility = 'visible';
+            submitBtn.style.display = 'block';
+        }
+    }
 
     const tl = gsap.timeline({ paused: true });
 
@@ -516,33 +531,57 @@ function addMessage(content, type) {
 function getBotResponse(userMessage) {
     const message = userMessage.toLowerCase();
     
-    // Simple bot responses based on keywords
+    // Enriched professional bot responses
     if (message.includes('service') || message.includes('développement')) {
-        return "NSY propose des services de développement web, mobile, intégration IA et automatisation. Souhaitez-vous plus d'informations sur un domaine spécifique ?";
+        return "🚀 NSY offre une gamme complète de services technologiques :\n\n• Développement d'applications web et mobile (React, Node.js, Flutter)\n• Intégration d'Intelligence Artificielle (ML, NLP, Computer Vision)\n• Automatisation des processus métier et RPA\n• Conseil en transformation digitale\n• Architecture cloud et DevOps\n\nDans quel domaine souhaitez-vous approfondir ?";
     }
     
-    if (message.includes('ia') || message.includes('intelligence') || message.includes('ai')) {
-        return "Notre expertise en IA couvre : machine learning, automatisation des processus, chatbots, analyse de données et solutions personnalisées. Quel est votre projet ?";
+    if (message.includes('ia') || message.includes('intelligence') || message.includes('ai') || message.includes('machine learning')) {
+        return "🧠 Notre expertise IA est au cœur de notre offre :\n\n• Machine Learning & Deep Learning (TensorFlow, PyTorch)\n• Traitement du langage naturel (NLP) et chatbots intelligents\n• Computer Vision et reconnaissance d'images\n• Automatisation intelligente des processus (RPA + IA)\n• Systèmes de recommandation personnalisés\n• Analyse prédictive et Business Intelligence\n\nAvez-vous un cas d'usage particulier en tête ?";
     }
     
-    if (message.includes('prix') || message.includes('coût') || message.includes('tarif')) {
-        return "Nos tarifs sont personnalisés selon votre projet. Contactez-nous via le formulaire pour un devis gratuit adapté à vos besoins spécifiques.";
+    if (message.includes('prix') || message.includes('coût') || message.includes('tarif') || message.includes('budget')) {
+        return "💰 Nos tarifs sont adaptés à chaque projet :\n\n• Audit initial et conseil : Gratuit (1h)\n• Développement web/mobile : À partir de 500€/jour\n• Projets IA : Devis personnalisé selon complexité\n• Forfaits tout inclus pour PME/startups\n• Support et maintenance : Plans flexibles\n\n📞 Contactez-nous pour un devis précis et sans engagement !";
     }
     
-    if (message.includes('contact') || message.includes('email')) {
-        return "Vous pouvez nous contacter à : contact@nsy.fr ou utiliser le formulaire de contact sur cette page. Nous répondons sous 24h !";
+    if (message.includes('contact') || message.includes('email') || message.includes('rendez-vous')) {
+        return "📧 Contactez NSY facilement :\n\n• Email direct : contact@nsy.fr (réponse < 24h)\n• Formulaire de contact sur cette page\n• Consultation gratuite de 30min disponible\n• Télétravail ou sur site selon vos préférences\n\n🕒 Nous privilégions un premier échange pour comprendre vos enjeux avant tout engagement.";
     }
     
-    if (message.includes('expérience') || message.includes('portfolio')) {
-        return "NSY a plus de 12 ans d'expérience en développement et transformation digitale. Nous accompagnons entreprises et startups dans leurs projets technologiques.";
+    if (message.includes('expérience') || message.includes('portfolio') || message.includes('référence')) {
+        return "🏆 NSY : Plus de 12 ans d'expertise prouvée :\n\n• 50+ projets réalisés (startups, PME, grands comptes)\n• Expertise technique : Full-Stack, Cloud, DevOps, IA\n• Secteurs : E-commerce, Fintech, Santé, Industrie 4.0\n• Certifications : AWS, Google Cloud, Microsoft Azure\n• Méthodologies : Agile, Scrum, DevOps, Design Thinking\n\n📈 Taux de satisfaction client : 98% | Projets livrés dans les délais : 95%";
     }
     
-    if (message.includes('bonjour') || message.includes('salut') || message.includes('hello')) {
-        return "Bonjour ! Ravi de vous rencontrer. Je suis là pour répondre à vos questions sur NSY et nos services. Que puis-je vous expliquer ?";
+    if (message.includes('technologie') || message.includes('stack') || message.includes('outil')) {
+        return "⚙️ Notre stack technologique de pointe :\n\n🎯 Frontend : React, Vue.js, Angular, TypeScript\n🔧 Backend : Node.js, Python, Java, .NET\n☁️ Cloud : AWS, Azure, Google Cloud, Docker, Kubernetes\n🤖 IA/ML : TensorFlow, PyTorch, OpenAI API, Hugging Face\n📱 Mobile : React Native, Flutter, PWA\n🗄️ Databases : PostgreSQL, MongoDB, Redis\n\nQuelle technologie vous intéresse le plus ?";
+    }
+    
+    if (message.includes('méthodologie') || message.includes('processus') || message.includes('méthode')) {
+        return "📋 Notre méthodologie éprouvée en 6 étapes :\n\n1. 🎯 Audit & Analyse des besoins\n2. 🏗️ Architecture & Conception technique\n3. 💻 Développement itératif (sprints 2 semaines)\n4. 🧪 Tests & Validation qualité\n5. 🚀 Déploiement & Mise en production\n6. 🔄 Support & Évolutions continues\n\n✨ Approche Agile avec livraisons fréquentes et feedback client constant.";
+    }
+    
+    if (message.includes('équipe') || message.includes('qui') || message.includes('cédric')) {
+        return "👨‍💻 L'équipe NSY :\n\n🎖️ Cédric Barme - Fondateur & Lead Developer\n• 12+ ans d'expérience Full-Stack\n• Expert en IA et transformation digitale\n• Ancien consultant grands comptes\n• Passionné d'innovation et nouvelles technologies\n\n🤝 Réseau de partenaires spécialisés selon vos besoins\n📚 Formation continue et veille technologique quotidienne";
+    }
+    
+    if (message.includes('bonjour') || message.includes('salut') || message.includes('hello') || message.includes('bonsoir')) {
+        return "👋 Bonjour et bienvenue sur le site NSY !\n\nJe suis votre assistant virtuel, spécialisé en :\n• Renseignements sur nos services IA et développement\n• Information sur nos méthodes et technologies\n• Orientation pour votre projet digital\n• Mise en relation avec notre équipe\n\n💡 Comment puis-je vous accompagner dans votre réflexion ?";
+    }
+    
+    if (message.includes('automatisation') || message.includes('automation') || message.includes('rpa')) {
+        return "🔄 Expertise en automatisation NSY :\n\n• RPA (Robotic Process Automation) avec UiPath, Blue Prism\n• Automatisation des workflows métier\n• Intégration API et webhooks\n• Chatbots et assistants virtuels intelligents\n• Automatisation des tests (Selenium, Cypress)\n• CI/CD et déploiement automatisé\n\n⚡ Gains typiques : 60-80% de temps économisé sur les tâches répétitives.";
+    }
+    
+    if (message.includes('web') || message.includes('site') || message.includes('application')) {
+        return "💻 Développement web & applications NSY :\n\n🎨 Frontend moderne : React, Vue.js, TypeScript\n🔧 Backend robuste : Node.js, Python, microservices\n📱 Applications mobiles : React Native, Flutter\n🌐 Sites web sur-mesure : E-commerce, corporate, SaaS\n⚡ Performance : PWA, optimisation SEO, Core Web Vitals\n🔒 Sécurité : HTTPS, authentification, protection données\n\nQuel type d'application envisagez-vous ?";
+    }
+    
+    if (message.includes('délai') || message.includes('temps') || message.includes('durée')) {
+        return "⏱️ Délais de réalisation NSY :\n\n• Site vitrine : 2-4 semaines\n• Application web complexe : 2-6 mois\n• Projet IA/ML : 1-4 mois selon données\n• Automatisation RPA : 3-8 semaines\n• Audit & conseil : 1-2 semaines\n\n📅 Planning adaptatif avec jalons et livrables intermédiaires. Priorité à la qualité et aux délais convenus.";
     }
     
     // Default response
-    return "Merci pour votre question ! Pour une réponse personnalisée, n'hésitez pas à nous contacter directement à contact@nsy.fr ou via le formulaire de contact.";
+    return "🤔 Question intéressante ! Pour vous donner une réponse précise et adaptée à votre contexte, je vous recommande :\n\n📧 Contact direct : contact@nsy.fr\n📝 Formulaire de contact (plus bas sur cette page)\n📞 Consultation gratuite de 30min\n\n💡 Notre expertise s'adapte à chaque projet unique. Partagez-nous vos défis, nous trouverons la solution optimale !";
 }
 
 // Register ScrollTrigger
