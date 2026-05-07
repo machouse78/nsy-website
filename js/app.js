@@ -349,8 +349,28 @@ function initNavigation() {
                                       document.querySelector('.content-hero').offsetHeight;
                 const headerHeight = document.querySelector('.site-header').offsetHeight;
                 
+                // Different buffers for different sections since Expertise works perfectly
+                let buffer = 100; // Default buffer
+                
+                switch(targetId) {
+                    case 'about':       // La Société - needs more buffer
+                        buffer = 200;   
+                        break;
+                    case 'services':    // Services - needs more buffer  
+                        buffer = 200;   
+                        break;
+                    case 'contact':     // Contact - needs more buffer
+                        buffer = 200;   
+                        break;
+                    case 'expertise':   // Expertise - perfect as is
+                        buffer = 100;   
+                        break;
+                    default:
+                        buffer = 150;   
+                }
+                
                 // Adjust position to show section label and heading properly
-                const targetPosition = elementTop + videoHeroHeight - headerHeight - 100; // 100px buffer
+                const targetPosition = elementTop + videoHeroHeight - headerHeight - buffer;
                 
                 // Scroll with Lenis smooth scroll
                 if (lenis) {
