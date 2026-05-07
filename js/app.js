@@ -343,14 +343,18 @@ function initNavigation() {
             const targetElement = document.getElementById(targetId);
             
             if (targetElement) {
-                // Calculate position accounting for video hero offset
+                // Calculate position accounting for video hero offset and header height
                 const elementTop = targetElement.offsetTop;
                 const videoHeroHeight = document.querySelector('.video-hero').offsetHeight + 
                                       document.querySelector('.content-hero').offsetHeight;
+                const headerHeight = document.querySelector('.site-header').offsetHeight;
+                
+                // Adjust position to show section label and heading properly
+                const targetPosition = elementTop + videoHeroHeight - headerHeight - 100; // 100px buffer
                 
                 // Scroll with Lenis smooth scroll
                 if (lenis) {
-                    lenis.scrollTo(elementTop + videoHeroHeight, {
+                    lenis.scrollTo(targetPosition, {
                         duration: 2,
                         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
                     });
