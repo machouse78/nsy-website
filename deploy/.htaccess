@@ -1,0 +1,88 @@
+# NSY Website - Configuration Infomaniak
+# Optimisé pour hébergement mutualisé
+
+# Sécurité
+ServerTokens Prod
+Header always set X-Content-Type-Options nosniff
+Header always set X-Frame-Options DENY
+Header always set X-XSS-Protection "1; mode=block"
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+# Compression GZIP
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html
+    AddOutputFilterByType DEFLATE text/css
+    AddOutputFilterByType DEFLATE text/javascript
+    AddOutputFilterByType DEFLATE text/xml
+    AddOutputFilterByType DEFLATE text/plain
+    AddOutputFilterByType DEFLATE application/javascript
+    AddOutputFilterByType DEFLATE application/x-javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE application/xml
+    AddOutputFilterByType DEFLATE application/rss+xml
+    AddOutputFilterByType DEFLATE application/atom+xml
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+# Cache Headers pour performance
+<IfModule mod_expires.c>
+    ExpiresActive On
+    
+    # Images et vidéos
+    ExpiresByType image/png "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 month"
+    ExpiresByType image/jpeg "access plus 1 month"
+    ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType video/mp4 "access plus 1 month"
+    
+    # CSS et JS
+    ExpiresByType text/css "access plus 1 week"
+    ExpiresByType application/javascript "access plus 1 week"
+    ExpiresByType text/javascript "access plus 1 week"
+    
+    # Fonts
+    ExpiresByType font/woff2 "access plus 1 month"
+    ExpiresByType font/woff "access plus 1 month"
+    
+    # HTML
+    ExpiresByType text/html "access plus 1 hour"
+</IfModule>
+
+# Types MIME pour fonts
+<IfModule mod_mime.c>
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+    AddType application/javascript .js
+</IfModule>
+
+# Index page
+DirectoryIndex index.html
+
+# Erreurs personnalisées
+ErrorDocument 404 /index.html
+ErrorDocument 500 /index.html
+
+# Réglages PHP (si nécessaire pour formulaire futur)
+<IfModule mod_php.c>
+    php_value upload_max_filesize 10M
+    php_value post_max_size 10M
+    php_value max_execution_time 300
+</IfModule>
+
+# Protection des fichiers sensibles
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Optimisation vidéo
+<FilesMatch "\.(mp4|webm|ogv)$">
+    Header set Cache-Control "max-age=2592000, public"
+</FilesMatch>
+
+# Force HTTPS (recommandé pour Infomaniak)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+</IfModule>
