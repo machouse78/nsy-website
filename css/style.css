@@ -415,8 +415,26 @@ body {
 
 /* Ensure contact section is fully visible */
 .section-cta[data-persist="true"] {
-  padding-bottom: 5vh;
-  min-height: 80vh;
+  padding-bottom: 15vh; /* Augmenté pour plus d'espace */
+  min-height: 100vh; /* Augmenté pour contenir tout le contenu */
+}
+
+/* Force contact form visibility */
+.section-cta .contact-form {
+  position: relative;
+  z-index: 100;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.section-cta .contact-form .cta-button {
+  position: relative;
+  z-index: 101;
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  background: var(--accent-blue) !important;
+  color: white !important;
 }
 
 .cta-button {
@@ -510,9 +528,14 @@ body {
 
 .form-submit {
   margin-top: 2rem;
-  display: block;
+  display: block !important;
   width: 100%;
   max-width: 300px;
+  opacity: 1 !important;
+  visibility: visible !important;
+  position: relative;
+  z-index: 102;
+  background: var(--accent-blue) !important;
 }
 
 /* Chatbot IA */
