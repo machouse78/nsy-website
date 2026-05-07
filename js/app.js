@@ -32,22 +32,65 @@ function initLenis() {
     gsap.ticker.lagSmoothing(0);
 }
 
-// 2. VIDEO HANDLING
+// 2. VIDEO HANDLING with fade-out effect
 function initVideoHandling() {
     if (heroVideo) {
+        let videoDuration = 0;
+        let fadeStartTime = 0;
+        
         // Ensure video plays (Apple style - autoplay on load)
         heroVideo.addEventListener('loadedmetadata', () => {
+            videoDuration = heroVideo.duration;
+            fadeStartTime = videoDuration - 2; // Start fade 2 seconds before end
+            
             heroVideo.play().catch(e => {
                 console.log('Autoplay prevented:', e);
-                // Show a play button if autoplay fails
                 showVideoPlayButton();
             });
         });
 
+        // Monitor video time for fade-out effect
+        heroVideo.addEventListener('timeupdate', () => {
+            const currentTime = heroVideo.currentTime;
+            
+            if (currentTime >= fadeStartTime && currentTime < videoDuration) {
+                // Calculate fade progress (0 to 1 over 2 seconds)
+                const fadeProgress = (currentTime - fadeStartTime) / 2;
+                
+                // Smooth easing function for more natural feel
+                const easedProgress = 1 - Math.pow(1 - fadeProgress, 3); // Cubic ease-out
+                
+                // Apply progressive slow-motion effect using playbackRate
+                const targetRate = 1 - (easedProgress * 0.7); // Slow down to 30% of original speed
+                heroVideo.playbackRate = Math.max(0.3, targetRate);
+                
+                // Add subtle visual effects for cinematic feel
+                const opacity = 1 - (easedProgress * 0.2); // Very slight opacity fade
+                const brightness = 1 - (easedProgress * 0.1); // Subtle brightness reduction
+                
+                heroVideo.style.opacity = Math.max(0.8, opacity);
+                heroVideo.style.filter = `brightness(${Math.max(0.9, brightness)})`;
+                
+                // Add fade-out class for additional CSS effects
+                if (fadeProgress > 0.5) {
+                    heroVideo.classList.add('video-fade-out');
+                }
+            } else if (currentTime < fadeStartTime) {
+                // Reset to normal state if before fade zone
+                heroVideo.playbackRate = 1;
+                heroVideo.style.opacity = '1';
+                heroVideo.style.filter = 'none';
+                heroVideo.classList.remove('video-fade-out');
+            }
+        });
+
         // Video ends (no loop like Apple)
         heroVideo.addEventListener('ended', () => {
-            console.log('Video ended - staying on last frame');
-            // Video stays on last frame, doesn't loop
+            console.log('Video ended with fade-out effect');
+            // Maintain final fade state
+            heroVideo.style.opacity = '0.8';
+            heroVideo.style.filter = 'brightness(0.9)';
+            heroVideo.classList.add('video-fade-out');
         });
 
         // Hide loader when video is ready
