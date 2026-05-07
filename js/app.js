@@ -108,24 +108,14 @@ function startExperience() {
 
 // Video plays automatically, no frame binding needed
 
-// 8. HERO ANIMATIONS (Word Split) - Immediate on load
+// 8. HERO ANIMATIONS - Content under video
 function initHeroAnimations() {
-    // Hero heading word animation
-    const heroSpans = document.querySelectorAll('.hero-heading span');
     const heroTagline = document.querySelector('.hero-tagline');
     const scrollIndicator = document.querySelector('.scroll-indicator');
+    const sectionLabel = document.querySelector('.content-hero .section-label');
     
-    // Animate in immediately when video is visible
-    gsap.to(heroSpans, {
-        y: 0,
-        opacity: 1,
-        duration: 1.2,
-        ease: "power3.out",
-        stagger: 0.15,
-        delay: 0.3
-    });
-    
-    gsap.to(heroTagline, {
+    // Animate content under video with delay
+    gsap.to(sectionLabel, {
         y: 0,
         opacity: 1,
         duration: 0.8,
@@ -133,12 +123,20 @@ function initHeroAnimations() {
         delay: 1.0
     });
     
+    gsap.to(heroTagline, {
+        y: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: "power3.out",
+        delay: 1.2
+    });
+    
     gsap.to(scrollIndicator, {
         y: 0,
         opacity: 1,
         duration: 0.6,
         ease: "power2.out",
-        delay: 1.5
+        delay: 1.6
     });
 }
 
