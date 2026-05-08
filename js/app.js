@@ -471,19 +471,6 @@ function initFooter() {
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
-    
-    // Make footer navigation links work
-    const footerLinks = document.querySelectorAll('.footer-column a');
-    footerLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            const navLink = document.querySelector(`.nav-links a[href="#${targetId}"]`);
-            if (navLink) {
-                navLink.click(); // Reuse existing navigation logic
-            }
-        });
-    });
 }
 
 // Contact Form Handler
