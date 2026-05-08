@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
+        xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
+  
+  <!-- Page principale -->
+  <url>
+    <loc>https://www.nsy.fr/</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    
+    <!-- Images -->
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/nsy-logo.png</image:loc>
+      <image:title>NSY - Logo Intelligence Artificielle</image:title>
+      <image:caption>Logo de NSY, Entreprise de Services du Numérique spécialisée en IA</image:caption>
+    </image:image>
+    
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/briefing.png</image:loc>
+      <image:title>NSY - Processus de développement</image:title>
+      <image:caption>Méthodologie NSY en 3 étapes pour les projets IA et transformation digitale</image:caption>
+    </image:image>
+    
+    <!-- Vidéos -->
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
+      <video:title>NSY - Présentation Intelligence Artificielle</video:title>
+      <video:description>Vidéo de présentation de NSY, expert en IA et transformation digitale</video:description>
+      <video:content_loc>https://www.nsy.fr/public/video.mp4</video:content_loc>
+      <video:duration>30</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+  
+  <!-- Sections spécifiques -->
+  <url>
+    <loc>https://www.nsy.fr/#concept</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.nsy.fr/#process</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.nsy.fr/#about</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.nsy.fr/#services</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.nsy.fr/#expertise</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://www.nsy.fr/#contact</loc>
+    <lastmod>2024-05-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+</urlset>
