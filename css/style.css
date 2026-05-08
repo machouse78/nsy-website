@@ -976,17 +976,22 @@ body {
   
 
   
-  /* Header compact sur smartphone */
+  /* Header ultra-compact sur smartphone */
   .site-header {
-    padding: 1rem var(--section-padding); /* Réduction du padding (2rem → 1rem) */
+    padding: 0.5rem var(--section-padding); /* Encore plus compact (2rem → 0.5rem) */
   }
   
   .header-logo {
-    height: 1.8rem; /* Logo plus petit (2.5rem → 1.8rem) */
+    height: 1.2rem; /* Logo encore plus petit (2.5rem → 1.2rem) */
   }
   
   .logo-text-container {
-    display: none; /* Masquer le sous-titre "AI & Digital" sur mobile */
+    display: block; /* Réintégrer le sous-titre */
+  }
+  
+  .logo-subtitle {
+    font-size: 0.6rem; /* Sous-titre très petit pour mobile */
+    letter-spacing: 0.05em;
   }
   
   .nav-links {
