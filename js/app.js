@@ -187,6 +187,33 @@ function initHeroAnimations() {
         ease: "power2.out",
         delay: 1.6
     });
+
+    // Add click handler to scroll to first section using same logic as nav links
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', () => {
+            const targetElement = document.getElementById('concept');
+            
+            if (targetElement) {
+                // Use exact same logic as navigation
+                const elementTop = targetElement.offsetTop;
+                const videoHeroHeight = document.querySelector('.video-hero').offsetHeight + 
+                                      document.querySelector('.content-hero').offsetHeight;
+                const headerHeight = document.querySelector('.site-header').offsetHeight;
+                const buffer = 100; // Same buffer as concept section
+                
+                const targetPosition = elementTop + videoHeroHeight - headerHeight - buffer;
+                
+                if (lenis) {
+                    lenis.scrollTo(targetPosition, {
+                        duration: 2,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                    });
+                }
+            }
+        });
+        // Add cursor pointer
+        scrollIndicator.style.cursor = 'pointer';
+    }
 }
 
 // No hero transition needed - video is immediately visible
@@ -387,7 +414,7 @@ function initNavigation() {
                 
                 switch(targetId) {
                     case 'concept':     // 001 - Concept (align-left)
-                        buffer = 300;   
+                        buffer = 100;   
                         break;
                     case 'process':     // 002 - Processus (align-right)  
                         buffer = 250;   
