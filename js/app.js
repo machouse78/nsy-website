@@ -640,20 +640,34 @@ function getBotResponse(userMessage) {
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// Image Modal Functions
+// Image Modal Functions with Smooth Animations
 function openImageModal() {
     const modal = document.getElementById('imageModal');
     if (modal) {
-        modal.classList.add('open');
-        document.body.style.overflow = 'hidden'; // Prevent background scroll
+        // Show modal immediately
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        // Trigger animation after a frame
+        requestAnimationFrame(() => {
+            modal.classList.add('open');
+        });
     }
 }
 
 function closeImageModal() {
     const modal = document.getElementById('imageModal');
     if (modal) {
+        // Start closing animation
+        modal.classList.add('closing');
         modal.classList.remove('open');
-        document.body.style.overflow = ''; // Restore scroll
+        
+        // Hide modal after animation completes
+        setTimeout(() => {
+            modal.style.display = 'none';
+            modal.classList.remove('closing');
+            document.body.style.overflow = '';
+        }, 400); // Match CSS transition duration
     }
 }
 
