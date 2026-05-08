@@ -949,6 +949,34 @@ body {
     justify-content: center;
     width: 200px;
   }
+  
+  /* Video Hero Responsive */
+  .video-hero {
+    height: 60vh; /* Réduction de 100vh à 60vh sur mobile */
+    min-height: 400px; /* Hauteur minimum pour éviter trop petit */
+  }
+  
+  .content-hero {
+    min-height: 50vh; /* Réduction aussi du content hero */
+    padding: 3rem var(--section-padding) 4rem; /* Padding réduit */
+  }
+  
+  .hero-tagline {
+    font-size: 1.1rem; /* Texte légèrement plus petit */
+    line-height: 1.6;
+  }
+}
+
+/* Responsive Tablet */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .video-hero {
+    height: 80vh; /* Réduction légère pour tablettes */
+  }
+  
+  .content-hero {
+    min-height: 55vh;
+    padding: 3.5rem var(--section-padding) 5rem;
+  }
 }
 
 /* Responsive */
@@ -985,6 +1013,33 @@ body {
   
   .section-cta .section-inner {
     max-width: 100%;
+  }
+}
+
+/* Responsive Small Mobile */
+@media (max-width: 480px) {
+  .video-hero {
+    height: 50vh; /* Encore plus petit sur très petits écrans */
+    min-height: 350px;
+  }
+  
+  .content-hero {
+    min-height: 45vh;
+    padding: 2rem var(--section-padding) 3rem;
+  }
+  
+  .hero-tagline {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  
+  .scroll-indicator {
+    padding: 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .scroll-arrow {
+    font-size: 1.2rem;
   }
 }
 
