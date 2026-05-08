@@ -76,17 +76,18 @@ curl -w "@curl-format.txt" -o /dev/null -s "https://votre-domaine.ch"
 ## ⚠️ Points d'Attention Infomaniak
 
 ### Limitations Hébergement Mutualisé
-- **Taille fichiers** : Vidéo MP4 ~58MB (vérifier limite upload)
+- **Taille fichiers** : 3 vidéos MP4 ~200MB total (vérifier limite upload)
 - **Bande passante** : Surveillance consommation vidéo auto-play
 - **PHP** : Non requis pour ce site (HTML/CSS/JS pur)
 
-### Optimisations Conseillées
-1. **Compresser vidéo** si problème taille :
-   ```bash
-   ffmpeg -i public/video.mp4 -crf 28 -preset slow public/video_compressed.mp4
-   ```
+### Vidéos Multiples
+- **3 vidéos** : video.mp4, video2.mp4, video3.mp4
+- **Chargement aléatoire** : Une vidéo sélectionnée à chaque visite
+- **Diversité contenu** : Expérience utilisateur variée
 
-2. **CDN** : Utiliser CDN Infomaniak si disponible pour vidéo
+### Optimisations Conseillées
+1. **CDN recommandé** : Pour héberger les 3 vidéos (200MB total)
+2. **Monitoring bande passante** : Surveillance consommation
 
 3. **Monitoring** : Surveiller métriques Core Web Vitals
 
