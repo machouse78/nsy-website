@@ -131,8 +131,12 @@
                 <p class="section-body">Analyse du besoin, conception & réalisation, livraison du produit. Une méthodologie structurée pour transformer vos idées en solutions concrètes.</p>
                 
                 <!-- Image Briefing -->
-                <div class="concept-image" style="margin: 2rem 0;">
-                    <img src="public/briefing.png" alt="Processus NSY - Briefing" style="max-width: 100%; height: auto; border-radius: 8px;">
+                <div class="concept-image" style="margin: 2rem 0; position: relative;">
+                    <img src="public/briefing.png" alt="Processus NSY - Briefing" 
+                         class="briefing-image" 
+                         style="max-width: 100%; height: auto; border-radius: 8px; cursor: zoom-in; transition: transform 0.3s ease;"
+                         onclick="openImageModal()">
+                    <div class="zoom-indicator">🔍 Cliquer pour agrandir</div>
                 </div>
                 
                 <p class="section-note">Chaque étape est cruciale pour garantir le succès et l'adoption de votre solution IA.</p>
@@ -279,6 +283,18 @@
             <p class="footer-ai-mention">Site créé avec l'IA • Transparence totale</p>
         </div>
     </footer>
+
+    <!-- Image Modal -->
+    <div class="image-modal" id="imageModal">
+        <div class="modal-backdrop" onclick="closeImageModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeImageModal()">×</button>
+            <img src="public/briefing.png" alt="Processus NSY - Briefing détaillé" class="modal-image">
+            <div class="modal-caption">
+                Processus NSY - Méthodologie en 3 étapes pour vos projets IA
+            </div>
+        </div>
+    </div>
 
     <!-- Chatbot IA -->
     <div class="chatbot-container" id="chatbot">
