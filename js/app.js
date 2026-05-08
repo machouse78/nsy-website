@@ -639,3 +639,27 @@ function getBotResponse(userMessage) {
 
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
+
+// Image Modal Functions
+function openImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden'; // Prevent background scroll
+    }
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    if (modal) {
+        modal.classList.remove('open');
+        document.body.style.overflow = ''; // Restore scroll
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
