@@ -67,9 +67,10 @@
 
 ```
 nsy-website/
-├── index.html                  # Page principale (7 sections numérotées)
+├── index.html                  # Page principale (7 sections + 50+ balises SEO)
+├── sitemap.xml                 # Plan du site pour moteurs de recherche
 ├── .htaccess                   # Configuration Apache/Infomaniak optimisée
-├── robots.txt                  # SEO et indexation
+├── robots.txt                  # SEO et indexation optimisés
 ├── css/
 │   └── style.css              # Styles complets + responsive + modal
 ├── js/
@@ -165,6 +166,34 @@ open http://localhost:8000
 - **GZIP compression** : Activée pour tous les text assets
 - **Espacement scroll optimisé** : Sections serrées et fluides
 
+## 🔍 SEO & Référencement Google
+
+### 📊 **Balises Meta Optimisées**
+- **50+ balises meta** : Title, description, keywords étendus
+- **Schema.org JSON-LD** : Organisation + Founder + Services
+- **Open Graph enrichi** : Images 1200x630, locale fr_FR
+- **Twitter Cards** : Large image + @nsy_fr / @cedric_barme
+- **Géolocalisation** : France + langue française
+
+### 🗺️ **Sitemap & Indexation**
+- **sitemap.xml complet** : Pages + images + vidéos avec métadonnées
+- **robots.txt optimisé** : Instructions Googlebot + Bing
+- **Canonical URL** : https://www.nsy.fr
+- **Preload critical** : CSS + JS pour Core Web Vitals
+
+### 🎯 **Mots-clés Ciblés**
+```
+Primaires: NSY, Intelligence Artificielle, IA, ESN France
+Secondaires: React, Node.js, Python, AWS, Azure, DevOps
+Longue traîne: Cédric Barme expert IA, transformation digitale automatisation
+```
+
+### 📈 **Rich Snippets & Featured**
+- **Organisation Schema** : Logo, adresse, contact, services
+- **Person Schema** : Cédric Barme + réseaux sociaux
+- **VideoObject** : Métadonnées vidéos hero
+- **ImageObject** : Alt-text + captions optimisées
+
 ## 🎨 Sections & Contenu
 
 ### 📄 Structure des Sections
@@ -240,6 +269,13 @@ sections = {
 - **Chatbot expert** : Réponses détaillées sur tous les aspects NSY
 - **Formulaire intelligent** : Génération mailto + validation HTML5
 - **Footer dynamique** : Année automatique + mention transparence IA
+- **Liens sociaux** : LinkedIn + GitHub dans footer avec animations hover
+
+### ✅ SEO & Référencement  
+- **50+ balises meta** : Schema.org, Open Graph, Twitter Cards enrichies
+- **Sitemap.xml complet** : Pages + images + vidéos avec métadonnées
+- **Robots.txt optimisé** : Instructions spécifiques Google + Bing
+- **Mots-clés étendus** : React, Node.js, Python, AWS, expert IA, full-stack
 
 ## 🤝 Contribution
 
