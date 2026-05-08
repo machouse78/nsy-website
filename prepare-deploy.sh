@@ -11,6 +11,7 @@ mkdir -p deploy
 # Copier tous les fichiers nécessaires
 echo "📁 Copie des fichiers..."
 cp index.html deploy/
+cp sitemap.xml deploy/
 cp .htaccess deploy/
 cp robots.txt deploy/
 cp -r css deploy/
@@ -20,7 +21,7 @@ cp -r public deploy/
 # Vérifier les fichiers essentiels
 echo "✅ Vérifications..."
 
-files_required=("deploy/index.html" "deploy/.htaccess" "deploy/public/video.mp4" "deploy/public/nsy-logo.png" "deploy/css/style.css" "deploy/js/app.js")
+files_required=("deploy/index.html" "deploy/sitemap.xml" "deploy/.htaccess" "deploy/robots.txt" "deploy/public/video.mp4" "deploy/public/nsy-logo.png" "deploy/css/style.css" "deploy/js/app.js")
 
 for file in "${files_required[@]}"; do
     if [ -f "$file" ]; then
