@@ -928,3 +928,15 @@ body {
   opacity: 0;
   pointer-events: none;
 }
+
+/* Force concept section visibility when navigated to */
+#concept.force-visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+#concept.force-visible * {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: none !important;
+}

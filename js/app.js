@@ -447,7 +447,7 @@ function initNavigation() {
                         setTimeout(() => {
                             const conceptSection = document.getElementById('concept');
                             if (conceptSection) {
-                                conceptSection.style.opacity = '1';
+                                conceptSection.classList.add('force-visible');
                             }
                         }, 100);
                     }
