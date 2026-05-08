@@ -1,15 +1,38 @@
 User-agent: *
 Allow: /
 
-# Sitemap (à créer après mise en ligne)
+# Sitemap principal
 Sitemap: https://www.nsy.fr/sitemap.xml
 
 # Interdire l'indexation des fichiers techniques
 Disallow: /css/
 Disallow: /js/
 Disallow: /.htaccess
-Disallow: /frames/
+Disallow: /deploy/
+Disallow: /.claude/
+Disallow: /prepare-deploy.sh
 
-# Autoriser l'indexation des pages principales
-Allow: /index.html
-Allow: /public/
+# Autoriser l'indexation des assets publics
+Allow: /public/*.png
+Allow: /public/*.jpg
+Allow: /public/*.jpeg
+Allow: /public/*.gif
+Allow: /public/*.webp
+Allow: /public/*.svg
+
+# Interdire l'indexation des vidéos lourdes (mais autoriser pour video sitemap)
+Disallow: /public/*.mp4
+Allow: /public/video.mp4
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1
+
+# Instructions spécifiques pour Google
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+# Instructions pour Bing
+User-agent: Bingbot  
+Allow: /
+Crawl-delay: 1
