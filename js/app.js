@@ -640,39 +640,47 @@ function getBotResponse(userMessage) {
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// Image Modal Functions with Natural Zoom
+// Image Modal Functions with True Zoom from Source Position
 function openImageModal() {
     const modal = document.getElementById('imageModal');
     const sourceImage = document.querySelector('.briefing-image');
     const modalImage = modal.querySelector('.modal-image');
     
     if (modal && sourceImage && modalImage) {
-        // Get source image position and size
+        // Get source image exact position and size
         const sourceRect = sourceImage.getBoundingClientRect();
-        const modalRect = modal.getBoundingClientRect();
         
-        // Calculate relative position for zoom origin
-        const originX = ((sourceRect.left + sourceRect.width / 2) / modalRect.width) * 100;
-        const originY = ((sourceRect.top + sourceRect.height / 2) / modalRect.height) * 100;
+        // Position modal image exactly at source position initially
+        modalImage.style.left = sourceRect.left + 'px';
+        modalImage.style.top = sourceRect.top + 'px';
+        modalImage.style.width = sourceRect.width + 'px';
+        modalImage.style.height = sourceRect.height + 'px';
+        modalImage.style.transform = 'none';
         
-        // Set transform origin to source image center
-        modalImage.style.setProperty('--zoom-origin-x', originX + '%');
-        modalImage.style.setProperty('--zoom-origin-y', originY + '%');
-        
-        // Calculate initial scale (source size / final size ratio)
-        const initialScale = Math.min(sourceRect.width / (window.innerWidth * 0.8), 
-                                     sourceRect.height / (window.innerHeight * 0.8));
-        
-        // Set initial state
-        modalImage.style.transform = `scale(${initialScale})`;
-        modal.style.display = 'flex';
+        // Show modal
+        modal.style.display = 'block';
         document.body.style.overflow = 'hidden';
         
-        // Animate to full size
+        // Calculate final centered position and size
+        const finalWidth = Math.min(window.innerWidth * 0.9, modalImage.naturalWidth || 800);
+        const finalHeight = (finalWidth * sourceRect.height) / sourceRect.width;
+        const finalLeft = (window.innerWidth - finalWidth) / 2;
+        const finalTop = Math.max((window.innerHeight - finalHeight) / 2, 50);
+        
+        // Animate to center with larger size
         requestAnimationFrame(() => {
             modal.classList.add('open');
-            modalImage.style.transform = 'scale(1)';
+            modalImage.style.left = finalLeft + 'px';
+            modalImage.style.top = finalTop + 'px';
+            modalImage.style.width = finalWidth + 'px';
+            modalImage.style.height = finalHeight + 'px';
         });
+        
+        // Store final position for close animation
+        modalImage.dataset.finalLeft = finalLeft;
+        modalImage.dataset.finalTop = finalTop;
+        modalImage.dataset.finalWidth = finalWidth;
+        modalImage.dataset.finalHeight = finalHeight;
     }
 }
 
@@ -681,25 +689,31 @@ function closeImageModal() {
     const sourceImage = document.querySelector('.briefing-image');
     const modalImage = modal.querySelector('.modal-image');
     
-    if (modal && modalImage) {
-        // Animate back to initial scale
-        const sourceRect = sourceImage ? sourceImage.getBoundingClientRect() : { width: 200, height: 150 };
-        const initialScale = Math.min(sourceRect.width / (window.innerWidth * 0.8), 
-                                     sourceRect.height / (window.innerHeight * 0.8));
+    if (modal && modalImage && sourceImage) {
+        const sourceRect = sourceImage.getBoundingClientRect();
         
-        modal.classList.add('closing');
+        // Animate back to source position and size
         modal.classList.remove('open');
-        modalImage.style.transform = `scale(${initialScale})`;
+        modalImage.style.left = sourceRect.left + 'px';
+        modalImage.style.top = sourceRect.top + 'px';
+        modalImage.style.width = sourceRect.width + 'px';
+        modalImage.style.height = sourceRect.height + 'px';
         
         // Hide modal after animation
         setTimeout(() => {
             modal.style.display = 'none';
-            modal.classList.remove('closing');
-            modalImage.style.transform = '';
             document.body.style.overflow = '';
         }, 500);
     }
 }
+
+// Add click on modal image to close
+document.addEventListener('DOMContentLoaded', () => {
+    const modalImage = document.querySelector('.modal-image');
+    if (modalImage) {
+        modalImage.addEventListener('click', closeImageModal);
+    }
+});
 
 // Close modal with Escape key
 document.addEventListener('keydown', (e) => {
