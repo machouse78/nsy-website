@@ -143,15 +143,16 @@ function hideLoader() {
 // 6. START EXPERIENCE
 function startExperience() {
     initSectionAnimations();
-    initCounters();
     initMarquees();
-    initDarkOverlay();
     
     // Start hero animations immediately
     initHeroAnimations();
     
     // Initialize navigation
     initNavigation();
+    
+    // Initialize modal image click
+    initModalImageClick();
 }
 
 // Video plays automatically, no frame binding needed
@@ -186,6 +187,33 @@ function initHeroAnimations() {
         ease: "power2.out",
         delay: 1.6
     });
+
+    // Add click handler to scroll to first section using same logic as nav links
+    if (scrollIndicator) {
+        scrollIndicator.addEventListener('click', () => {
+            const targetElement = document.getElementById('concept');
+            
+            if (targetElement) {
+                // Use exact same logic as navigation
+                const elementTop = targetElement.offsetTop;
+                const videoHeroHeight = document.querySelector('.video-hero').offsetHeight + 
+                                      document.querySelector('.content-hero').offsetHeight;
+                const headerHeight = document.querySelector('.site-header').offsetHeight;
+                const buffer = 100; // Same buffer as concept section
+                
+                const targetPosition = elementTop + videoHeroHeight - headerHeight - buffer;
+                
+                if (lenis) {
+                    lenis.scrollTo(targetPosition, {
+                        duration: 2,
+                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
+                    });
+                }
+            }
+        });
+        // Add cursor pointer
+        scrollIndicator.style.cursor = 'pointer';
+    }
 }
 
 // No hero transition needed - video is immediately visible
@@ -331,24 +359,7 @@ function setupSectionAnimation(section) {
     });
 }
 
-// 11. COUNTER ANIMATIONS
-function initCounters() {
-    document.querySelectorAll(".stat-number").forEach(el => {
-        const target = parseFloat(el.dataset.value);
-        const decimals = parseInt(el.dataset.decimals || "0");
-        
-        ScrollTrigger.create({
-            trigger: el.closest(".scroll-section"),
-            start: "top 70%",
-            end: "bottom 30%",
-            scrub: true,
-            onUpdate: (self) => {
-                const currentValue = target * self.progress;
-                el.textContent = decimals === 0 ? Math.round(currentValue) : currentValue.toFixed(decimals);
-            }
-        });
-    });
-}
+// Counter animations removed
 
 // 12. HORIZONTAL TEXT MARQUEE
 function initMarquees() {
@@ -379,18 +390,7 @@ function initMarquees() {
     });
 }
 
-// 13. DARK OVERLAY for stats section
-function initDarkOverlay() {
-    ScrollTrigger.create({
-        trigger: document.querySelector('.section-stats'),
-        start: "top center",
-        end: "bottom center",
-        scrub: true,
-        onUpdate: (self) => {
-            darkOverlay.style.opacity = self.progress * 0.9;
-        }
-    });
-}
+// Dark overlay removed
 
 // Navigation functionality
 function initNavigation() {
@@ -413,20 +413,23 @@ function initNavigation() {
                 let buffer = 100; // Default buffer
                 
                 switch(targetId) {
-                    case 'concept':     // Concept - nouvelle première section  
-                        buffer = 200;   
-                        break;
-                    case 'about':       // La Société - needs more buffer
-                        buffer = 200;   
-                        break;
-                    case 'services':    // Services - needs more buffer  
-                        buffer = 200;   
-                        break;
-                    case 'contact':     // Contact - needs much more buffer (end of page)
-                        buffer = 600;   
-                        break;
-                    case 'expertise':   // Expertise - perfect as is
+                    case 'concept':     // 001 - Concept (align-left)
                         buffer = 100;   
+                        break;
+                    case 'process':     // 002 - Processus (align-right)  
+                        buffer = 250;   
+                        break;
+                    case 'about':       // 003 - La Société (align-left)
+                        buffer = 200;   
+                        break;
+                    case 'services':    // 004 - Services (align-right)
+                        buffer = 200;   
+                        break;
+                    case 'expertise':   // 005 - Expertise (align-left)
+                        buffer = 100;   
+                        break;
+                    case 'contact':     // 006 - Contact (align-right)
+                        buffer = 600;   
                         break;
                     default:
                         buffer = 150;   
@@ -441,6 +444,8 @@ function initNavigation() {
                         duration: 2,
                         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
                     });
+                    
+                    // No special handling needed - let ScrollTrigger manage visibility
                 }
             }
         });
@@ -463,19 +468,6 @@ function initFooter() {
     if (currentYearSpan) {
         currentYearSpan.textContent = new Date().getFullYear();
     }
-    
-    // Make footer navigation links work
-    const footerLinks = document.querySelectorAll('.footer-column a');
-    footerLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1);
-            const navLink = document.querySelector(`.nav-links a[href="#${targetId}"]`);
-            if (navLink) {
-                navLink.click(); // Reuse existing navigation logic
-            }
-        });
-    });
 }
 
 // Contact Form Handler
@@ -634,3 +626,62 @@ function getBotResponse(userMessage) {
 
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
+
+// Image Modal Functions - Simple Transform Approach
+function openImageModal() {
+    const modal = document.getElementById('imageModal');
+    const sourceImage = document.querySelector('.briefing-image');
+    const modalImage = modal.querySelector('.modal-image');
+    
+    if (modal && sourceImage && modalImage) {
+        // Get source image position for transform-origin
+        const sourceRect = sourceImage.getBoundingClientRect();
+        const modalRect = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
+        
+        // Calculate transform-origin as percentage of viewport
+        const originX = (sourceRect.left + sourceRect.width / 2) / modalRect.width * 100;
+        const originY = (sourceRect.top + sourceRect.height / 2) / modalRect.height * 100;
+        
+        // Set transform-origin to source image center
+        modalImage.style.transformOrigin = `${originX}% ${originY}%`;
+        
+        // Show modal and trigger animation
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+        
+        requestAnimationFrame(() => {
+            modal.classList.add('open');
+        });
+    }
+}
+
+function closeImageModal() {
+    const modal = document.getElementById('imageModal');
+    
+    if (modal) {
+        modal.classList.remove('open');
+        
+        setTimeout(() => {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 600);
+    }
+}
+
+// Add click on modal image to close (initialize after DOM loaded)
+function initModalImageClick() {
+    const modalImage = document.querySelector('.modal-image');
+    if (modalImage) {
+        modalImage.addEventListener('click', closeImageModal);
+    }
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageModal();
+    }
+});
