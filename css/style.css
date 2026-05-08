@@ -302,11 +302,11 @@ body {
 
 /* Scroll Container - Starts after video + content hero */
 #scroll-container {
-  height: 1000vh; /* Augmenté pour permettre scroll jusqu'en bas */
+  height: 1200vh; /* Encore augmenté pour le footer */
   position: relative;
   z-index: 50;
   background: var(--bg-dark);
-  padding-bottom: 10vh; /* Padding pour voir la dernière section */
+  padding-bottom: 15vh; /* Plus de padding pour le footer */
 }
 
 /* Scroll Sections */
@@ -419,8 +419,8 @@ body {
 
 /* Ensure contact section is fully visible */
 .section-cta[data-persist="true"] {
-  padding-bottom: 15vh; /* Augmenté pour plus d'espace */
-  min-height: 100vh; /* Augmenté pour contenir tout le contenu */
+  padding-bottom: 25vh; /* Encore plus d'espace pour séparer du footer */
+  min-height: 100vh;
 }
 
 /* Force contact form visibility */
@@ -919,8 +919,8 @@ body {
 .site-footer {
   background: var(--bg-dark);
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 2rem var(--section-padding);
-  margin-top: 4rem;
+  padding: 3rem var(--section-padding);
+  margin-top: 8rem; /* Augmenté pour plus d'espace */
 }
 
 .footer-bottom {
