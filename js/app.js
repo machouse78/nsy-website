@@ -414,7 +414,7 @@ function initNavigation() {
                 
                 switch(targetId) {
                     case 'concept':     // Concept - nouvelle première section  
-                        buffer = 200;   
+                        buffer = 350;   // Augmenté pour arriver plus haut
                         break;
                     case 'about':       // La Société - needs more buffer
                         buffer = 200;   
