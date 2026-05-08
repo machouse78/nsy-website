@@ -414,7 +414,7 @@ function initNavigation() {
                 
                 switch(targetId) {
                     case 'concept':     // Concept - nouvelle première section  
-                        buffer = 350;   // Augmenté pour arriver plus haut
+                        buffer = 500;   // Encore plus haut pour visibilité immédiate
                         break;
                     case 'about':       // La Société - needs more buffer
                         buffer = 200;   
@@ -441,6 +441,16 @@ function initNavigation() {
                         duration: 2,
                         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
                     });
+                    
+                    // Force visibility for concept section immediately
+                    if (targetId === 'concept') {
+                        setTimeout(() => {
+                            const conceptSection = document.getElementById('concept');
+                            if (conceptSection) {
+                                conceptSection.style.opacity = '1';
+                            }
+                        }, 100);
+                    }
                 }
             }
         });
