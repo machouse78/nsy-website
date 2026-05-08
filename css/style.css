@@ -976,7 +976,8 @@ body {
   
 
   
-  .nav-links {
+  /* Masquer complètement le header sur smartphone */
+  .site-header {
     display: none;
   }
   
