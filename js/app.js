@@ -640,34 +640,64 @@ function getBotResponse(userMessage) {
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// Image Modal Functions with Smooth Animations
+// Image Modal Functions with Natural Zoom
 function openImageModal() {
     const modal = document.getElementById('imageModal');
-    if (modal) {
-        // Show modal immediately
+    const sourceImage = document.querySelector('.briefing-image');
+    const modalImage = modal.querySelector('.modal-image');
+    
+    if (modal && sourceImage && modalImage) {
+        // Get source image position and size
+        const sourceRect = sourceImage.getBoundingClientRect();
+        const modalRect = modal.getBoundingClientRect();
+        
+        // Calculate relative position for zoom origin
+        const originX = ((sourceRect.left + sourceRect.width / 2) / modalRect.width) * 100;
+        const originY = ((sourceRect.top + sourceRect.height / 2) / modalRect.height) * 100;
+        
+        // Set transform origin to source image center
+        modalImage.style.setProperty('--zoom-origin-x', originX + '%');
+        modalImage.style.setProperty('--zoom-origin-y', originY + '%');
+        
+        // Calculate initial scale (source size / final size ratio)
+        const initialScale = Math.min(sourceRect.width / (window.innerWidth * 0.8), 
+                                     sourceRect.height / (window.innerHeight * 0.8));
+        
+        // Set initial state
+        modalImage.style.transform = `scale(${initialScale})`;
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        // Trigger animation after a frame
+        // Animate to full size
         requestAnimationFrame(() => {
             modal.classList.add('open');
+            modalImage.style.transform = 'scale(1)';
         });
     }
 }
 
 function closeImageModal() {
     const modal = document.getElementById('imageModal');
-    if (modal) {
-        // Start closing animation
+    const sourceImage = document.querySelector('.briefing-image');
+    const modalImage = modal.querySelector('.modal-image');
+    
+    if (modal && modalImage) {
+        // Animate back to initial scale
+        const sourceRect = sourceImage ? sourceImage.getBoundingClientRect() : { width: 200, height: 150 };
+        const initialScale = Math.min(sourceRect.width / (window.innerWidth * 0.8), 
+                                     sourceRect.height / (window.innerHeight * 0.8));
+        
         modal.classList.add('closing');
         modal.classList.remove('open');
+        modalImage.style.transform = `scale(${initialScale})`;
         
-        // Hide modal after animation completes
+        // Hide modal after animation
         setTimeout(() => {
             modal.style.display = 'none';
             modal.classList.remove('closing');
+            modalImage.style.transform = '';
             document.body.style.overflow = '';
-        }, 400); // Match CSS transition duration
+        }, 500);
     }
 }
 
