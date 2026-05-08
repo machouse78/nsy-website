@@ -976,9 +976,21 @@ body {
   
 
   
-  /* Masquer complètement le header sur smartphone */
+  /* Header compact sur smartphone */
   .site-header {
-    display: none;
+    padding: 1rem var(--section-padding); /* Réduction du padding (2rem → 1rem) */
+  }
+  
+  .header-logo {
+    height: 1.8rem; /* Logo plus petit (2.5rem → 1.8rem) */
+  }
+  
+  .logo-text-container {
+    display: none; /* Masquer le sous-titre "AI & Digital" sur mobile */
+  }
+  
+  .nav-links {
+    display: none; /* Garder les liens cachés sur mobile */
   }
   
   .hero-heading {
