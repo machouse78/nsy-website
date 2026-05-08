@@ -413,20 +413,23 @@ function initNavigation() {
                 let buffer = 100; // Default buffer
                 
                 switch(targetId) {
-                    case 'concept':     // Concept - nouvelle première section  
-                        buffer = 500;   // Encore plus haut pour visibilité immédiate
+                    case 'concept':     // 001 - Concept (align-left)
+                        buffer = 300;   
                         break;
-                    case 'about':       // La Société - needs more buffer
+                    case 'process':     // 002 - Processus (align-right)  
+                        buffer = 250;   
+                        break;
+                    case 'about':       // 003 - La Société (align-left)
                         buffer = 200;   
                         break;
-                    case 'services':    // Services - needs more buffer  
+                    case 'services':    // 004 - Services (align-right)
                         buffer = 200;   
                         break;
-                    case 'contact':     // Contact - needs much more buffer (end of page)
-                        buffer = 600;   
-                        break;
-                    case 'expertise':   // Expertise - perfect as is
+                    case 'expertise':   // 005 - Expertise (align-left)
                         buffer = 100;   
+                        break;
+                    case 'contact':     // 006 - Contact (align-right)
+                        buffer = 600;   
                         break;
                     default:
                         buffer = 150;   
@@ -442,15 +445,7 @@ function initNavigation() {
                         easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
                     });
                     
-                    // Force visibility for concept section immediately
-                    if (targetId === 'concept') {
-                        setTimeout(() => {
-                            const conceptSection = document.getElementById('concept');
-                            if (conceptSection) {
-                                conceptSection.classList.add('force-visible');
-                            }
-                        }, 100);
-                    }
+                    // No special handling needed - let ScrollTrigger manage visibility
                 }
             }
         });
