@@ -519,9 +519,9 @@ function initChatbot() {
     const chatbotSend = document.getElementById('chatbot-send');
     const chatbotMessages = document.getElementById('chatbot-messages');
     
-    // Toggle chatbot
+    // Toggle chatbot (open/close)
     chatbotToggle.addEventListener('click', () => {
-        chatbotWindow.classList.add('open');
+        chatbotWindow.classList.toggle('open');
     });
     
     chatbotClose.addEventListener('click', () => {
