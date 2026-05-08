@@ -394,6 +394,9 @@ function initNavigation() {
                 let buffer = 100; // Default buffer
                 
                 switch(targetId) {
+                    case 'concept':     // Concept - nouvelle première section  
+                        buffer = 200;   
+                        break;
                     case 'about':       // La Société - needs more buffer
                         buffer = 200;   
                         break;
@@ -401,7 +404,7 @@ function initNavigation() {
                         buffer = 200;   
                         break;
                     case 'contact':     // Contact - needs much more buffer (end of page)
-                        buffer = 600;   // Augmenté de 400px → 600px
+                        buffer = 600;   
                         break;
                     case 'expertise':   // Expertise - perfect as is
                         buffer = 100;   
