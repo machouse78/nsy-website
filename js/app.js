@@ -152,6 +152,9 @@ function startExperience() {
     
     // Initialize navigation
     initNavigation();
+    
+    // Initialize modal image click
+    initModalImageClick();
 }
 
 // Video plays automatically, no frame binding needed
@@ -640,80 +643,57 @@ function getBotResponse(userMessage) {
 // Register ScrollTrigger
 gsap.registerPlugin(ScrollTrigger);
 
-// Image Modal Functions with True Zoom from Source Position
+// Image Modal Functions - Simple Transform Approach
 function openImageModal() {
     const modal = document.getElementById('imageModal');
     const sourceImage = document.querySelector('.briefing-image');
     const modalImage = modal.querySelector('.modal-image');
     
     if (modal && sourceImage && modalImage) {
-        // Get source image exact position and size
+        // Get source image position for transform-origin
         const sourceRect = sourceImage.getBoundingClientRect();
+        const modalRect = {
+            width: window.innerWidth,
+            height: window.innerHeight
+        };
         
-        // Position modal image exactly at source position initially
-        modalImage.style.left = sourceRect.left + 'px';
-        modalImage.style.top = sourceRect.top + 'px';
-        modalImage.style.width = sourceRect.width + 'px';
-        modalImage.style.height = sourceRect.height + 'px';
-        modalImage.style.transform = 'none';
+        // Calculate transform-origin as percentage of viewport
+        const originX = (sourceRect.left + sourceRect.width / 2) / modalRect.width * 100;
+        const originY = (sourceRect.top + sourceRect.height / 2) / modalRect.height * 100;
         
-        // Show modal
-        modal.style.display = 'block';
+        // Set transform-origin to source image center
+        modalImage.style.transformOrigin = `${originX}% ${originY}%`;
+        
+        // Show modal and trigger animation
+        modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         
-        // Calculate final centered position and size
-        const finalWidth = Math.min(window.innerWidth * 0.9, modalImage.naturalWidth || 800);
-        const finalHeight = (finalWidth * sourceRect.height) / sourceRect.width;
-        const finalLeft = (window.innerWidth - finalWidth) / 2;
-        const finalTop = Math.max((window.innerHeight - finalHeight) / 2, 50);
-        
-        // Animate to center with larger size
         requestAnimationFrame(() => {
             modal.classList.add('open');
-            modalImage.style.left = finalLeft + 'px';
-            modalImage.style.top = finalTop + 'px';
-            modalImage.style.width = finalWidth + 'px';
-            modalImage.style.height = finalHeight + 'px';
         });
-        
-        // Store final position for close animation
-        modalImage.dataset.finalLeft = finalLeft;
-        modalImage.dataset.finalTop = finalTop;
-        modalImage.dataset.finalWidth = finalWidth;
-        modalImage.dataset.finalHeight = finalHeight;
     }
 }
 
 function closeImageModal() {
     const modal = document.getElementById('imageModal');
-    const sourceImage = document.querySelector('.briefing-image');
-    const modalImage = modal.querySelector('.modal-image');
     
-    if (modal && modalImage && sourceImage) {
-        const sourceRect = sourceImage.getBoundingClientRect();
-        
-        // Animate back to source position and size
+    if (modal) {
         modal.classList.remove('open');
-        modalImage.style.left = sourceRect.left + 'px';
-        modalImage.style.top = sourceRect.top + 'px';
-        modalImage.style.width = sourceRect.width + 'px';
-        modalImage.style.height = sourceRect.height + 'px';
         
-        // Hide modal after animation
         setTimeout(() => {
             modal.style.display = 'none';
             document.body.style.overflow = '';
-        }, 500);
+        }, 600);
     }
 }
 
-// Add click on modal image to close
-document.addEventListener('DOMContentLoaded', () => {
+// Add click on modal image to close (initialize after DOM loaded)
+function initModalImageClick() {
     const modalImage = document.querySelector('.modal-image');
     if (modalImage) {
         modalImage.addEventListener('click', closeImageModal);
     }
-});
+}
 
 // Close modal with Escape key
 document.addEventListener('keydown', (e) => {
