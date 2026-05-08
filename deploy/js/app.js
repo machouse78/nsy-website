@@ -15,9 +15,28 @@ const darkOverlay = document.getElementById('dark-overlay');
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
     initLenis();
+    initRandomVideoSelection();
     initVideoHandling();
     initHeroAnimations();
 });
+
+// Random video selection
+function initRandomVideoSelection() {
+    const videos = ['video.mp4', 'video2.mp4', 'video3.mp4'];
+    const randomIndex = Math.floor(Math.random() * videos.length);
+    const selectedVideo = videos[randomIndex];
+    
+    console.log(`Loading random video: ${selectedVideo}`);
+    
+    if (heroVideo) {
+        // Update video source with random selection
+        const source = heroVideo.querySelector('source');
+        if (source) {
+            source.src = `public/${selectedVideo}`;
+            heroVideo.load(); // Reload video with new source
+        }
+    }
+}
 
 // 1. LENIS SMOOTH SCROLL (MANDATORY selon skill)
 function initLenis() {
@@ -394,6 +413,9 @@ function initNavigation() {
                 let buffer = 100; // Default buffer
                 
                 switch(targetId) {
+                    case 'concept':     // Concept - nouvelle première section  
+                        buffer = 200;   
+                        break;
                     case 'about':       // La Société - needs more buffer
                         buffer = 200;   
                         break;
@@ -401,7 +423,7 @@ function initNavigation() {
                         buffer = 200;   
                         break;
                     case 'contact':     // Contact - needs much more buffer (end of page)
-                        buffer = 600;   // Augmenté de 400px → 600px
+                        buffer = 600;   
                         break;
                     case 'expertise':   // Expertise - perfect as is
                         buffer = 100;   
