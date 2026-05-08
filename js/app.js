@@ -143,9 +143,7 @@ function hideLoader() {
 // 6. START EXPERIENCE
 function startExperience() {
     initSectionAnimations();
-    initCounters();
     initMarquees();
-    initDarkOverlay();
     
     // Start hero animations immediately
     initHeroAnimations();
@@ -334,24 +332,7 @@ function setupSectionAnimation(section) {
     });
 }
 
-// 11. COUNTER ANIMATIONS
-function initCounters() {
-    document.querySelectorAll(".stat-number").forEach(el => {
-        const target = parseFloat(el.dataset.value);
-        const decimals = parseInt(el.dataset.decimals || "0");
-        
-        ScrollTrigger.create({
-            trigger: el.closest(".scroll-section"),
-            start: "top 70%",
-            end: "bottom 30%",
-            scrub: true,
-            onUpdate: (self) => {
-                const currentValue = target * self.progress;
-                el.textContent = decimals === 0 ? Math.round(currentValue) : currentValue.toFixed(decimals);
-            }
-        });
-    });
-}
+// Counter animations removed
 
 // 12. HORIZONTAL TEXT MARQUEE
 function initMarquees() {
@@ -382,18 +363,7 @@ function initMarquees() {
     });
 }
 
-// 13. DARK OVERLAY for stats section
-function initDarkOverlay() {
-    ScrollTrigger.create({
-        trigger: document.querySelector('.section-stats'),
-        start: "top center",
-        end: "bottom center",
-        scrub: true,
-        onUpdate: (self) => {
-            darkOverlay.style.opacity = self.progress * 0.9;
-        }
-    });
-}
+// Dark overlay removed
 
 // Navigation functionality
 function initNavigation() {

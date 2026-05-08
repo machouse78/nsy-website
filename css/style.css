@@ -269,18 +269,7 @@ body {
 
 
 
-/* Dark Overlay */
-#dark-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(10, 10, 10, 0.9);
-  z-index: 20;
-  pointer-events: none;
-  opacity: 0;
-}
+/* Dark overlay removed */
 
 /* Marquee */
 .marquee-wrap {
@@ -366,51 +355,7 @@ body {
   font-weight: 500;
 }
 
-/* Stats Section */
-.section-stats {
-  width: 100%;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 6rem;
-  text-align: center;
-}
-
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  color: var(--text-on-dark);
-}
-
-.stat-number {
-  font-family: var(--font-display);
-  font-size: clamp(4rem, 8vw, 8rem);
-  font-weight: 700;
-  line-height: 1;
-  margin-bottom: 0.5rem;
-}
-
-.stat-suffix {
-  font-size: clamp(1.5rem, 3vw, 3rem);
-  font-weight: 600;
-  margin-left: 0.2rem;
-}
-
-.stat-label {
-  font-size: 1rem;
-  font-weight: 500;
-  opacity: 0.8;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-top: 1rem;
-}
+/* Stats section removed */
 
 /* CTA Section */
 .section-cta .section-inner {
@@ -970,10 +915,7 @@ body {
     max-width: 100%;
   }
   
-  .stats-grid {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-  }
+
   
   .nav-links {
     display: none;
@@ -989,18 +931,7 @@ body {
   }
 }
 
-/* Dark overlay backdrop for stats */
-.section-stats::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(10, 10, 10, 0.3);
-  backdrop-filter: blur(10px);
-  z-index: -1;
-}
+/* Stats backdrop removed */
 
 /* Animations prêtes pour GSAP */
 .fade-in-up {
