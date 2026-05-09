@@ -307,19 +307,29 @@ body {
   opacity: 0;
 }
 
-/* Side-aligned text zones selon skill */
-.align-left {
-  padding-left: var(--section-padding);
-  padding-right: 55vw;
-}
-
+/* Widget-based centered sections */
+.align-left,
 .align-right {
-  padding-left: 55vw;
-  padding-right: var(--section-padding);
+  padding: 4rem var(--section-padding);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .section-inner {
-  max-width: 40vw;
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  
+  /* Style widget graphique */
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 3rem 2.5rem;
+  backdrop-filter: blur(10px);
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .section-heading {
@@ -965,13 +975,13 @@ body {
   
   .align-left,
   .align-right {
-    padding-left: var(--section-padding);
-    padding-right: var(--section-padding);
-    text-align: center;
+    padding: 2rem var(--section-padding); /* Mobile widget spacing */
   }
   
   .section-inner {
     max-width: 100%;
+    padding: 2rem 1.5rem; /* Réduction padding widget sur mobile */
+    border-radius: 15px; /* Bordures plus petites sur mobile */
   }
   
 
