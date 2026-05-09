@@ -20,22 +20,174 @@ document.addEventListener('DOMContentLoaded', () => {
     initHeroAnimations();
 });
 
-// Random video selection
+// Enhanced video selection with quality detection
 function initRandomVideoSelection() {
-    const videos = ['video.mp4', 'video2.mp4', 'video3.mp4'];
-    const randomIndex = Math.floor(Math.random() * videos.length);
-    const selectedVideo = videos[randomIndex];
+    showLoadingProgress(0);
     
-    console.log(`Loading random video: ${selectedVideo}`);
+    // Video sets: HD and Light versions
+    const videoSets = [
+        { hd: 'video.mp4', light: 'video-light.mp4' },
+        { hd: 'video2.mp4', light: 'video2-light.mp4' },
+        { hd: 'video3.mp4', light: 'video3-light.mp4' }
+    ];
     
-    if (heroVideo) {
-        // Update video source with random selection
-        const source = heroVideo.querySelector('source');
-        if (source) {
-            source.src = `public/${selectedVideo}`;
-            heroVideo.load(); // Reload video with new source
+    const randomIndex = Math.floor(Math.random() * videoSets.length);
+    const selectedSet = videoSets[randomIndex];
+    
+    // Detect connection speed and choose quality
+    detectConnectionQuality().then(quality => {
+        const videoFile = quality === 'fast' ? selectedSet.hd : selectedSet.light;
+        console.log(`Loading ${quality} quality video: ${videoFile}`);
+        loadVideoWithProgress(videoFile);
+    });
+}
+
+// Connection quality detection
+async function detectConnectionQuality() {
+    try {
+        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+        
+        // Use Network Information API if available
+        if (connection) {
+            const effectiveType = connection.effectiveType;
+            console.log(`Connection type: ${effectiveType}`);
+            
+            if (effectiveType === '4g' || connection.downlink > 2) {
+                return 'fast';
+            } else {
+                return 'slow';
+            }
+        }
+        
+        // Fallback: Simple bandwidth test
+        const startTime = Date.now();
+        const testImage = new Image();
+        
+        return new Promise((resolve) => {
+            testImage.onload = () => {
+                const duration = Date.now() - startTime;
+                const speed = duration < 500 ? 'fast' : 'slow';
+                console.log(`Bandwidth test: ${duration}ms - ${speed}`);
+                resolve(speed);
+            };
+            
+            testImage.onerror = () => {
+                console.log('Bandwidth test failed, using light quality');
+                resolve('slow');
+            };
+            
+            // Test with small image (logo)
+            testImage.src = `public/nsy-logo.png?t=${Date.now()}`;
+            
+            // Timeout fallback
+            setTimeout(() => resolve('slow'), 2000);
+        });
+    } catch (error) {
+        console.log('Quality detection failed, using light quality');
+        return 'slow';
+    }
+}
+
+// Enhanced video loading with real progress
+function loadVideoWithProgress(videoFile) {
+    if (!heroVideo) return;
+    
+    const source = heroVideo.querySelector('source');
+    if (!source) return;
+    
+    let loadingComplete = false;
+    let progressInterval;
+    
+    // Simulate progress during loading
+    let currentProgress = 10;
+    progressInterval = setInterval(() => {
+        if (currentProgress < 90 && !loadingComplete) {
+            currentProgress += Math.random() * 3;
+            showLoadingProgress(Math.min(currentProgress, 90));
+        }
+    }, 200);
+    
+    // Handle video loading events
+    heroVideo.addEventListener('loadstart', () => {
+        showLoadingProgress(15);
+        console.log('Video loading started');
+    });
+    
+    heroVideo.addEventListener('progress', (e) => {
+        if (e.lengthComputable) {
+            const percent = (e.loaded / e.total) * 100;
+            showLoadingProgress(Math.max(currentProgress, percent * 0.9));
+        }
+    });
+    
+    // Wait for video to be completely ready
+    heroVideo.addEventListener('canplaythrough', () => {
+        clearInterval(progressInterval);
+        loadingComplete = true;
+        
+        // Finish loading animation
+        animateToComplete(() => {
+            hideLoader();
+        });
+    });
+    
+    // Fallback timeout (if video takes too long)
+    setTimeout(() => {
+        if (!loadingComplete) {
+            console.log('Video loading timeout, showing site anyway');
+            clearInterval(progressInterval);
+            loadingComplete = true;
+            animateToComplete(() => hideLoader());
+        }
+    }, 15000); // 15 second timeout
+    
+    // Load the selected video
+    source.src = `public/${videoFile}`;
+    heroVideo.load();
+}
+
+// Show loading progress with messages
+function showLoadingProgress(percent) {
+    const loaderBar = document.querySelector('.loader-fill');
+    const loaderPercent = document.getElementById('loader-percent');
+    const loaderMessage = document.getElementById('loader-message');
+    
+    if (loaderBar) {
+        loaderBar.style.width = percent + '%';
+    }
+    if (loaderPercent) {
+        loaderPercent.textContent = Math.round(percent) + '%';
+    }
+    
+    // Update status messages
+    if (loaderMessage) {
+        if (percent < 15) {
+            loaderMessage.textContent = 'Détection de la qualité de connexion...';
+        } else if (percent < 30) {
+            loaderMessage.textContent = 'Chargement de la vidéo en cours...';
+        } else if (percent < 70) {
+            loaderMessage.textContent = 'Optimisation pour votre appareil...';
+        } else if (percent < 95) {
+            loaderMessage.textContent = 'Finalisation du chargement...';
+        } else {
+            loaderMessage.textContent = 'Prêt ! Lancement de l\'expérience...';
         }
     }
+}
+
+// Animate loader to completion
+function animateToComplete(callback) {
+    let progress = parseInt(loaderPercent?.textContent) || 90;
+    
+    const finishInterval = setInterval(() => {
+        progress += 2;
+        showLoadingProgress(progress);
+        
+        if (progress >= 100) {
+            clearInterval(finishInterval);
+            setTimeout(callback, 300);
+        }
+    }, 50);
 }
 
 // 1. LENIS SMOOTH SCROLL (MANDATORY selon skill)

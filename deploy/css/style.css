@@ -56,10 +56,42 @@ body {
 }
 
 .loader-brand {
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  text-align: center;
+}
+
+.loader-title {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--text-on-dark);
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.loader-subtitle {
+  font-size: 0.9rem;
+  color: var(--accent-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+}
+
+.loader-status {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+#loader-message {
+  color: var(--accent-gray);
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  min-height: 1.2em;
 }
 
 #loader-logo {
