@@ -20,6 +20,7 @@ Disallow: /README.md
 
 # Autoriser explicitement les assets visuels du site
 Allow: /public/nsy-logo.png
+Allow: /public/nsy-logo-ai.png
 Allow: /public/photo-profil.png
 Allow: /public/finance-assurance.png
 Allow: /public/web-ia.png
