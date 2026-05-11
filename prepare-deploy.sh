@@ -1,65 +1,127 @@
 #!/bin/bash
+# NSY — Préparation déploiement Infomaniak
+# Reconstruit le dossier deploy/ avec les fichiers à uploader dans public_html/.
 
-# Script de préparation déploiement Infomaniak
-# NSY Website
+set -e
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$ROOT"
 
 echo "🚀 Préparation du déploiement NSY Website pour Infomaniak..."
+echo "   Source : $ROOT"
 
-# Créer le dossier de déploiement
-mkdir -p deploy
-
-# Créer un deploy propre
+# Reset propre
 rm -rf deploy
 mkdir -p deploy
 
-# Copier tous les fichiers nécessaires
-echo "📁 Copie des fichiers..."
-cp index.html deploy/
-cp sitemap.xml deploy/
-cp .htaccess deploy/
-cp robots.txt deploy/
-cp README.md deploy/
-cp -r css deploy/
-cp -r js deploy/
-cp -r public deploy/
+# ───── Fichiers racine ─────
+echo "📁 Copie des fichiers racine..."
+cp index.html        deploy/
+cp sitemap.xml       deploy/
+cp robots.txt        deploy/
+cp .htaccess         deploy/
 
-# Nettoyer les fichiers inutiles dans deploy
-echo "🧹 Nettoyage des fichiers inutiles..."
-find deploy/public -name ".DS_Store" -delete 2>/dev/null || true
-find deploy -name "video_optimized.mp4" -delete 2>/dev/null || true
+# ───── Dossiers CSS et JS ─────
+echo "📁 Copie de css/ et js/..."
+cp -R css deploy/
+cp -R js  deploy/
 
-# Vérifier les fichiers essentiels
-echo "✅ Vérifications..."
+# ───── Public : on ne copie QUE les assets réellement utilisés ─────
+echo "📁 Copie des assets utilisés (public/)..."
+mkdir -p deploy/public
 
-files_required=("deploy/index.html" "deploy/sitemap.xml" "deploy/.htaccess" "deploy/robots.txt" "deploy/README.md" "deploy/public/video.mp4" "deploy/public/video2.mp4" "deploy/public/video3.mp4" "deploy/public/briefing.png" "deploy/public/nsy-logo.png" "deploy/public/cropped-NSY-logo-32x32.png" "deploy/css/style.css" "deploy/js/app.js")
+# Images
+cp public/nsy-logo.png                  deploy/public/
+cp public/photo-profil.png              deploy/public/
+cp public/finance-assurance.png         deploy/public/
+cp public/web-ia.png                    deploy/public/
+cp public/cropped-NSY-logo-32x32.png    deploy/public/
+cp public/cropped-NSY-logo-180x180.png  deploy/public/
+cp public/cropped-NSY-logo-192x192.png  deploy/public/
+cp public/cropped-NSY-logo-270x270.png  deploy/public/
 
-for file in "${files_required[@]}"; do
-    if [ -f "$file" ]; then
-        echo "✓ $file - OK"
-    else
-        echo "❌ $file - MANQUANT"
-    fi
+# Vidéos
+cp public/nsy-ia.mp4                    deploy/public/
+cp public/finance-assurance.mp4         deploy/public/
+cp public/web-ia.mp4                    deploy/public/
+
+# ───── Nettoyage ─────
+find deploy -name ".DS_Store" -delete 2>/dev/null || true
+
+# ───── Vérification des fichiers requis ─────
+echo ""
+echo "✅ Vérification des fichiers requis..."
+
+required=(
+  "deploy/index.html"
+  "deploy/sitemap.xml"
+  "deploy/robots.txt"
+  "deploy/.htaccess"
+  "deploy/css/style.css"
+  "deploy/js/app.js"
+  "deploy/public/nsy-logo.png"
+  "deploy/public/photo-profil.png"
+  "deploy/public/finance-assurance.png"
+  "deploy/public/web-ia.png"
+  "deploy/public/cropped-NSY-logo-32x32.png"
+  "deploy/public/cropped-NSY-logo-180x180.png"
+  "deploy/public/cropped-NSY-logo-192x192.png"
+  "deploy/public/cropped-NSY-logo-270x270.png"
+  "deploy/public/nsy-ia.mp4"
+  "deploy/public/finance-assurance.mp4"
+  "deploy/public/web-ia.mp4"
+)
+
+missing=0
+for f in "${required[@]}"; do
+  if [ -f "$f" ]; then
+    echo "  ✓ $f"
+  else
+    echo "  ❌ $f  — MANQUANT"
+    missing=$((missing + 1))
+  fi
 done
 
-# Tailles des fichiers
+# ───── Vérification des références dans index.html ─────
 echo ""
-echo "📊 Tailles des assets:"
-du -h deploy/public/video*.mp4 2>/dev/null | awk '{print "Vidéo " NR ": " $1}'
-du -h deploy/public/briefing.png 2>/dev/null | awk '{print "Image briefing: " $1}'
-du -h deploy/public/nsy-logo.png 2>/dev/null | awk '{print "Logo principal: " $1}'
-du -h deploy/public/cropped-NSY-logo-*.png 2>/dev/null | wc -l | awk '{print "Favicons: " $1 " fichiers"}'
-du -h deploy/css/style.css 2>/dev/null | awk '{print "CSS: " $1}'
-du -h deploy/js/app.js 2>/dev/null | awk '{print "JavaScript: " $1}'
-du -h deploy/README.md 2>/dev/null | awk '{print "Documentation: " $1}'
+echo "🔍 Recherche de références broken dans index.html..."
+broken=0
+while IFS= read -r ref; do
+  if [ ! -e "deploy/$ref" ]; then
+    echo "  ⚠️  index.html référence \"$ref\" qui n'existe pas dans deploy/"
+    broken=$((broken + 1))
+  fi
+done < <(grep -oE '(src|href)="(css|js|public)/[^"]+"' deploy/index.html | sed -E 's/.*"([^"]+)".*/\1/' | sort -u)
 
-# Taille totale
+# ───── Rapport ─────
+echo ""
+echo "📊 Tailles des assets clés :"
+du -h deploy/public/*.mp4 2>/dev/null | awk '{printf "  %-50s %s\n", $2, $1}'
+du -h deploy/public/*.png 2>/dev/null | awk '{printf "  %-50s %s\n", $2, $1}'
+du -h deploy/css/style.css deploy/js/app.js deploy/index.html 2>/dev/null | awk '{printf "  %-50s %s\n", $2, $1}'
+
 total_size=$(du -sh deploy/ | awk '{print $1}')
-echo "Total dossier deploy: $total_size"
+file_count=$(find deploy -type f | wc -l | tr -d ' ')
 
 echo ""
-echo "📋 Instructions finales:"
-echo "1. Uploadez le contenu du dossier 'deploy/' dans public_html/"
-echo "2. Vérifiez que .htaccess est bien uploadé"
-echo "3. Testez https://votre-domaine.ch"
+echo "📦 Bundle de déploiement :"
+echo "  Fichiers : $file_count"
+echo "  Taille totale : $total_size"
+if [ "$missing" -eq 0 ] && [ "$broken" -eq 0 ]; then
+  echo "  Statut : ✅ Prêt pour l'upload"
+else
+  echo "  Statut : ⚠️  $missing fichier(s) manquant(s), $broken référence(s) cassée(s)"
+fi
+
 echo ""
-echo "🎉 Site prêt pour Infomaniak !"
+echo "📋 Étapes suivantes :"
+echo "  1. Uploader le CONTENU de deploy/ (pas le dossier lui-même) dans public_html/ sur Infomaniak"
+echo "  2. Vérifier que .htaccess est bien transféré (souvent caché dans les clients FTP — activez l'affichage des fichiers cachés)"
+echo "  3. Tester https://www.nsy.fr"
+echo "  4. Soumettre le sitemap dans Google Search Console : https://search.google.com/search-console"
+echo "  5. Vérifier robots.txt : https://www.nsy.fr/robots.txt"
+echo ""
+
+if [ "$missing" -gt 0 ] || [ "$broken" -gt 0 ]; then
+  exit 1
+fi

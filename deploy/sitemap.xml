@@ -2,79 +2,87 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-  
-  <!-- Page principale -->
+
+  <!-- Page principale (one-page : Accueil / Services / À propos / Contact via ancres) -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2024-05-08</lastmod>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    
-    <!-- Images -->
+
+    <!-- Images principales -->
     <image:image>
       <image:loc>https://www.nsy.fr/public/nsy-logo.png</image:loc>
-      <image:title>NSY - Logo Intelligence Artificielle</image:title>
-      <image:caption>Logo de NSY, Entreprise de Services du Numérique spécialisée en IA</image:caption>
+      <image:title>NSY — Cabinet de conseil technique et création web propulsée par l'IA</image:title>
+      <image:caption>Logo NSY, EURL fondée par Cédric Barme à Orléans</image:caption>
     </image:image>
-    
+
     <image:image>
-      <image:loc>https://www.nsy.fr/public/briefing.png</image:loc>
-      <image:title>NSY - Processus de développement</image:title>
-      <image:caption>Méthodologie NSY en 3 étapes pour les projets IA et transformation digitale</image:caption>
+      <image:loc>https://www.nsy.fr/public/photo-profil.png</image:loc>
+      <image:title>Cédric Barme, fondateur de NSY</image:title>
+      <image:caption>Cédric Barme — consultant technique senior, 14 ans d'expérience finance / assurance</image:caption>
     </image:image>
-    
-    <!-- Vidéos -->
+
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/finance-assurance.png</image:loc>
+      <image:title>Conseil technique finance et assurance</image:title>
+      <image:caption>Service NSY : missions techniques senior pour la finance, l'assurance et l'asset management</image:caption>
+    </image:image>
+
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/web-ia.png</image:loc>
+      <image:title>Création de sites web propulsés par l'intelligence artificielle</image:title>
+      <image:caption>Service NSY : sites web nouvelle génération avec intégration LLM (Claude, OpenAI, Mistral)</image:caption>
+    </image:image>
+
+    <!-- Vidéo hero -->
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
-      <video:title>NSY - Présentation Intelligence Artificielle</video:title>
-      <video:description>Vidéo de présentation de NSY, expert en IA et transformation digitale</video:description>
-      <video:content_loc>https://www.nsy.fr/public/video.mp4</video:content_loc>
-      <video:duration>30</video:duration>
+      <video:title>NSY — Animation IA du hero</video:title>
+      <video:description>Animation cyber IA présentée dans la section hero du site NSY</video:description>
+      <video:content_loc>https://www.nsy.fr/public/nsy-ia.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+
+    <!-- Vidéo service 01 : conseil finance & assurance -->
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/finance-assurance.png</video:thumbnail_loc>
+      <video:title>Conseil technique finance et assurance — NSY</video:title>
+      <video:description>Présentation visuelle du service de conseil technique senior pour la finance et l'assurance</video:description>
+      <video:content_loc>https://www.nsy.fr/public/finance-assurance.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+
+    <!-- Vidéo service 02 : création web IA -->
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/web-ia.png</video:thumbnail_loc>
+      <video:title>Création web propulsée par l'IA — NSY</video:title>
+      <video:description>Présentation visuelle du service de création de sites web propulsés par l'intelligence artificielle</video:description>
+      <video:content_loc>https://www.nsy.fr/public/web-ia.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>
-  
-  <!-- Sections spécifiques -->
-  <url>
-    <loc>https://www.nsy.fr/#concept</loc>
-    <lastmod>2024-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.nsy.fr/#process</loc>
-    <lastmod>2024-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.nsy.fr/#about</loc>
-    <lastmod>2024-05-08</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  
+
+  <!-- Sections de la page (ancres) — utiles pour les featured snippets Google -->
   <url>
     <loc>https://www.nsy.fr/#services</loc>
-    <lastmod>2024-05-08</lastmod>
-    <changefreq>weekly</changefreq>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-  
+
   <url>
-    <loc>https://www.nsy.fr/#expertise</loc>
-    <lastmod>2024-05-08</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.nsy.fr/#contact</loc>
-    <lastmod>2024-05-08</lastmod>
+    <loc>https://www.nsy.fr/#about</loc>
+    <lastmod>2026-05-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
-  
+
+  <url>
+    <loc>https://www.nsy.fr/#contact</loc>
+    <lastmod>2026-05-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
 </urlset>

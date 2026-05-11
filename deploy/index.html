@@ -1,404 +1,777 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NSY - Intelligence Artificielle & Solutions Numériques | ESN Experte</title>
-    <meta name="description" content="NSY, Entreprise de Services du Numérique experte en IA et nouvelles technologies. Développement web, mobile, automatisation et transformation digitale. 12+ ans d'expérience.">
-    <meta name="keywords" content="NSY, Intelligence Artificielle, IA, ESN France, développement web, mobile, React, Node.js, Python, automatisation, transformation digitale, machine learning, solutions numériques, AWS, Azure, DevOps, Cédric Barme, expert IA, développement full-stack, chatbot, API, cloud computing, data science">
-    <meta name="author" content="NSY - Cédric Barme">
-    <meta name="robots" content="index, follow">
-    
-    <!-- SEO Avancé pour Google -->
-    <meta name="language" content="fr">
-    <meta name="revisit-after" content="7 days">
-    <meta name="rating" content="general">
-    <meta name="distribution" content="global">
-    <meta name="geo.region" content="FR">
-    <meta name="geo.country" content="France">
-    <meta name="geo.placename" content="France">
-    <meta name="theme-color" content="#407BFF">
-    <meta name="msapplication-TileColor" content="#000000">
-    <meta name="msapplication-navbutton-color" content="#407BFF">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    
-    <!-- Schema.org / JSON-LD -->
-    <script type="application/ld+json">
-    {
-        "@context": "https://schema.org",
-        "@type": "Organization",
-        "name": "NSY",
-        "alternateName": "NSY Intelligence Artificielle",
-        "url": "https://www.nsy.fr",
-        "logo": "https://www.nsy.fr/public/nsy-logo.png",
-        "description": "Entreprise de Services du Numérique spécialisée en Intelligence Artificielle et transformation digitale",
-        "founder": {
-            "@type": "Person",
-            "name": "Cédric Barme",
-            "jobTitle": "Expert IA & Développement Full-Stack",
-            "sameAs": [
-                "https://linkedin.com/in/cedric-barme",
-                "https://github.com/machouse78/nsy-website"
-            ]
-        },
-        "contactPoint": {
-            "@type": "ContactPoint",
-            "email": "contact@nsy.fr",
-            "contactType": "customer service",
-            "areaServed": "FR"
-        },
-        "address": {
-            "@type": "PostalAddress",
-            "addressCountry": "FR"
-        },
-        "serviceType": [
-            "Développement Web",
-            "Intelligence Artificielle", 
-            "Transformation Digitale",
-            "Développement Mobile",
-            "Automatisation",
-            "Machine Learning",
-            "Solutions Cloud"
-        ],
-        "knowsAbout": [
-            "React",
-            "Node.js", 
-            "Python",
-            "Intelligence Artificielle",
-            "Machine Learning",
-            "AWS",
-            "Azure",
-            "DevOps"
-        ]
-    }
-    </script>
-    
-    <!-- Canonical URL -->
-    <link rel="canonical" href="https://www.nsy.fr">
-    
-    <!-- Sitemap & Robots -->
-    <link rel="sitemap" type="application/xml" href="/sitemap.xml">
-    
-    <!-- Alternate Languages -->
-    <link rel="alternate" hreflang="fr" href="https://www.nsy.fr">
-    <link rel="alternate" hreflang="x-default" href="https://www.nsy.fr">
-    
-    <!-- Preload Critical Resources -->
-    <link rel="preload" href="css/style.css" as="style">
-    <link rel="preload" href="js/app.js" as="script">
-    
-    <!-- DNS Prefetch -->
-    <link rel="dns-prefetch" href="//cdn.jsdelivr.net">
-    <link rel="dns-prefetch" href="//fonts.googleapis.com">
-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="NSY - Intelligence Artificielle & Solutions Numériques | ESN Experte">
-    <meta property="og:description" content="NSY, ESN spécialisée en IA et transformation digitale. Développement web, mobile, automatisation. 12+ ans d'expérience. Contact : contact@nsy.fr">
-    <meta property="og:url" content="https://www.nsy.fr">
-    <meta property="og:image" content="https://www.nsy.fr/public/nsy-logo.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:site_name" content="NSY">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="article:author" content="Cédric Barme">
-    <meta property="article:publisher" content="https://www.nsy.fr">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="NSY - Intelligence Artificielle & Solutions Numériques | ESN Experte">
-    <meta name="twitter:description" content="ESN spécialisée en IA et transformation digitale. Développement web, mobile, automatisation. 12+ ans d'expérience.">
-    <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-logo.png">
-    <meta name="twitter:image:alt" content="NSY - Logo Intelligence Artificielle">
-    <meta name="twitter:site" content="@nsy_fr">
-    <meta name="twitter:creator" content="@cedric_barme">
-    
-    <!-- Favicons & App Icons -->
-    <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png">
-    <link rel="icon" type="image/png" sizes="270x270" href="public/cropped-NSY-logo-270x270.png">
-    
-    <!-- Fallback favicon -->
-    <link rel="shortcut icon" href="public/cropped-NSY-logo-32x32.png">
-    
-    <!-- Web App Manifest (Optional) -->
-    <meta name="msapplication-TileImage" content="public/cropped-NSY-logo-270x270.png">
-    <meta name="msapplication-TileColor" content="#000000">
-    
-    <!-- Fonts distinctives selon skill frontend-design -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <link rel="stylesheet" href="css/style.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>NSY — Conseil technique & création web propulsée par l'IA</title>
+<meta name="description" content="NSY accompagne les grands acteurs de la finance et de l'assurance sur leurs missions techniques les plus exigeantes, et propulse les entreprises ambitieuses vers la transition IA grâce à des sites web nouvelle génération." />
+<meta name="author" content="NSY — Cédric Barme" />
+<meta name="theme-color" content="#0A0F1C" />
+
+<link rel="canonical" href="https://www.nsy.fr" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr" />
+
+<meta property="og:type" content="website" />
+<meta property="og:title" content="NSY — Conseil technique & création web propulsée par l'IA" />
+<meta property="og:description" content="Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA." />
+<meta property="og:url" content="https://www.nsy.fr" />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-logo.png" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:site_name" content="NSY" />
+<meta name="twitter:card" content="summary_large_image" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "NSY",
+  "url": "https://www.nsy.fr",
+  "logo": "https://www.nsy.fr/public/nsy-logo.png",
+  "description": "Cabinet de conseil technique indépendant — finance, assurance et création web propulsée par l'IA.",
+  "founder": {
+    "@type": "Person",
+    "name": "Cédric Barme",
+    "jobTitle": "Consultant senior · Fondateur",
+    "sameAs": [
+      "https://www.linkedin.com/in/c%C3%A9dric-barme/",
+      "https://github.com/machouse78/nsy-website"
+    ]
+  },
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "email": "contact@nsy.fr",
+    "contactType": "customer service",
+    "areaServed": "FR"
+  }
+}
+</script>
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="shortcut icon" href="public/cropped-NSY-logo-32x32.png" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-    <!-- Loader -->
-    <div id="loader">
-        <div class="loader-brand">
-            <img src="public/nsy-logo.png" alt="NSY Logo" id="loader-logo">
-            <div class="loader-title">NSY</div>
-            <div class="loader-subtitle">Intelligence Artificielle</div>
+
+<!-- ───── Nav ───── -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link active" data-target="top" href="#top">Accueil</a>
+      <a class="nav-link" data-target="services" href="#services">Services</a>
+      <a class="nav-link" data-target="about" href="#about">À propos</a>
+      <a class="nav-link" data-target="contact" href="#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+    </div>
+    <a class="nav-cta" href="#contact">
+      <span class="status-dot"></span>
+      Disponible · Q3 <span data-current-year>2026</span>
+    </a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ───── Hero ───── -->
+<section class="hero" id="top">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="pill"><span data-years>14</span> ANS</span>
+        Conseil technique senior · Indépendant
+      </div>
+      <h1>
+        L'expertise <span class="ital">qui transforme</span><br />
+        <span class="accent">vos systèmes critiques</span>
+      </h1>
+      <p class="hero-sub">
+        NSY accompagne les grands acteurs de la finance et de l'assurance sur leurs missions techniques les plus exigeantes — et propulse les entreprises ambitieuses vers la transition IA grâce à des sites web nouvelle génération.
+      </p>
+      <div class="hero-cta-row">
+        <a class="btn btn-primary" href="#services">
+          Découvrir les services <span class="arrow">→</span>
+        </a>
+        <a class="btn btn-ghost" href="#contact">
+          Démarrer un échange
+        </a>
+      </div>
+      <div class="hero-meta">
+        <div class="hero-meta-item">
+          <div class="num"><span data-years>14</span><sup>+</sup></div>
+          <div class="lab">Années d'expertise</div>
         </div>
-        <div class="loader-status">
-            <div id="loader-message">Détection de la qualité de connexion...</div>
-            <div id="loader-bar">
-                <div class="loader-fill"></div>
-            </div>
-            <div id="loader-percent">0%</div>
+        <div class="hero-meta-item">
+          <div class="num">CAC&nbsp;40</div>
+          <div class="lab">Clients de référence</div>
         </div>
+        <div class="hero-meta-item">
+          <div class="num">100<sup>%</sup></div>
+          <div class="lab">Mission directe</div>
+        </div>
+      </div>
     </div>
 
-    <!-- Fixed Header -->
-    <header class="site-header">
-        <nav>
-            <div class="nav-logo">
-                <img src="public/nsy-logo.png" alt="NSY Logo" class="header-logo">
-                <div class="logo-text-container">
-                    <span class="logo-subtitle">AI & Digital</span>
+    <div class="hero-visual" aria-hidden="true">
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+      <div class="orbit"></div>
+
+      <div class="glyph">
+        <div class="glyph-rings"></div>
+        <div class="glyph-core">
+          <div class="glyph-disc"></div>
+          <video
+            class="glyph-video"
+            src="public/nsy-ia.mp4"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+            aria-label="Animation NSY · IA"
+          ></video>
+        </div>
+      </div>
+
+      <div class="terminal t-1">
+        <div class="h"><span></span><span></span><span></span></div>
+        <div class="ln"><span class="c"># nsy_audit.sh</span></div>
+        <div class="ln"><span class="k">$</span> analyse <span class="s">"core-banking"</span></div>
+        <div class="ln"><span class="c">→ 12 services scannés</span></div>
+        <div class="ln"><span class="k">✓</span> rapport prêt<span class="cursor"></span></div>
+      </div>
+
+      <div class="terminal t-2">
+        <div class="h"><span></span><span></span><span></span></div>
+        <div class="ln"><span class="c"># site_ia.config</span></div>
+        <div class="ln"><span class="k">build</span>: <span class="s">"production"</span></div>
+        <div class="ln"><span class="k">ai</span>: <span class="s">"claude-haiku"</span></div>
+        <div class="ln"><span class="k">deploy</span>: <span class="s">"edge"</span> ✓</div>
+      </div>
+
+      <div class="tag cyan tag-1"><i></i>uptime · 99.98%</div>
+      <div class="tag warm tag-2"><i></i>latence · 42 ms</div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Marquee ───── -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track">
+    <span class="marquee-item">Banque de détail</span>
+    <span class="marquee-item">Assurance vie</span>
+    <span class="marquee-item">Asset management</span>
+    <span class="marquee-item">Architecture cloud</span>
+    <span class="marquee-item">Création web · IA</span>
+    <span class="marquee-item">Audit & cadrage</span>
+    <span class="marquee-item">Migration legacy</span>
+    <span class="marquee-item">DevOps & SRE</span>
+    <span class="marquee-item">Banque de détail</span>
+    <span class="marquee-item">Assurance vie</span>
+    <span class="marquee-item">Asset management</span>
+    <span class="marquee-item">Architecture cloud</span>
+    <span class="marquee-item">Création web · IA</span>
+    <span class="marquee-item">Audit & cadrage</span>
+    <span class="marquee-item">Migration legacy</span>
+    <span class="marquee-item">DevOps & SRE</span>
+  </div>
+</div>
+
+<!-- ───── Capabilities ───── -->
+<section class="block">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Deux missions, un standard</span>
+      <span class="line"></span>
+      <span class="mono">01 / Capacités</span>
+    </div>
+    <div class="section-head">
+      <h2>Une double expertise rare,<br />assemblée sous un seul nom.</h2>
+      <p class="lede">
+        D'un côté, l'expérience d'un consultant senior qui a livré sur les systèmes les plus critiques. De l'autre, la maîtrise des outils IA qui redéfinissent aujourd'hui la création web.
+      </p>
+    </div>
+
+    <div class="cap-grid">
+      <article class="cap">
+        <div class="cap-shape"></div>
+        <div class="cap-num">01 / CONSEIL</div>
+        <h3>Missions techniques pour la finance & l'assurance</h3>
+        <p>Cadrage, architecture, expertise senior et reprise en main de chantiers complexes. Une présence directe aux côtés de vos équipes — sans intermédiaire, sans courtier.</p>
+        <ul class="cap-list">
+          <li>Architecture distribuée</li>
+          <li>Migration legacy</li>
+          <li>Audit technique</li>
+          <li>Conformité DORA</li>
+          <li>Cloud privé / hybride</li>
+        </ul>
+      </article>
+      <article class="cap warm">
+        <div class="cap-shape"></div>
+        <div class="cap-num">02 / CRÉATION WEB IA</div>
+        <h3>Sites web propulsés par l'intelligence artificielle</h3>
+        <p>Pour les entreprises qui veulent franchir la transition IA. Conception, génération assistée, intégration de modèles et déploiement edge — du brief à la mise en ligne.</p>
+        <ul class="cap-list">
+          <li>Sites vitrines & SaaS</li>
+          <li>Intégration LLM</li>
+          <li>Génération assistée</li>
+          <li>SEO sémantique</li>
+          <li>Déploiement edge</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Process ───── -->
+<section class="block">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Méthode</span>
+      <span class="line"></span>
+      <span class="mono">02 / Déroulé</span>
+    </div>
+    <div class="section-head">
+      <h2>Un cadre clair,<br />de la première heure jusqu'à la mise en production.</h2>
+      <p class="lede">
+        Pas d'effet d'annonce. Une méthode lisible, des livrables concrets et un seul interlocuteur du début à la fin de la mission.
+      </p>
+    </div>
+
+    <div class="process">
+      <div class="step">
+        <div class="n">01 / DISCOVERY</div>
+        <h4>Cadrage</h4>
+        <p>Atelier de 90 minutes pour comprendre le besoin, les contraintes et identifier les angles morts.</p>
+      </div>
+      <div class="step">
+        <div class="n">02 / DESIGN</div>
+        <h4>Architecture</h4>
+        <p>Proposition technique avec arbitrages documentés, roadmap et estimation à effort constant.</p>
+      </div>
+      <div class="step">
+        <div class="n">03 / BUILD</div>
+        <h4>Réalisation</h4>
+        <p>Mission directe ou pilotage d'équipe, avec revues hebdomadaires et démos toutes les deux semaines.</p>
+      </div>
+      <div class="step">
+        <div class="n">04 / HANDOVER</div>
+        <h4>Transmission</h4>
+        <p>Documentation, formation des équipes internes et suivi sur 90 jours après la livraison.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Trust strip ───── -->
+<section class="block">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Références</span>
+      <span class="line"></span>
+      <span class="mono">03 / Terrain</span>
+    </div>
+    <div class="section-head">
+      <h2>Ce que NSY apporte<br />à vos chantiers stratégiques.</h2>
+      <p class="lede">
+        Une intervention senior sans surcouche commerciale. Pas de pyramide, pas de junior caché, pas de Powerpoint d'agence : du temps de cerveau qualifié, directement sur vos sujets.
+      </p>
+    </div>
+
+    <div class="cap-grid three">
+      <article class="cap" style="padding: 28px;">
+        <div class="cap-num">03 / VALEUR</div>
+        <h3 style="font-size: 22px; margin-top: 10px;">Indépendance</h3>
+        <p style="margin-top: 10px; font-size: 14.5px;">Mission directe via EURL — un seul contrat, un seul interlocuteur.</p>
+      </article>
+      <article class="cap" style="padding: 28px;">
+        <div class="cap-num">04 / VALEUR</div>
+        <h3 style="font-size: 22px; margin-top: 10px;">Confidentialité</h3>
+        <p style="margin-top: 10px; font-size: 14.5px;">Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).</p>
+      </article>
+      <article class="cap" style="padding: 28px;">
+        <div class="cap-num">05 / VALEUR</div>
+        <h3 style="font-size: 22px; margin-top: 10px;">Engagement</h3>
+        <p style="margin-top: 10px; font-size: 14.5px;">Présence sur site ou hybride à Orléans, Paris, La Défense ou en région.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Services ───── -->
+<section class="block" id="services">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Offre</span>
+      <span class="line"></span>
+      <span class="mono">Services / 02 lignes</span>
+    </div>
+    <div class="section-head">
+      <h2>Deux offres,<br />pensées pour des contextes très différents.</h2>
+      <p class="lede">
+        D'un côté, des missions techniques senior pour les institutions financières. De l'autre, des sites web nouvelle génération pour les entreprises qui passent à l'IA. Le même niveau d'exigence dans les deux cas.
+      </p>
+    </div>
+
+    <div class="svc-stack">
+      <article class="svc">
+        <div class="svc-cover svc-cover-image">
+          <img src="public/finance-assurance.png" alt="" class="svc-bg" />
+          <video src="public/finance-assurance.mp4" class="svc-bg-video" muted loop playsinline preload="metadata"></video>
+          <span class="svc-tag">Service · 01</span>
+          <div class="svc-icon">
+            <span class="badge"><span class="dot"></span>Conseil senior</span>
+            <div class="title">Conseil technique<br />finance & assurance</div>
+          </div>
+        </div>
+        <div class="svc-body">
+          <p class="lede">
+            Pour les directions techniques des grands acteurs financiers : un consultant senior intégré directement à vos équipes, sans surcouche commerciale, sur vos chantiers les plus stratégiques.
+          </p>
+
+          <h4>Domaines couverts</h4>
+          <ul class="svc-list">
+            <li>Architecture distribuée et migration de cœurs métiers (banque, assurance vie, asset management)</li>
+            <li>Audit technique, due diligence et expertise pour comités de direction</li>
+            <li>Mise en conformité DORA, RGPD et exigences ACPR / AMF</li>
+            <li>Cadrage de chantiers complexes et reprise de programmes en difficulté</li>
+            <li>Pilotage technique d'équipes mixtes (internes, prestataires, ESN)</li>
+          </ul>
+
+          <h4>Stack & environnements</h4>
+          <div class="svc-stack-grid">
+            <div>Java / Kotlin</div>
+            <div>Python</div>
+            <div>Kafka · MQ</div>
+            <div>K8s · OpenShift</div>
+            <div>AWS · Azure</div>
+            <div>Terraform</div>
+            <div>Postgres · Oracle</div>
+            <div>Mainframe IBM</div>
+          </div>
+
+          <div class="svc-foot">
+            <div class="svc-price">
+              <span class="muted">Format · </span><strong>TJ ou forfait</strong><span class="muted"> · Mission directe EURL</span>
+            </div>
+            <a class="btn btn-ghost" href="#contact">Cadrer une mission <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+
+      <article class="svc warm">
+        <div class="svc-cover svc-cover-image">
+          <img src="public/web-ia.png" alt="" class="svc-bg" />
+          <video src="public/web-ia.mp4" class="svc-bg-video" muted loop playsinline preload="metadata"></video>
+          <span class="svc-tag">Service · 02</span>
+          <div class="svc-icon">
+            <span class="badge"><span class="dot"></span>Création web · IA</span>
+            <div class="title">Sites web propulsés<br />par l'intelligence artificielle</div>
+          </div>
+        </div>
+        <div class="svc-body">
+          <p class="lede">
+            Pour les PME et ETI qui veulent prendre le virage IA sans tâtonner : conception, génération assistée et intégration de modèles dans des sites pensés pour convertir et durer.
+          </p>
+
+          <h4>Ce qui est livré</h4>
+          <ul class="svc-list">
+            <li>Site vitrine, plateforme SaaS ou portail métier — design sur mesure, performant et accessible</li>
+            <li>Intégration de modèles IA (chatbot, recherche sémantique, génération de contenu, agent métier)</li>
+            <li>Stack moderne et hébergement edge pour des temps de chargement sous 200 ms</li>
+            <li>Référencement sémantique pensé pour les nouveaux moteurs de recherche IA</li>
+            <li>Tableau de bord d'usage et plan d'évolution sur 6 et 12 mois</li>
+          </ul>
+
+          <h4>Outils & intégrations</h4>
+          <div class="svc-stack-grid">
+            <div>Next.js · Astro</div>
+            <div>Anthropic Claude</div>
+            <div>OpenAI</div>
+            <div>Mistral AI</div>
+            <div>Vercel · Cloudflare</div>
+            <div>Supabase</div>
+            <div>Stripe · HubSpot</div>
+            <div>n8n · Make</div>
+          </div>
+
+          <div class="svc-foot">
+            <div class="svc-price">
+              <span class="muted">À partir de · </span><strong>9 800 € HT</strong><span class="muted"> · forfait clé en main</span>
+            </div>
+            <a class="btn btn-ghost" href="#contact">Démarrer un projet <span class="arrow">→</span></a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ───── About ───── -->
+<section class="block" id="about">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">À propos</span>
+      <span class="line"></span>
+      <span class="mono">PROFIL / CÉDRIC BARME</span>
+    </div>
+
+    <div class="about-grid">
+      <aside class="profile">
+        <div class="profile-cover">
+          <img src="public/photo-profil.png" alt="Cédric Barme" class="profile-photo" />
+        </div>
+        <div class="profile-body">
+          <div class="name">Cédric Barme</div>
+          <div class="role">Fondateur · Consultant senior</div>
+
+          <div class="profile-meta">
+            <div><span>Statut</span><span>EURL · NSY</span></div>
+            <div><span>Expérience</span><span><span data-years>14</span> ans</span></div>
+            <div><span>Localisation</span><span>ORLÉANS · CVL</span></div>
+            <div><span>Langues</span><span>FR · EN</span></div>
+            <div><span>Disponibilité</span><span class="accent-text">Q3 <span data-current-year>2026</span></span></div>
+          </div>
+        </div>
+      </aside>
+
+      <div class="about-body">
+        <h2>Un seul interlocuteur,<br /><span data-years-fr>quatorze</span> ans de terrain.</h2>
+        <p>
+          <strong>NSY est un cabinet à un seul nom.</strong> Derrière chaque mission, une seule personne — moi — avec <span data-years-fr>quatorze</span> années passées dans les coulisses techniques des plus grandes institutions financières françaises.
+        </p>
+        <p>
+          J'ai conçu, livré et débogué des systèmes qui traitent des milliards d'euros par jour. J'ai vu ce qui marche, ce qui casse, et ce qui ne tient pas la promesse vendue. Cette expérience, je la mets aujourd'hui au service d'un nombre limité de clients — par choix.
+        </p>
+
+        <div class="signal-grid">
+          <div class="signal">
+            <div class="v"><span data-years>14</span><sup>ans</sup></div>
+            <div class="l">d'expertise senior</div>
+          </div>
+          <div class="signal">
+            <div class="v">5<sup>+</sup></div>
+            <div class="l">RÔLES PAR MISSION · POLYVALENCE</div>
+          </div>
+          <div class="signal">
+            <div class="v">3</div>
+            <div class="l">clients en parallèle, max.</div>
+          </div>
+        </div>
+
+        <h4 class="about-h4">Secteurs de référence</h4>
+        <div class="clients">
+          <span>Banque de détail</span>
+          <span>Banque privée</span>
+          <span>Assurance vie</span>
+          <span>Asset management</span>
+          <span>Paiement</span>
+          <span>Fintech</span>
+        </div>
+
+        <h4 class="about-h4">Parcours</h4>
+        <div class="timeline">
+          <div class="timeline-item">
+            <div class="yr">2026 →</div>
+            <div>
+              <div class="ti">NSY · Fondateur</div>
+              <div class="di">Lancement de l'offre conseil + création web IA en EURL.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="yr">2018 — 2026</div>
+            <div>
+              <div class="ti">Tech lead · Indépendant</div>
+              <div class="di">Migration de socles Java EE, pilotage et supervision de production, et développements transverses pour de grandes assurances européennes.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="yr">2017 — 2018</div>
+            <div>
+              <div class="ti">Tech lead · ESN haut de gamme</div>
+              <div class="di">Conception et développement full-stack, de la page blanche à la mise en production.</div>
+            </div>
+          </div>
+          <div class="timeline-item">
+            <div class="yr">2014 — 2017</div>
+            <div>
+              <div class="ti">Ingénieur logiciel · Banque d'investissement</div>
+              <div class="di">Conception de plateformes de trading et de risque temps réel.</div>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="about-h4">Principes de travail</h4>
+        <ul class="svc-list" style="margin-bottom: 0;">
+          <li><strong style="color: var(--fg-0);">Mission directe.</strong> Pas d'ESN entre vous et moi. Un contrat, un interlocuteur, zéro intermédiaire.</li>
+          <li><strong style="color: var(--fg-0);">Honnêteté technique.</strong> Je dis quand un projet n'est pas la bonne idée. Mieux vaut perdre une mission qu'un client.</li>
+          <li><strong style="color: var(--fg-0);">Trois clients maximum.</strong> Pour rester réellement disponible et garder un niveau de qualité non négociable.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ───── Contact ───── -->
+<section class="block" id="contact">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Contact</span>
+      <span class="line"></span>
+      <span class="mono">Réponse sous 48h ouvrées</span>
+    </div>
+
+    <div class="contact-grid">
+      <div class="contact-aside">
+        <h2>Parlons<br />de votre projet.</h2>
+        <p class="lede">
+          Décrivez votre contexte en quelques lignes. Je reviens vers vous sous 48 heures ouvrées avec une lecture honnête : faisabilité, ordre de grandeur, et prochain pas concret.
+        </p>
+
+        <div class="contact-channels">
+          <a href="mailto:contact@nsy.fr" class="channel">
+            <div>
+              <div class="l">Email direct</div>
+              <div class="v">contact@nsy.fr</div>
+            </div>
+            <span class="arrow">→</span>
+          </a>
+          <a href="tel:+33672947106" class="channel">
+            <div>
+              <div class="l">Téléphone</div>
+              <div class="v">+33 (0)6 72 94 71 06</div>
+            </div>
+            <span class="arrow">→</span>
+          </a>
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" class="channel">
+            <div>
+              <div class="l">LinkedIn · 30 min</div>
+              <div class="v">Réserver un échange</div>
+            </div>
+            <span class="arrow">→</span>
+          </a>
+        </div>
+
+        <div class="legal-card">
+          <div><span>Raison sociale</span><span>NSY · EURL</span></div>
+          <div><span>Capital</span><span>100 €</span></div>
+          <div><span>SIREN</span><span>842 078 453</span></div>
+          <div><span>Siège</span><span>Orléans, France</span></div>
+        </div>
+      </div>
+
+      <form class="form" id="contact-form" novalidate>
+        <input type="hidden" id="service" name="service" value="consulting" />
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="name">Nom complet</label>
+            <input id="name" name="name" type="text" required placeholder="Jean Dupont" />
+          </div>
+          <div class="field">
+            <label for="company">Société</label>
+            <input id="company" name="company" type="text" placeholder="Nom de votre entreprise" />
+          </div>
+          <div class="field">
+            <label for="email">Email professionnel</label>
+            <input id="email" name="email" type="email" required placeholder="prenom@societe.fr" />
+          </div>
+          <div class="field">
+            <label for="phone">Téléphone</label>
+            <input id="phone" name="phone" type="tel" placeholder="+33 6 00 00 00 00" />
+          </div>
+
+          <div class="field full">
+            <label>Service concerné</label>
+            <div class="opts">
+              <div class="opt active" data-service="consulting">
+                <div class="ch"></div>
+                <div>
+                  <div class="opt-t">Conseil technique</div>
+                  <div class="opt-d">Mission senior pour finance, assurance, asset management.</div>
                 </div>
-            </div>
-            <div class="nav-links">
-                <a href="#concept">Concept</a>
-                <a href="#process">Processus</a>
-                <a href="#about">La Société</a>
-                <a href="#services">Services</a>
-                <a href="#expertise">Expertise</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </nav>
-    </header>
-
-    <!-- Video Hero Section - Like Apple iPhone pages -->
-    <section class="video-hero">
-        <!-- Video Container - Auto-play, no loop -->
-        <div class="video-container">
-            <video id="hero-video" autoplay muted playsinline>
-                <source src="public/video.mp4" type="video/mp4">
-                Votre navigateur ne supporte pas la lecture vidéo.
-            </video>
-        </div>
-    </section>
-
-    <!-- Content Section - Positioned under video -->
-    <section class="content-hero">
-        <div class="hero-content-wrapper">
-            <div class="section-label">001 / Innovation</div>
-            <p class="hero-tagline">ESN experte en nouvelles technologies, nous accompagnons votre transformation digitale avec l'IA au cœur de l'innovation.</p>
-            
-            <!-- Scroll Indicator -->
-            <div class="scroll-indicator">
-                <span>Découvrir</span>
-                <div class="scroll-arrow">↓</div>
-            </div>
-        </div>
-    </section>
-    </section>
-
-    <!-- Canvas Container -->
-    <div class="canvas-wrap">
-        <canvas id="canvas"></canvas>
-    </div>
-
-
-
-    <!-- Marquee Elements -->
-    <div class="marquee-wrap" data-scroll-speed="-30" style="top: 25vh;">
-        <div class="marquee-text">NSY • INTELLIGENCE ARTIFICIELLE • INNOVATION •</div>
-    </div>
-
-    <div class="marquee-wrap" data-scroll-speed="25" style="top: 75vh;">
-        <div class="marquee-text">TRANSFORMATION DIGITALE • EXPERTISE • NSY •</div>
-    </div>
-
-    <!-- Scroll Container -->
-    <div id="scroll-container">
-        
-        <!-- Concept Section -->
-        <section class="scroll-section section-content align-left" id="concept"
-                 data-enter="10" data-leave="22" data-animation="fade-up">
-            <div class="section-inner">
-                <span class="section-label">002 / Concept</span>
-                <h2 class="section-heading">Notre approche</h2>
-                <p class="section-body">Découvrez la méthodologie NSY : une approche structurée en 3 étapes pour transformer vos idées en solutions digitales innovantes.</p>
-                <p class="section-note">Une méthode éprouvée pour garantir le succès de votre transformation digitale avec l'IA.</p>
-            </div>
-        </section>
-        
-        <!-- Process Section -->
-        <section class="scroll-section section-content align-right" id="process"
-                 data-enter="25" data-leave="37" data-animation="scale-up">
-            <div class="section-inner">
-                <span class="section-label">003 / Processus</span>
-                <h2 class="section-heading">3 étapes clés</h2>
-                <p class="section-body">Analyse du besoin, conception & réalisation, livraison du produit. Une méthodologie structurée pour transformer vos idées en solutions concrètes.</p>
-                
-                <!-- Image Briefing -->
-                <div class="concept-image" style="margin: 2rem 0; position: relative;">
-                    <img src="public/briefing.png" alt="Processus NSY - Briefing" 
-                         class="briefing-image" 
-                         style="max-width: 100%; height: auto; border-radius: 8px; cursor: zoom-in; transition: transform 0.3s ease;"
-                         onclick="openImageModal()">
-                    <div class="zoom-indicator">🔍 Cliquer pour agrandir</div>
+              </div>
+              <div class="opt" data-service="web-ai">
+                <div class="ch"></div>
+                <div>
+                  <div class="opt-t">Création web · IA</div>
+                  <div class="opt-d">Site nouvelle génération propulsé par l'IA, clé en main.</div>
                 </div>
-                
-                <p class="section-note">Chaque étape est cruciale pour garantir le succès et l'adoption de votre solution IA.</p>
+              </div>
             </div>
-        </section>
-        
-        <!-- About Section -->
-        <section class="scroll-section section-content align-left" id="about"
-                 data-enter="40" data-leave="52" data-animation="fade-up">
-            <div class="section-inner">
-                <span class="section-label">004 / La Société</span>
-                <h2 class="section-heading">NSY, votre partenaire technologique</h2>
-                <p class="section-body">Entreprise de Services du Numérique (ESN) experte dans le domaine des nouvelles technologies et de l'informatique. Notre mission évolue constamment : nous proposons à nos clients une expertise technique et de conseil pour les accompagner dans la transition de l'ère numérique.</p>
-                <p class="section-note">Une approche personnalisée alliant innovation et expertise technique pour réussir votre transformation digitale.</p>
-            </div>
-        </section>
+          </div>
 
-        <!-- Services Section -->
-        <section class="scroll-section section-content align-right" id="services"
-                 data-enter="55" data-leave="67" data-animation="stagger-up">
-            <div class="section-inner">
-                <span class="section-label">005 / Services</span>
-                <h2 class="section-heading">Développement & Innovation</h2>
-                <p class="section-body">Développement d'applications web et mobiles, intégration d'intelligence artificielle, automatisation des processus métier. Nous créons des solutions sur-mesure adaptées à vos besoins spécifiques.</p>
-                <div class="service-list">
-                    <div class="service-item">• Applications Web & Mobile</div>
-                    <div class="service-item">• Intelligence Artificielle</div>
-                    <div class="service-item">• Automatisation</div>
-                    <div class="service-item">• Conseil & Expertise</div>
-                </div>
-            </div>
-        </section>
+          <div class="field full">
+            <label for="timing">Horizon de démarrage</label>
+            <select id="timing" name="timing">
+              <option value="now">Dès maintenant</option>
+              <option value="q3" selected>Sous 1 à 2 mois</option>
+              <option value="q4">Sous 3 à 6 mois</option>
+              <option value="future">Pas urgent — exploration</option>
+            </select>
+          </div>
 
+          <div class="field full">
+            <label for="message">Décrivez votre besoin</label>
+            <textarea id="message" name="message" required placeholder="Contexte, enjeu, contrainte de délai, équipe en place… Quelques lignes suffisent."></textarea>
+          </div>
+        </div>
 
-
-        <!-- Expertise Section -->
-        <section class="scroll-section section-content align-left"
-                 data-enter="70" data-leave="82" data-animation="clip-reveal" id="expertise">
-            <div class="section-inner">
-                <span class="section-label">006 / Expertise</span>
-                <h2 class="section-heading">Technologies de pointe</h2>
-                <p class="section-body">Maîtrise des dernières technologies et frameworks. Spécialisation en intelligence artificielle, développement full-stack, et solutions cloud. Une veille technologique constante pour rester à la pointe de l'innovation.</p>
-                <p class="section-note">React, Node.js, Python, IA/ML, Cloud AWS/Azure, DevOps, et bien plus encore.</p>
-            </div>
-        </section>
-
-        <!-- Contact CTA Section -->
-        <section class="scroll-section section-cta align-right"
-                 data-enter="85" data-leave="100" data-animation="scale-up" data-persist="true" id="contact">
-            <div class="section-inner">
-                <span class="section-label">007 / Contact</span>
-                <h2 class="section-heading">Démarrons votre projet</h2>
-                <p class="section-body">Prêt à transformer votre vision en réalité ? Contactez-nous pour discuter de votre projet et découvrir comment nous pouvons vous accompagner dans votre transformation digitale.</p>
-                
-                <!-- Formulaire de Contact -->
-                <form class="contact-form" id="contactForm">
-                    <div class="form-group">
-                        <input type="text" id="name" name="name" placeholder="Nom complet" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="email" id="email" name="email" placeholder="Email" required>
-                    </div>
-                    <div class="form-group">
-                        <input type="text" id="subject" name="subject" placeholder="Sujet du projet">
-                    </div>
-                    <div class="form-group">
-                        <textarea id="message" name="message" placeholder="Décrivez votre projet..." rows="4" required></textarea>
-                    </div>
-                    <button type="submit" class="cta-button form-submit">Envoyer le message</button>
-                </form>
-            </div>
-        </section>
-
+        <div class="form-foot">
+          <p class="note">
+            En envoyant ce formulaire, vous acceptez d'être recontacté. Vos données ne sont ni revendues, ni partagées — RGPD oblige.
+          </p>
+          <button type="submit" class="btn btn-primary" id="contact-submit">
+            <span class="btn-label">Envoyer la demande</span> <span class="arrow">→</span>
+          </button>
+        </div>
+      </form>
     </div>
+  </div>
+</section>
 
-    <!-- Footer -->
-    <footer class="site-footer">
-        <div class="footer-content">
-            <div class="footer-social">
-                <h4>Suivez-nous</h4>
-                <div class="social-links">
-                    <a href="https://linkedin.com/in/cédric-barme" target="_blank" rel="noopener noreferrer" class="social-link">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                        </svg>
-                        <span>LinkedIn</span>
-                    </a>
-                    <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener noreferrer" class="social-link">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        <span>GitHub</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; <span id="current-year">2024</span> NSY. Tous droits réservés.</p>
-            <p class="footer-ai-mention">Site créé avec l'IA • Transparence totale</p>
-        </div>
-    </footer>
+<!-- ───── CTA banner ───── -->
+<div class="cta-banner">
+  <span class="kicker">↳ Prochain créneau</span>
+  <h2 style="margin-top: 18px;">Un projet à cadrer ?<br />Un chantier à débloquer ?</h2>
+  <p>Réservez un appel de 30 minutes. Vous repartez avec une lecture honnête de votre situation — qu'elle débouche ou non sur une mission.</p>
+  <div style="display: flex; gap: 14px; flex-wrap: wrap;">
+    <a class="btn btn-primary" href="#contact">Réserver un appel <span class="arrow">→</span></a>
+    <a class="btn btn-ghost" href="#services">Voir les services</a>
+  </div>
+</div>
 
-    <!-- Image Modal -->
-    <div class="image-modal" id="imageModal">
-        <div class="modal-backdrop" onclick="closeImageModal()"></div>
-        <div class="modal-content">
-            <button class="modal-close" onclick="closeImageModal()">×</button>
-            <img src="public/briefing.png" alt="Processus NSY - Briefing détaillé" class="modal-image">
-            <div class="modal-caption">
-                Processus NSY - Méthodologie en 3 étapes pour vos projets IA
-            </div>
+</main>
+
+<!-- ───── Footer ───── -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · ORLÉANS</div>
+          </div>
         </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="#top">Accueil</a>
+        <a href="#services">Services</a>
+        <a href="#about">À propos</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <p>Conseil technique senior</p>
+        <p>Architecture cloud</p>
+        <p>Création web · IA</p>
+        <p>Audit & cadrage</p>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="mailto:contact@nsy.fr">contact@nsy.fr</a>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <p>Orléans · Centre-Val de Loire</p>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+        </div>
+      </div>
     </div>
-
-    <!-- Chatbot IA -->
-    <div class="chatbot-container" id="chatbot">
-        <div class="chatbot-toggle" id="chatbot-toggle">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
-                <path d="M8 10h.01M12 10h.01M16 10h.01"></path>
-            </svg>
-        </div>
-        
-        <div class="chatbot-window" id="chatbot-window">
-            <div class="chatbot-header">
-                <div class="chatbot-title">
-                    <img src="public/nsy-logo.png" alt="NSY" class="chatbot-logo">
-                    <span>Assistant NSY</span>
-                </div>
-                <button class="chatbot-close" id="chatbot-close">×</button>
-            </div>
-            
-            <div class="chatbot-messages" id="chatbot-messages">
-                <div class="message bot-message">
-                    <div class="message-content">
-                        Bonjour ! Je suis l'assistant virtuel de NSY. Comment puis-je vous aider avec vos projets d'IA et de transformation digitale ?
-                    </div>
-                </div>
-            </div>
-            
-            <div class="chatbot-input-container">
-                <input type="text" id="chatbot-input" placeholder="Tapez votre question..." />
-                <button id="chatbot-send">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL au capital de 100 € · SIREN 842 078 453</div>
+      <div>Mentions légales · Confidentialité · CGV</div>
     </div>
+  </div>
+</footer>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/lenis@1/dist/lenis.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
-    <script src="js/app.js"></script>
+<!-- ───── Toast ───── -->
+<div class="toast hidden" id="toast" role="status" aria-live="polite">
+  <span style="color: var(--accent);">✓</span>
+  Message reçu — réponse sous 48h ouvrées.
+</div>
+
+<!-- ───── Chatbot ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Ouvrir le chat">
+  <svg class="icon-open" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+  <span class="cbot-fab-dot"></span>
+</button>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Assistant NSY">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <img src="public/nsy-logo.png" alt="NSY" class="cbot-avatar-img" />
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Assistant NSY</div>
+      <div class="cbot-status"><span class="cbot-online"></span>En ligne · Réponse instantanée</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/nsy-logo.png" alt="NSY" /></div>
+      <div class="cbot-bubble">Bonjour 👋 Je suis l'assistant NSY. Je peux répondre à vos questions sur nos services, l'expertise de Cédric, ou vous orienter vers le bon contact. Que puis-je faire pour vous ?</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">Quels sont vos services ?</button>
+    <button class="cbot-chip">Quel est le tarif d'un site IA ?</button>
+    <button class="cbot-chip">Cédric est-il disponible ?</button>
+    <button class="cbot-chip">Travaillez-vous avec les banques ?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Posez votre question…" />
+    <button class="cbot-send" id="cbot-send" aria-label="Envoyer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span>Réponse automatisée · vérifiez les informations critiques</span>
+    <button id="cbot-escalate">Parler à Cédric →</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
 </body>
 </html>

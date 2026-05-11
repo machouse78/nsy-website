@@ -1,308 +1,141 @@
-# 🚀 NSY Website - Intelligence Artificielle & Solutions Numériques
+# NSY — Cabinet de conseil technique & création web propulsée par l'IA
 
-[![Website](https://img.shields.io/badge/Website-Live-brightgreen)](https://www.nsy.fr)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Built with](https://img.shields.io/badge/Built%20with-AI-purple)](https://github.com/machouse78/nsy-website)
+[![Site](https://img.shields.io/badge/site-www.nsy.fr-00E5FF)](https://www.nsy.fr)
+[![Hébergement](https://img.shields.io/badge/h%C3%A9bergement-Infomaniak-1AB7EA)](https://www.infomaniak.com)
 
-> Site web professionnel pour NSY, ESN spécialisée en Intelligence Artificielle et transformation digitale. 
-> Créé avec une approche Apple-style et des animations vidéo immersives.
+Site one-page pour **NSY**, EURL fondée par Cédric Barme à Orléans. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
 
-![NSY Website Preview](public/nsy-logo.png)
+## Direction artistique
 
-## ✨ Fonctionnalités Principales
+Design **"Cyber Cabinet"** — palette navy profond + cyan électrique + accent orange du logo. Typographie : Space Grotesk (display) + Manrope (corps) + JetBrains Mono (annotations).
 
-### 🎬 **Vidéo Hero Immersive**
-- **3 vidéos aléatoires** : Chargement Math.random() entre video.mp4, video2.mp4, video3.mp4
-- Animation vidéo fullscreen style Apple iPhone
-- Auto-play au chargement (respect politique navigateurs)
-- **Ralentissement progressif** : playbackRate JavaScript dans les 0.5 dernières secondes
-- Pas de boucle, arrêt naturel sur dernière frame
+| Couleur | Hex | Usage |
+|---|---|---|
+| `--bg-1` | `#0A0F1C` | Fond principal |
+| `--accent` | `#00E5FF` | Cyan électrique — CTA, liens actifs, glow |
+| `--warm` | `#F08A2C` | Orange du logo — points d'accent rares |
+| `--fg-0` / `--fg-1` / `--fg-2` | `#F2F6FF` → `#8993AF` | Échelle de gris-bleu du texte |
 
-### 🎨 **Design Premium Apple-Style**
-- **Typographie distinctive** : Playfair Display + Inter (évite générique)
-- **Palette minimaliste** : Bleu accent + fond noir pour thème IA
-- **Layout asymétrique** : Sections alternées gauche/droite avec numérotation
-- **Animations GSAP** : ScrollTrigger + Lenis smooth scroll optimisées
+## Stack
 
-### 🤖 **Intelligence Artificielle Intégrée**
-- **Chatbot IA expert** : Réponses contextuelles sur services NSY
-- **Base de connaissances** : Technologies, prix, méthodologie, contact
-- **Interface moderne** : Toggle fixe + fenêtre backdrop-blur
-- **Réponses expertes** : Stack technique détaillé, grilles tarifaires
+- **HTML5 + CSS3 + JavaScript vanilla** — zéro framework, zéro bundler
+- **Google Fonts** : Space Grotesk, Manrope, JetBrains Mono
+- **CSS custom properties** + `@property` pour les transitions interpolables (CTA banner gradient)
+- **Vidéos MP4** servies directement, `preload="metadata"` pour ne pas saturer le first paint
 
-### 📱 **UX/Navigation Ultra-Optimisée**
-- **Navigation ultra-précise** : Buffers différentiels par section (concept: 100px, processus: 250px, etc.)
-- **Smooth scroll Lenis** : Transitions fluides entre toutes les sections
-- **Responsive design** : Mobile-first avec breakpoints adaptatifs
-- **Formulaire contact** : Génération mailto automatique + validation HTML5
-- **Modal image** : Zoom briefing.png avec transform-origin calculé depuis position source
+## Structure du site
 
-### 🎯 **Fonctionnalités Avancées**
-- **Bouton "Découvrir"** : Scroll automatique vers section Concept avec buffer identique au menu
-- **Sections alternées** : align-left/align-right avec animations slide cohérentes
-- **Espacements optimisés** : Distribution serrée et uniforme (12 points par section)
-- **Marquees animées** : Texte défilant avec vitesses différentielles
-- **Footer intelligent** : Année automatique + mention transparence IA
-- **Liens sociaux** : LinkedIn + GitHub avec animations hover et icônes SVG
+Page unique avec ancres :
 
-## 🛠️ Technologies Utilisées
+| Section | id | Contenu |
+|---|---|---|
+| Hero | `top` | Headline + CTA + sphère vidéo `nsy-ia.mp4` + terminaux ASCII flottants |
+| Marquee | — | Bandeau défilant des domaines couverts |
+| Capabilities | — | 2 cards : Conseil senior / Création web IA |
+| Process | — | 4 étapes : Discovery → Design → Build → Handover |
+| Trust strip | — | 3 valeurs : Indépendance / Confidentialité / Engagement |
+| Services | `services` | 2 cards détaillées avec swap image ↔ vidéo au survol |
+| About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
+| Contact | `contact` | Formulaire avec choix de service + canaux directs + mentions légales |
+| CTA banner | — | Bandeau "Prochain créneau" avec spotlight souris suivant |
+| Footer | — | Navigation + expertise + contact + réseaux sociaux |
 
-### Frontend Core
-- **HTML5** - Structure sémantique moderne
-- **CSS3** - Styling avancé avec variables custom + modal système
-- **JavaScript ES6+** - Logic native sans frameworks
+## Fonctionnalités interactives
 
-### Libraries & CDN
-- **GSAP 3** + **ScrollTrigger** - Animations professionnelles
-- **Lenis** - Smooth scroll premium
-- **Fonts Google** - Playfair Display + Inter
+- **Année et expérience dynamiques** : `data-current-year`, `data-years`, `data-years-fr` injectés en JS (basé sur `2026 - 14 = 2012` comme année de début de carrière)
+- **Scroll-spy nav** via `IntersectionObserver` — la rubrique active passe en cyan dans le menu
+- **Sphère hero** : vidéo `nsy-ia.mp4` en `object-fit: cover`, masquée en cercle, terminaux ASCII et tags qui flottent au-dessus avec `z-index: 3`
+- **Cards services** : au survol, l'image PNG cross-fade vers une vidéo MP4 qui se lance ; au mouseleave, retour à `currentTime = 0`
+- **CTA banner "Prochain créneau"** : 2 dégradés radiaux (cyan + orange) qui suivent la souris en temps réel via custom properties `--mx` / `--my`, avec retour en douceur (550 ms) quand on quitte la zone — grâce à `@property` qui rend les pourcentages interpolables
+- **Chatbot flottant** : FAB cyan en bas-droite, panneau glassmorphic, réponses par mots-clés (tarifs, dispo, services, contact, parcours, banque…)
+- **Formulaire contact** : option pour choisir le service (Conseil technique / Création web IA), horizon de démarrage, message libre. Toast de confirmation après submit (stub front-only, à brancher sur un backend pour la prod)
 
-### Optimisations
-- **Video API native** - playbackRate pour ralentissement progressif
-- **Canvas rendering** - Fallbacks si nécessaire  
-- **Responsive images** - Optimisation mobile
-- **Compression GZIP** - Configuration .htaccess Infomaniak
-
-## 📁 Structure du Projet
+## Structure du repo
 
 ```
 nsy-website/
-├── index.html                  # Page principale (7 sections + 50+ balises SEO)
-├── sitemap.xml                 # Plan du site pour moteurs de recherche
-├── .htaccess                   # Configuration Apache/Infomaniak optimisée
-├── robots.txt                  # SEO et indexation optimisés
-├── css/
-│   └── style.css              # Styles complets + responsive + modal
-├── js/
-│   └── app.js                 # Logic + animations + chatbot + modal
-├── public/
-│   ├── video.mp4              # Vidéo hero principale (69MB)
-│   ├── video2.mp4             # Vidéo alternative 2
-│   ├── video3.mp4             # Vidéo alternative 3
-│   ├── briefing.png           # Image processus NSY (modal zoom)
-│   └── nsy-logo.png           # Logo NSY
-├── deploy/                     # Dossier déploiement auto-généré (225MB)
-├── .claude/
-│   └── skills/                # Skills IA utilisés
-├── DEPLOIEMENT-INFOMANIAK.md   # Guide hébergement complet
-└── prepare-deploy.sh           # Script préparation automatique
+├── index.html                    # Page principale (one-page complet)
+├── css/style.css                 # Styles complets (~1500 lignes)
+├── js/app.js                     # Logique chatbot, swaps vidéo, scroll-spy, CTA spotlight
+├── public/                       # Assets servis publiquement
+│   ├── nsy-logo.png              # Logo principal
+│   ├── cropped-NSY-logo-*.png    # Favicons (32, 180, 192, 270)
+│   ├── photo-profil.png          # Photo Cédric Barme (section About)
+│   ├── finance-assurance.png     # Visuel statique service 01
+│   ├── finance-assurance.mp4     # Vidéo au survol service 01
+│   ├── web-ia.png                # Visuel statique service 02
+│   ├── web-ia.mp4                # Vidéo au survol service 02
+│   └── nsy-ia.mp4                # Vidéo de la sphère hero
+├── sitemap.xml                   # Plan du site (page + images + vidéos)
+├── robots.txt                    # Règles pour les crawlers
+├── .htaccess                     # Config Apache pour Infomaniak (GZIP + cache + HTTPS)
+├── prepare-deploy.sh             # Script de build du dossier deploy/
+├── deploy/                       # Dossier généré, à uploader dans public_html/
+├── DEPLOIEMENT-INFOMANIAK.md     # Guide hébergement
+└── README.md                     # Ce fichier
 ```
 
-## 🎯 Skills IA Appliqués
+## Tester en local
 
-### 🎨 **frontend-design**
-- Interface distinctive évitant les clichés IA génériques
-- Compositions asymétriques et typographie caractérielle
-- Animations orchestrées et détails atmosphériques
-- Couleurs et espacements premium
-
-### 🎬 **video-to-website** 
-- Intégration vidéo hero style Apple iPhone/MacBook
-- Effets de ralentissement cinématographique
-- Optimisation performance et UX vidéo
-- Chargement aléatoire multi-vidéos
-
-## 🚀 Installation & Développement
-
-### Prérequis
-- Navigateur moderne (Chrome, Firefox, Safari, Edge)
-- Serveur local pour développement
-
-### Installation
 ```bash
-# Cloner le repository
-git clone https://github.com/machouse78/nsy-website.git
-cd nsy-website
-
-# Lancer serveur local
+# Python (préinstallé sur macOS)
 python3 -m http.server 8000
-# Ou
-npx serve .
-# Ou
-php -S localhost:8000
-
-# Accéder au site
 open http://localhost:8000
+
+# ou Node
+npx serve .
+
+# ou VS Code / Cursor — extension "Live Server", clic droit sur index.html
 ```
 
-### Développement
+## Préparer un déploiement
+
 ```bash
-# Préparer le déploiement
 ./prepare-deploy.sh
-
-# Contenu à uploader = dossier deploy/ (225MB avec 3 vidéos)
 ```
 
-## 🌐 Déploiement Infomaniak
+Le script :
+1. Reconstruit le dossier `deploy/` à zéro
+2. Copie **uniquement les assets utilisés** (images, vidéos, CSS, JS, racine) — environ 97 Mo
+3. Vérifie que tous les fichiers requis sont présents
+4. Vérifie que chaque `src=` / `href=` dans `index.html` pointe vers un fichier qui existe
+5. Affiche un tableau récapitulatif + tailles
+6. Sort en code 1 si quelque chose manque (utilisable en CI)
 
-### Préparation Automatique
-```bash
-./prepare-deploy.sh  # Génère le dossier deploy/ complet
-```
+## Déployer sur Infomaniak
 
-### Upload FTP
-1. Connectez-vous à votre espace Infomaniak
-2. Uploadez le contenu de `deploy/` dans `public_html/`
-3. Vérifiez que `.htaccess` est bien transféré
-4. Vérifiez les 3 vidéos (69MB chacune)
+1. Lancer `./prepare-deploy.sh`
+2. Uploader le **contenu** de `deploy/` (pas le dossier lui-même) dans `public_html/` via FTP / SFTP
+3. **Important** : activer l'affichage des fichiers cachés dans le client FTP pour transférer `.htaccess`
+4. Tester `https://www.nsy.fr` — SSL automatique via Let's Encrypt
+5. Soumettre le sitemap sur [Google Search Console](https://search.google.com/search-console)
+6. Vérifier `https://www.nsy.fr/robots.txt`
 
-### Post-Déploiement
-- ✅ Site accessible sur `https://www.nsy.fr`
-- ✅ SSL automatique (Let's Encrypt Infomaniak)
-- ✅ Compression GZIP activée
-- ✅ Cache headers configurés (1 mois assets, 1 semaine code)
+Le `.htaccess` configure : GZIP, cache headers (1 mois images/vidéos, 1 semaine CSS/JS, 1h HTML), force HTTPS, security headers (`X-Frame-Options`, `Strict-Transport-Security`, etc.).
 
-## 📊 Performance & Optimisations
+## SEO
 
-### Métriques Cibles
-- **First Contentful Paint** : < 2s
-- **Largest Contentful Paint** : < 4s (avec vidéo)
-- **Cumulative Layout Shift** : < 0.1
-- **Time to Interactive** : < 5s
+- **Sitemap** référençant la page principale + ses ancres + les 4 images clés + les 3 vidéos hero/services
+- **Robots.txt** avec Allow explicite pour les assets utilisés, Disallow des répertoires techniques
+- **Meta tags** complets : title, description, keywords, Open Graph, Twitter Card
+- **JSON-LD Organization** avec founder = Cédric Barme + sameAs LinkedIn/GitHub
+- **Canonical URL** : `https://www.nsy.fr`
+- **hreflang** : `fr` + `x-default`
 
-### Optimisations Appliquées
-- **Multi-vidéos** : 3 vidéos 69MB chacune pour variété
-- **Cache stratégie** : 1 mois images/vidéos, 1 semaine CSS/JS
-- **GZIP compression** : Activée pour tous les text assets
-- **Espacement scroll optimisé** : Sections serrées et fluides
+## Crédits
 
-## 🔍 SEO & Référencement Google
+- **Conception & développement** : Cédric Barme — assisté de Claude (Anthropic)
+- **Design system** : direction "Cyber Cabinet" issue du brief Claude Design
+- **Photo profil** : Cédric Barme
+- **Vidéos** : générées via outils IA (Veo / Sora) ou tournage perso, intégrées telles quelles
 
-### 📊 **Balises Meta Optimisées**
-- **50+ balises meta** : Title, description, keywords étendus
-- **Schema.org JSON-LD** : Organisation + Founder + Services
-- **Open Graph enrichi** : Images 1200x630, locale fr_FR
-- **Twitter Cards** : Large image + @nsy_fr / @cedric_barme
-- **Géolocalisation** : France + langue française
+## Contact
 
-### 🗺️ **Sitemap & Indexation**
-- **sitemap.xml complet** : Pages + images + vidéos avec métadonnées
-- **robots.txt optimisé** : Instructions Googlebot + Bing
-- **Canonical URL** : https://www.nsy.fr
-- **Preload critical** : CSS + JS pour Core Web Vitals
-
-### 🎯 **Mots-clés Ciblés**
-```
-Primaires: NSY, Intelligence Artificielle, IA, ESN France
-Secondaires: React, Node.js, Python, AWS, Azure, DevOps
-Longue traîne: Cédric Barme expert IA, transformation digitale automatisation
-```
-
-### 📈 **Rich Snippets & Featured**
-- **Organisation Schema** : Logo, adresse, contact, services
-- **Person Schema** : Cédric Barme + réseaux sociaux
-- **VideoObject** : Métadonnées vidéos hero
-- **ImageObject** : Alt-text + captions optimisées
-
-## 🎨 Sections & Contenu
-
-### 📄 Structure des Sections
-1. **001 / Innovation** - Vidéo hero + tagline + bouton "Découvrir"
-2. **002 / Concept** - Notre approche méthodologique
-3. **003 / Processus** - 3 étapes clés + image briefing.png (modal)
-4. **004 / La Société** - Présentation NSY ESN
-5. **005 / Services** - Développement & Innovation IA
-6. **006 / Expertise** - Technologies de pointe
-7. **007 / Contact** - Formulaire + informations (data-persist)
-
-### 🤖 Chatbot IA Responses
-- **Services** : Stack technique + domaines expertise
-- **IA/ML** : Technologies + cas d'usage + exemples projets
-- **Prix** : Grille tarifaire détaillée + consultations gratuites
-- **Contact** : Coordonnées + délais réponse + disponibilités
-- **Technologies** : Frontend/Backend/Cloud/DevOps détaillé
-- **Méthodologie** : Process 6 étapes + Agile + livrables
-
-## 🔧 Configuration Technique
-
-### Vidéo Settings
-```javascript
-// 3 vidéos aléatoires au chargement
-const videos = ['video.mp4', 'video2.mp4', 'video3.mp4'];
-const randomVideo = videos[Math.floor(Math.random() * videos.length)];
-
-// Ralentissement 0.5s avant fin
-fadeStartTime = videoDuration - 0.5;
-fadeProgress = (currentTime - fadeStartTime) / 0.5;
-playbackRate = 1.0 → 0.3 (ralentissement 70%)
-```
-
-### Navigation Buffers (Optimisés)
-```javascript
-buffers = {
-    concept: 100px,     // Section Concept (était 300px → 200px → 100px)
-    process: 250px,     // Processus  
-    about: 200px,       // La Société
-    services: 200px,    // Services
-    expertise: 100px,   // Expertise (parfait)
-    contact: 600px      // Contact (fin de page)
-}
-```
-
-### Sections Scroll (Espacements Serrés)
-```javascript
-// Distribution optimisée sur 100% de scroll
-sections = {
-    concept: '10% → 22%',    // 12 points
-    process: '25% → 37%',    // 12 points  
-    about: '40% → 52%',      // 12 points
-    services: '55% → 67%',   // 12 points
-    expertise: '70% → 82%',  // 12 points
-    contact: '85% → 100%'    // 15 points (data-persist)
-}
-```
-
-## 🎯 Corrections & Améliorations Récentes
-
-### ✅ Navigation Optimisée
-- **Bouton "Découvrir"** : Utilise même logique que liens menu (buffer 100px)
-- **Buffers ajustés** : Concept réduit de 300px → 100px pour meilleur positionnement
-- **Espacements serrés** : Distribution uniforme 12 points par section
-
-### ✅ Sections Stabilisées  
-- **Numérotation corrigée** : 001 → 007 sans doublons
-- **Expertise visible** : Plage étendue 70% → 82% (était 84% → 92%)
-- **Contact restaurée** : 85% → 100% (était invisible à 100% → 120%)
-
-### ✅ Fonctionnalités Avancées
-- **Modal image briefing** : Transform-origin calculé + clic pour fermer
-- **Chatbot expert** : Réponses détaillées sur tous les aspects NSY
-- **Formulaire intelligent** : Génération mailto + validation HTML5
-- **Footer dynamique** : Année automatique + mention transparence IA
-- **Liens sociaux** : LinkedIn + GitHub dans footer avec animations hover
-
-### ✅ SEO & Référencement  
-- **50+ balises meta** : Schema.org, Open Graph, Twitter Cards enrichies
-- **Sitemap.xml complet** : Pages + images + vidéos avec métadonnées
-- **Robots.txt optimisé** : Instructions spécifiques Google + Bing
-- **Mots-clés étendus** : React, Node.js, Python, AWS, expert IA, full-stack
-
-## 🤝 Contribution
-
-Ce projet démontre l'utilisation de skills IA spécialisés pour créer des interfaces web distinctives et performantes.
-
-### Développé par
-- **NSY** - [nsy.fr](https://nsy.fr)
-- **Cédric Barme** - Expert IA & Développement Full-Stack
-
-### Built with ❤️ and 🤖
-Site créé avec l'IA en toute transparence, appliquant les skills `frontend-design` et `video-to-website` pour un résultat premium Apple-style.
-
----
-
-## 📞 Contact & Réseaux
-
-### 📧 Contact Professionnel
 - **Email** : [contact@nsy.fr](mailto:contact@nsy.fr)
-- **Website** : [nsy.fr](https://nsy.fr)
-- **Expertise** : Intelligence Artificielle & Transformation Digitale
-- **Spécialités** : React, Node.js, Python, IA/ML, Cloud AWS/Azure, DevOps
-
-### 🌐 Réseaux Sociaux
-- **LinkedIn** : [linkedin.com/in/cedric-barme](https://linkedin.com/in/cédric-barme)
+- **LinkedIn** : [linkedin.com/in/cédric-barme](https://www.linkedin.com/in/c%C3%A9dric-barme/)
 - **GitHub** : [github.com/machouse78/nsy-website](https://github.com/machouse78/nsy-website)
-- **Profil** : Expert IA & Développement Full-Stack
+- **Localisation** : Orléans, Centre-Val de Loire
 
 ---
 
-*© 2024 NSY. Tous droits réservés. | Site créé avec l'IA • Transparence totale*
+© 2026 NSY · EURL · SIREN 842 078 453 · Mention "Site créé avec l'IA — transparence totale" en footer.
