@@ -157,10 +157,10 @@
       return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 9 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
     }
     if (t.includes('disponib') || t.includes('quand') || t.includes('démarr') || t.includes('demarr')) {
-      return "Cédric est disponible pour de nouvelles missions à partir du Q3 2026. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.";
+      return `Cédric est disponible pour de nouvelles missions à partir du Q3 ${currentYear}. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.`;
     }
     if (t.includes('banque') || t.includes('finance') || t.includes('assurance')) {
-      return "Oui — c'est même le cœur du métier. 12 ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).";
+      return `Oui — c'est même le cœur du métier. ${yearsExperience} ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).`;
     }
     if (t.includes('service') || t.includes('offre') || t.includes('faites')) {
       return "Deux offres : (1) Conseil technique senior pour la finance et l'assurance — architecture, audit, migration, conformité. (2) Création web propulsée par l'IA pour les entreprises en transition — sites, plateformes SaaS et intégration de modèles (Claude, OpenAI, Mistral).";
@@ -169,7 +169,7 @@
       return "Le plus simple : remplir le formulaire en bas de page (réponse sous 48h ouvrées) ou écrire directement à contact@nsy.fr. Vous pouvez aussi cliquer sur « Parler à Cédric → » ci-dessous.";
     }
     if (t.includes('cédric') || t.includes('cedric') || t.includes('parcours') || t.includes('expérience') || t.includes('experience')) {
-      return "Cédric Barme, fondateur de NSY. 12 ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant via EURL.";
+      return `Cédric Barme, fondateur de NSY. ${yearsExperience} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant via EURL.`;
     }
     return "Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.";
   }
