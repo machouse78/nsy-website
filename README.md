@@ -3,7 +3,7 @@
 [![Site](https://img.shields.io/badge/site-www.nsy.fr-00E5FF)](https://www.nsy.fr)
 [![Hébergement](https://img.shields.io/badge/h%C3%A9bergement-Infomaniak-1AB7EA)](https://www.infomaniak.com)
 
-Site one-page pour **NSY**, EURL fondée par Cédric Barme à Orléans. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
+Site one-page pour **NSY**, EURL fondée par Cédric Barme à Epieds-en-Beauce. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
 
 ## Direction artistique
 
@@ -134,7 +134,7 @@ Le `.htaccess` configure : GZIP, cache headers (1 mois images/vidéos, 1 semaine
 - **Email** : [contact@nsy.fr](mailto:contact@nsy.fr)
 - **LinkedIn** : [linkedin.com/in/cédric-barme](https://www.linkedin.com/in/c%C3%A9dric-barme/)
 - **GitHub** : [github.com/machouse78/nsy-website](https://github.com/machouse78/nsy-website)
-- **Localisation** : Orléans, Centre-Val de Loire
+- **Localisation** : Epieds-en-Beauce, Centre-Val de Loire
 
 ---
 
