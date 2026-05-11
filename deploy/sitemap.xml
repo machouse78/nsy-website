@@ -12,8 +12,14 @@
 
     <!-- Images principales -->
     <image:image>
+      <image:loc>https://www.nsy.fr/public/nsy-logo-ai.png</image:loc>
+      <image:title>NSY — L'IA au service du numérique</image:title>
+      <image:caption>Bannière NSY : conseil technique et création web propulsée par l'intelligence artificielle</image:caption>
+    </image:image>
+
+    <image:image>
       <image:loc>https://www.nsy.fr/public/nsy-logo.png</image:loc>
-      <image:title>NSY — Cabinet de conseil technique et création web propulsée par l'IA</image:title>
+      <image:title>Logo NSY</image:title>
       <image:caption>Logo NSY, EURL fondée par Cédric Barme à Epieds-en-Beauce</image:caption>
     </image:image>
 
