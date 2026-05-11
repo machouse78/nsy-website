@@ -1,38 +1,49 @@
+# NSY — robots.txt
+# https://www.nsy.fr/
+
 User-agent: *
 Allow: /
 
 # Sitemap principal
 Sitemap: https://www.nsy.fr/sitemap.xml
 
-# Interdire l'indexation des fichiers techniques
+# Bloquer les répertoires techniques et fichiers locaux
 Disallow: /css/
 Disallow: /js/
 Disallow: /.htaccess
 Disallow: /deploy/
 Disallow: /.claude/
+Disallow: /.git/
 Disallow: /prepare-deploy.sh
+Disallow: /DEPLOIEMENT-INFOMANIAK.md
+Disallow: /README.md
 
-# Autoriser l'indexation des assets publics
-Allow: /public/*.png
-Allow: /public/*.jpg
-Allow: /public/*.jpeg
-Allow: /public/*.gif
-Allow: /public/*.webp
-Allow: /public/*.svg
+# Autoriser explicitement les assets visuels du site
+Allow: /public/nsy-logo.png
+Allow: /public/photo-profil.png
+Allow: /public/finance-assurance.png
+Allow: /public/web-ia.png
+Allow: /public/cropped-NSY-logo-32x32.png
+Allow: /public/cropped-NSY-logo-180x180.png
+Allow: /public/cropped-NSY-logo-192x192.png
+Allow: /public/cropped-NSY-logo-270x270.png
 
-# Interdire l'indexation des vidéos lourdes (mais autoriser pour video sitemap)
+# Bloquer les vidéos lourdes du crawl général,
+# mais les autoriser dans le video sitemap (référencées explicitement).
 Disallow: /public/*.mp4
-Allow: /public/video.mp4
+Allow: /public/nsy-ia.mp4
+Allow: /public/finance-assurance.mp4
+Allow: /public/web-ia.mp4
 
-# Crawl-delay pour éviter la surcharge
+# Crawl-delay raisonnable
 Crawl-delay: 1
 
-# Instructions spécifiques pour Google
+# Googlebot — pas de delay
 User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
 
-# Instructions pour Bing
-User-agent: Bingbot  
+# Bingbot
+User-agent: Bingbot
 Allow: /
 Crawl-delay: 1

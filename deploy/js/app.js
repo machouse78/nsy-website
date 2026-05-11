@@ -1,839 +1,232 @@
-// NSY Website - Real Video Implementation (Apple Style)
+/* NSY — Cyber Cabinet
+   Vanilla JS for nav active-state, contact form toast, service radio, chatbot. */
 
-// Global variables
-let lenis;
+(function () {
+  'use strict';
 
-// DOM Elements
-const loader = document.getElementById('loader');
-const loaderBar = document.querySelector('.loader-fill');
-const loaderPercent = document.getElementById('loader-percent');
-const heroVideo = document.getElementById('hero-video');
-const scrollContainer = document.getElementById('scroll-container');
-const videoHero = document.querySelector('.video-hero');
-const darkOverlay = document.getElementById('dark-overlay');
+  // ───── Dynamic year & experience ─────
+  // Cédric had 14 years of experience in 2026 → started in 2012.
+  const CAREER_START_YEAR = 2012;
+  const currentYear = new Date().getFullYear();
+  const yearsExperience = Math.max(0, currentYear - CAREER_START_YEAR);
 
-// Initialize everything
-document.addEventListener('DOMContentLoaded', () => {
-    initLenis();
-    initRandomVideoSelection();
-    initVideoHandling();
-    initHeroAnimations();
-});
+  const FR_NUMBERS = {
+    1: 'un', 2: 'deux', 3: 'trois', 4: 'quatre', 5: 'cinq',
+    6: 'six', 7: 'sept', 8: 'huit', 9: 'neuf', 10: 'dix',
+    11: 'onze', 12: 'douze', 13: 'treize', 14: 'quatorze', 15: 'quinze',
+    16: 'seize', 17: 'dix-sept', 18: 'dix-huit', 19: 'dix-neuf', 20: 'vingt',
+    21: 'vingt et un', 22: 'vingt-deux', 23: 'vingt-trois', 24: 'vingt-quatre',
+    25: 'vingt-cinq', 26: 'vingt-six', 27: 'vingt-sept', 28: 'vingt-huit',
+    29: 'vingt-neuf', 30: 'trente'
+  };
+  const yearsExperienceFr = FR_NUMBERS[yearsExperience] || String(yearsExperience);
 
-// Enhanced video selection with quality detection
-function initRandomVideoSelection() {
-    showLoadingProgress(0);
-    
-    // Video sets: HD and Light versions
-    const videoSets = [
-        { hd: 'video.mp4', light: 'video-light.mp4' },
-        { hd: 'video2.mp4', light: 'video2-light.mp4' },
-        { hd: 'video3.mp4', light: 'video3-light.mp4' }
-    ];
-    
-    const randomIndex = Math.floor(Math.random() * videoSets.length);
-    const selectedSet = videoSets[randomIndex];
-    
-    // Detect connection speed and choose quality
-    detectConnectionQuality().then(quality => {
-        const videoFile = quality === 'fast' ? selectedSet.hd : selectedSet.light;
-        console.log(`Loading ${quality} quality video: ${videoFile}`);
-        loadVideoWithProgress(videoFile);
-    });
-}
+  document.querySelectorAll('[data-years]').forEach((el) => {
+    el.textContent = yearsExperience;
+  });
+  document.querySelectorAll('[data-years-fr]').forEach((el) => {
+    el.textContent = yearsExperienceFr;
+  });
+  document.querySelectorAll('[data-current-year]').forEach((el) => {
+    el.textContent = currentYear;
+  });
 
-// Connection quality detection
-async function detectConnectionQuality() {
-    try {
-        const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
-        
-        // Use Network Information API if available
-        if (connection) {
-            const effectiveType = connection.effectiveType;
-            console.log(`Connection type: ${effectiveType}`);
-            
-            if (effectiveType === '4g' || connection.downlink > 2) {
-                return 'fast';
-            } else {
-                return 'slow';
-            }
-        }
-        
-        // Fallback: Simple bandwidth test
-        const startTime = Date.now();
-        const testImage = new Image();
-        
-        return new Promise((resolve) => {
-            testImage.onload = () => {
-                const duration = Date.now() - startTime;
-                const speed = duration < 500 ? 'fast' : 'slow';
-                console.log(`Bandwidth test: ${duration}ms - ${speed}`);
-                resolve(speed);
-            };
-            
-            testImage.onerror = () => {
-                console.log('Bandwidth test failed, using light quality');
-                resolve('slow');
-            };
-            
-            // Test with small image (logo)
-            testImage.src = `public/nsy-logo.png?t=${Date.now()}`;
-            
-            // Timeout fallback
-            setTimeout(() => resolve('slow'), 2000);
+  // Smooth-scroll + active nav state on scroll
+  const navLinks = document.querySelectorAll('.nav-link[data-target]');
+  const sections = Array.from(navLinks)
+    .map((a) => document.getElementById(a.dataset.target))
+    .filter(Boolean);
+
+  function setActive(id) {
+    navLinks.forEach((a) => a.classList.toggle('active', a.dataset.target === id));
+  }
+
+  if ('IntersectionObserver' in window && sections.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
         });
-    } catch (error) {
-        console.log('Quality detection failed, using light quality');
-        return 'slow';
-    }
-}
-
-// Enhanced video loading with real progress
-function loadVideoWithProgress(videoFile) {
-    if (!heroVideo) return;
-    
-    const source = heroVideo.querySelector('source');
-    if (!source) return;
-    
-    let loadingComplete = false;
-    let progressInterval;
-    
-    // Simulate progress during loading
-    let currentProgress = 10;
-    progressInterval = setInterval(() => {
-        if (currentProgress < 90 && !loadingComplete) {
-            currentProgress += Math.random() * 3;
-            showLoadingProgress(Math.min(currentProgress, 90));
-        }
-    }, 200);
-    
-    // Handle video loading events
-    heroVideo.addEventListener('loadstart', () => {
-        showLoadingProgress(15);
-        console.log('Video loading started');
-    });
-    
-    heroVideo.addEventListener('progress', (e) => {
-        if (e.lengthComputable) {
-            const percent = (e.loaded / e.total) * 100;
-            showLoadingProgress(Math.max(currentProgress, percent * 0.9));
-        }
-    });
-    
-    // Wait for video to be completely ready
-    heroVideo.addEventListener('canplaythrough', () => {
-        clearInterval(progressInterval);
-        loadingComplete = true;
-        
-        // Finish loading animation
-        animateToComplete(() => {
-            hideLoader();
-        });
-    });
-    
-    // Fallback timeout (if video takes too long)
-    setTimeout(() => {
-        if (!loadingComplete) {
-            console.log('Video loading timeout, showing site anyway');
-            clearInterval(progressInterval);
-            loadingComplete = true;
-            animateToComplete(() => hideLoader());
-        }
-    }, 15000); // 15 second timeout
-    
-    // Load the selected video
-    source.src = `public/${videoFile}`;
-    heroVideo.load();
-}
-
-// Show loading progress with messages
-function showLoadingProgress(percent) {
-    const loaderBar = document.querySelector('.loader-fill');
-    const loaderPercent = document.getElementById('loader-percent');
-    const loaderMessage = document.getElementById('loader-message');
-    
-    if (loaderBar) {
-        loaderBar.style.width = percent + '%';
-    }
-    if (loaderPercent) {
-        loaderPercent.textContent = Math.round(percent) + '%';
-    }
-    
-    // Update status messages
-    if (loaderMessage) {
-        if (percent < 15) {
-            loaderMessage.textContent = 'Détection de la qualité de connexion...';
-        } else if (percent < 30) {
-            loaderMessage.textContent = 'Chargement de la vidéo en cours...';
-        } else if (percent < 70) {
-            loaderMessage.textContent = 'Optimisation pour votre appareil...';
-        } else if (percent < 95) {
-            loaderMessage.textContent = 'Finalisation du chargement...';
-        } else {
-            loaderMessage.textContent = 'Prêt ! Lancement de l\'expérience...';
-        }
-    }
-}
-
-// Animate loader to completion
-function animateToComplete(callback) {
-    let progress = parseInt(loaderPercent?.textContent) || 90;
-    
-    const finishInterval = setInterval(() => {
-        progress += 2;
-        showLoadingProgress(progress);
-        
-        if (progress >= 100) {
-            clearInterval(finishInterval);
-            setTimeout(callback, 300);
-        }
-    }, 50);
-}
-
-// 1. LENIS SMOOTH SCROLL (MANDATORY selon skill)
-function initLenis() {
-    lenis = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true
-    });
-    
-    lenis.on("scroll", ScrollTrigger.update);
-    gsap.ticker.add((time) => lenis.raf(time * 1000));
-    gsap.ticker.lagSmoothing(0);
-}
-
-// 2. VIDEO HANDLING with fade-out effect
-function initVideoHandling() {
-    if (heroVideo) {
-        let videoDuration = 0;
-        let fadeStartTime = 0;
-        
-        // Ensure video plays (Apple style - autoplay on load)
-        heroVideo.addEventListener('loadedmetadata', () => {
-            videoDuration = heroVideo.duration;
-            fadeStartTime = videoDuration - 0.5; // Start fade 0.5 seconds before end
-            
-            heroVideo.play().catch(e => {
-                console.log('Autoplay prevented:', e);
-                showVideoPlayButton();
-            });
-        });
-
-        // Monitor video time for speed fade-out effect only
-        heroVideo.addEventListener('timeupdate', () => {
-            const currentTime = heroVideo.currentTime;
-            
-            if (currentTime >= fadeStartTime && currentTime < videoDuration) {
-                // Calculate fade progress (0 to 1 over 0.5 seconds)
-                const fadeProgress = (currentTime - fadeStartTime) / 0.5;
-                
-                // Smooth easing function for more natural feel
-                const easedProgress = 1 - Math.pow(1 - fadeProgress, 3); // Cubic ease-out
-                
-                // Apply ONLY speed slow-motion effect using playbackRate
-                const targetRate = 1 - (easedProgress * 0.7); // Slow down to 30% of original speed
-                heroVideo.playbackRate = Math.max(0.3, targetRate);
-                
-            } else if (currentTime < fadeStartTime) {
-                // Reset to normal speed if before fade zone
-                heroVideo.playbackRate = 1;
-            }
-        });
-
-        // Video ends (no loop like Apple)
-        heroVideo.addEventListener('ended', () => {
-            console.log('Video ended with speed fade-out effect');
-            // Video stays on last frame at slow speed
-        });
-
-        // Hide loader when video is ready
-        heroVideo.addEventListener('canplaythrough', () => {
-            hideLoader();
-        });
-    }
-}
-
-function showVideoPlayButton() {
-    // Create a play button overlay if autoplay fails
-    const playButton = document.createElement('div');
-    playButton.innerHTML = `
-        <button class="video-play-btn">
-            <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-                <circle cx="30" cy="30" r="30" fill="rgba(0,0,0,0.7)"/>
-                <path d="M23 18l14 12-14 12V18z" fill="white"/>
-            </svg>
-        </button>
-    `;
-    playButton.style.cssText = `
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 100;
-        cursor: pointer;
-    `;
-    
-    videoHero.appendChild(playButton);
-    
-    playButton.addEventListener('click', () => {
-        heroVideo.play();
-        playButton.remove();
-    });
-}
-
-function hideLoader() {
-    // Hide loader when video is ready
-    setTimeout(() => {
-        loader.classList.add('loader-hidden');
-        startExperience();
-    }, 500);
-}
-
-// Video handling replaces canvas rendering
-
-// 6. START EXPERIENCE
-function startExperience() {
-    initSectionAnimations();
-    initMarquees();
-    
-    // Start hero animations immediately
-    initHeroAnimations();
-    
-    // Initialize navigation
-    initNavigation();
-    
-    // Initialize modal image click
-    initModalImageClick();
-}
-
-// Video plays automatically, no frame binding needed
-
-// 8. HERO ANIMATIONS - Content under video
-function initHeroAnimations() {
-    const heroTagline = document.querySelector('.hero-tagline');
-    const scrollIndicator = document.querySelector('.scroll-indicator');
-    const sectionLabel = document.querySelector('.content-hero .section-label');
-    
-    // Animate content under video with delay
-    gsap.to(sectionLabel, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: 1.0
-    });
-    
-    gsap.to(heroTagline, {
-        y: 0,
-        opacity: 1,
-        duration: 0.8,
-        ease: "power3.out",
-        delay: 1.2
-    });
-    
-    gsap.to(scrollIndicator, {
-        y: 0,
-        opacity: 1,
-        duration: 0.6,
-        ease: "power2.out",
-        delay: 1.6
-    });
-
-    // Add click handler to scroll to first section using same logic as nav links
-    if (scrollIndicator) {
-        scrollIndicator.addEventListener('click', () => {
-            const targetElement = document.getElementById('concept');
-            
-            if (targetElement) {
-                // Use exact same logic as navigation
-                const elementTop = targetElement.offsetTop;
-                const videoHeroHeight = document.querySelector('.video-hero').offsetHeight + 
-                                      document.querySelector('.content-hero').offsetHeight;
-                const headerHeight = document.querySelector('.site-header').offsetHeight;
-                const buffer = 100; // Same buffer as concept section
-                
-                const targetPosition = elementTop + videoHeroHeight - headerHeight - buffer;
-                
-                if (lenis) {
-                    lenis.scrollTo(targetPosition, {
-                        duration: 2,
-                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                    });
-                }
-            }
-        });
-        // Add cursor pointer
-        scrollIndicator.style.cursor = 'pointer';
-    }
-}
-
-// No hero transition needed - video is immediately visible
-
-// 10. SECTION ANIMATION SYSTEM selon skill
-function initSectionAnimations() {
-    const sections = document.querySelectorAll('.scroll-section');
-    
-    sections.forEach(section => {
-        setupSectionAnimation(section);
-        positionSection(section);
-    });
-}
-
-function positionSection(section) {
-    const enter = parseFloat(section.dataset.enter) / 100;
-    const leave = parseFloat(section.dataset.leave) / 100;
-    const midpoint = (enter + leave) / 2;
-    
-    // Position at midpoint with translateY(-50%)
-    section.style.top = (midpoint * 100) + '%';
-    section.style.transform = 'translateY(-50%)';
-}
-
-function setupSectionAnimation(section) {
-    const type = section.dataset.animation;
-    const persist = section.dataset.persist === "true";
-    const enter = parseFloat(section.dataset.enter) / 100;
-    const leave = parseFloat(section.dataset.leave) / 100;
-    
-    const children = section.querySelectorAll(
-        ".section-label, .section-heading, .section-body, .section-note, .contact-info, .service-list, .stat"
+      },
+      { rootMargin: '-40% 0px -55% 0px', threshold: 0 }
     );
-    
-    // Force formulaire visibility for contact section
-    if (section.id === 'contact') {
-        const form = section.querySelector('.contact-form');
-        const submitBtn = section.querySelector('.form-submit');
-        if (form) {
-            form.style.opacity = '1';
-            form.style.visibility = 'visible';
-        }
-        if (submitBtn) {
-            submitBtn.style.opacity = '1';
-            submitBtn.style.visibility = 'visible';
-            submitBtn.style.display = 'block';
-        }
-    }
+    sections.forEach((s) => io.observe(s));
+  }
 
-    const tl = gsap.timeline({ paused: true });
-
-    // Different animation types selon skill (4+ types, never repeat)
-    switch (type) {
-        case "fade-up":
-            tl.from(children, { 
-                y: 50, 
-                opacity: 0, 
-                stagger: 0.12, 
-                duration: 0.9, 
-                ease: "power3.out" 
-            });
-            break;
-        case "slide-left":
-            tl.from(children, { 
-                x: -80, 
-                opacity: 0, 
-                stagger: 0.14, 
-                duration: 0.9, 
-                ease: "power3.out" 
-            });
-            break;
-        case "slide-right":
-            tl.from(children, { 
-                x: 80, 
-                opacity: 0, 
-                stagger: 0.14, 
-                duration: 0.9, 
-                ease: "power3.out" 
-            });
-            break;
-        case "scale-up":
-            tl.from(children, { 
-                scale: 0.85, 
-                opacity: 0, 
-                stagger: 0.12, 
-                duration: 1.0, 
-                ease: "power2.out" 
-            });
-            break;
-        case "rotate-in":
-            tl.from(children, { 
-                y: 40, 
-                rotation: 3, 
-                opacity: 0, 
-                stagger: 0.1, 
-                duration: 0.9, 
-                ease: "power3.out" 
-            });
-            break;
-        case "stagger-up":
-            tl.from(children, { 
-                y: 60, 
-                opacity: 0, 
-                stagger: 0.15, 
-                duration: 0.8, 
-                ease: "power3.out" 
-            });
-            break;
-        case "clip-reveal":
-            tl.from(children, { 
-                clipPath: "inset(100% 0 0 0)", 
-                opacity: 0, 
-                stagger: 0.15, 
-                duration: 1.2, 
-                ease: "power4.inOut" 
-            });
-            break;
-    }
-
-    // ScrollTrigger for section animation - Simple approach
-    ScrollTrigger.create({
-        trigger: scrollContainer,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-            const p = self.progress;
-            
-            if (p >= enter && p <= leave) {
-                const sectionProgress = (p - enter) / (leave - enter);
-                section.style.opacity = 1;
-                tl.progress(Math.min(sectionProgress * 2, 1));
-            } else if (persist && p > leave) {
-                section.style.opacity = 1;
-                tl.progress(1);
-            } else {
-                section.style.opacity = 0;
-                if (!persist || p < enter) {
-                    tl.progress(0);
-                }
-            }
-        }
+  // Service-option radio (form)
+  const opts = document.querySelectorAll('.opt[data-service]');
+  const serviceInput = document.getElementById('service');
+  opts.forEach((opt) => {
+    opt.addEventListener('click', () => {
+      opts.forEach((o) => o.classList.remove('active'));
+      opt.classList.add('active');
+      if (serviceInput) serviceInput.value = opt.dataset.service;
     });
-}
+  });
 
-// Counter animations removed
+  // Contact form: stub submit + toast
+  const form = document.getElementById('contact-form');
+  const toast = document.getElementById('toast');
+  const submitBtn = document.getElementById('contact-submit');
 
-// 12. HORIZONTAL TEXT MARQUEE
-function initMarquees() {
-    document.querySelectorAll(".marquee-wrap").forEach(el => {
-        const speed = parseFloat(el.dataset.scrollSpeed) || -25;
-        const marqueeText = el.querySelector(".marquee-text");
-        
-        gsap.to(marqueeText, {
-            xPercent: speed,
-            ease: "none",
-            scrollTrigger: { 
-                trigger: document.body, 
-                start: "top top", 
-                end: "bottom bottom", 
-                scrub: true 
-            }
-        });
-        
-        // Show marquee when scrolling past video
-        ScrollTrigger.create({
-            trigger: scrollContainer,
-            start: "top bottom",
-            end: "bottom top",
-            onToggle: (self) => {
-                el.style.opacity = self.isActive ? 1 : 0;
-            }
-        });
+  if (form) {
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        const label = submitBtn.querySelector('.btn-label');
+        if (label) label.textContent = 'Envoyé ✓';
+      }
+      if (toast) {
+        toast.classList.remove('hidden');
+        setTimeout(() => toast.classList.add('hidden'), 3500);
+      }
     });
-}
+  }
 
-// Dark overlay removed
+  // ───── Chatbot ─────
+  const fab = document.getElementById('cbot-fab');
+  const panel = document.getElementById('cbot');
+  const closeBtn = document.getElementById('cbot-close');
+  const body = document.getElementById('cbot-body');
+  const input = document.getElementById('cbot-input');
+  const sendBtn = document.getElementById('cbot-send');
+  const suggestions = document.getElementById('cbot-suggestions');
+  const escalate = document.getElementById('cbot-escalate');
 
-// Navigation functionality
-function initNavigation() {
-    const navLinks = document.querySelectorAll('.nav-links a');
-    
-    navLinks.forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            const targetId = link.getAttribute('href').substring(1); // Remove #
-            const targetElement = document.getElementById(targetId);
-            
-            if (targetElement) {
-                // Calculate position accounting for video hero offset and header height
-                const elementTop = targetElement.offsetTop;
-                const videoHeroHeight = document.querySelector('.video-hero').offsetHeight + 
-                                      document.querySelector('.content-hero').offsetHeight;
-                const headerHeight = document.querySelector('.site-header').offsetHeight;
-                
-                // Different buffers for different sections since Expertise works perfectly
-                let buffer = 100; // Default buffer
-                
-                switch(targetId) {
-                    case 'concept':     // 001 - Concept (align-left)
-                        buffer = 100;   
-                        break;
-                    case 'process':     // 002 - Processus (align-right)  
-                        buffer = 250;   
-                        break;
-                    case 'about':       // 003 - La Société (align-left)
-                        buffer = 200;   
-                        break;
-                    case 'services':    // 004 - Services (align-right)
-                        buffer = 200;   
-                        break;
-                    case 'expertise':   // 005 - Expertise (align-left)
-                        buffer = 100;   
-                        break;
-                    case 'contact':     // 006 - Contact (align-right)
-                        buffer = 600;   
-                        break;
-                    default:
-                        buffer = 150;   
-                }
-                
-                // Adjust position to show section label and heading properly
-                const targetPosition = elementTop + videoHeroHeight - headerHeight - buffer;
-                
-                // Scroll with Lenis smooth scroll
-                if (lenis) {
-                    lenis.scrollTo(targetPosition, {
-                        duration: 2,
-                        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t))
-                    });
-                    
-                    // No special handling needed - let ScrollTrigger manage visibility
-                }
-            }
-        });
+  if (fab && panel) {
+    fab.addEventListener('click', () => {
+      const isOpen = panel.classList.toggle('open');
+      fab.classList.toggle('open', isOpen);
     });
-}
+    closeBtn?.addEventListener('click', () => {
+      panel.classList.remove('open');
+      fab.classList.remove('open');
+    });
+    escalate?.addEventListener('click', () => {
+      panel.classList.remove('open');
+      fab.classList.remove('open');
+      const c = document.getElementById('contact');
+      if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+  }
 
-// Contact Form and Chatbot functionality
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize navigation after DOM is loaded
-    initNavigation();
-    initContactForm();
-    initChatbot();
-    initFooter();
-});
+  function makeAvatar() {
+    const a = document.createElement('div');
+    a.className = 'cbot-msg-avatar';
+    const img = document.createElement('img');
+    img.src = 'public/nsy-logo.png';
+    img.alt = 'NSY';
+    a.appendChild(img);
+    return a;
+  }
 
-// Footer functionality
-function initFooter() {
-    // Update copyright year automatically
-    const currentYearSpan = document.getElementById('current-year');
-    if (currentYearSpan) {
-        currentYearSpan.textContent = new Date().getFullYear();
+  function appendMessage(role, content) {
+    if (!body) return null;
+    const wrap = document.createElement('div');
+    wrap.className = `cbot-msg cbot-msg-${role}`;
+    if (role === 'assistant') {
+      wrap.appendChild(makeAvatar());
     }
-}
+    const bubble = document.createElement('div');
+    bubble.className = 'cbot-bubble';
+    bubble.textContent = content;
+    wrap.appendChild(bubble);
+    body.appendChild(wrap);
+    body.scrollTop = body.scrollHeight;
+    return bubble;
+  }
 
-// Contact Form Handler
-function initContactForm() {
-    const contactForm = document.getElementById('contactForm');
-    
-    if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const formData = new FormData(contactForm);
-            const name = formData.get('name');
-            const email = formData.get('email');
-            const subject = formData.get('subject') || 'Nouveau projet';
-            const message = formData.get('message');
-            
-            // Create mailto link
-            const mailtoLink = `mailto:contact@nsy.fr?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(
-                `Bonjour,\n\nNom: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\nCordialement,\n${name}`
-            )}`;
-            
-            window.open(mailtoLink, '_blank');
-            
-            // Show success message
-            showFormSuccess();
-        });
+  function appendTyping() {
+    if (!body) return null;
+    const wrap = document.createElement('div');
+    wrap.className = 'cbot-msg cbot-msg-assistant';
+    const bubble = document.createElement('div');
+    bubble.className = 'cbot-bubble cbot-typing';
+    bubble.innerHTML = '<span></span><span></span><span></span>';
+    wrap.appendChild(makeAvatar());
+    wrap.appendChild(bubble);
+    body.appendChild(wrap);
+    body.scrollTop = body.scrollHeight;
+    return wrap;
+  }
+
+  function botReply(userText) {
+    const t = userText.toLowerCase();
+    if (t.includes('tarif') || t.includes('prix') || t.includes('coût') || t.includes('cout') || t.includes('budget')) {
+      return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 9 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
     }
-}
+    if (t.includes('disponib') || t.includes('quand') || t.includes('démarr') || t.includes('demarr')) {
+      return "Cédric est disponible pour de nouvelles missions à partir du Q3 2026. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.";
+    }
+    if (t.includes('banque') || t.includes('finance') || t.includes('assurance')) {
+      return "Oui — c'est même le cœur du métier. 12 ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).";
+    }
+    if (t.includes('service') || t.includes('offre') || t.includes('faites')) {
+      return "Deux offres : (1) Conseil technique senior pour la finance et l'assurance — architecture, audit, migration, conformité. (2) Création web propulsée par l'IA pour les entreprises en transition — sites, plateformes SaaS et intégration de modèles (Claude, OpenAI, Mistral).";
+    }
+    if (t.includes('contact') || t.includes('joindre') || t.includes('rendez-vous') || t.includes('rdv')) {
+      return "Le plus simple : remplir le formulaire en bas de page (réponse sous 48h ouvrées) ou écrire directement à contact@nsy.fr. Vous pouvez aussi cliquer sur « Parler à Cédric → » ci-dessous.";
+    }
+    if (t.includes('cédric') || t.includes('cedric') || t.includes('parcours') || t.includes('expérience') || t.includes('experience')) {
+      return "Cédric Barme, fondateur de NSY. 12 ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant via EURL.";
+    }
+    return "Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.";
+  }
 
-function showFormSuccess() {
-    const submitBtn = document.querySelector('.form-submit');
-    const originalText = submitBtn.textContent;
-    
-    submitBtn.textContent = 'Message envoyé !';
-    submitBtn.style.background = '#10b981';
-    
+  function send(text) {
+    const content = (text ?? input?.value ?? '').trim();
+    if (!content) return;
+    if (input) input.value = '';
+    suggestions?.classList.add('hidden');
+    appendMessage('user', content);
+    const typing = appendTyping();
     setTimeout(() => {
-        submitBtn.textContent = originalText;
-        submitBtn.style.background = '';
-    }, 3000);
-}
+      typing?.remove();
+      appendMessage('assistant', botReply(content));
+    }, 600 + Math.random() * 400);
+  }
 
-// Chatbot IA
-function initChatbot() {
-    const chatbotToggle = document.getElementById('chatbot-toggle');
-    const chatbotWindow = document.getElementById('chatbot-window');
-    const chatbotClose = document.getElementById('chatbot-close');
-    const chatbotInput = document.getElementById('chatbot-input');
-    const chatbotSend = document.getElementById('chatbot-send');
-    const chatbotMessages = document.getElementById('chatbot-messages');
-    
-    // Toggle chatbot (open/close)
-    chatbotToggle.addEventListener('click', () => {
-        chatbotWindow.classList.toggle('open');
+  sendBtn?.addEventListener('click', () => send());
+  input?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      send();
+    }
+  });
+
+  document.querySelectorAll('.cbot-chip').forEach((chip) => {
+    chip.addEventListener('click', () => send(chip.textContent));
+  });
+
+  // ───── CTA banner: gradients follow mouse ─────
+  const ctaBanner = document.querySelector('.cta-banner');
+  if (ctaBanner) {
+    ctaBanner.addEventListener('mouseenter', () => ctaBanner.classList.add('hover-active'));
+    ctaBanner.addEventListener('mousemove', (e) => {
+      const rect = ctaBanner.getBoundingClientRect();
+      const x = ((e.clientX - rect.left) / rect.width) * 100;
+      const y = ((e.clientY - rect.top) / rect.height) * 100;
+      ctaBanner.style.setProperty('--mx', `${x.toFixed(2)}%`);
+      ctaBanner.style.setProperty('--my', `${y.toFixed(2)}%`);
     });
-    
-    chatbotClose.addEventListener('click', () => {
-        chatbotWindow.classList.remove('open');
+    ctaBanner.addEventListener('mouseleave', () => {
+      ctaBanner.classList.remove('hover-active');
+      ctaBanner.style.removeProperty('--mx');
+      ctaBanner.style.removeProperty('--my');
     });
-    
-    // Send message
-    function sendMessage() {
-        const message = chatbotInput.value.trim();
-        if (!message) return;
-        
-        // Add user message
-        addMessage(message, 'user');
-        chatbotInput.value = '';
-        
-        // Simulate bot response
-        setTimeout(() => {
-            const response = getBotResponse(message);
-            addMessage(response, 'bot');
-        }, 1000);
-    }
-    
-    chatbotSend.addEventListener('click', sendMessage);
-    chatbotInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
-            sendMessage();
-        }
+  }
+
+  // ───── Service card image ↔ video swap on hover ─────
+  document.querySelectorAll('.svc-cover-image').forEach((cover) => {
+    const video = cover.querySelector('.svc-bg-video');
+    if (!video) return;
+    cover.addEventListener('mouseenter', () => {
+      video.play().catch(() => {});
     });
-}
-
-function addMessage(content, type) {
-    const chatbotMessages = document.getElementById('chatbot-messages');
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}-message`;
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.textContent = content;
-    
-    messageDiv.appendChild(messageContent);
-    chatbotMessages.appendChild(messageDiv);
-    
-    // Scroll to bottom
-    chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
-}
-
-function getBotResponse(userMessage) {
-    const message = userMessage.toLowerCase();
-    
-    // Enriched professional bot responses
-    if (message.includes('service') || message.includes('développement')) {
-        return "🚀 NSY offre une gamme complète de services technologiques :\n\n• Développement d'applications web et mobile (React, Node.js, Flutter)\n• Intégration d'Intelligence Artificielle (ML, NLP, Computer Vision)\n• Automatisation des processus métier et RPA\n• Conseil en transformation digitale\n• Architecture cloud et DevOps\n\nDans quel domaine souhaitez-vous approfondir ?";
-    }
-    
-    if (message.includes('ia') || message.includes('intelligence') || message.includes('ai') || message.includes('machine learning')) {
-        return "🧠 Notre expertise IA est au cœur de notre offre :\n\n• Machine Learning & Deep Learning (TensorFlow, PyTorch)\n• Traitement du langage naturel (NLP) et chatbots intelligents\n• Computer Vision et reconnaissance d'images\n• Automatisation intelligente des processus (RPA + IA)\n• Systèmes de recommandation personnalisés\n• Analyse prédictive et Business Intelligence\n\nAvez-vous un cas d'usage particulier en tête ?";
-    }
-    
-    if (message.includes('prix') || message.includes('coût') || message.includes('tarif') || message.includes('budget')) {
-        return "💰 Nos tarifs sont adaptés à chaque projet :\n\n• Audit initial et conseil : Gratuit (1h)\n• Développement web/mobile : À partir de 500€/jour\n• Projets IA : Devis personnalisé selon complexité\n• Forfaits tout inclus pour PME/startups\n• Support et maintenance : Plans flexibles\n\n📞 Contactez-nous pour un devis précis et sans engagement !";
-    }
-    
-    if (message.includes('contact') || message.includes('email') || message.includes('rendez-vous')) {
-        return "📧 Contactez NSY facilement :\n\n• Email direct : contact@nsy.fr (réponse < 24h)\n• Formulaire de contact sur cette page\n• Consultation gratuite de 30min disponible\n• Télétravail ou sur site selon vos préférences\n\n🕒 Nous privilégions un premier échange pour comprendre vos enjeux avant tout engagement.";
-    }
-    
-    if (message.includes('expérience') || message.includes('portfolio') || message.includes('référence')) {
-        return "🏆 NSY : Plus de 12 ans d'expertise prouvée :\n\n• 50+ projets réalisés (startups, PME, grands comptes)\n• Expertise technique : Full-Stack, Cloud, DevOps, IA\n• Secteurs : E-commerce, Fintech, Santé, Industrie 4.0\n• Certifications : AWS, Google Cloud, Microsoft Azure\n• Méthodologies : Agile, Scrum, DevOps, Design Thinking\n\n📈 Taux de satisfaction client : 98% | Projets livrés dans les délais : 95%";
-    }
-    
-    if (message.includes('technologie') || message.includes('stack') || message.includes('outil')) {
-        return "⚙️ Notre stack technologique de pointe :\n\n🎯 Frontend : React, Vue.js, Angular, TypeScript\n🔧 Backend : Node.js, Python, Java, .NET\n☁️ Cloud : AWS, Azure, Google Cloud, Docker, Kubernetes\n🤖 IA/ML : TensorFlow, PyTorch, OpenAI API, Hugging Face\n📱 Mobile : React Native, Flutter, PWA\n🗄️ Databases : PostgreSQL, MongoDB, Redis\n\nQuelle technologie vous intéresse le plus ?";
-    }
-    
-    if (message.includes('méthodologie') || message.includes('processus') || message.includes('méthode')) {
-        return "📋 Notre méthodologie éprouvée en 6 étapes :\n\n1. 🎯 Audit & Analyse des besoins\n2. 🏗️ Architecture & Conception technique\n3. 💻 Développement itératif (sprints 2 semaines)\n4. 🧪 Tests & Validation qualité\n5. 🚀 Déploiement & Mise en production\n6. 🔄 Support & Évolutions continues\n\n✨ Approche Agile avec livraisons fréquentes et feedback client constant.";
-    }
-    
-    if (message.includes('équipe') || message.includes('qui') || message.includes('cédric')) {
-        return "👨‍💻 L'équipe NSY :\n\n🎖️ Cédric Barme - Fondateur & Lead Developer\n• 12+ ans d'expérience Full-Stack\n• Expert en IA et transformation digitale\n• Ancien consultant grands comptes\n• Passionné d'innovation et nouvelles technologies\n\n🤝 Réseau de partenaires spécialisés selon vos besoins\n📚 Formation continue et veille technologique quotidienne";
-    }
-    
-    if (message.includes('bonjour') || message.includes('salut') || message.includes('hello') || message.includes('bonsoir')) {
-        return "👋 Bonjour et bienvenue sur le site NSY !\n\nJe suis votre assistant virtuel, spécialisé en :\n• Renseignements sur nos services IA et développement\n• Information sur nos méthodes et technologies\n• Orientation pour votre projet digital\n• Mise en relation avec notre équipe\n\n💡 Comment puis-je vous accompagner dans votre réflexion ?";
-    }
-    
-    if (message.includes('automatisation') || message.includes('automation') || message.includes('rpa')) {
-        return "🔄 Expertise en automatisation NSY :\n\n• RPA (Robotic Process Automation) avec UiPath, Blue Prism\n• Automatisation des workflows métier\n• Intégration API et webhooks\n• Chatbots et assistants virtuels intelligents\n• Automatisation des tests (Selenium, Cypress)\n• CI/CD et déploiement automatisé\n\n⚡ Gains typiques : 60-80% de temps économisé sur les tâches répétitives.";
-    }
-    
-    if (message.includes('web') || message.includes('site') || message.includes('application')) {
-        return "💻 Développement web & applications NSY :\n\n🎨 Frontend moderne : React, Vue.js, TypeScript\n🔧 Backend robuste : Node.js, Python, microservices\n📱 Applications mobiles : React Native, Flutter\n🌐 Sites web sur-mesure : E-commerce, corporate, SaaS\n⚡ Performance : PWA, optimisation SEO, Core Web Vitals\n🔒 Sécurité : HTTPS, authentification, protection données\n\nQuel type d'application envisagez-vous ?";
-    }
-    
-    if (message.includes('délai') || message.includes('temps') || message.includes('durée')) {
-        return "⏱️ Délais de réalisation NSY :\n\n• Site vitrine : 2-4 semaines\n• Application web complexe : 2-6 mois\n• Projet IA/ML : 1-4 mois selon données\n• Automatisation RPA : 3-8 semaines\n• Audit & conseil : 1-2 semaines\n\n📅 Planning adaptatif avec jalons et livrables intermédiaires. Priorité à la qualité et aux délais convenus.";
-    }
-    
-    // Default response
-    return "🤔 Question intéressante ! Pour vous donner une réponse précise et adaptée à votre contexte, je vous recommande :\n\n📧 Contact direct : contact@nsy.fr\n📝 Formulaire de contact (plus bas sur cette page)\n📞 Consultation gratuite de 30min\n\n💡 Notre expertise s'adapte à chaque projet unique. Partagez-nous vos défis, nous trouverons la solution optimale !";
-}
-
-// Register ScrollTrigger
-gsap.registerPlugin(ScrollTrigger);
-
-// Image Modal Functions - Simple Transform Approach
-function openImageModal() {
-    const modal = document.getElementById('imageModal');
-    const sourceImage = document.querySelector('.briefing-image');
-    const modalImage = modal.querySelector('.modal-image');
-    
-    if (modal && sourceImage && modalImage) {
-        // Get source image position for transform-origin
-        const sourceRect = sourceImage.getBoundingClientRect();
-        const modalRect = {
-            width: window.innerWidth,
-            height: window.innerHeight
-        };
-        
-        // Calculate transform-origin as percentage of viewport
-        const originX = (sourceRect.left + sourceRect.width / 2) / modalRect.width * 100;
-        const originY = (sourceRect.top + sourceRect.height / 2) / modalRect.height * 100;
-        
-        // Set transform-origin to source image center
-        modalImage.style.transformOrigin = `${originX}% ${originY}%`;
-        
-        // Show modal and trigger animation
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-        
-        requestAnimationFrame(() => {
-            modal.classList.add('open');
-        });
-    }
-}
-
-function closeImageModal() {
-    const modal = document.getElementById('imageModal');
-    
-    if (modal) {
-        modal.classList.remove('open');
-        
-        setTimeout(() => {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-        }, 600);
-    }
-}
-
-// Add click on modal image to close (initialize after DOM loaded)
-function initModalImageClick() {
-    const modalImage = document.querySelector('.modal-image');
-    if (modalImage) {
-        modalImage.addEventListener('click', closeImageModal);
-    }
-}
-
-// Close modal with Escape key
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-        closeImageModal();
-    }
-});
+    cover.addEventListener('mouseleave', () => {
+      video.pause();
+      try { video.currentTime = 0; } catch (_) {}
+    });
+  });
+})();
