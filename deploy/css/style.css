@@ -1328,6 +1328,97 @@ section.block:first-of-type { border-top: 0; }
   color: var(--accent);
 }
 
+/* ───── Legal pages (mentions-legales, confidentialite) ───── */
+.legal-page {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 40px 0 80px;
+  font-size: 16px;
+  line-height: 1.7;
+  color: var(--fg-1);
+}
+.legal-page h1 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  color: var(--fg-0);
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+.legal-page h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(22px, 2.4vw, 28px);
+  color: var(--fg-0);
+  margin: 56px 0 18px;
+  letter-spacing: -0.015em;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--line);
+}
+.legal-page p {
+  margin: 0 0 16px;
+  color: var(--fg-1);
+}
+.legal-page p strong { color: var(--fg-0); font-weight: 500; }
+.legal-page a {
+  color: var(--accent);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+  transition: color .2s;
+}
+.legal-page a:hover { color: var(--fg-0); }
+.legal-page ul {
+  margin: 0 0 18px;
+  padding-left: 0;
+  list-style: none;
+}
+.legal-page ul li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 10px;
+  color: var(--fg-1);
+}
+.legal-page ul li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  width: 6px; height: 6px;
+  background: var(--accent);
+  border-radius: 1px;
+  box-shadow: 0 0 8px var(--accent);
+}
+.legal-page ul li strong { color: var(--fg-0); font-weight: 500; }
+.legal-dl {
+  display: grid;
+  grid-template-columns: minmax(150px, 220px) 1fr;
+  gap: 8px 24px;
+  margin: 18px 0 28px;
+  padding: 22px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: rgba(255,255,255,0.02);
+}
+.legal-dl dt {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+  padding-top: 2px;
+}
+.legal-dl dd {
+  margin: 0;
+  color: var(--fg-0);
+  font-size: 15px;
+}
+.legal-dl dd a { color: var(--accent); }
+@media (max-width: 600px) {
+  .legal-dl { grid-template-columns: 1fr; gap: 4px 0; padding: 20px; }
+  .legal-dl dd { margin-bottom: 14px; }
+  .legal-dl dd:last-child { margin-bottom: 0; }
+}
+
 /* ───── Footer ───── */
 footer.foot {
   border-top: 1px solid var(--line);

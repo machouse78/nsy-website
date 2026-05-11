@@ -16,10 +16,12 @@ mkdir -p deploy
 
 # ───── Fichiers racine ─────
 echo "📁 Copie des fichiers racine..."
-cp index.html        deploy/
-cp sitemap.xml       deploy/
-cp robots.txt        deploy/
-cp .htaccess         deploy/
+cp index.html            deploy/
+cp mentions-legales.html deploy/
+cp confidentialite.html  deploy/
+cp sitemap.xml           deploy/
+cp robots.txt            deploy/
+cp .htaccess             deploy/
 
 # ───── Dossiers CSS et JS ─────
 echo "📁 Copie de css/ et js/..."
@@ -54,6 +56,8 @@ echo "✅ Vérification des fichiers requis..."
 
 required=(
   "deploy/index.html"
+  "deploy/mentions-legales.html"
+  "deploy/confidentialite.html"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
   "deploy/.htaccess"
