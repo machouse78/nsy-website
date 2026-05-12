@@ -201,7 +201,7 @@
       return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 9 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
     }
     if (t.includes('disponib') || t.includes('quand') || t.includes('démarr') || t.includes('demarr')) {
-      return `Cédric est disponible pour de nouvelles missions à partir du Q3 ${currentYear}. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.`;
+      return `Cédric est disponible pour de nouvelles missions à partir du Q4 ${currentYear}. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.`;
     }
     if (t.includes('banque') || t.includes('finance') || t.includes('assurance')) {
       return `Oui — c'est même le cœur du métier. ${yearsExperience} ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).`;

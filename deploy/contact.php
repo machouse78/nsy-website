@@ -207,7 +207,7 @@ try {
             .       'J\'ai bien reçu votre message concernant <strong style="color:#F2F6FF">' . $esc($serviceLabel) . '</strong> et je reviens vers vous personnellement <strong style="color:#00E5FF">sous 48 heures ouvrées</strong> avec une première lecture de votre besoin.'
             .     '</p>'
             .     '<p style="font-size:16px;line-height:1.6;color:#C5CEE3;margin:0 0 28px">'
-            .       'Si vous avez d\'autres éléments à partager d\'ici là (contexte, contraintes, échéances), répondez simplement à cet email — il atterrira directement dans ma boîte.'
+            .       'Si vous avez d\'autres éléments à partager d\'ici là (contexte, contraintes, échéances), écrivez-moi directement à <a href="mailto:contact@nsy.fr" style="color:#00E5FF;text-decoration:none">contact@nsy.fr</a>.'
             .     '</p>'
             .     '<hr style="border:0;border-top:1px solid rgba(140,170,220,0.15);margin:28px 0">'
             .     '<table style="font-size:14px;color:#C5CEE3;border-collapse:collapse;line-height:1.6">'
@@ -227,7 +227,7 @@ try {
 
         $auto->AltBody = "Merci, $name.\n\n"
             . "J'ai bien reçu votre message concernant « $serviceLabel » et je reviens vers vous personnellement sous 48 heures ouvrées avec une première lecture de votre besoin.\n\n"
-            . "Si vous avez d'autres éléments à partager d'ici là, répondez simplement à cet email — il atterrira directement dans ma boîte.\n\n"
+            . "Si vous avez d'autres éléments à partager d'ici là, écrivez-moi directement à contact@nsy.fr.\n\n"
             . "Site       : https://www.nsy.fr\n"
             . "Email      : contact@nsy.fr\n"
             . "LinkedIn   : https://www.linkedin.com/in/cédric-barme/\n\n"
