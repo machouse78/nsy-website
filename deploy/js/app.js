@@ -101,6 +101,11 @@
         let data = {};
         try { data = await res.json(); } catch (_) {}
 
+        // TEMPORARY: surface server-side SMTP errors in the console for diagnostics
+        if (!data.ok && data.debug) {
+          console.error('[NSY contact] server error detail:', data.debug);
+        }
+
         if (res.ok && data.ok) {
           setLabel('Envoyé ✓');
           showToast('Message reçu — réponse sous 48h ouvrées.');
