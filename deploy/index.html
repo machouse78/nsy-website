@@ -154,6 +154,7 @@
           <div class="glyph-disc"></div>
           <video
             class="glyph-video"
+            id="glyph-video"
             src="public/nsy-ia.mp4"
             autoplay
             loop
@@ -162,6 +163,16 @@
             preload="auto"
             aria-label="Animation NSY · IA"
           ></video>
+          <div class="glyph-loader" id="glyph-loader" aria-hidden="true">
+            <svg class="glyph-loader-ring" viewBox="0 0 100 100">
+              <circle class="glyph-loader-track" cx="50" cy="50" r="46"></circle>
+              <circle class="glyph-loader-progress" id="glyph-loader-progress" cx="50" cy="50" r="46"></circle>
+            </svg>
+            <div class="glyph-loader-text">
+              <div class="glyph-loader-pct" id="glyph-loader-pct">0%</div>
+              <div class="glyph-loader-label">NSY · IA</div>
+            </div>
+          </div>
         </div>
       </div>
 
