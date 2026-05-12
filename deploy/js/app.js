@@ -278,22 +278,62 @@
     if (glyphVideo.readyState >= 4) hideLoader();
   }
 
-  // ───── CTA banner: gradients follow mouse ─────
+  // ───── CTA banner: gradients react to input ─────
+  // Desktop (with hover): cyan/orange gradients follow the mouse cursor.
+  // Touch/tablet (no hover): auto-animate via sinusoidal motion on X and
+  // Y with different periods, only while the banner is in the viewport
+  // (battery courtesy). Respects prefers-reduced-motion.
   const ctaBanner = document.querySelector('.cta-banner');
   if (ctaBanner) {
-    ctaBanner.addEventListener('mouseenter', () => ctaBanner.classList.add('hover-active'));
-    ctaBanner.addEventListener('mousemove', (e) => {
-      const rect = ctaBanner.getBoundingClientRect();
-      const x = ((e.clientX - rect.left) / rect.width) * 100;
-      const y = ((e.clientY - rect.top) / rect.height) * 100;
-      ctaBanner.style.setProperty('--mx', `${x.toFixed(2)}%`);
-      ctaBanner.style.setProperty('--my', `${y.toFixed(2)}%`);
-    });
-    ctaBanner.addEventListener('mouseleave', () => {
-      ctaBanner.classList.remove('hover-active');
-      ctaBanner.style.removeProperty('--mx');
-      ctaBanner.style.removeProperty('--my');
-    });
+    const noHover = window.matchMedia('(hover: none)').matches;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (noHover && !reducedMotion) {
+      // Auto-animate on touch devices
+      ctaBanner.classList.add('hover-active'); // disable goal-interpolation; we drive every frame
+      const start = performance.now();
+      const PERIOD_X = 14000;
+      const PERIOD_Y = 19000;
+      let rafId = null;
+      let active = false;
+
+      const tick = (now) => {
+        const tx = ((now - start) % PERIOD_X) / PERIOD_X * 2 * Math.PI;
+        const ty = ((now - start) % PERIOD_Y) / PERIOD_Y * 2 * Math.PI;
+        const x = 50 + 35 * Math.sin(tx); // sweeps 15% → 85% horizontally
+        const y = 50 + 35 * Math.cos(ty); // sweeps 15% → 85% vertically
+        ctaBanner.style.setProperty('--mx', x.toFixed(2) + '%');
+        ctaBanner.style.setProperty('--my', y.toFixed(2) + '%');
+        if (active) rafId = requestAnimationFrame(tick);
+      };
+
+      const io = new IntersectionObserver(([entry]) => {
+        if (entry.isIntersecting && !active) {
+          active = true;
+          rafId = requestAnimationFrame(tick);
+        } else if (!entry.isIntersecting && active) {
+          active = false;
+          if (rafId) cancelAnimationFrame(rafId);
+          rafId = null;
+        }
+      }, { rootMargin: '50px' });
+      io.observe(ctaBanner);
+    } else {
+      // Mouse tracking on hover-capable devices
+      ctaBanner.addEventListener('mouseenter', () => ctaBanner.classList.add('hover-active'));
+      ctaBanner.addEventListener('mousemove', (e) => {
+        const rect = ctaBanner.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        ctaBanner.style.setProperty('--mx', `${x.toFixed(2)}%`);
+        ctaBanner.style.setProperty('--my', `${y.toFixed(2)}%`);
+      });
+      ctaBanner.addEventListener('mouseleave', () => {
+        ctaBanner.classList.remove('hover-active');
+        ctaBanner.style.removeProperty('--mx');
+        ctaBanner.style.removeProperty('--my');
+      });
+    }
   }
 
   // ───── Service cards: image stays visible until video is ready, then cross-fades ─────
