@@ -1367,7 +1367,9 @@ section.block:first-of-type { border-top: 0; }
 .toast {
   position: fixed;
   bottom: 24px;
-  right: 24px;
+  left: 24px;
+  right: auto;
+  max-width: calc(100vw - 48px);
   padding: 14px 18px;
   border: 1px solid var(--accent);
   background: rgba(0,229,255,0.08);
@@ -1376,12 +1378,17 @@ section.block:first-of-type { border-top: 0; }
   font-family: var(--font-mono);
   font-size: 13px;
   letter-spacing: 0.04em;
+  line-height: 1.45;
   color: var(--fg-0);
   display: flex;
   align-items: center;
   gap: 10px;
   z-index: 200;
   animation: toast-in .25s ease;
+  word-break: break-word;
+}
+@media (max-width: 480px) {
+  .toast { left: 12px; right: 12px; max-width: none; }
 }
 .toast.hidden { display: none; }
 @keyframes toast-in {
