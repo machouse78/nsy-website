@@ -116,9 +116,9 @@ $bodyText = "Nouvelle demande via le formulaire NSY\n\n"
     . "---\nEnvoyé depuis nsy.fr · IP $ip · " . date('Y-m-d H:i:s') . "\n";
 
 // ───── Send via PHPMailer + SMTP ─────
-require_once __DIR__ . '/lib/PHPMailer/src/Exception.php';
-require_once __DIR__ . '/lib/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/lib/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/vendor/PHPMailer/src/Exception.php';
+require_once __DIR__ . '/vendor/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/vendor/PHPMailer/src/SMTP.php';
 
 $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
