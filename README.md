@@ -113,14 +113,40 @@ Le script :
 
 Le `.htaccess` configure : GZIP, cache headers (1 mois images/vidéos, 1 semaine CSS/JS, 1h HTML), force HTTPS, security headers (`X-Frame-Options`, `Strict-Transport-Security`, etc.).
 
-## SEO
+## SEO & partage social
 
-- **Sitemap** référençant la page principale + ses ancres + les 4 images clés + les 3 vidéos hero/services
+- **Sitemap** référençant la page principale + ses ancres + les pages légales + les 4 images clés (dont la bannière OG) + les 3 vidéos hero/services
 - **Robots.txt** avec Allow explicite pour les assets utilisés, Disallow des répertoires techniques
-- **Meta tags** complets : title, description, keywords, Open Graph, Twitter Card
 - **JSON-LD Organization** avec founder = Cédric Barme + sameAs LinkedIn/GitHub
 - **Canonical URL** : `https://www.nsy.fr`
 - **hreflang** : `fr` + `x-default`
+
+### Open Graph & Twitter Card
+
+Chaque page (accueil + `mentions-legales.html` + `confidentialite.html`) embarque un bloc complet :
+
+| Balise | Valeur (accueil) |
+|---|---|
+| `og:type` / `og:site_name` / `og:locale` | `website` / `NSY` / `fr_FR` |
+| `og:title` / `og:description` | Titre + description (~120 caractères) spécifique à la page |
+| `og:image` (+ `:secure_url`, `:type`, `:width`, `:height`, `:alt`) | `https://www.nsy.fr/public/nsy-og.jpg` · `image/jpeg` · **1200×630** · alt "NSY — L'IA au service du numérique" |
+| `twitter:card` | `summary_large_image` |
+| `twitter:title` / `twitter:description` / `twitter:image` / `twitter:image:alt` | équivalents Twitter (mêmes valeurs en pratique) |
+
+**Bannière OG** (`public/nsy-og.jpg`, **145 Ko**, 1200×630) : dérivée du master `public/nsy-logo-ai.png` (1672×941) via :
+
+```bash
+ffmpeg -i public/nsy-logo-ai.png \
+  -vf "scale=-2:630,pad=1200:630:(1200-iw)/2:0:color=0x0A0F1C" \
+  -q:v 4 public/nsy-og.jpg
+```
+
+→ Mise à hauteur 630px sans déformation, puis padding navy `#0A0F1C` (couleur de fond du site) à gauche et à droite jusqu'aux 1200px canoniques. Aucun crop, tout le contenu reste visible et le padding fond avec les bords sombres de l'image source. Pour régénérer dans d'autres formats : reprendre `public/nsy-logo-ai.png`.
+
+**Validation après upload** :
+- Facebook / LinkedIn : [opengraph.xyz](https://www.opengraph.xyz) ou [developers.facebook.com/tools/debug](https://developers.facebook.com/tools/debug)
+- Twitter/X : [cards-dev.twitter.com/validator](https://cards-dev.twitter.com/validator) (déprécié mais encore actif)
+- WhatsApp / Slack / Discord : envoi à soi-même
 
 ## Crédits
 
