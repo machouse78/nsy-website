@@ -1,0 +1,17 @@
+<?php
+/**
+ * NSY — SMTP credentials template.
+ *
+ * Copy this file to _secret/config.php on the production server (via FTP/SFTP)
+ * and fill in the real password. config.php is .gitignored — it must NEVER
+ * be committed.
+ */
+return [
+    'smtp_host'     => 'mail.infomaniak.com',
+    'smtp_port'     => 465,
+    'smtp_secure'   => 'ssl',           // 'ssl' for 465, 'tls' for 587
+    'smtp_username' => 'noreply@nsy.fr',
+    'smtp_password' => 'CHANGE_ME_SET_THE_REAL_PASSWORD_HERE',
+    'to_address'    => 'contact@nsy.fr',
+    'to_name'       => 'Cédric Barme (NSY)',
+];
