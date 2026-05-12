@@ -145,7 +145,9 @@ try {
     $mail->send();
     echo json_encode(['ok' => true]);
 } catch (\PHPMailer\PHPMailer\Exception $e) {
-    error_log('NSY contact: PHPMailer error — ' . $mail->ErrorInfo);
+    $errMsg = '[' . date('Y-m-d H:i:s') . '] NSY contact: ' . ($mail->ErrorInfo ?: $e->getMessage()) . "\n";
+    error_log($errMsg);
+    @file_put_contents(__DIR__ . '/_secret/contact-errors.log', $errMsg, FILE_APPEND);
     http_response_code(500);
     echo json_encode([
         'ok'    => false,
