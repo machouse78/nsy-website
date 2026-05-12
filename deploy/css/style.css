@@ -458,6 +458,65 @@ section.block:first-of-type { border-top: 0; }
   pointer-events: none;
   background: transparent;
 }
+
+/* ───── Video loader (in the blue sphere) ───── */
+.glyph-loader {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 1;
+  transition: opacity .5s ease;
+}
+.glyph-loader.hidden { opacity: 0; }
+.glyph-loader-ring {
+  position: absolute;
+  inset: 4%;
+  width: 92%;
+  height: 92%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+.glyph-loader-ring circle {
+  fill: none;
+  stroke-width: 1.2;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+.glyph-loader-track { stroke: rgba(0, 229, 255, 0.15); }
+.glyph-loader-progress {
+  stroke: var(--accent);
+  stroke-dasharray: 289.03;   /* 2 × π × 46 */
+  stroke-dashoffset: 289.03;
+  filter: drop-shadow(0 0 6px rgba(0, 229, 255, 0.7));
+  transition: stroke-dashoffset .25s ease;
+}
+.glyph-loader-text {
+  position: relative;
+  text-align: center;
+  font-family: var(--font-mono);
+  color: var(--accent);
+  text-shadow: 0 0 8px rgba(0, 229, 255, 0.45);
+}
+.glyph-loader-pct {
+  font-size: clamp(20px, 3.2vw, 30px);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.glyph-loader-label {
+  font-size: clamp(8px, 0.9vw, 10px);
+  letter-spacing: 0.28em;
+  color: var(--fg-2);
+  margin-top: 8px;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+.glyph-loader.error .glyph-loader-pct { color: #ff6b6b; text-shadow: 0 0 8px rgba(255, 107, 107, 0.5); }
+.glyph-loader.error .glyph-loader-progress { stroke: #ff6b6b; }
 .glyph-rings {
   position: absolute;
   inset: -18%;

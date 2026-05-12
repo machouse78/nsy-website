@@ -199,6 +199,41 @@
     chip.addEventListener('click', () => send(chip.textContent));
   });
 
+  // ───── Hero video loader (cyan ring + percentage in blue sphere) ─────
+  const glyphVideo = document.getElementById('glyph-video');
+  const glyphLoader = document.getElementById('glyph-loader');
+  const glyphPct = document.getElementById('glyph-loader-pct');
+  const glyphRing = document.getElementById('glyph-loader-progress');
+  const GLYPH_CIRC = 2 * Math.PI * 46;
+
+  if (glyphVideo && glyphLoader) {
+    const setVideoProgress = (p) => {
+      const pct = Math.max(0, Math.min(100, Math.round(p * 100)));
+      if (glyphPct) glyphPct.textContent = pct + '%';
+      if (glyphRing) glyphRing.style.strokeDashoffset = GLYPH_CIRC * (1 - pct / 100);
+    };
+
+    const hideLoader = () => {
+      setVideoProgress(1);
+      setTimeout(() => glyphLoader.classList.add('hidden'), 350);
+    };
+
+    glyphVideo.addEventListener('progress', () => {
+      if (!glyphVideo.duration || !isFinite(glyphVideo.duration) || glyphVideo.buffered.length === 0) return;
+      const end = glyphVideo.buffered.end(glyphVideo.buffered.length - 1);
+      setVideoProgress(end / glyphVideo.duration);
+    });
+
+    glyphVideo.addEventListener('canplaythrough', hideLoader, { once: true });
+    glyphVideo.addEventListener('error', () => {
+      glyphLoader.classList.add('error');
+      if (glyphPct) glyphPct.textContent = 'ERR';
+    });
+
+    // Edge case: video already cached / fully buffered before listeners attach
+    if (glyphVideo.readyState >= 4) hideLoader();
+  }
+
   // ───── CTA banner: gradients follow mouse ─────
   const ctaBanner = document.querySelector('.cta-banner');
   if (ctaBanner) {
