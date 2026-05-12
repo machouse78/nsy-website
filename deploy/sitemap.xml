@@ -12,7 +12,7 @@
 
     <!-- Images principales -->
     <image:image>
-      <image:loc>https://www.nsy.fr/public/nsy-logo-ai.png</image:loc>
+      <image:loc>https://www.nsy.fr/public/nsy-og.jpg</image:loc>
       <image:title>NSY — L'IA au service du numérique</image:title>
       <image:caption>Bannière NSY : conseil technique et création web propulsée par l'intelligence artificielle</image:caption>
     </image:image>

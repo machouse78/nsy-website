@@ -34,7 +34,7 @@ mkdir -p deploy/public
 
 # Images
 cp public/nsy-logo.png                  deploy/public/
-cp public/nsy-logo-ai.png               deploy/public/
+cp public/nsy-og.jpg                    deploy/public/
 cp public/photo-profil.png              deploy/public/
 cp public/finance-assurance.png         deploy/public/
 cp public/web-ia.png                    deploy/public/
@@ -65,7 +65,7 @@ required=(
   "deploy/css/style.css"
   "deploy/js/app.js"
   "deploy/public/nsy-logo.png"
-  "deploy/public/nsy-logo-ai.png"
+  "deploy/public/nsy-og.jpg"
   "deploy/public/photo-profil.png"
   "deploy/public/finance-assurance.png"
   "deploy/public/web-ia.png"
