@@ -392,6 +392,12 @@ section.block:first-of-type { border-top: 0; }
   letter-spacing: -0.02em;
 }
 .hero-meta-item .num sup { font-size: 16px; color: var(--accent); margin-left: 2px; vertical-align: super; }
+.hero-meta-item .num.num-text {
+  font-size: clamp(18px, 1.6vw, 22px);
+  letter-spacing: -0.005em;
+  white-space: nowrap;
+}
+.hero-meta-item .num-sep { color: var(--accent); }
 .hero-meta-item .lab {
   font-family: var(--font-mono);
   font-size: 10.5px;
