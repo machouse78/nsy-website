@@ -1349,8 +1349,18 @@ section.block:first-of-type { border-top: 0; }
   line-height: 1.4;
 }
 
+.form-turnstile {
+  margin-top: 24px;
+  display: flex;
+  justify-content: flex-start;
+  min-height: 0;
+}
+.form-turnstile:empty,
+.form-turnstile .cf-turnstile:empty { margin: 0; }
+.form-turnstile iframe { border-radius: 8px; }
+
 .form-foot {
-  margin-top: 28px;
+  margin-top: 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
