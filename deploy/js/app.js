@@ -273,7 +273,7 @@
   // Fades opacity to 0 in the last ~triggerWindow seconds, then back to 1
   // in the first ~triggerWindow seconds after the loop. The seam is hidden
   // while the element is invisible — no visible jump cut.
-  function setupLoopFade(video, fadeDurationSec = 0.4, triggerWindowSec = 0.5) {
+  function setupLoopFade(video, fadeDurationSec = 0.15, triggerWindowSec = 0.18) {
     if (!video) return;
     let phase = 'visible'; // 'visible' | 'fading-out'
     const transition = `opacity ${Math.round(fadeDurationSec * 1000)}ms ease`;
