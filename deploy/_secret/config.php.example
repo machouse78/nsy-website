@@ -7,11 +7,13 @@
  * be committed.
  */
 return [
-    'smtp_host'     => 'mail.infomaniak.com',
-    'smtp_port'     => 465,
-    'smtp_secure'   => 'ssl',           // 'ssl' for 465, 'tls' for 587
-    'smtp_username' => 'noreply@nsy.fr',
-    'smtp_password' => 'CHANGE_ME_SET_THE_REAL_PASSWORD_HERE',
-    'to_address'    => 'contact@nsy.fr',
-    'to_name'       => 'Cédric Barme (NSY)',
+    'smtp_host'        => 'mail.infomaniak.com',
+    'smtp_port'        => 465,
+    'smtp_secure'      => 'ssl',           // 'ssl' for 465, 'tls' for 587
+    'smtp_username'    => 'noreply@nsy.fr',
+    'smtp_password'    => 'CHANGE_ME_SET_THE_REAL_PASSWORD_HERE',
+    'to_address'       => 'contact@nsy.fr',
+    'to_name'          => 'Cédric Barme (NSY)',
+    // Cloudflare Turnstile (anti-bot) — get yours at https://dash.cloudflare.com/?to=/:account/turnstile
+    'turnstile_secret' => 'CHANGE_ME_SET_THE_TURNSTILE_SECRET_KEY',
 ];
