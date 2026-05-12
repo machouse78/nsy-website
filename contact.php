@@ -145,12 +145,18 @@ try {
     $mail->send();
     echo json_encode(['ok' => true]);
 } catch (\PHPMailer\PHPMailer\Exception $e) {
-    $errMsg = '[' . date('Y-m-d H:i:s') . '] NSY contact: ' . ($mail->ErrorInfo ?: $e->getMessage()) . "\n";
+    $detail = $mail->ErrorInfo ?: $e->getMessage();
+    $errMsg = '[' . date('Y-m-d H:i:s') . '] NSY contact: ' . $detail . "\n";
     error_log($errMsg);
+    // Try writing to two locations in case _secret/ is not writable.
     @file_put_contents(__DIR__ . '/_secret/contact-errors.log', $errMsg, FILE_APPEND);
+    @file_put_contents(__DIR__ . '/contact-errors.log', $errMsg, FILE_APPEND);
     http_response_code(500);
     echo json_encode([
         'ok'    => false,
         'error' => "Erreur d'envoi — réessayez ou écrivez directement à contact@nsy.fr.",
+        // TEMPORARY: expose the real SMTP error for diagnostics.
+        // Remove after the form is validated end-to-end.
+        'debug' => $detail,
     ]);
 }
