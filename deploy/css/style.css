@@ -1011,10 +1011,7 @@ section.block:first-of-type { border-top: 0; }
   margin-top: 56px;
   align-items: start;
 }
-@media (max-width: 920px) {
-  .about-grid { grid-template-columns: 1fr; gap: 40px; }
-  .profile { position: static; top: auto; }
-}
+@media (max-width: 920px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
 
 .profile {
   position: sticky;
@@ -1023,6 +1020,9 @@ section.block:first-of-type { border-top: 0; }
   border-radius: var(--radius-lg);
   background: linear-gradient(180deg, rgba(15,22,38,0.7), rgba(10,15,28,0.4));
   overflow: hidden;
+}
+@media (max-width: 920px) {
+  .profile { position: static; top: auto; }
 }
 .profile-cover {
   aspect-ratio: 4/3;
