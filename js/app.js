@@ -297,5 +297,13 @@
     else video.addEventListener('canplaythrough', attach, { once: true });
   }
 
-  document.querySelectorAll('video[loop]').forEach((v) => setupLoopFade(v));
+  document.querySelectorAll('video[loop]').forEach((v) => {
+    if (v.id === 'glyph-video') {
+      // Hero sphere: very short fade — almost imperceptible cut masking
+      setupLoopFade(v, 0.15, 0.18);
+    } else {
+      // Service cards: slower, more cinematic fade across the loop
+      setupLoopFade(v);
+    }
+  });
 })();
