@@ -19,14 +19,27 @@ echo "📁 Copie des fichiers racine..."
 cp index.html            deploy/
 cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
+cp contact.php           deploy/
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp .htaccess             deploy/
 
-# ───── Dossiers CSS et JS ─────
-echo "📁 Copie de css/ et js/..."
+# ───── Dossiers CSS, JS, lib (PHPMailer) ─────
+echo "📁 Copie de css/, js/, lib/..."
 cp -R css deploy/
 cp -R js  deploy/
+cp -R lib deploy/
+
+# ───── Secrets (gitignored, mais copiés dans deploy/ pour upload FTP) ─────
+echo "📁 Copie de _secret/ (credentials SMTP)..."
+mkdir -p deploy/_secret
+cp _secret/.htaccess          deploy/_secret/
+cp _secret/config.php.example deploy/_secret/
+if [ -f _secret/config.php ]; then
+  cp _secret/config.php deploy/_secret/
+else
+  echo "  ⚠️  _secret/config.php absent — le formulaire ne fonctionnera PAS sans ce fichier."
+fi
 
 # ───── Public : on ne copie QUE les assets réellement utilisés ─────
 echo "📁 Copie des assets utilisés (public/)..."
@@ -59,11 +72,17 @@ required=(
   "deploy/index.html"
   "deploy/mentions-legales.html"
   "deploy/confidentialite.html"
+  "deploy/contact.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
   "deploy/.htaccess"
   "deploy/css/style.css"
   "deploy/js/app.js"
+  "deploy/lib/PHPMailer/src/PHPMailer.php"
+  "deploy/lib/PHPMailer/src/SMTP.php"
+  "deploy/lib/PHPMailer/src/Exception.php"
+  "deploy/_secret/.htaccess"
+  "deploy/_secret/config.php"
   "deploy/public/nsy-logo.png"
   "deploy/public/nsy-og.jpg"
   "deploy/public/photo-profil.png"

@@ -603,8 +603,10 @@
         </div>
       </div>
 
-      <form class="form" id="contact-form" novalidate>
+      <form class="form" id="contact-form" action="contact.php" method="POST" novalidate>
         <input type="hidden" id="service" name="service" value="consulting" />
+        <!-- Honeypot anti-bot — humans never see it, bots fill it and get silently rejected -->
+        <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none" aria-hidden="true" />
 
         <div class="form-grid">
           <div class="field">

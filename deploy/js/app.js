@@ -70,16 +70,55 @@
   const submitBtn = document.getElementById('contact-submit');
 
   if (form) {
-    form.addEventListener('submit', (e) => {
+    const setLabel = (text) => {
+      const label = submitBtn?.querySelector('.btn-label');
+      if (label) label.textContent = text;
+    };
+    const showToast = (text, isError = false) => {
+      if (!toast) return;
+      toast.textContent = '';
+      const icon = document.createElement('span');
+      icon.style.color = isError ? '#ff6b6b' : 'var(--accent)';
+      icon.textContent = isError ? '✕' : '✓';
+      toast.appendChild(icon);
+      toast.appendChild(document.createTextNode(' ' + text));
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 4000);
+    };
+
+    form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        const label = submitBtn.querySelector('.btn-label');
-        if (label) label.textContent = 'Envoyé ✓';
-      }
-      if (toast) {
-        toast.classList.remove('hidden');
-        setTimeout(() => toast.classList.add('hidden'), 3500);
+      if (submitBtn) submitBtn.disabled = true;
+      setLabel('Envoi…');
+
+      try {
+        const res = await fetch(form.action || 'contact.php', {
+          method: 'POST',
+          body: new FormData(form),
+          headers: { Accept: 'application/json' },
+        });
+
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
+
+        if (res.ok && data.ok) {
+          setLabel('Envoyé ✓');
+          showToast('Message reçu — réponse sous 48h ouvrées.');
+          form.reset();
+          const consultingOpt = document.querySelector('.opt[data-service="consulting"]');
+          document.querySelectorAll('.opt').forEach((o) => o.classList.remove('active'));
+          if (consultingOpt) consultingOpt.classList.add('active');
+          const serviceInput = document.getElementById('service');
+          if (serviceInput) serviceInput.value = 'consulting';
+        } else {
+          if (submitBtn) submitBtn.disabled = false;
+          setLabel('Réessayer');
+          showToast(data.error || "Erreur d'envoi — réessayez ou écrivez à contact@nsy.fr.", true);
+        }
+      } catch (err) {
+        if (submitBtn) submitBtn.disabled = false;
+        setLabel('Réessayer');
+        showToast('Erreur réseau — réessayez ou écrivez à contact@nsy.fr.', true);
       }
     });
   }
