@@ -1011,7 +1011,10 @@ section.block:first-of-type { border-top: 0; }
   margin-top: 56px;
   align-items: start;
 }
-@media (max-width: 920px) { .about-grid { grid-template-columns: 1fr; gap: 40px; } }
+@media (max-width: 920px) {
+  .about-grid { grid-template-columns: 1fr; gap: 40px; }
+  .profile { position: static; top: auto; }
+}
 
 .profile {
   position: sticky;
