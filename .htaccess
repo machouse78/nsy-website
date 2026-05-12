@@ -1,14 +1,22 @@
 # NSY Website - Configuration Infomaniak
-# Optimisé pour hébergement mutualisé
+# Optimisé pour hébergement mutualisé Apache
 
-# Sécurité
-ServerTokens Prod
-Header always set X-Content-Type-Options nosniff
-Header always set X-Frame-Options DENY
-Header always set X-XSS-Protection "1; mode=block"
-Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+# Index page
+DirectoryIndex index.html
 
-# Compression GZIP
+# Pages d'erreur personnalisées
+ErrorDocument 404 /index.html
+
+# ───── Sécurité : headers HTTP ─────
+# (uniquement si mod_headers est chargé, sinon ignoré silencieusement)
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "DENY"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+</IfModule>
+
+# ───── Compression GZIP ─────
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/html
     AddOutputFilterByType DEFLATE text/css
@@ -24,63 +32,59 @@ Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains
     AddOutputFilterByType DEFLATE image/svg+xml
 </IfModule>
 
-# Cache Headers pour performance
+# ───── Cache navigateur ─────
 <IfModule mod_expires.c>
     ExpiresActive On
-    
-    # Images et vidéos
+
+    # Images
     ExpiresByType image/png "access plus 1 month"
     ExpiresByType image/jpg "access plus 1 month"
     ExpiresByType image/jpeg "access plus 1 month"
     ExpiresByType image/webp "access plus 1 month"
+    ExpiresByType image/svg+xml "access plus 1 month"
+
+    # Vidéos
     ExpiresByType video/mp4 "access plus 1 month"
-    
+
     # CSS et JS
     ExpiresByType text/css "access plus 1 week"
     ExpiresByType application/javascript "access plus 1 week"
     ExpiresByType text/javascript "access plus 1 week"
-    
+
     # Fonts
     ExpiresByType font/woff2 "access plus 1 month"
     ExpiresByType font/woff "access plus 1 month"
-    
+
     # HTML
     ExpiresByType text/html "access plus 1 hour"
 </IfModule>
 
-# Types MIME pour fonts
+# ───── Types MIME ─────
 <IfModule mod_mime.c>
     AddType font/woff2 .woff2
     AddType font/woff .woff
     AddType application/javascript .js
 </IfModule>
 
-# Index page
-DirectoryIndex index.html
-
-# Erreurs personnalisées
-ErrorDocument 404 /index.html
-ErrorDocument 500 /index.html
-
-# Réglages PHP (si nécessaire pour formulaire futur)
-<IfModule mod_php.c>
-    php_value upload_max_filesize 10M
-    php_value post_max_size 10M
-    php_value max_execution_time 300
+# ───── Cache vidéos (header explicite, en plus du mod_expires) ─────
+<IfModule mod_headers.c>
+    <FilesMatch "\.(mp4|webm|ogv)$">
+        Header set Cache-Control "max-age=2592000, public"
+    </FilesMatch>
 </IfModule>
 
-# Protection des fichiers sensibles
-<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql)$">
-    Order Allow,Deny
-    Deny from all
+# ───── Protection des fichiers sensibles ─────
+<FilesMatch "\.(htaccess|htpasswd|ini|log|sh|sql|env|bak)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order Allow,Deny
+        Deny from all
+    </IfModule>
 </FilesMatch>
 
-# Optimisation vidéo
-<FilesMatch "\.(mp4|webm|ogv)$">
-    Header set Cache-Control "max-age=2592000, public"
-</FilesMatch>
-
-# Force HTTPS (recommandé pour Infomaniak)
+# ───── Forcer HTTPS ─────
 <IfModule mod_rewrite.c>
     RewriteEngine On
     RewriteCond %{HTTPS} off
