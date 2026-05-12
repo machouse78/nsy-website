@@ -815,8 +815,8 @@ section.block:first-of-type { border-top: 0; }
   transform: scale(1.06);
   transform-origin: center center;
 }
-.svc-cover-image:hover .svc-bg { opacity: 0; }
-.svc-cover-image:hover .svc-bg-video { opacity: 1; }
+.svc-cover-image.video-ready .svc-bg { opacity: 0; }
+.svc-cover-image.video-ready .svc-bg-video { opacity: 1; }
 .svc.warm .svc-bg-video { transform: scale(1.16); }
 .svc-cover-image { background: #060a14; }
 .svc-cover-image::before { display: none; }

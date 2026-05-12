@@ -252,16 +252,20 @@
     });
   }
 
-  // ───── Service card image ↔ video swap on hover ─────
+  // ───── Service cards: image stays visible until video is ready, then cross-fades ─────
   document.querySelectorAll('.svc-cover-image').forEach((cover) => {
     const video = cover.querySelector('.svc-bg-video');
     if (!video) return;
-    cover.addEventListener('mouseenter', () => {
-      video.play().catch(() => {});
-    });
-    cover.addEventListener('mouseleave', () => {
-      video.pause();
-      try { video.currentTime = 0; } catch (_) {}
-    });
+
+    const reveal = () => cover.classList.add('video-ready');
+
+    if (video.readyState >= 4) {
+      reveal();
+    } else {
+      video.addEventListener('canplaythrough', reveal, { once: true });
+    }
+
+    // Some browsers block autoplay until first user interaction — retry once a play attempt resolves.
+    video.play().catch(() => {});
   });
 })();
