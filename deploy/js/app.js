@@ -285,8 +285,16 @@
   // (battery courtesy). Respects prefers-reduced-motion.
   const ctaBanner = document.querySelector('.cta-banner');
   if (ctaBanner) {
-    const noHover = window.matchMedia('(hover: none)').matches;
+    // Detect "touch / no-hover" via 3 complementary signals — any positive
+    // is treated as touch-primary. Some Android browsers and old iOS Safari
+    // don't honor `(hover: none)` correctly.
+    const noHover =
+      window.matchMedia('(hover: none)').matches ||
+      window.matchMedia('(pointer: coarse)').matches ||
+      ('ontouchstart' in window) ||
+      (navigator.maxTouchPoints || 0) > 0;
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    console.info('[CTA] mode:', noHover ? 'auto-animation' : 'mouse-tracking', '— reducedMotion:', reducedMotion);
 
     if (noHover && !reducedMotion) {
       // Auto-animate on touch devices
