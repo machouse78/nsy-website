@@ -268,4 +268,34 @@
     // Some browsers block autoplay until first user interaction — retry once a play attempt resolves.
     video.play().catch(() => {});
   });
+
+  // ───── Smooth fade across loop point for every looping <video> ─────
+  // Fades opacity to 0 in the last ~triggerWindow seconds, then back to 1
+  // in the first ~triggerWindow seconds after the loop. The seam is hidden
+  // while the element is invisible — no visible jump cut.
+  function setupLoopFade(video, fadeDurationSec = 0.4, triggerWindowSec = 0.5) {
+    if (!video) return;
+    let phase = 'visible'; // 'visible' | 'fading-out'
+    const transition = `opacity ${Math.round(fadeDurationSec * 1000)}ms ease`;
+
+    const onTime = () => {
+      if (!video.duration || !isFinite(video.duration)) return;
+      const remaining = video.duration - video.currentTime;
+      if (phase === 'visible' && remaining < triggerWindowSec) {
+        phase = 'fading-out';
+        video.style.transition = transition;
+        video.style.opacity = '0';
+      } else if (phase === 'fading-out' && video.currentTime < triggerWindowSec && remaining > triggerWindowSec) {
+        phase = 'visible';
+        video.style.transition = transition;
+        video.style.opacity = '1';
+      }
+    };
+
+    const attach = () => video.addEventListener('timeupdate', onTime);
+    if (video.readyState >= 4) attach();
+    else video.addEventListener('canplaythrough', attach, { once: true });
+  }
+
+  document.querySelectorAll('video[loop]').forEach((v) => setupLoopFade(v));
 })();
