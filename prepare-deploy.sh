@@ -24,11 +24,11 @@ cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp .htaccess             deploy/
 
-# ───── Dossiers CSS, JS, lib (PHPMailer) ─────
-echo "📁 Copie de css/, js/, lib/..."
+# ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
+echo "📁 Copie de css/, js/, vendor/..."
 cp -R css deploy/
 cp -R js  deploy/
-cp -R lib deploy/
+cp -R vendor deploy/
 
 # ───── Secrets (gitignored, mais copiés dans deploy/ pour upload FTP) ─────
 echo "📁 Copie de _secret/ (credentials SMTP)..."
@@ -78,9 +78,9 @@ required=(
   "deploy/.htaccess"
   "deploy/css/style.css"
   "deploy/js/app.js"
-  "deploy/lib/PHPMailer/src/PHPMailer.php"
-  "deploy/lib/PHPMailer/src/SMTP.php"
-  "deploy/lib/PHPMailer/src/Exception.php"
+  "deploy/vendor/PHPMailer/src/PHPMailer.php"
+  "deploy/vendor/PHPMailer/src/SMTP.php"
+  "deploy/vendor/PHPMailer/src/Exception.php"
   "deploy/_secret/.htaccess"
   "deploy/_secret/config.php"
   "deploy/public/nsy-logo.png"
