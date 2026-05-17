@@ -90,3 +90,7 @@ jspm_packages/
 # Storybook build outputs
 .out
 .storybook-out
+
+# Blender source files (too large; only the optimised .glb is shipped)
+*.blend
+*.blend1
