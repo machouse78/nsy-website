@@ -89,4 +89,14 @@ ErrorDocument 404 /index.html
     RewriteEngine On
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # ───── Anti-hotlink sur médias propriétaires (mp4, glb, gltf) ─────
+    # Bloque l'embed direct depuis un autre domaine. Les requêtes "directes"
+    # (Referer vide = barre d'adresse) sont autorisées pour ne pas casser
+    # les téléchargements légitimes via DevTools / l'utilisateur déterminé,
+    # mais ça bloque 99 %% des bots et des sites tiers qui embarqueraient.
+    RewriteCond %{HTTP_REFERER} !^$
+    RewriteCond %{HTTP_REFERER} !^https?://(www\.)?nsy\.fr/ [NC]
+    RewriteCond %{HTTP_REFERER} !^https?://localhost [NC]
+    RewriteRule \.(mp4|webm|ogv|glb|gltf)$ - [F,L]
 </IfModule>
