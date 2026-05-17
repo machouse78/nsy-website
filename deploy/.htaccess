@@ -90,6 +90,15 @@ ErrorDocument 404 /index.html
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
+    # ───── Auto-détection langue (Accept-Language) ─────
+    # Sur racine ou /index.html : si pas de cookie nsy_lang ET navigateur en anglais,
+    # rediriger vers /index-en.html. Le cookie est posé par le switch de drapeau JS,
+    # donc dès qu'un utilisateur a choisi une langue, on respecte son choix.
+    RewriteCond %{HTTP_COOKIE} !nsy_lang= [NC]
+    RewriteCond %{HTTP:Accept-Language} ^en [NC]
+    RewriteCond %{REQUEST_URI} ^/(index\.html)?$
+    RewriteRule ^ /index-en.html [L,R=302]
+
     # ───── Anti-hotlink sur médias propriétaires (mp4, glb, gltf) ─────
     # Bloque l'embed direct depuis un autre domaine. Les requêtes "directes"
     # (Referer vide = barre d'adresse) sont autorisées pour ne pas casser

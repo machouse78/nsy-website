@@ -15,7 +15,7 @@ rm -rf deploy
 mkdir -p deploy
 
 # ───── Fichiers racine ─────
-echo "📁 Copie des fichiers racine..."
+echo "📁 Copie des fichiers racine (FR)..."
 cp index.html            deploy/
 cp hobbie.html           deploy/
 cp mentions-legales.html deploy/
@@ -24,6 +24,12 @@ cp contact.php           deploy/
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp .htaccess             deploy/
+
+echo "📁 Copie des fichiers racine (EN)..."
+cp index-en.html             deploy/
+cp hobbie-en.html            deploy/
+cp mentions-legales-en.html  deploy/
+cp confidentialite-en.html   deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."
@@ -78,6 +84,10 @@ required=(
   "deploy/hobbie.html"
   "deploy/mentions-legales.html"
   "deploy/confidentialite.html"
+  "deploy/index-en.html"
+  "deploy/hobbie-en.html"
+  "deploy/mentions-legales-en.html"
+  "deploy/confidentialite-en.html"
   "deploy/contact.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"

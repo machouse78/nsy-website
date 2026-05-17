@@ -243,6 +243,28 @@
     chip.addEventListener('click', () => send(chip.textContent));
   });
 
+  // ───── Language switcher (🇫🇷 / 🇬🇧) — sets cookie + redirect to matching page ─────
+  document.querySelectorAll('.lang-flag').forEach((flag) => {
+    flag.addEventListener('click', (e) => {
+      e.preventDefault();
+      const lang = flag.dataset.lang;
+      // Persist preference for 1 year so the auto-detect on / does not override
+      document.cookie = `nsy_lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
+
+      // Derive the target URL from the current pathname
+      const path = window.location.pathname;
+      const file = path.split('/').pop() || 'index.html';
+      const hash = window.location.hash || '';
+      let target;
+      if (lang === 'en') {
+        target = file.endsWith('-en.html') ? file : file.replace(/\.html$/, '-en.html');
+      } else {
+        target = file.replace(/-en\.html$/, '.html');
+      }
+      window.location.href = target + hash;
+    });
+  });
+
   // ───── Hero video loader (cyan ring + percentage in blue sphere) ─────
   const glyphVideo = document.getElementById('glyph-video');
   const glyphLoader = document.getElementById('glyph-loader');

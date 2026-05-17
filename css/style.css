@@ -201,6 +201,28 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
   padding-left: 12px;
   border-left: 1px solid var(--line);
 }
+.nav-lang {
+  display: flex;
+  gap: 2px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
+}
+.lang-flag {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.5;
+  filter: grayscale(0.5);
+  transition: opacity .2s, filter .2s, background .2s, transform .15s;
+  cursor: pointer;
+  text-decoration: none;
+}
+.lang-flag:hover { opacity: 0.85; filter: grayscale(0); background: rgba(255,255,255,0.04); transform: scale(1.05); }
+.lang-flag.active { opacity: 1; filter: grayscale(0); background: rgba(0,229,255,0.08); cursor: default; }
 .nav-icon {
   width: 36px; height: 36px;
   display: grid; place-items: center;
@@ -260,6 +282,12 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
   }
   .nav-icon { width: 30px; height: 30px; }
   .nav-icon svg { width: 15px; height: 15px; }
+  .nav-lang {
+    order: 4;
+    padding-left: 6px;
+    border-left: 0;
+  }
+  .lang-flag { width: 28px; height: 28px; font-size: 14px; }
 }
 @media (max-width: 380px) {
   .nav-inner { padding: 8px 12px; column-gap: 4px; }
