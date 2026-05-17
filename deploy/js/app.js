@@ -197,8 +197,8 @@
 
   // Detect page language from <html lang="..."> — defaults to fr
   const pageLang = (document.documentElement.lang || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
-  // Path to the hobbies page (FR or EN) for cross-links
-  const hobbiePath = pageLang === 'en' ? 'hobbie-en.html' : 'hobbie.html';
+  // Path to the hobbies/loisirs page (translated slug per language) for cross-links
+  const hobbiePath = pageLang === 'en' ? 'hobbies.html' : 'loisirs.html';
 
   function botReply(userText) {
     const t = userText.toLowerCase();
@@ -294,6 +294,19 @@
   }
 
   // ───── Language switcher (🇫🇷 / 🇬🇧) — sets cookie + redirect to matching page ─────
+  // Slugs are real translations (loisirs/hobbies, mentions-legales/legal-notice, etc.)
+  // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
+  // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
+  const SLUG_FR_TO_EN = {
+    'index.html': 'index-en.html',
+    'loisirs.html': 'hobbies.html',
+    'mentions-legales.html': 'legal-notice.html',
+    'confidentialite.html': 'privacy.html',
+  };
+  const SLUG_EN_TO_FR = Object.fromEntries(
+    Object.entries(SLUG_FR_TO_EN).map(([fr, en]) => [en, fr])
+  );
+
   document.querySelectorAll('.lang-flag').forEach((flag) => {
     flag.addEventListener('click', (e) => {
       e.preventDefault();
@@ -307,9 +320,11 @@
       const hash = window.location.hash || '';
       let target;
       if (lang === 'en') {
-        target = file.endsWith('-en.html') ? file : file.replace(/\.html$/, '-en.html');
+        // FR → EN: look up, or stay on the same page if already EN
+        target = SLUG_FR_TO_EN[file] || file;
       } else {
-        target = file.replace(/-en\.html$/, '.html');
+        // EN → FR: reverse lookup, or stay on the same page if already FR
+        target = SLUG_EN_TO_FR[file] || file;
       }
       window.location.href = target + hash;
     });

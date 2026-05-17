@@ -110,26 +110,26 @@
 
   <!-- Hobbies & 3D (FR) -->
   <url>
-    <loc>https://www.nsy.fr/hobbie.html</loc>
+    <loc>https://www.nsy.fr/loisirs.html</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/hobbie.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/hobbie-en.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/hobbie.html" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/loisirs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/hobbies.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/loisirs.html" />
   </url>
 
   <!-- Hobbies & 3D (EN) -->
   <url>
-    <loc>https://www.nsy.fr/hobbie-en.html</loc>
+    <loc>https://www.nsy.fr/hobbies.html</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/hobbie.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/hobbie-en.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/hobbie.html" />
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/loisirs.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/hobbies.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/loisirs.html" />
   </url>
 
   <!-- Pages légales FR -->
@@ -140,7 +140,7 @@
     <priority>0.3</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/mentions-legales.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/mentions-legales-en.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/legal-notice.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/mentions-legales.html" />
   </url>
 
@@ -151,30 +151,30 @@
     <priority>0.3</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/confidentialite.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/confidentialite-en.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/privacy.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/confidentialite.html" />
   </url>
 
   <!-- Pages légales EN -->
   <url>
-    <loc>https://www.nsy.fr/mentions-legales-en.html</loc>
+    <loc>https://www.nsy.fr/legal-notice.html</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/mentions-legales.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/mentions-legales-en.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/legal-notice.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/mentions-legales.html" />
   </url>
 
   <url>
-    <loc>https://www.nsy.fr/confidentialite-en.html</loc>
+    <loc>https://www.nsy.fr/privacy.html</loc>
     <lastmod>2026-05-17</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/confidentialite.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/confidentialite-en.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/privacy.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/confidentialite.html" />
   </url>
 
