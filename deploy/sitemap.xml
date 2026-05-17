@@ -91,6 +91,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- Hobbies & 3D -->
+  <url>
+    <loc>https://www.nsy.fr/hobbie.html</loc>
+    <lastmod>2026-05-17</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
   <!-- Pages légales -->
   <url>
     <loc>https://www.nsy.fr/mentions-legales.html</loc>

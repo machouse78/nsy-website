@@ -1463,6 +1463,82 @@ section.block:first-of-type { border-top: 0; }
   color: var(--accent);
 }
 
+/* ───── Hobbies page ───── */
+.hero-cyan {
+  background: linear-gradient(95deg, #00E5FF 0%, #6FA8FF 50%, #00E5FF 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradient-pan 9s linear infinite;
+}
+.hobbie-showcase {
+  margin-top: 56px;
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  background: #05080F;
+}
+.hobbie-video {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  background: #000;
+  pointer-events: none; /* anti-click-to-save (best-effort) */
+  user-select: none;
+}
+.hobbie-caption {
+  padding: 14px 22px;
+  border-top: 1px solid var(--line);
+  background: rgba(0,0,0,0.5);
+  color: var(--fg-3);
+  font-size: 11px;
+}
+.model-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  background: radial-gradient(ellipse at center, rgba(0,229,255,0.12), transparent 70%), #000;
+  overflow: hidden;
+  user-select: none;
+}
+.hobbie-model {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  --poster-color: transparent;
+  --progress-bar-color: var(--accent);
+  --progress-bar-height: 1px;
+  cursor: grab;
+}
+.hobbie-model:active { cursor: grabbing; }
+.model-hint {
+  position: absolute;
+  bottom: 14px;
+  right: 18px;
+  padding: 6px 12px;
+  background: rgba(0,0,0,0.6);
+  border: 1px solid rgba(0,229,255,0.3);
+  border-radius: 999px;
+  font-size: 10.5px;
+  color: var(--accent);
+  pointer-events: none;
+  animation: model-hint-pulse 2.5s ease-in-out infinite;
+}
+@keyframes model-hint-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; box-shadow: 0 0 18px rgba(0,229,255,0.4); }
+}
+@media (max-width: 600px) {
+  .model-stage { aspect-ratio: 4 / 3; }
+  .model-hint { font-size: 9.5px; bottom: 10px; right: 10px; padding: 5px 10px; }
+}
+
 /* ───── Legal pages (mentions-legales, confidentialite) ───── */
 .legal-page {
   max-width: 760px;

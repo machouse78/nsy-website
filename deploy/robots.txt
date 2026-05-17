@@ -35,6 +35,11 @@ Disallow: /public/*.mp4
 Allow: /public/nsy-ia.mp4
 Allow: /public/finance-assurance.mp4
 Allow: /public/web-ia.mp4
+Allow: /public/animation.mp4
+
+# Modèles 3D — pas crawlables par défaut, ils ne servent pas le SEO texte
+Disallow: /public/*.glb
+Disallow: /public/*.gltf
 
 # Crawl-delay raisonnable
 Crawl-delay: 1

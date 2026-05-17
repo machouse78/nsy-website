@@ -17,6 +17,7 @@ mkdir -p deploy
 # ───── Fichiers racine ─────
 echo "📁 Copie des fichiers racine..."
 cp index.html            deploy/
+cp hobbie.html           deploy/
 cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
 cp contact.php           deploy/
@@ -60,6 +61,10 @@ cp public/cropped-NSY-logo-270x270.png  deploy/public/
 cp public/nsy-ia.mp4                    deploy/public/
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
+cp public/animation.mp4                 deploy/public/
+
+# Modèles 3D
+cp public/renault-wireframe.glb         deploy/public/
 
 # ───── Nettoyage ─────
 find deploy -name ".DS_Store" -delete 2>/dev/null || true
@@ -70,6 +75,7 @@ echo "✅ Vérification des fichiers requis..."
 
 required=(
   "deploy/index.html"
+  "deploy/hobbie.html"
   "deploy/mentions-legales.html"
   "deploy/confidentialite.html"
   "deploy/contact.php"
@@ -95,6 +101,8 @@ required=(
   "deploy/public/nsy-ia.mp4"
   "deploy/public/finance-assurance.mp4"
   "deploy/public/web-ia.mp4"
+  "deploy/public/animation.mp4"
+  "deploy/public/renault-wireframe.glb"
 )
 
 missing=0
