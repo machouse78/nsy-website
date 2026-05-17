@@ -64,19 +64,38 @@ for obj in mesh_objects:
     obj.hide_select = False
     obj.hide_render = False
 
-# ───── 4. Apply all transforms on every mesh, then join into one ─────
-print("[NSY] Applying transforms + joining meshes…")
+# ───── 4. Bake world transforms into mesh data, clear parenting ─────
+# CRITICAL: bpy.ops.object.transform_apply only applies the LOCAL transform,
+# not parent-child hierarchy. The source .blend has many parented objects
+# (antenna parented to body, mirror parented to door, etc.), so a plain
+# transform_apply leaves children in their PARENT-relative coordinate space.
+# After join + scale, the result is parts flying around to weird positions
+# (exactly the "complètement flingué" bug).
+#
+# Fix: directly multiply each mesh's local coords by its world matrix,
+# then reset the object's matrix to identity. This guarantees every vertex
+# is now in world space, regardless of any parent chain.
+print("[NSY] Baking matrix_world into each mesh's vertex data…")
+from mathutils import Matrix as _M
+for obj in mesh_objects:
+    if obj.data and obj.data.vertices:
+        obj.data.transform(obj.matrix_world)
+        obj.matrix_world = _M.Identity(4)
+bpy.context.view_layer.update()
+
+# Now safe to clear parents (everything is already in world space)
 bpy.ops.object.select_all(action="DESELECT")
 for obj in mesh_objects:
     obj.select_set(True)
-
-# Activate the first mesh
 bpy.context.view_layer.objects.active = mesh_objects[0]
+bpy.ops.object.parent_clear(type="CLEAR")
 
-# Apply location, rotation and scale on all selected
-bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
-
-# Join everything into the active object
+# ───── 4b. Join all meshes into one object ─────
+print("[NSY] Joining meshes…")
+bpy.ops.object.select_all(action="DESELECT")
+for obj in mesh_objects:
+    obj.select_set(True)
+bpy.context.view_layer.objects.active = mesh_objects[0]
 bpy.ops.object.join()
 
 merged = bpy.context.view_layer.objects.active
@@ -154,7 +173,7 @@ print(f"[NSY] After cleanup : {len(merged.data.polygons)} faces, bbox size={tupl
 # ───── 9. Wireframe modifier (3D tubes along edges, K2000-style) ─────
 print("[NSY] Adding Wireframe modifier…")
 wireframe = merged.modifiers.new(name="Wireframe", type="WIREFRAME")
-wireframe.thickness = 0.004        # in object-space units (we are at 2-unit scale)
+wireframe.thickness = 0.0025       # in object-space units (model is 2-unit max). 0.0025 ≈ 0.12% of model size
 wireframe.use_even_offset = False  # stable on cleaned mesh; True can explode bbox
 wireframe.use_relative_offset = False
 wireframe.use_replace = True       # remove original faces, keep only the wires
@@ -200,7 +219,9 @@ cyan_srgb = (0x00 / 255, 0xE5 / 255, 0xFF / 255)
 cyan_linear = tuple(srgb_to_linear(c) for c in cyan_srgb) + (1.0,)
 
 emission.inputs["Color"].default_value = cyan_linear
-emission.inputs["Strength"].default_value = 2.5  # nice glow under model-viewer's default exposure
+# Strength 1.0 keeps the cyan readable as cyan even after ACES tone-mapping
+# at exposure 1.0. Anything ≥2.0 clips green+blue to (1,1) → white wires.
+emission.inputs["Strength"].default_value = 1.0
 
 links.new(emission.outputs["Emission"], out.inputs["Surface"])
 merged.data.materials.append(mat)
