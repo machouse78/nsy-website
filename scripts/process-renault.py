@@ -51,18 +51,88 @@ for obj in list(bpy.data.objects):
     if obj.type != "MESH":
         bpy.data.objects.remove(obj, do_unlink=True)
 
-mesh_objects = [o for o in bpy.data.objects if o.type == "MESH"]
-print(f"[NSY] Mesh objects remaining: {len(mesh_objects)}")
+# ───── 2b. Respect the artist's hidden state ─────
+# The source .blend hides display pedestals, light probes, ground planes,
+# turntables — anything that is not the car. Un-hiding them (as the first
+# version did) pulled in two huge spheres + a bar that overwhelmed the
+# bbox and squashed the actual car down to a tiny wireframe.
+# Rule: a mesh that is hidden in viewport, render or globally is not car.
+all_meshes = [o for o in bpy.data.objects if o.type == "MESH"]
+print(f"[NSY] All meshes in scene: {len(all_meshes)}")
+
+mesh_objects = []
+for obj in all_meshes:
+    hidden_viewport_eye = obj.hide_get()       # the eye icon
+    hidden_disable_view = obj.hide_viewport    # the monitor icon
+    hidden_render = obj.hide_render            # the camera icon
+    if hidden_viewport_eye or hidden_disable_view or hidden_render:
+        print(f"[NSY]   - SKIP (hidden): {obj.name}")
+        continue
+    # NOTE: we deliberately do NOT filter by name. The source .blend uses
+    # generic words like "floor", "plane", "console" for actual car parts
+    # (BACK_FLOOR = trunk, BOTTOM_FLOOR = underside, F_CONSOLE_AND_FLOOR =
+    # front console + floorboard, etc.) — filtering on these names was
+    # eating legitimate body panels. We rely on the size-based outlier
+    # filter (below) instead.
+    mesh_objects.append(obj)
+
+print(f"[NSY] Mesh objects kept after visibility/name filter: {len(mesh_objects)}")
 if not mesh_objects:
-    print("[NSY] ERROR: No mesh objects found")
+    print("[NSY] ERROR: No mesh objects survived filtering")
     sys.exit(1)
 
-# ───── 3. Make everything visible & selectable ─────
+# Make sure the kept ones are fully selectable (don't change hide state of the
+# ones we already decided to drop — those still need to be removed entirely)
 for obj in mesh_objects:
     obj.hide_set(False)
     obj.hide_viewport = False
     obj.hide_select = False
     obj.hide_render = False
+
+# Remove the dropped ones from the scene entirely so they cannot leak into
+# downstream operators (join, transform_apply etc.)
+for obj in all_meshes:
+    if obj not in mesh_objects:
+        bpy.data.objects.remove(obj, do_unlink=True)
+
+# ───── 3b. Per-object bbox diagnostic + size-based outlier filter ─────
+# Compute each kept mesh's world-space bbox max-dim. The median size of
+# car parts is a reliable anchor: anything more than 25x the median is an
+# outlier (display rig, light probe, environment sphere, etc.).
+print("[NSY] Per-object bbox sizes (world-space)…")
+obj_sizes = {}
+for obj in mesh_objects:
+    if not obj.data or not obj.data.vertices:
+        obj_sizes[obj.name] = 0.0
+        continue
+    mn = Vector((float("inf"),) * 3)
+    mx = Vector((float("-inf"),) * 3)
+    for v in obj.data.vertices:
+        w = obj.matrix_world @ v.co
+        mn.x, mn.y, mn.z = min(mn.x, w.x), min(mn.y, w.y), min(mn.z, w.z)
+        mx.x, mx.y, mx.z = max(mx.x, w.x), max(mx.y, w.y), max(mx.z, w.z)
+    s = mx - mn
+    obj_sizes[obj.name] = max(s.x, s.y, s.z)
+
+sizes_sorted = sorted(obj_sizes.values())
+median_size = sizes_sorted[len(sizes_sorted) // 2] if sizes_sorted else 0.0
+print(f"[NSY] Median object max-dim: {median_size:.3f}")
+print(f"[NSY] Largest 5 objects:")
+for name, sz in sorted(obj_sizes.items(), key=lambda kv: -kv[1])[:5]:
+    print(f"[NSY]   {sz:8.3f}  {name}")
+
+OUTLIER_THRESHOLD = max(median_size * 25.0, 6.0)  # at least 6 units floor
+outliers = [name for name, sz in obj_sizes.items() if sz > OUTLIER_THRESHOLD]
+if outliers:
+    print(f"[NSY] Removing {len(outliers)} outlier object(s) (max-dim > {OUTLIER_THRESHOLD:.2f}):")
+    for name in outliers:
+        print(f"[NSY]   - DROP outlier: {name} (size={obj_sizes[name]:.2f})")
+        obj = bpy.data.objects.get(name)
+        if obj:
+            bpy.data.objects.remove(obj, do_unlink=True)
+    mesh_objects = [o for o in mesh_objects if o.name not in outliers]
+
+print(f"[NSY] Mesh objects after outlier filter: {len(mesh_objects)}")
 
 # ───── 4. Bake world transforms into mesh data, clear parenting ─────
 # CRITICAL: bpy.ops.object.transform_apply only applies the LOCAL transform,
@@ -141,15 +211,72 @@ print(f"[NSY] Post-bake bbox : min={tuple(round(c, 3) for c in mn)} max={tuple(r
 print(f"[NSY] Post-bake center: {tuple(round(c, 3) for c in center)}  (should be ~0,0,0)")
 print(f"[NSY] Post-bake size : {tuple(round(c, 3) for c in size)}  (max should be ~2)")
 
-# ───── 7. Decimate to ~50k triangles for a readable wireframe ─────
-print("[NSY] Adding Decimate modifier…")
-decimate = merged.modifiers.new(name="Decimate", type="DECIMATE")
-decimate.ratio = 0.10  # tuned: dense enough to read the silhouette, sparse enough for cyber feel
-decimate.use_collapse_triangulate = True
-bpy.ops.object.modifier_apply(modifier="Decimate")
+# ───── 6. Re-orient so the LONGEST axis is along Blender Y ─────
+# Blender exports with Y-up convention: Blender Z → glTF Y (height),
+# Blender Y → glTF -Z (depth, horizontal). For a normal "car on a turntable"
+# look, we want:
+#   - shortest axis (width)  → Blender X  (already the case here)
+#   - longest  axis (length) → Blender Y  (becomes horizontal in model-viewer)
+#   - middle   axis (height) → Blender Z  (becomes vertical in model-viewer)
+# The source has length along Z (24.2 = largest), so we swap Y↔Z with a
+# 90° rotation around X. Without this, auto-rotate spins the car around
+# its own length axis (rotisserie effect) instead of horizontally.
+import math
+axes = [("X", size.x), ("Y", size.y), ("Z", size.z)]
+axes.sort(key=lambda x: -x[1])
+longest_axis = axes[0][0]
+print(f"[NSY] Longest axis = {longest_axis} (size={axes[0][1]:.3f})")
+
+if longest_axis == "Z":
+    # Swap Y↔Z: rotate +90° around X. (Y_new = Z_old, Z_new = -Y_old)
+    print("[NSY] Rotating +90° around X to put length on Y…")
+    rot = Matrix.Rotation(math.radians(90), 4, "X")
+    merged.data.transform(rot)
+    merged.data.update()
+elif longest_axis == "X":
+    # Swap X↔Y: rotate +90° around Z.
+    print("[NSY] Rotating +90° around Z to put length on Y…")
+    rot = Matrix.Rotation(math.radians(90), 4, "Z")
+    merged.data.transform(rot)
+    merged.data.update()
+# else: already on Y, nothing to do
+
+bpy.context.view_layer.update()
+mn, mx, center, size = world_bbox(merged)
+print(f"[NSY] After re-orient: bbox size={tuple(round(c, 3) for c in size)}, center={tuple(round(c, 3) for c in center)}")
+
+# ───── 7. Decimate — PLANAR mode (preserves silhouette) ─────
+# COLLAPSE mode at ratio 0.10 was destroying the car body (which has many
+# large flat panels that collapse easily) while leaving the wheels intact
+# (high-curvature topology that resists collapse). Result: the user saw
+# only wheels + axle, no body.
+#
+# PLANAR mode merges coplanar faces (anything below 5° angle) without
+# changing the silhouette. The car body's flat panels (doors, roof, hood,
+# trunk) become single quads, but every edge defining the car's shape is
+# preserved → the wireframe still reads as a car.
+print("[NSY] Adding Decimate modifier (PLANAR mode)…")
+decimate = merged.modifiers.new(name="Decimate_Planar", type="DECIMATE")
+decimate.decimate_type = "DISSOLVE"     # planar / un-subdivide
+decimate.angle_limit = 0.0872665        # 5° in radians — merge near-coplanar faces only
+decimate.delimit = {'NORMAL', 'MATERIAL'}
+bpy.ops.object.modifier_apply(modifier="Decimate_Planar")
 bpy.context.view_layer.update()
 _mn, _mx, _c, _s = world_bbox(merged)
-print(f"[NSY] After decimate: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+print(f"[NSY] After planar decimate: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+
+# Second pass: moderate Collapse to thin out remaining high-poly areas
+# (wheels, headlights, rounded body curves) so they don't appear as
+# solid blobs in the wireframe.
+print("[NSY] Adding Decimate modifier (COLLAPSE pass, ratio 0.4)…")
+decimate2 = merged.modifiers.new(name="Decimate_Collapse", type="DECIMATE")
+decimate2.decimate_type = "COLLAPSE"
+decimate2.ratio = 0.4                   # keep 40% of the remaining geometry
+decimate2.use_collapse_triangulate = True
+bpy.ops.object.modifier_apply(modifier="Decimate_Collapse")
+bpy.context.view_layer.update()
+_mn, _mx, _c, _s = world_bbox(merged)
+print(f"[NSY] After collapse pass: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
 
 # ───── 8. Clean up the mesh: remove duplicate verts + recalc normals + triangulate ─────
 print("[NSY] Cleaning mesh (merge doubles + recalc normals + triangulate)…")
