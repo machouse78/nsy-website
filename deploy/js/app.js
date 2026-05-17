@@ -195,8 +195,41 @@
     return wrap;
   }
 
+  // Detect page language from <html lang="..."> — defaults to fr
+  const pageLang = (document.documentElement.lang || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
+  // Path to the hobbies page (FR or EN) for cross-links
+  const hobbiePath = pageLang === 'en' ? 'hobbie-en.html' : 'hobbie.html';
+
   function botReply(userText) {
     const t = userText.toLowerCase();
+
+    if (pageLang === 'en') {
+      // ───── ENGLISH knowledge base ─────
+      if (t.includes('price') || t.includes('pricing') || t.includes('cost') || t.includes('rate') || t.includes('budget') || t.includes('how much')) {
+        return "Technical consulting: day-rate or fixed-fee, direct engagement via EURL — to be scoped together. Web creation · AI: from €9,800 ex-VAT for a turnkey package. For a precise quote, the contact form is the fastest path.";
+      }
+      if (t.includes('availab') || t.includes('when') || t.includes('start') || t.includes('booked')) {
+        return `Cédric is available for new engagements from Q4 ${currentYear} onward. Maximum three clients in parallel to keep the bar of excellence non-negotiable.`;
+      }
+      if (t.includes('bank') || t.includes('finance') || t.includes('insurance') || t.includes('asset')) {
+        return `Yes — that's the core specialty. ${yearsExperience} years of expertise on critical builds in retail banking, private banking, life insurance and asset management. Fluent in regulated environments (ACPR, AMF, GDPR, DORA).`;
+      }
+      if (t.includes('3d') || t.includes('blender') || t.includes('wireframe') || t.includes('animation') || t.includes('model') || t.includes('hobby') || t.includes('hobbies') || t.includes('renault') || t.includes('render') || t.includes('hobbie')) {
+        return `Yes, in-house 3D is one of the creative offerings — Blender renders optimised for the web, lightweight and fast-loading (no impact on page speed). Two live examples on the Hobbies page: a looped 3D animation and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: /${hobbiePath}`;
+      }
+      if (t.includes('service') || t.includes('offer') || t.includes('what do you do')) {
+        return "Two offerings: (1) Senior technical consulting for finance & insurance — architecture, audit, migration, compliance. (2) AI-powered web creation for organisations in transition — websites, SaaS platforms, LLM integration (Claude, OpenAI, Mistral). And as a bonus: 3D animations / interactive models for the web.";
+      }
+      if (t.includes('contact') || t.includes('reach') || t.includes('meeting') || t.includes('call')) {
+        return "Simplest path: fill in the contact form at the bottom of the page (reply within 48 business hours) or email contact@nsy.fr directly. You can also click \"Talk to Cédric →\" below.";
+      }
+      if (t.includes('cédric') || t.includes('cedric') || t.includes('background') || t.includes('experience') || t.includes('who')) {
+        return `Cédric Barme, founder of NSY. ${yearsExperience} years behind the scenes of France's largest financial institutions — distributed architecture, real-time trading platforms, legacy core migration. Now an independent consultant via EURL.`;
+      }
+      return `Good question — I can guide you through NSY services, Cédric's expertise, the 3D showcase (/${hobbiePath}) or how to get in touch. For something more specific, the contact form is the most efficient.`;
+    }
+
+    // ───── FRENCH knowledge base ─────
     if (t.includes('tarif') || t.includes('prix') || t.includes('coût') || t.includes('cout') || t.includes('budget')) {
       return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 9 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
     }
@@ -206,8 +239,11 @@
     if (t.includes('banque') || t.includes('finance') || t.includes('assurance')) {
       return `Oui — c'est même le cœur du métier. ${yearsExperience} ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).`;
     }
+    if (t.includes('3d') || t.includes('blender') || t.includes('wireframe') || t.includes('animation') || t.includes('modèle') || t.includes('modele') || t.includes('loisir') || t.includes('hobby') || t.includes('hobbies') || t.includes('hobbie') || t.includes('renault') || t.includes('rendu') || t.includes('voiture')) {
+      return `Oui, la 3D maison fait partie des cordes créatives — rendus Blender optimisés pour le web, légers et rapides (zéro impact sur la performance des pages). Deux exemples concrets sur la page Loisirs : une animation 3D en boucle et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : /${hobbiePath}`;
+    }
     if (t.includes('service') || t.includes('offre') || t.includes('faites')) {
-      return "Deux offres : (1) Conseil technique senior pour la finance et l'assurance — architecture, audit, migration, conformité. (2) Création web propulsée par l'IA pour les entreprises en transition — sites, plateformes SaaS et intégration de modèles (Claude, OpenAI, Mistral).";
+      return "Deux offres : (1) Conseil technique senior pour la finance et l'assurance — architecture, audit, migration, conformité. (2) Création web propulsée par l'IA pour les entreprises en transition — sites, plateformes SaaS et intégration de modèles (Claude, OpenAI, Mistral). En bonus : animations 3D / modèles interactifs pour le web.";
     }
     if (t.includes('contact') || t.includes('joindre') || t.includes('rendez-vous') || t.includes('rdv')) {
       return "Le plus simple : remplir le formulaire en bas de page (réponse sous 48h ouvrées) ou écrire directement à contact@nsy.fr. Vous pouvez aussi cliquer sur « Parler à Cédric → » ci-dessous.";
@@ -215,7 +251,7 @@
     if (t.includes('cédric') || t.includes('cedric') || t.includes('parcours') || t.includes('expérience') || t.includes('experience')) {
       return `Cédric Barme, fondateur de NSY. ${yearsExperience} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant via EURL.`;
     }
-    return "Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.";
+    return `Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric, la 3D maison (/${hobbiePath}) ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.`;
   }
 
   function send(text) {
@@ -242,6 +278,20 @@
   document.querySelectorAll('.cbot-chip').forEach((chip) => {
     chip.addEventListener('click', () => send(chip.textContent));
   });
+
+  // ───── 3D model framing (hobbies page) ─────
+  // Even with bounds="tight", some GLBs need an explicit reframe after load
+  // to ensure the orbit pivot lands on the visible geometry center.
+  const renaultViewer = document.getElementById('renault-viewer');
+  if (renaultViewer) {
+    renaultViewer.addEventListener('load', () => {
+      // updateFraming() recomputes camera-target on the visible bounding box
+      // and resets the camera-orbit radius accordingly.
+      if (typeof renaultViewer.updateFraming === 'function') {
+        renaultViewer.updateFraming();
+      }
+    });
+  }
 
   // ───── Language switcher (🇫🇷 / 🇬🇧) — sets cookie + redirect to matching page ─────
   document.querySelectorAll('.lang-flag').forEach((flag) => {
