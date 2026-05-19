@@ -361,66 +361,50 @@ def apply_modifiers_via_depsgraph(obj):
     obj.modifiers.clear()
     bpy.context.view_layer.update()
 
+# ───── 7. Decimate aggressively to a low-poly "shape only" mesh ─────
+# We're going to convert TRIANGLES → LINES downstream (in Node.js), so we
+# need a clean, low-poly mesh: every triangle contributes 3 line segments
+# in the final GLB. Aiming for ~5k triangles → ~7-10k unique edges as
+# lines → very crisp K2000 wireframe at ~100-200 KB.
 faces_before = len(merged.data.polygons)
 print(f"[NSY] Faces before Decimate: {faces_before}")
-print("[NSY] Adding Decimate modifier (COLLAPSE, ratio 0.08)…")
-decimate = merged.modifiers.new(name="Decimate_For_Web", type="DECIMATE")
+print("[NSY] Adding Decimate modifier (COLLAPSE, ratio 0.015)…")
+decimate = merged.modifiers.new(name="Decimate_For_Lines", type="DECIMATE")
 decimate.decimate_type = "COLLAPSE"
-decimate.ratio = 0.08                   # keep 8% of edges — light enough for web
+decimate.ratio = 0.015                  # 1.5% — very aggressive; aiming for ~5k triangles
 decimate.use_collapse_triangulate = True
 apply_modifiers_via_depsgraph(merged)
 faces_after = len(merged.data.polygons)
 _mn, _mx, _c, _s = world_bbox(merged)
 print(f"[NSY] After decimate: {faces_after} faces (was {faces_before}, ratio={faces_after/max(1,faces_before):.3f}), bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
-if faces_after >= faces_before * 0.5:
-    print(f"[NSY] WARNING: decimate did not reduce face count as expected (got {faces_after/faces_before:.1%}, expected ~8%)")
-render_preview("02_after_decimate")
 
-# ───── 8. Clean up the mesh: remove duplicate verts + recalc normals + triangulate ─────
+# ───── 8. Clean up: merge doubles + recalc normals + triangulate ─────
 print("[NSY] Cleaning mesh (merge doubles + recalc normals + triangulate)…")
 bpy.context.view_layer.objects.active = merged
 merged.select_set(True)
 bpy.ops.object.mode_set(mode="EDIT")
 bpy.ops.mesh.select_all(action="SELECT")
-# 1. Merge vertices that are within a small distance (kills duplicates that cause
-#    degenerate triangles → wireframe modifier blow-up)
-bpy.ops.mesh.remove_doubles(threshold=0.001)
-# 2. Recalculate normals consistently outward (wireframe's offset depends on
-#    the normal direction; inconsistent normals = vertices flying everywhere)
+bpy.ops.mesh.remove_doubles(threshold=0.002)
 bpy.ops.mesh.normals_make_consistent(inside=False)
-# 3. Triangulate everything for predictable wireframe output
 bpy.ops.mesh.quads_convert_to_tris(quad_method="BEAUTY", ngon_method="BEAUTY")
 bpy.ops.object.mode_set(mode="OBJECT")
 bpy.context.view_layer.update()
 _mn, _mx, _c, _s = world_bbox(merged)
 print(f"[NSY] After cleanup : {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
 
-# ───── 9. Wireframe modifier (3D tubes along edges, K2000-style) ─────
-faces_before_wf = len(merged.data.polygons)
-print(f"[NSY] Faces before Wireframe: {faces_before_wf}")
-print("[NSY] Adding Wireframe modifier…")
-wireframe = merged.modifiers.new(name="Wireframe_For_Web", type="WIREFRAME")
-wireframe.thickness = 0.0025       # in object-space units (model is 2-unit max). 0.0025 ≈ 0.12% of model size
-wireframe.use_even_offset = False  # stable on cleaned mesh; True can explode bbox
-wireframe.use_relative_offset = False
-wireframe.use_replace = True       # remove original faces, keep only the wires
-wireframe.material_offset = 0
-wireframe.offset = 1.0
-apply_modifiers_via_depsgraph(merged)
-faces_after_wf = len(merged.data.polygons)
-_mn, _mx, _c, _s = world_bbox(merged)
-print(f"[NSY] After wireframe: {faces_after_wf} faces (was {faces_before_wf}, x{faces_after_wf/max(1,faces_before_wf):.1f}), bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
-
-# ───── 9b. Re-center after wireframe (in case the modifier shifted the bbox slightly) ─────
-print("[NSY] Final recenter…")
-center_after = (_mn + _mx) / 2
+# Final recenter in case ops nudged the bbox
+center_after = _c
 fix_xform = Matrix.Translation(-center_after)
 merged.data.transform(fix_xform)
 merged.data.update()
 bpy.context.view_layer.update()
 _mn, _mx, _c, _s = world_bbox(merged)
 print(f"[NSY] After recenter : bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
-render_preview("03_after_wireframe")
+render_preview("03_lowpoly_triangles")
+# NOTE: Blender's glTF exporter cannot write edges-only meshes (it produces
+# an empty 188-byte GLB if there are no faces). So we export TRIANGLES
+# here, then post-process with scripts/tris-to-lines.mjs to convert the
+# triangle indices into deduplicated edge indices with primitive mode = LINES.
 
 # ───── 10. Cyan emissive material (Knight Rider / K2000 aesthetic) ─────
 print("[NSY] Creating cyan emissive material…")
@@ -436,24 +420,45 @@ links = mat.node_tree.links
 for node in list(nodes):
     nodes.remove(node)
 
+# For GL_LINES rendering in Three.js / model-viewer, the material color comes
+# from baseColorFactor (mapped to LineBasicMaterial.color). emissiveFactor is
+# ignored on line primitives. So we use a Principled BSDF with both Base Color
+# AND Emission set to cyan — that way:
+#   - The exported glTF has baseColorFactor = cyan (used by LINES)
+#   - It also has emissiveFactor = cyan (used if TRIANGLES, for glow effect)
 out = nodes.new(type="ShaderNodeOutputMaterial")
-emission = nodes.new(type="ShaderNodeEmission")
+bsdf = nodes.new(type="ShaderNodeBsdfPrincipled")
 
-# Cyan #00E5FF in linear space (gamma 2.2 → linear ≈ srgb_to_linear)
+# Cyan #00E5FF in linear space
 def srgb_to_linear(c):
     return ((c + 0.055) / 1.055) ** 2.4 if c > 0.04045 else c / 12.92
 
 cyan_srgb = (0x00 / 255, 0xE5 / 255, 0xFF / 255)
 cyan_linear = tuple(srgb_to_linear(c) for c in cyan_srgb) + (1.0,)
+cyan_rgb = cyan_linear[:3]
 
-emission.inputs["Color"].default_value = cyan_linear
-# Strength 1.0 keeps the cyan readable as cyan even after ACES tone-mapping
-# at exposure 1.0. Anything ≥2.0 clips green+blue to (1,1) → white wires.
-emission.inputs["Strength"].default_value = 1.0
+bsdf.inputs["Base Color"].default_value = cyan_linear
+# Emission inputs differ between Blender versions: 4.x uses "Emission Color",
+# 3.x used "Emission". Try both.
+for em_key in ("Emission Color", "Emission"):
+    if em_key in bsdf.inputs:
+        bsdf.inputs[em_key].default_value = cyan_linear
+        break
+if "Emission Strength" in bsdf.inputs:
+    bsdf.inputs["Emission Strength"].default_value = 1.0
+# Make it pure (no specular, no metallic) so the color reads as flat cyan
+if "Metallic" in bsdf.inputs:
+    bsdf.inputs["Metallic"].default_value = 0.0
+if "Roughness" in bsdf.inputs:
+    bsdf.inputs["Roughness"].default_value = 1.0
+if "Specular IOR Level" in bsdf.inputs:
+    bsdf.inputs["Specular IOR Level"].default_value = 0.0
+elif "Specular" in bsdf.inputs:
+    bsdf.inputs["Specular"].default_value = 0.0
 
-links.new(emission.outputs["Emission"], out.inputs["Surface"])
+links.new(bsdf.outputs["BSDF"], out.inputs["Surface"])
+
 # Also set the material's viewport color so Workbench previews show cyan
-# (Workbench MATERIAL color mode reads diffuse_color, NOT the Emission shader)
 mat.diffuse_color = cyan_linear
 merged.data.materials.append(mat)
 

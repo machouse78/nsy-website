@@ -94,3 +94,6 @@ jspm_packages/
 # Blender source files (too large; only the optimised .glb is shipped)
 *.blend
 *.blend1
+
+# npm: build tooling uses npm install --no-save, so the lockfile is noise
+package-lock.json
