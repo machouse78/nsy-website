@@ -23,7 +23,9 @@ import bpy
 import bmesh
 import sys
 import os
-from mathutils import Vector, Matrix
+import math
+from mathutils import Vector, Matrix as _M
+Matrix = _M  # alias used elsewhere in this script
 
 # ───── Parse CLI args (after `--`) ─────
 argv = sys.argv
@@ -39,8 +41,79 @@ if len(user_argv) < 2:
 INPUT_BLEND = os.path.abspath(user_argv[0])
 OUTPUT_GLB = os.path.abspath(user_argv[1])
 
+# Optional 3rd arg: directory where to write per-step preview renders.
+PREVIEW_DIR = os.path.abspath(user_argv[2]) if len(user_argv) >= 3 else None
+if PREVIEW_DIR:
+    os.makedirs(PREVIEW_DIR, exist_ok=True)
+    print(f"[NSY] Previews → {PREVIEW_DIR}")
+
 print(f"[NSY] Input  : {INPUT_BLEND}")
 print(f"[NSY] Output : {OUTPUT_GLB}")
+
+
+# ───── Preview render helper ─────
+# Uses BLENDER_WORKBENCH (OpenGL viewport-style renderer): ~1-3s per frame
+# even with 700k+ faces. We don't need PBR for verification — just a clean
+# shaded view to check geometry, orientation and proportions.
+def render_preview(step_name):
+    """Save a PNG of the current scene state for visual verification."""
+    if not PREVIEW_DIR:
+        return
+    scene = bpy.context.scene
+
+    # Clear cameras from previous renders (workbench doesn't need lights)
+    for o in list(scene.objects):
+        if o.type in ("CAMERA", "LIGHT"):
+            bpy.data.objects.remove(o, do_unlink=True)
+
+    # Compute camera distance based on current bbox
+    mesh = bpy.context.view_layer.objects.active
+    if mesh and mesh.data and mesh.data.vertices:
+        mn = Vector((float("inf"),) * 3)
+        mx = Vector((float("-inf"),) * 3)
+        for v in mesh.data.vertices:
+            w = mesh.matrix_world @ v.co
+            mn.x, mn.y, mn.z = min(mn.x, w.x), min(mn.y, w.y), min(mn.z, w.z)
+            mx.x, mx.y, mx.z = max(mx.x, w.x), max(mx.y, w.y), max(mx.z, w.z)
+        size = mx - mn
+        cam_radius = max(size.x, size.y, size.z) * 2.5 + 1.0
+    else:
+        cam_radius = 8.0
+
+    # Camera placed slightly off side-view — classic car beauty shot.
+    # After re-orient: length is along Y, height along Z, width along X.
+    # Camera at +X (passenger side), slightly toward -Y (front), slightly +Z (above).
+    # theta=60° off front, phi=15° elevation.
+    theta = math.radians(60)
+    phi = math.radians(15)
+    cam_x = cam_radius * math.cos(phi) * math.sin(theta)
+    cam_y = -cam_radius * math.cos(phi) * math.cos(theta)
+    cam_z = cam_radius * math.sin(phi)
+    bpy.ops.object.camera_add(location=(cam_x, cam_y, cam_z))
+    cam = bpy.context.object
+    # Point camera at origin, with Blender world Z as "up" (NOT Y — that
+    # was the bug that made the car look like it was on its side)
+    direction = Vector((0.0, 0.0, 0.0)) - cam.location
+    cam.rotation_euler = direction.to_track_quat("-Z", "Y").to_euler()
+    scene.camera = cam
+
+    # Workbench render settings — fast, no shaders needed.
+    # Valid shading.type for workbench: WIREFRAME, SOLID, RENDERED
+    scene.render.engine = "BLENDER_WORKBENCH"
+    scene.display.shading.type = "SOLID"
+    scene.display.shading.color_type = "MATERIAL"    # use the cyan emissive material color
+    scene.display.shading.light = "FLAT"             # no shading, show color as-is
+    scene.display.shading.background_type = "VIEWPORT"
+    scene.display.shading.background_color = (0.04, 0.06, 0.10)  # dark navy
+    scene.render.resolution_x = 1200
+    scene.render.resolution_y = 700
+    scene.render.film_transparent = False
+
+    out = os.path.join(PREVIEW_DIR, f"step_{step_name}.png")
+    scene.render.image_settings.file_format = "PNG"
+    scene.render.filepath = out
+    print(f"[NSY] Rendering preview → {out}")
+    bpy.ops.render.render(write_still=True)
 
 # ───── 1. Load the source .blend ─────
 bpy.ops.wm.open_mainfile(filepath=INPUT_BLEND)
@@ -134,33 +207,39 @@ if outliers:
 
 print(f"[NSY] Mesh objects after outlier filter: {len(mesh_objects)}")
 
-# ───── 4. Bake world transforms into mesh data, clear parenting ─────
-# CRITICAL: bpy.ops.object.transform_apply only applies the LOCAL transform,
-# not parent-child hierarchy. The source .blend has many parented objects
-# (antenna parented to body, mirror parented to door, etc.), so a plain
-# transform_apply leaves children in their PARENT-relative coordinate space.
-# After join + scale, the result is parts flying around to weird positions
-# (exactly the "complètement flingué" bug).
+# ───── 4. Bake parent transforms then apply local transforms, then join ─────
+# The right sequence (verified by inspecting the source .blend separately):
+#   1. parent_clear(CLEAR_KEEP_TRANSFORM) — bakes parent.matrix_world into
+#      each child's matrix_local. After this, no parenting, but every object
+#      sits at its true world position via its OWN matrix_local.
+#   2. transform_apply — now this works correctly: each object's local
+#      transform (which now includes the inherited parent transform) gets
+#      baked into the mesh data. After this, matrix_local = identity and
+#      mesh vertices are at world coords.
+#   3. join — combines all meshes into one. Each vertex is already in world
+#      coords, no further transform needed.
 #
-# Fix: directly multiply each mesh's local coords by its world matrix,
-# then reset the object's matrix to identity. This guarantees every vertex
-# is now in world space, regardless of any parent chain.
-print("[NSY] Baking matrix_world into each mesh's vertex data…")
-from mathutils import Matrix as _M
-for obj in mesh_objects:
-    if obj.data and obj.data.vertices:
-        obj.data.transform(obj.matrix_world)
-        obj.matrix_world = _M.Identity(4)
-bpy.context.view_layer.update()
-
-# Now safe to clear parents (everything is already in world space)
+# Why the previous "matrix_world bake" approach was wrong: setting
+# obj.matrix_world = Identity(4) doesn't persist — Blender recomputes
+# matrix_world from location/rotation/scale on the next update. So my
+# old code baked world coords into the mesh AND left matrix_world intact,
+# which then got applied AGAIN at join time → double-transformed positions.
+print("[NSY] Clearing parent relationships (CLEAR_KEEP_TRANSFORM)…")
 bpy.ops.object.select_all(action="DESELECT")
 for obj in mesh_objects:
     obj.select_set(True)
 bpy.context.view_layer.objects.active = mesh_objects[0]
-bpy.ops.object.parent_clear(type="CLEAR")
+bpy.ops.object.parent_clear(type="CLEAR_KEEP_TRANSFORM")
+bpy.context.view_layer.update()
 
-# ───── 4b. Join all meshes into one object ─────
+print("[NSY] Applying local transforms (location, rotation, scale)…")
+bpy.ops.object.select_all(action="DESELECT")
+for obj in mesh_objects:
+    obj.select_set(True)
+bpy.context.view_layer.objects.active = mesh_objects[0]
+bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+bpy.context.view_layer.update()
+
 print("[NSY] Joining meshes…")
 bpy.ops.object.select_all(action="DESELECT")
 for obj in mesh_objects:
@@ -228,9 +307,13 @@ longest_axis = axes[0][0]
 print(f"[NSY] Longest axis = {longest_axis} (size={axes[0][1]:.3f})")
 
 if longest_axis == "Z":
-    # Swap Y↔Z: rotate +90° around X. (Y_new = Z_old, Z_new = -Y_old)
-    print("[NSY] Rotating +90° around X to put length on Y…")
-    rot = Matrix.Rotation(math.radians(90), 4, "X")
+    # Swap Y↔Z: rotate -90° around X. (Y_new = Z_old, Z_new = -Y_old in
+    # right-hand rule.)
+    # Direction (-90 vs +90) was verified empirically via render previews:
+    # this source has its car wheels at +Y_source. After -90° around X,
+    # wheels land at -Z_blender (= ground level), roof at +Z_blender (= up).
+    print("[NSY] Rotating -90° around X to put length on Y, wheels at -Z…")
+    rot = Matrix.Rotation(math.radians(-90), 4, "X")
     merged.data.transform(rot)
     merged.data.update()
 elif longest_axis == "X":
@@ -255,28 +338,24 @@ print(f"[NSY] After re-orient: bbox size={tuple(round(c, 3) for c in size)}, cen
 # changing the silhouette. The car body's flat panels (doors, roof, hood,
 # trunk) become single quads, but every edge defining the car's shape is
 # preserved → the wireframe still reads as a car.
-print("[NSY] Adding Decimate modifier (PLANAR mode)…")
-decimate = merged.modifiers.new(name="Decimate_Planar", type="DECIMATE")
-decimate.decimate_type = "DISSOLVE"     # planar / un-subdivide
-decimate.angle_limit = 0.0872665        # 5° in radians — merge near-coplanar faces only
-decimate.delimit = {'NORMAL', 'MATERIAL'}
-bpy.ops.object.modifier_apply(modifier="Decimate_Planar")
-bpy.context.view_layer.update()
-_mn, _mx, _c, _s = world_bbox(merged)
-print(f"[NSY] After planar decimate: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+# Snapshot BEFORE any decimation to verify the source looks like a car
+render_preview("01_after_join_and_center")
 
-# Second pass: moderate Collapse to thin out remaining high-poly areas
-# (wheels, headlights, rounded body curves) so they don't appear as
-# solid blobs in the wireframe.
-print("[NSY] Adding Decimate modifier (COLLAPSE pass, ratio 0.4)…")
-decimate2 = merged.modifiers.new(name="Decimate_Collapse", type="DECIMATE")
-decimate2.decimate_type = "COLLAPSE"
-decimate2.ratio = 0.4                   # keep 40% of the remaining geometry
-decimate2.use_collapse_triangulate = True
-bpy.ops.object.modifier_apply(modifier="Decimate_Collapse")
+# Single Decimate Collapse pass at a moderate ratio.
+# PLANAR mode was tried before and turned the body into 1-2 huge panels
+# (no material/normal boundaries to delimit after the join+cleanup),
+# producing the "huge cyan blob" bug. A moderate COLLAPSE keeps the topology
+# car-shaped while reducing polycount enough for a readable wireframe.
+print("[NSY] Adding Decimate modifier (COLLAPSE, ratio 0.08)…")
+decimate = merged.modifiers.new(name="Decimate", type="DECIMATE")
+decimate.decimate_type = "COLLAPSE"
+decimate.ratio = 0.08                   # keep 8% of edges — light enough for web
+decimate.use_collapse_triangulate = True
+bpy.ops.object.modifier_apply(modifier="Decimate")
 bpy.context.view_layer.update()
 _mn, _mx, _c, _s = world_bbox(merged)
-print(f"[NSY] After collapse pass: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+print(f"[NSY] After decimate: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+render_preview("02_after_decimate")
 
 # ───── 8. Clean up the mesh: remove duplicate verts + recalc normals + triangulate ─────
 print("[NSY] Cleaning mesh (merge doubles + recalc normals + triangulate)…")
@@ -320,6 +399,7 @@ merged.data.update()
 bpy.context.view_layer.update()
 _mn, _mx, _c, _s = world_bbox(merged)
 print(f"[NSY] After recenter : bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+render_preview("03_after_wireframe")
 
 # ───── 10. Cyan emissive material (Knight Rider / K2000 aesthetic) ─────
 print("[NSY] Creating cyan emissive material…")
@@ -351,7 +431,12 @@ emission.inputs["Color"].default_value = cyan_linear
 emission.inputs["Strength"].default_value = 1.0
 
 links.new(emission.outputs["Emission"], out.inputs["Surface"])
+# Also set the material's viewport color so Workbench previews show cyan
+# (Workbench MATERIAL color mode reads diffuse_color, NOT the Emission shader)
+mat.diffuse_color = cyan_linear
 merged.data.materials.append(mat)
+
+render_preview("04_after_cyan_material")
 
 # ───── 11. Export to glTF (binary .glb) ─────
 # Force unit settings to neutral so the glTF exporter does not apply
