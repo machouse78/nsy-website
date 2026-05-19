@@ -346,15 +346,34 @@ render_preview("01_after_join_and_center")
 # (no material/normal boundaries to delimit after the join+cleanup),
 # producing the "huge cyan blob" bug. A moderate COLLAPSE keeps the topology
 # car-shaped while reducing polycount enough for a readable wireframe.
+# Apply Decimate using depsgraph evaluation — reliable in headless mode.
+# bpy.ops.object.modifier_apply silently fails sometimes in --background;
+# the depsgraph approach is the bulletproof equivalent: add the modifier,
+# evaluate the depsgraph, copy the evaluated mesh back to the object.
+def apply_modifiers_via_depsgraph(obj):
+    """Bake all modifiers on obj into its mesh data, then clear the stack."""
+    depsgraph = bpy.context.evaluated_depsgraph_get()
+    eval_obj = obj.evaluated_get(depsgraph)
+    new_mesh = bpy.data.meshes.new_from_object(eval_obj)
+    old_mesh = obj.data
+    obj.data = new_mesh
+    bpy.data.meshes.remove(old_mesh)
+    obj.modifiers.clear()
+    bpy.context.view_layer.update()
+
+faces_before = len(merged.data.polygons)
+print(f"[NSY] Faces before Decimate: {faces_before}")
 print("[NSY] Adding Decimate modifier (COLLAPSE, ratio 0.08)…")
-decimate = merged.modifiers.new(name="Decimate", type="DECIMATE")
+decimate = merged.modifiers.new(name="Decimate_For_Web", type="DECIMATE")
 decimate.decimate_type = "COLLAPSE"
 decimate.ratio = 0.08                   # keep 8% of edges — light enough for web
 decimate.use_collapse_triangulate = True
-bpy.ops.object.modifier_apply(modifier="Decimate")
-bpy.context.view_layer.update()
+apply_modifiers_via_depsgraph(merged)
+faces_after = len(merged.data.polygons)
 _mn, _mx, _c, _s = world_bbox(merged)
-print(f"[NSY] After decimate: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+print(f"[NSY] After decimate: {faces_after} faces (was {faces_before}, ratio={faces_after/max(1,faces_before):.3f}), bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+if faces_after >= faces_before * 0.5:
+    print(f"[NSY] WARNING: decimate did not reduce face count as expected (got {faces_after/faces_before:.1%}, expected ~8%)")
 render_preview("02_after_decimate")
 
 # ───── 8. Clean up the mesh: remove duplicate verts + recalc normals + triangulate ─────
@@ -377,18 +396,20 @@ _mn, _mx, _c, _s = world_bbox(merged)
 print(f"[NSY] After cleanup : {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
 
 # ───── 9. Wireframe modifier (3D tubes along edges, K2000-style) ─────
+faces_before_wf = len(merged.data.polygons)
+print(f"[NSY] Faces before Wireframe: {faces_before_wf}")
 print("[NSY] Adding Wireframe modifier…")
-wireframe = merged.modifiers.new(name="Wireframe", type="WIREFRAME")
+wireframe = merged.modifiers.new(name="Wireframe_For_Web", type="WIREFRAME")
 wireframe.thickness = 0.0025       # in object-space units (model is 2-unit max). 0.0025 ≈ 0.12% of model size
 wireframe.use_even_offset = False  # stable on cleaned mesh; True can explode bbox
 wireframe.use_relative_offset = False
 wireframe.use_replace = True       # remove original faces, keep only the wires
 wireframe.material_offset = 0
-wireframe.offset = 1.0             # offset = 1 means the wires sit on top of the original surface
-bpy.ops.object.modifier_apply(modifier="Wireframe")
-bpy.context.view_layer.update()
+wireframe.offset = 1.0
+apply_modifiers_via_depsgraph(merged)
+faces_after_wf = len(merged.data.polygons)
 _mn, _mx, _c, _s = world_bbox(merged)
-print(f"[NSY] After wireframe: {len(merged.data.polygons)} faces, bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
+print(f"[NSY] After wireframe: {faces_after_wf} faces (was {faces_before_wf}, x{faces_after_wf/max(1,faces_before_wf):.1f}), bbox size={tuple(round(c, 3) for c in _s)}, center={tuple(round(c, 3) for c in _c)}")
 
 # ───── 9b. Re-center after wireframe (in case the modifier shifted the bbox slightly) ─────
 print("[NSY] Final recenter…")
