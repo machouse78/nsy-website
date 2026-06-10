@@ -43,9 +43,21 @@ html, body {
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Disable Chrome/Android's automatic text-size inflation ("font boosting"),
+     which would override our clamp() and blow up the hero h1 → horizontal
+     overflow on phones like the ROG Phone 6. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  /* Safety net: never let any element trigger a horizontal scroll on mobile.
+     Combined with overflow-wrap below, long words break instead of widening
+     the layout. */
+  overflow-x: hidden;
 }
 
 html { scroll-behavior: smooth; }
+
+/* Long titles / words must break instead of pushing the container wider */
+h1, h2, h3, h4, p { overflow-wrap: anywhere; word-break: normal; }
 
 body::before {
   content: "";
