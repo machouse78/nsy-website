@@ -229,6 +229,40 @@
 
   const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+  // ───── Per-message language detection ─────
+  // The bot answers in the language of the QUESTION, not just the page. So an
+  // English visitor who lands on the FR page (or vice versa) still gets a
+  // reply in their language. Ambiguous/short messages fall back to the page
+  // language. Detection is a cheap stopword + accent heuristic — enough to
+  // tell FR from EN reliably for the kinds of questions this bot handles.
+  const FR_MARKERS = new Set([
+    'vous','etes','est','quel','quelle','quels','quelles','combien','votre','vos','nos','notre',
+    'pourquoi','comment','ca','faites','faire','bonjour','bonsoir','salut','merci','oui','non',
+    'avez','avec','pour','une','des','les','je','parlez','francais','disponible','tarif','prix',
+    'cout','realisez','proposez','gardez','ou','quand','aussi','aussi','votre'
+  ]);
+  const EN_MARKERS = new Set([
+    'you','are','is','what','whats','how','much','the','do','does','did','your','where','why','who',
+    'when','hello','hi','hey','thanks','thank','please','can','could','would','with','for','about',
+    'available','website','price','cost','make','offer','speak','english','your','there','i'
+  ]);
+
+  function detectLang(raw) {
+    const text = norm(raw);
+    if (!text) return pageLang;
+    const toks = text.split(' ');
+    let fr = 0, en = 0;
+    for (const t of toks) {
+      if (FR_MARKERS.has(t)) fr++;
+      if (EN_MARKERS.has(t)) en++;
+    }
+    // Accented letters are a strong French signal (English barely uses them)
+    if (/[éèêëàâäçùûüîïôö]/i.test(raw)) fr += 2;
+    if (en > fr) return 'en';
+    if (fr > en) return 'fr';
+    return pageLang; // tie / unknown → page default
+  }
+
   // Whole-word (or stem) match for single cues; substring for multi-word cues.
   const cueHit = (cue, text, tokens) => {
     if (cue.indexOf(' ') !== -1) return text.indexOf(cue) !== -1;
@@ -483,6 +517,8 @@
   function botReply(userText) {
     const text = norm(userText);
     const tokens = text.split(' ');
+    // Answer in the language of the question (falls back to the page language)
+    const lang = detectLang(userText);
 
     // 1) Best content intent by specificity-weighted score
     let best = null;
@@ -494,25 +530,25 @@
 
     if (best && bestScore > 0) {
       lastIntentId = best.id;
-      return pick(best[pageLang]);
+      return pick(best[lang]);
     }
 
     // 2) Short follow-up ("et ?", "plus de détails"…) → re-open last topic
     const isShort = tokens.length <= 4;
     if (isShort && lastIntentId && FOLLOWUP_CUES.some((c) => cueHit(c, text, tokens))) {
       const prev = INTENTS.find((i) => i.id === lastIntentId);
-      if (prev) return pick(prev[pageLang]);
+      if (prev) return pick(prev[lang]);
     }
 
     // 3) Smalltalk (greeting / thanks / bye) only if nothing else hit
     for (const intent of SMALLTALK) {
       if (scoreIntent(intent, text, tokens) > 0) {
-        return pick(intent[pageLang]);
+        return pick(intent[lang]);
       }
     }
 
     // 4) Fallback
-    return pick(FALLBACKS[pageLang]);
+    return pick(FALLBACKS[lang]);
   }
 
   function send(text) {
