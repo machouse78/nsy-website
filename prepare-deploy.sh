@@ -65,7 +65,8 @@ cp public/cropped-NSY-logo-270x270.png  deploy/public/
 cp public/nsy-ia.mp4                    deploy/public/
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
-cp public/animation.mp4                 deploy/public/
+# Note: public/animation.mp4 n'est plus déployée — l'animation 3D de la
+# section Loisirs est désormais une intégration YouTube (chaîne NSY).
 
 # Modèles 3D
 cp public/renault-wireframe.glb         deploy/public/
@@ -107,7 +108,6 @@ required=(
   "deploy/public/nsy-ia.mp4"
   "deploy/public/finance-assurance.mp4"
   "deploy/public/web-ia.mp4"
-  "deploy/public/animation.mp4"
   "deploy/public/renault-wireframe.glb"
 )
 
