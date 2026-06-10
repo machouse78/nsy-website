@@ -1518,6 +1518,20 @@ section.block:first-of-type { border-top: 0; }
   pointer-events: none; /* anti-click-to-save (best-effort) */
   user-select: none;
 }
+.hobbie-embed {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #000;
+}
+.hobbie-embed iframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+}
 .hobbie-caption {
   padding: 14px 22px;
   border-top: 1px solid var(--line);
