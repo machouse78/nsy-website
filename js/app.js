@@ -174,7 +174,13 @@
     }
     const bubble = document.createElement('div');
     bubble.className = 'cbot-bubble';
-    bubble.textContent = content;
+    // Assistant copy is 100% static strings we author (may contain <b>/links),
+    // so innerHTML is safe here. User input must NEVER be rendered as HTML.
+    if (role === 'assistant') {
+      bubble.innerHTML = content;
+    } else {
+      bubble.textContent = content;
+    }
     wrap.appendChild(bubble);
     body.appendChild(wrap);
     body.scrollTop = body.scrollHeight;
@@ -202,58 +208,311 @@
   // same-page anchor works for both languages.
   const hobbiePath = '#creations';
 
+  // ───── Chatbot knowledge engine (rule-based, bilingual) ─────
+  // Each intent declares accent-free keyword cues + several response variants
+  // per language. We normalise the user message (lowercase, strip accents and
+  // punctuation), score every "content" intent by the specificity of its
+  // matched cues (longer / multi-word cues weigh more), and answer the best
+  // match — rotating variants so the bot doesn't repeat itself. Greetings,
+  // thanks and goodbye only fire when no content intent matched. A short
+  // follow-up ("et ?", "plus de détails"…) re-opens the previous topic.
+
+  const Y = currentYear;
+  const XP = yearsExperience;
+
+  const norm = (s) => (s || '')
+    .toLowerCase()
+    .normalize('NFD').replace(/[̀-ͯ]/g, '')   // drop accents
+    .replace(/[^a-z0-9€$\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+  // Whole-word (or stem) match for single cues; substring for multi-word cues.
+  const cueHit = (cue, text, tokens) => {
+    if (cue.indexOf(' ') !== -1) return text.indexOf(cue) !== -1;
+    for (const tok of tokens) {
+      if (tok === cue) return true;
+      if (cue.length >= 3 && tok.startsWith(cue)) return true; // tarif→tarifs, disponib→disponibilite
+    }
+    return false;
+  };
+
+  // Content intents — ordered by priority (earlier wins ties).
+  const INTENTS = [
+    {
+      id: 'pricing',
+      cues: ['tarif','prix','cout','combien','devis','budget','cher','montant','ca coute','prix indicatif',
+              'price','pricing','cost','rate','quote','how much','fee'],
+      fr: [
+        `Deux logiques de tarif : <b>Conseil technique</b> — au jour ou au forfait, mission directe via l'EURL, à cadrer selon le périmètre. <b>Création web · IA</b> — à partir de 5 800 € HT en forfait clé en main. Pour un chiffrage précis, le formulaire de contact est le plus rapide.`,
+        `Côté création web · IA : à partir de 5 800 € HT (forfait clé en main). Côté conseil technique : tarif journalier ou forfait selon la mission. Le devis exact dépend du périmètre — décrivez votre besoin via le formulaire et je reviens sous 48 h ouvrées.`
+      ],
+      en: [
+        `Two pricing tracks: <b>Technical consulting</b> — day-rate or fixed-fee, direct engagement via the EURL, scoped to the work. <b>Web creation · AI</b> — from €5,800 ex-VAT for a turnkey package. For a precise quote, the contact form is the fastest route.`,
+        `Web creation · AI starts at €5,800 ex-VAT (turnkey). Technical consulting is day-rate or fixed-fee depending on the mission. The exact quote depends on scope — describe your need in the form and you'll hear back within 48 business hours.`
+      ]
+    },
+    {
+      id: 'availability',
+      cues: ['disponib','dispo','quand','delai','commenc','demarr','libre','planning','agenda','prochaine',
+              'available','availability','when','start','lead time','booked','timeline'],
+      fr: [
+        `Cédric prend de nouvelles missions à partir du <b>Q4 ${Y}</b>. Trois clients en parallèle au maximum, pour rester réellement disponible et tenir un niveau d'exigence non négociable.`,
+        `Disponibilité : à partir du Q4 ${Y}. Le créneau est volontairement limité (3 clients max en simultané) — si votre projet a une échéance, indiquez-la dans le formulaire pour caler le timing.`
+      ],
+      en: [
+        `Cédric takes on new engagements from <b>Q4 ${Y}</b>. Three clients in parallel at most, to stay genuinely available and hold a non-negotiable quality bar.`,
+        `Availability: from Q4 ${Y}. The slot is deliberately limited (3 clients max at once) — if your project has a deadline, mention it in the form so we can line up the timing.`
+      ]
+    },
+    {
+      id: 'web_ai',
+      cues: ['site','site web','web','website','application','appli','app','saas','plateforme','platform',
+              'ia','intelligence artificielle','llm','claude','openai','mistral','gpt','chatbot','agent',
+              'rag','recherche semantique','semantic','ai','automatis','automation'],
+      fr: [
+        `La création web NSY, c'est des sites et plateformes nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots métier, recherche sémantique, génération de contenu, agents. Le tout pensé pour la performance et le SEO. À partir de 5 800 € HT.`,
+        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Forfait clé en main à partir de 5 800 € HT.`
+      ],
+      en: [
+        `NSY web creation means next-generation sites and platforms with AI at the core: LLM integration (Claude, OpenAI, Mistral), business chatbots, semantic search, content generation, agents — all built for performance and SEO. From €5,800 ex-VAT.`,
+        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. Turnkey from €5,800 ex-VAT.`
+      ]
+    },
+    {
+      id: 'finance_insurance',
+      cues: ['banque','bancaire','finance','financ','assurance','assureur','asset','trading','acpr','amf',
+              'dora','fintech','reglement','regule','conformite','bank','banking','insurance','insurer',
+              'regulated','compliance'],
+      fr: [
+        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, plateformes de trading et de risque temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA).`,
+        `Oui — finance et assurance sont le terrain principal de Cédric : ${XP} ans en institutions financières françaises, sur des systèmes critiques et régulés. Migration Java EE, supervision de production, conformité (ACPR, AMF, DORA). Si votre contexte est régulé, c'est exactement la zone de confort.`
+      ],
+      en: [
+        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time trading and risk platforms, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA).`,
+        `Yes — finance and insurance are Cédric's main ground: ${XP} years inside French financial institutions, on critical, regulated systems. Java EE migration, production oversight, compliance (ACPR, AMF, DORA). If your context is regulated, that's exactly the comfort zone.`
+      ]
+    },
+    {
+      id: 'threeD',
+      cues: ['3d','blender','wireframe','animation','modele','rendu','render','voiture','renault','baccara',
+              'loisir','hobby','hobbies','youtube'],
+      fr: [
+        `La 3D fait partie des cordes créatives : rendus Blender optimisés pour le web, légers et rapides. Deux exemples concrets dans la section Loisirs — une animation 3D (vidéo YouTube) et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : section ${hobbiePath}.`,
+        `Oui, animations et modèles 3D maison — du Blender pensé pour le web (zéro ralentissement). Le wireframe cyan de la Renault R25 dans la section ${hobbiePath} est interactif : cliquez-glissez pour le faire tourner. Et oui, ça aussi ça peut s'intégrer à votre site.`
+      ],
+      en: [
+        `3D is one of the creative strings: Blender renders optimised for the web — light and fast. Two live examples in the Hobbies section — a 3D animation (YouTube video) and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: ${hobbiePath} section.`,
+        `Yes, in-house 3D animations and models — Blender built for the web (no slowdown). The cyan Renault R25 wireframe in the ${hobbiePath} section is interactive: click and drag to spin it. And yes, this can be embedded into your site too.`
+      ]
+    },
+    {
+      id: 'services',
+      cues: ['service','offre','offrez','prestation','proposez','propose','faites','what do you do',
+              'what do you offer','offering','help with'],
+      fr: [
+        `Deux offres : <b>(1) Conseil technique senior</b> pour la finance et l'assurance — architecture, audit, migration, conformité. <b>(2) Création web propulsée par l'IA</b> — sites, plateformes SaaS, intégration de LLM. En bonus : animations et modèles 3D pour le web. Sur quel axe puis-je préciser ?`,
+        `NSY couvre deux choses : du conseil technique senior (finance/assurance, systèmes critiques) et de la création web avec l'IA (sites, SaaS, chatbots, recherche sémantique). Plus une touche 3D. Dites-moi votre besoin et je vous oriente.`
+      ],
+      en: [
+        `Two offerings: <b>(1) Senior technical consulting</b> for finance & insurance — architecture, audit, migration, compliance. <b>(2) AI-powered web creation</b> — sites, SaaS platforms, LLM integration. Bonus: 3D animations and models for the web. Which one should I expand on?`,
+        `NSY does two things: senior technical consulting (finance/insurance, critical systems) and AI-powered web creation (sites, SaaS, chatbots, semantic search). Plus a 3D touch. Tell me your need and I'll point you the right way.`
+      ]
+    },
+    {
+      id: 'about_cedric',
+      cues: ['cedric','barme','fondateur','founder','parcours','experience','qui est','qui etes','profil',
+              'cv','background','who is','who are','about you'],
+      fr: [
+        `Cédric Barme, fondateur de NSY (EURL créée en 2018). ${XP} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant, et créateur web propulsé par l'IA.`,
+        `Le fondateur, c'est Cédric Barme : ${XP} ans d'ingénierie sur des systèmes critiques (banque, assurance), puis création de l'EURL NSY en 2018. Tech lead, architecte, et depuis peu, création web avec l'IA. Le profil LinkedIn est en haut de page.`
+      ],
+      en: [
+        `Cédric Barme, founder of NSY (EURL founded in 2018). ${XP} years behind the scenes of France's largest financial institutions — distributed architecture, real-time trading platforms, legacy-core migration. Now an independent consultant and AI-powered web creator.`,
+        `The founder is Cédric Barme: ${XP} years of engineering on critical systems (banking, insurance), then founded the NSY EURL in 2018. Tech lead, architect, and lately AI-powered web creation. His LinkedIn is linked at the top of the page.`
+      ]
+    },
+    {
+      id: 'tech_stack',
+      cues: ['techno','technologie','stack','java','jvm','cloud','aws','gcp','azure','kubernetes','docker',
+              'conteneur','container','react','node','microservice','outil','tooling','technical stack'],
+      fr: [
+        `Côté technique : architecture distribuée et microservices, écosystème JVM/Java EE, cloud (AWS, GCP, Azure), conteneurs (Docker, Kubernetes), front moderne, et intégration de LLM pour la partie IA. Le choix d'outils se fait selon votre existant — pas de dogme, du pragmatisme.`,
+        `Stack typique : JVM/Java pour le back critique, cloud + conteneurs pour l'exploitation, front web moderne, et briques IA (Claude/OpenAI/Mistral) pour l'intégration intelligente. Tout est adapté à votre contexte plutôt qu'imposé.`
+      ],
+      en: [
+        `On the tech side: distributed architecture and microservices, JVM/Java EE ecosystem, cloud (AWS, GCP, Azure), containers (Docker, Kubernetes), a modern front end, and LLM integration for the AI part. Tool choices follow your existing stack — pragmatism over dogma.`,
+        `Typical stack: JVM/Java for the critical back end, cloud + containers for operations, a modern web front end, and AI building blocks (Claude/OpenAI/Mistral) for smart integration. Everything is adapted to your context rather than imposed.`
+      ]
+    },
+    {
+      id: 'process',
+      cues: ['comment ca marche','comment ca se passe','process','processus','methode','demarche','etape',
+              'deroulement','how it works','how does it work','next step','onboarding'],
+      fr: [
+        `Le déroulé : (1) un premier échange pour comprendre le contexte, (2) un cadrage honnête — faisabilité, ordre de grandeur, prochain pas concret, (3) une proposition si le projet s'y prête, (4) la réalisation, du cadrage à la mise en production. Première réponse sous 48 h ouvrées.`,
+        `En pratique : vous décrivez le besoin → retour sous 48 h ouvrées avec une lecture franche (faisabilité + ordre de grandeur) → proposition → réalisation livrée par la même personne qui l'a proposée, jusqu'à la prod. Pas de pyramide, pas d'intermédiaire.`
+      ],
+      en: [
+        `The flow: (1) a first conversation to understand the context, (2) an honest scoping — feasibility, ballpark, concrete next step, (3) a proposal if the project fits, (4) delivery, from scoping to production. First reply within 48 business hours.`,
+        `In practice: you describe the need → reply within 48 business hours with a straight read (feasibility + ballpark) → proposal → delivery by the same person who pitched it, all the way to production. No pyramid, no middleman.`
+      ]
+    },
+    {
+      id: 'location',
+      cues: ['localis','situe','situez','adresse','region','ville','beauce','epieds','orleans','loiret',
+              'distance','remote','distanciel','teletravail','sur site','deplac','base','based','geograph',
+              'ou se trouve','ou est','ou etes','ou se situe','etes vous ou','vous etes ou',
+              'where','located','location','on site','based'],
+      fr: [
+        `NSY est basée à Epieds-en-Beauce (Centre-Val de Loire), entre Orléans et Chartres. Les missions se font principalement en distanciel, partout en France et en Europe, avec des déplacements ponctuels possibles selon le besoin.`,
+        `Siège en Beauce (Centre-Val de Loire), mais le travail est essentiellement à distance — donc la localisation du client n'est pas un frein. Déplacements sur site envisageables pour les temps forts d'une mission.`
+      ],
+      en: [
+        `NSY is based in Epieds-en-Beauce (Centre-Val de Loire, France), between Orléans and Chartres. Engagements are mostly remote, across France and Europe, with occasional on-site visits when needed.`,
+        `Registered in the Beauce region (Centre-Val de Loire), but the work is essentially remote — so your location isn't a blocker. On-site visits are possible for key moments of a mission.`
+      ]
+    },
+    {
+      id: 'references',
+      cues: ['reference','client','clientele','portfolio','realisation','exemple','case study','case',
+              'temoignage','testimonial','who have you worked'],
+      fr: [
+        `Les missions se déroulent au sein de grandes institutions financières et d'assurance, le plus souvent sous accord de confidentialité — donc pas de noms publics ici. Les démonstrateurs visibles, eux, sont ce site (multilingue, chatbot, 3D) et la section Loisirs.`,
+        `La plupart des références sont sous NDA (finance/assurance), donc difficiles à citer nommément. En revanche, ce site lui-même illustre le savoir-faire web + IA + 3D — c'est un portfolio vivant.`
+      ],
+      en: [
+        `Engagements take place inside large financial and insurance institutions, usually under NDA — so no public names here. The visible showcases are this site (multilingual, chatbot, 3D) and the Hobbies section.`,
+        `Most references are under NDA (finance/insurance), so hard to name directly. This site itself, though, demonstrates the web + AI + 3D know-how — a living portfolio.`
+      ]
+    },
+    {
+      id: 'data_gdpr',
+      cues: ['rgpd','gdpr','donnee','privacy','confidentialite','cookie','vie privee','tracking','tracage'],
+      fr: [
+        `Côté données : aucun cookie de suivi ni outil d'analyse tiers. Un seul cookie fonctionnel (votre préférence de langue), posé uniquement quand vous cliquez un drapeau. Les infos du formulaire servent uniquement à vous répondre, jamais revendues. Détails dans la Politique de confidentialité (bas de page).`,
+        `NSY ne piste personne : zéro cookie publicitaire, pas de Google Analytics. Seul un cookie de langue, et les données du formulaire restent privées (RGPD). Tout est expliqué dans la page Confidentialité.`
+      ],
+      en: [
+        `On data: no tracking cookies, no third-party analytics. A single functional cookie (your language preference), set only when you click a flag. Form details are used solely to reply to you, never sold. Full detail in the Privacy policy (footer).`,
+        `NSY tracks nobody: zero advertising cookies, no Google Analytics. Only a language cookie, and form data stays private (GDPR). It's all spelled out on the Privacy page.`
+      ]
+    },
+    {
+      id: 'why_nsy',
+      cues: ['pourquoi','difference','differenc','avantage','valeur ajoutee','plutot que','vs','versus',
+              'why nsy','why you','why choose','what makes'],
+      fr: [
+        `Trois principes : <b>sans pyramide</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>trois clients max</b> — pour rester vraiment disponible. De l'ingénierie senior, en direct, sans surcouche commerciale.`,
+        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod (pas d'intermédiaire), une parole franche sur la faisabilité, et un nombre de clients volontairement limité. Vous parlez à celui qui construit, pas à un commercial.`
+      ],
+      en: [
+        `Three principles: <b>no pyramid</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>three clients max</b> — to stay genuinely available. Senior engineering, direct, with no commercial layer.`,
+        `What sets NSY apart: a single senior point of contact from scoping to production (no middleman), a straight word on feasibility, and a deliberately limited client count. You talk to the person who builds, not a salesperson.`
+      ]
+    },
+    {
+      id: 'contact',
+      cues: ['contact','contacter','joindre','rendez vous','rdv','appel','telephone','tel','mail','email',
+              'ecrire','parler','reach','meeting','call','book','get in touch','email you'],
+      fr: [
+        `Le plus simple : le formulaire en bas de page (réponse sous 48 h ouvrées), ou directement <b>contact@nsy.fr</b> / +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
+        `Pour échanger : formulaire en bas de page, e-mail à <b>contact@nsy.fr</b>, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
+      ],
+      en: [
+        `Easiest path: the form at the bottom of the page (reply within 48 business hours), or directly <b>contact@nsy.fr</b> / +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
+        `To get in touch: the form at the bottom, an email to <b>contact@nsy.fr</b>, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
+      ]
+    }
+  ];
+
+  // Smalltalk — only used when no content intent matched.
+  const SMALLTALK = [
+    {
+      id: 'thanks',
+      cues: ['merci','thanks','thank you','thx','nickel','parfait','super','genial','top','cool','great'],
+      fr: [`Avec plaisir 🙂 Autre chose ? Services, tarifs, dispo, 3D… je reste là.`,
+            `Je vous en prie ! Si une question surgit (devis, parcours, contact), n'hésitez pas.`],
+      en: [`My pleasure 🙂 Anything else? Services, pricing, availability, 3D… I'm here.`,
+            `You're welcome! If anything comes up (quote, background, contact), just ask.`]
+    },
+    {
+      id: 'bye',
+      cues: ['au revoir','aurevoir','bye','goodbye','a bientot','ciao','bonne journee','bonne soiree'],
+      fr: [`À bientôt 👋 Et pour démarrer un échange, le formulaire en bas de page fait le job.`,
+            `Bonne continuation 👋 Le formulaire de contact reste ouvert quand vous voulez.`],
+      en: [`See you 👋 And to start a conversation, the form at the bottom does the job.`,
+            `Take care 👋 The contact form stays open whenever you're ready.`]
+    },
+    {
+      id: 'greeting',
+      cues: ['bonjour','bonsoir','salut','coucou','hello','hi','hey','yo','bjr'],
+      fr: [`Bonjour 👋 Je suis l'assistant NSY. Je peux parler services, tarifs, disponibilité, finance/assurance, création web IA ou 3D — que cherchez-vous ?`,
+            `Salut 👋 Posez-moi une question sur NSY (offres, tarifs, parcours de Cédric, 3D) ou décrivez votre besoin, je vous oriente.`],
+      en: [`Hello 👋 I'm the NSY assistant. I can cover services, pricing, availability, finance/insurance, AI web creation or 3D — what are you after?`,
+            `Hi 👋 Ask me anything about NSY (offerings, pricing, Cédric's background, 3D) or describe your need, and I'll point you the right way.`]
+    }
+  ];
+
+  const FALLBACKS = {
+    fr: [
+      `Bonne question. Je peux détailler les <b>services</b>, les <b>tarifs</b>, la <b>disponibilité</b>, l'expertise <b>finance/assurance</b>, la <b>création web IA</b> ou la <b>3D</b> — dites-moi l'angle. Pour un cas précis, le formulaire de contact reste le plus efficace.`,
+      `Je n'ai pas de réponse toute faite là-dessus, mais je peux vous orienter : services, tarifs, parcours de Cédric, web/IA, 3D, ou prise de contact. Sur quoi puis-je préciser ?`
+    ],
+    en: [
+      `Good question. I can detail <b>services</b>, <b>pricing</b>, <b>availability</b>, <b>finance/insurance</b> expertise, <b>AI web creation</b> or <b>3D</b> — tell me the angle. For a specific case, the contact form is the most effective.`,
+      `I don't have a canned answer for that, but I can point you: services, pricing, Cédric's background, web/AI, 3D, or getting in touch. What should I expand on?`
+    ]
+  };
+
+  const FOLLOWUP_CUES = ['et','plus','encore','details','detail','dis m en plus','en savoir plus','more',
+                          'tell me more','go on','continue','et alors','precise','elabore'];
+
+  let lastIntentId = null;
+
+  function scoreIntent(intent, text, tokens) {
+    let score = 0;
+    for (const cue of intent.cues) {
+      if (cueHit(cue, text, tokens)) score += cue.length; // longer/multi-word cues weigh more
+    }
+    return score;
+  }
+
   function botReply(userText) {
-    const t = userText.toLowerCase();
+    const text = norm(userText);
+    const tokens = text.split(' ');
 
-    if (pageLang === 'en') {
-      // ───── ENGLISH knowledge base ─────
-      if (t.includes('price') || t.includes('pricing') || t.includes('cost') || t.includes('rate') || t.includes('budget') || t.includes('how much')) {
-        return "Technical consulting: day-rate or fixed-fee, direct engagement via EURL — to be scoped together. Web creation · AI: from €5,800 ex-VAT for a turnkey package. For a precise quote, the contact form is the fastest path.";
-      }
-      if (t.includes('availab') || t.includes('when') || t.includes('start') || t.includes('booked')) {
-        return `Cédric is available for new engagements from Q4 ${currentYear} onward. Maximum three clients in parallel to keep the bar of excellence non-negotiable.`;
-      }
-      if (t.includes('bank') || t.includes('finance') || t.includes('insurance') || t.includes('asset')) {
-        return `Yes — that's the core specialty. ${yearsExperience} years of expertise on critical builds in retail banking, private banking, life insurance and asset management. Fluent in regulated environments (ACPR, AMF, GDPR, DORA).`;
-      }
-      if (t.includes('3d') || t.includes('blender') || t.includes('wireframe') || t.includes('animation') || t.includes('model') || t.includes('hobby') || t.includes('hobbies') || t.includes('renault') || t.includes('render') || t.includes('hobbie')) {
-        return `Yes, in-house 3D is one of the creative offerings — Blender renders optimised for the web, lightweight and fast-loading (no impact on page speed). Two live examples in the Hobbies section: a looped 3D animation and an interactive wireframe model of a Renault R25 Baccara you can rotate. Scroll down to ${hobbiePath} to have a look.`;
-      }
-      if (t.includes('service') || t.includes('offer') || t.includes('what do you do')) {
-        return "Two offerings: (1) Senior technical consulting for finance & insurance — architecture, audit, migration, compliance. (2) AI-powered web creation for organisations in transition — websites, SaaS platforms, LLM integration (Claude, OpenAI, Mistral). And as a bonus: 3D animations / interactive models for the web.";
-      }
-      if (t.includes('contact') || t.includes('reach') || t.includes('meeting') || t.includes('call')) {
-        return "Simplest path: fill in the contact form at the bottom of the page (reply within 48 business hours) or email contact@nsy.fr directly. You can also click \"Talk to Cédric →\" below.";
-      }
-      if (t.includes('cédric') || t.includes('cedric') || t.includes('background') || t.includes('experience') || t.includes('who')) {
-        return `Cédric Barme, founder of NSY. ${yearsExperience} years behind the scenes of France's largest financial institutions — distributed architecture, real-time trading platforms, legacy core migration. Now an independent consultant via EURL.`;
-      }
-      return `Good question — I can guide you through NSY services, Cédric's expertise, the 3D showcase (${hobbiePath} section) or how to get in touch. For something more specific, the contact form is the most efficient.`;
+    // 1) Best content intent by specificity-weighted score
+    let best = null;
+    let bestScore = 0;
+    for (const intent of INTENTS) {
+      const s = scoreIntent(intent, text, tokens);
+      if (s > bestScore) { bestScore = s; best = intent; }
     }
 
-    // ───── FRENCH knowledge base ─────
-    if (t.includes('tarif') || t.includes('prix') || t.includes('coût') || t.includes('cout') || t.includes('budget')) {
-      return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 5 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
+    if (best && bestScore > 0) {
+      lastIntentId = best.id;
+      return pick(best[pageLang]);
     }
-    if (t.includes('disponib') || t.includes('quand') || t.includes('démarr') || t.includes('demarr')) {
-      return `Cédric est disponible pour de nouvelles missions à partir du Q4 ${currentYear}. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.`;
+
+    // 2) Short follow-up ("et ?", "plus de détails"…) → re-open last topic
+    const isShort = tokens.length <= 4;
+    if (isShort && lastIntentId && FOLLOWUP_CUES.some((c) => cueHit(c, text, tokens))) {
+      const prev = INTENTS.find((i) => i.id === lastIntentId);
+      if (prev) return pick(prev[pageLang]);
     }
-    if (t.includes('banque') || t.includes('finance') || t.includes('assurance')) {
-      return `Oui — c'est même le cœur du métier. ${yearsExperience} ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).`;
+
+    // 3) Smalltalk (greeting / thanks / bye) only if nothing else hit
+    for (const intent of SMALLTALK) {
+      if (scoreIntent(intent, text, tokens) > 0) {
+        return pick(intent[pageLang]);
+      }
     }
-    if (t.includes('3d') || t.includes('blender') || t.includes('wireframe') || t.includes('animation') || t.includes('modèle') || t.includes('modele') || t.includes('loisir') || t.includes('hobby') || t.includes('hobbies') || t.includes('hobbie') || t.includes('renault') || t.includes('rendu') || t.includes('voiture')) {
-      return `Oui, la 3D maison fait partie des cordes créatives — rendus Blender optimisés pour le web, légers et rapides (zéro impact sur la performance des pages). Deux exemples concrets dans la section Loisirs : une animation 3D en boucle et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. Descendez jusqu'à ${hobbiePath} pour les voir.`;
-    }
-    if (t.includes('service') || t.includes('offre') || t.includes('faites')) {
-      return "Deux offres : (1) Conseil technique senior pour la finance et l'assurance — architecture, audit, migration, conformité. (2) Création web propulsée par l'IA pour les entreprises en transition — sites, plateformes SaaS et intégration de modèles (Claude, OpenAI, Mistral). En bonus : animations 3D / modèles interactifs pour le web.";
-    }
-    if (t.includes('contact') || t.includes('joindre') || t.includes('rendez-vous') || t.includes('rdv')) {
-      return "Le plus simple : remplir le formulaire en bas de page (réponse sous 48h ouvrées) ou écrire directement à contact@nsy.fr. Vous pouvez aussi cliquer sur « Parler à Cédric → » ci-dessous.";
-    }
-    if (t.includes('cédric') || t.includes('cedric') || t.includes('parcours') || t.includes('expérience') || t.includes('experience')) {
-      return `Cédric Barme, fondateur de NSY. ${yearsExperience} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant via EURL.`;
-    }
-    return `Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric, la 3D maison (section ${hobbiePath}) ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.`;
+
+    // 4) Fallback
+    return pick(FALLBACKS[pageLang]);
   }
 
   function send(text) {
