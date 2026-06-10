@@ -90,14 +90,18 @@ ErrorDocument 404 /index.html
     RewriteCond %{HTTPS} off
     RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
-    # ───── Redirections 301 anciennes URLs → nouvelles (slugs traduits) ─────
-    # Les anciennes URLs avec suffixe -en.html sont remplacées par de vraies
-    # traductions de slug. Ces 301 préservent le SEO et évitent les 404
-    # depuis les backlinks / Search Console.
-    RewriteRule ^hobbie\.html$           /loisirs.html       [L,R=301]
-    RewriteRule ^hobbie-en\.html$        /hobbies.html       [L,R=301]
-    RewriteRule ^mentions-legales-en\.html$ /legal-notice.html [L,R=301]
-    RewriteRule ^confidentialite-en\.html$  /privacy.html      [L,R=301]
+    # ───── Redirections 301 anciennes URLs → nouvelles ─────
+    # Ces 301 préservent le SEO et évitent les 404 depuis les backlinks /
+    # Search Console.
+    # Les pages Loisirs/Hobbies autonomes ont été fusionnées dans une section
+    # de la page d'accueil (#creations) — toutes leurs anciennes URLs y pointent.
+    RewriteRule ^hobbie\.html$              /#creations          [L,R=301]
+    RewriteRule ^hobbie-en\.html$           /index-en.html#creations [L,R=301]
+    RewriteRule ^loisirs\.html$             /#creations          [L,R=301]
+    RewriteRule ^hobbies\.html$             /index-en.html#creations [L,R=301]
+    # Pages légales : traductions de slug FR ↔ EN.
+    RewriteRule ^mentions-legales-en\.html$ /legal-notice.html   [L,R=301]
+    RewriteRule ^confidentialite-en\.html$  /privacy.html        [L,R=301]
 
     # ───── Auto-détection langue (Accept-Language) ─────
     # Sur racine ou /index.html : si pas de cookie nsy_lang ET navigateur en anglais,

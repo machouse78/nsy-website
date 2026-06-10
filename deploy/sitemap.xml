@@ -108,28 +108,12 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Hobbies & 3D (FR) -->
+  <!-- Loisirs & créations 3D (section ancre de la page d'accueil) -->
   <url>
-    <loc>https://www.nsy.fr/loisirs.html</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://www.nsy.fr/#creations</loc>
+    <lastmod>2026-06-10</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/loisirs.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/hobbies.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/loisirs.html" />
-  </url>
-
-  <!-- Hobbies & 3D (EN) -->
-  <url>
-    <loc>https://www.nsy.fr/hobbies.html</loc>
-    <lastmod>2026-05-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-
-    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/loisirs.html" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/hobbies.html" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/loisirs.html" />
+    <priority>0.6</priority>
   </url>
 
   <!-- Pages légales FR -->
