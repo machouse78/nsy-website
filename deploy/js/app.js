@@ -208,7 +208,7 @@
     if (pageLang === 'en') {
       // ───── ENGLISH knowledge base ─────
       if (t.includes('price') || t.includes('pricing') || t.includes('cost') || t.includes('rate') || t.includes('budget') || t.includes('how much')) {
-        return "Technical consulting: day-rate or fixed-fee, direct engagement via EURL — to be scoped together. Web creation · AI: from €9,800 ex-VAT for a turnkey package. For a precise quote, the contact form is the fastest path.";
+        return "Technical consulting: day-rate or fixed-fee, direct engagement via EURL — to be scoped together. Web creation · AI: from €5,800 ex-VAT for a turnkey package. For a precise quote, the contact form is the fastest path.";
       }
       if (t.includes('availab') || t.includes('when') || t.includes('start') || t.includes('booked')) {
         return `Cédric is available for new engagements from Q4 ${currentYear} onward. Maximum three clients in parallel to keep the bar of excellence non-negotiable.`;
@@ -233,7 +233,7 @@
 
     // ───── FRENCH knowledge base ─────
     if (t.includes('tarif') || t.includes('prix') || t.includes('coût') || t.includes('cout') || t.includes('budget')) {
-      return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 9 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
+      return "Service Conseil technique : tarif journalier ou forfait, mission directe via EURL — à cadrer selon le scope. Service Création web · IA : à partir de 5 800 € HT en forfait clé en main. Pour un devis précis, le formulaire de contact est le plus rapide.";
     }
     if (t.includes('disponib') || t.includes('quand') || t.includes('démarr') || t.includes('demarr')) {
       return `Cédric est disponible pour de nouvelles missions à partir du Q4 ${currentYear}. Trois clients en parallèle maximum pour garder un niveau d'exigence non négociable.`;
