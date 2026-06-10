@@ -590,6 +590,40 @@
     });
   }
 
+  // ───── 3D model: enlarge ↔ restore (CSS lightbox) ─────
+  // Toggling .expanded makes the stage fill the viewport; model-viewer is
+  // responsive, so we just re-fit the framing once the new size has settled.
+  const modelStage = renaultViewer ? renaultViewer.closest('.model-stage') : null;
+  const modelExpandBtn = modelStage ? modelStage.querySelector('.model-expand') : null;
+  if (modelStage && modelExpandBtn) {
+    const reframeModel = () => {
+      if (renaultViewer && typeof renaultViewer.updateFraming === 'function') {
+        // wait two frames so the resized container is measured before re-fit
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          try { renaultViewer.updateFraming(); } catch (_) {}
+        }));
+      }
+    };
+    const setModelExpanded = (on) => {
+      modelStage.classList.toggle('expanded', on);
+      document.body.classList.toggle('model-expanded-lock', on);
+      const label = on ? modelExpandBtn.dataset.labelClose : modelExpandBtn.dataset.labelOpen;
+      if (label) {
+        modelExpandBtn.setAttribute('aria-label', label);
+        modelExpandBtn.setAttribute('title', label);
+      }
+      reframeModel();
+    };
+    modelExpandBtn.addEventListener('click', () => {
+      setModelExpanded(!modelStage.classList.contains('expanded'));
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modelStage.classList.contains('expanded')) {
+        setModelExpanded(false);
+      }
+    });
+  }
+
   // ───── Language switcher (🇫🇷 / 🇬🇧) — sets cookie + redirect to matching page ─────
   // Slugs are real translations (loisirs/hobbies, mentions-legales/legal-notice, etc.)
   // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
