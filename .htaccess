@@ -84,11 +84,15 @@ ErrorDocument 404 /index.html
     </IfModule>
 </FilesMatch>
 
-# ───── Forcer HTTPS ─────
+# ───── Forcer HTTPS + www (hôte canonique : https://www.nsy.fr) ─────
 <IfModule mod_rewrite.c>
     RewriteEngine On
-    RewriteCond %{HTTPS} off
-    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+    # Un seul 301 vers l'hôte canonique : évite les doublons d'indexation
+    # http/https ET www/non-www. Toutes les balises canoniques pointent
+    # vers https://www.nsy.fr — cette règle aligne le serveur dessus.
+    RewriteCond %{HTTPS} off [OR]
+    RewriteCond %{HTTP_HOST} !^www\.nsy\.fr$ [NC]
+    RewriteRule ^ https://www.nsy.fr%{REQUEST_URI} [L,R=301]
 
     # ───── Redirections 301 anciennes URLs → nouvelles ─────
     # Ces 301 préservent le SEO et évitent les 404 depuis les backlinks /
