@@ -1532,6 +1532,39 @@ section.block:first-of-type { border-top: 0; }
   border: 0;
   display: block;
 }
+
+/* Loisirs & créations : 2 colonnes (vidéo agrandie à gauche, wireframe à droite) */
+.creations-grid {
+  display: grid;
+  grid-template-columns: 3fr 2fr; /* la vidéo occupe la colonne la plus large */
+  gap: 36px;
+  margin-top: 48px;
+  align-items: start;
+}
+.creation-col {
+  min-width: 0; /* évite le débordement des médias dans la grille */
+}
+/* Dans la grille, le showcase suit directement le label : pas de grande marge */
+.creation-col .hobbie-showcase {
+  margin-top: 18px;
+}
+.creation-title {
+  font-size: clamp(20px, 2vw, 26px);
+  margin: 24px 0 12px;
+}
+.creation-desc {
+  color: var(--fg-2);
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0;
+}
+/* Mobile / tablette : empilement vertical, une création après l'autre */
+@media (max-width: 920px) {
+  .creations-grid {
+    grid-template-columns: 1fr;
+    gap: 48px;
+  }
+}
 .hobbie-caption {
   padding: 14px 22px;
   border-top: 1px solid var(--line);

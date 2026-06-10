@@ -576,74 +576,76 @@
       </p>
     </div>
 
-    <!-- Création 01 : animation vidéo (chaîne YouTube) -->
-    <div class="eyebrow-row" style="margin-top: 48px;">
-      <span class="block-eyebrow">01 · Animation</span>
-      <span class="line"></span>
-      <span class="mono">Vidéo 3D · Chaîne YouTube</span>
-    </div>
-    <div class="section-head">
-      <h3 style="font-size: clamp(22px, 3vw, 32px);">Animation 3D, sur ma chaîne YouTube.</h3>
-      <p class="lede">
-        Exemple d'animation 3D conçue sous Blender et publiée sur ma chaîne YouTube. Du concept au rendu final, pensée pour une diffusion web fluide.
-      </p>
-    </div>
-    <div class="hobbie-showcase">
-      <div class="hobbie-embed">
-        <iframe
-          src="https://www.youtube-nocookie.com/embed/e8lAeey3Xl0?rel=0"
-          title="Animation 3D NSY — chaîne YouTube"
-          loading="lazy"
-          referrerpolicy="strict-origin-when-cross-origin"
-          allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
+    <div class="creations-grid">
+      <!-- Création 01 : animation vidéo (chaîne YouTube) — colonne gauche, agrandie -->
+      <div class="creation-col">
+        <div class="eyebrow-row">
+          <span class="block-eyebrow">01 · Animation</span>
+          <span class="line"></span>
+          <span class="mono">Chaîne YouTube</span>
+        </div>
+        <div class="hobbie-showcase">
+          <div class="hobbie-embed">
+            <iframe
+              src="https://www.youtube-nocookie.com/embed/e8lAeey3Xl0?rel=0"
+              title="Animation 3D NSY — chaîne YouTube"
+              loading="lazy"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+          <div class="hobbie-caption">
+            <span class="mono">© NSY · animation 3D · chaîne YouTube</span>
+          </div>
+        </div>
+        <h3 class="creation-title">Animation 3D, sur ma chaîne YouTube.</h3>
+        <p class="creation-desc">
+          Exemple d'animation conçue sous Blender et publiée sur ma chaîne YouTube. Du concept au rendu final, pensée pour une diffusion web fluide.
+        </p>
       </div>
-      <div class="hobbie-caption">
-        <span class="mono">© NSY · animation 3D · chaîne YouTube</span>
-      </div>
-    </div>
 
-    <!-- Création 02 : modèle 3D interactif -->
-    <div class="eyebrow-row" style="margin-top: 48px;">
-      <span class="block-eyebrow">02 · Modèle interactif</span>
-      <span class="line"></span>
-      <span class="mono">Renault R25 Baccara · 1992 · Wireframe</span>
-    </div>
-    <div class="section-head">
-      <h3 style="font-size: clamp(22px, 3vw, 32px);">Modèle 3D interactif, rendu wireframe cyber.</h3>
-      <p class="lede">
-        Esthétique K2000 : maillage cyan néon sur fond noir, comme dans les vieux thrillers technos. <strong style="color: var(--fg-0);">Cliquez-glissez avec la souris</strong> pour faire pivoter le modèle. Sur mobile : faites glisser avec un doigt.
-      </p>
-    </div>
-    <div class="hobbie-showcase">
-      <div class="model-stage" oncontextmenu="return false">
-        <model-viewer
-          class="hobbie-model"
-          id="renault-viewer"
-          src="public/renault-wireframe.glb"
-          alt="Renault R25 Baccara 1992 — modèle wireframe interactif"
-          auto-rotate
-          auto-rotate-delay="2000"
-          rotation-per-second="20deg"
-          camera-controls
-          interaction-prompt="none"
-          disable-zoom
-          disable-pan
-          shadow-intensity="0"
-          environment-image="neutral"
-          tone-mapping="neutral"
-          exposure="1.0"
-          bounds="tight"
-          camera-orbit="-30deg 75deg auto"
-          field-of-view="auto"
-          loading="eager"
-          reveal="auto"
-        ></model-viewer>
-        <div class="model-hint mono">↻ Faites pivoter</div>
-      </div>
-      <div class="hobbie-caption">
-        <span class="mono">© NSY · propriété intellectuelle · reproduction interdite</span>
+      <!-- Création 02 : modèle 3D interactif — colonne droite -->
+      <div class="creation-col">
+        <div class="eyebrow-row">
+          <span class="block-eyebrow">02 · Modèle interactif</span>
+          <span class="line"></span>
+          <span class="mono">Renault R25 · Wireframe</span>
+        </div>
+        <div class="hobbie-showcase">
+          <div class="model-stage" oncontextmenu="return false">
+            <model-viewer
+              class="hobbie-model"
+              id="renault-viewer"
+              src="public/renault-wireframe.glb"
+              alt="Renault R25 Baccara 1992 — modèle wireframe interactif"
+              auto-rotate
+              auto-rotate-delay="2000"
+              rotation-per-second="20deg"
+              camera-controls
+              interaction-prompt="none"
+              disable-zoom
+              disable-pan
+              shadow-intensity="0"
+              environment-image="neutral"
+              tone-mapping="neutral"
+              exposure="1.0"
+              bounds="tight"
+              camera-orbit="-30deg 75deg auto"
+              field-of-view="auto"
+              loading="eager"
+              reveal="auto"
+            ></model-viewer>
+            <div class="model-hint mono">↻ Faites pivoter</div>
+          </div>
+          <div class="hobbie-caption">
+            <span class="mono">© NSY · propriété intellectuelle · reproduction interdite</span>
+          </div>
+        </div>
+        <h3 class="creation-title">Modèle 3D interactif, wireframe cyber.</h3>
+        <p class="creation-desc">
+          Esthétique K2000 : maillage cyan néon sur fond noir. <strong style="color: var(--fg-0);">Cliquez-glissez avec la souris</strong> pour faire pivoter le modèle. Sur mobile : faites glisser avec un doigt.
+        </p>
       </div>
     </div>
   </div>
