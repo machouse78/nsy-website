@@ -238,12 +238,15 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
 }
 @media (max-width: 720px) {
   /* Two-row mobile header:
-     row 1 = brand (left) + CTA "Disponible" (right)
-     row 2 = 4 nav-links + 2 social icons (LinkedIn, GitHub) */
+     row 1 = brand (left) + CTA "Disponible/Available" (right)
+     row 2 = 4 nav-links + 2 social icons + 2 language flags.
+     Sizes are tightened so the whole second row fits on ONE line in BOTH
+     languages — the longer FR labels (Accueil / À propos) used to push the
+     flags onto a third line. */
   .nav-inner {
     flex-wrap: wrap;
-    padding: 10px 14px;
-    column-gap: 8px;
+    padding: 10px 12px;
+    column-gap: 6px;
     row-gap: 8px;
   }
   .brand { order: 0; }
@@ -264,37 +267,40 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
     margin-left: 0;
     flex: 1 1 auto;
     justify-content: center;
-    gap: 2px;
+    gap: 0;
   }
   .nav-link {
-    padding: 6px 9px;
-    font-size: 12px;
-    letter-spacing: -0.01em;
+    padding: 5px 6px;
+    font-size: 11px;
+    letter-spacing: -0.02em;
   }
 
   .nav-social {
     order: 3;
     display: flex;
-    margin-left: 4px;
-    padding-left: 8px;
+    margin-left: 2px;
+    padding-left: 6px;
     border-left: 1px solid var(--line);
-    gap: 2px;
+    gap: 0;
   }
-  .nav-icon { width: 30px; height: 30px; }
-  .nav-icon svg { width: 15px; height: 15px; }
+  .nav-icon { width: 26px; height: 26px; }
+  .nav-icon svg { width: 14px; height: 14px; }
   .nav-lang {
     order: 4;
-    padding-left: 6px;
+    padding-left: 4px;
     border-left: 0;
+    gap: 0;
   }
-  .lang-flag { width: 28px; height: 28px; font-size: 14px; }
+  .lang-flag { width: 26px; height: 26px; font-size: 13px; }
 }
 @media (max-width: 380px) {
-  .nav-inner { padding: 8px 12px; column-gap: 4px; }
-  .nav-link { padding: 5px 7px; font-size: 11px; }
+  .nav-inner { padding: 8px 10px; column-gap: 4px; }
+  .nav-link { padding: 4px 5px; font-size: 10.5px; }
   .nav-cta { padding: 4px 8px; font-size: 10px; }
   .brand-mark { height: 24px; }
-  .nav-icon { width: 28px; height: 28px; }
+  .nav-icon { width: 24px; height: 24px; }
+  .nav-icon svg { width: 13px; height: 13px; }
+  .lang-flag { width: 24px; height: 24px; font-size: 12px; }
 }
 
 /* ───── Buttons ───── */
