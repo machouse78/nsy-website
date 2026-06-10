@@ -197,8 +197,10 @@
 
   // Detect page language from <html lang="..."> — defaults to fr
   const pageLang = (document.documentElement.lang || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
-  // Path to the hobbies/loisirs page (translated slug per language) for cross-links
-  const hobbiePath = pageLang === 'en' ? 'hobbies.html' : 'loisirs.html';
+  // The 3D creations now live in a section of the homepage (#creations),
+  // not a standalone page. The chatbot only runs on the index pages, so a
+  // same-page anchor works for both languages.
+  const hobbiePath = '#creations';
 
   function botReply(userText) {
     const t = userText.toLowerCase();
@@ -215,7 +217,7 @@
         return `Yes — that's the core specialty. ${yearsExperience} years of expertise on critical builds in retail banking, private banking, life insurance and asset management. Fluent in regulated environments (ACPR, AMF, GDPR, DORA).`;
       }
       if (t.includes('3d') || t.includes('blender') || t.includes('wireframe') || t.includes('animation') || t.includes('model') || t.includes('hobby') || t.includes('hobbies') || t.includes('renault') || t.includes('render') || t.includes('hobbie')) {
-        return `Yes, in-house 3D is one of the creative offerings — Blender renders optimised for the web, lightweight and fast-loading (no impact on page speed). Two live examples on the Hobbies page: a looped 3D animation and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: /${hobbiePath}`;
+        return `Yes, in-house 3D is one of the creative offerings — Blender renders optimised for the web, lightweight and fast-loading (no impact on page speed). Two live examples in the Hobbies section: a looped 3D animation and an interactive wireframe model of a Renault R25 Baccara you can rotate. Scroll down to ${hobbiePath} to have a look.`;
       }
       if (t.includes('service') || t.includes('offer') || t.includes('what do you do')) {
         return "Two offerings: (1) Senior technical consulting for finance & insurance — architecture, audit, migration, compliance. (2) AI-powered web creation for organisations in transition — websites, SaaS platforms, LLM integration (Claude, OpenAI, Mistral). And as a bonus: 3D animations / interactive models for the web.";
@@ -226,7 +228,7 @@
       if (t.includes('cédric') || t.includes('cedric') || t.includes('background') || t.includes('experience') || t.includes('who')) {
         return `Cédric Barme, founder of NSY. ${yearsExperience} years behind the scenes of France's largest financial institutions — distributed architecture, real-time trading platforms, legacy core migration. Now an independent consultant via EURL.`;
       }
-      return `Good question — I can guide you through NSY services, Cédric's expertise, the 3D showcase (/${hobbiePath}) or how to get in touch. For something more specific, the contact form is the most efficient.`;
+      return `Good question — I can guide you through NSY services, Cédric's expertise, the 3D showcase (${hobbiePath} section) or how to get in touch. For something more specific, the contact form is the most efficient.`;
     }
 
     // ───── FRENCH knowledge base ─────
@@ -240,7 +242,7 @@
       return `Oui — c'est même le cœur du métier. ${yearsExperience} ans d'expertise sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management. Habitué aux environnements régulés (ACPR, AMF, RGPD, DORA).`;
     }
     if (t.includes('3d') || t.includes('blender') || t.includes('wireframe') || t.includes('animation') || t.includes('modèle') || t.includes('modele') || t.includes('loisir') || t.includes('hobby') || t.includes('hobbies') || t.includes('hobbie') || t.includes('renault') || t.includes('rendu') || t.includes('voiture')) {
-      return `Oui, la 3D maison fait partie des cordes créatives — rendus Blender optimisés pour le web, légers et rapides (zéro impact sur la performance des pages). Deux exemples concrets sur la page Loisirs : une animation 3D en boucle et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : /${hobbiePath}`;
+      return `Oui, la 3D maison fait partie des cordes créatives — rendus Blender optimisés pour le web, légers et rapides (zéro impact sur la performance des pages). Deux exemples concrets dans la section Loisirs : une animation 3D en boucle et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. Descendez jusqu'à ${hobbiePath} pour les voir.`;
     }
     if (t.includes('service') || t.includes('offre') || t.includes('faites')) {
       return "Deux offres : (1) Conseil technique senior pour la finance et l'assurance — architecture, audit, migration, conformité. (2) Création web propulsée par l'IA pour les entreprises en transition — sites, plateformes SaaS et intégration de modèles (Claude, OpenAI, Mistral). En bonus : animations 3D / modèles interactifs pour le web.";
@@ -251,7 +253,7 @@
     if (t.includes('cédric') || t.includes('cedric') || t.includes('parcours') || t.includes('expérience') || t.includes('experience')) {
       return `Cédric Barme, fondateur de NSY. ${yearsExperience} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant via EURL.`;
     }
-    return `Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric, la 3D maison (/${hobbiePath}) ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.`;
+    return `Bonne question — je peux vous orienter sur les services NSY, l'expertise de Cédric, la 3D maison (section ${hobbiePath}) ou la prise de contact. Pour quelque chose de plus précis, le formulaire de contact reste le plus efficace.`;
   }
 
   function send(text) {
@@ -299,7 +301,6 @@
   // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
   const SLUG_FR_TO_EN = {
     'index.html': 'index-en.html',
-    'loisirs.html': 'hobbies.html',
     'mentions-legales.html': 'legal-notice.html',
     'confidentialite.html': 'privacy.html',
   };

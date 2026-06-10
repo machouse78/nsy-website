@@ -69,6 +69,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
 </head>
 <body>
 
@@ -85,7 +86,7 @@
       <a class="nav-link active" data-target="top" href="#top">Accueil</a>
       <a class="nav-link" data-target="services" href="#services">Services</a>
       <a class="nav-link" data-target="about" href="#about">À propos</a>
-      <a class="nav-link" href="loisirs.html">Loisirs</a>
+      <a class="nav-link" data-target="creations" href="#creations">Loisirs</a>
       <a class="nav-link" data-target="contact" href="#contact">Contact</a>
     </div>
     <div class="nav-social">
@@ -561,6 +562,94 @@
   </div>
 </section>
 
+<!-- ───── Loisirs & créations 3D ───── -->
+<section class="block" id="creations">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Loisirs & créations</span>
+      <span class="line"></span>
+      <span class="mono">Quand le code rencontre la 3D</span>
+    </div>
+    <div class="section-head">
+      <h2>La 3D au service<br /><span class="hero-cyan">de l'expérience web.</span></h2>
+      <p class="lede">
+        En dehors des missions, je conçois des animations 3D optimisées pour le web — légères, performantes, sans ralentir vos visiteurs. Vidéos courtes, modèles interactifs, esthétique cyber. Deux exemples ci-dessous.
+      </p>
+    </div>
+
+    <!-- Création 01 : animation vidéo -->
+    <div class="eyebrow-row" style="margin-top: 48px;">
+      <span class="block-eyebrow">01 · Animation</span>
+      <span class="line"></span>
+      <span class="mono">Vidéo 3D · Boucle 8s · 1080p</span>
+    </div>
+    <div class="section-head">
+      <h3 style="font-size: clamp(22px, 3vw, 32px);">Animation 3D, intégrable en boucle.</h3>
+      <p class="lede">
+        Courte animation 3D rendue offline puis intégrée comme vidéo de fond. Légère (~9 Mo), démarre sans interaction — parfaite pour une section hero ou une vitrine.
+      </p>
+    </div>
+    <div class="hobbie-showcase">
+      <video
+        class="hobbie-video"
+        src="public/animation.mp4"
+        autoplay loop muted playsinline
+        preload="auto"
+        controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
+        oncontextmenu="return false"
+        aria-label="Animation 3D NSY — démonstration"
+      ></video>
+      <div class="hobbie-caption">
+        <span class="mono">© NSY · propriété intellectuelle · reproduction interdite</span>
+      </div>
+    </div>
+
+    <!-- Création 02 : modèle 3D interactif -->
+    <div class="eyebrow-row" style="margin-top: 48px;">
+      <span class="block-eyebrow">02 · Modèle interactif</span>
+      <span class="line"></span>
+      <span class="mono">Renault R25 Baccara · 1992 · Wireframe</span>
+    </div>
+    <div class="section-head">
+      <h3 style="font-size: clamp(22px, 3vw, 32px);">Modèle 3D interactif, rendu wireframe cyber.</h3>
+      <p class="lede">
+        Esthétique K2000 : maillage cyan néon sur fond noir, comme dans les vieux thrillers technos. <strong style="color: var(--fg-0);">Cliquez-glissez avec la souris</strong> pour faire pivoter le modèle. Sur mobile : faites glisser avec un doigt.
+      </p>
+    </div>
+    <div class="hobbie-showcase">
+      <div class="model-stage" oncontextmenu="return false">
+        <model-viewer
+          class="hobbie-model"
+          id="renault-viewer"
+          src="public/renault-wireframe.glb"
+          alt="Renault R25 Baccara 1992 — modèle wireframe interactif"
+          auto-rotate
+          auto-rotate-delay="2000"
+          rotation-per-second="20deg"
+          camera-controls
+          interaction-prompt="none"
+          disable-zoom
+          disable-pan
+          shadow-intensity="0"
+          environment-image="neutral"
+          tone-mapping="neutral"
+          exposure="1.0"
+          bounds="tight"
+          camera-orbit="-30deg 75deg auto"
+          field-of-view="auto"
+          loading="eager"
+          reveal="auto"
+        ></model-viewer>
+        <div class="model-hint mono">↻ Faites pivoter</div>
+      </div>
+      <div class="hobbie-caption">
+        <span class="mono">© NSY · propriété intellectuelle · reproduction interdite</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ───── Contact ───── -->
 <section class="block" id="contact">
   <div class="container">
@@ -719,7 +808,7 @@
         <a href="#top">Accueil</a>
         <a href="#services">Services</a>
         <a href="#about">À propos</a>
-        <a href="loisirs.html">Loisirs</a>
+        <a href="#creations">Loisirs</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="foot-col">

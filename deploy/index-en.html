@@ -69,6 +69,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
 <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+<script type="module" src="https://unpkg.com/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
 </head>
 <body>
 
@@ -82,7 +83,7 @@
       <a class="nav-link active" data-target="top" href="#top">Home</a>
       <a class="nav-link" data-target="services" href="#services">Services</a>
       <a class="nav-link" data-target="about" href="#about">About</a>
-      <a class="nav-link" href="hobbies.html">Hobbies</a>
+      <a class="nav-link" data-target="creations" href="#creations">Hobbies</a>
       <a class="nav-link" data-target="contact" href="#contact">Contact</a>
     </div>
     <div class="nav-social">
@@ -548,6 +549,94 @@
   </div>
 </section>
 
+<!-- ───── Hobbies & 3D creations ───── -->
+<section class="block" id="creations">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Hobbies & creations</span>
+      <span class="line"></span>
+      <span class="mono">Where code meets 3D</span>
+    </div>
+    <div class="section-head">
+      <h2>3D for a next-level<br /><span class="hero-cyan">web experience.</span></h2>
+      <p class="lede">
+        Outside of client work, I craft 3D animations optimised for the web — lightweight, performant, without slowing your visitors down. Short videos, interactive models, cyber aesthetics. Two examples below.
+      </p>
+    </div>
+
+    <!-- Creation 01: video animation -->
+    <div class="eyebrow-row" style="margin-top: 48px;">
+      <span class="block-eyebrow">01 · Animation</span>
+      <span class="line"></span>
+      <span class="mono">3D video · 8s loop · 1080p</span>
+    </div>
+    <div class="section-head">
+      <h3 style="font-size: clamp(22px, 3vw, 32px);">3D animation, embeddable as a loop.</h3>
+      <p class="lede">
+        A short 3D animation rendered offline then embedded as a background video. Lightweight (~9 MB), starts without interaction — perfect for a hero section or a showcase.
+      </p>
+    </div>
+    <div class="hobbie-showcase">
+      <video
+        class="hobbie-video"
+        src="public/animation.mp4"
+        autoplay loop muted playsinline
+        preload="auto"
+        controlsList="nodownload nofullscreen noremoteplayback"
+        disablePictureInPicture
+        oncontextmenu="return false"
+        aria-label="NSY 3D animation — demo"
+      ></video>
+      <div class="hobbie-caption">
+        <span class="mono">© NSY · intellectual property · reproduction forbidden</span>
+      </div>
+    </div>
+
+    <!-- Creation 02: interactive 3D model -->
+    <div class="eyebrow-row" style="margin-top: 48px;">
+      <span class="block-eyebrow">02 · Interactive model</span>
+      <span class="line"></span>
+      <span class="mono">Renault R25 Baccara · 1992 · Wireframe</span>
+    </div>
+    <div class="section-head">
+      <h3 style="font-size: clamp(22px, 3vw, 32px);">Interactive 3D model, cyber wireframe render.</h3>
+      <p class="lede">
+        Knight Rider aesthetics: neon cyan mesh on a black background, like in old techno thrillers. <strong style="color: var(--fg-0);">Click and drag with your mouse</strong> to rotate the model. On mobile: swipe with a finger.
+      </p>
+    </div>
+    <div class="hobbie-showcase">
+      <div class="model-stage" oncontextmenu="return false">
+        <model-viewer
+          class="hobbie-model"
+          id="renault-viewer"
+          src="public/renault-wireframe.glb"
+          alt="Renault R25 Baccara 1992 — interactive wireframe model"
+          auto-rotate
+          auto-rotate-delay="2000"
+          rotation-per-second="20deg"
+          camera-controls
+          interaction-prompt="none"
+          disable-zoom
+          disable-pan
+          shadow-intensity="0"
+          environment-image="neutral"
+          tone-mapping="neutral"
+          exposure="1.0"
+          bounds="tight"
+          camera-orbit="-30deg 75deg auto"
+          field-of-view="auto"
+          loading="eager"
+          reveal="auto"
+        ></model-viewer>
+        <div class="model-hint mono">↻ Drag to rotate</div>
+      </div>
+      <div class="hobbie-caption">
+        <span class="mono">© NSY · intellectual property · reproduction forbidden</span>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="block" id="contact">
   <div class="container">
     <div class="eyebrow-row">
@@ -703,7 +792,7 @@
         <a href="#top">Home</a>
         <a href="#services">Services</a>
         <a href="#about">About</a>
-        <a href="hobbies.html">Hobbies</a>
+        <a href="#creations">Hobbies</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="foot-col">

@@ -17,7 +17,6 @@ mkdir -p deploy
 # ───── Fichiers racine ─────
 echo "📁 Copie des fichiers racine (FR)..."
 cp index.html            deploy/
-cp loisirs.html           deploy/
 cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
 cp contact.php           deploy/
@@ -27,7 +26,6 @@ cp .htaccess             deploy/
 
 echo "📁 Copie des fichiers racine (EN)..."
 cp index-en.html             deploy/
-cp hobbies.html            deploy/
 cp legal-notice.html  deploy/
 cp privacy.html   deploy/
 
@@ -81,11 +79,9 @@ echo "✅ Vérification des fichiers requis..."
 
 required=(
   "deploy/index.html"
-  "deploy/loisirs.html"
   "deploy/mentions-legales.html"
   "deploy/confidentialite.html"
   "deploy/index-en.html"
-  "deploy/hobbies.html"
   "deploy/legal-notice.html"
   "deploy/privacy.html"
   "deploy/contact.php"
