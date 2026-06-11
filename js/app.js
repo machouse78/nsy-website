@@ -31,6 +31,9 @@
     el.textContent = currentYear;
   });
 
+  // Page language from <html lang="…"> — drives UI strings (form, chatbot…).
+  const pageLang = (document.documentElement.lang || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
+
   // Smooth-scroll + active nav state on scroll
   const navLinks = document.querySelectorAll('.nav-link[data-target]');
   const sections = Array.from(navLinks)
@@ -70,6 +73,22 @@
   const submitBtn = document.getElementById('contact-submit');
 
   if (form) {
+    // Bilingual UI strings for the form states / toasts, by page language.
+    const F = pageLang === 'en' ? {
+      sending: 'Sending…',
+      sent: 'Sent ✓',
+      retry: 'Retry',
+      ok: 'Message received — reply within 48 business hours.',
+      errSend: 'Sending failed — try again or email contact@nsy.fr.',
+      errNet: 'Network error — try again or email contact@nsy.fr.',
+    } : {
+      sending: 'Envoi…',
+      sent: 'Envoyé ✓',
+      retry: 'Réessayer',
+      ok: 'Message reçu — réponse sous 48h ouvrées.',
+      errSend: "Erreur d'envoi — réessayez ou écrivez à contact@nsy.fr.",
+      errNet: 'Erreur réseau — réessayez ou écrivez à contact@nsy.fr.',
+    };
     const setLabel = (text) => {
       const label = submitBtn?.querySelector('.btn-label');
       if (label) label.textContent = text;
@@ -89,7 +108,7 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (submitBtn) submitBtn.disabled = true;
-      setLabel('Envoi…');
+      setLabel(F.sending);
 
       try {
         const res = await fetch(form.action || 'contact.php', {
@@ -107,8 +126,8 @@
         }
 
         if (res.ok && data.ok) {
-          setLabel('Envoyé ✓');
-          showToast('Message reçu — réponse sous 48h ouvrées.');
+          setLabel(F.sent);
+          showToast(F.ok);
           form.reset();
           const consultingOpt = document.querySelector('.opt[data-service="consulting"]');
           document.querySelectorAll('.opt').forEach((o) => o.classList.remove('active'));
@@ -117,13 +136,13 @@
           if (serviceInput) serviceInput.value = 'consulting';
         } else {
           if (submitBtn) submitBtn.disabled = false;
-          setLabel('Réessayer');
-          showToast(data.error || "Erreur d'envoi — réessayez ou écrivez à contact@nsy.fr.", true);
+          setLabel(F.retry);
+          showToast(data.error || F.errSend, true);
         }
       } catch (err) {
         if (submitBtn) submitBtn.disabled = false;
-        setLabel('Réessayer');
-        showToast('Erreur réseau — réessayez ou écrivez à contact@nsy.fr.', true);
+        setLabel(F.retry);
+        showToast(F.errNet, true);
       }
     });
   }
@@ -201,8 +220,6 @@
     return wrap;
   }
 
-  // Detect page language from <html lang="..."> — defaults to fr
-  const pageLang = (document.documentElement.lang || 'fr').toLowerCase().startsWith('en') ? 'en' : 'fr';
   // The 3D creations now live in a section of the homepage (#creations),
   // not a standalone page. The chatbot only runs on the index pages, so a
   // same-page anchor works for both languages.
