@@ -844,4 +844,30 @@
       }
     });
   }
+
+  // ───── Power saving: freeze CSS animations + 3D rotation off-screen ─────
+  // Same idea as the videos: the ~8 infinite CSS animations (gradient sweeps,
+  // spinning rings, marquee, hint pulse…) repaint forever even when their
+  // section is scrolled away. We add .anim-paused to a section when it leaves
+  // the viewport (CSS then sets animation-play-state: paused on everything
+  // inside) and remove it when it returns. The Renault's auto-rotate is also
+  // toggled — model-viewer already pauses WebGL rendering off-screen, this
+  // additionally stops the turntable from advancing.
+  const renault = document.getElementById('renault-viewer');
+  const animZones = document.querySelectorAll('.hero, .marquee, #about, #creations');
+  if (animZones.length && 'IntersectionObserver' in window) {
+    const aio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        e.target.classList.toggle('anim-paused', !e.isIntersecting);
+        if (renault && e.target.contains(renault)) {
+          if (e.isIntersecting) renault.setAttribute('auto-rotate', '');
+          else renault.removeAttribute('auto-rotate');
+        }
+      });
+    }, { rootMargin: '100px' }); // resume just before the section scrolls in
+    animZones.forEach((z) => {
+      z.classList.add('anim-paused'); // start paused; the observer un-pauses visible ones
+      aio.observe(z);
+    });
+  }
 })();
