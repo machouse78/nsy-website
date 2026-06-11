@@ -515,6 +515,17 @@ section.block:first-of-type { border-top: 0; }
   color: var(--fg-2);
   margin-top: 4px;
 }
+/* On narrow phones the 3 auto columns (+ "Banque · Assurance" nowrap) don't
+   fit and were forcing the whole hero ~28px wider than the viewport. Let
+   them wrap and equal-share the row instead. */
+@media (max-width: 420px) {
+  .hero-meta {
+    grid-template-columns: 1fr 1fr;
+    gap: 20px 16px;
+  }
+  .hero-meta-item .num { font-size: 26px; }
+  .hero-meta-item .num.num-text { font-size: 15px; white-space: normal; }
+}
 
 /* ───── Hero visual: stacked geometric panels ───── */
 .hero-visual {
