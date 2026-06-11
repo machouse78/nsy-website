@@ -812,4 +812,36 @@
     if (v.id === 'glyph-video') return;
     setupLoopFade(v);
   });
+
+  // ───── Power saving: pause looping videos off-screen / in background ─────
+  // A looping <video> re-decodes every frame for as long as it plays — there
+  // is no "cached decoded frames" for a loop. So the only way to stop the
+  // continuous CPU/GPU cost is to actually pause it when it isn't visible:
+  //   • off-screen (scrolled out of view) — the 2 service videos sit below
+  //     the fold and were decoding for nothing;
+  //   • hidden tab — no point decoding what the user can't see.
+  const loopingVideos = Array.from(document.querySelectorAll('video[loop]'));
+  if (loopingVideos.length && 'IntersectionObserver' in window) {
+    const onScreen = new WeakSet();
+    const resume = (v) => {
+      if (onScreen.has(v) && document.visibilityState === 'visible') {
+        v.play().catch(() => {});
+      }
+    };
+    const vio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { onScreen.add(e.target); resume(e.target); }
+        else { onScreen.delete(e.target); e.target.pause(); }
+      });
+    }, { rootMargin: '150px' }); // start just before it scrolls into view
+    loopingVideos.forEach((v) => vio.observe(v));
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden') {
+        loopingVideos.forEach((v) => v.pause());
+      } else {
+        loopingVideos.forEach(resume);
+      }
+    });
+  }
 })();
