@@ -246,12 +246,11 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
 /* Mobile-only forced line break in the nav (see ≤720px rules) */
 .nav-break { display: none; }
 
-@media (max-width: 860px) {
-  .nav-links a:not(.nav-link) { display: none; }
-  .nav-link { padding: 8px 10px; font-size: 13px; }
-}
-@media (max-width: 720px) {
-  /* Two-row mobile header:
+@media (max-width: 940px) {
+  /* Two-row mobile header — used up to 940px so that landscape phones
+     (iPhone 14 @844px, Pro Max @932px) get the compact layout instead of
+     the desktop 1-row nav, which needs ~914px and otherwise overflows
+     (the CTA "Disponible · Q4 2026" got cut off).
      row 1 = brand (left) + CTA "Disponible/Available" (right)
      row 2 = 4 nav-links + 2 social icons + 2 language flags.
      Sizes are tightened so the whole second row fits on ONE line in BOTH
