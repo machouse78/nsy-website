@@ -114,6 +114,18 @@ Outils de vérification (j'ai appris à ne rien pousser sans regarder le rendu) 
 
 **Prérequis** : Blender 4.x (`/Applications/Blender.app` sur macOS) + `npm install` (devDeps : `@gltf-transform/*`, `draco3dgltf`, `puppeteer`). Le `.blend` source est gitignored (trop lourd) — seul le `.glb` optimisé est livré.
 
+## Performance & éco-ressources
+
+Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire chauffer le CPU/GPU. Tout ce qui tourne en boucle est mis en pause dès que ce n'est pas visible — principe : **on ne décode / n'anime / ne rend que ce que l'utilisateur regarde**.
+
+- **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
+- **Vidéo hero** (`nsy-ia.mp4`) : recompressée du **1080p (4.8 Mo)** vers un **crop carré 720×720 (1.7 Mo)** — elle s'affiche dans une sphère de ~300px masquée en cercle, donc le 1080p et les bords 16:9 étaient inutiles. Décodage divisé par ~4.
+- **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
+- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Loisirs n'est pas visible.
+- **Cache** : `.htaccess` pose `Cache-Control: max-age` (1 mois médias) — évite le **re-téléchargement** (mais pas le re-décodage, d'où la mise en pause ci-dessus).
+
+Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'environ **94 → 12 M pixels/s** (≈ −87 %), et les sections hors écran ne repeignent plus rien.
+
 ## Structure du repo
 
 ```

@@ -88,6 +88,18 @@ body::after {
 
 main, .nav, footer { position: relative; z-index: 1; }
 
+/* ───── Power saving: pause animations of off-screen sections ─────
+   JS toggles .anim-paused on a section (via IntersectionObserver) when it
+   scrolls out of view; this freezes every CSS animation inside it — including
+   on pseudo-elements — so nothing repaints off-screen. Removed again when the
+   section comes back into view. */
+.anim-paused,
+.anim-paused *,
+.anim-paused *::before,
+.anim-paused *::after {
+  animation-play-state: paused !important;
+}
+
 a { color: inherit; text-decoration: none; }
 button { font: inherit; cursor: pointer; border: 0; background: transparent; color: inherit; }
 
