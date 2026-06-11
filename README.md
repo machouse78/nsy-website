@@ -156,6 +156,9 @@ nsy-website/
 │   ├── nsy-og.jpg                       # Bannière Open Graph 1200×630
 │   └── renault-wireframe.glb            # Modèle 3D wireframe (660 Ko)
 ├── package.json                         # Build tooling 3D uniquement (devDependencies)
+├── skills/                              # Skills Claude Code (doc, NON déployés) — voir § dédié
+│   ├── skill-nsy-website/               #   conventions & faits du projet
+│   └── frontend-responsive-perf/        #   techniques responsive/perf réutilisables
 ├── sitemap.xml / robots.txt
 ├── .htaccess                            # Apache : redirections, GZIP, cache, i18n, anti-hotlink
 ├── prepare-deploy.sh                    # Build du dossier deploy/
@@ -220,6 +223,15 @@ ffmpeg -i public/nsy-logo-ai.png \
 → mise à hauteur 630 px sans déformation, puis padding navy `#0A0F1C` jusqu'aux 1200 px. Aucun crop.
 
 **Validation après upload** : [opengraph.xyz](https://www.opengraph.xyz) · [Facebook Debugger](https://developers.facebook.com/tools/debug) · envoi WhatsApp/Slack à soi-même.
+
+## Skills Claude Code (`skills/`)
+
+Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
+
+- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Loisirs / Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
+- **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
+
+**Activation** : Claude Code lit les skills depuis `~/.claude/skills/`. Copier ou lier les dossiers (`cp -R skills/* ~/.claude/skills/` ou `ln -s`). Détails dans [`skills/README.md`](skills/README.md).
 
 ## Crédits
 
