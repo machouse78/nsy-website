@@ -58,6 +58,25 @@ services card (FR+EN) and the chatbot replies (FR+EN). Keep all in sync.
   `https://www.nsy.fr/` everywhere (canonical, hreflang, og:url, sitemap).
 - All pages were translated to English (owner: "toutes les pages du site").
 
+### A language change applies to the WHOLE site — every layer
+Owner rule: any i18n change must be propagated everywhere, not just the
+visible page copy. When touching language, go through all layers:
+- **Visible HTML** copy on both the FR and EN page.
+- **JS-injected UI strings** (`js/app.js`): the contact button states
+  (`Envoi…/Sending…`, `Envoyé ✓/Sent ✓`, `Réessayer/Retry`) and the success /
+  send-error / network-error **toasts** — keyed by `pageLang` (defined once at
+  the top of the IIFE).
+- **PHP server responses + transactional email** (`contact.php`): a hidden
+  `lang` field is posted (`lang=fr` on the FR form, `lang=en` on the EN form).
+  `contact.php` reads it and makes bilingual: every JSON error message (via a
+  `$L(fr,en)` helper) **and the auto-responder email** to the prospect
+  (subject, HTML body, AltBody, `<html lang>`, and the service label —
+  e.g. "Web creation · AI" for EN). The admin notification to Cédric stays FR
+  (it's internal).
+- **Every `<form>` must carry the hidden `lang` field** matching its page.
+- Plus the usual: meta / OG / Twitter / JSON-LD, legal pages, `sitemap.xml`,
+  the chatbot.
+
 ## 4. Copy / terminology rules
 - **"Hobbies" → "Loisirs"** on the FR side (nav, `<title>`, OG/Twitter, eyebrow,
   footer). EN keeps "Hobbies".

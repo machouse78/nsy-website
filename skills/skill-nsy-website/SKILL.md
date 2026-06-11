@@ -37,6 +37,13 @@ must hold in every change.
   page; the home canonical is `https://www.nsy.fr/` (trailing slash, consistent).
 - Touching pages/links means updating ALL of: nav, footer, `sitemap.xml`,
   hreflang, `.htaccess` (slug + 301s), `prepare-deploy.sh`.
+- **A language change must be applied to the WHOLE site, every layer** — not
+  just visible HTML copy. Check: visible text (FR+EN pages), **JS-injected UI
+  strings** (button states, toasts in `js/app.js`, keyed by `pageLang`),
+  **PHP server messages + the auto-responder email** (`contact.php`, keyed by
+  the hidden `lang` form field), the **hidden `lang` field on every form**,
+  meta/OG/JSON-LD, legal pages, sitemap and the chatbot. The contact form is
+  fully bilingual end-to-end (front strings + server errors + auto-reply email).
 
 ## Cookies / legal
 - Only one cookie: **`nsy_lang`** (functional, set on explicit flag click) →
