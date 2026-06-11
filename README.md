@@ -69,7 +69,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **CTA banner "Prochain créneau"** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
 - **Section 3D `#creations`** :
   - **Vidéo YouTube** de la chaîne NSY, intégrée via `youtube-nocookie.com` (aucun cookie avant lecture)
-  - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — esthétique K2000 cyan, rotation auto + drag souris/tactile
+  - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile
   - Disposition **2 colonnes** sur desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px)
 - **Chatbot intelligent** (voir ci-dessous)
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
@@ -98,7 +98,7 @@ Les identifiants SMTP vivent dans `_secret/config.php` (gitignored). Modèle fou
 
 ## Pipeline wireframe 3D
 
-Le modèle `public/renault-wireframe.glb` (**660 Ko**, esthétique K2000 cyan) est généré depuis un `.blend` source via une chaîne reproductible (`scripts/`) :
+Le modèle `public/renault-wireframe.glb` (**660 Ko**, rendu filaire cyan néon) est généré depuis un `.blend` source via une chaîne reproductible (`scripts/`) :
 
 ```bash
 ./scripts/build-wireframe.sh

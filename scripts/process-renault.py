@@ -365,7 +365,7 @@ def apply_modifiers_via_depsgraph(obj):
 # We're going to convert TRIANGLES → LINES downstream (in Node.js), so we
 # need a clean, low-poly mesh: every triangle contributes 3 line segments
 # in the final GLB. Aiming for ~5k triangles → ~7-10k unique edges as
-# lines → very crisp K2000 wireframe at ~100-200 KB.
+# lines → very crisp neon wireframe at ~100-200 KB.
 faces_before = len(merged.data.polygons)
 print(f"[NSY] Faces before Decimate: {faces_before}")
 print("[NSY] Adding Decimate modifier (COLLAPSE, ratio 0.015)…")
@@ -406,7 +406,7 @@ render_preview("03_lowpoly_triangles")
 # here, then post-process with scripts/tris-to-lines.mjs to convert the
 # triangle indices into deduplicated edge indices with primitive mode = LINES.
 
-# ───── 10. Cyan emissive material (Knight Rider / K2000 aesthetic) ─────
+# ───── 10. Cyan emissive material (neon wireframe look) ─────
 print("[NSY] Creating cyan emissive material…")
 # Drop all existing material slots
 merged.data.materials.clear()
