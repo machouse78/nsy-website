@@ -60,6 +60,8 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **hreflang réciproque** `fr` / `en` / `x-default` sur les 6 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
+> ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
+
 ## Fonctionnalités interactives
 
 - **Année & expérience dynamiques** : `data-current-year`, `data-years`, `data-years-fr` injectés en JS (basé sur `2026 - 14 = 2012` comme année de début de carrière)
@@ -90,9 +92,11 @@ FAB cyan en bas-droite, panneau glassmorphic. **Pas de LLM ni d'API** (volontair
 `contact.php` :
 1. Vérifie le **token Cloudflare Turnstile** (anti-bot) côté serveur
 2. **Honeypot** anti-spam (champ caché que seuls les bots remplissent)
-3. Envoie le message à `contact@nsy.fr` via **PHPMailer + SMTP Infomaniak**
-4. Envoie une **auto-réponse HTML** au prospect, localisée selon le champ caché `lang` (FR/EN)
-5. Répond en JSON (`{ ok: true }`) → toast de confirmation côté front
+3. Envoie le message à `contact@nsy.fr` via **PHPMailer + SMTP Infomaniak** (notification interne en FR)
+4. Envoie une **auto-réponse HTML** au prospect, **localisée FR/EN** selon le champ caché `lang` (objet, corps HTML, version texte, `<html lang>`, libellé du service)
+5. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → toast côté front
+
+**Bilingue de bout en bout** : tous les messages d'erreur JSON renvoyés au front (via un helper `$L(fr, en)`) **et** l'email d'auto-réponse suivent la langue du visiteur (champ caché `lang`). Côté navigateur, les états du bouton (`Envoi…/Sending…`, `Envoyé ✓/Sent ✓`, `Réessayer/Retry`) et les toasts sont pilotés par `pageLang` dans `js/app.js`.
 
 Les identifiants SMTP vivent dans `_secret/config.php` (gitignored). Modèle fourni : `_secret/config.php.example`.
 
