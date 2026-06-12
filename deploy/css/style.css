@@ -1585,12 +1585,21 @@ section.block:first-of-type { border-top: 0; }
   border: 0;
   display: block;
 }
+/* Création 01 = Short YouTube vertical (9:16) : carte portrait centrée, plafonnée */
+.hobbie-showcase.is-short {
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.hobbie-showcase.is-short .hobbie-embed {
+  aspect-ratio: 9 / 16;
+}
 
 /* Loisirs & créations : 2 colonnes (vidéo agrandie à gauche, wireframe à droite) */
 .creations-grid {
   display: grid;
-  grid-template-columns: 3fr 2fr; /* la vidéo occupe la colonne la plus large */
-  gap: 36px;
+  grid-template-columns: minmax(0, 340px) 1fr; /* Short portrait à gauche (~340px), modèle 3D plus large à droite */
+  gap: 44px;
   margin-top: 48px;
   align-items: start;
 }
