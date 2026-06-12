@@ -118,14 +118,16 @@ visible page copy. When touching language, go through all layers:
   "Working principles". 301-redirect the old slugs to it.
 - **No "Loisirs"/"Hobbies" nav link** (owner: the section is enough). Footer
   link to `#creations` is fine. Legal pages link to `index{,-en}.html#creations`.
-- `#creations` layout: **desktop = 2 columns** — YouTube video on the **left,
-  enlarged, filling its column** (wider column, `grid-template-columns: 3fr 2fr`)
-  + interactive wireframe on the **right**. **Mobile (≤920px) = stacked**, one
-  after the other (the site's normal responsive behavior — no special handling).
+- `#creations` layout: **desktop = 2 columns** — vertical YouTube **Short** on
+  the **left** in a portrait card (`grid-template-columns: minmax(0,340px) 1fr`,
+  so the Short is ~340px wide and the interactive wireframe is **larger on the
+  right**). **Mobile (≤920px) = stacked**, one after the other; the Short stays
+  capped at 340px and centered (`.hobbie-showcase.is-short`, `max-width:340px`).
 - Creation 01 = **YouTube embed** of NSY's channel via `youtube-nocookie.com`
-  (privacy-friendly), video id **`e8lAeey3Xl0`** ("Renault 25 Baccara V6 Turbo
-  Black Sherry — Blender Cinematic 4K"). The old local `animation.mp4` is no
-  longer deployed.
+  (privacy-friendly), **Short** id **`Yjgjm3U5JnQ`** ("🖤 Renault 25 Baccara V6
+  Turbo Black Sherry ✨ #shorts"). It is a **vertical 9:16** clip — the embed box
+  uses `aspect-ratio: 9/16` via the `.hobbie-showcase.is-short` modifier (not the
+  default 16:9). The old local `animation.mp4` is no longer deployed.
 
 ## 8. 3D Renault wireframe
 - Source: `public/Renault_R25_Baccara_1992.blend` (gitignored, large). Ship only

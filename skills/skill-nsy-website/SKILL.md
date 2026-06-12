@@ -69,9 +69,11 @@ must hold in every change.
 ## Layout / responsive
 - The Loisirs/3D content is a **homepage section `#creations`** (after the
   "Principes de travail" / "Working principles" block), not a standalone page;
-  no "Loisirs" nav link. Desktop = 2 columns (YouTube video left/larger,
-  wireframe right); mobile ≤920px stacks. The animation is a **YouTube embed**
-  (youtube-nocookie.com, video `e8lAeey3Xl0`), not a local mp4.
+  no "Loisirs" nav link. Desktop = 2 columns (vertical YouTube **Short** left in
+  a ~340px portrait card, wireframe model larger right); mobile ≤920px stacks
+  (Short capped at 340px, centered). The animation is a **YouTube embed**
+  (youtube-nocookie.com, Short `Yjgjm3U5JnQ` — "Renault 25 Baccara V6 Turbo
+  Black Sherry", vertical 9:16 via `.hobbie-showcase.is-short`), not a local mp4.
 - Mobile nav: compact 2-row layout up to **940px** (landscape phones included);
   the flags must stay inline in both languages.
 - Keep `text-size-adjust: 100%` + the overflow-x guards (Android Chrome
