@@ -72,7 +72,7 @@ must hold in every change.
   no "Loisirs" nav link. Desktop = 2 columns (vertical YouTube **Short** left in
   a ~340px portrait card, wireframe model larger right); mobile ≤920px stacks
   (Short capped at 340px, centered). The animation is a **YouTube embed**
-  (youtube-nocookie.com, Short `Yjgjm3U5JnQ` — "Renault 25 Baccara V6 Turbo
+  (youtube-nocookie.com, Short `bJPxWWbOFSM` — "Renault 25 Baccara V6 Turbo
   Black Sherry", vertical 9:16 via `.hobbie-showcase.is-short`), not a local mp4.
 - Mobile nav: compact 2-row layout up to **940px** (landscape phones included);
   the flags must stay inline in both languages.

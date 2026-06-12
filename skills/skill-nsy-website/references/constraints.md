@@ -124,8 +124,8 @@ visible page copy. When touching language, go through all layers:
   right**). **Mobile (≤920px) = stacked**, one after the other; the Short stays
   capped at 340px and centered (`.hobbie-showcase.is-short`, `max-width:340px`).
 - Creation 01 = **YouTube embed** of NSY's channel via `youtube-nocookie.com`
-  (privacy-friendly), **Short** id **`Yjgjm3U5JnQ`** ("🖤 Renault 25 Baccara V6
-  Turbo Black Sherry ✨ #shorts"). It is a **vertical 9:16** clip — the embed box
+  (privacy-friendly), **Short** id **`bJPxWWbOFSM`** ("✨ Renault 25 Baccara V6
+  Turbo Black Sherry | La légende française en 4K ✨ #shorts"). It is a **vertical 9:16** clip — the embed box
   uses `aspect-ratio: 9/16` via the `.hobbie-showcase.is-short` modifier (not the
   default 16:9). The old local `animation.mp4` is no longer deployed.
 
