@@ -77,6 +77,25 @@ visible page copy. When touching language, go through all layers:
 - Plus the usual: meta / OG / Twitter / JSON-LD, legal pages, `sitemap.xml`,
   the chatbot.
 
+### Feasibility questionnaire (`faisabilite.html` / `feasibility.html`)
+- A **dedicated bilingual page** (NOT inlined in the homepage — keeps it light):
+  a **13-step wizard**, ~80 fields, dark NSY theme, `.qz-` CSS namespace in
+  `style.css`, behaviour in **`js/faisabilite.js`**. Reached from the Contact
+  section via a `.faisa-cta` card and a footer "Contact" link on every page.
+- Handler **`faisabilite.php`** mirrors `contact.php` exactly: SMTP + Turnstile
+  + honeypot + 60s rate-limit, an admin notification in the **same light-card
+  email style** (answers grouped by section) **and the same dark NSY
+  auto-responder** to the visitor. Bilingual via the hidden `lang` field.
+- **Single-source labels (DRY):** the question + answer labels live ONLY in the
+  HTML (translated per page). `js/faisabilite.js` reads them from the DOM into a
+  JSON `payload` = `[{section, items:[{label, value, sub}]}]` (empty answers
+  skipped); `faisabilite.php` renders that payload generically, so it never
+  needs to know the questions — **FR / EN / email can't drift**. Edit a question
+  → edit the HTML only. Required radio/checkbox groups carry `data-required`;
+  required text fields use `required`; `contact_nom` + `contact_email` are the
+  server-validated fields. New slug pair added to `SLUG_FR_TO_EN` in `app.js`,
+  to `sitemap.xml` (hreflang), and to `prepare-deploy.sh` (copy + required list).
+
 ## 4. Copy / terminology rules
 - **"Hobbies" → "Loisirs"** on the FR side (nav, `<title>`, OG/Twitter, eyebrow,
   footer). EN keeps "Hobbies".

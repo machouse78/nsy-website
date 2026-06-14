@@ -29,8 +29,8 @@ must hold in every change.
 
 ## Bilingual (FR/EN) — every new page or link must stay symmetric
 - One file per language, **real translated slugs** (loisirs↔hobbies,
-  mentions-legales↔legal-notice, confidentialite↔privacy) — EXCEPT the home
-  stays `index.html` ↔ `index-en.html`.
+  mentions-legales↔legal-notice, confidentialite↔privacy,
+  faisabilite↔feasibility) — EXCEPT the home stays `index.html` ↔ `index-en.html`.
 - **Flag switcher** 🇫🇷🇬🇧 (not text), sets `nsy_lang` cookie + redirects via the
   explicit slug map in `js/app.js`. `.htaccess` auto-detects `Accept-Language`
   on `/`. Reciprocal **hreflang** fr/en/x-default + self-canonical on every
@@ -44,6 +44,20 @@ must hold in every change.
   the hidden `lang` form field), the **hidden `lang` field on every form**,
   meta/OG/JSON-LD, legal pages, sitemap and the chatbot. The contact form is
   fully bilingual end-to-end (front strings + server errors + auto-reply email).
+
+## Feasibility questionnaire (faisabilite.html / feasibility.html)
+- Dedicated bilingual page (a **13-step wizard**, ~80 fields) linked from the
+  **Contact section** via a `.faisa-cta` card + a footer "Contact" link on every
+  page. NOT inlined in the homepage (keeps it light). Dark NSY theme, `.qz-`
+  CSS namespace in `style.css`, logic in **`js/faisabilite.js`**.
+- Submission mirrors the contact form: POST → **`faisabilite.php`** (same SMTP /
+  Turnstile / honeypot / rate-limit) → admin email (light card, like contact)
+  **+ dark NSY auto-responder** to the visitor. Bilingual via the hidden `lang`.
+- **DRY rule:** question/answer labels live ONLY in the HTML (translated per
+  page). `js/faisabilite.js` reads them from the DOM into a structured JSON
+  `payload` `[{section, items:[{label,value,sub}]}]`; `faisabilite.php` renders
+  that generically — so FR / EN / email never drift. To edit a question, edit
+  the HTML; no PHP/JS change needed.
 
 ## Cookies / legal
 - Only one cookie: **`nsy_lang`** (functional, set on explicit flag click) →
