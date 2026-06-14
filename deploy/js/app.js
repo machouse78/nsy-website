@@ -597,30 +597,78 @@
   // Even with bounds="tight", some GLBs need an explicit reframe after load
   // to ensure the orbit pivot lands on the visible geometry center.
   const renaultViewer = document.getElementById('renault-viewer');
+  const modelStage = renaultViewer ? renaultViewer.closest('.model-stage') : null;
+  const modelExpandBtn = modelStage ? modelStage.querySelector('.model-expand') : null;
+  const isModelExpanded = () => !!(modelStage && modelStage.classList.contains('expanded'));
+
+  // Re-fit the framing once the resized container has been measured (2 frames).
+  function reframeModel() {
+    if (renaultViewer && typeof renaultViewer.updateFraming === 'function') {
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        try { renaultViewer.updateFraming(); } catch (_) {}
+      }));
+    }
+  }
+
+  // Single source of truth for the turntable. The model keeps auto-rotating
+  // while it is on-screen OR expanded fullscreen, and only stops when genuinely
+  // scrolled off-screen (power saving). Crucially it does NOT toggle on every
+  // transient intersection flip — so a portrait↔landscape orientation change
+  // (which momentarily reflows/repositions #creations) no longer freezes it.
+  // We only touch the attribute when the desired state differs, so when the
+  // model stays visible across the switch, auto-rotate is left untouched and
+  // the rotation is truly continuous (no auto-rotate-delay restart).
+  function syncModelRotation() {
+    if (!renaultViewer) return;
+    let onScreen;
+    if (isModelExpanded()) {
+      onScreen = true; // fullscreen overlay always shows the model
+    } else {
+      // Decide on the #creations SECTION (same element/margin the observer
+      // watches), not the model's tight rect — so rotation turns on as soon as
+      // the section is in view, matching the original behaviour. model-viewer
+      // still pauses its own WebGL when the model itself is off-screen, so this
+      // doesn't waste GPU.
+      const zone = renaultViewer.closest('#creations') || renaultViewer;
+      const r = zone.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      onScreen = r.bottom > -100 && r.top < vh + 100; // 100px margin = observer rootMargin
+    }
+    if (onScreen) {
+      if (!renaultViewer.hasAttribute('auto-rotate')) renaultViewer.setAttribute('auto-rotate', '');
+    } else if (renaultViewer.hasAttribute('auto-rotate')) {
+      renaultViewer.removeAttribute('auto-rotate');
+    }
+  }
+
   if (renaultViewer) {
     renaultViewer.addEventListener('load', () => {
       // updateFraming() recomputes camera-target on the visible bounding box
       // and resets the camera-orbit radius accordingly.
-      if (typeof renaultViewer.updateFraming === 'function') {
-        renaultViewer.updateFraming();
-      }
+      if (typeof renaultViewer.updateFraming === 'function') renaultViewer.updateFraming();
     });
+
+    // Orientation / viewport changes (mobile portrait↔landscape, mobile address
+    // bar show/hide, window resize): re-fit the framing and re-assert rotation
+    // once the new layout has settled, so the turntable keeps spinning across
+    // the switch instead of being left paused by a transient observer fire.
+    let viewportTimer;
+    const onViewportChange = () => {
+      requestAnimationFrame(() => requestAnimationFrame(syncModelRotation));
+      clearTimeout(viewportTimer);
+      viewportTimer = setTimeout(() => { syncModelRotation(); reframeModel(); }, 350);
+    };
+    window.addEventListener('resize', onViewportChange);
+    window.addEventListener('orientationchange', onViewportChange);
+    if (window.screen && screen.orientation && typeof screen.orientation.addEventListener === 'function') {
+      screen.orientation.addEventListener('change', onViewportChange);
+    }
   }
 
   // ───── 3D model: enlarge ↔ restore (CSS lightbox) ─────
   // Toggling .expanded makes the stage fill the viewport; model-viewer is
   // responsive, so we just re-fit the framing once the new size has settled.
-  const modelStage = renaultViewer ? renaultViewer.closest('.model-stage') : null;
-  const modelExpandBtn = modelStage ? modelStage.querySelector('.model-expand') : null;
   if (modelStage && modelExpandBtn) {
-    const reframeModel = () => {
-      if (renaultViewer && typeof renaultViewer.updateFraming === 'function') {
-        // wait two frames so the resized container is measured before re-fit
-        requestAnimationFrame(() => requestAnimationFrame(() => {
-          try { renaultViewer.updateFraming(); } catch (_) {}
-        }));
-      }
-    };
     const setModelExpanded = (on) => {
       modelStage.classList.toggle('expanded', on);
       document.body.classList.toggle('model-expanded-lock', on);
@@ -630,6 +678,7 @@
         modelExpandBtn.setAttribute('title', label);
       }
       reframeModel();
+      syncModelRotation(); // expanding shows the model fullscreen → keep it spinning
     };
     modelExpandBtn.addEventListener('click', () => {
       setModelExpanded(!modelStage.classList.contains('expanded'));
@@ -876,10 +925,10 @@
     const aio = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
         e.target.classList.toggle('anim-paused', !e.isIntersecting);
-        if (renault && e.target.contains(renault)) {
-          if (e.isIntersecting) renault.setAttribute('auto-rotate', '');
-          else renault.removeAttribute('auto-rotate');
-        }
+        // Delegate the turntable decision to the shared helper, which also
+        // accounts for the expanded/fullscreen case and avoids needless
+        // attribute churn (keeps rotation continuous across orientation flips).
+        if (renault && e.target.contains(renault)) syncModelRotation();
       });
     }, { rootMargin: '100px' }); // resume just before the section scrolls in
     animZones.forEach((z) => {
