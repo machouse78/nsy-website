@@ -128,6 +128,10 @@ visible page copy. When touching language, go through all layers:
   Turbo Black Sherry | La légende française en 4K ✨ #shorts"). It is a **vertical 9:16** clip — the embed box
   uses `aspect-ratio: 9/16` via the `.hobbie-showcase.is-short` modifier (not the
   default 16:9). The old local `animation.mp4` is no longer deployed.
+  Embed params: `rel=0&controls=0&playsinline=1&iv_load_policy=3` — **`controls=0`
+  is deliberate** (owner wants a clean player with NO control/title overlay that
+  fades in on play, so the video is fully visible immediately); `playsinline=1`
+  keeps it inside the portrait card on iOS. Keep `controls=0` unless asked.
 
 ## 8. 3D Renault wireframe
 - Source: `public/Renault_R25_Baccara_1992.blend` (gitignored, large). Ship only
