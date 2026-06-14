@@ -141,6 +141,14 @@ visible page copy. When touching language, go through all layers:
 - Geometry MUST be **centered** (orbit pivot = car center) and not too far / not
   too small (owner's repeated complaints). Verify the bbox is symmetric.
 - **Auto-rotate clockwise**: `rotation-per-second="-20deg"` (negative = clockwise).
+- **Auto-rotate MUST survive a portrait↔landscape orientation change AND the
+  expanded/fullscreen mode** (owner requirement). The turntable is governed by a
+  single `syncModelRotation()` helper in `js/app.js`: `auto-rotate` stays ON
+  while `#creations` is on-screen OR the model is expanded, and is removed ONLY
+  when genuinely off-screen (power saving). It also listens to
+  `orientationchange`/`resize`/`screen.orientation` to re-assert + reframe after
+  the layout settles. Do NOT go back to toggling `auto-rotate` straight from the
+  IntersectionObserver — that froze the model on rotation and when fullscreen.
 - Anti-download: **dissuasion only, no watermark** — `.htaccess` anti-hotlink on
   mp4/glb (Referer check) + `controlsList="nodownload..."` / `oncontextmenu`.
 - Owner pain point: do not push 3D blind. **Render/screenshot first**
@@ -168,8 +176,10 @@ visible page copy. When touching language, go through all layers:
   - Off-screen sections' CSS animations frozen via `.anim-paused`
     (`animation-play-state: paused`, pseudo-elements included), toggled on
     `.hero / .marquee / #about / #creations`.
-  - `<model-viewer>` auto-rotate dropped/re-added with `#creations` visibility
-    (it already pauses WebGL rendering off-screen natively).
+  - `<model-viewer>` auto-rotate managed by `syncModelRotation()`: ON while
+    `#creations` is visible OR the model is expanded, removed only off-screen
+    (it already pauses WebGL rendering off-screen natively). NB: it must keep
+    spinning across portrait↔landscape + in fullscreen — see §8.
 - **Do NOT touch the chatbot's CSS animations** (cbot-ping/pulse/bounce) — they
   stay running. (Explicit owner instruction.)
 - Recompress over-sized media to real display size (hero video was 1080p @5Mbps
