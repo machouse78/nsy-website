@@ -2178,3 +2178,148 @@ footer.foot {
   .cbot { right: 12px; left: 12px; width: auto; bottom: 90px; }
   .cbot-fab { right: 16px; bottom: 16px; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════
+   Questionnaire de faisabilité (pages faisabilite.html / feasibility.html)
+   Wizard multi-étapes au thème sombre NSY. Préfixe .qz- pour éviter
+   toute collision avec le formulaire de contact (.form/.field/.opt).
+   ═══════════════════════════════════════════════════════════════════ */
+.qz-wrap { max-width: 780px; margin: 0 auto; }
+.qz-intro { margin-bottom: 36px; }
+.qz-intro .lede { font-size: 17px; color: var(--fg-1); max-width: 640px; }
+
+/* Progress */
+.qz-progress {
+  height: 6px; background: var(--bg-3); border-radius: 50px;
+  overflow: hidden; margin-bottom: 8px;
+}
+.qz-progress-bar {
+  height: 100%; width: 0%; border-radius: 50px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  box-shadow: 0 0 12px var(--accent-glow);
+  transition: width .4s ease;
+}
+.qz-progress-label {
+  font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em;
+  color: var(--fg-2); text-align: right; margin-bottom: 28px;
+}
+
+/* Section card (one step) */
+.qz-section {
+  display: none;
+  background: var(--bg-2); border: 1px solid var(--line-strong);
+  border-radius: var(--radius-lg); padding: 32px 32px 8px;
+  animation: qzFade .35s ease;
+}
+.qz-section.active { display: block; }
+@keyframes qzFade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+.qz-section-title {
+  display: flex; align-items: baseline; gap: 12px;
+  font-family: var(--font-display); font-size: 20px; font-weight: 600;
+  color: var(--fg-0); margin-bottom: 28px;
+  padding-bottom: 16px; border-bottom: 1px solid var(--line);
+}
+.qz-section-title .qz-num {
+  font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+  color: var(--accent); letter-spacing: .04em;
+}
+.qz-sublabel {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 600;
+  text-transform: uppercase; letter-spacing: .12em; color: var(--accent);
+  margin: 28px 0 14px; padding-bottom: 6px; border-bottom: 1px solid var(--line);
+}
+
+/* Fields */
+.qz-field { margin-bottom: 22px; }
+.qz-label {
+  display: block; font-size: 15px; font-weight: 600;
+  color: var(--fg-0); margin-bottom: 8px;
+}
+.qz-req { color: var(--warm); margin-left: 3px; }
+.qz-hint { font-size: 13px; color: var(--fg-2); font-style: italic; margin: -2px 0 8px; }
+
+.qz-form input[type="text"],
+.qz-form input[type="email"],
+.qz-form input[type="tel"],
+.qz-form textarea,
+.qz-form select {
+  width: 100%; background: var(--bg-3); color: var(--fg-0);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-sm);
+  padding: 12px 14px; font-size: 15px; font-family: var(--font-body);
+  transition: border-color .2s, box-shadow .2s; outline: none;
+}
+.qz-form textarea { resize: vertical; min-height: 92px; line-height: 1.5; }
+.qz-form input::placeholder, .qz-form textarea::placeholder { color: var(--fg-3); }
+.qz-form input:focus, .qz-form textarea:focus, .qz-form select:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow);
+}
+.qz-form input.qz-invalid, .qz-form textarea.qz-invalid { border-color: #ff6b6b; }
+
+/* Choice groups (checkbox / radio) as selectable chips */
+.qz-check-group, .qz-radio-group { display: flex; flex-direction: column; gap: 10px; }
+.qz-check-group label, .qz-radio-group label {
+  display: flex; align-items: flex-start; gap: 12px; cursor: pointer;
+  font-size: 14.5px; color: var(--fg-1); line-height: 1.45;
+  padding: 11px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--line-strong); background: var(--bg-3);
+  transition: border-color .15s, background .15s, color .15s;
+}
+.qz-check-group label:hover, .qz-radio-group label:hover {
+  border-color: var(--accent); color: var(--fg-0);
+}
+.qz-check-group input, .qz-radio-group input {
+  margin-top: 1px; width: 17px; height: 17px; flex-shrink: 0;
+  accent-color: var(--accent);
+}
+.qz-check-group label:has(input:checked),
+.qz-radio-group label:has(input:checked) {
+  border-color: var(--accent); background: rgba(0,229,255,0.06); color: var(--fg-0);
+}
+
+/* Navigation */
+.qz-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-top: 28px; flex-wrap: wrap;
+}
+.qz-turnstile { margin: 24px 0 4px; min-height: 1px; }
+.qz-prev {
+  background: transparent; color: var(--fg-1);
+  border: 1px solid var(--line-strong);
+}
+.qz-prev:hover { border-color: var(--accent); color: var(--fg-0); }
+.qz-prev:disabled { opacity: .35; cursor: not-allowed; }
+.qz-note { font-size: 12.5px; color: var(--fg-2); margin: 20px 0 0; line-height: 1.5; }
+
+/* Success */
+.qz-success {
+  text-align: center; background: var(--bg-2);
+  border: 1px solid var(--line-strong); border-radius: var(--radius-lg);
+  padding: 56px 28px;
+}
+.qz-success .qz-ico {
+  font-size: 40px; display: inline-grid; place-items: center;
+  width: 76px; height: 76px; margin-bottom: 18px; border-radius: 50%;
+  background: rgba(0,229,255,0.08); border: 1px solid var(--line-strong);
+}
+.qz-success h2 { font-size: 26px; color: var(--fg-0); margin-bottom: 12px; }
+.qz-success p { color: var(--fg-1); font-size: 15px; line-height: 1.7; max-width: 460px; margin: 0 auto; }
+
+/* Contact-section CTA card linking to the questionnaire */
+.faisa-cta {
+  margin-top: 28px; padding: 22px 24px; border-radius: var(--radius-md);
+  border: 1px solid var(--line-strong);
+  background: linear-gradient(135deg, rgba(0,229,255,0.05), rgba(77,125,255,0.04));
+  display: flex; align-items: center; justify-content: space-between; gap: 18px;
+}
+.faisa-cta .l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+.faisa-cta h3 { font-size: 17px; color: var(--fg-0); margin: 6px 0 4px; }
+.faisa-cta p { font-size: 13.5px; color: var(--fg-2); margin: 0; }
+.faisa-cta .arrow { font-size: 20px; color: var(--accent); flex-shrink: 0; }
+
+@media (max-width: 600px) {
+  .qz-section { padding: 24px 18px 6px; }
+  .qz-section-title { font-size: 18px; }
+  .qz-nav .btn, .qz-nav .qz-prev { flex: 1 1 auto; justify-content: center; }
+  .faisa-cta { flex-direction: column; align-items: flex-start; }
+}

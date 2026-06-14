@@ -698,6 +698,7 @@
     'index.html': 'index-en.html',
     'mentions-legales.html': 'legal-notice.html',
     'confidentialite.html': 'privacy.html',
+    'faisabilite.html': 'feasibility.html',
   };
   const SLUG_EN_TO_FR = Object.fromEntries(
     Object.entries(SLUG_FR_TO_EN).map(([fr, en]) => [en, fr])

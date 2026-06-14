@@ -162,4 +162,27 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/confidentialite.html" />
   </url>
 
+  <!-- Questionnaire de faisabilité projet (FR / EN) -->
+  <url>
+    <loc>https://www.nsy.fr/faisabilite.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/faisabilite.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/feasibility.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faisabilite.html" />
+  </url>
+
+  <url>
+    <loc>https://www.nsy.fr/feasibility.html</loc>
+    <lastmod>2026-06-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/faisabilite.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/feasibility.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faisabilite.html" />
+  </url>
+
 </urlset>

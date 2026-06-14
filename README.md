@@ -43,7 +43,7 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | CTA banner | — | Bandeau "Prochain créneau" avec spotlight souris suivant |
 | Footer | — | Navigation + expertise + contact + réseaux sociaux |
 
-Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN) et `confidentialite.html` / `privacy.html` (EN).
+Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN) et le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN), accessible depuis la section Contact.
 
 ## Bilingue (FR / EN)
 
@@ -54,6 +54,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `index.html` (`/`) | `index-en.html` |
 | `mentions-legales.html` | `legal-notice.html` |
 | `confidentialite.html` | `privacy.html` |
+| `faisabilite.html` | `feasibility.html` |
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
@@ -75,6 +76,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   - Disposition **2 colonnes** sur desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px)
 - **Chatbot intelligent** (voir ci-dessous)
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
+- **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **13 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
 
 ### Chatbot — moteur de règles bilingue
 
@@ -137,9 +139,12 @@ nsy-website/
 ├── index.html / index-en.html          # Page principale FR / EN
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
-├── contact.php                          # Backend formulaire (PHPMailer + Turnstile)
-├── css/style.css                        # Styles complets
+├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 13 étapes) FR / EN
+├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
+├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
+├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
+├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
 ├── scripts/                             # Pipeline 3D (Blender + glTF-Transform + Puppeteer)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export

@@ -19,7 +19,9 @@ echo "📁 Copie des fichiers racine (FR)..."
 cp index.html            deploy/
 cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
+cp faisabilite.html      deploy/
 cp contact.php           deploy/
+cp faisabilite.php       deploy/
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp .htaccess             deploy/
@@ -28,6 +30,7 @@ echo "📁 Copie des fichiers racine (EN)..."
 cp index-en.html             deploy/
 cp legal-notice.html  deploy/
 cp privacy.html   deploy/
+cp feasibility.html   deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."
@@ -85,12 +88,16 @@ required=(
   "deploy/index-en.html"
   "deploy/legal-notice.html"
   "deploy/privacy.html"
+  "deploy/faisabilite.html"
+  "deploy/feasibility.html"
   "deploy/contact.php"
+  "deploy/faisabilite.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
   "deploy/.htaccess"
   "deploy/css/style.css"
   "deploy/js/app.js"
+  "deploy/js/faisabilite.js"
   "deploy/vendor/PHPMailer/src/PHPMailer.php"
   "deploy/vendor/PHPMailer/src/SMTP.php"
   "deploy/vendor/PHPMailer/src/Exception.php"
