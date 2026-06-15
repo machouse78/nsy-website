@@ -98,14 +98,19 @@
   const fieldLabel = (field) => { const l = field.querySelector('.qz-label'); return l ? clean(l.textContent.replace('*', '')) : ''; };
 
   function fieldValue(field) {
-    const radios = field.querySelectorAll('input[type=radio]');
-    if (radios.length) { const c = [...radios].find((r) => r.checked); return c ? optLabel(c) : ''; }
-    const checks = field.querySelectorAll('input[type=checkbox]');
-    if (checks.length) return [...checks].filter((c) => c.checked).map(optLabel).join(', ');
-    const el = field.querySelector('input, textarea, select');
-    if (!el) return '';
-    if (el.tagName === 'SELECT') return el.options[el.selectedIndex] ? clean(el.options[el.selectedIndex].text) : '';
-    return String(el.value || '').trim();
+    // Collect every input in the field so MIXED fields work too (e.g. a textarea
+    // followed by a checkbox, or radios followed by a free-text input).
+    const parts = [];
+    field.querySelectorAll('input[type=text], input[type=email], input[type=tel], textarea, select').forEach((el) => {
+      const v = el.tagName === 'SELECT'
+        ? (el.options[el.selectedIndex] ? clean(el.options[el.selectedIndex].text) : '')
+        : String(el.value || '').trim();
+      if (v) parts.push(v);
+    });
+    field.querySelectorAll('input[type=radio]:checked, input[type=checkbox]:checked').forEach((c) => {
+      parts.push(optLabel(c));
+    });
+    return parts.join(', ');
   }
 
   function collect() {

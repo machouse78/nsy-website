@@ -76,7 +76,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   - Disposition **2 colonnes** sur desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px)
 - **Chatbot intelligent** (voir ci-dessous)
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
-- **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **13 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
+- **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **7 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
 
 ### Chatbot — moteur de règles bilingue
 
@@ -139,7 +139,7 @@ nsy-website/
 ├── index.html / index-en.html          # Page principale FR / EN
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
-├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 13 étapes) FR / EN
+├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 7 étapes) FR / EN
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)

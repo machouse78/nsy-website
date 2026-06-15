@@ -92,7 +92,7 @@
       </div>
 
       <div class="qz-progress"><div class="qz-progress-bar" id="qzBar"></div></div>
-      <div class="qz-progress-label" id="qzLabel">Step 1 / 13</div>
+      <div class="qz-progress-label" id="qzLabel">Step 1 / 7</div>
 
       <form class="qz-form" id="feasibility-form" action="faisabilite.php" method="POST" novalidate>
         <input type="hidden" name="lang" value="en" />
@@ -134,8 +134,9 @@
 
         <!-- STEP 2 -->
         <section class="qz-section" data-step="2">
-          <div class="qz-section-title"><span class="qz-num">02</span> Identity &amp; presentation</div>
+          <div class="qz-section-title"><span class="qz-num">02</span> Identity &amp; website goals</div>
 
+          <div class="qz-sublabel">Identity</div>
           <div class="qz-field">
             <label class="qz-label">Industry / sector(s) <span class="qz-req">*</span></label>
             <p class="qz-hint">Multiple choices possible</p>
@@ -175,18 +176,6 @@
             <textarea name="description_activite" required></textarea>
           </div>
           <div class="qz-field">
-            <label class="qz-label">Who are your target customers?</label>
-            <p class="qz-hint">Profile, age, sector… If you don't know yet, leave blank.</p>
-            <textarea name="clients_cibles"></textarea>
-          </div>
-          <div class="qz-field">
-            <label class="qz-label">Have you already identified your target audience?</label>
-            <div class="qz-radio-group">
-              <label><input type="radio" name="public_cible_defini" value="Yes, it is defined" /> Yes, it is defined</label>
-              <label><input type="radio" name="public_cible_defini" value="Not yet — my target audience needs to be defined" /> Not yet — my target audience needs to be defined</label>
-            </div>
-          </div>
-          <div class="qz-field">
             <label class="qz-label">Size of your organisation</label>
             <div class="qz-radio-group">
               <label><input type="radio" name="taille" value="Independent / Freelance / Sole trader" /> Independent / Freelance / Sole trader</label>
@@ -197,11 +186,16 @@
               <label><input type="radio" name="taille" value="Public body / Institution" /> Public body / Institution</label>
             </div>
           </div>
-        </section>
+          <div class="qz-field">
+            <label class="qz-label">Who are your target customers?</label>
+            <p class="qz-hint">Profile, age, sector… If you don't know yet, tick the option below.</p>
+            <textarea name="clients_cibles"></textarea>
+            <div class="qz-check-group" style="margin-top:10px">
+              <label><input type="checkbox" name="public_cible_defini" value="non" /> I don't know yet — my target audience needs to be defined</label>
+            </div>
+          </div>
 
-        <!-- STEP 3 -->
-        <section class="qz-section" data-step="3">
-          <div class="qz-section-title"><span class="qz-num">03</span> Goals of the website</div>
+          <div class="qz-sublabel">Goals</div>
           <div class="qz-field">
             <label class="qz-label">What should your website be for? <span class="qz-req">*</span></label>
             <p class="qz-hint">Multiple answers possible</p>
@@ -220,14 +214,16 @@
           </div>
         </section>
 
-        <!-- STEP 4 -->
-        <section class="qz-section" data-step="4">
-          <div class="qz-section-title"><span class="qz-num">04</span> Existing site &amp; migration</div>
+        <!-- STEP 3 -->
+        <section class="qz-section" data-step="3">
+          <div class="qz-section-title"><span class="qz-num">03</span> Existing site &amp; content</div>
+
+          <div class="qz-sublabel">Existing site</div>
           <div class="qz-field">
             <label class="qz-label">Do you already have a website online? <span class="qz-req">*</span></label>
             <div class="qz-radio-group" data-required>
-              <label><input type="radio" name="site_existant" value="Yes" /> Yes</label>
-              <label><input type="radio" name="site_existant" value="No" /> No</label>
+              <label><input type="radio" name="site_existant" value="oui" /> Yes</label>
+              <label><input type="radio" name="site_existant" value="non" /> No</label>
             </div>
           </div>
           <div class="qz-field">
@@ -274,11 +270,8 @@
               <label><input type="radio" name="acces_identifiants" value="To be retrieved" /> To be retrieved</label>
             </div>
           </div>
-        </section>
 
-        <!-- STEP 5 -->
-        <section class="qz-section" data-step="5">
-          <div class="qz-section-title"><span class="qz-num">05</span> Content &amp; pages</div>
+          <div class="qz-sublabel">Content</div>
           <div class="qz-field">
             <label class="qz-label">Which sections / pages would you like? <span class="qz-req">*</span></label>
             <p class="qz-hint">E.g. Home, About, Services, Contact…</p>
@@ -293,8 +286,8 @@
             </div>
           </div>
           <div class="qz-field">
-            <label class="qz-label">Do you have professional photos? <span class="qz-req">*</span></label>
-            <div class="qz-radio-group" data-required>
+            <label class="qz-label">Do you have professional photos?</label>
+            <div class="qz-radio-group">
               <label><input type="radio" name="photos" value="Yes" /> Yes</label>
               <label><input type="radio" name="photos" value="No, I'll use royalty-free photos" /> No, I'll use royalty-free photos</label>
             </div>
@@ -317,21 +310,20 @@
           <div class="qz-field">
             <label class="qz-label">Will the site be in several languages?</label>
             <div class="qz-radio-group">
-              <label><input type="radio" name="multilingue" value="No" /> No</label>
-              <label><input type="radio" name="multilingue" value="Yes" /> Yes</label>
+              <label><input type="radio" name="multilingue" value="Non" /> No</label>
+              <label><input type="radio" name="multilingue" value="Oui" /> Yes — which ones:</label>
             </div>
-          </div>
-          <div class="qz-field">
-            <label class="qz-label">If yes, which languages?</label>
-            <input type="text" name="langues" />
+            <input type="text" name="langues" placeholder="English, Spanish…" style="margin-top:10px" />
           </div>
         </section>
 
-        <!-- STEP 6 -->
-        <section class="qz-section" data-step="6">
-          <div class="qz-section-title"><span class="qz-num">06</span> Brand &amp; visual identity</div>
+        <!-- STEP 4 -->
+        <section class="qz-section" data-step="4">
+          <div class="qz-section-title"><span class="qz-num">04</span> Brand &amp; features</div>
+
+          <div class="qz-sublabel">Brand guidelines</div>
           <div class="qz-field">
-            <label class="qz-label">Do you have an existing brand guidelines? <span class="qz-req">*</span></label>
+            <label class="qz-label">Do you have existing brand guidelines? <span class="qz-req">*</span></label>
             <div class="qz-radio-group" data-required>
               <label><input type="radio" name="charte" value="Yes — to be provided (vector logo, typefaces, official colours)" /> Yes — to be provided (vector logo, typefaces, official colours)</label>
               <label><input type="radio" name="charte" value="No — to be created" /> No — to be created</label>
@@ -368,11 +360,8 @@
               <label><input type="checkbox" name="style" value="Other" /> Other</label>
             </div>
           </div>
-        </section>
 
-        <!-- STEP 7 -->
-        <section class="qz-section" data-step="7">
-          <div class="qz-section-title"><span class="qz-num">07</span> Features</div>
+          <div class="qz-sublabel">Features</div>
           <div class="qz-field">
             <label class="qz-label">Which features are needed? <span class="qz-req">*</span></label>
             <p class="qz-hint">Multiple answers possible</p>
@@ -393,8 +382,8 @@
             <textarea name="integrations"></textarea>
           </div>
           <div class="qz-field">
-            <label class="qz-label">Will the site's content change regularly? <span class="qz-req">*</span></label>
-            <div class="qz-radio-group" data-required>
+            <label class="qz-label">Will the site's content change regularly?</label>
+            <div class="qz-radio-group">
               <label><input type="radio" name="evolution_contenu" value="Yes, very often" /> Yes, very often</label>
               <label><input type="radio" name="evolution_contenu" value="Yes, occasionally" /> Yes, occasionally</label>
               <label><input type="radio" name="evolution_contenu" value="No" /> No</label>
@@ -402,9 +391,11 @@
           </div>
         </section>
 
-        <!-- STEP 8 -->
-        <section class="qz-section" data-step="8">
-          <div class="qz-section-title"><span class="qz-num">08</span> Social media</div>
+        <!-- STEP 5 -->
+        <section class="qz-section" data-step="5">
+          <div class="qz-section-title"><span class="qz-num">05</span> Social media &amp; technical</div>
+
+          <div class="qz-sublabel">Social media</div>
           <div class="qz-field">
             <label class="qz-label">Which social networks do you use?</label>
             <div class="qz-check-group">
@@ -425,11 +416,8 @@
               <label><input type="radio" name="flux_reseau" value="To be discussed" /> To be discussed</label>
             </div>
           </div>
-        </section>
 
-        <!-- STEP 9 -->
-        <section class="qz-section" data-step="9">
-          <div class="qz-section-title"><span class="qz-num">09</span> Technical &amp; hosting</div>
+          <div class="qz-sublabel">Technical &amp; hosting</div>
           <div class="qz-field">
             <label class="qz-label">Do you already have a domain name? <span class="qz-req">*</span></label>
             <div class="qz-radio-group" data-required>
@@ -464,9 +452,11 @@
           </div>
         </section>
 
-        <!-- STEP 10 -->
-        <section class="qz-section" data-step="10">
-          <div class="qz-section-title"><span class="qz-num">10</span> GDPR &amp; data</div>
+        <!-- STEP 6 -->
+        <section class="qz-section" data-step="6">
+          <div class="qz-section-title"><span class="qz-num">06</span> GDPR &amp; SEO</div>
+
+          <div class="qz-sublabel">GDPR &amp; data</div>
           <div class="qz-field">
             <label class="qz-label">Will your site collect personal data? <span class="qz-req">*</span></label>
             <p class="qz-hint">Forms, newsletter, cookies…</p>
@@ -476,11 +466,8 @@
               <label><input type="radio" name="donnees_perso" value="I don't know" /> I don't know</label>
             </div>
           </div>
-        </section>
 
-        <!-- STEP 11 -->
-        <section class="qz-section" data-step="11">
-          <div class="qz-section-title"><span class="qz-num">11</span> Search engine optimisation (SEO)</div>
+          <div class="qz-sublabel">Search engine optimisation (SEO)</div>
           <div class="qz-field">
             <label class="qz-label">Is organic search ranking important to you? <span class="qz-req">*</span></label>
             <div class="qz-radio-group" data-required>
@@ -502,24 +489,20 @@
               <label><input type="radio" name="google_business" value="I don't know" /> I don't know</label>
             </div>
           </div>
-        </section>
 
-        <!-- STEP 12 -->
-        <section class="qz-section" data-step="12">
-          <div class="qz-section-title"><span class="qz-num">12</span> Access &amp; administration</div>
+          <div class="qz-sublabel">Administration</div>
           <div class="qz-field">
             <label class="qz-label">Would you like training to manage the site?</label>
             <div class="qz-radio-group">
               <label><input type="radio" name="formation" value="Yes" /> Yes</label>
               <label><input type="radio" name="formation" value="No" /> No</label>
-              <label><input type="radio" name="formation" value="To be decided based on complexity" /> To be decided based on complexity</label>
             </div>
           </div>
         </section>
 
-        <!-- STEP 13 -->
-        <section class="qz-section" data-step="13">
-          <div class="qz-section-title"><span class="qz-num">13</span> Organisation, deadlines &amp; sign-off</div>
+        <!-- STEP 7 -->
+        <section class="qz-section" data-step="7">
+          <div class="qz-section-title"><span class="qz-num">07</span> Timeline &amp; budget</div>
           <div class="qz-field">
             <label class="qz-label">Do you have a desired go-live date?</label>
             <input type="text" name="date_mise_en_ligne" placeholder="E.g. end of September 2026" />
@@ -542,21 +525,20 @@
           <div class="qz-field">
             <label class="qz-label">Do you have a budget range?</label>
             <div class="qz-radio-group">
-              <label><input type="radio" name="budget" value="Less than €500" /> Less than €500</label>
-              <label><input type="radio" name="budget" value="€500 – €1,500" /> €500 – €1,500</label>
-              <label><input type="radio" name="budget" value="€1,500 – €3,000" /> €1,500 – €3,000</label>
-              <label><input type="radio" name="budget" value="€3,000 – €5,000" /> €3,000 – €5,000</label>
-              <label><input type="radio" name="budget" value="More than €5,000" /> More than €5,000</label>
-              <label><input type="radio" name="budget" value="I don't know yet — I'd like a quote first" /> I don't know yet — I'd like a quote first</label>
+              <label><input type="radio" name="budget" value="€3,000 – €3,500" /> €3,000 – €3,500</label>
+              <label><input type="radio" name="budget" value="€5,000 – €10,000" /> €5,000 – €10,000</label>
+              <label><input type="radio" name="budget" value="€10,000 – €20,000" /> €10,000 – €20,000</label>
+              <label><input type="radio" name="budget" value="€20,000 – €40,000" /> €20,000 – €40,000</label>
+              <label><input type="radio" name="budget" value="Over €40,000" /> Over €40,000</label>
+              <label><input type="radio" name="budget" value="I don't know yet — I'd like an estimate first" /> I don't know yet — I'd like an estimate first</label>
             </div>
           </div>
           <div class="qz-field">
             <label class="qz-label">Would you like a recap memo of the site delivered?</label>
             <p class="qz-hint">The memo covers the essentials: sitemap, brand guidelines, features, back-office access…</p>
             <div class="qz-radio-group">
-              <label><input type="radio" name="memento" value="Yes, it would help me get to grips with it" /> Yes, it would help me get to grips with it</label>
+              <label><input type="radio" name="memento" value="Yes" /> Yes</label>
               <label><input type="radio" name="memento" value="No" /> No</label>
-              <label><input type="radio" name="memento" value="To be decided based on project complexity" /> To be decided based on project complexity</label>
             </div>
           </div>
         </section>
