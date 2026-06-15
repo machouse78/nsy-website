@@ -79,7 +79,7 @@ visible page copy. When touching language, go through all layers:
 
 ### Feasibility questionnaire (`faisabilite.html` / `feasibility.html`)
 - A **dedicated bilingual page** (NOT inlined in the homepage — keeps it light):
-  a **13-step wizard**, ~80 fields, dark NSY theme, `.qz-` CSS namespace in
+  a **7-step wizard**, ~80 fields, dark NSY theme, `.qz-` CSS namespace in
   `style.css`, behaviour in **`js/faisabilite.js`**. Reached from the Contact
   section via a `.faisa-cta` card and a footer "Contact" link on every page.
 - Handler **`faisabilite.php`** mirrors `contact.php` exactly: SMTP + Turnstile

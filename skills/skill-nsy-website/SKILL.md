@@ -46,7 +46,7 @@ must hold in every change.
   fully bilingual end-to-end (front strings + server errors + auto-reply email).
 
 ## Feasibility questionnaire (faisabilite.html / feasibility.html)
-- Dedicated bilingual page (a **13-step wizard**, ~80 fields) linked from the
+- Dedicated bilingual page (a **7-step wizard**, ~80 fields) linked from the
   **Contact section** via a `.faisa-cta` card + a footer "Contact" link on every
   page. NOT inlined in the homepage (keeps it light). Dark NSY theme, `.qz-`
   CSS namespace in `style.css`, logic in **`js/faisabilite.js`**.
