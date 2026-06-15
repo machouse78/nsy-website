@@ -2311,7 +2311,10 @@ footer.foot {
   border: 1px solid var(--line-strong);
   background: linear-gradient(135deg, rgba(0,229,255,0.05), rgba(77,125,255,0.04));
   display: flex; align-items: center; justify-content: space-between; gap: 18px;
+  transition: border-color .2s;
 }
+.faisa-cta:hover,
+.faisa-cta:focus-visible { border-color: rgba(0,229,255,0.4); outline: none; }
 .faisa-cta .l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 .faisa-cta h3 { font-size: 17px; color: var(--fg-0); margin: 6px 0 4px; }
 .faisa-cta p { font-size: 13.5px; color: var(--fg-2); margin: 0; }
