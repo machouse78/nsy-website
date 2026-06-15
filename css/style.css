@@ -2314,7 +2314,8 @@ footer.foot {
   transition: border-color .2s;
 }
 .faisa-cta:hover,
-.faisa-cta:focus-visible { border-color: rgba(0,229,255,0.4); outline: none; }
+.faisa-cta:focus,
+.faisa-cta:focus-visible { border-color: rgba(0,229,255,0.4); }
 .faisa-cta .l { font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 .faisa-cta h3 { font-size: 17px; color: var(--fg-0); margin: 6px 0 4px; }
 .faisa-cta p { font-size: 13.5px; color: var(--fg-2); margin: 0; }
