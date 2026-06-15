@@ -61,6 +61,11 @@
 
   function update() {
     sections.forEach((s) => s.classList.toggle('active', +s.dataset.step === current));
+    // Stepper labels above the bar: mark past steps "done", the current "active".
+    document.querySelectorAll('#qzSteps .qz-step').forEach((el, i) => {
+      el.classList.toggle('done', i + 1 < current);
+      el.classList.toggle('active', i + 1 === current);
+    });
     const pct = Math.round((current / TOTAL) * 100);
     if (bar) bar.style.width = pct + '%';
     if (label) label.textContent = T.step(current, TOTAL);
