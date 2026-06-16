@@ -413,17 +413,17 @@
     },
     {
       id: 'location',
-      cues: ['localis','situe','situez','adresse','region','ville','beauce','epieds','orleans','loiret',
+      cues: ['localis','situe','situez','adresse','region','ville',
               'distance','remote','distanciel','teletravail','sur site','deplac','base','based','geograph',
               'ou se trouve','ou est','ou etes','ou se situe','etes vous ou','vous etes ou',
               'where','located','location','on site','based'],
       fr: [
-        `NSY est basée à Epieds-en-Beauce (Centre-Val de Loire), entre Orléans et Chartres. Les missions se font principalement en distanciel, partout en France et en Europe, avec des déplacements ponctuels possibles selon le besoin.`,
-        `Siège en Beauce (Centre-Val de Loire), mais le travail est essentiellement à distance — donc la localisation du client n'est pas un frein. Déplacements sur site envisageables pour les temps forts d'une mission.`
+        `NSY est basée en France. Les missions se font principalement en distanciel, partout en France et en Europe, avec des déplacements ponctuels possibles selon le besoin.`,
+        `Le travail est essentiellement à distance — la localisation du client n'est pas un frein. Déplacements sur site envisageables pour les temps forts d'une mission.`
       ],
       en: [
-        `NSY is based in Epieds-en-Beauce (Centre-Val de Loire, France), between Orléans and Chartres. Engagements are mostly remote, across France and Europe, with occasional on-site visits when needed.`,
-        `Registered in the Beauce region (Centre-Val de Loire), but the work is essentially remote — so your location isn't a blocker. On-site visits are possible for key moments of a mission.`
+        `NSY is based in France. Engagements are mostly remote, across France and Europe, with occasional on-site visits when needed.`,
+        `Work is essentially remote — your location isn't a blocker. On-site visits are possible for key moments of a mission.`
       ]
     },
     {

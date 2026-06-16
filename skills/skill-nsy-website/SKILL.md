@@ -17,6 +17,12 @@ must hold in every change.
 ## Always-true facts (keep accurate everywhere — pages, chatbot, legal, meta)
 - NSY founded **2018** (not 2026). Owner/founder: **Cédric Barme**. EURL,
   capital 100 €, SIREN 842 078 453, Epieds-en-Beauce (Centre-Val de Loire).
+- **Display rule (owner request):** the **share capital** and the **registered
+  office / city** must appear ONLY on the legal pages (`mentions-legales.html`
+  / `legal-notice.html`) where they are legally required (LCEN). They must NOT
+  appear elsewhere — footer, contact card, About, JSON-LD, emails, chatbot,
+  sitemap captions, etc. Only "France" (or at most "Centre-Val de Loire") is
+  acceptable outside the legal pages.
 - AI web creation price: **from 5 800 € HT** / **€5,800 ex-VAT** — never 9 800.
 - Availability shown dynamically as **Q4 {current year}**; experience via
   `data-years` (career start 2012). Contact: contact@nsy.fr / +33 6 72 94 71 06.
