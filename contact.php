@@ -249,7 +249,7 @@ try {
             .       '<span style="color:#8993AF;font-size:13px">' . $ar['role'] . '</span>'
             .     '</p>'
             .   '</div>'
-            .   '<p style="text-align:center;font-family:monospace;font-size:10px;letter-spacing:0.1em;color:#5B6485;margin:24px 0 0">NSY · EURL · Epieds-en-Beauce · SIREN 842 078 453</p>'
+            .   '<p style="text-align:center;font-family:monospace;font-size:10px;letter-spacing:0.1em;color:#5B6485;margin:24px 0 0">NSY · EURL · SIREN 842 078 453</p>'
             . '</div>'
             . '</body></html>';
 
@@ -258,7 +258,7 @@ try {
             . "Email      : contact@nsy.fr\n"
             . "LinkedIn   : https://www.linkedin.com/in/cédric-barme/\n\n"
             . "—\nCédric Barme\n" . $ar['role'] . "\n\n"
-            . "NSY · EURL · Epieds-en-Beauce · SIREN 842 078 453\n";
+            . "NSY · EURL · SIREN 842 078 453\n";
 
         $auto->send();
     } catch (\PHPMailer\PHPMailer\Exception $autoErr) {
