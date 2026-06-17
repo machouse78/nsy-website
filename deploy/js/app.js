@@ -234,7 +234,6 @@
   // thanks and goodbye only fire when no content intent matched. A short
   // follow-up ("et ?", "plus de détails"…) re-opens the previous topic.
 
-  const Y = currentYear;
   const XP = yearsExperience;
 
   const norm = (s) => (s || '')
@@ -310,12 +309,12 @@
       cues: ['disponib','dispo','quand','delai','commenc','demarr','libre','planning','agenda','prochaine',
               'available','availability','when','start','lead time','booked','timeline'],
       fr: [
-        `Cédric prend de nouvelles missions à partir du <b>Q4 ${Y}</b>. Trois clients en parallèle au maximum, pour rester réellement disponible et tenir un niveau d'exigence non négociable.`,
-        `Disponibilité : à partir du Q4 ${Y}. Le créneau est volontairement limité (3 clients max en simultané) — si votre projet a une échéance, indiquez-la dans le formulaire pour caler le timing.`
+        `Cédric est <b>disponible dès à présent</b> pour de nouvelles missions. Trois clients en parallèle au maximum, pour rester réellement disponible et tenir un niveau d'exigence non négociable.`,
+        `Disponibilité : <b>immédiate</b>. Le créneau est volontairement limité (3 clients max en simultané) — si votre projet a une échéance, indiquez-la dans le formulaire pour caler le timing.`
       ],
       en: [
-        `Cédric takes on new engagements from <b>Q4 ${Y}</b>. Three clients in parallel at most, to stay genuinely available and hold a non-negotiable quality bar.`,
-        `Availability: from Q4 ${Y}. The slot is deliberately limited (3 clients max at once) — if your project has a deadline, mention it in the form so we can line up the timing.`
+        `Cédric is <b>available right now</b> for new engagements. Three clients in parallel at most, to stay genuinely available and hold a non-negotiable quality bar.`,
+        `Availability: <b>immediate</b>. The slot is deliberately limited (3 clients max at once) — if your project has a deadline, mention it in the form so we can line up the timing.`
       ]
     },
     {
