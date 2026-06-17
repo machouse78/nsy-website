@@ -18,7 +18,7 @@ requirements, not suggestions.
 | Email / phone | contact@nsy.fr / +33 (0)6 72 94 71 06 |
 | LinkedIn | linkedin.com/in/cédric-barme |
 | GitHub | github.com/machouse78/nsy-website |
-| Availability label | "Disponible · Q4 {year}" / "Available · Q4 {year}" (dynamic) |
+| Availability label | "Disponible maintenant" / "Available now" — owner is available immediately, **no Q4-{year} date anywhere** (removed on owner request) |
 | Experience | `data-years` injected by JS; career start 2012 (→ 14 yrs in 2026) |
 
 **Offerings (two + bonus):** (1) senior technical consulting for finance &

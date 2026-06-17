@@ -24,8 +24,10 @@ must hold in every change.
   sitemap captions, etc. Only "France" (or at most "Centre-Val de Loire") is
   acceptable outside the legal pages.
 - AI web creation price: **from 5 800 € HT** / **€5,800 ex-VAT** — never 9 800.
-- Availability shown dynamically as **Q4 {current year}**; experience via
-  `data-years` (career start 2012). Contact: contact@nsy.fr / +33 6 72 94 71 06.
+- Availability is **"now / immediate"** (owner is available immediately) — nav
+  CTA says "Disponible maintenant" / "Available now", no Q4-{year} date anywhere
+  (removed on owner request). Experience via `data-years` (career start 2012).
+  Contact: contact@nsy.fr / +33 6 72 94 71 06.
 
 ## Copy & terminology
 - French "Hobbies" → **"Loisirs"**; "Wireframe" → **"Maillage"** (EN keeps
