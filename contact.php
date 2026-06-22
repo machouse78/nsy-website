@@ -11,6 +11,18 @@
 
 declare(strict_types=1);
 
+// PHP 8.x hardening (the host moved from 7.4 to 8.5): keep any
+// deprecation / warning noise — e.g. from the bundled PHPMailer, stricter on
+// PHP 8.x — OUT of the JSON response body. Otherwise that text is prepended or
+// appended to the JSON, the browser can't parse the reply, and the form shows
+// a false "send error" even though the email was actually sent. Real errors
+// are still written to the server error log.
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+ini_set('display_errors', '0');
+// Belt-and-braces: buffer all output so stray notices can't corrupt the JSON;
+// we discard the buffer right before emitting the response.
+ob_start();
+
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 
@@ -266,6 +278,7 @@ try {
         error_log('NSY contact: autoresponder failed — ' . $auto->ErrorInfo);
     }
 
+    if (ob_get_length()) ob_clean(); // drop any stray notice/deprecation before the JSON
     echo json_encode(['ok' => true]);
 } catch (\PHPMailer\PHPMailer\Exception $e) {
     $detail = $mail->ErrorInfo ?: $e->getMessage();
@@ -275,6 +288,7 @@ try {
     @file_put_contents(__DIR__ . '/_secret/contact-errors.log', $errMsg, FILE_APPEND);
     @file_put_contents(__DIR__ . '/contact-errors.log', $errMsg, FILE_APPEND);
     http_response_code(500);
+    if (ob_get_length()) ob_clean();
     echo json_encode([
         'ok'    => false,
         'error' => $L("Erreur d'envoi — réessayez ou écrivez directement à contact@nsy.fr.", 'Sending failed — try again or email contact@nsy.fr directly.'),
