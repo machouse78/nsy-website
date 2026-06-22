@@ -10,9 +10,13 @@ cd "$ROOT"
 echo "🚀 Préparation du déploiement NSY Website pour Infomaniak..."
 echo "   Source : $ROOT"
 
-# Reset propre
-rm -rf deploy
+# Reset propre — MAIS on préserve les miroirs non versionnés de l'ancien site
+# (old-wp, boutique, forum, _old) qui doivent rester dans deploy/ pour l'upload
+# FTP. On vide donc deploy/ de tout SAUF ces dossiers.
 mkdir -p deploy
+find deploy -mindepth 1 -maxdepth 1 \
+  ! -name 'old-wp' ! -name 'boutique' ! -name 'forum' ! -name '_old' \
+  -exec rm -rf {} +
 
 # ───── Fichiers racine ─────
 echo "📁 Copie des fichiers racine (FR)..."

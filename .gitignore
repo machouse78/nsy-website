@@ -25,6 +25,14 @@ build/
 _secret/config.php
 deploy/_secret/config.php
 
+# Live-site mirrors copied into deploy/ for FTP upload only — NOT part of the
+# repo (old WordPress site, boutique, forum…). Kept locally for the upload,
+# never committed (can be large). The build script preserves these folders.
+deploy/old-wp/
+deploy/boutique/
+deploy/forum/
+deploy/_old/
+
 # Vite cache
 .vite/
 
