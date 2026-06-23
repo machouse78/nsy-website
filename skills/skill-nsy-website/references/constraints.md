@@ -220,6 +220,13 @@ visible page copy. When touching language, go through all layers:
 ## 12. Workflow & deployment
 - **Autonomous execution** (owner's standing preference, in memory): run
   commands without asking; pause only for destructive/irreversible ops.
+- **Nav & footer = `partials/` (single source of truth).** Edit
+  `partials/{nav,footer}.{fr,en}.html`, then `node scripts/sync-partials.mjs`
+  (`npm run partials`) rewrites the `<!-- @partial:nav/footer -->` regions in
+  all 8 pages; `prepare-deploy.sh` runs it too. Never hand-edit `<nav>`/`<footer>`
+  in a page (overwritten + you'd miss the other 7). `{{P}}` = anchor base path
+  (`''` home / `index.html`|`index-en.html` sub). Reason it exists: the owner
+  was tired of half the pages being forgotten on every nav/footer change.
 - Develop in the git worktree; commit + push to **`main`** (fast-forward push
   `HEAD:main`), then `git pull --ff-only origin main` in the primary worktree.
   Commit messages end with `Co-Authored-By: Claude <model> <noreply@anthropic.com>`.

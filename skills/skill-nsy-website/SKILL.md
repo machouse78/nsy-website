@@ -45,6 +45,24 @@ must hold in every change.
   page; the home canonical is `https://www.nsy.fr/` (trailing slash, consistent).
 - Touching pages/links means updating ALL of: nav, footer, `sitemap.xml`,
   hreflang, `.htaccess` (slug + 301s), `prepare-deploy.sh`.
+
+## ⚠️ Nav & footer are PARTIALS — never edit them per-page
+- The top nav and the footer are a **single source of truth** in `partials/`:
+  `nav.fr.html` · `nav.en.html` · `footer.fr.html` · `footer.en.html`.
+- To change the nav or footer: **edit the partial(s)**, then run
+  `node scripts/sync-partials.mjs` (or `npm run partials`). It rewrites the
+  regions marked `<!-- @partial:nav -->…<!-- @endpartial:nav -->` /
+  `…:footer…` in **all 8 pages** at once (idempotent). `prepare-deploy.sh`
+  also runs it automatically. **Do NOT hand-edit `<nav>`/`<footer>` inside a
+  page** — your change will be overwritten on the next sync, and you'd only
+  touch one page anyway.
+- `{{P}}` in a partial = base path for in-page anchors: `''` on the home pages
+  (`#services`, smooth scroll + scroll-spy) and `index.html`/`index-en.html`
+  on sub-pages (jump back to the homepage section). Per-language partials carry
+  the right active flag + EN/FR labels. The committed `.html` keeps the rendered
+  markup (local `python -m http.server` preview + SEO still work; no runtime
+  include). The nav is intentionally 4 links (no per-section links) to avoid
+  overflow — add discoverability via the footer instead.
 - **A language change must be applied to the WHOLE site, every layer** — not
   just visible HTML copy. Check: visible text (FR+EN pages), **JS-injected UI
   strings** (button states, toasts in `js/app.js`, keyed by `pageLang`),

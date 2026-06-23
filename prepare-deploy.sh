@@ -10,6 +10,15 @@ cd "$ROOT"
 echo "🚀 Préparation du déploiement NSY Website pour Infomaniak..."
 echo "   Source : $ROOT"
 
+# ───── Nav + footer : resynchronise toutes les pages depuis partials/ ─────
+# (source unique ; voir scripts/sync-partials.mjs). Idempotent.
+if command -v node >/dev/null 2>&1; then
+  node scripts/sync-partials.mjs >/dev/null && echo "🧩 Nav/footer synchronisés depuis partials/"
+else
+  echo "  ⚠️  node introuvable — nav/footer NON resynchronisés."
+  echo "      Après édition de partials/, lance : node scripts/sync-partials.mjs"
+fi
+
 # Reset propre — MAIS on préserve les miroirs non versionnés de l'ancien site
 # (old-wp, boutique, forum, _old) qui doivent rester dans deploy/ pour l'upload
 # FTP. On vide donc deploy/ de tout SAUF ces dossiers.
