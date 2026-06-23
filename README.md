@@ -36,15 +36,14 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | Capabilities | — | 2 cards : Conseil senior / Création web IA |
 | Process | — | 4 étapes : Discovery → Design → Build → Handover |
 | Trust strip | — | 3 valeurs : Indépendance / Confidentialité / Engagement |
-| Services | `services` | 2 cards détaillées avec swap image ↔ vidéo au survol |
-| **Réalisations** | `realisations` | Portfolio des **sites clients livrés** (grille de cartes : aperçu → site en ligne). 1ʳᵉ réalisation : PRV Concept |
+| Services | `services` | 2 cards détaillées avec swap image ↔ vidéo au survol. La card Web·IA renvoie vers la page **Réalisations** (bouton « Voir nos réalisations ») |
 | About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
 | **Loisirs & créations** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
 | Contact | `contact` | Formulaire (PHP) avec choix de service + canaux directs + mentions légales |
 | CTA banner | — | Bandeau "Prochain créneau" avec spotlight souris suivant |
 | Footer | — | Navigation + expertise + contact + réseaux sociaux |
 
-Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN) et le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN), accessible depuis la section Contact.
+Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN), le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN, depuis la section Contact) et les **Réalisations** `realisations.html` / `portfolio.html` (EN, portfolio des sites clients — 1ʳᵉ réalisation : PRV Concept).
 
 ## Bilingue (FR / EN)
 
@@ -55,6 +54,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `index.html` (`/`) | `index-en.html` |
 | `mentions-legales.html` | `legal-notice.html` |
 | `confidentialite.html` | `privacy.html` |
+| `realisations.html` | `portfolio.html` |
 | `faisabilite.html` | `feasibility.html` |
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.

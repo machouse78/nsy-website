@@ -38,7 +38,8 @@ must hold in every change.
 ## Bilingual (FR/EN) — every new page or link must stay symmetric
 - One file per language, **real translated slugs** (loisirs↔hobbies,
   mentions-legales↔legal-notice, confidentialite↔privacy,
-  faisabilite↔feasibility) — EXCEPT the home stays `index.html` ↔ `index-en.html`.
+  faisabilite↔feasibility, realisations↔portfolio) — EXCEPT the home stays
+  `index.html` ↔ `index-en.html`.
 - **Flag switcher** 🇫🇷🇬🇧 (not text), sets `nsy_lang` cookie + redirects via the
   explicit slug map in `js/app.js`. `.htaccess` auto-detects `Accept-Language`
   on `/`. Reciprocal **hreflang** fr/en/x-default + self-canonical on every
@@ -106,16 +107,21 @@ must hold in every change.
 - **Never push a 3D change without first rendering/screenshotting the result**
   and confirming it looks right (use `scripts/screenshot-glb.mjs`).
 
-## Client realizations (`#realisations`)
-- Homepage section (after `#services`, before `#creations`) showcasing **delivered
-  client websites** as a `.realisations-grid` of `.realisation-card`s (screenshot
-  thumbnail → live site, name, URL, description, tags). Bilingual: FR eyebrow
-  "Réalisations", EN "Work". First entry: **PRV Concept** (www.prv-concept.com),
-  thumbnail `public/prv-concept.jpg` (recompressed ~160 KB). To add a client, copy
-  one `.realisation-card` block in both index pages + add its screenshot.
-- **No top-nav link** (keeps the already-tight nav from overflowing < ~1100px —
-  the home nav deliberately omits per-section links like Loisirs). Reachable via
-  the **footer "Navigation"** link + sitemap anchor `#realisations`.
+## Client realizations — DEDICATED PAGE (`realisations.html` / `portfolio.html`)
+- A **standalone bilingual page** (NOT a homepage section — owner moved it out),
+  showing delivered client websites as a `.realisations-grid` of
+  `.realisation-card`s (screenshot thumbnail → live site, name, URL, description,
+  tags). First entry: **PRV Concept** (www.prv-concept.com), thumbnail
+  `public/prv-concept.jpg` (recompressed ~160 KB). To add a client, copy one
+  `.realisation-card` block in **both** pages + ship its screenshot.
+- **Reached from a button** "Voir nos réalisations" / "See our work" placed in
+  the **Web·IA service card** `.svc-foot` (right of "Démarrer un projet", grouped
+  in `.svc-actions`), plus the footer "Réalisations"/"Work" link → the page.
+  **No top-nav link** (keeps the already-tight nav from overflowing < ~1100px).
+- Slug pair `realisations.html ↔ portfolio.html` is in `SLUG_FR_TO_EN`
+  (`js/app.js`), `sitemap.xml` (own URLs + hreflang + the PRV image), the
+  `sync-partials.mjs` page list (so nav/footer sync there too), and
+  `prepare-deploy.sh`.
 
 ## Layout / responsive
 - The Loisirs/3D content is a **homepage section `#creations`** (after the
