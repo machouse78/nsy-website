@@ -88,6 +88,17 @@ must hold in every change.
 - **Never push a 3D change without first rendering/screenshotting the result**
   and confirming it looks right (use `scripts/screenshot-glb.mjs`).
 
+## Client realizations (`#realisations`)
+- Homepage section (after `#services`, before `#creations`) showcasing **delivered
+  client websites** as a `.realisations-grid` of `.realisation-card`s (screenshot
+  thumbnail → live site, name, URL, description, tags). Bilingual: FR eyebrow
+  "Réalisations", EN "Work". First entry: **PRV Concept** (www.prv-concept.com),
+  thumbnail `public/prv-concept.jpg` (recompressed ~160 KB). To add a client, copy
+  one `.realisation-card` block in both index pages + add its screenshot.
+- **No top-nav link** (keeps the already-tight nav from overflowing < ~1100px —
+  the home nav deliberately omits per-section links like Loisirs). Reachable via
+  the **footer "Navigation"** link + sitemap anchor `#realisations`.
+
 ## Layout / responsive
 - The Loisirs/3D content is a **homepage section `#creations`** (after the
   "Principes de travail" / "Working principles" block), not a standalone page;

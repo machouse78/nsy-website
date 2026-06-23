@@ -37,6 +37,7 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | Process | — | 4 étapes : Discovery → Design → Build → Handover |
 | Trust strip | — | 3 valeurs : Indépendance / Confidentialité / Engagement |
 | Services | `services` | 2 cards détaillées avec swap image ↔ vidéo au survol |
+| **Réalisations** | `realisations` | Portfolio des **sites clients livrés** (grille de cartes : aperçu → site en ligne). 1ʳᵉ réalisation : PRV Concept |
 | About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
 | **Loisirs & créations** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
 | Contact | `contact` | Formulaire (PHP) avec choix de service + canaux directs + mentions légales |

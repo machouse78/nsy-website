@@ -63,6 +63,7 @@ cp public/nsy-og.jpg                    deploy/public/
 cp public/photo-profil.png              deploy/public/
 cp public/finance-assurance.png         deploy/public/
 cp public/web-ia.png                    deploy/public/
+cp public/prv-concept.jpg               deploy/public/
 cp public/cropped-NSY-logo-32x32.png    deploy/public/
 cp public/cropped-NSY-logo-180x180.png  deploy/public/
 cp public/cropped-NSY-logo-192x192.png  deploy/public/
@@ -112,6 +113,7 @@ required=(
   "deploy/public/photo-profil.png"
   "deploy/public/finance-assurance.png"
   "deploy/public/web-ia.png"
+  "deploy/public/prv-concept.jpg"
   "deploy/public/cropped-NSY-logo-32x32.png"
   "deploy/public/cropped-NSY-logo-180x180.png"
   "deploy/public/cropped-NSY-logo-192x192.png"

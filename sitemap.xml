@@ -46,6 +46,12 @@
       <image:caption>Service NSY : sites web nouvelle génération avec intégration LLM (Claude, OpenAI, Mistral)</image:caption>
     </image:image>
 
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/prv-concept.jpg</image:loc>
+      <image:title>PRV Concept — site réalisé par NSY</image:title>
+      <image:caption>Réalisation NSY : site vitrine de l'association PRV Concept, dédiée au V6 PRV (Peugeot · Renault · Volvo)</image:caption>
+    </image:image>
+
     <!-- Vidéo hero -->
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
@@ -106,6 +112,14 @@
     <lastmod>2026-05-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+  </url>
+
+  <!-- Réalisations clients (section ancre de la page d'accueil) -->
+  <url>
+    <loc>https://www.nsy.fr/#realisations</loc>
+    <lastmod>2026-06-22</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
 
   <!-- Loisirs & créations 3D (section ancre de la page d'accueil) -->
