@@ -348,13 +348,13 @@
     {
       id: 'threeD',
       cues: ['3d','blender','wireframe','animation','modele','rendu','render','voiture','renault','baccara',
-              'loisir','hobby','hobbies','youtube'],
+              'loisir','hobby','hobbies','conception','youtube'],
       fr: [
-        `La 3D fait partie des cordes créatives : rendus Blender optimisés pour le web, légers et rapides. Deux exemples concrets dans la section Loisirs — une animation 3D (vidéo YouTube) et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : section ${hobbiePath}.`,
+        `La 3D fait partie des cordes créatives : rendus Blender optimisés pour le web, légers et rapides. Deux exemples concrets dans la section Conception 3D — une animation 3D (vidéo YouTube) et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : section ${hobbiePath}.`,
         `Oui, animations et modèles 3D maison — du Blender pensé pour le web (zéro ralentissement). Le wireframe cyan de la Renault R25 dans la section ${hobbiePath} est interactif : cliquez-glissez pour le faire tourner. Et oui, ça aussi ça peut s'intégrer à votre site.`
       ],
       en: [
-        `3D is one of the creative strings: Blender renders optimised for the web — light and fast. Two live examples in the Hobbies section — a 3D animation (YouTube video) and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: ${hobbiePath} section.`,
+        `3D is one of the creative strings: Blender renders optimised for the web — light and fast. Two live examples in the 3D Design section — a 3D animation (YouTube video) and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: ${hobbiePath} section.`,
         `Yes, in-house 3D animations and models — Blender built for the web (no slowdown). The cyan Renault R25 wireframe in the ${hobbiePath} section is interactive: click and drag to spin it. And yes, this can be embedded into your site too.`
       ]
     },
@@ -430,11 +430,11 @@
       cues: ['reference','client','clientele','portfolio','realisation','exemple','case study','case',
               'temoignage','testimonial','who have you worked'],
       fr: [
-        `Les missions se déroulent au sein de grandes institutions financières et d'assurance, le plus souvent sous accord de confidentialité — donc pas de noms publics ici. Les démonstrateurs visibles, eux, sont ce site (multilingue, chatbot, 3D) et la section Loisirs.`,
+        `Les missions se déroulent au sein de grandes institutions financières et d'assurance, le plus souvent sous accord de confidentialité — donc pas de noms publics ici. Les démonstrateurs visibles, eux, sont ce site (multilingue, chatbot, 3D) et la section Conception 3D.`,
         `La plupart des références sont sous NDA (finance/assurance), donc difficiles à citer nommément. En revanche, ce site lui-même illustre le savoir-faire web + IA + 3D — c'est un portfolio vivant.`
       ],
       en: [
-        `Engagements take place inside large financial and insurance institutions, usually under NDA — so no public names here. The visible showcases are this site (multilingual, chatbot, 3D) and the Hobbies section.`,
+        `Engagements take place inside large financial and insurance institutions, usually under NDA — so no public names here. The visible showcases are this site (multilingual, chatbot, 3D) and the 3D Design section.`,
         `Most references are under NDA (finance/insurance), so hard to name directly. This site itself, though, demonstrates the web + AI + 3D know-how — a living portfolio.`
       ]
     },

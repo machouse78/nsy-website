@@ -30,8 +30,10 @@ must hold in every change.
   Contact: contact@nsy.fr / +33 6 72 94 71 06.
 
 ## Copy & terminology
-- French "Hobbies" → **"Loisirs"**; "Wireframe" → **"Maillage"** (EN keeps
-  "Wireframe"). Filenames/URLs unchanged.
+- The 3D section is labelled **"Conception 3D"** (FR) / **"3D Design"** (EN) —
+  renamed from "Loisirs"/"Hobbies & créations" (owner). "Wireframe" →
+  **"Maillage"** (EN keeps "Wireframe"). Internal names unchanged: the `#creations`
+  id, the `.hobbie-*` CSS classes, and the chatbot cues stay as-is.
 - **No "K2000" / "Knight Rider"** wording anywhere — keep copy sober/pro.
 - Tone: professional consulting. Don't reintroduce gimmicks.
 
@@ -124,9 +126,10 @@ must hold in every change.
   `prepare-deploy.sh`.
 
 ## Layout / responsive
-- The Loisirs/3D content is a **homepage section `#creations`** (after the
-  "Principes de travail" / "Working principles" block), not a standalone page;
-  no "Loisirs" nav link. Desktop = 2 columns (vertical YouTube **Short** left in
+- The 3D-design content (eyebrow **"Conception 3D"** / **"3D Design"**) is a
+  **homepage section `#creations`** (after the "Principes de travail" /
+  "Working principles" block), not a standalone page; no top-nav link (the
+  footer link "Conception 3D" / "3D Design" points to it). Desktop = 2 columns (vertical YouTube **Short** left in
   a ~340px portrait card, wireframe model larger right); mobile ≤920px stacks
   (Short capped at 340px, centered). The animation is a **YouTube embed**
   (youtube-nocookie.com, Short `bJPxWWbOFSM` — "Renault 25 Baccara V6 Turbo

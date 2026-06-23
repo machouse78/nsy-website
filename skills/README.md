@@ -7,7 +7,7 @@ site par eux-mêmes.
 
 | Skill | Rôle |
 |---|---|
-| **`skill-nsy-website/`** | Le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT, SIREN…), conventions bilingues, terminologie (Loisirs/Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite d'avoir à re-préciser ces règles à chaque session. |
+| **`skill-nsy-website/`** | Le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT, SIREN…), conventions bilingues, terminologie (Conception 3D/Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite d'avoir à re-préciser ces règles à chaque session. |
 | **`frontend-responsive-perf/`** | Le « comment » technique réutilisable (framework-agnostique) : responsive parfait mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless. |
 
 ## Activer les skills

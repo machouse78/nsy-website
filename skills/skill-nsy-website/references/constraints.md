@@ -97,8 +97,10 @@ visible page copy. When touching language, go through all layers:
   to `sitemap.xml` (hreflang), and to `prepare-deploy.sh` (copy + required list).
 
 ## 4. Copy / terminology rules
-- **"Hobbies" → "Loisirs"** on the FR side (nav, `<title>`, OG/Twitter, eyebrow,
-  footer). EN keeps "Hobbies".
+- **The 3D section is "Conception 3D" (FR) / "3D Design" (EN)** — owner renamed
+  it from "Loisirs & créations" / "Hobbies & creations". Appears in the section
+  eyebrow + the footer "Navigation" link + the chatbot answers. Internal names
+  (`#creations` id, `.hobbie-*` classes, chatbot cues `loisir`/`hobby`) unchanged.
 - **"Wireframe" → "Maillage"** on FR pages (eyebrow, title, alt). EN keeps
   "Wireframe". The GLB filename `renault-wireframe.glb` is unchanged (it's a URL).
 - **Ban "K2000" and "Knight Rider"** anywhere (HTML, README, code comments).
@@ -131,12 +133,14 @@ visible page copy. When touching language, go through all layers:
   (FR/EN), not just the page language. (Owner: "il parle anglais aussi".)
 - Keep facts accurate (price 5 800, founded 2018, etc.).
 
-## 7. Homepage structure / the "Loisirs" merge
+## 7. Homepage structure / the "Conception 3D" section
 - The standalone Loisirs/Hobbies page was removed; its content is a homepage
-  **section `id="creations"`** placed right after "Principes de travail" /
-  "Working principles". 301-redirect the old slugs to it.
-- **No "Loisirs"/"Hobbies" nav link** (owner: the section is enough). Footer
-  link to `#creations` is fine. Legal pages link to `index{,-en}.html#creations`.
+  **section `id="creations"`** (eyebrow now **"Conception 3D"** / **"3D Design"**)
+  placed right after "Principes de travail" / "Working principles".
+  301-redirect the old slugs to it.
+- **No top-nav link** (owner: the section is enough). The footer "Navigation"
+  link ("Conception 3D" / "3D Design") points to `#creations`. Legal/other pages
+  link to `index{,-en}.html#creations`.
 - `#creations` layout: **desktop = 2 columns** — vertical YouTube **Short** on
   the **left** in a portrait card (`grid-template-columns: minmax(0,340px) 1fr`,
   so the Short is ~340px wide and the interactive wireframe is **larger on the
