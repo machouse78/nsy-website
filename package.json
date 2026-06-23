@@ -6,7 +6,8 @@
   "type": "commonjs",
   "scripts": {
     "build:wireframe": "./scripts/build-wireframe.sh",
-    "screenshot": "node scripts/screenshot-glb.mjs"
+    "screenshot": "node scripts/screenshot-glb.mjs",
+    "partials": "node scripts/sync-partials.mjs"
   },
   "devDependencies": {
     "@gltf-transform/core": "^4.3.0",

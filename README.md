@@ -146,7 +146,11 @@ nsy-website/
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
-├── scripts/                             # Pipeline 3D (Blender + glTF-Transform + Puppeteer)
+├── partials/                            # ⭐ Source unique de la nav + du footer (FR/EN)
+│   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
+│   └── footer.fr.html / footer.en.html  #    Pied de page
+├── scripts/                             # Outillage build (3D + synchro partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 8 pages (npm run partials)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
 │   ├── tris-to-lines.mjs                # Triangles → GL_LINES
