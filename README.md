@@ -38,7 +38,7 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | Trust strip | — | 3 valeurs : Indépendance / Confidentialité / Engagement |
 | Services | `services` | 2 cards détaillées avec swap image ↔ vidéo au survol. La card Web·IA renvoie vers la page **Réalisations** (bouton « Voir nos réalisations ») |
 | About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
-| **Loisirs & créations** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
+| **Conception 3D** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
 | Contact | `contact` | Formulaire (PHP) avec choix de service + canaux directs + mentions légales |
 | CTA banner | — | Bandeau "Prochain créneau" avec spotlight souris suivant |
 | Footer | — | Navigation + expertise + contact + réseaux sociaux |
@@ -128,7 +128,7 @@ Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire c
 - **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
 - **Vidéo hero** (`nsy-ia.mp4`) : recompressée du **1080p (4.8 Mo)** vers un **crop carré 720×720 (1.7 Mo)** — elle s'affiche dans une sphère de ~300px masquée en cercle, donc le 1080p et les bords 16:9 étaient inutiles. Décodage divisé par ~4.
 - **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
-- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Loisirs n'est pas visible.
+- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible.
 - **Cache** : `.htaccess` pose `Cache-Control: max-age` (1 mois médias) — évite le **re-téléchargement** (mais pas le re-décodage, d'où la mise en pause ci-dessus).
 
 Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'environ **94 → 12 M pixels/s** (≈ −87 %), et les sections hors écran ne repeignent plus rien.
@@ -242,7 +242,7 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
 
-- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Loisirs / Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
+- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Conception 3D / Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
 
 **Activation** : Claude Code lit les skills depuis `~/.claude/skills/`. Copier ou lier les dossiers (`cp -R skills/* ~/.claude/skills/` ou `ln -s`). Détails dans [`skills/README.md`](skills/README.md).
