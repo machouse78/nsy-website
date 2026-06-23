@@ -33,6 +33,7 @@ cp index.html            deploy/
 cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
 cp faisabilite.html      deploy/
+cp realisations.html     deploy/
 cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp sitemap.xml           deploy/
@@ -44,6 +45,7 @@ cp index-en.html             deploy/
 cp legal-notice.html  deploy/
 cp privacy.html   deploy/
 cp feasibility.html   deploy/
+cp portfolio.html   deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."
@@ -104,6 +106,8 @@ required=(
   "deploy/privacy.html"
   "deploy/faisabilite.html"
   "deploy/feasibility.html"
+  "deploy/realisations.html"
+  "deploy/portfolio.html"
   "deploy/contact.php"
   "deploy/faisabilite.php"
   "deploy/sitemap.xml"

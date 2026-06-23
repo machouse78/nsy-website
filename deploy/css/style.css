@@ -1076,6 +1076,8 @@ section.block:first-of-type { border-top: 0; }
   padding-top: 22px;
   border-top: 1px solid var(--line);
 }
+/* Groupe de boutons à droite du prix (Démarrer un projet + Voir nos réalisations) */
+.svc-actions { display: flex; gap: 10px; flex-wrap: wrap; }
 .svc-price {
   font-family: var(--font-mono);
   font-size: 12px;
