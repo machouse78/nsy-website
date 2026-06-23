@@ -34,18 +34,22 @@ const partials = {
   en: { nav: read('partials/nav.en.html').trim(), footer: read('partials/footer.en.html').trim() },
 };
 
-// [file, language, base-path for {{P}}]
+// [file, language, base-path for {{P}}, active nav data-target]
+// `active` = which top-nav link is highlighted on that page. The home pages use
+// 'top' but their scroll-spy overrides it live; sub-pages have no scroll-spy so
+// this value is what stays shown. The Réalisations page belongs to the offer →
+// highlight "Services".
 const pages = [
-  ['index.html',            'fr', ''],
-  ['index-en.html',         'en', ''],
-  ['mentions-legales.html', 'fr', 'index.html'],
-  ['confidentialite.html',  'fr', 'index.html'],
-  ['faisabilite.html',      'fr', 'index.html'],
-  ['realisations.html',     'fr', 'index.html'],
-  ['legal-notice.html',     'en', 'index-en.html'],
-  ['privacy.html',          'en', 'index-en.html'],
-  ['feasibility.html',      'en', 'index-en.html'],
-  ['portfolio.html',        'en', 'index-en.html'],
+  ['index.html',            'fr', '',               'top'],
+  ['index-en.html',         'en', '',               'top'],
+  ['mentions-legales.html', 'fr', 'index.html',     'top'],
+  ['confidentialite.html',  'fr', 'index.html',     'top'],
+  ['faisabilite.html',      'fr', 'index.html',     'top'],
+  ['realisations.html',     'fr', 'index.html',     'services'],
+  ['legal-notice.html',     'en', 'index-en.html',  'top'],
+  ['privacy.html',          'en', 'index-en.html',  'top'],
+  ['feasibility.html',      'en', 'index-en.html',  'top'],
+  ['portfolio.html',        'en', 'index-en.html',  'services'],
 ];
 
 function replaceRegion(html, name, content, file) {
@@ -58,10 +62,14 @@ function replaceRegion(html, name, content, file) {
 }
 
 let changed = 0;
-for (const [file, lang, P] of pages) {
+for (const [file, lang, P, active = 'top'] of pages) {
   const before = read(file);
   let html = before;
-  const nav = partials[lang].nav.replaceAll('{{P}}', P);
+  let nav = partials[lang].nav.replaceAll('{{P}}', P);
+  // Highlight the right top-nav link for this page: clear every active, then
+  // set it on the link whose data-target matches `active`.
+  nav = nav.replace(/class="nav-link active"/g, 'class="nav-link"')
+           .replace(`class="nav-link" data-target="${active}"`, `class="nav-link active" data-target="${active}"`);
   const footer = partials[lang].footer.replaceAll('{{P}}', P);
   html = replaceRegion(html, 'nav', nav, file);
   html = replaceRegion(html, 'footer', footer, file);
