@@ -937,4 +937,42 @@
       aio.observe(z);
     });
   }
+
+  // ───── Scroll reveal (one-shot, IntersectionObserver) ─────
+  // Fade + translateY sur les blocs de contenu au scroll. One-shot : l'observer
+  // se retire après déclenchement (unobserve). Désactivé si prefers-reduced-motion.
+  // Seuls transform + opacity sont animés (composited, GPU, pas de layout/paint).
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const revealEls = document.querySelectorAll('.cap, .svc, .step, .signal, .timeline-item, .realisation-card');
+
+    // Stagger : décalage progressif par position dans le conteneur parent
+    const staggerMap = new Map();
+    revealEls.forEach((el) => {
+      const parent = el.parentElement;
+      if (!staggerMap.has(parent)) staggerMap.set(parent, 0);
+      const idx = staggerMap.get(parent);
+      staggerMap.set(parent, idx + 1);
+      el.style.transitionDelay = Math.min(idx * 65, 220) + 'ms';
+      el.classList.add('reveal-up');
+    });
+
+    const revealIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-visible');
+        revealIO.unobserve(e.target);
+        // Retire les classes une fois la transition terminée pour que les
+        // transitions hover normales (border-color, transform .25s) soient
+        // pleinement restaurées sans conflit de durée.
+        e.target.addEventListener('transitionend', function cleanup(ev) {
+          if (ev.propertyName !== 'opacity') return;
+          e.target.classList.remove('reveal-up', 'is-visible');
+          e.target.style.transitionDelay = '';
+          e.target.removeEventListener('transitionend', cleanup);
+        });
+      });
+    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.08 });
+
+    revealEls.forEach((el) => revealIO.observe(el));
+  }
 })();
