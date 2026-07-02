@@ -1024,7 +1024,9 @@
     const bar = document.createElement('div');
     bar.className = 'scroll-progress';
     bar.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(bar);
+    // Dans la nav sticky (ancrée sous le menu, façon PRV Concept) ;
+    // fallback en haut du viewport si une page n'avait pas de nav.
+    (document.querySelector('.nav') || document.body).appendChild(bar);
     let ticking = false;
     const update = () => {
       const doc = document.documentElement;
