@@ -572,6 +572,8 @@ section.block:first-of-type { border-top: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Parallaxe souris (JS) — plan opposé aux terminaux pour l'effet de profondeur */
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
 }
 .glyph-core {
   position: relative;
@@ -710,8 +712,10 @@ section.block:first-of-type { border-top: 0; }
 .terminal .cursor { display: inline-block; width: 7px; height: 13px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-.t-1 { top: 4%; right: -6%; width: 230px; transform: rotate(2deg); }
-.t-2 { bottom: 8%; left: -8%; width: 250px; transform: rotate(-3deg); }
+/* --px/--py : décalage parallaxe (souris) écrit par JS — translate3d composité,
+   0 par défaut donc inerte sans JS / sur tactile / en reduced-motion. */
+.t-1 { top: 4%; right: -6%; width: 230px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(2deg); }
+.t-2 { bottom: 8%; left: -8%; width: 250px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(-3deg); }
 
 .tag {
   position: absolute;
@@ -735,8 +739,8 @@ section.block:first-of-type { border-top: 0; }
 .tag.cyan i { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .tag.warm i { background: var(--warm); box-shadow: 0 0 8px var(--warm); }
 
-.tag-1 { top: 38%; right: -2%; }
-.tag-2 { bottom: 32%; left: -4%; }
+.tag-1 { top: 38%; right: -2%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
+.tag-2 { bottom: 32%; left: -4%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
 
 /* marquee strip */
 .marquee {
@@ -2471,6 +2475,118 @@ footer.foot {
 .hero .hero-meta {
   animation: hero-entry var(--dur-lg) var(--ease-out) both;
   animation-delay: 480ms;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UX pass 2 — micro-interactions & chorégraphie
+   Règle inchangée : uniquement transform / opacity en animation ;
+   les changements de couleur/bordure restent des transitions hover
+   ponctuelles (paint transitoire, pas de coût continu).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Barre de progression de lecture (élément injecté par JS sur chaque page) */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  box-shadow: 0 0 8px var(--accent-glow);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 60; /* au-dessus de la nav (50) */
+  pointer-events: none;
+}
+
+/* Compteurs animés : chiffres tabulaires = zéro décalage pendant le comptage */
+.hero-meta-item .num,
+.signal .v { font-variant-numeric: tabular-nums; }
+
+/* Sheen (balayage lumineux) sur le CTA principal + état pressé */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform .55s var(--ease-out);
+  pointer-events: none;
+}
+.btn-primary:hover::before { transform: translateX(120%); }
+.btn:active { transform: translateY(0) scale(0.97); }
+
+/* Étapes du process : hover jusque-là inexistant */
+.step { transition: background-color .25s; }
+.step .n { transition: text-shadow .25s; }
+.step:hover { background-color: rgba(0,229,255,0.035); }
+.step:hover .n { text-shadow: 0 0 12px rgba(0,229,255,0.5); }
+
+/* Chips (listes de capacités, secteurs, stacks) */
+.cap-list li,
+.clients span,
+.svc-stack-grid div {
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.cap-list li:hover,
+.clients span:hover,
+.svc-stack-grid div:hover {
+  border-color: rgba(0,229,255,0.35);
+  color: var(--fg-0);
+  transform: translateY(-1px);
+}
+
+/* Flèches des cartes-liens : même langage que .btn */
+.channel .arrow,
+.faisa-cta .arrow { transition: transform .2s, color .2s; }
+.channel:hover .arrow { transform: translateX(3px); color: var(--accent); }
+.faisa-cta:hover .arrow { transform: translateX(3px); }
+
+/* Couverture des cartes service : zoom léger du visuel au hover */
+.svc-bg { transition: opacity .35s ease, transform .65s var(--ease-out); }
+.svc:hover .svc-bg { transform: scale(1.04); }
+.svc:hover .svc-bg-video { transform: scale(1.10); }
+.svc.warm:hover .svc-bg-video { transform: scale(1.20); }
+
+/* Soulignés animés : footer (liens directs des colonnes + barre légale) */
+.foot-col > a,
+.foot-bot a {
+  position: relative;
+  width: fit-content;
+}
+.foot-col > a::after,
+.foot-bot a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s var(--ease-out);
+}
+.foot-col > a:hover::after,
+.foot-bot a:hover::after { transform: scaleX(1); }
+
+/* Marquee : pause au survol pour laisser lire */
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* Pastille "↻ Faites pivoter" : masquée après la première manipulation */
+.model-hint.is-done {
+  animation: none;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+/* Impression : les blocs en attente de reveal ne doivent jamais sortir blancs */
+@media print {
+  .reveal-up { opacity: 1 !important; transform: none !important; }
 }
 
 /* ───── prefers-reduced-motion ───── */
