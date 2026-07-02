@@ -79,15 +79,15 @@
       sent: 'Sent ✓',
       retry: 'Retry',
       ok: 'Message received — reply within 48 business hours.',
-      errSend: 'Sending failed — try again or email contact@nsy.fr.',
-      errNet: 'Network error — try again or email contact@nsy.fr.',
+      errSend: 'Sending failed — please try again.',
+      errNet: 'Network error — please try again.',
     } : {
       sending: 'Envoi…',
       sent: 'Envoyé ✓',
       retry: 'Réessayer',
       ok: 'Message reçu — réponse sous 48h ouvrées.',
-      errSend: "Erreur d'envoi — réessayez ou écrivez à contact@nsy.fr.",
-      errNet: 'Erreur réseau — réessayez ou écrivez à contact@nsy.fr.',
+      errSend: "Erreur d'envoi — veuillez réessayer.",
+      errNet: 'Erreur réseau — veuillez réessayer.',
     };
     const setLabel = (text) => {
       const label = submitBtn?.querySelector('.btn-label');
@@ -468,12 +468,12 @@
       cues: ['contact','contacter','joindre','rendez vous','rdv','appel','telephone','tel','mail','email',
               'ecrire','parler','reach','meeting','call','book','get in touch','email you'],
       fr: [
-        `Le plus simple : le formulaire en bas de page (réponse sous 48 h ouvrées), ou directement <b>contact@nsy.fr</b> / +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
-        `Pour échanger : formulaire en bas de page, e-mail à <b>contact@nsy.fr</b>, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
+        `Le plus simple : le formulaire en bas de page (réponse sous 48 h ouvrées), ou par téléphone au +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
+        `Pour échanger : formulaire en bas de page, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
       ],
       en: [
-        `Easiest path: the form at the bottom of the page (reply within 48 business hours), or directly <b>contact@nsy.fr</b> / +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
-        `To get in touch: the form at the bottom, an email to <b>contact@nsy.fr</b>, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
+        `Easiest path: the form at the bottom of the page (reply within 48 business hours), or by phone at +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
+        `To get in touch: the form at the bottom, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
       ]
     }
   ];

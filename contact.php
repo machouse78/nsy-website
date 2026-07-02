@@ -48,7 +48,7 @@ $configPath = __DIR__ . '/_secret/config.php';
 if (!file_exists($configPath)) {
     error_log('NSY contact: missing _secret/config.php');
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => $L('Configuration serveur manquante. Écrivez-nous à contact@nsy.fr.', 'Server configuration missing. Please email contact@nsy.fr.')]);
+    echo json_encode(['ok' => false, 'error' => $L('Erreur de configuration serveur — veuillez réessayer.', 'Server configuration error — please try again.')]);
     exit;
 }
 $config = require $configPath;
@@ -224,20 +224,20 @@ try {
             'subject'  => 'Thanks for your message — NSY',
             'greeting' => 'Thank you, ' . $esc($name) . '.',
             'p1'       => 'I\'ve received your message about <strong style="color:#F2F6FF">' . $esc($serviceLabelClient) . '</strong> and I\'ll personally get back to you <strong style="color:#00E5FF">within 48 business hours</strong> with an initial read of your need.',
-            'p2'       => 'If you have anything else to share in the meantime (context, constraints, deadlines), email me directly at <a href="mailto:contact@nsy.fr" style="color:#00E5FF;text-decoration:none">contact@nsy.fr</a>.',
+            'p2'       => 'If you have anything else to share in the meantime (context, constraints, deadlines), simply reply to this email.',
             'role'     => 'Founder of NSY',
             'alt'      => "Thank you, $name.\n\n"
                 . "I've received your message about « $serviceLabelClient » and I'll personally get back to you within 48 business hours with an initial read of your need.\n\n"
-                . "If you have anything else to share in the meantime, email me directly at contact@nsy.fr.\n",
+                . "If you have anything else to share in the meantime, simply reply to this email.\n",
         ] : [
             'subject'  => 'Merci pour votre message — NSY',
             'greeting' => 'Merci, ' . $esc($name) . '.',
             'p1'       => 'J\'ai bien reçu votre message concernant <strong style="color:#F2F6FF">' . $esc($serviceLabelClient) . '</strong> et je reviens vers vous personnellement <strong style="color:#00E5FF">sous 48 heures ouvrées</strong> avec une première lecture de votre besoin.',
-            'p2'       => 'Si vous avez d\'autres éléments à partager d\'ici là (contexte, contraintes, échéances), écrivez-moi directement à <a href="mailto:contact@nsy.fr" style="color:#00E5FF;text-decoration:none">contact@nsy.fr</a>.',
+            'p2'       => 'Si vous avez d\'autres éléments à partager d\'ici là (contexte, contraintes, échéances), répondez simplement à cet email.',
             'role'     => 'Fondateur de NSY',
             'alt'      => "Merci, $name.\n\n"
                 . "J'ai bien reçu votre message concernant « $serviceLabelClient » et je reviens vers vous personnellement sous 48 heures ouvrées avec une première lecture de votre besoin.\n\n"
-                . "Si vous avez d'autres éléments à partager d'ici là, écrivez-moi directement à contact@nsy.fr.\n",
+                . "Si vous avez d'autres éléments à partager d'ici là, répondez simplement à cet email.\n",
         ];
 
         $auto->Subject = $ar['subject'];
@@ -291,7 +291,7 @@ try {
     if (ob_get_length()) ob_clean();
     echo json_encode([
         'ok'    => false,
-        'error' => $L("Erreur d'envoi — réessayez ou écrivez directement à contact@nsy.fr.", 'Sending failed — try again or email contact@nsy.fr directly.'),
+        'error' => $L("Erreur d'envoi — veuillez réessayer.", 'Sending failed — please try again.'),
         // TEMPORARY: expose the real SMTP error for diagnostics.
         // Remove after the form is validated end-to-end.
         'debug' => $detail,
