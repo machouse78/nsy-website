@@ -48,7 +48,7 @@ $configPath = __DIR__ . '/_secret/config.php';
 if (!file_exists($configPath)) {
     error_log('NSY faisabilité: missing _secret/config.php');
     http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => $L('Configuration serveur manquante. Écrivez-nous à contact@nsy.fr.', 'Server configuration missing. Please email contact@nsy.fr.')]);
+    echo json_encode(['ok' => false, 'error' => $L('Erreur de configuration serveur — veuillez réessayer.', 'Server configuration error — please try again.')]);
     exit;
 }
 $config = require $configPath;
@@ -224,20 +224,20 @@ try {
             'subject'  => 'Thanks for your feasibility request — NSY',
             'greeting' => 'Thank you, ' . $esc($name) . '.',
             'p1'       => 'I\'ve received your <strong style="color:#F2F6FF">project feasibility questionnaire</strong> and I\'ll personally get back to you <strong style="color:#00E5FF">within 48 business hours</strong> with an initial read: feasibility, ballpark figure, and a concrete next step.',
-            'p2'       => 'If you have anything else to add in the meantime (references, constraints, deadlines), email me directly at <a href="mailto:contact@nsy.fr" style="color:#00E5FF;text-decoration:none">contact@nsy.fr</a>.',
+            'p2'       => 'If you have anything else to add in the meantime (references, constraints, deadlines), simply reply to this email.',
             'role'     => 'Founder of NSY',
             'alt'      => "Thank you, $name.\n\n"
                 . "I've received your project feasibility questionnaire and I'll personally get back to you within 48 business hours with an initial read: feasibility, ballpark figure, and a concrete next step.\n\n"
-                . "If you have anything else to add in the meantime, email me directly at contact@nsy.fr.\n",
+                . "If you have anything else to add in the meantime, simply reply to this email.\n",
         ] : [
             'subject'  => 'Merci pour votre demande de faisabilité — NSY',
             'greeting' => 'Merci, ' . $esc($name) . '.',
             'p1'       => 'J\'ai bien reçu votre <strong style="color:#F2F6FF">questionnaire de faisabilité projet</strong> et je reviens vers vous personnellement <strong style="color:#00E5FF">sous 48 heures ouvrées</strong> avec une première lecture : faisabilité, ordre de grandeur, et prochain pas concret.',
-            'p2'       => 'Si vous avez d\'autres éléments à ajouter d\'ici là (références, contraintes, échéances), écrivez-moi directement à <a href="mailto:contact@nsy.fr" style="color:#00E5FF;text-decoration:none">contact@nsy.fr</a>.',
+            'p2'       => 'Si vous avez d\'autres éléments à ajouter d\'ici là (références, contraintes, échéances), répondez simplement à cet email.',
             'role'     => 'Fondateur de NSY',
             'alt'      => "Merci, $name.\n\n"
                 . "J'ai bien reçu votre questionnaire de faisabilité projet et je reviens vers vous personnellement sous 48 heures ouvrées avec une première lecture : faisabilité, ordre de grandeur, et prochain pas concret.\n\n"
-                . "Si vous avez d'autres éléments à ajouter d'ici là, écrivez-moi directement à contact@nsy.fr.\n",
+                . "Si vous avez d'autres éléments à ajouter d'ici là, répondez simplement à cet email.\n",
         ];
 
         $auto->Subject = $ar['subject'];
@@ -289,7 +289,7 @@ try {
     if (ob_get_length()) ob_clean();
     echo json_encode([
         'ok'    => false,
-        'error' => $L("Erreur d'envoi — réessayez ou écrivez directement à contact@nsy.fr.", 'Sending failed — try again or email contact@nsy.fr directly.'),
+        'error' => $L("Erreur d'envoi — veuillez réessayer.", 'Sending failed — please try again.'),
         'debug' => $detail,
     ]);
 }
