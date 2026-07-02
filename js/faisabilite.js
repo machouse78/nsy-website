@@ -19,14 +19,14 @@
     step: (a, b) => `Step ${a} / ${b}`,
     fill: 'Please complete the required fields (*).',
     sending: 'Sending…', retry: 'Send the questionnaire',
-    errSend: 'Sending failed — try again or email contact@nsy.fr.',
-    errNet: 'Network error — try again or email contact@nsy.fr.',
+    errSend: 'Sending failed — please try again.',
+    errNet: 'Network error — please try again.',
   } : {
     step: (a, b) => `Étape ${a} / ${b}`,
     fill: 'Merci de compléter les champs obligatoires (*).',
     sending: 'Envoi…', retry: 'Envoyer le questionnaire',
-    errSend: "Erreur d'envoi — réessayez ou écrivez à contact@nsy.fr.",
-    errNet: 'Erreur réseau — réessayez ou écrivez à contact@nsy.fr.',
+    errSend: "Erreur d'envoi — veuillez réessayer.",
+    errNet: 'Erreur réseau — veuillez réessayer.',
   };
 
   const sections = [...form.querySelectorAll('.qz-section')];
