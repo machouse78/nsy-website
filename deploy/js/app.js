@@ -79,15 +79,15 @@
       sent: 'Sent ✓',
       retry: 'Retry',
       ok: 'Message received — reply within 48 business hours.',
-      errSend: 'Sending failed — try again or email contact@nsy.fr.',
-      errNet: 'Network error — try again or email contact@nsy.fr.',
+      errSend: 'Sending failed — please try again.',
+      errNet: 'Network error — please try again.',
     } : {
       sending: 'Envoi…',
       sent: 'Envoyé ✓',
       retry: 'Réessayer',
       ok: 'Message reçu — réponse sous 48h ouvrées.',
-      errSend: "Erreur d'envoi — réessayez ou écrivez à contact@nsy.fr.",
-      errNet: 'Erreur réseau — réessayez ou écrivez à contact@nsy.fr.',
+      errSend: "Erreur d'envoi — veuillez réessayer.",
+      errNet: 'Erreur réseau — veuillez réessayer.',
     };
     const setLabel = (text) => {
       const label = submitBtn?.querySelector('.btn-label');
@@ -468,12 +468,12 @@
       cues: ['contact','contacter','joindre','rendez vous','rdv','appel','telephone','tel','mail','email',
               'ecrire','parler','reach','meeting','call','book','get in touch','email you'],
       fr: [
-        `Le plus simple : le formulaire en bas de page (réponse sous 48 h ouvrées), ou directement <b>contact@nsy.fr</b> / +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
-        `Pour échanger : formulaire en bas de page, e-mail à <b>contact@nsy.fr</b>, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
+        `Le plus simple : le formulaire en bas de page (réponse sous 48 h ouvrées), ou par téléphone au +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
+        `Pour échanger : formulaire en bas de page, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
       ],
       en: [
-        `Easiest path: the form at the bottom of the page (reply within 48 business hours), or directly <b>contact@nsy.fr</b> / +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
-        `To get in touch: the form at the bottom, an email to <b>contact@nsy.fr</b>, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
+        `Easiest path: the form at the bottom of the page (reply within 48 business hours), or by phone at +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
+        `To get in touch: the form at the bottom, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
       ]
     }
   ];
@@ -641,11 +641,39 @@
   }
 
   if (renaultViewer) {
+    // ───── Netteté du wireframe sur écrans standard (DPR 1) ─────
+    // model-viewer rend son canvas à window.devicePixelRatio : sur un écran
+    // non-Retina les lignes GL 1px crénellent visiblement (le MSAA du contexte
+    // WebGL est déjà actif mais insuffisant sur des lignes fines). On force un
+    // rendu 2× que le CSS re-descend à la taille d'affichage (supersampling).
+    // Coût : ~4× de pixels GPU sur CE canvas, uniquement pour les écrans 1× —
+    // canvas modeste, shader lignes trivial, et model-viewer coupe déjà son
+    // rendu hors écran. Les écrans Retina/mobiles (DPR ≥ 2) sont inchangés.
+    if ((window.devicePixelRatio || 1) < 2) {
+      try {
+        Object.defineProperty(window, 'devicePixelRatio', { get: () => 2, configurable: true });
+      } catch (_) { /* propriété non redéfinissable : on reste au rendu natif */ }
+    }
+
     renaultViewer.addEventListener('load', () => {
       // updateFraming() recomputes camera-target on the visible bounding box
       // and resets the camera-orbit radius accordingly.
       if (typeof renaultViewer.updateFraming === 'function') renaultViewer.updateFraming();
     });
+
+    // ───── Pastille "↻ Faites pivoter" : disparaît après usage ─────
+    // Dès que l'utilisateur a fait pivoter le modèle lui-même, l'invite a
+    // rempli son rôle : fondu de sortie + arrêt de l'animation de pulsation
+    // (une boucle infinie de moins à l'écran).
+    const modelHint = modelStage ? modelStage.querySelector('.model-hint') : null;
+    if (modelHint) {
+      const onUserCamera = (e) => {
+        if (!e.detail || e.detail.source !== 'user-interaction') return;
+        modelHint.classList.add('is-done');
+        renaultViewer.removeEventListener('camera-change', onUserCamera);
+      };
+      renaultViewer.addEventListener('camera-change', onUserCamera);
+    }
 
     // Orientation / viewport changes (mobile portrait↔landscape, mobile address
     // bar show/hide, window resize): re-fit the framing and re-assert rotation
@@ -852,7 +880,9 @@
   function setupLoopFade(video, fadeDurationSec = 0.5, triggerWindowSec = 0.55) {
     if (!video) return;
     let phase = 'visible'; // 'visible' | 'fading-out'
-    const transition = `opacity ${Math.round(fadeDurationSec * 1000)}ms ease`;
+    // Inclut transform : une transition inline remplace ENTIÈREMENT celle du
+    // CSS, or le zoom hover des cartes service anime transform sur ces vidéos.
+    const transition = `opacity ${Math.round(fadeDurationSec * 1000)}ms ease, transform 650ms cubic-bezier(.25,.46,.45,.94)`;
 
     const onTime = () => {
       if (!video.duration || !isFinite(video.duration)) return;
@@ -936,5 +966,162 @@
       z.classList.add('anim-paused'); // start paused; the observer un-pauses visible ones
       aio.observe(z);
     });
+  }
+
+  // ───── Scroll reveal (one-shot, IntersectionObserver) ─────
+  // Fade + translateY sur les blocs de contenu au scroll. One-shot : l'observer
+  // se retire après déclenchement (unobserve). Désactivé si prefers-reduced-motion.
+  // Seuls transform + opacity sont animés (composited, GPU, pas de layout/paint).
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+    const revealEls = document.querySelectorAll(
+      '.cap, .svc, .step, .signal, .timeline-item, .realisation-card, ' +
+      '.section-head, .creation-col, .channel, .faisa-cta, .form'
+    );
+
+    // Stagger : décalage progressif par position dans le conteneur parent
+    const staggerMap = new Map();
+    revealEls.forEach((el) => {
+      const parent = el.parentElement;
+      if (!staggerMap.has(parent)) staggerMap.set(parent, 0);
+      const idx = staggerMap.get(parent);
+      staggerMap.set(parent, idx + 1);
+      el.style.transitionDelay = Math.min(idx * 65, 220) + 'ms';
+      el.classList.add('reveal-up');
+    });
+
+    const revealIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('is-visible');
+        revealIO.unobserve(e.target);
+        // Retire les classes une fois la transition terminée pour que les
+        // transitions hover normales (border-color, transform .25s) soient
+        // pleinement restaurées sans conflit de durée.
+        e.target.addEventListener('transitionend', function cleanup(ev) {
+          if (ev.propertyName !== 'opacity') return;
+          e.target.classList.remove('reveal-up', 'is-visible');
+          e.target.style.transitionDelay = '';
+          e.target.removeEventListener('transitionend', cleanup);
+        });
+      });
+    }, { rootMargin: '0px 0px -50px 0px', threshold: 0.08 });
+
+    revealEls.forEach((el) => revealIO.observe(el));
+  }
+
+  // ═══════════════════════════════════════════════════════════════════
+  // UX pass 2 — compteurs, barre de lecture, parallaxe hero
+  // Même philosophie perf : transform/opacity uniquement, rAF qui
+  // s'arrêtent au repos, tout gated par prefers-reduced-motion.
+  // ═══════════════════════════════════════════════════════════════════
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+  // ───── Barre de progression de lecture (toutes pages) ─────
+  // Feedback lié au geste de l'utilisateur → autorisée même en reduced-motion.
+  // transform: scaleX (composité), mise à jour au plus 1×/frame via rAF-guard.
+  {
+    const bar = document.createElement('div');
+    bar.className = 'scroll-progress';
+    bar.setAttribute('aria-hidden', 'true');
+    // Dans la nav sticky (ancrée sous le menu, façon PRV Concept) ;
+    // fallback en haut du viewport si une page n'avait pas de nav.
+    (document.querySelector('.nav') || document.body).appendChild(bar);
+    let ticking = false;
+    const update = () => {
+      const doc = document.documentElement;
+      const max = doc.scrollHeight - doc.clientHeight;
+      bar.style.transform = `scaleX(${max > 0 ? Math.min(1, doc.scrollTop / max).toFixed(4) : 0})`;
+      ticking = false;
+    };
+    const onScroll = () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll, { passive: true });
+    update();
+  }
+
+  // ───── Compteurs animés (hero-meta + signaux About) ─────
+  // One-shot au scroll-in : le nombre (nœud texte ou span[data-years]) compte
+  // de 0 à sa valeur en ~900 ms, ease-out, chiffres tabulaires (zéro reflow
+  // de largeur). Ignoré en reduced-motion : les valeurs restent statiques.
+  if (!prefersReduced && 'IntersectionObserver' in window) {
+    const hosts = document.querySelectorAll('.hero-meta-item .num:not(.num-text), .signal .v');
+    const targets = [];
+    hosts.forEach((host) => {
+      for (const n of host.childNodes) {
+        if (n.nodeType === 3 && /^\s*\d+\s*$/.test(n.textContent)) {
+          targets.push({ node: n, end: parseInt(n.textContent, 10) });
+          return;
+        }
+        if (n.nodeType === 1 && n.hasAttribute && n.hasAttribute('data-years')) {
+          const t = n.firstChild;
+          if (t && /^\d+$/.test(t.textContent)) targets.push({ node: t, end: parseInt(t.textContent, 10) });
+          return;
+        }
+      }
+    });
+    const easeOut = (t) => 1 - Math.pow(1 - t, 3);
+    const runCounter = ({ node, end }) => {
+      const t0 = performance.now();
+      const dur = 900;
+      const tick = (now) => {
+        const p = Math.min(1, (now - t0) / dur);
+        node.textContent = Math.round(easeOut(p) * end);
+        if (p < 1) requestAnimationFrame(tick);
+      };
+      node.textContent = '0';
+      requestAnimationFrame(tick);
+    };
+    const cio = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        cio.unobserve(e.target);
+        targets.filter((t) => e.target.contains(t.node)).forEach(runCounter);
+      });
+    }, { threshold: 0.6 });
+    targets.forEach((t) => cio.observe(t.node.parentElement.closest('.hero-meta-item, .signal') || t.node.parentElement));
+  }
+
+  // ───── Parallaxe souris sur le visuel hero (desktop uniquement) ─────
+  // Terminaux / tags / glyphe se déplacent sur des plans de profondeur
+  // différents en suivant le curseur (lerp amorti). Écrit uniquement les
+  // variables --px/--py consommées par translate3d en CSS (composité).
+  // Le rAF s'arrête dès que la cible est atteinte ; inactif hero hors écran,
+  // sur tactile, et en reduced-motion.
+  const heroSection = document.querySelector('.hero');
+  if (heroSection && hoverCapable && !prefersReduced && 'IntersectionObserver' in window) {
+    const AMP = 14; // déplacement max (px) du plan le plus proche
+    const layers = [
+      ['.t-1', 1], ['.t-2', 0.85], ['.tag-1', 0.55], ['.tag-2', 0.55], ['.glyph', -0.22],
+    ].map(([sel, k]) => ({ el: heroSection.querySelector(sel), k }))
+      .filter((o) => o.el);
+    if (layers.length) {
+      let tx = 0, ty = 0, cx = 0, cy = 0, rafId = null, heroVisible = false;
+      const step = () => {
+        cx += (tx - cx) * 0.08;
+        cy += (ty - cy) * 0.08;
+        layers.forEach(({ el, k }) => {
+          el.style.setProperty('--px', (cx * k).toFixed(2) + 'px');
+          el.style.setProperty('--py', (cy * k).toFixed(2) + 'px');
+        });
+        if (Math.abs(tx - cx) > 0.05 || Math.abs(ty - cy) > 0.05) rafId = requestAnimationFrame(step);
+        else rafId = null; // au repos : plus aucun frame
+      };
+      const kick = () => { if (!rafId) rafId = requestAnimationFrame(step); };
+      heroSection.addEventListener('mousemove', (e) => {
+        if (!heroVisible) return;
+        const r = heroSection.getBoundingClientRect();
+        tx = ((e.clientX - r.left) / r.width - 0.5) * 2 * AMP;
+        ty = ((e.clientY - r.top) / r.height - 0.5) * 2 * AMP;
+        kick();
+      });
+      heroSection.addEventListener('mouseleave', () => { tx = 0; ty = 0; kick(); });
+      new IntersectionObserver(([entry]) => {
+        heroVisible = entry.isIntersecting;
+        if (!heroVisible) { tx = 0; ty = 0; kick(); } // retour au repos hors écran
+      }).observe(heroSection);
+    }
   }
 })();

@@ -26,6 +26,13 @@
 
   --maxw: 1240px;
 
+  --ease-out: cubic-bezier(.25,.46,.45,.94);
+  --ease-spring: cubic-bezier(.2,.7,.2,1);
+  --dur-xs: 120ms;
+  --dur-sm: 200ms;
+  --dur-md: 400ms;
+  --dur-lg: 600ms;
+
   --font-display: 'Space Grotesk', 'Helvetica Neue', sans-serif;
   --font-body: 'Manrope', 'Helvetica Neue', sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
@@ -50,11 +57,24 @@ html, body {
   text-size-adjust: 100%;
   /* Safety net: never let any element trigger a horizontal scroll on mobile.
      Combined with overflow-wrap below, long words break instead of widening
-     the layout. */
+     the layout.
+     clip (≠ hidden) bloque le débordement horizontal SANS créer de conteneur
+     de scroll — hidden désactivait position:sticky (la nav ne restait pas
+     ancrée au scroll). hidden reste en fallback pour les vieux navigateurs. */
   overflow-x: hidden;
+  overflow-x: clip;
 }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* La nav étant ancrée (sticky), les ancres #services/#contact… doivent
+     atterrir SOUS elle, pas derrière : hauteur nav (69px desktop) + marge. */
+  scroll-padding-top: 84px;
+}
+@media (max-width: 940px) {
+  /* Nav compacte 2 rangées : 83-93px de haut selon la largeur */
+  html { scroll-padding-top: 108px; }
+}
 
 /* Long titles / words must break instead of pushing the container wider */
 h1, h2, h3, h4, p { overflow-wrap: anywhere; word-break: normal; }
@@ -350,7 +370,7 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
   font-weight: 600;
   font-size: 15px;
   letter-spacing: -0.005em;
-  transition: transform .15s ease, background .2s, color .2s;
+  transition: transform .15s ease, background .2s, color .2s, border-color .2s;
   cursor: pointer;
 }
 .btn-primary {
@@ -565,6 +585,8 @@ section.block:first-of-type { border-top: 0; }
   display: flex;
   align-items: center;
   justify-content: center;
+  /* Parallaxe souris (JS) — plan opposé aux terminaux pour l'effet de profondeur */
+  transform: translate3d(var(--px, 0px), var(--py, 0px), 0);
 }
 .glyph-core {
   position: relative;
@@ -703,8 +725,10 @@ section.block:first-of-type { border-top: 0; }
 .terminal .cursor { display: inline-block; width: 7px; height: 13px; background: var(--accent); vertical-align: -2px; animation: blink 1s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-.t-1 { top: 4%; right: -6%; width: 230px; transform: rotate(2deg); }
-.t-2 { bottom: 8%; left: -8%; width: 250px; transform: rotate(-3deg); }
+/* --px/--py : décalage parallaxe (souris) écrit par JS — translate3d composité,
+   0 par défaut donc inerte sans JS / sur tactile / en reduced-motion. */
+.t-1 { top: 4%; right: -6%; width: 230px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(2deg); }
+.t-2 { bottom: 8%; left: -8%; width: 250px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(-3deg); }
 
 .tag {
   position: absolute;
@@ -728,8 +752,8 @@ section.block:first-of-type { border-top: 0; }
 .tag.cyan i { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .tag.warm i { background: var(--warm); box-shadow: 0 0 8px var(--warm); }
 
-.tag-1 { top: 38%; right: -2%; }
-.tag-2 { bottom: 32%; left: -4%; }
+.tag-1 { top: 38%; right: -2%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
+.tag-2 { bottom: 32%; left: -4%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
 
 /* marquee strip */
 .marquee {
@@ -878,7 +902,9 @@ section.block:first-of-type { border-top: 0; }
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: linear-gradient(180deg, rgba(15,22,38,0.7), rgba(10,15,28,0.4));
+  transition: border-color .25s, transform .25s;
 }
+.svc:hover { border-color: rgba(0,229,255,0.25); transform: translateY(-2px); }
 @media (max-width: 920px) { .svc { grid-template-columns: 1fr; } }
 
 .svc-cover {
@@ -1209,7 +1235,9 @@ section.block:first-of-type { border-top: 0; }
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
   background: rgba(255,255,255,0.02);
+  transition: border-color .2s, transform .2s;
 }
+.signal:hover { border-color: rgba(0,229,255,0.2); transform: translateY(-2px); }
 .signal .v {
   font-family: var(--font-display);
   font-size: 36px;
@@ -1672,7 +1700,7 @@ section.block:first-of-type { border-top: 0; }
 }
 @keyframes model-hint-pulse {
   0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; box-shadow: 0 0 18px rgba(0,229,255,0.4); }
+  50% { opacity: 1; }
 }
 
 /* Bouton agrandir / réduire le modèle 3D */
@@ -1853,6 +1881,7 @@ footer.foot {
   font-size: 14px;
   color: var(--fg-1);
   margin: 8px 0;
+  transition: color .15s;
 }
 .foot-col a:hover { color: var(--accent); }
 .foot-bot {
@@ -1925,13 +1954,21 @@ footer.foot {
   border-radius: 50%;
   background: var(--warm);
   border: 2px solid var(--bg-1);
+}
+.cbot-fab-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--warm);
+  opacity: 0.7;
   animation: cbot-ping 2s ease-out infinite;
 }
 .cbot-fab.open .cbot-fab-dot { display: none; }
 @keyframes cbot-ping {
-  0% { box-shadow: 0 0 0 0 rgba(240,138,44,0.6); }
-  70% { box-shadow: 0 0 0 10px rgba(240,138,44,0); }
-  100% { box-shadow: 0 0 0 0 rgba(240,138,44,0); }
+  0%  { transform: scale(1);   opacity: 0.7; }
+  70% { transform: scale(2.6); opacity: 0; }
+  100%{ transform: scale(1);   opacity: 0; }
 }
 
 .cbot {
@@ -2399,3 +2436,215 @@ footer.foot {
   color: var(--fg-2); border: 1px solid var(--line); border-radius: 50px; padding: 5px 11px;
 }
 @media (max-width: 560px) { .realisation-body { padding: 18px 18px 22px; } }
+
+/* ───── Focus visible (accessibilité clavier) ───── */
+.nav-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.cap:focus-visible,
+.signal:focus-visible,
+.channel:focus-visible,
+.svc:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+/* ───── Scroll reveal ───── */
+/* Posée via JS sur les blocs de contenu ; la transition se déclenche via
+   IntersectionObserver (one-shot, unobserve après déclenchement).
+   Uniquement transform + opacity → composited, pas de layout/paint. */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity var(--dur-md) var(--ease-out), transform var(--dur-md) var(--ease-out);
+}
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ───── Hero entry (one-shot au chargement de la page) ───── */
+@keyframes hero-entry {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+.hero .hero-eyebrow {
+  animation: hero-entry var(--dur-lg) var(--ease-out) both;
+  animation-delay: 50ms;
+}
+.hero h1 {
+  animation: hero-entry .7s var(--ease-out) both;
+  animation-delay: 150ms;
+}
+.hero .hero-sub {
+  animation: hero-entry var(--dur-lg) var(--ease-out) both;
+  animation-delay: 270ms;
+}
+.hero .hero-cta-row {
+  animation: hero-entry var(--dur-lg) var(--ease-out) both;
+  animation-delay: 380ms;
+}
+.hero .hero-meta {
+  animation: hero-entry var(--dur-lg) var(--ease-out) both;
+  animation-delay: 480ms;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   UX pass 2 — micro-interactions & chorégraphie
+   Règle inchangée : uniquement transform / opacity en animation ;
+   les changements de couleur/bordure restent des transitions hover
+   ponctuelles (paint transitoire, pas de coût continu).
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* Barre de progression de lecture (élément injecté par JS sur chaque page).
+   Insérée DANS la nav sticky → elle reste ancrée sous le menu au scroll,
+   comme la jauge de lecture de PRV Concept. Fallback fixed si nav absente. */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--accent-2), var(--accent));
+  box-shadow: 0 0 8px var(--accent-glow);
+  transform: scaleX(0);
+  transform-origin: left;
+  z-index: 60; /* au-dessus de la nav (50) */
+  pointer-events: none;
+}
+.nav .scroll-progress {
+  position: absolute;
+  top: auto;
+  bottom: -1px; /* recouvre le border-bottom de la nav */
+  z-index: 1;
+}
+
+/* Compteurs animés : chiffres tabulaires = zéro décalage pendant le comptage */
+.hero-meta-item .num,
+.signal .v { font-variant-numeric: tabular-nums; }
+
+/* Sheen (balayage lumineux) sur le CTA principal + état pressé */
+.btn-primary {
+  position: relative;
+  overflow: hidden;
+}
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255,255,255,0.5) 50%, transparent 62%);
+  transform: translateX(-120%);
+  transition: transform .55s var(--ease-out);
+  pointer-events: none;
+}
+.btn-primary:hover::before { transform: translateX(120%); }
+.btn:active { transform: translateY(0) scale(0.97); }
+
+/* Étapes du process : hover jusque-là inexistant */
+.step { transition: background-color .25s; }
+.step .n { transition: text-shadow .25s; }
+.step:hover { background-color: rgba(0,229,255,0.035); }
+.step:hover .n { text-shadow: 0 0 12px rgba(0,229,255,0.5); }
+
+/* Chips (listes de capacités, secteurs, stacks) */
+.cap-list li,
+.clients span,
+.svc-stack-grid div {
+  transition: border-color .2s, color .2s, transform .2s;
+}
+.cap-list li:hover,
+.clients span:hover,
+.svc-stack-grid div:hover {
+  border-color: rgba(0,229,255,0.35);
+  color: var(--fg-0);
+  transform: translateY(-1px);
+}
+
+/* Flèches des cartes-liens : même langage que .btn */
+.channel .arrow,
+.faisa-cta .arrow { transition: transform .2s, color .2s; }
+.channel:hover .arrow { transform: translateX(3px); color: var(--accent); }
+.faisa-cta:hover .arrow { transform: translateX(3px); }
+
+/* Couverture des cartes service : zoom léger du visuel au hover */
+.svc-bg { transition: opacity .35s ease, transform .65s var(--ease-out); }
+.svc:hover .svc-bg { transform: scale(1.04); }
+.svc:hover .svc-bg-video { transform: scale(1.10); }
+.svc.warm:hover .svc-bg-video { transform: scale(1.20); }
+
+/* Soulignés animés : footer (liens directs des colonnes + barre légale) */
+.foot-col > a,
+.foot-bot a {
+  position: relative;
+  width: fit-content;
+}
+.foot-col > a::after,
+.foot-bot a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 100%;
+  height: 1px;
+  background: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform .25s var(--ease-out);
+}
+.foot-col > a:hover::after,
+.foot-bot a:hover::after { transform: scaleX(1); }
+
+/* Marquee : pause au survol pour laisser lire */
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+/* Pastille "↻ Faites pivoter" : masquée après la première manipulation */
+.model-hint.is-done {
+  animation: none;
+  opacity: 0;
+  transition: opacity .5s ease;
+}
+
+/* Impression : les blocs en attente de reveal ne doivent jamais sortir blancs */
+@media print {
+  .reveal-up { opacity: 1 !important; transform: none !important; }
+}
+
+/* ───── prefers-reduced-motion ───── */
+@media (prefers-reduced-motion: reduce) {
+  /* Stoppe les animations infinies */
+  .hero h1 .accent, .hero-cyan { animation: none; }
+  .glyph-rings { animation: none; }
+  .profile-monogram::before { animation: none; }
+  .marquee-track { animation: none; }
+  .model-hint { animation: none; opacity: 0.8; }
+  .cbot-fab-dot::after { animation: none; }
+  .cbot-avatar-pulse { animation: none; }
+  .cbot-typing span { animation: none; opacity: 1; }
+  .terminal .cursor { animation: none; opacity: 1; }
+
+  /* Hero entry : visible immédiatement, sans animation */
+  .hero .hero-eyebrow,
+  .hero h1,
+  .hero .hero-sub,
+  .hero .hero-cta-row,
+  .hero .hero-meta {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  /* Scroll reveal : visible immédiatement */
+  .reveal-up {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  /* Raccourcit toutes les durées restantes */
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
