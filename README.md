@@ -40,7 +40,7 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
 | **Conception 3D** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
 | Contact | `contact` | Formulaire (PHP) avec choix de service + canaux directs + mentions légales |
-| CTA banner | — | Bandeau "Prochain créneau" avec spotlight souris suivant |
+| CTA banner | — | Bandeau « Disponible maintenant » avec spotlight souris suivant |
 | Footer | — | Navigation + expertise + contact + réseaux sociaux |
 
 Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN), le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN, depuis la section Contact) et les **Réalisations** `realisations.html` / `portfolio.html` (EN, portfolio des sites clients — 1ʳᵉ réalisation : PRV Concept).
@@ -59,7 +59,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 6 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 10 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -67,13 +67,15 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 ## Fonctionnalités interactives
 
 - **Année & expérience dynamiques** : `data-current-year`, `data-years`, `data-years-fr` injectés en JS (basé sur `2026 - 14 = 2012` comme année de début de carrière)
+- **Nav ancrée** (`position: sticky`) + **jauge de lecture** cyan sous le menu (scaleX composité). Piège résolu : `overflow-x: hidden` sur `html/body` désactivait silencieusement le sticky → remplacé par `overflow-x: clip` (même correctif que prv-concept.com), avec `scroll-padding-top` pour que les ancres atterrissent sous le menu
 - **Scroll-spy nav** via `IntersectionObserver` — la rubrique active passe en cyan
+- **Animations & micro-interactions** (UX pass) : entrée hero échelonnée, reveal au scroll avec stagger par conteneur, **compteurs animés** au scroll-in (14+, 3 max…), **parallaxe souris** sur le visuel hero (5 plans de profondeur, lerp amorti, desktop uniquement), sheen sur le CTA principal, hovers étapes/chips/flèches, soulignés animés du footer, marquee en pause au survol — le tout **uniquement en `transform`/`opacity`**, rAF auto-stoppés au repos, et **`prefers-reduced-motion` intégral**
 - **Sphère hero** : vidéo `nsy-ia.mp4` en `object-fit: cover`, masquée en cercle, terminaux ASCII flottants
 - **Cards services** : au survol, l'image PNG cross-fade vers une vidéo MP4 ; retour à `currentTime = 0` au mouseleave
 - **CTA banner "Prochain créneau"** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
 - **Section 3D `#creations`** :
   - **Vidéo YouTube** de la chaîne NSY, intégrée via `youtube-nocookie.com` (aucun cookie avant lecture)
-  - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile
+  - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile ; **supersampling ×2 sur écrans non-Retina** (lignes lisses en DPR 1) et pastille « Faites pivoter » auto-masquée après la première manipulation
   - Disposition **2 colonnes** sur desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px)
 - **Chatbot intelligent** (voir ci-dessous)
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
@@ -95,7 +97,7 @@ FAB cyan en bas-droite, panneau glassmorphic. **Pas de LLM ni d'API** (volontair
 `contact.php` :
 1. Vérifie le **token Cloudflare Turnstile** (anti-bot) côté serveur
 2. **Honeypot** anti-spam (champ caché que seuls les bots remplissent)
-3. Envoie le message à `contact@nsy.fr` via **PHPMailer + SMTP Infomaniak** (notification interne en FR)
+3. Envoie le message à la boîte NSY via **PHPMailer + SMTP Infomaniak** (notification interne en FR). L'adresse n'apparaît **nulle part sur le site public ni dans ce README** (anti-scraping) : les visiteurs passent par le formulaire, l'auto-réponse porte un `Reply-To` interne
 4. Envoie une **auto-réponse HTML** au prospect, **localisée FR/EN** selon le champ caché `lang` (objet, corps HTML, version texte, `<html lang>`, libellé du service)
 5. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → toast côté front
 
@@ -128,7 +130,8 @@ Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire c
 - **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
 - **Vidéo hero** (`nsy-ia.mp4`) : recompressée du **1080p (4.8 Mo)** vers un **crop carré 720×720 (1.7 Mo)** — elle s'affiche dans une sphère de ~300px masquée en cercle, donc le 1080p et les bords 16:9 étaient inutiles. Décodage divisé par ~4.
 - **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
-- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible.
+- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible. Le supersampling ×2 (netteté) ne s'applique qu'aux écrans DPR 1 et ne coûte donc rien sur mobile/Retina.
+- **Animations JS** (parallaxe hero, compteurs, jauge de lecture) : boucles `requestAnimationFrame` qui **s'arrêtent d'elles-mêmes au repos** (lerp convergé, compteur fini) — aucune boucle infinie ; tout est coupé par `prefers-reduced-motion`.
 - **Cache** : `.htaccess` pose `Cache-Control: max-age` (1 mois médias) — évite le **re-téléchargement** (mais pas le re-décodage, d'où la mise en pause ci-dessus).
 
 Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'environ **94 → 12 M pixels/s** (≈ −87 %), et les sections hors écran ne repeignent plus rien.
@@ -150,7 +153,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
 ├── scripts/                             # Outillage build (3D + synchro partials)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 8 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 10 pages (npm run partials)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
 │   ├── tris-to-lines.mjs                # Triangles → GL_LINES
@@ -219,7 +222,7 @@ Le `.htaccess` configure :
 ## SEO & partage social
 
 - **Sitemap** : page principale (FR + EN) + ancres + pages légales + images clés + vidéos, avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 6 pages
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 10 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD Organization** : founder = Cédric Barme + sameAs LinkedIn/GitHub
 - **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`
@@ -256,7 +259,7 @@ Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/c
 
 ## Contact
 
-- **Email** : [contact@nsy.fr](mailto:contact@nsy.fr)
+- **Formulaire** : [www.nsy.fr/#contact](https://www.nsy.fr/#contact) (réponse sous 48 h ouvrées)
 - **LinkedIn** : [linkedin.com/in/cédric-barme](https://www.linkedin.com/in/c%C3%A9dric-barme/)
 - **GitHub** : [github.com/machouse78/nsy-website](https://github.com/machouse78/nsy-website)
 - **Localisation** : France (missions principalement en distanciel)
