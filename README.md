@@ -43,7 +43,7 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | CTA banner | — | Bandeau « Disponible maintenant » avec spotlight souris suivant |
 | Footer | — | Navigation + expertise + contact + réseaux sociaux |
 
-Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN), le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN, depuis la section Contact) et les **Réalisations** `realisations.html` / `portfolio.html` (EN, portfolio des sites clients — 1ʳᵉ réalisation : PRV Concept).
+Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN), le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN, depuis la section Contact) et les **Réalisations** `realisations.html` / `portfolio.html` (EN, portfolio des sites clients — 1ʳᵉ réalisation : PRV Concept). Les vignettes des réalisations sont **capturées automatiquement** depuis les sites live (`npm run capture:realisations` → JPEG à la taille d'affichage, ~110 Ko) — à relancer avant un déploiement pour les rafraîchir ; les visiteurs ne reçoivent qu'une image statique (zéro iframe, zéro coût runtime).
 
 ## Bilingue (FR / EN)
 
@@ -154,6 +154,7 @@ nsy-website/
 │   └── footer.fr.html / footer.en.html  #    Pied de page
 ├── scripts/                             # Outillage build (3D + synchro partials)
 │   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 10 pages (npm run partials)
+│   ├── capture-realisation.mjs          # Vignette Réalisations auto (npm run capture:realisations)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
 │   ├── tris-to-lines.mjs                # Triangles → GL_LINES
