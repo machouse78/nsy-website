@@ -1673,6 +1673,78 @@ section.block:first-of-type { border-top: 0; }
   overflow: hidden;
   user-select: none;
 }
+/* Sol "grille Tron Legacy" en perspective sous la voiture — 100 % statique
+   (un seul paint), peint SOUS le canvas transparent de model-viewer (enfant
+   positionné → passe au-dessus du pseudo-élément).
+   Recette du look Tron : cœur de ligne net 1px + halo doux (drop-shadow,
+   peint une fois puis composité) + lueur d'horizon au bord fuyant du plan
+   + masque en fondu latéral. Aucune animation : zéro coût continu. */
+.model-stage::before {
+  content: "";
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  bottom: 0;
+  height: 64%; /* hauteur AVANT projection ; après rotateX le plan occupe ~1/3 bas de la scène */
+  background-image:
+    /* lueur d'horizon (le "haut" du plan = le bord lointain après rotateX) */
+    linear-gradient(to bottom, rgba(0,229,255,0.30), rgba(0,229,255,0.06) 16%, transparent 30%),
+    /* cœurs de lignes nets */
+    linear-gradient(rgba(0,229,255,0.55) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,0.55) 1px, transparent 1px),
+    /* halo large sous chaque ligne (bloom bon marché) */
+    linear-gradient(rgba(0,229,255,0.12) 4px, transparent 4px),
+    linear-gradient(90deg, rgba(0,229,255,0.12) 4px, transparent 4px);
+  background-size:
+    100% 100%,
+    46px 46px,
+    46px 46px,
+    46px 46px,
+    46px 46px;
+  background-position: 0 0, 0 0, 0 0, -1.5px -1.5px, -1.5px -1.5px;
+  filter: drop-shadow(0 0 6px rgba(0,229,255,0.35));
+  transform: perspective(600px) rotateX(56deg);
+  transform-origin: center bottom;
+  -webkit-mask-image: radial-gradient(ellipse 75% 100% at center bottom, black 40%, transparent 82%);
+  mask-image: radial-gradient(ellipse 75% 100% at center bottom, black 40%, transparent 82%);
+  pointer-events: none;
+}
+/* Points lumineux qui filent vers l'horizon sur le quadrillage (affiche Tron
+   Legacy). Conteneur = même plan incliné que la grille ; chaque point anime
+   transform + opacity uniquement (composité). La perspective du parent
+   rétrécit naturellement les points en approchant l'horizon. Injecté par JS
+   (enhancement) ; figé hors écran par .anim-paused ; masqué en reduced-motion.
+   Pas de masque CSS ici : le fondu à l'horizon est baké dans les keyframes
+   (un masque sur des enfants animés forcerait une re-rasterisation continue). */
+.tron-floor-fx {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  bottom: 0;
+  height: 64%;
+  transform: perspective(600px) rotateX(56deg);
+  transform-origin: center bottom;
+  pointer-events: none;
+}
+.tron-dot {
+  position: absolute;
+  bottom: -3px;
+  left: var(--lane, 50%);
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #E8FDFF 0%, var(--accent) 45%, transparent 72%);
+  box-shadow: 0 0 8px var(--accent), 0 0 18px rgba(0,229,255,0.5);
+  opacity: 0;
+  animation: tron-dot-run var(--dur, 3.6s) linear infinite;
+}
+@keyframes tron-dot-run {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 1; }
+  80%  { opacity: 0.9; }
+  100% { transform: translate3d(0, calc(-1 * var(--runY, 300px)), 0); opacity: 0; }
+}
 .hobbie-model {
   position: absolute;
   inset: 0;
@@ -2618,6 +2690,7 @@ footer.foot {
   .profile-monogram::before { animation: none; }
   .marquee-track { animation: none; }
   .model-hint { animation: none; opacity: 0.8; }
+  .tron-floor-fx { display: none; }
   .cbot-fab-dot::after { animation: none; }
   .cbot-avatar-pulse { animation: none; }
   .cbot-typing span { animation: none; opacity: 1; }
