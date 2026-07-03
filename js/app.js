@@ -701,14 +701,24 @@
       const fx = document.createElement('div');
       fx.className = 'tron-floor-fx';
       fx.setAttribute('aria-hidden', 'true');
+      const GRID = 46; // pas du quadrillage (voir background-size de .model-stage::before)
+      // Les points SUIVENT les lignes verticales de la grille : la voie est un
+      // multiple du pas (+0.5px = centre de la ligne de 1px), tirée au sort
+      // parmi les colonnes hors bords extrêmes.
+      const gridLane = () => {
+        const w = fx.clientWidth || 0;
+        if (!w) return '50%';
+        const min = Math.ceil(w * 0.06 / GRID);
+        const max = Math.floor(w * 0.94 / GRID);
+        const k = min + Math.floor(Math.random() * Math.max(1, max - min + 1));
+        return (k * GRID + 0.5) + 'px';
+      };
       for (let i = 0; i < 5; i++) {
         const dot = document.createElement('span');
         dot.className = 'tron-dot';
-        const newLane = () => dot.style.setProperty('--lane', (8 + Math.random() * 84).toFixed(1) + '%');
-        newLane();
         dot.style.setProperty('--dur', (2.6 + Math.random() * 2.8).toFixed(2) + 's');
         dot.style.animationDelay = (Math.random() * 3.5).toFixed(2) + 's';
-        dot.addEventListener('animationiteration', newLane);
+        dot.addEventListener('animationiteration', () => dot.style.setProperty('--lane', gridLane()));
         fx.appendChild(dot);
       }
       // Course des points = hauteur du plan (px), consommée par les keyframes.
@@ -716,6 +726,8 @@
       // Avant le <model-viewer> dans le DOM : au-dessus de la grille (::before),
       // sous le canvas transparent du modèle.
       modelStage.insertBefore(fx, modelStage.firstChild);
+      // Voies initiales — après insertion (clientWidth mesurable seulement là).
+      fx.querySelectorAll('.tron-dot').forEach((dot) => dot.style.setProperty('--lane', gridLane()));
       setRun();
       window.addEventListener('resize', () => requestAnimationFrame(setRun), { passive: true });
       // L'agrandissement lightbox change la taille du plan sans event resize.
