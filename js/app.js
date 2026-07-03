@@ -692,6 +692,37 @@
       entryIO.observe(renaultViewer.closest('#creations') || renaultViewer);
     }
 
+    // ───── Points lumineux du sol Tron (filent vers l'horizon) ─────
+    // 5 points sur le plan incliné de la grille : voie (X), vitesse et départ
+    // aléatoires ; nouvelle voie tirée à chaque passage (animationiteration).
+    // transform/opacity uniquement (composité) ; .anim-paused les fige quand
+    // la section est hors écran ; rien n'est injecté en reduced-motion.
+    if (modelStage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const fx = document.createElement('div');
+      fx.className = 'tron-floor-fx';
+      fx.setAttribute('aria-hidden', 'true');
+      for (let i = 0; i < 5; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'tron-dot';
+        const newLane = () => dot.style.setProperty('--lane', (8 + Math.random() * 84).toFixed(1) + '%');
+        newLane();
+        dot.style.setProperty('--dur', (2.6 + Math.random() * 2.8).toFixed(2) + 's');
+        dot.style.animationDelay = (Math.random() * 3.5).toFixed(2) + 's';
+        dot.addEventListener('animationiteration', newLane);
+        fx.appendChild(dot);
+      }
+      // Course des points = hauteur du plan (px), consommée par les keyframes.
+      const setRun = () => fx.style.setProperty('--runY', fx.clientHeight + 'px');
+      // Avant le <model-viewer> dans le DOM : au-dessus de la grille (::before),
+      // sous le canvas transparent du modèle.
+      modelStage.insertBefore(fx, modelStage.firstChild);
+      setRun();
+      window.addEventListener('resize', () => requestAnimationFrame(setRun), { passive: true });
+      // L'agrandissement lightbox change la taille du plan sans event resize.
+      new MutationObserver(() => requestAnimationFrame(setRun))
+        .observe(modelStage, { attributes: true, attributeFilter: ['class'] });
+    }
+
     // ───── Pastille "↻ Faites pivoter" : disparaît après usage ─────
     // Dès que l'utilisateur a fait pivoter le modèle lui-même, l'invite a
     // rempli son rôle : fondu de sortie + arrêt de l'animation de pulsation
