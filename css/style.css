@@ -1709,6 +1709,42 @@ section.block:first-of-type { border-top: 0; }
   mask-image: radial-gradient(ellipse 75% 100% at center bottom, black 40%, transparent 82%);
   pointer-events: none;
 }
+/* Points lumineux qui filent vers l'horizon sur le quadrillage (affiche Tron
+   Legacy). Conteneur = même plan incliné que la grille ; chaque point anime
+   transform + opacity uniquement (composité). La perspective du parent
+   rétrécit naturellement les points en approchant l'horizon. Injecté par JS
+   (enhancement) ; figé hors écran par .anim-paused ; masqué en reduced-motion.
+   Pas de masque CSS ici : le fondu à l'horizon est baké dans les keyframes
+   (un masque sur des enfants animés forcerait une re-rasterisation continue). */
+.tron-floor-fx {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  bottom: 0;
+  height: 64%;
+  transform: perspective(600px) rotateX(56deg);
+  transform-origin: center bottom;
+  pointer-events: none;
+}
+.tron-dot {
+  position: absolute;
+  bottom: -3px;
+  left: var(--lane, 50%);
+  width: 6px;
+  height: 6px;
+  margin-left: -3px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #E8FDFF 0%, var(--accent) 45%, transparent 72%);
+  box-shadow: 0 0 8px var(--accent), 0 0 18px rgba(0,229,255,0.5);
+  opacity: 0;
+  animation: tron-dot-run var(--dur, 3.6s) linear infinite;
+}
+@keyframes tron-dot-run {
+  0%   { transform: translate3d(0, 0, 0); opacity: 0; }
+  10%  { opacity: 1; }
+  80%  { opacity: 0.9; }
+  100% { transform: translate3d(0, calc(-1 * var(--runY, 300px)), 0); opacity: 0; }
+}
 .hobbie-model {
   position: absolute;
   inset: 0;
@@ -2654,6 +2690,7 @@ footer.foot {
   .profile-monogram::before { animation: none; }
   .marquee-track { animation: none; }
   .model-hint { animation: none; opacity: 0.8; }
+  .tron-floor-fx { display: none; }
   .cbot-fab-dot::after { animation: none; }
   .cbot-avatar-pulse { animation: none; }
   .cbot-typing span { animation: none; opacity: 1; }
