@@ -661,6 +661,80 @@
       if (typeof renaultViewer.updateFraming === 'function') renaultViewer.updateFraming();
     });
 
+    // ───── Entrée caméra cinématique (one-shot) ─────
+    // Au premier passage sur la section, la caméra part d'un cadrage éloigné
+    // en plongée latérale et effectue un travelling d'approche vers l'angle
+    // final — model-viewer interpole lui-même les changements de camera-orbit
+    // (SmoothControls). One-shot : zéro coût une fois arrivée. Désactivé en
+    // reduced-motion (le cadrage final est alors appliqué d'emblée).
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      const FINAL_ORBIT = renaultViewer.getAttribute('camera-orbit') || '-30deg 75deg auto';
+      const START_ORBIT = '-95deg 68deg 140%';
+      renaultViewer.setAttribute('camera-orbit', START_ORBIT);
+
+      let modelLoaded = false;
+      let sectionSeen = false;
+      let entryDone = false;
+      const playEntry = () => {
+        if (entryDone || !modelLoaded || !sectionSeen) return;
+        entryDone = true;
+        // Petite respiration pour laisser le premier rendu s'afficher,
+        // puis travelling vers le cadrage final (interpolé ~1s).
+        setTimeout(() => renaultViewer.setAttribute('camera-orbit', FINAL_ORBIT), 250);
+      };
+      renaultViewer.addEventListener('load', () => { modelLoaded = true; playEntry(); }, { once: true });
+      const entryIO = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        sectionSeen = true;
+        entryIO.disconnect();
+        playEntry();
+      }, { threshold: 0.35 });
+      entryIO.observe(renaultViewer.closest('#creations') || renaultViewer);
+    }
+
+    // ───── Points lumineux du sol Tron (filent vers l'horizon) ─────
+    // 5 points sur le plan incliné de la grille : voie (X), vitesse et départ
+    // aléatoires ; nouvelle voie tirée à chaque passage (animationiteration).
+    // transform/opacity uniquement (composité) ; .anim-paused les fige quand
+    // la section est hors écran ; rien n'est injecté en reduced-motion.
+    if (modelStage && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const fx = document.createElement('div');
+      fx.className = 'tron-floor-fx';
+      fx.setAttribute('aria-hidden', 'true');
+      const GRID = 46; // pas du quadrillage (voir background-size de .model-stage::before)
+      // Les points SUIVENT les lignes verticales de la grille : la voie est un
+      // multiple du pas (+0.5px = centre de la ligne de 1px), tirée au sort
+      // parmi les colonnes hors bords extrêmes.
+      const gridLane = () => {
+        const w = fx.clientWidth || 0;
+        if (!w) return '50%';
+        const min = Math.ceil(w * 0.06 / GRID);
+        const max = Math.floor(w * 0.94 / GRID);
+        const k = min + Math.floor(Math.random() * Math.max(1, max - min + 1));
+        return (k * GRID + 0.5) + 'px';
+      };
+      for (let i = 0; i < 5; i++) {
+        const dot = document.createElement('span');
+        dot.className = 'tron-dot';
+        dot.style.setProperty('--dur', (2.6 + Math.random() * 2.8).toFixed(2) + 's');
+        dot.style.animationDelay = (Math.random() * 3.5).toFixed(2) + 's';
+        dot.addEventListener('animationiteration', () => dot.style.setProperty('--lane', gridLane()));
+        fx.appendChild(dot);
+      }
+      // Course des points = hauteur du plan (px), consommée par les keyframes.
+      const setRun = () => fx.style.setProperty('--runY', fx.clientHeight + 'px');
+      // Avant le <model-viewer> dans le DOM : au-dessus de la grille (::before),
+      // sous le canvas transparent du modèle.
+      modelStage.insertBefore(fx, modelStage.firstChild);
+      // Voies initiales — après insertion (clientWidth mesurable seulement là).
+      fx.querySelectorAll('.tron-dot').forEach((dot) => dot.style.setProperty('--lane', gridLane()));
+      setRun();
+      window.addEventListener('resize', () => requestAnimationFrame(setRun), { passive: true });
+      // L'agrandissement lightbox change la taille du plan sans event resize.
+      new MutationObserver(() => requestAnimationFrame(setRun))
+        .observe(modelStage, { attributes: true, attributeFilter: ['class'] });
+    }
+
     // ───── Pastille "↻ Faites pivoter" : disparaît après usage ─────
     // Dès que l'utilisateur a fait pivoter le modèle lui-même, l'invite a
     // rempli son rôle : fondu de sortie + arrêt de l'animation de pulsation
