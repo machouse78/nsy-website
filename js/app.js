@@ -661,6 +661,37 @@
       if (typeof renaultViewer.updateFraming === 'function') renaultViewer.updateFraming();
     });
 
+    // ───── Entrée caméra cinématique (one-shot) ─────
+    // Au premier passage sur la section, la caméra part d'un cadrage éloigné
+    // en plongée latérale et effectue un travelling d'approche vers l'angle
+    // final — model-viewer interpole lui-même les changements de camera-orbit
+    // (SmoothControls). One-shot : zéro coût une fois arrivée. Désactivé en
+    // reduced-motion (le cadrage final est alors appliqué d'emblée).
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches && 'IntersectionObserver' in window) {
+      const FINAL_ORBIT = renaultViewer.getAttribute('camera-orbit') || '-30deg 75deg auto';
+      const START_ORBIT = '-95deg 68deg 140%';
+      renaultViewer.setAttribute('camera-orbit', START_ORBIT);
+
+      let modelLoaded = false;
+      let sectionSeen = false;
+      let entryDone = false;
+      const playEntry = () => {
+        if (entryDone || !modelLoaded || !sectionSeen) return;
+        entryDone = true;
+        // Petite respiration pour laisser le premier rendu s'afficher,
+        // puis travelling vers le cadrage final (interpolé ~1s).
+        setTimeout(() => renaultViewer.setAttribute('camera-orbit', FINAL_ORBIT), 250);
+      };
+      renaultViewer.addEventListener('load', () => { modelLoaded = true; playEntry(); }, { once: true });
+      const entryIO = new IntersectionObserver(([entry]) => {
+        if (!entry.isIntersecting) return;
+        sectionSeen = true;
+        entryIO.disconnect();
+        playEntry();
+      }, { threshold: 0.35 });
+      entryIO.observe(renaultViewer.closest('#creations') || renaultViewer);
+    }
+
     // ───── Pastille "↻ Faites pivoter" : disparaît après usage ─────
     // Dès que l'utilisateur a fait pivoter le modèle lui-même, l'invite a
     // rempli son rôle : fondu de sortie + arrêt de l'animation de pulsation
