@@ -62,7 +62,10 @@ if [ ! -d node_modules/@gltf-transform/core ]; then
     @gltf-transform/extensions \
     draco3dgltf >/dev/null
 fi
-node scripts/tris-to-lines.mjs "$TMP_TRIS" "$OUT"
+# --min-angle 25 : ne garde que les arêtes vives (angle dièdre ≥ 25°) + bords.
+# Le wireframe reste lisible de face (capot/toit ne bavent plus en masse
+# cyan). Réglage choisi après comparaison visuelle 15° / 25° / 35°.
+node scripts/tris-to-lines.mjs "$TMP_TRIS" "$OUT" --min-angle "${WIREFRAME_MIN_ANGLE:-25}"
 
 echo ""
 echo "✅ Built $OUT ($(du -h "$OUT" | cut -f1))"
