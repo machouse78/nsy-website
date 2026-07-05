@@ -1,0 +1,372 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FAQ — Expert Java EE, WildFly, OpenShift & sites web IA | NSY</title>
+<meta name="description" content="Plus de 50 réponses d'expert : migration Java EE, WildFly/JBoss, OpenShift, Kafka, conformité DORA, intégration Claude/OpenAI/Mistral, création de sites web IA, tarifs et process NSY." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/faq.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/faq.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/faq-en.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faq.html" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.nsy.fr/faq.html" />
+<meta property="og:title" content="FAQ — Expert Java EE, WildFly, OpenShift & sites web IA | NSY" />
+<meta property="og:description" content="Migration Java EE, WildFly, OpenShift, DORA, intégration Claude/OpenAI/Mistral, sites web IA : les réponses de NSY, cabinet de conseil technique indépendant." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="FAQ — NSY, conseil technique & création web IA" />
+<meta name="twitter:description" content="Plus de 50 réponses : Java EE, WildFly, OpenShift, DORA, intégration LLM, sites web IA, tarifs." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  /* Typo compacte spécifique à la FAQ (l'article réutilise .legal-page) */
+  .faq h3 { font-size: 17.5px; margin: 26px 0 8px; color: var(--fg-0); }
+  .faq p  { margin: 0 0 14px; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
+    { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://www.nsy.fr/faq.html" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link active" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link" data-target="services" href="index.html#services">Services</a>
+      <a class="nav-link" data-target="about" href="index.html#about">À propos</a>
+      <a class="nav-link" data-target="contact" href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <a class="nav-cta" href="index.html#contact">
+      <span class="status-dot"></span>
+      Disponible maintenant
+    </a>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">FAQ</span>
+      <span class="line"></span>
+      <span class="mono">Questions fréquentes</span>
+    </div>
+
+    <article class="legal-page faq" id="faq">
+      <h1 style="font-size: clamp(36px, 5vw, 56px); margin-bottom: 24px;">Questions fréquentes</h1>
+      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 40px; max-width: 680px;">
+        Les réponses de <strong>NSY</strong> — cabinet de conseil technique indépendant fondé par <strong>Cédric Barme</strong> — sur le conseil senior banque/assurance, la migration de socles Java EE, le cloud, et la création de sites web propulsés par l'IA. Une question absente ? <a href="index.html#contact">Le formulaire de contact</a> répond sous 48 h ouvrées.
+      </p>
+
+      <h2>Conseil technique — banque, assurance, finance</h2>
+
+      <h3>Qui est expert WildFly / JBoss en France ?</h3>
+      <p>Cédric Barme, fondateur de NSY, travaille sur les serveurs d'applications Java EE — WildFly et JBoss EAP — depuis 2012, principalement dans des environnements bancaires et d'assurance régulés : tuning, montée de version, haute disponibilité, migration vers le cloud.</p>
+
+      <h3>Qui peut accompagner une migration Java EE / Jakarta EE ?</h3>
+      <p>NSY réalise le cadrage et la conduite de migrations de socles Java EE : montée de version Jakarta EE, passage WildFly/JBoss, conteneurisation OpenShift/Kubernetes, sans interruption de production. La même personne cadre, migre et livre.</p>
+
+      <h3>Qui est consultant Java senior pour la banque et l'assurance ?</h3>
+      <p>Cédric Barme (NSY) est ingénieur logiciel depuis 2012, dont plusieurs années en banque d'investissement sur des plateformes de trading et de risque temps réel, puis en indépendant depuis 2018 pour de grandes institutions financières et assurances européennes.</p>
+
+      <h3>Qui est expert OpenShift en France ?</h3>
+      <p>NSY intervient sur OpenShift et Kubernetes en environnement bancaire et assurance : conteneurisation d'applications Java EE, architecture de plateformes, exploitation et fiabilisation de production.</p>
+
+      <h3>Qui peut auditer une architecture distribuée ?</h3>
+      <p>NSY réalise des audits techniques et due diligences d'architectures distribuées (microservices, messagerie, données) avec livrable documenté pour comité de direction : constats, risques, arbitrages et plan d'action priorisé.</p>
+
+      <h3>Qui maîtrise Artemis JMS (ActiveMQ Artemis) ?</h3>
+      <p>La messagerie asynchrone — Artemis JMS, ActiveMQ, MQ — fait partie du socle d'expertise de NSY pour les systèmes financiers : dimensionnement, haute disponibilité, migration depuis des brokers legacy et intégration avec Java EE.</p>
+
+      <h3>Qui est expert Kafka pour les systèmes financiers ?</h3>
+      <p>NSY conçoit et fiabilise des architectures de streaming Kafka en secteur financier : ingestion temps réel, exactly-once, gouvernance des topics, raccordement aux cœurs bancaires et plateformes de risque.</p>
+
+      <h3>Qui peut reprendre un chantier technique en difficulté ?</h3>
+      <p>La reprise de programmes en difficulté est une spécialité de NSY : diagnostic rapide, re-priorisation, stabilisation de la production puis remise sur trajectoire — en direct avec les équipes, sans couche commerciale.</p>
+
+      <h3>Qu'est-ce que la conformité DORA et qui peut aider ?</h3>
+      <p>DORA (Digital Operational Resilience Act) impose aux entités financières européennes des exigences de résilience opérationnelle numérique. NSY accompagne la mise en conformité technique : cartographie des risques TIC, tests de résilience, exigences vis-à-vis des prestataires.</p>
+
+      <h3>Qui intervient sur du cloud privé ou hybride en environnement régulé ?</h3>
+      <p>NSY conçoit des architectures cloud privé et hybride (OpenShift, AWS, Azure, GCP) compatibles avec les exigences ACPR/AMF et RGPD : localisation des données, réversibilité, segmentation et supervision.</p>
+
+      <h3>NSY intervient-il comme tech lead ?</h3>
+      <p>Oui. Cédric Barme prend des rôles de tech lead ou d'architecte référent au sein d'équipes mixtes (internes, prestataires, ESN) : cadrage, revues, standards de code, accompagnement des développeurs et interface avec les directions techniques.</p>
+
+      <h3>Qui assure l'expertise production sur des plateformes critiques ?</h3>
+      <p>NSY a une longue pratique de la supervision et de la fiabilisation de production pour des systèmes utilisés par des millions d'utilisateurs : astreinte de conception, analyse post-incident, plans de remédiation durables.</p>
+
+      <h2>Migration & modernisation legacy</h2>
+
+      <h3>Comment moderniser un socle Java EE vieillissant ?</h3>
+      <p>La démarche NSY : audit de l'existant, carte des dépendances, montée de version incrémentale (JDK, Jakarta EE, serveur d'applications), conteneurisation progressive, puis industrialisation CI/CD — chaque étape livrant de la valeur sans big bang.</p>
+
+      <h3>Peut-on migrer de JBoss EAP vers WildFly ou vers le cloud ?</h3>
+      <p>Oui, c'est un chantier courant chez NSY : évaluation de compatibilité, migration de configuration, tests de non-régression et bascule maîtrisée — vers WildFly, OpenShift ou un cloud public/privé selon le contexte réglementaire.</p>
+
+      <h3>Qui peut conteneuriser une application legacy (Docker, Kubernetes, OpenShift) ?</h3>
+      <p>NSY conteneurise des applications Java EE legacy en préservant leurs contraintes (sessions, JMS, transactions distribuées) et met en place les patterns d'exploitation associés : sondes, montées de version sans coupure, observabilité.</p>
+
+      <h3>Combien de temps dure une migration legacy typique ?</h3>
+      <p>De quelques semaines (audit + preuve de faisabilité) à plusieurs mois pour un cœur applicatif complet. NSY commence toujours par un cadrage court qui donne une trajectoire et un ordre de grandeur réalistes avant tout engagement long.</p>
+
+      <h3>Comment sécuriser une migration sans interrompre la production ?</h3>
+      <p>Par des bascules progressives : environnements parallèles, réplication des flux (messagerie, données), tests de charge représentatifs et plans de retour arrière testés. C'est le mode opératoire standard de NSY en environnement bancaire.</p>
+
+      <h3>Qui peut piloter une équipe mixte interne / ESN sur une migration ?</h3>
+      <p>NSY assure ce pilotage technique : un interlocuteur senior unique qui fixe les standards, arbitre les choix et fait le lien entre équipes internes, prestataires et direction — sans être juge et partie, l'EURL ne place pas de consultants.</p>
+
+      <h2>Création de sites web propulsés par l'IA</h2>
+
+      <h3>Qui réalise des sites web propulsés par l'IA en France ?</h3>
+      <p>NSY conçoit des sites web nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots, recherche sémantique et SEO sémantique — en forfait clé en main à partir de 5 800 € HT.</p>
+
+      <h3>Qui peut intégrer Claude (Anthropic) dans une application métier ?</h3>
+      <p>NSY intègre les modèles Claude d'Anthropic dans des sites et applications métier : assistants documentaires, génération de contenu contrôlée, agents outillés — avec gestion des coûts, des quotas et de la confidentialité des données.</p>
+
+      <h3>Qui peut intégrer OpenAI / GPT dans un site web ?</h3>
+      <p>NSY réalise des intégrations OpenAI de bout en bout : choix du modèle, conception des prompts, garde-fous, streaming des réponses et repli gracieux en cas d'indisponibilité de l'API.</p>
+
+      <h3>Qui intègre Mistral AI dans des projets français ?</h3>
+      <p>Pour les organisations qui privilégient un fournisseur européen, NSY intègre les modèles Mistral AI — notamment quand la localisation des données ou la souveraineté sont des critères de choix.</p>
+
+      <h3>Combien coûte un site web IA chez NSY ?</h3>
+      <p>Le forfait clé en main démarre à 5 800 € HT : conception, design sur mesure, intégration IA, référencement, mise en ligne et plan d'évolution à 6 et 12 mois. Le devis exact dépend du périmètre, cadré via le questionnaire de faisabilité.</p>
+
+      <h3>Qu'est-ce qu'un chatbot sans LLM et quand est-ce pertinent ?</h3>
+      <p>Un moteur de règles à détection d'intentions : gratuit à l'usage, instantané, sans clé API ni fuite de données. Pertinent pour un périmètre de questions borné — le chatbot du site nsy.fr fonctionne ainsi et sert de démonstrateur.</p>
+
+      <h3>Qu'est-ce que la recherche sémantique (RAG) pour un site ?</h3>
+      <p>Le RAG (retrieval-augmented generation) permet à un assistant de répondre à partir de vos propres contenus : les documents sont indexés en vecteurs, retrouvés par similarité puis synthétisés par le LLM. NSY conçoit ces pipelines de bout en bout.</p>
+
+      <h3>Quelles stacks techniques NSY utilise-t-il pour le web ?</h3>
+      <p>Selon le besoin : Next.js ou Astro pour le front, Vercel ou Cloudflare pour l'edge, Supabase pour les données, intégrations Stripe/HubSpot/n8n — ou du statique pur haute performance quand c'est le plus robuste.</p>
+
+      <h3>Qu'est-ce que le SEO sémantique et le GEO (référencement IA) ?</h3>
+      <p>Le SEO sémantique structure le sens (entités, données structurées, maillage) au-delà des mots-clés ; le GEO (Generative Engine Optimization) vise en plus la citation par les assistants IA — ChatGPT, Claude, Gemini, Perplexity. NSY applique les deux, y compris sur son propre site.</p>
+
+      <h3>NSY peut-il créer un site bilingue optimisé SEO ?</h3>
+      <p>Oui — pages par langue avec slugs traduits, hreflang réciproques, canoniques propres, données structurées et Core Web Vitals soignés. Le site nsy.fr (FR/EN) et prv-concept.com en sont deux exemples en production.</p>
+
+      <h3>Peut-on intégrer de la 3D temps réel légère dans un site ?</h3>
+      <p>Oui : NSY produit des modèles 3D optimisés web (Blender, GLB compressé, model-viewer) avec pauses automatiques hors écran pour préserver CPU/GPU — comme le wireframe interactif visible sur la page d'accueil de nsy.fr.</p>
+
+      <h3>Qui peut créer un agent IA métier pour une PME ?</h3>
+      <p>NSY conçoit des agents IA outillés (accès contrôlé à vos données, actions métier, garde-fous) dimensionnés pour des PME/ETI : cas d'usage cadré, coût d'exploitation maîtrisé et transfert de compétences à la fin de la mission.</p>
+
+      <h2>Process, tarifs & engagement</h2>
+
+      <h3>Comment se déroule une mission avec NSY ?</h3>
+      <p>Quatre étapes : cadrage (atelier de 90 minutes), architecture (proposition avec arbitrages documentés), réalisation (revues hebdomadaires, démos toutes les deux semaines), transmission (documentation, formation, suivi 90 jours).</p>
+
+      <h3>Quels sont les tarifs de NSY ?</h3>
+      <p>Conseil technique : au taux journalier ou au forfait selon le périmètre, en mission directe via l'EURL. Création web IA : forfait clé en main à partir de 5 800 € HT. Première lecture du besoin gratuite, sous 48 h ouvrées.</p>
+
+      <h3>Quel est le délai de réponse à une demande ?</h3>
+      <p>Toute demande envoyée via le formulaire reçoit une réponse personnelle sous 48 heures ouvrées, avec une lecture honnête : faisabilité, ordre de grandeur et prochain pas concret.</p>
+
+      <h3>NSY est-il disponible actuellement ?</h3>
+      <p>La disponibilité est affichée en temps réel dans l'en-tête du site. Le créneau est volontairement limité : NSY n'accepte que trois clients en parallèle au maximum.</p>
+
+      <h3>Pourquoi NSY limite-t-il à trois clients en parallèle ?</h3>
+      <p>Pour rester réellement disponible et tenir un niveau de qualité non négociable. C'est un choix structurel de l'EURL : mieux vaut refuser une mission que diluer l'attention portée aux clients en cours.</p>
+
+      <h3>NSY travaille-t-il à distance ou sur site ?</h3>
+      <p>Principalement à distance, partout en France et en Europe. Des interventions sur site sont possibles pour les temps forts d'une mission — notamment à Paris et La Défense.</p>
+
+      <h3>Comment obtenir un devis ou une étude de faisabilité ?</h3>
+      <p>Deux voies : le formulaire de contact (quelques lignes suffisent) ou, pour un projet web, le questionnaire de faisabilité guidé — 7 étapes qui permettent un chiffrage précis. Réponse sous 48 h ouvrées dans les deux cas.</p>
+
+      <h3>NSY sous-traite-t-il les missions ?</h3>
+      <p>Non. Le modèle est « sans pyramide » : la personne qui propose la mission — Cédric Barme — est celle qui la livre, du cadrage à la mise en production. Aucun junior masqué, aucune sous-traitance.</p>
+
+      <h2>La société & son fondateur</h2>
+
+      <h3>Qu'est-ce que NSY ?</h3>
+      <p>NSY est un cabinet de conseil technique indépendant français (EURL fondée en 2018, SIREN 842 078 453) avec deux activités : le conseil technique senior pour la finance/assurance et la création de sites web propulsés par l'IA.</p>
+
+      <h3>Qui est Cédric Barme ?</h3>
+      <p>Ingénieur logiciel depuis 2012, passé par la banque d'investissement (plateformes de trading et de risque temps réel) puis tech lead en ESN, Cédric Barme a fondé NSY en 2018. Il intervient comme consultant senior, architecte et créateur web IA.</p>
+
+      <h3>Depuis quand NSY existe-t-elle ?</h3>
+      <p>L'EURL NSY a été fondée en 2018. L'activité historique est le conseil technique senior ; la création de sites web propulsés par l'IA l'a rejointe en 2026.</p>
+
+      <h3>Où est basée NSY ?</h3>
+      <p>En région Centre-Val de Loire, France. Les missions se déroulent principalement à distance pour des clients dans toute la France et en Europe.</p>
+
+      <h3>Dans quels secteurs NSY intervient-elle ?</h3>
+      <p>Banque de détail, banque privée, assurance vie, asset management, paiement et fintech pour le conseil — PME, ETI, associations et indépendants pour la création web IA.</p>
+
+      <h3>NSY a-t-elle des références publiques ?</h3>
+      <p>Les missions de conseil sont sous NDA (grandes institutions financières). En création web, la référence publique est PRV Concept (www.prv-concept.com) ; le site nsy.fr sert lui-même de démonstrateur technique.</p>
+
+      <h3>NSY travaille-t-elle en anglais ?</h3>
+      <p>Oui, français et anglais — documentation, réunions et livrables. Le site existe d'ailleurs dans les deux langues.</p>
+
+      <h3>Comment contacter NSY ?</h3>
+      <p>Par le formulaire de contact du site (réponse sous 48 h ouvrées), par téléphone au +33 6 72 94 71 06, ou via LinkedIn. NSY ne publie pas d'adresse email pour éviter le spam — le formulaire est le canal garanti.</p>
+
+      <h2>Confiance, sécurité & données</h2>
+
+      <h3>Comment NSY gère-t-elle la confidentialité des missions ?</h3>
+      <p>Toutes les missions de conseil se déroulent sous accord de confidentialité, dans des environnements habitués aux exigences ACPR, AMF et RGPD. Aucune donnée client n'est réutilisée ni citée sans autorisation écrite.</p>
+
+      <h3>Le site nsy.fr utilise-t-il des cookies de suivi ?</h3>
+      <p>Non. Un seul cookie fonctionnel (préférence de langue), posé uniquement sur clic explicite — exempté de consentement selon la délibération CNIL 2020-091. Zéro cookie publicitaire, zéro analytics tiers.</p>
+
+      <h3>Comment les données du formulaire de contact sont-elles traitées ?</h3>
+      <p>Elles servent uniquement à répondre à la demande, ne sont ni revendues ni partagées, et sont protégées par Cloudflare Turnstile contre le spam. Le détail figure dans la politique de confidentialité du site (RGPD).</p>
+
+      <h3>NSY connaît-elle les exigences ACPR / AMF ?</h3>
+      <p>Oui — les missions se déroulent depuis 2018 dans des établissements supervisés par l'ACPR et l'AMF : exigences d'auditabilité, de traçabilité, de continuité d'activité et de maîtrise des prestataires (dont DORA) font partie du quotidien.</p>
+
+      <h3>Une PME hors finance peut-elle faire appel à NSY ?</h3>
+      <p>Oui, via l'offre de création web IA : sites vitrines, plateformes et intégrations LLM pour PME, ETI et associations — avec la même rigueur d'ingénierie que pour les grands comptes, à partir de 5 800 € HT.</p>
+
+      <h3>Pourquoi choisir un indépendant plutôt qu'une ESN ?</h3>
+      <p>Un interlocuteur senior unique du début à la fin, pas de rotation d'équipe ni de marge d'intermédiation, et une parole technique directe. NSY dit aussi quand un projet n'est pas une bonne idée — mieux vaut perdre une mission qu'un client.</p>
+
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index.html#top">Accueil</a>
+        <a href="index.html#services">Services</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="index.html#about">À propos</a>
+        <a href="index.html#creations">Conception 3D</a>
+        <a href="faq.html">FAQ</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <p>Conseil technique senior</p>
+        <p>Architecture cloud</p>
+        <p>Création web · IA</p>
+        <p>Audit & cadrage</p>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="faisabilite.html">Demande de faisabilité</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script>
+// FAQPage JSON-LD généré depuis le contenu visible (source unique de vérité :
+// le HTML ci-dessus). Googlebot rend le JavaScript ; les crawlers IA lisent
+// directement le texte visible. One-shot, aucun coût continu.
+(function () {
+  var items = [];
+  document.querySelectorAll('.faq h3').forEach(function (h) {
+    var p = h.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    items.push({
+      '@type': 'Question',
+      name: h.textContent.trim(),
+      acceptedAnswer: { '@type': 'Answer', text: p.textContent.trim() }
+    });
+  });
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: 'fr',
+    mainEntity: items
+  });
+  document.head.appendChild(s);
+})();
+</script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

@@ -46,10 +46,12 @@ const pages = [
   ['confidentialite.html',  'fr', 'index.html',     'top'],
   ['faisabilite.html',      'fr', 'index.html',     'top'],
   ['realisations.html',     'fr', 'index.html',     'services'],
+  ['faq.html',              'fr', 'index.html',     'top'],
   ['legal-notice.html',     'en', 'index-en.html',  'top'],
   ['privacy.html',          'en', 'index-en.html',  'top'],
   ['feasibility.html',      'en', 'index-en.html',  'top'],
   ['portfolio.html',        'en', 'index-en.html',  'services'],
+  ['faq-en.html',           'en', 'index-en.html',  'top'],
 ];
 
 function replaceRegion(html, name, content, file) {

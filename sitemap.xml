@@ -191,6 +191,29 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/confidentialite.html" />
   </url>
 
+  <!-- FAQ — 50+ questions/réponses expertise & offres (FR / EN) -->
+  <url>
+    <loc>https://www.nsy.fr/faq.html</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/faq.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/faq-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faq.html" />
+  </url>
+
+  <url>
+    <loc>https://www.nsy.fr/faq-en.html</loc>
+    <lastmod>2026-07-03</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/faq.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/faq-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faq.html" />
+  </url>
+
   <!-- Questionnaire de faisabilité projet (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faisabilite.html</loc>

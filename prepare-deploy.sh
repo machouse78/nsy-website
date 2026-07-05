@@ -34,10 +34,13 @@ cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
 cp faisabilite.html      deploy/
 cp realisations.html     deploy/
+cp faq.html              deploy/
 cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
+cp llms.txt              deploy/
+cp llms-full.txt         deploy/
 cp .htaccess             deploy/
 
 echo "📁 Copie des fichiers racine (EN)..."
@@ -46,6 +49,7 @@ cp legal-notice.html  deploy/
 cp privacy.html   deploy/
 cp feasibility.html   deploy/
 cp portfolio.html   deploy/
+cp faq-en.html    deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."
@@ -108,10 +112,14 @@ required=(
   "deploy/feasibility.html"
   "deploy/realisations.html"
   "deploy/portfolio.html"
+  "deploy/faq.html"
+  "deploy/faq-en.html"
   "deploy/contact.php"
   "deploy/faisabilite.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
+  "deploy/llms.txt"
+  "deploy/llms-full.txt"
   "deploy/.htaccess"
   "deploy/css/style.css"
   "deploy/js/app.js"

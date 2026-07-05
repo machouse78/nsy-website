@@ -801,6 +801,7 @@
     'confidentialite.html': 'privacy.html',
     'faisabilite.html': 'feasibility.html',
     'realisations.html': 'portfolio.html',
+    'faq.html': 'faq-en.html',
   };
   const SLUG_EN_TO_FR = Object.fromEntries(
     Object.entries(SLUG_FR_TO_EN).map(([fr, en]) => [en, fr])

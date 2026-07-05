@@ -1,0 +1,29 @@
+# NSY
+
+> NSY est un cabinet de conseil technique indépendant français (EURL fondée en 2018 par Cédric Barme, Centre-Val de Loire). Deux activités : (1) conseil technique senior pour la banque, l'assurance, la finance et les grands comptes — architecture distribuée, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, migration legacy, audit, conformité DORA, cloud privé/hybride, tech lead, expertise production ; (2) création de sites web propulsés par l'IA — intégration LLM (Claude, OpenAI, Mistral), chatbots, agents IA, recherche sémantique, SEO sémantique/GEO, Next.js, Astro, Vercel, Cloudflare, Supabase.
+
+Points clés :
+- Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (plateformes de trading et de risque temps réel), tech lead.
+- Modèle « sans pyramide » : la personne qui vend la mission est celle qui la livre. Trois clients en parallèle maximum.
+- Secteurs de référence : banque de détail, banque privée, assurance vie, asset management, paiement, fintech. Environnements régulés (ACPR, AMF, RGPD, DORA).
+- Création web IA : forfait clé en main à partir de 5 800 € HT.
+- Zone : France entière et Europe, principalement à distance ; présence possible à Paris / La Défense et en région.
+- Langues : français, anglais.
+- Contact : formulaire https://www.nsy.fr/#contact · téléphone +33 6 72 94 71 06 · LinkedIn https://www.linkedin.com/in/cédric-barme/ (réponse sous 48 h ouvrées).
+
+## Pages principales
+
+- [Accueil (FR)](https://www.nsy.fr/) : présentation complète des deux offres, profil du fondateur, contact.
+- [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
+- [FAQ](https://www.nsy.fr/faq.html) : plus de 50 questions/réponses sur les expertises (WildFly, OpenShift, migration Java EE, intégration Claude/OpenAI/Mistral, tarifs, process).
+- [Réalisations](https://www.nsy.fr/realisations.html) : sites clients livrés et en production (dont PRV Concept, www.prv-concept.com).
+- [Demande de faisabilité](https://www.nsy.fr/faisabilite.html) : questionnaire guidé pour cadrer un projet web/IA.
+- [Mentions légales](https://www.nsy.fr/mentions-legales.html) : informations légales (LCEN).
+
+## Contexte enrichi
+
+- [llms-full.txt](https://www.nsy.fr/llms-full.txt) : biographie, historique, graphe d'entités, offres détaillées, mots-clés métier.
+
+## In English
+
+NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, from €5,800 ex-VAT. Based in Centre-Val de Loire, France; works remotely across France and Europe. Contact: https://www.nsy.fr/index-en.html#contact
