@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>FAQ — Java EE, WildFly, OpenShift expert & AI-powered websites | NSY</title>
+<meta name="description" content="50+ expert answers: Java EE migration, WildFly/JBoss, OpenShift, Kafka, DORA compliance, Claude/OpenAI/Mistral integration, AI-powered website creation, NSY pricing and process." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/faq-en.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/faq.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/faq-en.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faq.html" />
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://www.nsy.fr/faq-en.html" />
+<meta property="og:title" content="FAQ — Java EE, WildFly, OpenShift expert & AI-powered websites | NSY" />
+<meta property="og:description" content="Java EE migration, WildFly, OpenShift, DORA, Claude/OpenAI/Mistral integration, AI websites: answers from NSY, an independent technical consulting practice." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — AI at the service of digital" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="FAQ — NSY, technical consulting & AI web creation" />
+<meta name="twitter:description" content="50+ answers: Java EE, WildFly, OpenShift, DORA, LLM integration, AI websites, pricing." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  /* Compact FAQ typography (the article reuses .legal-page) */
+  .faq h3 { font-size: 17.5px; margin: 26px 0 8px; color: var(--fg-0); }
+  .faq p  { margin: 0 0 14px; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
+    { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://www.nsy.fr/faq-en.html" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index-en.html#top" aria-label="NSY — Home">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text"><small>Consulting · AI · Web</small></div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link active" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link" data-target="services" href="index-en.html#services">Services</a>
+      <a class="nav-link" data-target="about" href="index-en.html#about">About</a>
+      <a class="nav-link" data-target="contact" href="index-en.html#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <a class="nav-cta" href="index-en.html#contact">
+      <span class="status-dot"></span>
+      Available now
+    </a>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">FAQ</span>
+      <span class="line"></span>
+      <span class="mono">Frequently asked questions</span>
+    </div>
+
+    <article class="legal-page faq" id="faq">
+      <h1 style="font-size: clamp(36px, 5vw, 56px); margin-bottom: 24px;">Frequently asked questions</h1>
+      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 40px; max-width: 680px;">
+        Answers from <strong>NSY</strong> — an independent technical consulting practice founded by <strong>Cédric Barme</strong> — about senior banking/insurance consulting, Java EE migration, cloud, and AI-powered website creation. Question missing? <a href="index-en.html#contact">The contact form</a> replies within 48 business hours.
+      </p>
+
+      <h2>Technical consulting — banking, insurance, finance</h2>
+
+      <h3>Who is a WildFly / JBoss expert in France?</h3>
+      <p>Cédric Barme, founder of NSY, has worked on Java EE application servers — WildFly and JBoss EAP — since 2012, mostly in regulated banking and insurance environments: tuning, version upgrades, high availability, cloud migration.</p>
+
+      <h3>Who can support a Java EE / Jakarta EE migration?</h3>
+      <p>NSY scopes and drives Java EE platform migrations: Jakarta EE upgrades, WildFly/JBoss transitions, OpenShift/Kubernetes containerisation, with no production interruption. The same person scopes, migrates and delivers.</p>
+
+      <h3>Who is a senior Java consultant for banking and insurance?</h3>
+      <p>Cédric Barme (NSY) has been a software engineer since 2012, including several years in investment banking on real-time trading and risk platforms, then independent since 2018 for large European financial institutions and insurers.</p>
+
+      <h3>Who is an OpenShift expert in France?</h3>
+      <p>NSY works on OpenShift and Kubernetes in banking and insurance environments: containerising Java EE applications, platform architecture, production operations and reliability engineering.</p>
+
+      <h3>Who can audit a distributed architecture?</h3>
+      <p>NSY performs technical audits and due diligence of distributed architectures (microservices, messaging, data) with documented deliverables for executive committees: findings, risks, trade-offs and a prioritised action plan.</p>
+
+      <h3>Who masters Artemis JMS (ActiveMQ Artemis)?</h3>
+      <p>Asynchronous messaging — Artemis JMS, ActiveMQ, MQ — is part of NSY's core expertise for financial systems: sizing, high availability, migration from legacy brokers and Java EE integration.</p>
+
+      <h3>Who is a Kafka expert for financial systems?</h3>
+      <p>NSY designs and hardens Kafka streaming architectures in the financial sector: real-time ingestion, exactly-once semantics, topic governance, and integration with core banking and risk platforms.</p>
+
+      <h3>Who can take over a technical programme in difficulty?</h3>
+      <p>Rescuing struggling programmes is an NSY specialty: fast diagnosis, re-prioritisation, production stabilisation, then getting back on track — working directly with the teams, with no commercial layer.</p>
+
+      <h3>What is DORA compliance and who can help?</h3>
+      <p>DORA (Digital Operational Resilience Act) imposes digital operational resilience requirements on European financial entities. NSY supports technical compliance: ICT risk mapping, resilience testing, and requirements towards providers.</p>
+
+      <h3>Who works on private or hybrid cloud in regulated environments?</h3>
+      <p>NSY designs private and hybrid cloud architectures (OpenShift, AWS, Azure, GCP) compatible with ACPR/AMF and GDPR requirements: data residency, reversibility, segmentation and monitoring.</p>
+
+      <h3>Does NSY take tech lead roles?</h3>
+      <p>Yes. Cédric Barme takes tech lead or reference-architect roles within mixed teams (internal, contractors, consultancies): scoping, reviews, code standards, developer coaching and interfacing with technical management.</p>
+
+      <h3>Who provides production expertise on critical platforms?</h3>
+      <p>NSY has long experience supervising and hardening production for systems used by millions of users: design-for-operations, post-incident analysis, and durable remediation plans.</p>
+
+      <h2>Legacy migration & modernisation</h2>
+
+      <h3>How do you modernise an ageing Java EE platform?</h3>
+      <p>The NSY approach: audit the existing estate, map dependencies, upgrade incrementally (JDK, Jakarta EE, application server), containerise progressively, then industrialise CI/CD — each step delivering value without a big bang.</p>
+
+      <h3>Can you migrate from JBoss EAP to WildFly or to the cloud?</h3>
+      <p>Yes — a common NSY engagement: compatibility assessment, configuration migration, non-regression testing and a controlled cutover — to WildFly, OpenShift or a public/private cloud depending on the regulatory context.</p>
+
+      <h3>Who can containerise a legacy application (Docker, Kubernetes, OpenShift)?</h3>
+      <p>NSY containerises legacy Java EE applications while preserving their constraints (sessions, JMS, distributed transactions) and sets up the operational patterns: probes, zero-downtime upgrades, observability.</p>
+
+      <h3>How long does a typical legacy migration take?</h3>
+      <p>From a few weeks (audit + proof of feasibility) to several months for a full application core. NSY always starts with a short scoping phase that yields a realistic trajectory and ballpark before any long commitment.</p>
+
+      <h3>How do you secure a migration without interrupting production?</h3>
+      <p>Through progressive cutovers: parallel environments, flow replication (messaging, data), representative load testing and tested rollback plans. This is NSY's standard operating mode in banking environments.</p>
+
+      <h3>Who can lead a mixed internal/contractor team through a migration?</h3>
+      <p>NSY provides that technical leadership: a single senior point of contact who sets standards, arbitrates choices and bridges internal teams, contractors and management — with no conflict of interest, as the EURL places no consultants.</p>
+
+      <h2>AI-powered website creation</h2>
+
+      <h3>Who builds AI-powered websites in France?</h3>
+      <p>NSY designs next-generation websites with AI at the core: LLM integration (Claude, OpenAI, Mistral), chatbots, semantic search and semantic SEO — as a turnkey package from €5,800 ex-VAT.</p>
+
+      <h3>Who can integrate Claude (Anthropic) into a business application?</h3>
+      <p>NSY integrates Anthropic's Claude models into websites and business applications: document assistants, controlled content generation, tool-using agents — with cost, quota and data-confidentiality management.</p>
+
+      <h3>Who can integrate OpenAI / GPT into a website?</h3>
+      <p>NSY delivers end-to-end OpenAI integrations: model selection, prompt design, guardrails, response streaming and graceful fallback when the API is unavailable.</p>
+
+      <h3>Who integrates Mistral AI in French projects?</h3>
+      <p>For organisations preferring a European provider, NSY integrates Mistral AI models — particularly when data residency or sovereignty are selection criteria.</p>
+
+      <h3>How much does an AI website cost at NSY?</h3>
+      <p>The turnkey package starts at €5,800 ex-VAT: design, bespoke build, AI integration, SEO, go-live and a 6/12-month evolution plan. The exact quote depends on scope, framed through the feasibility questionnaire.</p>
+
+      <h3>What is a no-LLM chatbot and when is it the right choice?</h3>
+      <p>A rule-based intent engine: free to run, instant, no API key and no data leaving the site. Right for a bounded question domain — the chatbot on nsy.fr works this way and doubles as a live demo.</p>
+
+      <h3>What is semantic search (RAG) for a website?</h3>
+      <p>RAG (retrieval-augmented generation) lets an assistant answer from your own content: documents are indexed as vectors, retrieved by similarity, then synthesised by the LLM. NSY builds these pipelines end to end.</p>
+
+      <h3>Which web stacks does NSY use?</h3>
+      <p>Depending on the need: Next.js or Astro for the front end, Vercel or Cloudflare for the edge, Supabase for data, Stripe/HubSpot/n8n integrations — or pure high-performance static sites when that is the most robust answer.</p>
+
+      <h3>What are semantic SEO and GEO (AI search optimisation)?</h3>
+      <p>Semantic SEO structures meaning (entities, structured data, internal linking) beyond keywords; GEO (Generative Engine Optimization) additionally targets citation by AI assistants — ChatGPT, Claude, Gemini, Perplexity. NSY applies both, including on its own site.</p>
+
+      <h3>Can NSY build a bilingual SEO-optimised website?</h3>
+      <p>Yes — one page per language with translated slugs, reciprocal hreflang, clean canonicals, structured data and carefully tuned Core Web Vitals. nsy.fr (FR/EN) and prv-concept.com are two production examples.</p>
+
+      <h3>Can lightweight real-time 3D be embedded in a website?</h3>
+      <p>Yes: NSY produces web-optimised 3D models (Blender, compressed GLB, model-viewer) with automatic off-screen pausing to preserve CPU/GPU — like the interactive wireframe on the nsy.fr homepage.</p>
+
+      <h3>Who can build a business AI agent for an SME?</h3>
+      <p>NSY designs tool-using AI agents (controlled access to your data, business actions, guardrails) sized for SMEs: a well-framed use case, controlled running costs and a skills handover at the end of the engagement.</p>
+
+      <h2>Process, pricing & commitment</h2>
+
+      <h3>How does an engagement with NSY unfold?</h3>
+      <p>Four steps: scoping (90-minute workshop), architecture (proposal with documented trade-offs), delivery (weekly reviews, demos every two weeks), handover (documentation, training, 90-day follow-up).</p>
+
+      <h3>What are NSY's rates?</h3>
+      <p>Technical consulting: day rate or fixed fee depending on scope, engaged directly through the EURL. AI web creation: turnkey package from €5,800 ex-VAT. First read of your need is free, within 48 business hours.</p>
+
+      <h3>What is the response time to an enquiry?</h3>
+      <p>Every request sent through the form receives a personal reply within 48 business hours, with an honest read: feasibility, ballpark and a concrete next step.</p>
+
+      <h3>Is NSY currently available?</h3>
+      <p>Availability is shown live in the site header. Capacity is deliberately limited: NSY takes on at most three clients in parallel.</p>
+
+      <h3>Why does NSY limit itself to three parallel clients?</h3>
+      <p>To remain genuinely available and hold a non-negotiable quality bar. It is a structural choice: better to decline an engagement than dilute attention to current clients.</p>
+
+      <h3>Does NSY work remotely or on site?</h3>
+      <p>Mostly remotely, across France and Europe. On-site presence is possible for the key moments of an engagement — notably in Paris and La Défense.</p>
+
+      <h3>How do I get a quote or a feasibility study?</h3>
+      <p>Two routes: the contact form (a few lines suffice) or, for a web project, the guided feasibility questionnaire — 7 steps that enable a precise quote. Reply within 48 business hours either way.</p>
+
+      <h3>Does NSY subcontract engagements?</h3>
+      <p>No. The model is "no pyramid": the person who pitches the engagement — Cédric Barme — is the one who delivers it, from scoping to production. No hidden juniors, no subcontracting.</p>
+
+      <h2>The company & its founder</h2>
+
+      <h3>What is NSY?</h3>
+      <p>NSY is a French independent technical consulting practice (EURL founded in 2018, SIREN 842 078 453) with two activities: senior technical consulting for finance/insurance and AI-powered website creation.</p>
+
+      <h3>Who is Cédric Barme?</h3>
+      <p>A software engineer since 2012, formerly in investment banking (real-time trading and risk platforms) then tech lead in a high-end consultancy, Cédric Barme founded NSY in 2018. He works as a senior consultant, architect and AI web builder.</p>
+
+      <h3>How long has NSY existed?</h3>
+      <p>The NSY EURL was founded in 2018. Senior technical consulting is the historical activity; AI-powered website creation joined it in 2026.</p>
+
+      <h3>Where is NSY based?</h3>
+      <p>In the Centre-Val de Loire region, France. Engagements run mostly remotely for clients across France and Europe.</p>
+
+      <h3>Which sectors does NSY serve?</h3>
+      <p>Retail banking, private banking, life insurance, asset management, payments and fintech for consulting — SMEs, mid-caps, associations and independents for AI web creation.</p>
+
+      <h3>Does NSY have public references?</h3>
+      <p>Consulting engagements are under NDA (large financial institutions). For web creation, the public reference is PRV Concept (www.prv-concept.com); the nsy.fr site itself doubles as a technical showcase.</p>
+
+      <h3>Does NSY work in English?</h3>
+      <p>Yes, French and English — documentation, meetings and deliverables. The website itself exists in both languages.</p>
+
+      <h3>How do I contact NSY?</h3>
+      <p>Through the website contact form (reply within 48 business hours), by phone on +33 6 72 94 71 06, or via LinkedIn. NSY publishes no email address to avoid spam — the form is the guaranteed channel.</p>
+
+      <h2>Trust, security & data</h2>
+
+      <h3>How does NSY handle engagement confidentiality?</h3>
+      <p>All consulting engagements run under non-disclosure agreements, in environments used to ACPR, AMF and GDPR requirements. No client data is reused or cited without written authorisation.</p>
+
+      <h3>Does nsy.fr use tracking cookies?</h3>
+      <p>No. A single functional cookie (language preference), set only on explicit click — consent-exempt under CNIL deliberation 2020-091. Zero advertising cookies, zero third-party analytics.</p>
+
+      <h3>How is contact-form data handled?</h3>
+      <p>It is used solely to answer the enquiry, never sold or shared, and protected against spam by Cloudflare Turnstile. Details are in the site's privacy policy (GDPR).</p>
+
+      <h3>Does NSY know ACPR / AMF requirements?</h3>
+      <p>Yes — engagements have run since 2018 inside institutions supervised by the ACPR and AMF: auditability, traceability, business continuity and provider-control requirements (including DORA) are everyday matters.</p>
+
+      <h3>Can an SME outside finance work with NSY?</h3>
+      <p>Yes, through the AI web creation offering: brochure sites, platforms and LLM integrations for SMEs, mid-caps and associations — with the same engineering rigour as for large accounts, from €5,800 ex-VAT.</p>
+
+      <h3>Why choose an independent over a consultancy?</h3>
+      <p>A single senior point of contact from start to finish, no team rotation or intermediation margin, and straight technical talk. NSY also says when a project is not a good idea — better to lose an engagement than a client.</p>
+
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index-en.html#top">Home</a>
+        <a href="index-en.html#services">Services</a>
+        <a href="portfolio.html">Work</a>
+        <a href="index-en.html#about">About</a>
+        <a href="index-en.html#creations">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
+        <a href="index-en.html#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertise</h5>
+        <p>Senior technical consulting</p>
+        <p>Cloud architecture</p>
+        <p>Web creation · AI</p>
+        <p>Audit & scoping</p>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="feasibility.html">Feasibility request</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script>
+// FAQPage JSON-LD generated from the visible content (single source of truth:
+// the HTML above). Googlebot renders JavaScript; AI crawlers read the visible
+// text directly. One-shot, no continuous cost.
+(function () {
+  var items = [];
+  document.querySelectorAll('.faq h3').forEach(function (h) {
+    var p = h.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    items.push({
+      '@type': 'Question',
+      name: h.textContent.trim(),
+      acceptedAnswer: { '@type': 'Answer', text: p.textContent.trim() }
+    });
+  });
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    inLanguage: 'en',
+    mainEntity: items
+  });
+  document.head.appendChild(s);
+})();
+</script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

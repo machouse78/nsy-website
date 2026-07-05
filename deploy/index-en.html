@@ -36,25 +36,114 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "Organization",
-  "name": "NSY",
-  "url": "https://www.nsy.fr",
-  "logo": "https://www.nsy.fr/public/nsy-logo.png",
-  "description": "Independent technical consulting practice — finance, insurance and AI-powered web creation.",
-  "founder": {
-    "@type": "Person",
-    "name": "Cédric Barme",
-    "jobTitle": "Senior consultant · Founder",
-    "sameAs": [
-      "https://www.linkedin.com/in/c%C3%A9dric-barme/",
-      "https://github.com/machouse78/nsy-website"
-    ]
-  },
-  "contactPoint": {
-    "@type": "ContactPoint",
-    "contactType": "customer service",
-    "areaServed": "FR"
-  }
+  "@graph": [
+    {
+      "@type": ["Organization", "ProfessionalService", "LocalBusiness"],
+      "@id": "https://www.nsy.fr/#org",
+      "name": "NSY",
+      "legalName": "NSY",
+      "url": "https://www.nsy.fr/",
+      "logo": "https://www.nsy.fr/public/nsy-logo.png",
+      "image": "https://www.nsy.fr/public/nsy-og.jpg",
+      "description": "Independent technical consulting practice founded in 2018: senior engagements for banking, insurance and finance (distributed architecture, Java EE, WildFly, OpenShift, Kafka, legacy migration, DORA compliance) and AI-powered website creation (Claude, OpenAI, Mistral integration).",
+      "foundingDate": "2018",
+      "identifier": { "@type": "PropertyValue", "propertyID": "SIREN", "value": "842078453" },
+      "founder": { "@id": "https://www.nsy.fr/#person" },
+      "telephone": "+33672947106",
+      "priceRange": "€€",
+      "address": {
+        "@type": "PostalAddress",
+        "addressRegion": "Centre-Val de Loire",
+        "addressCountry": "FR"
+      },
+      "areaServed": [
+        { "@type": "Country", "name": "France" },
+        { "@type": "AdministrativeArea", "name": "Europe" }
+      ],
+      "knowsLanguage": ["fr", "en"],
+      "knowsAbout": [
+        "distributed architecture", "Java EE", "Jakarta EE", "WildFly", "JBoss EAP",
+        "OpenShift", "Kubernetes", "Artemis JMS", "Kafka", "legacy migration",
+        "technical audit", "DORA compliance", "private and hybrid cloud",
+        "LLM integration", "Claude", "OpenAI", "Mistral AI", "chatbots",
+        "AI agents", "semantic search", "semantic SEO", "Next.js",
+        "Astro", "Vercel", "Cloudflare", "Supabase"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/c%C3%A9dric-barme/",
+        "https://github.com/machouse78/nsy-website",
+        "https://youtube.com/@new-software-yard"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer service",
+        "url": "https://www.nsy.fr/index-en.html#contact",
+        "telephone": "+33672947106",
+        "availableLanguage": ["fr", "en"],
+        "areaServed": "FR"
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://www.nsy.fr/#person",
+      "name": "Cédric Barme",
+      "jobTitle": "Senior technical consultant · Founder of NSY",
+      "worksFor": { "@id": "https://www.nsy.fr/#org" },
+      "image": "https://www.nsy.fr/public/photo-profil.png",
+      "nationality": { "@type": "Country", "name": "France" },
+      "knowsLanguage": ["fr", "en"],
+      "knowsAbout": [
+        "Java Enterprise", "distributed architecture", "WildFly", "JBoss EAP",
+        "OpenShift", "Kubernetes", "Artemis JMS", "Kafka", "Java EE migration",
+        "technical audit", "DORA compliance", "real-time trading platforms",
+        "enterprise AI", "LLM integration", "AI web creation"
+      ],
+      "sameAs": [
+        "https://www.linkedin.com/in/c%C3%A9dric-barme/",
+        "https://github.com/machouse78"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://www.nsy.fr/#website",
+      "url": "https://www.nsy.fr/",
+      "name": "NSY",
+      "inLanguage": ["fr", "en"],
+      "publisher": { "@id": "https://www.nsy.fr/#org" }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.nsy.fr/#service-conseil",
+      "serviceType": "Senior technical consulting — banking, insurance, finance",
+      "name": "Technical consulting for finance & insurance",
+      "description": "Senior technical engagements: distributed architecture, core-system migration, audit, DORA/ACPR/AMF compliance, private and hybrid cloud, tech lead, production expertise.",
+      "provider": { "@id": "https://www.nsy.fr/#org" },
+      "areaServed": { "@type": "Country", "name": "France" },
+      "audience": { "@type": "BusinessAudience", "name": "Banking, insurance, asset management, fintech" },
+      "offers": {
+        "@type": "Offer",
+        "description": "Day rate or fixed fee — direct engagement via the EURL, no middleman",
+        "priceCurrency": "EUR"
+      }
+    },
+    {
+      "@type": "Service",
+      "@id": "https://www.nsy.fr/#service-web-ia",
+      "serviceType": "AI-powered website creation",
+      "name": "Web creation · AI",
+      "description": "Brochure sites, SaaS platforms and business portals with LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search and semantic SEO.",
+      "provider": { "@id": "https://www.nsy.fr/#org" },
+      "areaServed": { "@type": "Country", "name": "France" },
+      "audience": { "@type": "BusinessAudience", "name": "SMEs, mid-caps, associations, independents" },
+      "offers": {
+        "@type": "Offer",
+        "name": "Turnkey package",
+        "description": "From €5,800 ex-VAT — design, bespoke build, AI integration, SEO, go-live",
+        "price": "5800",
+        "priceCurrency": "EUR"
+      }
+    }
+  ]
 }
 </script>
 
@@ -803,6 +892,7 @@
         <a href="portfolio.html">Work</a>
         <a href="#about">About</a>
         <a href="#creations">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
         <a href="#contact">Contact</a>
       </div>
       <div class="foot-col">

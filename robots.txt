@@ -1,5 +1,6 @@
 # NSY — robots.txt
 # https://www.nsy.fr/
+# Fichiers de contexte pour les IA : /llms.txt et /llms-full.txt
 
 User-agent: *
 Allow: /
@@ -24,6 +25,7 @@ Allow: /public/nsy-og.jpg
 Allow: /public/photo-profil.png
 Allow: /public/finance-assurance.png
 Allow: /public/web-ia.png
+Allow: /public/prv-concept.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
@@ -48,7 +50,61 @@ User-agent: Googlebot
 Allow: /
 Crawl-delay: 0
 
-# Bingbot
+# Bingbot (alimente aussi ChatGPT Search / Copilot)
 User-agent: Bingbot
 Allow: /
 Crawl-delay: 1
+
+# ═══════════════════════════════════════════════════════════════════
+# Crawlers IA / moteurs génératifs — exploration explicitement AUTORISÉE.
+# Objectif : être compris, indexé et citable par les assistants IA
+# (ChatGPT, Claude, Gemini, Perplexity, Copilot, Grok, Meta AI…).
+# Contexte structuré fourni dans /llms.txt et /llms-full.txt.
+# ═══════════════════════════════════════════════════════════════════
+
+# OpenAI — entraînement, recherche ChatGPT, navigation utilisateur
+User-agent: GPTBot
+User-agent: OAI-SearchBot
+User-agent: ChatGPT-User
+Allow: /
+
+# Anthropic (Claude) — entraînement, recherche, navigation utilisateur
+User-agent: ClaudeBot
+User-agent: Claude-SearchBot
+User-agent: Claude-User
+User-agent: anthropic-ai
+Allow: /
+
+# Google — usage IA générative (Gemini / AI Overviews)
+User-agent: Google-Extended
+Allow: /
+
+# Perplexity — index + navigation utilisateur
+User-agent: PerplexityBot
+User-agent: Perplexity-User
+Allow: /
+
+# ByteDance (Doubao / entraînement)
+User-agent: Bytespider
+Allow: /
+
+# Common Crawl (corpus d'entraînement de nombreux LLM)
+User-agent: CCBot
+Allow: /
+
+# Amazon (Alexa / Rufus)
+User-agent: Amazonbot
+Allow: /
+
+# Meta (Meta AI / Llama)
+User-agent: FacebookBot
+User-agent: meta-externalagent
+Allow: /
+
+# Apple (Apple Intelligence)
+User-agent: Applebot-Extended
+Allow: /
+
+# Mistral AI (Le Chat)
+User-agent: MistralAI-User
+Allow: /
