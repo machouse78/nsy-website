@@ -118,13 +118,13 @@ même fait sur ≥2 sources indépendantes).
   https://www.nsy.fr, dofollow ✓. Amélioration possible : ancre texte
   (voir recommandation ci-dessous).
 
+- **Google Search Console** : **propriété de domaine `sc-domain:nsy.fr`** ✅
+  (vérifiée par TXT DNS chez Infomaniak — l'enregistrement
+  `google-site-verification=…` doit rester dans la zone), sitemap soumis,
+  ancienne propriété préfixe supprimée.
+
 **⏳ Reste à faire :**
-1. **Google Search Console — vérifier le type de propriété** : la propriété
-   actuelle semble être un préfixe `https://nsy.fr/` (non-www) alors que le
-   site canonique vit sur `https://www.nsy.fr/`. Idéal : une **propriété de
-   domaine** `sc-domain:nsy.fr` (couvre www + non-www + http/https) via
-   vérification DNS chez Infomaniak.
-2. **Google Business Profile** (catégorie « consultant informatique », zone
+1. **Google Business Profile** (catégorie « consultant informatique », zone
    Centre-Val de Loire, sans adresse exacte) : nourrit le Knowledge Graph →
    Gemini.
 3. **Annuaires B2B crédibles** (Malt, Collective.work, France Num) —

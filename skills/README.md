@@ -1,6 +1,6 @@
 # Skills Claude Code
 
-Deux [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills)
+Trois [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills)
 versionnés avec le projet. Ce sont de la **documentation passive** chargée par
 Claude quand elle est pertinente — ils n'exécutent rien et ne modifient pas le
 site par eux-mêmes.
@@ -9,6 +9,7 @@ site par eux-mêmes.
 |---|---|
 | **`skill-nsy-website/`** | Le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT, SIREN…), conventions bilingues, terminologie (Conception 3D/Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite d'avoir à re-préciser ces règles à chaque session. |
 | **`frontend-responsive-perf/`** | Le « comment » technique réutilisable (framework-agnostique) : responsive parfait mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless. |
+| **`seo-geo-llmo/`** | Le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA dans robots.txt, llms.txt/llms-full.txt, JSON-LD `@graph` entitaire, FAQ conversationnelle, inscriptions externes (Bing Webmaster Tools, propriété de domaine GSC via TXT DNS, Wikidata sourcée SIRENE, Google Business Profile, LinkedIn, backlinks) — avec les pièges vécus et les vérifications curl/dig/headless. |
 
 ## Activer les skills
 
@@ -18,11 +19,12 @@ synchronisés avec le repo) :
 
 ```bash
 # Copie simple
-cp -R skills/skill-nsy-website skills/frontend-responsive-perf ~/.claude/skills/
+cp -R skills/skill-nsy-website skills/frontend-responsive-perf skills/seo-geo-llmo ~/.claude/skills/
 
 # …ou liens symboliques (les éditions du repo se répercutent automatiquement)
 ln -s "$(pwd)/skills/skill-nsy-website"        ~/.claude/skills/skill-nsy-website
 ln -s "$(pwd)/skills/frontend-responsive-perf" ~/.claude/skills/frontend-responsive-perf
+ln -s "$(pwd)/skills/seo-geo-llmo"             ~/.claude/skills/seo-geo-llmo
 ```
 
 Chaque skill suit le format standard : un `SKILL.md` (frontmatter `name` +

@@ -246,8 +246,8 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 
 | Service | Accès / référence |
 |---|---|
-| Google Search Console | https://search.google.com/search-console?resource_id=https://nsy.fr/ |
-| Bing Webmaster Tools (alimente ChatGPT Search & Copilot) | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
+| Google Search Console — **propriété de domaine** (vérifiée par TXT DNS chez Infomaniak, l'enregistrement doit rester en place) | https://search.google.com/search-console?resource_id=sc-domain:nsy.fr |
+| Bing Webmaster Tools (alimente ChatGPT Search & Copilot) — vérifié par meta `msvalidate.01` | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
 | Entité Wikidata (Knowledge Graph) | https://www.wikidata.org/wiki/Q140447227 |
 | Registre officiel (SIRENE) | https://annuaire-entreprises.data.gouv.fr/entreprise/842078453 |
 | LinkedIn entreprise | https://www.linkedin.com/company/28790840 |
@@ -275,6 +275,7 @@ Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/c
 
 - **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Conception 3D / Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
+- **`seo-geo-llmo`** — le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA, llms.txt, JSON-LD `@graph`, FAQ conversationnelle, inscriptions externes (Bing WT, propriété de domaine GSC, Wikidata, Google Business, backlinks) avec les pièges vécus et les méthodes de vérification.
 
 **Activation** : Claude Code lit les skills depuis `~/.claude/skills/`. Copier ou lier les dossiers (`cp -R skills/* ~/.claude/skills/` ou `ln -s`). Détails dans [`skills/README.md`](skills/README.md).
 
