@@ -111,8 +111,12 @@ même fait sur ≥2 sources indépendantes).
 2. **Google Business Profile** (fiche entreprise, catégorie « consultant
    informatique », zone Centre-Val de Loire) : nourrit le Knowledge Graph →
    Gemini. Attention : n'exposer que la région, pas l'adresse exacte.
-3. **Page LinkedIn entreprise NSY** (au-delà du profil personnel) + lien
-   croisé site ↔ page. Les LLM recoupent beaucoup via LinkedIn.
+3. **Page LinkedIn entreprise NSY** : elle existe
+   (https://www.linkedin.com/company/28790840, référencée dans les sameAs
+   JSON-LD et les llms.txt). Reste à faire côté LinkedIn : renseigner le
+   site web nsy.fr sur la page, compléter la description avec les
+   mots-clés métier, et publier de temps en temps (les LLM recoupent
+   beaucoup via LinkedIn).
 4. **Wikidata** : entrée NSY (société française, SIREN, fondateur) — base
    directe du Knowledge Graph et des corpus LLM. Facile, durable, gratuit.
 5. **Annuaires B2B crédibles** (Malt, Collective.work, France Num,

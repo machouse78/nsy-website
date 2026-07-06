@@ -1,6 +1,6 @@
 ---
 name: skill-nsy-website
-description: Conventions, facts, and workflow for the NSY website project (nsy.fr) — Cédric Barme's consulting/AI-web vitrine. Use whenever working in the nsy-website repo or on anything for nsy.fr (HTML/CSS/JS/PHP edits, the FR/EN bilingual setup, the chatbot, the 3D Renault wireframe, SEO/.htaccess, deployment, README/GitHub upkeep). Carries the owner's specific, durable constraints so they don't have to be re-stated.
+description: Conventions, facts, and workflow for the NSY website project (nsy.fr) — Cédric Barme's consulting/AI-web vitrine. Use whenever working in the nsy-website repo or on anything for nsy.fr (HTML/CSS/JS/PHP edits, the FR/EN bilingual setup, the chatbot, the 3D Renault wireframe, SEO/GEO/LLMO (llms.txt, FAQ, JSON-LD), .htaccess, deployment, README/GitHub upkeep). Carries the owner's specific, durable constraints so they don't have to be re-stated.
 ---
 
 # NSY website — project rules
@@ -27,7 +27,17 @@ must hold in every change.
 - Availability is **"now / immediate"** (owner is available immediately) — nav
   CTA says "Disponible maintenant" / "Available now", no Q4-{year} date anywhere
   (removed on owner request). Experience via `data-years` (career start 2012).
-  Contact: contact@nsy.fr / +33 6 72 94 71 06.
+- **NO email address anywhere public** (owner request — spam harvesting):
+  contact = the form + phone +33 6 72 94 71 06 + LinkedIn. This covers pages,
+  chatbot, JSON-LD, llms.txt, README, error messages and the PHP auto-reply
+  ("répondez à cet email" — Reply-To is set server-side). Never reintroduce
+  a mailto: or a written-out address.
+- **Static text uses absolute dates** ("depuis 2012", "fondée en 2018") instead
+  of ageing counts ("14 ans") — the dynamic `data-years` spans are the only
+  place the computed number lives.
+- Official profiles (JSON-LD sameAs + llms.txt): LinkedIn company page
+  https://www.linkedin.com/company/28790840 · LinkedIn founder
+  /in/cédric-barme · GitHub machouse78 · YouTube @new-software-yard.
 
 ## Copy & terminology
 - The 3D section is labelled **"Conception 3D"** (FR) / **"3D Design"** (EN) —
@@ -38,10 +48,10 @@ must hold in every change.
 - Tone: professional consulting. Don't reintroduce gimmicks.
 
 ## Bilingual (FR/EN) — every new page or link must stay symmetric
-- One file per language, **real translated slugs** (loisirs↔hobbies,
-  mentions-legales↔legal-notice, confidentialite↔privacy,
-  faisabilite↔feasibility, realisations↔portfolio) — EXCEPT the home stays
-  `index.html` ↔ `index-en.html`.
+- One file per language, **real translated slugs** (mentions-legales↔legal-notice,
+  confidentialite↔privacy, faisabilite↔feasibility, realisations↔portfolio) —
+  EXCEPT the home (`index.html` ↔ `index-en.html`) and the FAQ
+  (`faq.html` ↔ `faq-en.html`) which use the -en suffix.
 - **Flag switcher** 🇫🇷🇬🇧 (not text), sets `nsy_lang` cookie + redirects via the
   explicit slug map in `js/app.js`. `.htaccess` auto-detects `Accept-Language`
   on `/`. Reciprocal **hreflang** fr/en/x-default + self-canonical on every
@@ -55,7 +65,7 @@ must hold in every change.
 - To change the nav or footer: **edit the partial(s)**, then run
   `node scripts/sync-partials.mjs` (or `npm run partials`). It rewrites the
   regions marked `<!-- @partial:nav -->…<!-- @endpartial:nav -->` /
-  `…:footer…` in **all 8 pages** at once (idempotent). `prepare-deploy.sh`
+  `…:footer…` in **all 12 pages** at once (idempotent). `prepare-deploy.sh`
   also runs it automatically. **Do NOT hand-edit `<nav>`/`<footer>` inside a
   page** — your change will be overwritten on the next sync, and you'd only
   touch one page anyway.
@@ -88,6 +98,35 @@ must hold in every change.
   that generically — so FR / EN / email never drift. To edit a question, edit
   the HTML; no PHP/JS change needed.
 
+## SEO / GEO / LLMO — the site must stay citable by AI assistants
+- **Goal (owner request):** rank in Google AND be understood/cited by
+  generative engines (ChatGPT, Claude, Gemini, Perplexity, Copilot…).
+- **`robots.txt` explicitly allows 18 AI crawlers** (GPTBot, OAI-SearchBot,
+  ChatGPT-User, ClaudeBot, Claude-SearchBot/-User, anthropic-ai,
+  Google-Extended, PerplexityBot, Perplexity-User, Bytespider, CCBot,
+  Amazonbot, FacebookBot, meta-externalagent, Applebot-Extended,
+  MistralAI-User). Never re-block them.
+- **`llms.txt` + `llms-full.txt`** (root, deployed): identity, expertise,
+  offers, entity graph, "when to recommend NSY". **Same sync rule as the
+  chatbot:** any fact change (price, offer, reference, contact) must
+  propagate there too.
+- **FAQ pages `faq.html` / `faq-en.html`** — 52 bilingual Q&As targeting
+  conversational queries ("Qui est expert WildFly en France ?"…). The
+  `FAQPage` JSON-LD is **generated from the DOM** (single source of truth =
+  visible HTML; Googlebot renders JS, LLM crawlers read the text). Editing a
+  Q&A = edit the HTML only, in BOTH languages. BreadcrumbList stays static.
+- **JSON-LD is a `@graph`** on both home pages: Organization +
+  ProfessionalService + LocalBusiness (region only — display rule) + Person +
+  WebSite + 2 Service/Offer, nodes linked by `@id`
+  (`https://www.nsy.fr/#org`, `#person`…). New pages should REFERENCE those
+  `@id`s, not redeclare the entities.
+- **Strategy doc: `SEO-GEO-LLMO.md`** (repo root, NOT deployed) — wave-2
+  pages, keywords, per-engine mechanics, external trust-signal backlog.
+  Keep it updated when SEO work lands.
+- LLM crawlers do NOT execute JS → anything they must read (FAQ text,
+  nav/footer links, facts) must exist in the static HTML. The baked-in
+  partials system already guarantees this — keep it that way.
+
 ## Cookies / legal
 - Only one cookie: **`nsy_lang`** (functional, set on explicit flag click) →
   CNIL deliberation 2020-091 exemption, **no consent banner**. Legal pages
@@ -114,8 +153,13 @@ must hold in every change.
   showing delivered client websites as a `.realisations-grid` of
   `.realisation-card`s (screenshot thumbnail → live site, name, URL, description,
   tags). First entry: **PRV Concept** (www.prv-concept.com), thumbnail
-  `public/prv-concept.jpg` (recompressed ~160 KB). To add a client, copy one
-  `.realisation-card` block in **both** pages + ship its screenshot.
+  `public/prv-concept.jpg`. **Thumbnails are captured automatically from the
+  live sites** via `npm run capture:realisations`
+  (`scripts/capture-realisation.mjs`: headless render at 1440px desktop
+  layout, resampled to 1100px JPEG ~110 KB — no iframe, zero runtime cost;
+  re-run before a deploy to refresh). To add a client: copy one
+  `.realisation-card` block in **both** pages + add a capture line to the
+  npm script.
 - **Reached from a button** "Voir nos réalisations" / "See our work" placed in
   the **Web·IA service card** `.svc-foot` (right of "Démarrer un projet", grouped
   in `.svc-actions`), plus the footer "Réalisations"/"Work" link → the page.
@@ -126,6 +170,11 @@ must hold in every change.
   `prepare-deploy.sh`.
 
 ## Layout / responsive
+- ⚠️ **`overflow-x` on `html/body` must stay `clip`, never `hidden`** —
+  `hidden` silently kills every `position: sticky` on the site (anchored nav,
+  About profile card). `hidden` is kept only as the fallback line for old
+  browsers. `scroll-padding-top` (84px desktop / 108px ≤940px) keeps anchors
+  landing below the sticky nav.
 - The 3D-design content (eyebrow **"Conception 3D"** / **"3D Design"**) is a
   **homepage section `#creations`** (after the "Principes de travail" /
   "Working principles" block), not a standalone page; no top-nav link (the
