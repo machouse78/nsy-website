@@ -57,10 +57,18 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `realisations.html` | `portfolio.html` |
 | `faisabilite.html` | `feasibility.html` |
 | `faq.html` | `faq-en.html` |
+| `expertise-migration-java-ee.html` | `java-ee-migration.html` |
+| `expertise-wildfly-jboss.html` | `wildfly-jboss-expert.html` |
+| `expertise-openshift-kubernetes.html` | `openshift-kubernetes-expert.html` |
+| `expertise-kafka-messagerie.html` | `kafka-messaging-expert.html` |
+| `conformite-dora.html` | `dora-compliance.html` |
+| `integration-claude-entreprise.html` | `claude-integration.html` |
+| `creation-site-ia.html` | `ai-website-creation.html` |
+| `glossaire-ia-web.html` | `ai-web-glossary.html` |
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 12 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 28 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -146,6 +154,8 @@ nsy-website/
 ├── confidentialite.html / privacy.html
 ├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 7 étapes) FR / EN
 ├── faq.html / faq-en.html               # FAQ GEO/LLMO : 52 Q/R bilingues + FAQPage JSON-LD
+├── expertise-*.html + 8 paires piliers  # Vague 2 GEO : une expertise par URL (Java EE, WildFly,
+│                                        #   OpenShift, Kafka, DORA, Claude, site IA, glossaire)
 ├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
 ├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
@@ -157,7 +167,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
 ├── scripts/                             # Outillage build (3D + synchro partials)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 12 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 28 pages (npm run partials)
 │   ├── capture-realisation.mjs          # Vignette Réalisations auto (npm run capture:realisations)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
@@ -226,8 +236,8 @@ Le `.htaccess` configure :
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 12 pages + ancres + images clés + vidéos, avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 12 pages
+- **Sitemap** : 28 pages + ancres + images clés + vidéos, avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 28 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`
@@ -250,7 +260,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 | Bing Webmaster Tools (alimente ChatGPT Search & Copilot) — vérifié par meta `msvalidate.01` | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
 | Entité Wikidata (Knowledge Graph) | https://www.wikidata.org/wiki/Q140447227 |
 | Registre officiel (SIRENE) | https://annuaire-entreprises.data.gouv.fr/entreprise/842078453 |
-| LinkedIn entreprise | https://www.linkedin.com/company/28790840 |
+| LinkedIn entreprise | https://www.linkedin.com/company/nsy-new-software-yard |
 | Backlink éditorial | prv-concept.com → footer « Propulsé par NSY » |
 
 Le QID Wikidata et la page LinkedIn entreprise sont référencés dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
@@ -273,7 +283,7 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
 
-- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Conception 3D / Maillage, pas de « K2000 »), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
+- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
 - **`seo-geo-llmo`** — le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA, llms.txt, JSON-LD `@graph`, FAQ conversationnelle, inscriptions externes (Bing WT, propriété de domaine GSC, Wikidata, Google Business, backlinks) avec les pièges vécus et les méthodes de vérification.
 - **`frontend-design`** et **`video-to-website`** — les deux skills créatifs utilisés pour concevoir le site (design distinctif, site scroll-animé depuis une vidéo). Historiquement dans `.claude/skills/` (skills de projet) ; déplacés dans `skills/` + symlink pour être disponibles dans toutes les sessions.

@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Expert WildFly / JBoss EAP en France | NSY</title>
+<meta name="description" content="Tuning, haute disponibilité, montées de version et conteneurisation de WildFly / JBoss EAP en environnement régulé banque-assurance. Par Cédric Barme, sur ces serveurs d'applications depuis 2012." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/wildfly-jboss-expert.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+<meta property="og:title" content="Expert WildFly / JBoss EAP en France | NSY" />
+<meta property="og:description" content="Tuning, HA, montées de version et conteneurisation de WildFly / JBoss EAP en environnement régulé." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Expert WildFly / JBoss EAP en France | NSY" />
+<meta name="twitter:description" content="Tuning, HA, montées de version et conteneurisation de WildFly / JBoss EAP." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "WildFly / JBoss EAP", "item": "https://www.nsy.fr/expertise-wildfly-jboss.html" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "serviceType": "Expertise WildFly / JBoss EAP",
+      "name": "Expertise serveurs d'applications WildFly et JBoss EAP",
+      "description": "Tuning, haute disponibilité, montées de version, migration et conteneurisation de WildFly / JBoss EAP en environnement bancaire et assurance.",
+      "provider": { "@id": "https://www.nsy.fr/#org" },
+      "areaServed": { "@type": "Country", "name": "France" },
+      "audience": { "@type": "BusinessAudience", "name": "Banque, assurance, asset management" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link active" data-target="services" href="index.html#services">Services</a>
+      <a class="nav-link" data-target="about" href="index.html#about">À propos</a>
+      <a class="nav-link" data-target="contact" href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <a class="nav-cta" href="index.html#contact">
+      <span class="status-dot"></span>
+      Disponible maintenant
+    </a>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Expertise</span>
+      <span class="line"></span>
+      <span class="mono">WildFly · JBoss EAP</span>
+    </div>
+
+    <article class="legal-page">
+      <h1 style="font-size: clamp(32px, 4.5vw, 50px); margin-bottom: 16px;">WildFly &amp; JBoss EAP : l'expertise serveur d'applications</h1>
+      <p class="mono" style="margin-bottom: 32px;">Par Cédric Barme · Fondateur de NSY</p>
+
+      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 36px; max-width: 720px;">
+        WildFly et JBoss EAP portent une part considérable des systèmes critiques de la banque et de l'assurance françaises. Cédric Barme travaille sur ces serveurs d'applications depuis 2012 : tuning fin, haute disponibilité, montées de version majeures et passage au cloud — dans des environnements où l'indisponibilité se compte en préjudice réglementaire, pas seulement en minutes.
+      </p>
+
+      <h2>Les chantiers types</h2>
+      <ul>
+        <li><strong>Montée de version majeure</strong> — JBoss EAP 6/7 → 8, ou bascule EAP → WildFly : évaluation de compatibilité (API dépréciées, espace de noms Jakarta), migration de configuration (standalone/domain, profils, sous-systèmes), tests de non-régression et bascule maîtrisée.</li>
+        <li><strong>Haute disponibilité</strong> — clustering, réplication de sessions, files JMS en HA (voir l'<a href="expertise-kafka-messagerie.html">expertise messagerie</a>), équilibrage et tolérance aux pannes testée en conditions réelles.</li>
+        <li><strong>Tuning et stabilité</strong> — dimensionnement JVM (GC, heap, threads), pools de connexions, timeouts en cascade ; diagnostic des fuites et des dégradations lentes qui finissent en incident de production.</li>
+        <li><strong>Conteneurisation</strong> — WildFly sous OpenShift/Kubernetes en préservant les contraintes Java EE : sessions, transactions distribuées XA, ordre de démarrage (<a href="expertise-openshift-kubernetes.html">expertise OpenShift</a>).</li>
+      </ul>
+
+      <h2>Ce qui distingue un serveur d'applications « qui tourne » d'un serveur maîtrisé</h2>
+      <p>Beaucoup d'installations JBoss fonctionnent par inertie : la configuration d'origine n'a jamais été revisitée, les paramètres par défaut absorbent la charge jusqu'au jour où ils ne l'absorbent plus. La maîtrise, c'est savoir <em>pourquoi</em> chaque sous-système est configuré comme il l'est, disposer de métriques qui préviennent avant l'incident, et pouvoir monter de version sans retenir sa respiration. C'est l'état dans lequel NSY laisse les plateformes en fin de mission — documentation et transfert de compétences compris.</p>
+
+      <h2>Le contexte régulé n'est pas une option</h2>
+      <p>En banque et en assurance, une intervention sur le socle applicatif se fait sous contraintes : auditabilité des changements, environnements cloisonnés, fenêtres de tir négociées, exigences ACPR/AMF et désormais DORA (<a href="conformite-dora.html">voir l'accompagnement DORA</a>). NSY intervient dans ces cadres depuis 2018 — les procédures ne sont pas un frein découvert en cours de route, elles sont intégrées au plan dès le cadrage.</p>
+
+      <h2>Comment démarrer</h2>
+      <p>Le format le plus efficace : un audit court de votre installation (configuration, versions, métriques, incidents récents) qui débouche sur un plan d'action priorisé. Les <a href="faq.html">questions fréquentes</a> donnent les ordres de grandeur ; pour un contexte précis, le formulaire de contact reçoit une réponse sous 48 heures ouvrées.</p>
+
+      <a class="faisa-cta" href="index.html#contact" style="margin-top: 36px;">
+        <div>
+          <div class="l">Un JBoss / WildFly à fiabiliser ou à migrer ?</div>
+          <h3>Décrivez votre installation — lecture honnête sous 48 h ouvrées</h3>
+          <p>Audit court, plan d'action priorisé, puis exécution si vous le souhaitez.</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index.html#top">Accueil</a>
+        <a href="index.html#services">Services</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="index.html#about">À propos</a>
+        <a href="index.html#creations">Conception 3D</a>
+        <a href="faq.html">FAQ</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <a href="expertise-migration-java-ee.html">Migration Java EE</a>
+        <a href="expertise-wildfly-jboss.html">WildFly · JBoss EAP</a>
+        <a href="expertise-openshift-kubernetes.html">OpenShift · Kubernetes</a>
+        <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
+        <a href="conformite-dora.html">Conformité DORA</a>
+        <a href="integration-claude-entreprise.html">Intégration Claude</a>
+        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="glossaire-ia-web.html">Glossaire IA & web</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="faisabilite.html">Demande de faisabilité</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
