@@ -104,30 +104,43 @@ Règle transverse : les moteurs génératifs citent ce qu'ils peuvent
 **attribuer** (entité nommée + fait daté + URL stable) et **recouper** (le
 même fait sur ≥2 sources indépendantes).
 
-## 6. Signaux de confiance manquants (backlog priorisé)
+## 6. Signaux de confiance — état (juillet 2026)
 
-1. **Bing Webmaster Tools** : soumettre sitemap (alimente ChatGPT + Copilot).
-   Coût : 15 min. Impact GEO : fort.
-2. **Google Business Profile** (fiche entreprise, catégorie « consultant
-   informatique », zone Centre-Val de Loire) : nourrit le Knowledge Graph →
-   Gemini. Attention : n'exposer que la région, pas l'adresse exacte.
-3. **Page LinkedIn entreprise NSY** : elle existe
-   (https://www.linkedin.com/company/28790840, référencée dans les sameAs
-   JSON-LD et les llms.txt). Reste à faire côté LinkedIn : renseigner le
-   site web nsy.fr sur la page, compléter la description avec les
-   mots-clés métier, et publier de temps en temps (les LLM recoupent
-   beaucoup via LinkedIn).
-4. **Wikidata** : entrée NSY (société française, SIREN, fondateur) — base
-   directe du Knowledge Graph et des corpus LLM. Facile, durable, gratuit.
-5. **Annuaires B2B crédibles** (Malt, Collective.work, France Num,
-   sociétés.com est déjà auto-généré via SIREN) — cohérence NAP stricte
-   (nom/téléphone/région identiques partout).
-6. **Backlink PRV Concept → nsy.fr** (« site réalisé par NSY ») : premier
-   backlink éditorial naturel, à ancre propre.
-7. **Contenu daté et signé** : les pages vague 2 (§3) avec auteur visible
+**✅ Fait :**
+- **Bing Webmaster Tools** : site vérifié (meta msvalidate.01), sitemap
+  soumis — https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr
+- **Wikidata** : https://www.wikidata.org/wiki/Q140447227 (SIREN, forme
+  juridique, fondation 03/09/2018, siège région, sourcé annuaire-entreprises).
+  Référencé dans les sameAs JSON-LD + llms.txt.
+- **LinkedIn entreprise** : https://www.linkedin.com/company/28790840 —
+  à jour, référencée dans sameAs + llms.txt.
+- **Backlink PRV Concept** : footer sitewide « Propulsé par [logo NSY] » →
+  https://www.nsy.fr, dofollow ✓. Amélioration possible : ancre texte
+  (voir recommandation ci-dessous).
+
+**⏳ Reste à faire :**
+1. **Google Search Console — vérifier le type de propriété** : la propriété
+   actuelle semble être un préfixe `https://nsy.fr/` (non-www) alors que le
+   site canonique vit sur `https://www.nsy.fr/`. Idéal : une **propriété de
+   domaine** `sc-domain:nsy.fr` (couvre www + non-www + http/https) via
+   vérification DNS chez Infomaniak.
+2. **Google Business Profile** (catégorie « consultant informatique », zone
+   Centre-Val de Loire, sans adresse exacte) : nourrit le Knowledge Graph →
+   Gemini.
+3. **Annuaires B2B crédibles** (Malt, Collective.work, France Num) —
+   cohérence NAP stricte (nom/téléphone/région identiques partout).
+4. **Contenu daté et signé** : les pages vague 2 (§3) avec auteur visible
    « Cédric Barme » relié au `#person` du graphe.
-8. **Avis clients** publics (Google Business / Malt) une fois les profils
+5. **Avis clients** publics (Google Business / Malt) une fois les profils
    créés — signal E-E-A-T le plus dur à falsifier, donc le plus valorisé.
+
+**Recommandation backlink PRV** : le lien actuel est sain (dofollow, bonne
+URL canonique) mais l'ancre est seulement `alt="NSY"` sur l'image. Un moteur
+n'en tire que la marque. Enrichir en gardant la sobriété d'un crédit footer :
+`Propulsé par <a href="https://www.nsy.fr">[logo] NSY</a>` avec « NSY » en
+texte dans le lien et `alt="NSY — conseil technique & création de sites web
+IA"` sur le logo. Ne pas sur-optimiser l'ancre d'un lien sitewide (risque
+spam) : marque + court descriptif dans l'alt suffit.
 
 ## 7. Maintenance
 

@@ -242,6 +242,19 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 - **Dates absolues** dans le texte statique (« depuis 2012 », « fondée en 2018 ») — jamais périmé
 - Stratégie complète, pages à créer et actions externes : [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md)
 
+### Inscriptions & entités externes
+
+| Service | Accès / référence |
+|---|---|
+| Google Search Console | https://search.google.com/search-console?resource_id=https://nsy.fr/ |
+| Bing Webmaster Tools (alimente ChatGPT Search & Copilot) | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
+| Entité Wikidata (Knowledge Graph) | https://www.wikidata.org/wiki/Q140447227 |
+| Registre officiel (SIRENE) | https://annuaire-entreprises.data.gouv.fr/entreprise/842078453 |
+| LinkedIn entreprise | https://www.linkedin.com/company/28790840 |
+| Backlink éditorial | prv-concept.com → footer « Propulsé par NSY » |
+
+Le QID Wikidata et la page LinkedIn entreprise sont référencés dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
+
 ### Open Graph & Twitter Card
 
 Chaque page embarque un bloc OG/Twitter complet. Bannière (`public/nsy-og.jpg`, **145 Ko**, 1200×630) dérivée du master `public/nsy-logo-ai.png` :
