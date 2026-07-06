@@ -56,10 +56,11 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `confidentialite.html` | `privacy.html` |
 | `realisations.html` | `portfolio.html` |
 | `faisabilite.html` | `feasibility.html` |
+| `faq.html` | `faq-en.html` |
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 10 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 12 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -144,6 +145,9 @@ nsy-website/
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
 ├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 7 étapes) FR / EN
+├── faq.html / faq-en.html               # FAQ GEO/LLMO : 52 Q/R bilingues + FAQPage JSON-LD
+├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
+├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
@@ -153,7 +157,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
 ├── scripts/                             # Outillage build (3D + synchro partials)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 10 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 12 pages (npm run partials)
 │   ├── capture-realisation.mjs          # Vignette Réalisations auto (npm run capture:realisations)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
@@ -220,13 +224,23 @@ Le `.htaccess` configure :
 - **Anti-hotlink** sur les médias propriétaires (`mp4`, `glb`…) via contrôle du Referer
 - **GZIP**, **cache** (1 mois médias, 1 semaine CSS/JS, 1h HTML), **security headers** (`X-Frame-Options`, `Strict-Transport-Security`…)
 
-## SEO & partage social
+## SEO, GEO & partage social
 
-- **Sitemap** : page principale (FR + EN) + ancres + pages légales + images clés + vidéos, avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 10 pages
+- **Sitemap** : 12 pages + ancres + images clés + vidéos, avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 12 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
-- **JSON-LD Organization** : founder = Cédric Barme + sameAs LinkedIn/GitHub
+- **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`
+
+### GEO / LLMO (référencement dans les moteurs génératifs)
+
+Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, Copilot…
+
+- **18 crawlers IA explicitement autorisés** dans `robots.txt` (GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, Google-Extended, PerplexityBot, CCBot, Amazonbot, meta-externalagent, MistralAI-User…)
+- **`llms.txt` / `llms-full.txt`** : identité, expertises, offres, graphe d'entités et règles de recommandation, au format lisible par les LLM — à tenir en phase avec les faits du site (même règle que le chatbot)
+- **FAQ bilingue 52 Q/R** (`faq.html` / `faq-en.html`) ciblant les requêtes conversationnelles (« Qui est expert WildFly en France ? », « Qui peut intégrer Claude ? »…) ; le `FAQPage` JSON-LD est **généré depuis le DOM** (source unique = HTML visible)
+- **Dates absolues** dans le texte statique (« depuis 2012 », « fondée en 2018 ») — jamais périmé
+- Stratégie complète, pages à créer et actions externes : [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md)
 
 ### Open Graph & Twitter Card
 
