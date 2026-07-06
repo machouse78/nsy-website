@@ -125,8 +125,11 @@ même fait sur ≥2 sources indépendantes).
 - **LinkedIn entreprise** : https://www.linkedin.com/company/nsy-new-software-yard —
   à jour, référencée dans sameAs + llms.txt.
 - **Backlink PRV Concept** : footer sitewide « Propulsé par [logo NSY] » →
-  https://www.nsy.fr, dofollow ✓. Amélioration possible : ancre texte
-  (voir recommandation ci-dessous).
+  https://www.nsy.fr, dofollow ✓, **ancre enrichie et en ligne** (juillet
+  2026) : `alt`/`title` = « NSY — conseil technique & création de sites web
+  IA » sur les 7 pages, `aria-label` court supprimé. Choix retenu : logo
+  seul, l'alt porte l'ancre (Google utilise l'alt comme texte d'ancre d'un
+  lien-image) — pas de texte visible redondant. Vérifié sur le site live.
 
 - **Google Search Console** : **propriété de domaine `sc-domain:nsy.fr`** ✅
   (vérifiée par TXT DNS chez Infomaniak — l'enregistrement
@@ -144,13 +147,12 @@ même fait sur ≥2 sources indépendantes).
 5. **Avis clients** publics (Google Business / Malt) une fois les profils
    créés — signal E-E-A-T le plus dur à falsifier, donc le plus valorisé.
 
-**Recommandation backlink PRV** : le lien actuel est sain (dofollow, bonne
-URL canonique) mais l'ancre est seulement `alt="NSY"` sur l'image. Un moteur
-n'en tire que la marque. Enrichir en gardant la sobriété d'un crédit footer :
-`Propulsé par <a href="https://www.nsy.fr">[logo] NSY</a>` avec « NSY » en
-texte dans le lien et `alt="NSY — conseil technique & création de sites web
-IA"` sur le logo. Ne pas sur-optimiser l'ancre d'un lien sitewide (risque
-spam) : marque + court descriptif dans l'alt suffit.
+**Backlink PRV — appliqué ✅** (voir l'entrée dans « Fait » ci-dessus).
+Règle conservée pour les prochains crédits « Propulsé par NSY » sur les
+sites clients : lien `dofollow` vers l'URL canonique exacte, marque + court
+descriptif dans l'`alt` du logo (l'alt = l'ancre d'un lien-image), pas
+d'`aria-label` court qui l'écraserait, et jamais d'ancre sur-optimisée sur
+un lien sitewide (risque spam).
 
 ## 7. Maintenance
 
