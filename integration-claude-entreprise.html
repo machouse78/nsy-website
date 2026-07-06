@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Intégrer Claude (Anthropic) dans une application métier | NSY</title>
+<meta name="description" content="Assistants documentaires, agents outillés, RAG : intégrer les modèles Claude d'Anthropic dans vos applications métier avec maîtrise des coûts, des quotas et de la confidentialité. Par NSY, intégrateur LLM en France." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/claude-integration.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.nsy.fr/integration-claude-entreprise.html" />
+<meta property="og:title" content="Intégrer Claude (Anthropic) dans une application métier | NSY" />
+<meta property="og:description" content="Assistants documentaires, agents outillés, RAG : intégrer Claude proprement — coûts, quotas, confidentialité." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Intégrer Claude (Anthropic) dans une application métier | NSY" />
+<meta name="twitter:description" content="Assistants documentaires, agents outillés, RAG : intégrer Claude proprement." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Intégration Claude", "item": "https://www.nsy.fr/integration-claude-entreprise.html" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "serviceType": "Intégration de Claude (Anthropic) en entreprise",
+      "name": "Intégration des modèles Claude dans les applications métier",
+      "description": "Assistants documentaires, agents outillés, RAG : intégration des modèles Claude d'Anthropic avec maîtrise des coûts, des quotas et de la confidentialité des données.",
+      "provider": { "@id": "https://www.nsy.fr/#org" },
+      "areaServed": { "@type": "Country", "name": "France" },
+      "audience": { "@type": "BusinessAudience", "name": "PME, ETI, grands comptes" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link active" data-target="services" href="index.html#services">Services</a>
+      <a class="nav-link" data-target="about" href="index.html#about">À propos</a>
+      <a class="nav-link" data-target="contact" href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <a class="nav-cta" href="index.html#contact">
+      <span class="status-dot"></span>
+      Disponible maintenant
+    </a>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Expertise</span>
+      <span class="line"></span>
+      <span class="mono">Intégration Claude · Anthropic</span>
+    </div>
+
+    <article class="legal-page">
+      <h1 style="font-size: clamp(32px, 4.5vw, 50px); margin-bottom: 16px;">Intégrer Claude dans votre application métier</h1>
+      <p class="mono" style="margin-bottom: 32px;">Par Cédric Barme · Fondateur de NSY</p>
+
+      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 36px; max-width: 720px;">
+        Les modèles Claude d'Anthropic comptent parmi les plus capables du marché pour les usages d'entreprise : analyse documentaire, agents outillés, génération contrôlée. Mais entre la démo et l'application en production, il y a un métier — celui d'intégrer un LLM avec la même rigueur qu'un composant critique. C'est l'approche NSY.
+      </p>
+
+      <h2>Les cas d'usage qui fonctionnent</h2>
+      <ul>
+        <li><strong>Assistant documentaire (RAG)</strong> — répondre à partir de <em>vos</em> contenus : documentation interne, base de connaissances, contrats. Les documents sont indexés en vecteurs, retrouvés par similarité, et Claude synthétise avec citation des sources.</li>
+        <li><strong>Agents outillés</strong> — Claude qui agit : consulter votre base, préparer un devis, remplir un formulaire — avec des garde-fous stricts sur ce que l'agent peut et ne peut pas faire.</li>
+        <li><strong>Génération contrôlée</strong> — synthèses, courriers, contenus structurés produits dans votre format, votre ton et vos contraintes, avec relecture humaine là où l'enjeu l'exige.</li>
+        <li><strong>Analyse de flux</strong> — classification et extraction sur des volumes (emails entrants, réclamations, documents) que personne ne peut lire exhaustivement.</li>
+      </ul>
+
+      <h2>Ce qu'une intégration sérieuse traite — et que la démo ignore</h2>
+      <p><strong>La confidentialité</strong> : quelles données partent vers l'API, lesquelles n'y partent jamais, anonymisation en amont quand nécessaire — des questions non négociables dès que le RGPD ou un secteur régulé entre en jeu. <strong>Les coûts</strong> : dimensionnement du modèle par tâche (toutes ne méritent pas le modèle le plus puissant), plafonds, mise en cache. <strong>La robustesse</strong> : gestion des erreurs et des indisponibilités de l'API, replis gracieux, files de reprise. <strong>L'évaluation</strong> : mesurer la qualité des réponses avant et après chaque évolution, plutôt que de se fier à l'impression.</p>
+
+      <h2>Pourquoi Claude — et quand autre chose</h2>
+      <p>NSY intègre Claude pour ses points forts documentés : fenêtres de contexte étendues, fiabilité du suivi d'instructions, qualité en français. Mais l'honnêteté technique prime : selon la souveraineté exigée, le budget ou la nature de la tâche, Mistral AI ou OpenAI peuvent être le meilleur choix — parfois même un moteur de règles sans LLM, comme le chatbot de ce site. La recommandation se fait sur votre cas, pas sur un partenariat.</p>
+
+      <h2>Comment NSY intervient</h2>
+      <p>Un cadrage court identifie le cas d'usage à plus fort rendement, ses données et ses risques. Puis un prototype rapide valide la faisabilité sur vos contenus réels, avant l'industrialisation : intégration dans votre application ou dans un <a href="creation-site-ia.html">site web propulsé par l'IA</a>, supervision, transfert de compétences. Ingénieur logiciel depuis 2012, Cédric Barme applique aux intégrations LLM les standards des systèmes critiques — voir aussi les <a href="faq.html">questions fréquentes</a>.</p>
+
+      <a class="faisa-cta" href="faisabilite.html" style="margin-top: 36px;">
+        <div>
+          <div class="l">Un cas d'usage IA à valider ?</div>
+          <h3>Questionnaire de faisabilité — réponse sous 48 h ouvrées</h3>
+          <p>Décrivez le besoin : faisabilité, ordre de grandeur et prochain pas concret.</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index.html#top">Accueil</a>
+        <a href="index.html#services">Services</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="index.html#about">À propos</a>
+        <a href="index.html#creations">Conception 3D</a>
+        <a href="faq.html">FAQ</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <a href="expertise-migration-java-ee.html">Migration Java EE</a>
+        <a href="expertise-wildfly-jboss.html">WildFly · JBoss EAP</a>
+        <a href="expertise-openshift-kubernetes.html">OpenShift · Kubernetes</a>
+        <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
+        <a href="conformite-dora.html">Conformité DORA</a>
+        <a href="integration-claude-entreprise.html">Intégration Claude</a>
+        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="glossaire-ia-web.html">Glossaire IA & web</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="faisabilite.html">Demande de faisabilité</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

@@ -9,7 +9,7 @@ Points clés :
 - Création web IA : forfait clé en main à partir de 5 800 € HT.
 - Zone : France entière et Europe, principalement à distance ; présence possible à Paris / La Défense et en région.
 - Langues : français, anglais.
-- Contact : formulaire https://www.nsy.fr/#contact · téléphone +33 6 72 94 71 06 · LinkedIn entreprise https://www.linkedin.com/company/28790840 · LinkedIn fondateur https://www.linkedin.com/in/cédric-barme/ (réponse sous 48 h ouvrées).
+- Contact : formulaire https://www.nsy.fr/#contact · téléphone +33 6 72 94 71 06 · LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn fondateur https://www.linkedin.com/in/cédric-barme/ (réponse sous 48 h ouvrées).
 - Entité Wikidata : https://www.wikidata.org/wiki/Q140447227 (SIREN 842 078 453, registre officiel : https://annuaire-entreprises.data.gouv.fr/entreprise/842078453).
 
 ## Pages principales
@@ -17,6 +17,14 @@ Points clés :
 - [Accueil (FR)](https://www.nsy.fr/) : présentation complète des deux offres, profil du fondateur, contact.
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
 - [FAQ](https://www.nsy.fr/faq.html) : plus de 50 questions/réponses sur les expertises (WildFly, OpenShift, migration Java EE, intégration Claude/OpenAI/Mistral, tarifs, process).
+- [Migration Java EE / Jakarta EE](https://www.nsy.fr/expertise-migration-java-ee.html) : moderniser un socle sans big bang ni interruption de production.
+- [WildFly · JBoss EAP](https://www.nsy.fr/expertise-wildfly-jboss.html) : tuning, HA, montées de version des serveurs d'applications.
+- [OpenShift · Kubernetes](https://www.nsy.fr/expertise-openshift-kubernetes.html) : conteneuriser des applications critiques en environnement régulé.
+- [Kafka · Artemis JMS](https://www.nsy.fr/expertise-kafka-messagerie.html) : streaming et messagerie pour les systèmes financiers.
+- [Conformité DORA](https://www.nsy.fr/conformite-dora.html) : la résilience opérationnelle côté ingénierie.
+- [Intégration Claude](https://www.nsy.fr/integration-claude-entreprise.html) : les modèles Anthropic dans vos applications métier.
+- [Création de site IA](https://www.nsy.fr/creation-site-ia.html) : l'offre clé en main détaillée (dès 5 800 € HT).
+- [Glossaire IA & web](https://www.nsy.fr/glossaire-ia-web.html) : LLM, RAG, GEO, LLMO… expliqués simplement.
 - [Réalisations](https://www.nsy.fr/realisations.html) : sites clients livrés et en production (dont PRV Concept, www.prv-concept.com).
 - [Demande de faisabilité](https://www.nsy.fr/faisabilite.html) : questionnaire guidé pour cadrer un projet web/IA.
 - [Mentions légales](https://www.nsy.fr/mentions-legales.html) : informations légales (LCEN).

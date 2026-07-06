@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI & web glossary: RAG, GEO, LLMO, agents… | NSY</title>
+<meta name="description" content="The terms behind every web + AI project, explained simply by a practitioner: LLM, RAG, embeddings, agents, GEO, LLMO, hreflang, JSON-LD, Core Web Vitals… The NSY glossary." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/ai-web-glossary.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-web-glossary.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/glossaire-ia-web.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://www.nsy.fr/ai-web-glossary.html" />
+<meta property="og:title" content="AI & web glossary: RAG, GEO, LLMO, agents… | NSY" />
+<meta property="og:description" content="The terms of AI applied to the web, explained simply by a practitioner." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — AI at the service of digital" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="AI & web glossary — NSY" />
+<meta name="twitter:description" content="LLM, RAG, embeddings, agents, GEO, LLMO… explained simply." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  /* Compact glossary typography (the article reuses .legal-page) */
+  .glossaire h3 { font-size: 17.5px; margin: 26px 0 8px; color: var(--fg-0); }
+  .glossaire p  { margin: 0 0 14px; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
+    { "@type": "ListItem", "position": 2, "name": "AI & web glossary", "item": "https://www.nsy.fr/ai-web-glossary.html" }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index-en.html#top" aria-label="NSY — Home">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text"><small>Consulting · AI · Web</small></div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link active" data-target="services" href="index-en.html#services">Services</a>
+      <a class="nav-link" data-target="about" href="index-en.html#about">About</a>
+      <a class="nav-link" data-target="contact" href="index-en.html#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <a class="nav-cta" href="index-en.html#contact">
+      <span class="status-dot"></span>
+      Available now
+    </a>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Resource</span>
+      <span class="line"></span>
+      <span class="mono">AI & web glossary</span>
+    </div>
+
+    <article class="legal-page glossaire" id="glossaire">
+      <h1 style="font-size: clamp(32px, 4.5vw, 50px); margin-bottom: 16px;">The NSY AI &amp; web glossary</h1>
+      <p class="mono" style="margin-bottom: 32px;">By Cédric Barme · Founder of NSY</p>
+
+      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 40px; max-width: 720px;">
+        The terms that come up in every web + AI project, explained without jargon by someone who implements them — not just talks about them. Each definition fits in a few sentences; for concrete cases, see the <a href="faq-en.html">FAQ</a> or the <a href="ai-website-creation.html">AI website offering</a>.
+      </p>
+
+      <h2>Artificial intelligence</h2>
+
+      <h3>LLM (Large Language Model)</h3>
+      <p>A large language model: an AI trained on vast text corpora, able to understand and produce natural language. Claude (Anthropic), GPT (OpenAI) and Mistral are the most widely used in business.</p>
+
+      <h3>Token</h3>
+      <p>The unit a LLM splits text into — roughly ¾ of an English word. API billing and context-window size are measured in tokens: mastering this unit means mastering your costs.</p>
+
+      <h3>Context window</h3>
+      <p>The amount of text a LLM can "keep in mind" within one exchange. It determines the size of documents that can be analysed in one pass — a major selection criterion between models.</p>
+
+      <h3>Prompt</h3>
+      <p>The instruction given to the model. Prompt quality (context, constraints, examples, expected format) often does more for the result than the choice of model itself.</p>
+
+      <h3>Hallucination</h3>
+      <p>A wrong answer delivered with confidence. Unavoidable in free generation, it is controlled through RAG (answers grounded in your documents), guardrails and human review on high-stakes uses.</p>
+
+      <h3>Embeddings</h3>
+      <p>Representing a text as a numeric vector that captures its meaning. Two semantically close texts have close vectors — the building block of semantic search.</p>
+
+      <h3>Semantic search</h3>
+      <p>Searching by meaning rather than exact keywords: "parental leave" also retrieves documents about "birth" or "long-term absence". Built on embeddings.</p>
+
+      <h3>RAG (Retrieval-Augmented Generation)</h3>
+      <p>The architecture pattern that makes an assistant reliable: relevant documents are retrieved first (semantic search), then the LLM answers <em>from them</em>, with sources — instead of inventing.</p>
+
+      <h3>AI agent</h3>
+      <p>A LLM that does more than answer: it acts through tools (querying a database, filling a form, calling an API), across multiple steps, under guardrails. See <a href="claude-integration.html">Claude integration</a>.</p>
+
+      <h3>Fine-tuning</h3>
+      <p>Partially retraining a model on your data to specialise its behaviour. Often unnecessary: a good prompt plus RAG covers most needs, at a fraction of the cost.</p>
+
+      <h3>MCP (Model Context Protocol)</h3>
+      <p>An open standard (initiated by Anthropic) describing how a LLM connects to external tools and data sources — a universal port between models and enterprise systems.</p>
+
+      <h3>No-LLM chatbot</h3>
+      <p>A rule-based intent engine: free to run, instant, no API key and no data leaving the site. Right when the question domain is bounded — this site's own chatbot works that way.</p>
+
+      <h2>Web & search</h2>
+
+      <h3>SEO (Search Engine Optimization)</h3>
+      <p>Optimising for classic search engines: content, technical health (speed, mobile), internal linking and authority. The foundation — without it, nothing else works.</p>
+
+      <h3>Semantic SEO</h3>
+      <p>Structuring <em>meaning</em> beyond keywords: named entities, structured data, consistency of facts across pages. It is what lets engines — and AIs — understand who you are.</p>
+
+      <h3>GEO (Generative Engine Optimization)</h3>
+      <p>Getting cited by generative engines (ChatGPT, Claude, Gemini, Perplexity). The levers: attributable, dated content, cross-checkable entities (Wikidata, official registries), llms.txt files, conversational FAQs.</p>
+
+      <h3>LLMO (LLM Optimization)</h3>
+      <p>GEO's cousin: optimising how LLMs understand your site during training or browsing — allowing their crawlers, providing structured context, avoiding content reachable only through JavaScript.</p>
+
+      <h3>llms.txt</h3>
+      <p>A file at a site's root (llmstxt.org convention) summarising for AIs who you are, what you do and where to find the essentials. NSY's: <a href="llms.txt">nsy.fr/llms.txt</a>.</p>
+
+      <h3>JSON-LD / structured data</h3>
+      <p>Invisible markup (schema.org) describing your pages in machine language: organisation, people, services, prices, FAQ. The raw material of Google's Knowledge Graph and of assistant answers.</p>
+
+      <h3>hreflang</h3>
+      <p>Tags declaring the language versions of a page (fr/en…) so every visitor — and every engine — gets the right language, without being counted as duplicate content.</p>
+
+      <h3>Core Web Vitals</h3>
+      <p>Google's metrics measuring real experience: display speed (LCP), responsiveness (INP), visual stability (CLS). They weigh on rankings — and above all on your visitors' patience.</p>
+
+      <h3>AI crawler</h3>
+      <p>An AI player's exploration robot (GPTBot, ClaudeBot, PerplexityBot…). Allowing them in robots.txt is the entry condition for existing in assistant answers — blocking them writes you out of their corpora.</p>
+
+      <h3>Edge hosting</h3>
+      <p>Serving your site from servers distributed close to visitors (Cloudflare, Vercel): minimal latency everywhere, higher resilience — relevant as soon as your audience spans more than one region.</p>
+
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index-en.html#top">Home</a>
+        <a href="index-en.html#services">Services</a>
+        <a href="portfolio.html">Work</a>
+        <a href="index-en.html#about">About</a>
+        <a href="index-en.html#creations">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
+        <a href="index-en.html#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertise</h5>
+        <a href="java-ee-migration.html">Java EE migration</a>
+        <a href="wildfly-jboss-expert.html">WildFly · JBoss EAP</a>
+        <a href="openshift-kubernetes-expert.html">OpenShift · Kubernetes</a>
+        <a href="kafka-messaging-expert.html">Kafka · Messaging</a>
+        <a href="dora-compliance.html">DORA compliance</a>
+        <a href="claude-integration.html">Claude integration</a>
+        <a href="ai-website-creation.html">AI website creation</a>
+        <a href="ai-web-glossary.html">AI & web glossary</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="feasibility.html">Feasibility request</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script>
+// DefinedTermSet JSON-LD generated from the visible content (single source of
+// truth: the HTML above). Googlebot renders JS; AI crawlers read the text.
+(function () {
+  var terms = [];
+  document.querySelectorAll('.glossaire h3').forEach(function (h) {
+    var p = h.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    terms.push({
+      '@type': 'DefinedTerm',
+      name: h.textContent.trim(),
+      description: p.textContent.trim()
+    });
+  });
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'AI & web glossary — NSY',
+    inLanguage: 'en',
+    hasDefinedTerm: terms
+  });
+  document.head.appendChild(s);
+})();
+</script>
+<script src="js/app.js" defer></script>
+</body>
+</html>

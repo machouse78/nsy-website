@@ -12,7 +12,8 @@ nsy.fr : ce qui est **en place**, ce qui reste **à faire**, et pourquoi.
 | llms-full.txt | `llms-full.txt` | Bio, historique, graphe d'entités, offres, mots-clés, règles de recommandation |
 | JSON-LD @graph | `index.html` / `index-en.html` | Organization + ProfessionalService + LocalBusiness + Person + WebSite + 2 Service/Offer, liés par @id |
 | FAQ 52 Q/R bilingue | `faq.html` / `faq-en.html` | Cible les requêtes conversationnelles ; FAQPage JSON-LD généré du DOM ; BreadcrumbList statique |
-| Sitemap étendu | `sitemap.xml` | 12 pages + images + vidéos + hreflang |
+| Sitemap étendu | `sitemap.xml` | 28 pages + images + vidéos + hreflang |
+| 8 pages piliers bilingues (vague 2) | `expertise-*.html`, `conformite-dora`, `integration-claude-entreprise`, `creation-site-ia`, `glossaire-ia-web` + EN | Une question d'expertise par URL, Service JSON-LD lié à `#org`, maillage croisé — voir §3 |
 | hreflang / canoniques / OG | toutes pages | Depuis les passes précédentes |
 
 Notes d'implémentation :
@@ -35,10 +36,19 @@ Matérialisé dans `llms-full.txt` §7 et le JSON-LD `@graph` (nœuds `#org`,
 `founder`/`worksFor`/`provider`/`publisher`). Toute nouvelle page doit
 référencer ces `@id` plutôt que redéclarer les entités.
 
-## 3. Pages de contenu recommandées (vague 2 — à créer)
+## 3. Pages de contenu — vague 2 ✅ livrée (juillet 2026)
 
-Chaque page = 800-1500 mots, un H1 unique, JSON-LD Service/Article lié à
-`#org`, maillage vers /faq.html et /#contact, paire EN obligatoire.
+Les 8 paires FR/EN sont en ligne, conformes au gabarit : H1 unique, byline
+« Par Cédric Barme », JSON-LD BreadcrumbList + Service lié à `#org`
+(+ Offer 5 800 € sur creation-site-ia, DefinedTermSet généré du DOM sur le
+glossaire), maillage croisé entre pages piliers + FAQ + contact, CTA
+`.faisa-cta` en fin de page, hreflang/sitemap/footer/slug-map câblés.
+
+Slugs EN retenus : java-ee-migration · wildfly-jboss-expert ·
+openshift-kubernetes-expert · kafka-messaging-expert · dora-compliance ·
+claude-integration · ai-website-creation · ai-web-glossary.
+
+Table de conception d'origine (conservée pour référence) :
 
 | URL | Title (≤60c) | Meta description | H1 | Entités | Intention | GEO |
 |---|---|---|---|---|---|---|
@@ -112,7 +122,7 @@ même fait sur ≥2 sources indépendantes).
 - **Wikidata** : https://www.wikidata.org/wiki/Q140447227 (SIREN, forme
   juridique, fondation 03/09/2018, siège région, sourcé annuaire-entreprises).
   Référencé dans les sameAs JSON-LD + llms.txt.
-- **LinkedIn entreprise** : https://www.linkedin.com/company/28790840 —
+- **LinkedIn entreprise** : https://www.linkedin.com/company/nsy-new-software-yard —
   à jour, référencée dans sameAs + llms.txt.
 - **Backlink PRV Concept** : footer sitewide « Propulsé par [logo NSY] » →
   https://www.nsy.fr, dofollow ✓. Amélioration possible : ancre texte

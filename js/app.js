@@ -802,6 +802,14 @@
     'faisabilite.html': 'feasibility.html',
     'realisations.html': 'portfolio.html',
     'faq.html': 'faq-en.html',
+    'expertise-migration-java-ee.html': 'java-ee-migration.html',
+    'expertise-wildfly-jboss.html': 'wildfly-jboss-expert.html',
+    'expertise-openshift-kubernetes.html': 'openshift-kubernetes-expert.html',
+    'expertise-kafka-messagerie.html': 'kafka-messaging-expert.html',
+    'conformite-dora.html': 'dora-compliance.html',
+    'integration-claude-entreprise.html': 'claude-integration.html',
+    'creation-site-ia.html': 'ai-website-creation.html',
+    'glossaire-ia-web.html': 'ai-web-glossary.html',
   };
   const SLUG_EN_TO_FR = Object.fromEntries(
     Object.entries(SLUG_FR_TO_EN).map(([fr, en]) => [en, fr])

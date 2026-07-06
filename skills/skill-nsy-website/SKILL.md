@@ -36,7 +36,7 @@ must hold in every change.
   of ageing counts ("14 ans") — the dynamic `data-years` spans are the only
   place the computed number lives.
 - Official profiles (JSON-LD sameAs + llms.txt): LinkedIn company page
-  https://www.linkedin.com/company/28790840 · LinkedIn founder
+  https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn founder
   /in/cédric-barme · GitHub machouse78 · YouTube @new-software-yard.
 
 ## Copy & terminology
@@ -49,9 +49,11 @@ must hold in every change.
 
 ## Bilingual (FR/EN) — every new page or link must stay symmetric
 - One file per language, **real translated slugs** (mentions-legales↔legal-notice,
-  confidentialite↔privacy, faisabilite↔feasibility, realisations↔portfolio) —
-  EXCEPT the home (`index.html` ↔ `index-en.html`) and the FAQ
-  (`faq.html` ↔ `faq-en.html`) which use the -en suffix.
+  confidentialite↔privacy, faisabilite↔feasibility, realisations↔portfolio,
+  plus the 8 wave-2 pillar pairs: expertise-migration-java-ee↔java-ee-migration,
+  expertise-wildfly-jboss↔wildfly-jboss-expert, etc.) — EXCEPT the home
+  (`index.html` ↔ `index-en.html`) and the FAQ (`faq.html` ↔ `faq-en.html`)
+  which use the -en suffix. **Source of truth: `SLUG_FR_TO_EN` in `js/app.js`.**
 - **Flag switcher** 🇫🇷🇬🇧 (not text), sets `nsy_lang` cookie + redirects via the
   explicit slug map in `js/app.js`. `.htaccess` auto-detects `Accept-Language`
   on `/`. Reciprocal **hreflang** fr/en/x-default + self-canonical on every
@@ -65,7 +67,7 @@ must hold in every change.
 - To change the nav or footer: **edit the partial(s)**, then run
   `node scripts/sync-partials.mjs` (or `npm run partials`). It rewrites the
   regions marked `<!-- @partial:nav -->…<!-- @endpartial:nav -->` /
-  `…:footer…` in **all 12 pages** at once (idempotent). `prepare-deploy.sh`
+  `…:footer…` in **all 28 pages** at once (idempotent). `prepare-deploy.sh`
   also runs it automatically. **Do NOT hand-edit `<nav>`/`<footer>` inside a
   page** — your change will be overwritten on the next sync, and you'd only
   touch one page anyway.

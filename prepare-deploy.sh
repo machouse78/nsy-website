@@ -35,6 +35,14 @@ cp confidentialite.html  deploy/
 cp faisabilite.html      deploy/
 cp realisations.html     deploy/
 cp faq.html              deploy/
+cp expertise-migration-java-ee.html    deploy/
+cp expertise-wildfly-jboss.html        deploy/
+cp expertise-openshift-kubernetes.html deploy/
+cp expertise-kafka-messagerie.html     deploy/
+cp conformite-dora.html                deploy/
+cp integration-claude-entreprise.html  deploy/
+cp creation-site-ia.html               deploy/
+cp glossaire-ia-web.html               deploy/
 cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp sitemap.xml           deploy/
@@ -50,6 +58,14 @@ cp privacy.html   deploy/
 cp feasibility.html   deploy/
 cp portfolio.html   deploy/
 cp faq-en.html    deploy/
+cp java-ee-migration.html           deploy/
+cp wildfly-jboss-expert.html        deploy/
+cp openshift-kubernetes-expert.html deploy/
+cp kafka-messaging-expert.html      deploy/
+cp dora-compliance.html             deploy/
+cp claude-integration.html          deploy/
+cp ai-website-creation.html         deploy/
+cp ai-web-glossary.html             deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."
@@ -114,6 +130,22 @@ required=(
   "deploy/portfolio.html"
   "deploy/faq.html"
   "deploy/faq-en.html"
+  "deploy/expertise-migration-java-ee.html"
+  "deploy/expertise-wildfly-jboss.html"
+  "deploy/expertise-openshift-kubernetes.html"
+  "deploy/expertise-kafka-messagerie.html"
+  "deploy/conformite-dora.html"
+  "deploy/integration-claude-entreprise.html"
+  "deploy/creation-site-ia.html"
+  "deploy/glossaire-ia-web.html"
+  "deploy/java-ee-migration.html"
+  "deploy/wildfly-jboss-expert.html"
+  "deploy/openshift-kubernetes-expert.html"
+  "deploy/kafka-messaging-expert.html"
+  "deploy/dora-compliance.html"
+  "deploy/claude-integration.html"
+  "deploy/ai-website-creation.html"
+  "deploy/ai-web-glossary.html"
   "deploy/contact.php"
   "deploy/faisabilite.php"
   "deploy/sitemap.xml"

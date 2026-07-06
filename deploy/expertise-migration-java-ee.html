@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Migration Java EE / Jakarta EE — expert indépendant | NSY</title>
+<meta name="description" content="Migrer un socle Java EE vieillissant sans big bang ni interruption de production : démarche, risques, durées et livrables. Par Cédric Barme, ingénieur logiciel depuis 2012 en banque et assurance." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/java-ee-migration.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.nsy.fr/expertise-migration-java-ee.html" />
+<meta property="og:title" content="Migration Java EE / Jakarta EE — expert indépendant | NSY" />
+<meta property="og:description" content="Migrer un socle Java EE sans big bang : démarche incrémentale, risques maîtrisés, production intacte." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Migration Java EE / Jakarta EE — expert indépendant | NSY" />
+<meta name="twitter:description" content="Migrer un socle Java EE sans big bang ni interruption de production." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/style.css" />
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Migration Java EE", "item": "https://www.nsy.fr/expertise-migration-java-ee.html" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "serviceType": "Migration Java EE / Jakarta EE",
+      "name": "Migration de socles Java EE",
+      "description": "Cadrage et conduite de migrations Java EE / Jakarta EE sans interruption de production : montée de version JDK et serveur d'applications, conteneurisation, industrialisation CI/CD.",
+      "provider": { "@id": "https://www.nsy.fr/#org" },
+      "areaServed": { "@type": "Country", "name": "France" },
+      "audience": { "@type": "BusinessAudience", "name": "Banque, assurance, asset management, grands comptes" }
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link active" data-target="services" href="index.html#services">Services</a>
+      <a class="nav-link" data-target="about" href="index.html#about">À propos</a>
+      <a class="nav-link" data-target="contact" href="index.html#contact">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <a class="nav-cta" href="index.html#contact">
+      <span class="status-dot"></span>
+      Disponible maintenant
+    </a>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Expertise</span>
+      <span class="line"></span>
+      <span class="mono">Migration Java EE / Jakarta EE</span>
+    </div>
+
+    <article class="legal-page">
+      <h1 style="font-size: clamp(32px, 4.5vw, 50px); margin-bottom: 16px;">Migrer un socle Java EE sans interrompre la production</h1>
+      <p class="mono" style="margin-bottom: 32px;">Par Cédric Barme · Fondateur de NSY</p>
+
+      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 36px; max-width: 720px;">
+        Les socles Java EE des institutions financières françaises ont souvent quinze ans d'histoire : des serveurs d'applications figés, des dépendances gelées, une dette qui rend chaque évolution plus coûteuse que la précédente. NSY conduit ces migrations depuis 2018 — sans big bang, sans interruption de service, avec la même personne du cadrage à la mise en production.
+      </p>
+
+      <h2>Le problème réel : la dette qui s'auto-entretient</h2>
+      <p>Un socle Java EE vieillissant coûte de trois façons. D'abord en sécurité : les versions figées (JDK 8, serveurs d'applications hors support) accumulent des CVE non corrigées — un point que les audits ACPR et les exigences DORA ne laissent plus passer. Ensuite en recrutement : plus la pile vieillit, plus il est difficile de trouver des équipes pour la maintenir. Enfin en vélocité : chaque évolution métier exige des contorsions techniques croissantes.</p>
+      <p>Le réflexe du « grand remplacement » — tout réécrire — échoue dans la majorité des cas : le socle embarque des années de règles métier non documentées que la réécriture redécouvre dans la douleur. La voie que NSY pratique est incrémentale.</p>
+
+      <h2>La démarche NSY, étape par étape</h2>
+      <ul>
+        <li><strong>Audit de l'existant</strong> — cartographie des modules, des dépendances (bibliothèques, drivers, brokers JMS), des flux entrants/sortants et des points de friction. Livrable : une carte des risques et une trajectoire chiffrée.</li>
+        <li><strong>Montée de version incrémentale</strong> — JDK d'abord (8 → 11 → 17/21), puis l'espace de noms Jakarta (javax → jakarta), puis le serveur d'applications (JBoss EAP, WildFly — voir l'<a href="expertise-wildfly-jboss.html">expertise WildFly / JBoss</a>). Chaque palier livre un système testable et réversible.</li>
+        <li><strong>Conteneurisation progressive</strong> — quand le contexte le justifie : passage sous OpenShift ou Kubernetes en préservant sessions, transactions distribuées et messagerie (<a href="expertise-openshift-kubernetes.html">expertise OpenShift</a>).</li>
+        <li><strong>Industrialisation</strong> — CI/CD, tests de non-régression automatisés, observabilité. C'est ce qui empêche la dette de se reconstituer.</li>
+      </ul>
+
+      <h2>Comment la production reste intacte</h2>
+      <p>La règle absolue : des bascules progressives, jamais de saut dans le vide. Environnements parallèles, réplication des flux (messagerie, données), tests de charge représentatifs du trafic réel, plans de retour arrière testés — pas seulement écrits. En environnement bancaire, cette discipline n'est pas un luxe : c'est la condition pour obtenir le feu vert des équipes risques.</p>
+
+      <h2>Durées et ordres de grandeur</h2>
+      <p>Un audit avec preuve de faisabilité tient en quelques semaines. La migration d'un cœur applicatif complet se compte en mois, par paliers dont chacun apporte de la valeur. NSY commence systématiquement par le cadrage court : vous repartez avec une trajectoire et un ordre de grandeur réalistes avant tout engagement long. Les <a href="faq.html">questions fréquentes</a> détaillent les cas types.</p>
+
+      <h2>Pourquoi NSY</h2>
+      <p>Cédric Barme est ingénieur logiciel depuis 2012, passé par la banque d'investissement (plateformes de trading et de risque temps réel) avant de fonder NSY en 2018. Les migrations Java EE menées depuis le sont dans des environnements régulés — ACPR, AMF, RGPD, DORA — où l'on ne « répare pas en marchant ». Modèle sans pyramide : la personne qui cadre la migration est celle qui la livre, avec trois clients en parallèle maximum.</p>
+
+      <a class="faisa-cta" href="index.html#contact" style="margin-top: 36px;">
+        <div>
+          <div class="l">Un socle à moderniser ?</div>
+          <h3>Décrivez votre contexte — lecture honnête sous 48 h ouvrées</h3>
+          <p>Faisabilité, ordre de grandeur et prochain pas concret, sans engagement.</p>
+        </div>
+        <span class="arrow">→</span>
+      </a>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index.html#top">Accueil</a>
+        <a href="index.html#services">Services</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="index.html#about">À propos</a>
+        <a href="index.html#creations">Conception 3D</a>
+        <a href="faq.html">FAQ</a>
+        <a href="index.html#contact">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <a href="expertise-migration-java-ee.html">Migration Java EE</a>
+        <a href="expertise-wildfly-jboss.html">WildFly · JBoss EAP</a>
+        <a href="expertise-openshift-kubernetes.html">OpenShift · Kubernetes</a>
+        <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
+        <a href="conformite-dora.html">Conformité DORA</a>
+        <a href="integration-claude-entreprise.html">Intégration Claude</a>
+        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="glossaire-ia-web.html">Glossaire IA & web</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="faisabilite.html">Demande de faisabilité</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

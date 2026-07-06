@@ -214,6 +214,152 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faq.html" />
   </url>
 
+  <!-- Pages piliers — expertises & offres (FR / EN), vague 2 GEO -->
+  <url>
+    <loc>https://www.nsy.fr/expertise-migration-java-ee.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/java-ee-migration.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/java-ee-migration.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/java-ee-migration.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/expertise-wildfly-jboss.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/wildfly-jboss-expert.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/wildfly-jboss-expert.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/wildfly-jboss-expert.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/expertise-openshift-kubernetes.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-openshift-kubernetes.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/openshift-kubernetes-expert.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-openshift-kubernetes.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/openshift-kubernetes-expert.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-openshift-kubernetes.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/openshift-kubernetes-expert.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-openshift-kubernetes.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/expertise-kafka-messagerie.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/kafka-messaging-expert.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/kafka-messaging-expert.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/kafka-messaging-expert.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/conformite-dora.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conformite-dora.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/dora-compliance.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/conformite-dora.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/dora-compliance.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conformite-dora.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/dora-compliance.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/conformite-dora.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/integration-claude-entreprise.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/claude-integration.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/claude-integration.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/claude-integration.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/integration-claude-entreprise.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-ia.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-creation.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-ia.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/ai-website-creation.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-creation.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-ia.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/glossaire-ia-web.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-web-glossary.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/glossaire-ia-web.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/ai-web-glossary.html</loc>
+    <lastmod>2026-07-06</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-web-glossary.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/glossaire-ia-web.html" />
+  </url>
+
   <!-- Questionnaire de faisabilité projet (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faisabilite.html</loc>
