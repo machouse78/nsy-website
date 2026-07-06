@@ -153,9 +153,13 @@ nsy-website/
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
 ├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 7 étapes) FR / EN
+├── realisations.html / portfolio.html   # Réalisations clients (vignettes auto-capturées)
 ├── faq.html / faq-en.html               # FAQ GEO/LLMO : 52 Q/R bilingues + FAQPage JSON-LD
-├── expertise-*.html + 8 paires piliers  # Vague 2 GEO : une expertise par URL (Java EE, WildFly,
-│                                        #   OpenShift, Kafka, DORA, Claude, site IA, glossaire)
+├── (8 paires de pages piliers GEO)      # Une expertise par URL, FR ↔ EN (cf. table des slugs) :
+│                                        #   expertise-migration-java-ee, expertise-wildfly-jboss,
+│                                        #   expertise-openshift-kubernetes, expertise-kafka-messagerie,
+│                                        #   conformite-dora, integration-claude-entreprise,
+│                                        #   creation-site-ia, glossaire-ia-web
 ├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
 ├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
@@ -186,15 +190,19 @@ nsy-website/
 │   ├── web-ia.{png,mp4}                 # Service 02
 │   ├── nsy-ia.mp4                       # Sphère hero
 │   ├── nsy-og.jpg                       # Bannière Open Graph 1200×630
-│   └── renault-wireframe.glb            # Modèle 3D wireframe (660 Ko)
+│   ├── prv-concept.jpg                  # Vignette Réalisations (npm run capture:realisations)
+│   └── renault-wireframe.glb            # Modèle 3D wireframe arêtes vives (575 Ko)
 ├── package.json                         # Build tooling 3D uniquement (devDependencies)
 ├── skills/                              # Skills Claude Code (doc, NON déployés) — voir § dédié
 │   ├── skill-nsy-website/               #   conventions & faits du projet
-│   └── frontend-responsive-perf/        #   techniques responsive/perf réutilisables
+│   ├── frontend-responsive-perf/        #   techniques responsive/perf réutilisables
+│   ├── seo-geo-llmo/                    #   playbook SEO + GEO/LLMO réutilisable
+│   ├── frontend-design/                 #   interfaces distinctives production-grade
+│   └── video-to-website/                #   site scroll-animé depuis une vidéo
 ├── sitemap.xml / robots.txt
 ├── .htaccess                            # Apache : redirections, GZIP, cache, i18n, anti-hotlink
 ├── prepare-deploy.sh                    # Build du dossier deploy/
-├── deploy/                              # Généré (~16 Mo), à uploader dans public_html/
+├── deploy/                              # Généré (~14 Mo), à uploader dans public_html/
 ├── DEPLOIEMENT-INFOMANIAK.md            # Guide hébergement
 └── README.md                            # Ce fichier
 ```
