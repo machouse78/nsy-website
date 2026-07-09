@@ -1049,6 +1049,33 @@
       z.classList.add('anim-paused'); // start paused; the observer un-pauses visible ones
       aio.observe(z);
     });
+
+    // Ré-assertion après un changement de viewport (portrait ↔ paysage sur
+    // mobile, redimensionnement) : le reflow fait parfois « clignoter »
+    // l'IntersectionObserver — la zone est vue hors écran pendant la bascule,
+    // .anim-paused est posée, et l'événement de retour ne re-fire pas
+    // toujours. Résultat : les animations CSS (points du sol Tron, pulsations)
+    // restaient figées. Même correctif que pour l'auto-rotate du modèle :
+    // on recalcule l'état réel une fois la nouvelle mise en page stabilisée.
+    const syncAnimZones = () => {
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      animZones.forEach((z) => {
+        const r = z.getBoundingClientRect();
+        const onScreen = r.bottom > -100 && r.top < vh + 100; // = rootMargin 100px
+        z.classList.toggle('anim-paused', !onScreen);
+      });
+    };
+    let zoneTimer;
+    const onZoneViewportChange = () => {
+      requestAnimationFrame(() => requestAnimationFrame(syncAnimZones));
+      clearTimeout(zoneTimer);
+      zoneTimer = setTimeout(syncAnimZones, 400); // après stabilisation du layout
+    };
+    window.addEventListener('resize', onZoneViewportChange, { passive: true });
+    window.addEventListener('orientationchange', onZoneViewportChange);
+    if (window.screen && screen.orientation && typeof screen.orientation.addEventListener === 'function') {
+      screen.orientation.addEventListener('change', onZoneViewportChange);
+    }
   }
 
   // ───── Scroll reveal (one-shot, IntersectionObserver) ─────
