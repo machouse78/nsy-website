@@ -1036,9 +1036,23 @@
   const renault = document.getElementById('renault-viewer');
   const animZones = document.querySelectorAll('.hero, .marquee, #about, #creations');
   if (animZones.length && 'IntersectionObserver' in window) {
+    // Une zone est « visible » si son rect intersecte le viewport (marge 100px
+    // = rootMargin de l'observer) — OU si elle contient le stage 3D agrandi :
+    // en lightbox plein écran, le stage passe en position:fixed et la section
+    // sous-jacente perd sa hauteur ; elle peut alors sortir du viewport
+    // (scroll verrouillé) pendant que ses animations sont affichées plein
+    // écran. Sans cette exception, ouvrir le plein écran ou pivoter le
+    // téléphone figeait les points du sol Tron (l'auto-rotate, lui, avait
+    // déjà son exception dans syncModelRotation).
+    const zoneOnScreen = (z) => {
+      if (z.querySelector('.model-stage.expanded')) return true;
+      const r = z.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      return r.bottom > -100 && r.top < vh + 100;
+    };
     const aio = new IntersectionObserver((entries) => {
       entries.forEach((e) => {
-        e.target.classList.toggle('anim-paused', !e.isIntersecting);
+        e.target.classList.toggle('anim-paused', !zoneOnScreen(e.target));
         // Delegate the turntable decision to the shared helper, which also
         // accounts for the expanded/fullscreen case and avoids needless
         // attribute churn (keeps rotation continuous across orientation flips).
@@ -1058,12 +1072,7 @@
     // restaient figées. Même correctif que pour l'auto-rotate du modèle :
     // on recalcule l'état réel une fois la nouvelle mise en page stabilisée.
     const syncAnimZones = () => {
-      const vh = window.innerHeight || document.documentElement.clientHeight;
-      animZones.forEach((z) => {
-        const r = z.getBoundingClientRect();
-        const onScreen = r.bottom > -100 && r.top < vh + 100; // = rootMargin 100px
-        z.classList.toggle('anim-paused', !onScreen);
-      });
+      animZones.forEach((z) => z.classList.toggle('anim-paused', !zoneOnScreen(z)));
     };
     let zoneTimer;
     const onZoneViewportChange = () => {
