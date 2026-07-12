@@ -8,7 +8,7 @@
     "build:wireframe": "./scripts/build-wireframe.sh",
     "screenshot": "node scripts/screenshot-glb.mjs",
     "partials": "node scripts/sync-partials.mjs",
-    "capture:realisations": "node scripts/capture-realisation.mjs https://www.prv-concept.com public/prv-concept.jpg"
+    "capture:realisations": "node scripts/capture-realisation.mjs https://www.prv-concept.com public/prv-concept.jpg 1100 10000"
   },
   "devDependencies": {
     "@gltf-transform/core": "^4.3.0",

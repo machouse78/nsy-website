@@ -29,6 +29,9 @@ if (args.length < 2) {
 }
 const [URL_CIBLE, SORTIE] = args;
 const OUT_WIDTH = parseInt(args[2] || '1100', 10);
+// Attente après networkidle (ms) — à allonger pour les sites avec animation
+// d'entrée / loader (ex. PRV Concept et son démarrage de turbo).
+const WAIT_MS = parseInt(args[3] || '3000', 10);
 
 // Layout desktop de référence ; l'image sort en OUT_WIDTH × (ratio 16/10).
 const RENDER_W = 1440;
@@ -44,8 +47,8 @@ try {
   });
   console.log(`[capture] ${URL_CIBLE} → ${SORTIE} (${OUT_WIDTH}px de large)`);
   await page.goto(URL_CIBLE, { waitUntil: 'networkidle2', timeout: 60000 });
-  // Laisse retomber les animations d'entrée / lazy-load du haut de page.
-  await new Promise((r) => setTimeout(r, 3000));
+  // Laisse retomber les animations d'entrée / loaders / lazy-load.
+  await new Promise((r) => setTimeout(r, WAIT_MS));
   await page.screenshot({ path: SORTIE, type: 'jpeg', quality: 82 });
   const kb = Math.round(fs.statSync(SORTIE).size / 1024);
   console.log(`[capture] ✅ ${path.basename(SORTIE)} — ${kb} Ko`);
