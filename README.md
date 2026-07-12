@@ -185,7 +185,7 @@ nsy-website/
 │   └── .htaccess                        # Deny all
 ├── public/                              # Assets servis publiquement
 │   ├── nsy-logo.png + cropped-NSY-logo-*.png (favicons)
-│   ├── photo-profil.png                 # Photo Cédric (About)
+│   ├── photo-profil.jpg                 # Photo Cédric (About)
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
 │   ├── nsy-ia.mp4                       # Sphère hero
