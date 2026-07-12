@@ -91,7 +91,7 @@ mkdir -p deploy/public
 # Images
 cp public/nsy-logo.png                  deploy/public/
 cp public/nsy-og.jpg                    deploy/public/
-cp public/photo-profil.png              deploy/public/
+cp public/photo-profil.jpg              deploy/public/
 cp public/finance-assurance.png         deploy/public/
 cp public/web-ia.png                    deploy/public/
 cp public/prv-concept.jpg               deploy/public/
@@ -163,7 +163,7 @@ required=(
   "deploy/_secret/config.php"
   "deploy/public/nsy-logo.png"
   "deploy/public/nsy-og.jpg"
-  "deploy/public/photo-profil.png"
+  "deploy/public/photo-profil.jpg"
   "deploy/public/finance-assurance.png"
   "deploy/public/web-ia.png"
   "deploy/public/prv-concept.jpg"
