@@ -296,12 +296,12 @@
       cues: ['tarif','prix','cout','combien','devis','budget','cher','montant','ca coute','prix indicatif',
               'price','pricing','cost','rate','quote','how much','fee'],
       fr: [
-        `Deux logiques de tarif : <b>Conseil technique</b> — au jour ou au forfait, mission directe via l'EURL, à cadrer selon le périmètre. <b>Création web · IA</b> — à partir de 5 800 € HT en forfait clé en main. Pour un chiffrage précis, le formulaire de contact est le plus rapide.`,
-        `Côté création web · IA : à partir de 5 800 € HT (forfait clé en main). Côté conseil technique : tarif journalier ou forfait selon la mission. Le devis exact dépend du périmètre — décrivez votre besoin via le formulaire et je reviens sous 48 h ouvrées.`
+        `La tarification s'établit <b>en fonction du besoin</b> : périmètre, complexité, échéances. Conseil technique comme création web · IA font l'objet d'un devis après cadrage — décrivez votre projet via le formulaire, réponse sous 48 h ouvrées.`,
+        `Pas de grille tarifaire toute faite : chaque mission est chiffrée selon son périmètre réel. Le plus efficace : le formulaire de contact (ou le questionnaire de faisabilité pour un projet web) — vous recevez une lecture honnête et un ordre de grandeur sous 48 h ouvrées.`
       ],
       en: [
-        `Two pricing tracks: <b>Technical consulting</b> — day-rate or fixed-fee, direct engagement via the EURL, scoped to the work. <b>Web creation · AI</b> — from €5,800 ex-VAT for a turnkey package. For a precise quote, the contact form is the fastest route.`,
-        `Web creation · AI starts at €5,800 ex-VAT (turnkey). Technical consulting is day-rate or fixed-fee depending on the mission. The exact quote depends on scope — describe your need in the form and you'll hear back within 48 business hours.`
+        `Pricing is <b>based on your need</b>: scope, complexity, deadlines. Consulting and web creation · AI alike are quoted after scoping — describe your project through the form, reply within 48 business hours.`,
+        `No standard price list: every engagement is quoted on its real scope. The most effective route: the contact form (or the feasibility questionnaire for a web project) — you get an honest read and a ballpark within 48 business hours.`
       ]
     },
     {
@@ -309,12 +309,12 @@
       cues: ['disponib','dispo','quand','delai','commenc','demarr','libre','planning','agenda','prochaine',
               'available','availability','when','start','lead time','booked','timeline'],
       fr: [
-        `Cédric est <b>disponible dès à présent</b> pour de nouvelles missions. Trois clients en parallèle au maximum, pour rester réellement disponible et tenir un niveau d'exigence non négociable.`,
-        `Disponibilité : <b>immédiate</b>. Le créneau est volontairement limité (3 clients max en simultané) — si votre projet a une échéance, indiquez-la dans le formulaire pour caler le timing.`
+        `La disponibilité s'évalue au moment de la demande : NSY travaille avec <b>trois clients en parallèle maximum</b>, pour tenir un niveau d'exigence non négociable. Décrivez votre échéance via le formulaire — réponse sous 48 h ouvrées.`,
+        `Le créneau est volontairement limité (3 clients max en simultané). Si votre projet a une échéance, indiquez-la dans le formulaire : la faisabilité calendaire fait partie de la réponse.`
       ],
       en: [
-        `Cédric is <b>available right now</b> for new engagements. Three clients in parallel at most, to stay genuinely available and hold a non-negotiable quality bar.`,
-        `Availability: <b>immediate</b>. The slot is deliberately limited (3 clients max at once) — if your project has a deadline, mention it in the form so we can line up the timing.`
+        `Availability is assessed per request: NSY works with <b>three clients in parallel at most</b>, to hold a non-negotiable quality bar. Describe your timeline through the form — reply within 48 business hours.`,
+        `Capacity is deliberately limited (3 clients max at once). If your project has a deadline, mention it in the form: scheduling feasibility is part of the reply.`
       ]
     },
     {
@@ -323,12 +323,12 @@
               'ia','intelligence artificielle','llm','claude','openai','mistral','gpt','chatbot','agent',
               'rag','recherche semantique','semantic','ai','automatis','automation'],
       fr: [
-        `La création web NSY, c'est des sites et plateformes nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots métier, recherche sémantique, génération de contenu, agents. Le tout pensé pour la performance et le SEO. À partir de 5 800 € HT.`,
-        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Forfait clé en main à partir de 5 800 € HT.`
+        `La création web NSY, c'est des sites et plateformes nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots métier, recherche sémantique, génération de contenu, agents. Le tout pensé pour la performance et le SEO — tarification en fonction du besoin.`,
+        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Offre clé en main, chiffrée selon le périmètre.`
       ],
       en: [
-        `NSY web creation means next-generation sites and platforms with AI at the core: LLM integration (Claude, OpenAI, Mistral), business chatbots, semantic search, content generation, agents — all built for performance and SEO. From €5,800 ex-VAT.`,
-        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. Turnkey from €5,800 ex-VAT.`
+        `NSY web creation means next-generation sites and platforms with AI at the core: LLM integration (Claude, OpenAI, Mistral), business chatbots, semantic search, content generation, agents — all built for performance and SEO — pricing based on your need.`,
+        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. A turnkey offering, quoted on scope.`
       ]
     },
     {

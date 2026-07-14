@@ -304,7 +304,7 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
      the 2-row layout that the FR (wider) labels produce naturally. */
   .nav-break {
     display: block;
-    order: 1;            /* same as .nav-cta; sits right after it in DOM */
+    order: 3;            /* après social + drapeaux : force les liens en rangée 2 */
     flex: 0 0 100%;
     height: 0;
     margin: 0;
@@ -319,10 +319,12 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
     gap: 5px;
   }
 
+  /* Rangée 1 = brand + social + drapeaux (l'espace de l'ancien CTA) ;
+     rangée 2 = les 5 liens seuls — « Réalisations » tient ainsi jusqu'à 320px. */
   .nav-links {
-    order: 2;
+    order: 4;
     margin-left: 0;
-    flex: 1 1 auto;
+    flex: 1 1 100%;
     justify-content: center;
     gap: 0;
   }
@@ -333,17 +335,17 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
   }
 
   .nav-social {
-    order: 3;
+    order: 1;
     display: flex;
-    margin-left: 2px;
+    margin-left: auto;
     padding-left: 6px;
-    border-left: 1px solid var(--line);
+    border-left: 0;
     gap: 0;
   }
   .nav-icon { width: 26px; height: 26px; }
   .nav-icon svg { width: 14px; height: 14px; }
   .nav-lang {
-    order: 4;
+    order: 2;
     padding-left: 4px;
     border-left: 0;
     gap: 0;
