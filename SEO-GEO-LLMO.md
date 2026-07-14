@@ -40,7 +40,7 @@ référencer ces `@id` plutôt que redéclarer les entités.
 
 Les 8 paires FR/EN sont en ligne, conformes au gabarit : H1 unique, byline
 « Par Cédric Barme », JSON-LD BreadcrumbList + Service lié à `#org`
-(+ Offer 5 800 € sur creation-site-ia, DefinedTermSet généré du DOM sur le
+(+ Offer sans montant sur creation-site-ia — tarifs retirés du site en juillet 2026, DefinedTermSet généré du DOM sur le
 glossaire), maillage croisé entre pages piliers + FAQ + contact, CTA
 `.faisa-cta` en fin de page, hreflang/sitemap/footer/slug-map câblés.
 
@@ -58,7 +58,7 @@ Table de conception d'origine (conservée pour référence) :
 | `/expertise-kafka-messagerie.html` | Kafka & Artemis JMS pour la finance \| NSY | Streaming Kafka, messagerie Artemis/MQ : conception, HA, migration de brokers legacy. | Kafka et Artemis JMS en environnement financier | Kafka, Artemis JMS, MQ | Recherche d'expert | ★★ |
 | `/conformite-dora.html` | Conformité DORA : accompagnement technique \| NSY | DORA expliqué côté technique : cartographie TIC, tests de résilience, exigences prestataires. | DORA : la résilience opérationnelle, côté ingénierie | DORA, ACPR, AMF | Informationnelle → lead | ★★★ |
 | `/integration-claude-entreprise.html` | Intégrer Claude (Anthropic) dans une application métier \| NSY | Assistants documentaires, agents outillés, RAG : intégrer Claude proprement (coûts, quotas, confidentialité). | Intégrer Claude dans votre application métier | Claude, Anthropic, RAG, agents | Transactionnelle | ★★★ |
-| `/creation-site-ia.html` | Création de site web IA — forfait dès 5 800 € HT \| NSY | Site nouvelle génération avec IA intégrée : périmètre, méthode, délais, tarif clé en main. | Un site web propulsé par l'IA, clé en main | LLM, Next.js, Astro, SEO sémantique | Transactionnelle | ★★★ |
+| `/creation-site-ia.html` | Création de site web IA — offre clé en main (titre historique, tarif retiré depuis) \| NSY | Site nouvelle génération avec IA intégrée : périmètre, méthode, délais, tarif clé en main. | Un site web propulsé par l'IA, clé en main | LLM, Next.js, Astro, SEO sémantique | Transactionnelle | ★★★ |
 | `/glossaire-ia-web.html` | Glossaire IA & web : RAG, GEO, LLMO, agents… \| NSY | Les termes de l'IA appliquée au web, expliqués simplement par un praticien. | Le glossaire IA & web de NSY | RAG, GEO, LLMO, embeddings | Informationnelle (maillage) | ★★ |
 
 Pourquoi ça marche en GEO : les assistants citent les pages qui répondent à

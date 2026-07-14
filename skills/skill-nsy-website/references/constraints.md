@@ -25,9 +25,11 @@ requirements, not suggestions.
 insurance (architecture, audit, migration, compliance — ACPR/AMF/RGPD/DORA);
 (2) AI-powered web creation; bonus: in-house 3D animations/models.
 
-**Pricing:** AI web creation **from 5 800 € HT** (`€5,800 ex-VAT`). The figure
-9 800 was wrong — if you ever see it, it's stale. Price appears in: the
-services card (FR+EN) and the chatbot replies (FR+EN). Keep all in sync.
+**Pricing:** NO amount displayed anywhere (owner decision, July 2026) —
+pricing is « en fonction du besoin / devis après cadrage ». The old
+« from 5 800 € HT » (and the wrong 9 800) are both obsolete: never
+reintroduce a figure nor day-rate/fixed-fee wording. Applies to: services
+cards, chatbot, FAQ, pillar pages, JSON-LD Offers, llms.txt, README.
 
 ## 2. Stack (and what it is NOT)
 - Vanilla **HTML5 + CSS3 + JS**, zero framework, zero bundler.
@@ -131,7 +133,7 @@ visible page copy. When touching language, go through all layers:
   GDPR, why-NSY, contact + smalltalk + fallback.
 - **Per-message language detection**: reply in the language of the question
   (FR/EN), not just the page language. (Owner: "il parle anglais aussi".)
-- Keep facts accurate (price 5 800, founded 2018, etc.).
+- Keep facts accurate (no prices displayed, founded 2018, etc.).
 
 ## 7. Homepage structure / the "Conception 3D" section
 - The standalone Loisirs/Hobbies page was removed; its content is a homepage

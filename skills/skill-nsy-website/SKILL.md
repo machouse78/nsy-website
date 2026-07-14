@@ -23,10 +23,12 @@ must hold in every change.
   appear elsewhere — footer, contact card, About, JSON-LD, emails, chatbot,
   sitemap captions, etc. Only "France" (or at most "Centre-Val de Loire") is
   acceptable outside the legal pages.
-- AI web creation price: **from 5 800 € HT** / **€5,800 ex-VAT** — never 9 800.
-- Availability is **"now / immediate"** (owner is available immediately) — nav
-  CTA says "Disponible maintenant" / "Available now", no Q4-{year} date anywhere
-  (removed on owner request). Experience via `data-years` (career start 2012).
+- **NO prices displayed anywhere** (owner, July 2026): pricing is « en fonction du besoin / devis après cadrage » — never reintroduce an amount (the old « from 5 800 € HT » is obsolete) nor day-rate/fixed-fee wording.
+- **NO availability badge displayed** (owner, July 2026): the nav CTA
+  « Disponible maintenant » was removed. Availability is only discussed in
+  replies (3 clients max, scheduling assessed per request), never shown as a
+  status. No Q4-{year} date anywhere. Experience via `data-years` (career
+  start 2012).
 - **NO email address anywhere public** (owner request — spam harvesting):
   contact = the form + phone +33 6 72 94 71 06 + LinkedIn. This covers pages,
   chatbot, JSON-LD, llms.txt, README, error messages and the PHP auto-reply
@@ -35,7 +37,9 @@ must hold in every change.
 - **Static text uses absolute dates** ("depuis 2012", "fondée en 2018") instead
   of ageing counts ("14 ans") — the dynamic `data-years` spans are the only
   place the computed number lives.
-- Official profiles (JSON-LD sameAs + llms.txt): LinkedIn company page
+- Official profiles (JSON-LD sameAs + llms.txt; the nav/footer social icons
+  point to the COMPANY page, the personal profile stays only on the contact
+  « 30 min » card): LinkedIn company page
   https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn founder
   /in/cédric-barme · GitHub machouse78 · YouTube @new-software-yard.
 
@@ -76,8 +80,9 @@ must hold in every change.
   on sub-pages (jump back to the homepage section). Per-language partials carry
   the right active flag + EN/FR labels. The committed `.html` keeps the rendered
   markup (local `python -m http.server` preview + SEO still work; no runtime
-  include). The nav is intentionally 4 links (no per-section links) to avoid
-  overflow — add discoverability via the footer instead.
+  include). The nav has **5 links** (Accueil, Services, Réalisations, À propos,
+  Contact — Réalisations added on owner request, July 2026) and **no CTA
+  badge**. Other pages stay discoverable via the footer.
 - **A language change must be applied to the WHOLE site, every layer** — not
   just visible HTML copy. Check: visible text (FR+EN pages), **JS-injected UI
   strings** (button states, toasts in `js/app.js`, keyed by `pageLang`),

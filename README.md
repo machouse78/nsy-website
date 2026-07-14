@@ -40,7 +40,7 @@ Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
 | About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
 | **Conception 3D** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
 | Contact | `contact` | Formulaire (PHP) avec choix de service + canaux directs + mentions légales |
-| CTA banner | — | Bandeau « Disponible maintenant » avec spotlight souris suivant |
+| CTA banner | — | Bandeau d'appel à contact avec spotlight souris suivant |
 | Footer | — | Navigation + expertise + contact + réseaux sociaux |
 
 Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN), le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN, depuis la section Contact) et les **Réalisations** `realisations.html` / `portfolio.html` (EN, portfolio des sites clients — 1ʳᵉ réalisation : PRV Concept). Les vignettes des réalisations sont **capturées automatiquement** depuis les sites live (`npm run capture:realisations` → JPEG à la taille d'affichage, ~110 Ko) — à relancer avant un déploiement pour les rafraîchir ; les visiteurs ne reçoivent qu'une image statique (zéro iframe, zéro coût runtime).
@@ -81,7 +81,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **Animations & micro-interactions** (UX pass) : entrée hero échelonnée, reveal au scroll avec stagger par conteneur, **compteurs animés** au scroll-in (14+, 3 max…), **parallaxe souris** sur le visuel hero (5 plans de profondeur, lerp amorti, desktop uniquement), sheen sur le CTA principal, hovers étapes/chips/flèches, soulignés animés du footer, marquee en pause au survol — le tout **uniquement en `transform`/`opacity`**, rAF auto-stoppés au repos, et **`prefers-reduced-motion` intégral**
 - **Sphère hero** : vidéo `nsy-ia.mp4` en `object-fit: cover`, masquée en cercle, terminaux ASCII flottants
 - **Cards services** : au survol, l'image PNG cross-fade vers une vidéo MP4 ; retour à `currentTime = 0` au mouseleave
-- **CTA banner "Prochain créneau"** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
+- **CTA banner** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
 - **Section 3D `#creations`** :
   - **Vidéo YouTube** de la chaîne NSY, intégrée via `youtube-nocookie.com` (aucun cookie avant lecture)
   - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile ; **supersampling ×2 sur écrans non-Retina** (lignes lisses en DPR 1) et pastille « Faites pivoter » auto-masquée après la première manipulation
@@ -291,7 +291,7 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
 
-- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, prix 5 800 € HT…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
+- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, tarification en fonction du besoin…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
 - **`seo-geo-llmo`** — le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA, llms.txt, JSON-LD `@graph`, FAQ conversationnelle, inscriptions externes (Bing WT, propriété de domaine GSC, Wikidata, Google Business, backlinks) avec les pièges vécus et les méthodes de vérification.
 - **`frontend-design`** et **`video-to-website`** — les deux skills créatifs utilisés pour concevoir le site (design distinctif, site scroll-animé depuis une vidéo). Historiquement dans `.claude/skills/` (skills de projet) ; déplacés dans `skills/` + symlink pour être disponibles dans toutes les sessions.
