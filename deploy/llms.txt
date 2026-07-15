@@ -16,7 +16,7 @@ Points clés :
 
 - [Accueil (FR)](https://www.nsy.fr/) : présentation complète des deux offres, profil du fondateur, contact.
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
-- [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + création web IA), méthode, valeurs.
+- [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + création web IA), méthode, valeurs, démonstrateur 3D temps réel.
 - [À propos](https://www.nsy.fr/a-propos.html) : parcours de Cédric Barme, secteurs de référence, principes de travail.
 - [Contact](https://www.nsy.fr/contact.html) : formulaire, canaux directs, demande de faisabilité (réponse sous 48 h ouvrées).
 - [Conception 3D](https://www.nsy.fr/conception-3d.html) : animations et modèles 3D optimisés pour le web (démonstrateurs).

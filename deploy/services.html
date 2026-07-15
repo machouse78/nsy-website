@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Services — conseil technique & création web IA | NSY</title>
-<meta name="description" content="Deux offres NSY : conseil technique senior pour la finance et l'assurance, et création de sites web propulsés par l'IA. Méthode, domaines couverts, valeurs." />
+<meta name="description" content="Deux offres NSY : conseil technique senior pour la finance et l'assurance, et création de sites web propulsés par l'IA — avec 3D temps réel optimisée pour le web. Méthode, domaines couverts, valeurs." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.nsy.fr/services.html" />
 <link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
@@ -16,7 +16,7 @@
 <meta property="og:locale" content="fr_FR" />
 <meta property="og:url" content="https://www.nsy.fr/services.html" />
 <meta property="og:title" content="Services — conseil technique & création web IA | NSY" />
-<meta property="og:description" content="Deux offres NSY : conseil technique senior pour la finance et l'assurance, et création de sites web propulsés par l'IA. Méthode, domaines couverts, valeurs." />
+<meta property="og:description" content="Deux offres NSY : conseil technique senior pour la finance et l'assurance, et création de sites web propulsés par l'IA — avec 3D temps réel optimisée pour le web. Méthode, domaines couverts, valeurs." />
 <meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
@@ -24,7 +24,7 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Services — conseil technique & création web IA | NSY" />
-<meta name="twitter:description" content="Deux offres NSY : conseil technique senior pour la finance et l'assurance, et création de sites web propulsés par l'IA. Méthode, domaines couverts, valeurs." />
+<meta name="twitter:description" content="Deux offres NSY : conseil technique senior pour la finance et l'assurance, et création de sites web propulsés par l'IA — avec 3D temps réel optimisée pour le web. Méthode, domaines couverts, valeurs." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
@@ -34,6 +34,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<script type="module" src="https://unpkg.com/@google/model-viewer@4.2.0/dist/model-viewer.min.js"></script>
 
 <script type="application/ld+json">
 {
@@ -266,6 +267,62 @@
         <h3 style="font-size: 22px; margin-top: 10px;">Engagement</h3>
         <p style="margin-top: 10px; font-size: 14.5px;">Présence sur site ou hybride à Paris, La Défense ou en région.</p>
       </article>
+    </div>
+  </div>
+</section>
+<section class="block" id="creations">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Conception 3D</span>
+      <span class="line"></span>
+      <span class="mono">04 / Savoir-faire web</span>
+    </div>
+    <div class="section-head">
+      <h2>La 3D temps réel,<br /><span class="hero-cyan">au service de vos sites web.</span></h2>
+      <p class="lede">
+        La création web NSY intègre aussi de la 3D optimisée pour le navigateur — légère, interactive, esthétique cyber. Un exemple ci-dessous : un modèle en maillage, en rotation temps réel. Cliquez-glissez pour le faire pivoter.
+      </p>
+    </div>
+
+    <div class="hobbie-showcase" style="max-width: 720px; margin: 48px auto 0;">
+      <div class="model-stage" oncontextmenu="return false">
+        <model-viewer
+          class="hobbie-model"
+          id="renault-viewer"
+          src="public/renault-wireframe.glb"
+          alt="Renault R25 Baccara 1992 — modèle 3D en maillage interactif"
+          auto-rotate
+          auto-rotate-delay="2000"
+          rotation-per-second="-20deg"
+          camera-controls
+          interaction-prompt="none"
+          disable-zoom
+          disable-pan
+          shadow-intensity="0"
+          environment-image="neutral"
+          tone-mapping="neutral"
+          exposure="1.0"
+          bounds="tight"
+          camera-orbit="-30deg 75deg auto"
+          field-of-view="auto"
+          loading="lazy"
+          reveal="auto"
+        ></model-viewer>
+        <button class="model-expand" type="button"
+                data-label-open="Agrandir le modèle" data-label-close="Réduire le modèle"
+                aria-label="Agrandir le modèle" title="Agrandir">
+          <svg class="icon-expand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M16 21h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <svg class="icon-collapse" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3v3a2 2 0 0 1-2 2H3M21 8h-3a2 2 0 0 1-2-2V3M16 21v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/></svg>
+        </button>
+        <div class="model-hint mono">↻ Faites pivoter</div>
+      </div>
+      <div class="hobbie-caption">
+        <span class="mono">© NSY · propriété intellectuelle · reproduction interdite</span>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 32px;">
+      <a class="btn btn-ghost" href="conception-3d.html">Découvrir la Conception 3D <span class="arrow">→</span></a>
     </div>
   </div>
 </section>
