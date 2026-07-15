@@ -2503,7 +2503,15 @@ footer.foot {
 }
 .realisation-head h3 { font-size: 21px; margin: 0; letter-spacing: -0.01em; }
 .realisation-url { font-family: var(--font-mono); font-size: 12px; color: var(--accent); }
-.realisation-desc { color: var(--fg-2); font-size: 14.5px; line-height: 1.6; margin: 12px 0 16px; }
+.realisation-desc { color: var(--fg-2); font-size: 14.5px; line-height: 1.6; margin: 12px 0 14px; }
+/* Mini-fiche technique/SEO sous le besoin fonctionnel (fiche réalisation) */
+.realisation-specs { margin: 0 0 16px; display: grid; gap: 9px; }
+.realisation-specs > div { display: grid; gap: 3px; }
+.realisation-specs dt {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--accent);
+}
+.realisation-specs dd { margin: 0; color: var(--fg-3); font-size: 13px; line-height: 1.55; }
 .realisation-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .realisation-tags span {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
