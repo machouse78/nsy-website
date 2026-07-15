@@ -173,8 +173,9 @@ must hold in every change.
 ## Client realizations — DEDICATED PAGE (`realisations.html` / `portfolio.html`)
 - A **standalone bilingual page** (NOT a homepage section — owner moved it out),
   showing delivered client websites as a `.realisations-grid` of
-  `.realisation-card`s (screenshot thumbnail → live site, name, URL, description,
-  tags). First entry: **PRV Concept** (www.prv-concept.com), thumbnail
+  `.realisation-card`s (screenshot thumbnail → live site, name, URL, need +
+  technical/SEO specs, tags — see the "fiche réalisation" bullet below). First
+  entry: **PRV Concept** (www.prv-concept.com), thumbnail
   `public/prv-concept.jpg`. **Thumbnails are captured automatically from the
   live sites** via `npm run capture:realisations`
   (`scripts/capture-realisation.mjs`: headless render at 1440px desktop
@@ -182,6 +183,14 @@ must hold in every change.
   re-run before a deploy to refresh). To add a client: copy one
   `.realisation-card` block in **both** pages + add a capture line to the
   npm script.
+- **Card content = a compact "fiche réalisation" (owner request, July 2026)** —
+  each `.realisation-card` states, concisely (no over-detailing): (1) the
+  **functional need** in `.realisation-desc` (lead with a bold "Le besoin :" /
+  "The brief:"), then (2) a `<dl class="realisation-specs">` mini-sheet with a
+  **Technique/Tech** row (stack, framework-or-not, bilingual, hosting, notable
+  constraints) and a **SEO / GEO** row (structured data / sitemaps / canonicals
+  + generative-engine optimisation — GEO/LLMO), then (3) `.realisation-tags`.
+  Keep both languages symmetric. Same for every future client site.
 - **Reached from a button** "Voir nos réalisations" / "See our work" placed in
   the **Web·IA service card** `.svc-foot` (right of "Démarrer un projet", grouped
   in `.svc-actions`), plus the footer "Réalisations"/"Work" link → the page.
