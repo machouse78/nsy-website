@@ -197,14 +197,20 @@ must hold in every change.
   About profile card). `hidden` is kept only as the fallback line for old
   browsers. `scroll-padding-top` (84px desktop / 108px ≤940px) keeps anchors
   landing below the sticky nav.
-- The 3D-design content (eyebrow **"Conception 3D"** / **"3D Design"**) is a
-  **homepage section `#creations`** (after the "Principes de travail" /
-  "Working principles" block), not a standalone page; no top-nav link (the
-  footer link "Conception 3D" / "3D Design" points to it). Desktop = 2 columns (vertical YouTube **Short** left in
-  a ~340px portrait card, wireframe model larger right); mobile ≤920px stacks
-  (Short capped at 340px, centered). The animation is a **YouTube embed**
-  (youtube-nocookie.com, Short `bJPxWWbOFSM` — "Renault 25 Baccara V6 Turbo
-  Black Sherry", vertical 9:16 via `.hobbie-showcase.is-short`), not a local mp4.
+- The 3D-design content (eyebrow **"Conception 3D"** / **"3D Design"**) lives
+  on its **dedicated page** `conception-3d.html` / `3d-design.html` (footer +
+  chatbot link, NOT in the top nav) **and** as a **teaser section `#creations`
+  at the bottom of the Services page** (`services.html` / `services-en.html`,
+  owner request July 2026): the interactive wireframe model (`loading="lazy"`)
+  centered + a "Découvrir la Conception 3D" / "Explore 3D Design" CTA to the
+  full page. The dedicated page holds 2 items in a `.creations-grid` 2-col —
+  a vertical YouTube **Short** (left, ~340px portrait card) and the larger
+  wireframe model (right); mobile ≤920px stacks (Short capped at 340px,
+  centered). The animation is a **YouTube embed** (youtube-nocookie.com, Short
+  `bJPxWWbOFSM` — "Renault 25 Baccara V6 Turbo Black Sherry", vertical 9:16 via
+  `.hobbie-showcase.is-short`), not a local mp4. Both the dedicated page and
+  Services load `<model-viewer>` and give the model `id="renault-viewer"`
+  (unique within each page); the expand/lightbox JS keys off that id.
 - Mobile nav: compact 2-row layout up to **940px** (landscape phones included);
   the flags must stay inline in both languages.
 - Keep `text-size-adjust: 100%` + the overflow-x guards (Android Chrome
