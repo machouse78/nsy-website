@@ -32,7 +32,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 | Page | URL FR ↔ EN | Contenu |
 |---|---|---|
 | **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + bandeau CTA (→ Contact) |
-| **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs |
+| **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs + aperçu 3D (→ Conception 3D) |
 | **Réalisations** | `realisations.html` ↔ `portfolio.html` | Portfolio des sites clients (vignettes auto-capturées ; 1ʳᵉ : PRV Concept) |
 | **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme, signaux, parcours, secteurs, principes |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
@@ -83,10 +83,10 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **Sphère hero** : vidéo `nsy-ia.mp4` en `object-fit: cover`, masquée en cercle, terminaux ASCII flottants
 - **Cards services** : au survol, l'image PNG cross-fade vers une vidéo MP4 ; retour à `currentTime = 0` au mouseleave
 - **CTA banner** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
-- **Section 3D `#creations`** :
+- **Conception 3D** — page dédiée `conception-3d.html` / `3d-design.html` (section `#creations`), plus un **aperçu du modèle** en bas de la page Services :
   - **Vidéo YouTube** de la chaîne NSY, intégrée via `youtube-nocookie.com` (aucun cookie avant lecture)
   - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile ; **supersampling ×2 sur écrans non-Retina** (lignes lisses en DPR 1) et pastille « Faites pivoter » auto-masquée après la première manipulation
-  - Disposition **2 colonnes** sur desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px)
+  - Page dédiée en **2 colonnes** desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px) ; l'aperçu Services ne montre que le modèle (`loading="lazy"`) avec un lien « Découvrir la Conception 3D »
 - **Chatbot intelligent** (voir ci-dessous)
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
 - **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **7 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
@@ -117,7 +117,7 @@ Les identifiants SMTP vivent dans `_secret/config.php` (gitignored). Modèle fou
 
 ## Pipeline wireframe 3D
 
-Le modèle `public/renault-wireframe.glb` (**660 Ko**, rendu filaire cyan néon) est généré depuis un `.blend` source via une chaîne reproductible (`scripts/`) :
+Le modèle `public/renault-wireframe.glb` (**575 Ko**, rendu filaire cyan néon) est généré depuis un `.blend` source via une chaîne reproductible (`scripts/`) :
 
 ```bash
 ./scripts/build-wireframe.sh
@@ -150,7 +150,11 @@ Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'e
 
 ```
 nsy-website/
-├── index.html / index-en.html          # Page principale FR / EN
+├── index.html / index-en.html          # Accueil (landing) FR / EN
+├── services.html / services-en.html     # Services : 2 offres + méthode + aperçu 3D FR / EN
+├── a-propos.html / about.html           # À propos : profil de Cédric Barme FR / EN
+├── contact.html / contact-en.html       # Contact : formulaire PHP + canaux directs FR / EN
+├── conception-3d.html / 3d-design.html  # Conception 3D : modèle wireframe + animation YouTube FR / EN
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
 ├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 7 étapes) FR / EN
@@ -203,7 +207,7 @@ nsy-website/
 ├── sitemap.xml / robots.txt
 ├── .htaccess                            # Apache : redirections, GZIP, cache, i18n, anti-hotlink
 ├── prepare-deploy.sh                    # Build du dossier deploy/
-├── deploy/                              # Généré (~14 Mo), à uploader dans public_html/
+├── deploy/                              # Généré (~12 Mo), à uploader dans public_html/
 ├── DEPLOIEMENT-INFOMANIAK.md            # Guide hébergement
 └── README.md                            # Ce fichier
 ```
@@ -224,7 +228,7 @@ open http://localhost:8080
 ./prepare-deploy.sh
 ```
 
-Le script reconstruit `deploy/` à zéro, copie **uniquement les assets utilisés** (pages FR+EN, `contact.php`, `vendor/`, `_secret/`, CSS/JS, médias, `renault-wireframe.glb`), vérifie la présence des fichiers requis et les références dans `index.html`, affiche les tailles, et sort en code 1 si quelque chose manque (utilisable en CI). Bundle final ≈ **16 Mo**.
+Le script reconstruit `deploy/` à zéro, copie **uniquement les assets utilisés** (pages FR+EN, `contact.php`, `vendor/`, `_secret/`, CSS/JS, médias, `renault-wireframe.glb`), vérifie la présence des fichiers requis et les références dans `index.html`, affiche les tailles, et sort en code 1 si quelque chose manque (utilisable en CI). Bundle final ≈ **12 Mo**.
 
 ## Déployer sur Infomaniak
 
@@ -238,7 +242,7 @@ Le script reconstruit `deploy/` à zéro, copie **uniquement les assets utilisé
 
 Le `.htaccess` configure :
 - **Redirection canonique** unique vers `https://www.nsy.fr` (http→https **et** non-www→www, un seul 301)
-- **Redirections 301** des anciennes URLs (slugs obsolètes → section `#creations` / nouveaux slugs)
+- **Redirections 301** des anciennes URLs vers les nouveaux slugs (ex. `hobbie.html` → `conception-3d.html`, `mentions-legales-en.html` → `legal-notice.html`)
 - **Auto-détection de langue** (`Accept-Language`) sur la racine
 - **Anti-hotlink** sur les médias propriétaires (`mp4`, `glb`…) via contrôle du Referer
 - **GZIP**, **cache** (1 mois médias, 1 semaine CSS/JS, 1h HTML), **security headers** (`X-Frame-Options`, `Strict-Transport-Security`…)
