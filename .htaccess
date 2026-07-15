@@ -89,12 +89,12 @@ ErrorDocument 404 /index.html
     # ───── Redirections 301 anciennes URLs → nouvelles ─────
     # Ces 301 préservent le SEO et évitent les 404 depuis les backlinks /
     # Search Console.
-    # Les pages Loisirs/Hobbies autonomes ont été fusionnées dans une section
-    # de la page d'accueil (#creations) — toutes leurs anciennes URLs y pointent.
-    RewriteRule ^hobbie\.html$              /#creations          [L,R=301]
-    RewriteRule ^hobbie-en\.html$           /index-en.html#creations [L,R=301]
-    RewriteRule ^loisirs\.html$             /#creations          [L,R=301]
-    RewriteRule ^hobbies\.html$             /index-en.html#creations [L,R=301]
+    # Les anciennes pages Loisirs/Hobbies pointent vers la page dédiée
+    # Conception 3D (conception-3d.html / 3d-design.html).
+    RewriteRule ^hobbie\.html$              /conception-3d.html  [L,R=301]
+    RewriteRule ^hobbie-en\.html$           /3d-design.html      [L,R=301]
+    RewriteRule ^loisirs\.html$             /conception-3d.html  [L,R=301]
+    RewriteRule ^hobbies\.html$             /3d-design.html      [L,R=301]
     # Pages légales : traductions de slug FR ↔ EN.
     RewriteRule ^mentions-legales-en\.html$ /legal-notice.html   [L,R=301]
     RewriteRule ^confidentialite-en\.html$  /privacy.html        [L,R=301]
