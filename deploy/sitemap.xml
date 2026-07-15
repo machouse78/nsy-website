@@ -4,7 +4,7 @@
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1"
         xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
 
-  <!-- Page principale FR (one-page : Accueil / Services / À propos / Contact via ancres) -->
+  <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
     <lastmod>2026-05-17</lastmod>
@@ -86,26 +86,78 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/" />
   </url>
 
-  <!-- Sections de la page (ancres) — utiles pour les featured snippets Google -->
+  <!-- Pages du menu (structure multi-pages, juillet 2026) -->
   <url>
-    <loc>https://www.nsy.fr/#services</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://www.nsy.fr/services.html</loc>
+    <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/services-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/services.html" />
   </url>
-
   <url>
-    <loc>https://www.nsy.fr/#about</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://www.nsy.fr/services-en.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/services-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/services.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/a-propos.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/a-propos.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/a-propos.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/about.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/a-propos.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/about.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/a-propos.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/contact.html</loc>
+    <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/contact.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/contact-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/contact.html" />
   </url>
-
   <url>
-    <loc>https://www.nsy.fr/#contact</loc>
-    <lastmod>2026-05-17</lastmod>
+    <loc>https://www.nsy.fr/contact-en.html</loc>
+    <lastmod>2026-07-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/contact.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/contact-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/contact.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/conception-3d.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conception-3d.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/3d-design.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/conception-3d.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/3d-design.html</loc>
+    <lastmod>2026-07-07</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conception-3d.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/3d-design.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/conception-3d.html" />
   </url>
 
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
@@ -135,14 +187,6 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/realisations.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/portfolio.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/realisations.html" />
-  </url>
-
-  <!-- Loisirs & créations 3D (section ancre de la page d'accueil) -->
-  <url>
-    <loc>https://www.nsy.fr/#creations</loc>
-    <lastmod>2026-06-10</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
   </url>
 
   <!-- Pages légales FR -->

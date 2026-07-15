@@ -3,7 +3,7 @@
 [![Site](https://img.shields.io/badge/site-www.nsy.fr-00E5FF)](https://www.nsy.fr)
 [![Hébergement](https://img.shields.io/badge/h%C3%A9bergement-Infomaniak-1AB7EA)](https://www.infomaniak.com)
 
-Site one-page **bilingue (FR/EN)** pour **NSY**, EURL fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
+Site **multi-pages bilingue (FR/EN)** pour **NSY**, EURL fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
 
 ## Direction artistique
 
@@ -27,23 +27,20 @@ Design **"Cyber Cabinet"** — palette navy profond + cyan électrique + accent 
 
 ## Structure du site
 
-Page unique (FR `index.html` / EN `index-en.html`) avec ancres :
+Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **landing** qui renvoie vers les pages dédiées.
 
-| Section | id | Contenu |
+| Page | URL FR ↔ EN | Contenu |
 |---|---|---|
-| Hero | `top` | Headline + CTA + sphère vidéo `nsy-ia.mp4` + terminaux ASCII flottants |
-| Marquee | — | Bandeau défilant des domaines couverts |
-| Capabilities | — | 2 cards : Conseil senior / Création web IA |
-| Process | — | 4 étapes : Discovery → Design → Build → Handover |
-| Trust strip | — | 3 valeurs : Indépendance / Confidentialité / Engagement |
-| Services | `services` | 2 cards détaillées avec swap image ↔ vidéo au survol. La card Web·IA renvoie vers la page **Réalisations** (bouton « Voir nos réalisations ») |
-| About | `about` | Profil Cédric Barme, signaux clés, parcours, principes |
-| **Conception 3D** | `creations` | **Section 3D** : vidéo YouTube (chaîne NSY) + modèle wireframe interactif — 2 colonnes desktop, empilé mobile |
-| Contact | `contact` | Formulaire (PHP) avec choix de service + canaux directs + mentions légales |
-| CTA banner | — | Bandeau d'appel à contact avec spotlight souris suivant |
-| Footer | — | Navigation + expertise + contact + réseaux sociaux |
+| **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + bandeau CTA (→ Contact) |
+| **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs |
+| **Réalisations** | `realisations.html` ↔ `portfolio.html` | Portfolio des sites clients (vignettes auto-capturées ; 1ʳᵉ : PRV Concept) |
+| **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme, signaux, parcours, secteurs, principes |
+| **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
+| **Conception 3D** | `conception-3d.html` ↔ `3d-design.html` | Modèle wireframe Renault interactif + animation YouTube (démonstrateurs 3D) |
 
-Pages annexes : `mentions-legales.html` / `legal-notice.html` (EN), `confidentialite.html` / `privacy.html` (EN), le **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (EN, depuis la section Contact) et les **Réalisations** `realisations.html` / `portfolio.html` (EN, portfolio des sites clients — 1ʳᵉ réalisation : PRV Concept). Les vignettes des réalisations sont **capturées automatiquement** depuis les sites live (`npm run capture:realisations` → JPEG à la taille d'affichage, ~110 Ko) — à relancer avant un déploiement pour les rafraîchir ; les visiteurs ne reçoivent qu'une image statique (zéro iframe, zéro coût runtime).
+Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **5 liens** (Accueil, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
+
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html`, pages légales.
 
 ## Bilingue (FR / EN)
 
@@ -65,10 +62,14 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `integration-claude-entreprise.html` | `claude-integration.html` |
 | `creation-site-ia.html` | `ai-website-creation.html` |
 | `glossaire-ia-web.html` | `ai-web-glossary.html` |
+| `services.html` | `services-en.html` |
+| `a-propos.html` | `about.html` |
+| `contact.html` | `contact-en.html` |
+| `conception-3d.html` | `3d-design.html` |
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 28 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 36 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -171,7 +172,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
 ├── scripts/                             # Outillage build (3D + synchro partials)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 28 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 36 pages (npm run partials)
 │   ├── capture-realisation.mjs          # Vignette Réalisations auto (npm run capture:realisations)
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
@@ -244,8 +245,8 @@ Le `.htaccess` configure :
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 28 pages + ancres + images clés + vidéos, avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 28 pages
+- **Sitemap** : 36 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos, avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 36 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`

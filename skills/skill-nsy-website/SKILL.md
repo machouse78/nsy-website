@@ -5,7 +5,7 @@ description: Conventions, facts, and workflow for the NSY website project (nsy.f
 
 # NSY website — project rules
 
-Static bilingual (FR/EN) one-page site for **NSY**, EURL of **Cédric Barme**.
+Static **multi-page** bilingual (FR/EN) site for **NSY**, EURL of **Cédric Barme**.
 Stack: **vanilla HTML/CSS/JS, no framework/bundler**; PHP backend for the
 contact form (PHPMailer + Infomaniak SMTP + Cloudflare Turnstile);
 `<model-viewer>` 4.2.0 for 3D. Hosted on **Infomaniak**. It is **NOT**
@@ -54,7 +54,8 @@ must hold in every change.
 ## Bilingual (FR/EN) — every new page or link must stay symmetric
 - One file per language, **real translated slugs** (mentions-legales↔legal-notice,
   confidentialite↔privacy, faisabilite↔feasibility, realisations↔portfolio,
-  plus the 8 wave-2 pillar pairs: expertise-migration-java-ee↔java-ee-migration,
+  services↔services-en, a-propos↔about, contact↔contact-en,
+  conception-3d↔3d-design, plus the 8 wave-2 pillar pairs: expertise-migration-java-ee↔java-ee-migration,
   expertise-wildfly-jboss↔wildfly-jboss-expert, etc.) — EXCEPT the home
   (`index.html` ↔ `index-en.html`) and the FAQ (`faq.html` ↔ `faq-en.html`)
   which use the -en suffix. **Source of truth: `SLUG_FR_TO_EN` in `js/app.js`.**
@@ -71,7 +72,7 @@ must hold in every change.
 - To change the nav or footer: **edit the partial(s)**, then run
   `node scripts/sync-partials.mjs` (or `npm run partials`). It rewrites the
   regions marked `<!-- @partial:nav -->…<!-- @endpartial:nav -->` /
-  `…:footer…` in **all 28 pages** at once (idempotent). `prepare-deploy.sh`
+  `…:footer…` in **all 36 pages** at once (idempotent). `prepare-deploy.sh`
   also runs it automatically. **Do NOT hand-edit `<nav>`/`<footer>` inside a
   page** — your change will be overwritten on the next sync, and you'd only
   touch one page anyway.
@@ -83,6 +84,20 @@ must hold in every change.
   include). The nav has **5 links** (Accueil, Services, Réalisations, À propos,
   Contact — Réalisations added on owner request, July 2026) and **no CTA
   badge**. Other pages stay discoverable via the footer.
+- **Multi-page structure (owner, July 2026):** the site is NO LONGER
+  one-page. Each top-nav item is its own page — the home (`index.html` /
+  `index-en.html`) is a **landing** (hero + marquee + an offers teaser →
+  Services, a profile teaser → À propos, a CTA banner → Contact) and links
+  out to `services.html`·`services-en.html`, `a-propos.html`·`about.html`,
+  `contact.html`·`contact-en.html`, `realisations.html`·`portfolio.html`.
+  **`conception-3d.html`·`3d-design.html`** is its own page too (footer +
+  chatbot link, NOT in the top nav). The contact **form** now lives on the
+  Contact page (still posts to `contact.php`, unchanged); the 3D
+  `<model-viewer>` lives on the Conception 3D page. In-page `#services` /
+  `#about` / `#contact` / `#creations` anchors were rewritten to real page
+  URLs everywhere (nav, footer, chatbot, sitemap, llms.txt). **No hash
+  anchors survive in the sitemap** — fragments can't be 301-redirected, so
+  the old `/#services` URLs were removed, not aliased.
 - **A language change must be applied to the WHOLE site, every layer** — not
   just visible HTML copy. Check: visible text (FR+EN pages), **JS-injected UI
   strings** (button states, toasts in `js/app.js`, keyed by `pageLang`),

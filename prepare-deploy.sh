@@ -34,6 +34,10 @@ cp mentions-legales.html deploy/
 cp confidentialite.html  deploy/
 cp faisabilite.html      deploy/
 cp realisations.html     deploy/
+cp services.html         deploy/
+cp a-propos.html         deploy/
+cp contact.html          deploy/
+cp conception-3d.html    deploy/
 cp faq.html              deploy/
 cp expertise-migration-java-ee.html    deploy/
 cp expertise-wildfly-jboss.html        deploy/
@@ -57,6 +61,10 @@ cp legal-notice.html  deploy/
 cp privacy.html   deploy/
 cp feasibility.html   deploy/
 cp portfolio.html   deploy/
+cp services-en.html deploy/
+cp about.html       deploy/
+cp contact-en.html  deploy/
+cp 3d-design.html   deploy/
 cp faq-en.html    deploy/
 cp java-ee-migration.html           deploy/
 cp wildfly-jboss-expert.html        deploy/
@@ -128,6 +136,14 @@ required=(
   "deploy/feasibility.html"
   "deploy/realisations.html"
   "deploy/portfolio.html"
+  "deploy/services.html"
+  "deploy/services-en.html"
+  "deploy/a-propos.html"
+  "deploy/about.html"
+  "deploy/contact.html"
+  "deploy/contact-en.html"
+  "deploy/conception-3d.html"
+  "deploy/3d-design.html"
   "deploy/faq.html"
   "deploy/faq-en.html"
   "deploy/expertise-migration-java-ee.html"
