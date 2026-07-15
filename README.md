@@ -3,6 +3,8 @@
 [![Site](https://img.shields.io/badge/site-www.nsy.fr-00E5FF)](https://www.nsy.fr)
 [![Hébergement](https://img.shields.io/badge/h%C3%A9bergement-Infomaniak-1AB7EA)](https://www.infomaniak.com)
 
+🇫🇷 **Français** · [🇬🇧 English](README.en.md)
+
 Site **multi-pages bilingue (FR/EN)** pour **NSY**, EURL fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
 
 ## Direction artistique
@@ -209,7 +211,8 @@ nsy-website/
 ├── prepare-deploy.sh                    # Build du dossier deploy/
 ├── deploy/                              # Généré (~12 Mo), à uploader dans public_html/
 ├── DEPLOIEMENT-INFOMANIAK.md            # Guide hébergement
-└── README.md                            # Ce fichier
+├── README.md                            # Ce fichier (FR)
+└── README.en.md                         # Version anglaise
 ```
 
 ## Tester en local
@@ -312,7 +315,7 @@ Le dépôt versionne deux [skills Claude Code](https://docs.claude.com/en/docs/c
 
 ## Contact
 
-- **Formulaire** : [www.nsy.fr/#contact](https://www.nsy.fr/#contact) (réponse sous 48 h ouvrées)
+- **Formulaire** : [www.nsy.fr/contact.html](https://www.nsy.fr/contact.html) (réponse sous 48 h ouvrées)
 - **LinkedIn** : [linkedin.com/in/cédric-barme](https://www.linkedin.com/in/c%C3%A9dric-barme/)
 - **GitHub** : [github.com/machouse78/nsy-website](https://github.com/machouse78/nsy-website)
 - **Localisation** : France (missions principalement en distanciel)
