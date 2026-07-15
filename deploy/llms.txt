@@ -9,13 +9,17 @@ Points clés :
 - Création web IA : offre clé en main, tarification en fonction du besoin (devis après cadrage).
 - Zone : France entière et Europe, principalement à distance ; présence possible à Paris / La Défense et en région.
 - Langues : français, anglais.
-- Contact : formulaire https://www.nsy.fr/#contact · téléphone +33 6 72 94 71 06 · LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn fondateur https://www.linkedin.com/in/cédric-barme/ (réponse sous 48 h ouvrées).
+- Contact : formulaire https://www.nsy.fr/contact.html · téléphone +33 6 72 94 71 06 · LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn fondateur https://www.linkedin.com/in/cédric-barme/ (réponse sous 48 h ouvrées).
 - Entité Wikidata : https://www.wikidata.org/wiki/Q140447227 (SIREN 842 078 453, registre officiel : https://annuaire-entreprises.data.gouv.fr/entreprise/842078453).
 
 ## Pages principales
 
 - [Accueil (FR)](https://www.nsy.fr/) : présentation complète des deux offres, profil du fondateur, contact.
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
+- [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + création web IA), méthode, valeurs.
+- [À propos](https://www.nsy.fr/a-propos.html) : parcours de Cédric Barme, secteurs de référence, principes de travail.
+- [Contact](https://www.nsy.fr/contact.html) : formulaire, canaux directs, demande de faisabilité (réponse sous 48 h ouvrées).
+- [Conception 3D](https://www.nsy.fr/conception-3d.html) : animations et modèles 3D optimisés pour le web (démonstrateurs).
 - [FAQ](https://www.nsy.fr/faq.html) : plus de 50 questions/réponses sur les expertises (WildFly, OpenShift, migration Java EE, intégration Claude/OpenAI/Mistral, tarifs, process).
 - [Migration Java EE / Jakarta EE](https://www.nsy.fr/expertise-migration-java-ee.html) : moderniser un socle sans big bang ni interruption de production.
 - [WildFly · JBoss EAP](https://www.nsy.fr/expertise-wildfly-jboss.html) : tuning, HA, montées de version des serveurs d'applications.
@@ -35,4 +39,4 @@ Points clés :
 
 ## In English
 
-NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, priced on the need. Based in Centre-Val de Loire, France; works remotely across France and Europe. Contact: https://www.nsy.fr/index-en.html#contact
+NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, priced on the need. Based in Centre-Val de Loire, France; works remotely across France and Europe. Contact: https://www.nsy.fr/contact-en.html

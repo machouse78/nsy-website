@@ -169,8 +169,10 @@
     escalate?.addEventListener('click', () => {
       panel.classList.remove('open');
       fab.classList.remove('open');
+      // Site multi-pages : la section contact vit sur contact.html / contact-en.html.
       const c = document.getElementById('contact');
       if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      else window.location.href = pageLang === 'en' ? 'contact-en.html' : 'contact.html';
     });
   }
 
@@ -223,7 +225,7 @@
   // The 3D creations now live in a section of the homepage (#creations),
   // not a standalone page. The chatbot only runs on the index pages, so a
   // same-page anchor works for both languages.
-  const hobbiePath = '#creations';
+  const hobbiePath = pageLang === 'en' ? 'the 3D Design page' : 'la page Conception 3D';
 
   // ───── Chatbot knowledge engine (rule-based, bilingual) ─────
   // Each intent declares accent-free keyword cues + several response variants
@@ -350,12 +352,12 @@
       cues: ['3d','blender','wireframe','animation','modele','rendu','render','voiture','renault','baccara',
               'loisir','hobby','hobbies','conception','youtube'],
       fr: [
-        `La 3D fait partie des cordes créatives : rendus Blender optimisés pour le web, légers et rapides. Deux exemples concrets dans la section Conception 3D — une animation 3D (vidéo YouTube) et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : section ${hobbiePath}.`,
-        `Oui, animations et modèles 3D maison — du Blender pensé pour le web (zéro ralentissement). Le wireframe cyan de la Renault R25 dans la section ${hobbiePath} est interactif : cliquez-glissez pour le faire tourner. Et oui, ça aussi ça peut s'intégrer à votre site.`
+        `La 3D fait partie des cordes créatives : rendus Blender optimisés pour le web, légers et rapides. Deux exemples concrets sur la page Conception 3D — une animation 3D (vidéo YouTube) et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : ${hobbiePath}.`,
+        `Oui, animations et modèles 3D maison — du Blender pensé pour le web (zéro ralentissement). Le wireframe cyan de la Renault R25 sur ${hobbiePath} est interactif : cliquez-glissez pour le faire tourner. Et oui, ça aussi ça peut s'intégrer à votre site.`
       ],
       en: [
-        `3D is one of the creative strings: Blender renders optimised for the web — light and fast. Two live examples in the 3D Design section — a 3D animation (YouTube video) and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: ${hobbiePath} section.`,
-        `Yes, in-house 3D animations and models — Blender built for the web (no slowdown). The cyan Renault R25 wireframe in the ${hobbiePath} section is interactive: click and drag to spin it. And yes, this can be embedded into your site too.`
+        `3D is one of the creative strings: Blender renders optimised for the web — light and fast. Two live examples on the 3D Design page — a 3D animation (YouTube video) and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: ${hobbiePath}.`,
+        `Yes, in-house 3D animations and models — Blender built for the web (no slowdown). The cyan Renault R25 wireframe on ${hobbiePath} is interactive: click and drag to spin it. And yes, this can be embedded into your site too.`
       ]
     },
     {
@@ -468,12 +470,12 @@
       cues: ['contact','contacter','joindre','rendez vous','rdv','appel','telephone','tel','mail','email',
               'ecrire','parler','reach','meeting','call','book','get in touch','email you'],
       fr: [
-        `Le plus simple : le formulaire en bas de page (réponse sous 48 h ouvrées), ou par téléphone au +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
-        `Pour échanger : formulaire en bas de page, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
+        `Le plus simple : la page Contact (réponse sous 48 h ouvrées), ou par téléphone au +33 (0)6 72 94 71 06. Vous pouvez aussi cliquer sur « Parler à Cédric → » juste en dessous pour aller au formulaire.`,
+        `Pour échanger : page Contact, ou un créneau de 30 min via LinkedIn. Réponse sous 48 h ouvrées avec une lecture honnête de votre besoin.`
       ],
       en: [
-        `Easiest path: the form at the bottom of the page (reply within 48 business hours), or by phone at +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
-        `To get in touch: the form at the bottom, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
+        `Easiest path: the Contact page (reply within 48 business hours), or by phone at +33 (0)6 72 94 71 06. You can also click "Talk to Cédric →" just below to jump to the form.`,
+        `To get in touch: the Contact page, or a 30-min slot via LinkedIn. Reply within 48 business hours, with an honest read of your need.`
       ]
     }
   ];
@@ -810,6 +812,10 @@
     'integration-claude-entreprise.html': 'claude-integration.html',
     'creation-site-ia.html': 'ai-website-creation.html',
     'glossaire-ia-web.html': 'ai-web-glossary.html',
+    'services.html': 'services-en.html',
+    'a-propos.html': 'about.html',
+    'contact.html': 'contact-en.html',
+    'conception-3d.html': '3d-design.html',
   };
   const SLUG_EN_TO_FR = Object.fromEntries(
     Object.entries(SLUG_FR_TO_EN).map(([fr, en]) => [en, fr])
