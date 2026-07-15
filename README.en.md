@@ -274,7 +274,6 @@ Goal: be understood and **cited** by ChatGPT, Claude, Gemini, Perplexity, Copilo
 |---|---|
 | Google Search Console — **domain property** (verified by TXT DNS at Infomaniak, the record must stay in place) | https://search.google.com/search-console?resource_id=sc-domain:nsy.fr |
 | Bing Webmaster Tools (feeds ChatGPT Search & Copilot) — verified by `msvalidate.01` meta | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
-| Wikidata entity (Knowledge Graph) | https://www.wikidata.org/wiki/Q140447227 |
 | Official registry (SIRENE) | https://annuaire-entreprises.data.gouv.fr/entreprise/842078453 |
 | LinkedIn company | https://www.linkedin.com/company/nsy-new-software-yard |
 | Editorial backlink | prv-concept.com → footer "Powered by NSY" |
