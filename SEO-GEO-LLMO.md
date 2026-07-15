@@ -103,7 +103,7 @@ Actions : soumettre le site à Brave (il suit Bing/crawl propre), llms.txt ✓
 **Gemini (Google)** — Google-Extended autorisé ✓. Gemini s'appuie sur
 l'index Google + le **Knowledge Graph** : le levier n°1 est d'exister comme
 entité — JSON-LD cohérent ✓, mais il manque un **Google Business Profile**
-et une éventuelle fiche **Wikidata** (voir §6).
+(voir §6).
 
 **Perplexity / Copilot / Grok** — Perplexity : index propre (PerplexityBot ✓)
 + citations privilégiant les pages « réponse directe » → la FAQ est le bon
@@ -119,9 +119,9 @@ même fait sur ≥2 sources indépendantes).
 **✅ Fait :**
 - **Bing Webmaster Tools** : site vérifié (meta msvalidate.01), sitemap
   soumis — https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr
-- **Wikidata** : https://www.wikidata.org/wiki/Q140447227 (SIREN, forme
-  juridique, fondation 03/09/2018, siège région, sourcé annuaire-entreprises).
-  Référencé dans les sameAs JSON-LD + llms.txt.
+- **Wikidata** : entité `Q140447227` **retirée des références NSY (juillet 2026,
+  décision propriétaire)** — plus déclarée dans les `sameAs` JSON-LD ni dans
+  llms.txt / llms-full.txt. Ne pas la réintroduire pour NSY.
 - **LinkedIn entreprise** : https://www.linkedin.com/company/nsy-new-software-yard —
   à jour, référencée dans sameAs + llms.txt.
 - **Backlink PRV Concept** : footer sitewide « Propulsé par [logo NSY] » →

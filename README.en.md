@@ -278,7 +278,7 @@ Goal: be understood and **cited** by ChatGPT, Claude, Gemini, Perplexity, Copilo
 | LinkedIn company | https://www.linkedin.com/company/nsy-new-software-yard |
 | Editorial backlink | prv-concept.com → footer "Powered by NSY" |
 
-The Wikidata QID and the LinkedIn company page are referenced in the JSON-LD `sameAs` and in `llms.txt` / `llms-full.txt` — any new external registration must be added there too.
+The LinkedIn company page is referenced in the JSON-LD `sameAs` and in `llms.txt` / `llms-full.txt` — any new external registration must be added there too.
 
 ### Open Graph & Twitter Card
 

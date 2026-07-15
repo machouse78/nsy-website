@@ -278,7 +278,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 | LinkedIn entreprise | https://www.linkedin.com/company/nsy-new-software-yard |
 | Backlink éditorial | prv-concept.com → footer « Propulsé par NSY » |
 
-Le QID Wikidata et la page LinkedIn entreprise sont référencés dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
+La page LinkedIn entreprise est référencée dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
 
 ### Open Graph & Twitter Card
 
