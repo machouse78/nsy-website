@@ -97,3 +97,49 @@ first-paint cost matters.
 
 Measure before/after with the headless method (count playing videos, sum
 `w*h*fps`, check `animationPlayState`). See `verify-headless.md`.
+
+## 6. Responsive renderer-swap: gate on a JS class, not the width media query
+Two-renderer heroes are common: desktop plays an **alpha WebM** `<video>`;
+mobile/iOS (no alpha-video) decodes an MP4 into a `<canvas>` (blended so the
+black key drops out). The trap is deciding the renderer **once at load** from
+`matchMedia`, while CSS swaps them **by width**:
+
+```js
+// BAD: decision frozen at load; CSS does the visual swap by width
+var isMobile = matchMedia('(max-width: 1024px)').matches;
+if (isMobile) { video.remove(); initCanvasPipeline(); }
+```
+```css
+/* BAD: width alone reveals a canvas that may never have been initialized */
+@media (max-width: 1024px){ .engine-video{display:none} .engine-canvas{display:block} }
+```
+Failure: page **loaded wide, then resized below 1024** → CSS hides the working
+WebM and shows a **blank canvas the JS never drew to** → only the halo/background
+remains. No console error — a silent black hole.
+
+Fix — the JS class is the single source of truth for *which* renderer is live:
+```js
+if (isMobile) {
+  if (!canvas || !src.dataset.src) return;   // no canvas → keep the WebM
+  heroImg.classList.add('use-canvas');       // ONLY when we truly init canvas
+  video.remove();
+  initCanvasPipeline();
+}
+```
+```css
+/* renderer swap keyed off the class (any width) */
+.hero-img.use-canvas .engine-video { display: none; }
+.hero-img.use-canvas .engine-canvas { display: block; }
+/* the width media query keeps LAYOUT only (order, size, positioning),
+   and makes the WebM fit if it stays shown on a shrunk desktop: */
+@media (max-width: 1024px){ .hero-img .engine-video{ object-fit: contain } }
+```
+Now: real mobile load → `use-canvas` → canvas. Desktop load→shrink → no class →
+the WebM (which works on desktop at any width) stays. Verify BOTH directions.
+
+**Verifying in headless/preview:** autoplay is blocked without a user gesture,
+so the video sits `paused` at `currentTime 0`; if its opacity is driven by a
+`timeupdate`/rAF fade, it stays `opacity:0` — visually identical to the bug.
+Don't trust the blank paint. Assert via DOM that the element is present,
+`display:block`, in-viewport, canvas `display:none`; then force
+`v.currentTime=2; v.style.opacity=1` and screenshot to prove the frame renders.
