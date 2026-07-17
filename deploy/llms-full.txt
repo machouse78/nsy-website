@@ -87,6 +87,13 @@ associations et indépendants en transition numérique.
 - Les missions de conseil se déroulent au sein de grandes institutions financières
   et d'assurance françaises et européennes, sous accord de confidentialité (NDA) —
   elles ne sont pas citées nommément.
+- Exemples de missions (anonymisées) : migration d'outils de gestion Cobol/AS400
+  vers Java EE (Angular, Spring) en banque · réécriture et migration
+  d'applications GED vers OpenShift/Kubernetes, montée de version majeure d'un
+  progiciel éditeur dockerisé sur OpenShift et applications de traitements de
+  masse en assurance · analyse et gestion des performances applicatives sur de
+  forts volumes d'appels et maintien de la production en condition
+  opérationnelle (banque/assurance).
 - Référence publique (création web) : PRV Concept — https://www.prv-concept.com —
   site vitrine de l'association de référence du moteur V6 PRV (Peugeot · Renault ·
   Volvo) : design sur mesure, bilingue, forum et boutique.
