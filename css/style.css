@@ -2519,6 +2519,18 @@ footer.foot {
 }
 @media (max-width: 560px) { .realisation-body { padding: 18px 18px 22px; } }
 
+/* Grille de liens vers les pages d'expertise (page Services) */
+.expertise-links { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 40px; }
+.expertise-links a {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 16px 18px; border: 1px solid var(--line); border-radius: 12px;
+  color: var(--fg-1); font-weight: 500; font-size: 15px;
+  transition: border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.expertise-links a:hover { border-color: var(--accent); background: rgba(0,229,255,0.05); transform: translateY(-2px); }
+.expertise-links a .arrow { color: var(--accent); }
+@media (max-width: 640px) { .expertise-links { grid-template-columns: 1fr; } }
+
 /* ───── Focus visible (accessibilité clavier) ───── */
 .nav-link:focus-visible {
   outline: 2px solid var(--accent);
