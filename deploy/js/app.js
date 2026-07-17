@@ -339,12 +339,12 @@
               'dora','fintech','reglement','regule','conformite','bank','banking','insurance','insurer',
               'regulated','compliance'],
       fr: [
-        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, plateformes de trading et de risque temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA).`,
-        `Oui — finance et assurance sont le terrain principal de Cédric : ${XP} ans en institutions financières françaises, sur des systèmes critiques et régulés. Migration Java EE, supervision de production, conformité (ACPR, AMF, DORA). Si votre contexte est régulé, c'est exactement la zone de confort.`
+        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, plateformes de trading et de risque temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA). Et en mission, l'expertise IA de NSY sert aussi la productivité de vos équipes : automatisation, outillage.`,
+        `Oui — finance et assurance sont le terrain principal de Cédric : ${XP} ans en institutions financières françaises, sur des systèmes critiques et régulés. Migration Java EE, supervision de production, conformité (ACPR, AMF, DORA). Si votre contexte est régulé, c'est exactement la zone de confort. Bonus : l'apport d'expertise IA en cours de mission, côté productivité.`
       ],
       en: [
-        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time trading and risk platforms, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA).`,
-        `Yes — finance and insurance are Cédric's main ground: ${XP} years inside French financial institutions, on critical, regulated systems. Java EE migration, production oversight, compliance (ACPR, AMF, DORA). If your context is regulated, that's exactly the comfort zone.`
+        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time trading and risk platforms, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA). On-mission, NSY's AI expertise also lifts team productivity: automation and tooling.`,
+        `Yes — finance and insurance are Cédric's main ground: ${XP} years inside French financial institutions, on critical, regulated systems. Java EE migration, production oversight, compliance (ACPR, AMF, DORA). If your context is regulated, that's exactly the comfort zone. Bonus: AI expertise brought into the mission, on the productivity side.`
       ]
     },
     {
@@ -365,11 +365,11 @@
       cues: ['service','offre','offrez','prestation','proposez','propose','faites','what do you do',
               'what do you offer','offering','help with'],
       fr: [
-        `Deux offres : <b>(1) Conseil technique senior</b> pour la finance et l'assurance — architecture, audit, migration, conformité. <b>(2) Création web propulsée par l'IA</b> — sites, plateformes SaaS, intégration de LLM. En bonus : animations et modèles 3D pour le web. Sur quel axe puis-je préciser ?`,
+        `Deux offres : <b>(1) Conseil technique senior</b> pour la finance et l'assurance — architecture, audit, migration, conformité, expertise IA en mission. <b>(2) Création web propulsée par l'IA</b> — sites, plateformes SaaS, intégration de LLM. En bonus : animations et modèles 3D pour le web. Sur quel axe puis-je préciser ?`,
         `NSY couvre deux choses : du conseil technique senior (finance/assurance, systèmes critiques) et de la création web avec l'IA (sites, SaaS, chatbots, recherche sémantique). Plus une touche 3D. Dites-moi votre besoin et je vous oriente.`
       ],
       en: [
-        `Two offerings: <b>(1) Senior technical consulting</b> for finance & insurance — architecture, audit, migration, compliance. <b>(2) AI-powered web creation</b> — sites, SaaS platforms, LLM integration. Bonus: 3D animations and models for the web. Which one should I expand on?`,
+        `Two offerings: <b>(1) Senior technical consulting</b> for finance & insurance — architecture, audit, migration, compliance, on-mission AI expertise. <b>(2) AI-powered web creation</b> — sites, SaaS platforms, LLM integration. Bonus: 3D animations and models for the web. Which one should I expand on?`,
         `NSY does two things: senior technical consulting (finance/insurance, critical systems) and AI-powered web creation (sites, SaaS, chatbots, semantic search). Plus a 3D touch. Tell me your need and I'll point you the right way.`
       ]
     },
