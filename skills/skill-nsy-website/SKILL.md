@@ -186,11 +186,13 @@ must hold in every change.
 - **Card content = a compact "fiche réalisation" (owner request, July 2026)** —
   each `.realisation-card` states, concisely (no over-detailing): (1) the
   **functional need** in `.realisation-desc` (lead with a bold "Le besoin :" /
-  "The brief:"), then (2) a `<dl class="realisation-specs">` mini-sheet with a
-  **Technique/Tech** row (stack, framework-or-not, bilingual, hosting, notable
-  constraints) and a **SEO / GEO** row (structured data / sitemaps / canonicals
-  + generative-engine optimisation — GEO/LLMO), then (3) `.realisation-tags`.
-  Keep both languages symmetric. Same for every future client site.
+  "The brief:"), then (2) a `<dl class="realisation-specs">` mini-sheet with an
+  optional **Périmètre/Scope** row for larger builds (sections, entry counts,
+  standout features — PRV Concept has one), a **Technique/Tech** row (stack,
+  framework-or-not, bilingual, hosting, notable constraints) and a **SEO / GEO**
+  row (structured data / sitemaps / canonicals + generative-engine optimisation
+  — GEO/LLMO), then (3) `.realisation-tags`. Keep both languages symmetric.
+  Same for every future client site.
 - **Reached from a button** "Voir nos réalisations" / "See our work" placed in
   the **Web·IA service card** `.svc-foot` (right of "Démarrer un projet", grouped
   in `.svc-actions`), plus the footer "Réalisations"/"Work" link → the page.
