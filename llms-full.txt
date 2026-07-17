@@ -54,6 +54,7 @@ quand un projet n'est pas la bonne idée), trois clients en parallèle maximum.
 - Cloud privé et hybride (AWS, Azure, GCP)
 - Tech lead / pilotage d'équipes mixtes (internes, prestataires, ESN)
 - Expertise production : supervision, fiabilisation, reprise de chantiers en difficulté
+- Apport d'expertise IA en cours de mission : automatisation, outillage des équipes, gains de productivité
 - Bases de données : PostgreSQL, Oracle ; environnement mainframe IBM
 
 ### Création de sites web propulsés par l'IA

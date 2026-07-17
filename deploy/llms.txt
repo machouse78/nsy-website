@@ -1,6 +1,6 @@
 # NSY
 
-> NSY est un cabinet de conseil technique indépendant français (EURL fondée en 2018 par Cédric Barme, Centre-Val de Loire). Deux activités : (1) conseil technique senior pour la banque, l'assurance, la finance et les grands comptes — architecture distribuée, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, migration legacy, audit, conformité DORA, cloud privé/hybride, tech lead, expertise production ; (2) création de sites web propulsés par l'IA — intégration LLM (Claude, OpenAI, Mistral), chatbots, agents IA, recherche sémantique, SEO sémantique/GEO, Next.js, Astro, Vercel, Cloudflare, Supabase.
+> NSY est un cabinet de conseil technique indépendant français (EURL fondée en 2018 par Cédric Barme, Centre-Val de Loire). Deux activités : (1) conseil technique senior pour la banque, l'assurance, la finance et les grands comptes — architecture distribuée, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, migration legacy, audit, conformité DORA, cloud privé/hybride, tech lead, expertise production, apport d'expertise IA en mission (productivité des équipes) ; (2) création de sites web propulsés par l'IA — intégration LLM (Claude, OpenAI, Mistral), chatbots, agents IA, recherche sémantique, SEO sémantique/GEO, Next.js, Astro, Vercel, Cloudflare, Supabase.
 
 Points clés :
 - Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (plateformes de trading et de risque temps réel), tech lead.
