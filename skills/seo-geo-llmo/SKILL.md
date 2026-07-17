@@ -1,6 +1,6 @@
 ---
 name: seo-geo-llmo
-description: Reusable playbook for SEO + GEO/LLMO (being understood and CITED by ChatGPT, Claude, Gemini, Perplexity, Copilot) on any website — robots.txt AI-crawler allowlist, llms.txt/llms-full.txt, JSON-LD @graph entity modeling, conversational FAQ pages, external registrations (Bing Webmaster Tools, GSC domain property, Wikidata, Google Business Profile, LinkedIn, backlinks) and the verification methods for each. Use when optimizing a site's search or AI-assistant visibility (nsy.fr, prv-concept.com, client sites), creating llms.txt, structured data, FAQ/GEO content, or walking through search-engine/knowledge-graph registrations. Battle-tested on nsy.fr (July 2026).
+description: Reusable playbook for SEO + GEO/LLMO (being understood and CITED by ChatGPT, Claude, Gemini, Perplexity, Copilot) on any website — robots.txt AI-crawler allowlist, llms.txt/llms-full.txt, JSON-LD @graph entity modeling, conversational FAQ pages, external registrations (Bing Webmaster Tools, GSC domain property, Google Business Profile, LinkedIn, backlinks) and the verification methods for each. Use when optimizing a site's search or AI-assistant visibility (nsy.fr, prv-concept.com, client sites), creating llms.txt, structured data, FAQ/GEO content, or walking through search-engine/knowledge-graph registrations. Battle-tested on nsy.fr (July 2026).
 ---
 
 # SEO · GEO · LLMO — playbook réutilisable
@@ -43,7 +43,7 @@ Sur la page d'accueil : `@graph` avec nœuds reliés par `@id` stables
   veut pas exposer la ville : `addressRegion` + `addressCountry` sans rue).
 - `Person` (fondateur) avec `knowsAbout` exhaustif, `worksFor` → #org.
 - `Service` + `Offer` (prix « à partir de » = `price` + description).
-- `sameAs` : **toutes** les entités externes — Wikidata, LinkedIn entreprise ET
+- `sameAs` : **toutes** les entités externes — LinkedIn entreprise ET
   personne, GitHub, YouTube. C'est le ciment du Knowledge Graph.
 - Les autres pages **référencent** ces @id au lieu de redéclarer.
 - `identifier` PropertyValue pour le SIREN (entreprise FR).
@@ -73,11 +73,10 @@ images/vidéos légendées (les captions nourrissent aussi les LLM).
 |---|---|---|---|
 | 1 | **Bing Webmaster Tools** | Index de ChatGPT Search + Copilot | La vérif fichier XML peut rester bloquée sur un **cache négatif** côté Bing même quand le fichier répond 200 à tous les UA → basculer sur la **balise meta `msvalidate.01`** (même token), les deux méthodes coexistent |
 | 2 | **GSC propriété de DOMAINE** (`sc-domain:`) | Couvre www/non-www/http/https ; une propriété *préfixe* sur le mauvais host ne voit que des redirections | Vérification par **TXT DNS** chez le registrar (Infomaniak : Zone DNS → Ajouter un enregistrement → TXT, nom d'hôte vide = racine). Le TXT doit **rester** en place. Re-soumettre le sitemap dans la nouvelle propriété |
-| 3 | **Wikidata** | Base du Knowledge Graph ET des corpus LLM | Se connecter (les créations anonymes sont supprimées). Champ gauche = **P**ropriété, droite = **Q**/valeur. QIDs sûrs : P31→`Q4830453` (entreprise ; pour une association, chercher « association loi de 1901 »), P17→`Q142` (France), P1616 = SIREN (littéral), P571 = date exacte du registre, P856 = site, P1454 = forme juridique, P159 = région. **Référencer chaque déclaration** avec P854 → l'URL `annuaire-entreprises.data.gouv.fr/entreprise/<SIREN>` (registre d'État = notabilité inattaquable). Pas de fiche pour les personnes non notables. Reporter le QID dans les `sameAs` + llms.txt |
-| 4 | **Google Business Profile** | Knowledge Graph → Gemini | Description ≤ 750 car., les ~250 premiers seuls visibles, **pas d'URL/tél dedans** (champs dédiés), nom = la marque SEULE (mots-clés dans le nom = motif n°1 de suspension), « services sans établissement » si on ne veut pas exposer l'adresse |
-| 5 | **LinkedIn entreprise** | Source de recoupement majeure des LLM | Renseigner le site web sur la page, description avec les mots-clés métier, publier un minimum ; croiser : page ↔ site (`sameAs`) |
-| 6 | **Backlinks éditoriaux** (sites réalisés : « Propulsé par X ») | Premier jus de lien naturel | `dofollow` vers l'**URL canonique exacte**. Un lien image seule = ancre limitée au `alt` → mettre **la marque en texte dans le lien** + `alt` descriptif sur le logo. Ne PAS sur-optimiser l'ancre d'un lien sitewide (spam) : marque + court descriptif, c'est le réglage juste |
-| 7 | **Annuaires B2B** (Malt, Collective.work…) | Recoupement NAP | Nom/téléphone/région strictement identiques partout |
+| 3 | **Google Business Profile** | Knowledge Graph → Gemini | Description ≤ 750 car., les ~250 premiers seuls visibles, **pas d'URL/tél dedans** (champs dédiés), nom = la marque SEULE (mots-clés dans le nom = motif n°1 de suspension), « services sans établissement » si on ne veut pas exposer l'adresse |
+| 4 | **LinkedIn entreprise** | Source de recoupement majeure des LLM | Renseigner le site web sur la page, description avec les mots-clés métier, publier un minimum ; croiser : page ↔ site (`sameAs`) |
+| 5 | **Backlinks éditoriaux** (sites réalisés : « Propulsé par X ») | Premier jus de lien naturel | `dofollow` vers l'**URL canonique exacte**. Un lien image seule = ancre limitée au `alt` → mettre **la marque en texte dans le lien** + `alt` descriptif sur le logo. Ne PAS sur-optimiser l'ancre d'un lien sitewide (spam) : marque + court descriptif, c'est le réglage juste |
+| 6 | **Annuaires B2B** (Malt, Collective.work…) | Recoupement NAP | Nom/téléphone/région strictement identiques partout |
 
 ## 3. Vérifier, ne jamais supposer
 
@@ -99,16 +98,16 @@ images/vidéos légendées (les captions nourrissent aussi les LLM).
 - **Claude** ← ClaudeBot + recherche (historiquement Brave) + **llms.txt**
   (convention d'origine Anthropic).
 - **Gemini / AI Overviews** ← index Google + **Knowledge Graph**. Leviers :
-  GBP + Wikidata + JSON-LD cohérent.
+  GBP + JSON-LD cohérent.
 - **Perplexity** ← index propre ; privilégie les pages « réponse directe » →
   le format FAQ.
 - Transverse : contenu **daté, signé, attribuable** ; le même fait sur
-  plusieurs sources indépendantes (site + registre + LinkedIn + Wikidata).
+  plusieurs sources indépendantes (site + registre + LinkedIn).
 
 ## 5. Anti-patterns
 
 - Mots-clés dans le nom GBP, ancres sur-optimisées sitewide, FAQ en JSON-LD
   sans contenu visible équivalent, adresses email en clair si le propriétaire
   subit du spam (formulaire + téléphone), compteurs d'années codés en dur,
-  fiches Wikidata non sourcées, propriété GSC préfixe sur le mauvais host,
+  propriété GSC préfixe sur le mauvais host,
   bloquer CCBot « par prudence » (c'est se rayer des corpus d'entraînement).

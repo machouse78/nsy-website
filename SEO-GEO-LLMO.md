@@ -119,9 +119,6 @@ même fait sur ≥2 sources indépendantes).
 **✅ Fait :**
 - **Bing Webmaster Tools** : site vérifié (meta msvalidate.01), sitemap
   soumis — https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr
-- **Wikidata** : entité `Q140447227` **retirée des références NSY (juillet 2026,
-  décision propriétaire)** — plus déclarée dans les `sameAs` JSON-LD ni dans
-  llms.txt / llms-full.txt. Ne pas la réintroduire pour NSY.
 - **LinkedIn entreprise** : https://www.linkedin.com/company/nsy-new-software-yard —
   à jour, référencée dans sameAs + llms.txt.
 - **Backlink PRV Concept** : footer sitewide « Propulsé par [logo NSY] » →
