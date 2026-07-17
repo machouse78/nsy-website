@@ -97,7 +97,11 @@ associations et indépendants en transition numérique.
   opérationnelle (banque/assurance).
 - Référence publique (création web) : PRV Concept — https://www.prv-concept.com —
   site vitrine de l'association de référence du moteur V6 PRV (Peugeot · Renault ·
-  Volvo) : design sur mesure, bilingue, forum et boutique.
+  Volvo). Design sur mesure ; 8 rubriques + 23 fiches moteurs/véhicules/protos,
+  toutes bilingues FR/EN (pages anglaises générées par un pipeline maison) ;
+  bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré) ;
+  FAQ de 87 questions ; forum phpBB et boutique intégrés ; graphe d'entités
+  JSON-LD, sitemaps site + forum, optimisation GEO/LLMO.
 - Démonstrateur : le site https://www.nsy.fr lui-même (bilingue, chatbot sans LLM,
   3D temps réel, données structurées, optimisation CPU/GPU).
 
