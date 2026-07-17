@@ -210,7 +210,6 @@ nsy-website/
 ├── .htaccess                            # Apache: redirects, GZIP, cache, i18n, anti-hotlink
 ├── prepare-deploy.sh                    # Builds the deploy/ folder
 ├── deploy/                              # Generated (~12 MB), to upload into public_html/
-├── DEPLOIEMENT-INFOMANIAK.md            # Hosting guide
 ├── README.md                            # French version
 └── README.en.md                         # This file (EN)
 ```
