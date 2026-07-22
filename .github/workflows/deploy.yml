@@ -1,0 +1,51 @@
+name: Déploiement FTP (Infomaniak)
+
+# Déclenchement UNIQUEMENT manuel — décorrélé du push.
+# L'envoi FTP ne part que sur demande explicite :
+#   • bouton « Run workflow » dans l'onglet Actions de GitHub, ou
+#   • CLI : gh workflow run deploy.yml
+# Aucun push ne déclenche ce workflow.
+on:
+  workflow_dispatch:
+    inputs:
+      raison:
+        description: "Note libre (optionnel) — ce que ce déploiement met en ligne"
+        required: false
+        default: "Mise à jour du site"
+
+concurrency:
+  group: ftp-deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Envoi de deploy/ vers Infomaniak
+    runs-on: ubuntu-latest
+    steps:
+      - name: Récupérer le dépôt
+        uses: actions/checkout@v4
+
+      - name: Upload FTPS de deploy/ (mode incrémental, sans suppression)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          protocol: ftps
+          port: 21
+          # Le dossier versionné deploy/ = uniquement le site NSY (aucun secret,
+          # aucun miroir boutique/forum). Barre finale obligatoire.
+          local-dir: ./deploy/
+          # Chemin distant : mets-le dans une VARIABLE de dépôt FTP_SERVER_DIR
+          # (le chemin exact que montre ton client FTP, ex. /public_html/ ou ./).
+          # À défaut, la racine de l'utilisateur FTP (./) est utilisée.
+          server-dir: ${{ vars.FTP_SERVER_DIR != '' && vars.FTP_SERVER_DIR || './' }}
+          # dangerous-clean-slate:false (défaut) = ne vide JAMAIS le serveur.
+          # L'action ne supprime que les fichiers qu'elle a elle-même déjà
+          # envoyés ; _secret/config.php, boutique/, forum/ (absents de deploy/)
+          # ne sont jamais touchés.
+          dangerous-clean-slate: false
+          exclude: |
+            **/.DS_Store
+            **/.git*
+            **/README.md

@@ -249,6 +249,23 @@ Le `.htaccess` configure :
 - **Anti-hotlink** sur les médias propriétaires (`mp4`, `glb`…) via contrôle du Referer
 - **GZIP**, **cache** (1 mois médias, 1 semaine CSS/JS, 1h HTML), **security headers** (`X-Frame-Options`, `Strict-Transport-Security`…)
 
+### Déploiement FTP automatisé (à la demande)
+
+Le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) envoie
+`deploy/` en **FTPS** sur Infomaniak. Il est **manuel** (`workflow_dispatch`),
+**décorrélé du push** : rien ne part tant que l'on ne le déclenche pas
+(onglet **Actions → Déploiement FTP → Run workflow**, ou `gh workflow run deploy.yml`).
+
+- Envoi **incrémental** (seuls les fichiers modifiés partent) et **sans suppression**
+  (`dangerous-clean-slate: false`) : `_secret/config.php`, `boutique/`, `forum/`
+  — absents du `deploy/` versionné — ne sont **jamais** touchés sur le serveur.
+- **Secrets à créer une fois** (GitHub → *Settings → Secrets and variables → Actions → Secrets*) :
+  `FTP_SERVER` (hôte FTP Infomaniak), `FTP_USERNAME`, `FTP_PASSWORD`.
+  **Variable optionnelle** `FTP_SERVER_DIR` (onglet *Variables*) = le chemin exact
+  que montre ton client FTP (ex. `/public_html/`) ; défaut : racine de l'utilisateur FTP.
+- `_secret/config.php` (SMTP, gitignored) et le miroir `boutique/forum` ne sont pas
+  dans le repo : à uploader **une seule fois à la main**, ensuite le workflow ne s'en occupe pas.
+
 ## SEO, GEO & partage social
 
 - **Sitemap** : 36 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos, avec `xhtml:link` hreflang
