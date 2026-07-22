@@ -82,7 +82,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **Nav ancrée** (`position: sticky`) + **jauge de lecture** cyan sous le menu (scaleX composité). Piège résolu : `overflow-x: hidden` sur `html/body` désactivait silencieusement le sticky → remplacé par `overflow-x: clip` (même correctif que prv-concept.com), avec `scroll-padding-top` pour que les ancres atterrissent sous le menu
 - **Scroll-spy nav** via `IntersectionObserver` — la rubrique active passe en cyan
 - **Animations & micro-interactions** (UX pass) : entrée hero échelonnée, reveal au scroll avec stagger par conteneur, **compteurs animés** au scroll-in (14+, 3 max…), **parallaxe souris** sur le visuel hero (5 plans de profondeur, lerp amorti, desktop uniquement), sheen sur le CTA principal, hovers étapes/chips/flèches, soulignés animés du footer, marquee en pause au survol — le tout **uniquement en `transform`/`opacity`**, rAF auto-stoppés au repos, et **`prefers-reduced-motion` intégral**
-- **Sphère hero** : vidéo `nsy-ia.mp4` en `object-fit: cover`, masquée en cercle, terminaux ASCII flottants
+- **Vidéo hero** : `nsy-hero.mp4` en `object-fit: cover`, masquée dans le **grand cercle** extérieur, terminaux ASCII flottants — monogramme NSY animé au cœur d'un orbe énergétique (réseau finance cyan + maillage IA orange)
 - **Cards services** : au survol, l'image PNG cross-fade vers une vidéo MP4 ; retour à `currentTime = 0` au mouseleave
 - **CTA banner** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
 - **Conception 3D** — page dédiée `conception-3d.html` / `3d-design.html` (section `#creations`), plus un **aperçu du modèle** en bas de la page Services :
@@ -140,7 +140,7 @@ Outils de vérification (j'ai appris à ne rien pousser sans regarder le rendu) 
 Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire chauffer le CPU/GPU. Tout ce qui tourne en boucle est mis en pause dès que ce n'est pas visible — principe : **on ne décode / n'anime / ne rend que ce que l'utilisateur regarde**.
 
 - **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
-- **Vidéo hero** (`nsy-ia.mp4`) : recompressée du **1080p (4.8 Mo)** vers un **crop carré 720×720 (1.7 Mo)** — elle s'affiche dans une sphère de ~300px masquée en cercle, donc le 1080p et les bords 16:9 étaient inutiles. Décodage divisé par ~4.
+- **Vidéo hero** (`nsy-hero.mp4`) : générée via IA (Higgsfield, image→vidéo à partir du logo NSY), carrée **960×960**, **boucle en fondu** (crossfade au raccord, pas de coupure nette), **sans piste audio**, recompressée à **0,64 Mo**. Mise en pause hors-écran comme les autres vidéos.
 - **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
 - **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible. Le supersampling ×2 (netteté) ne s'applique qu'aux écrans DPR 1 et ne coûte donc rien sur mobile/Retina.
 - **Animations JS** (parallaxe hero, compteurs, jauge de lecture) : boucles `requestAnimationFrame` qui **s'arrêtent d'elles-mêmes au repos** (lerp convergé, compteur fini) — aucune boucle infinie ; tout est coupé par `prefers-reduced-motion`.
@@ -195,7 +195,7 @@ nsy-website/
 │   ├── photo-profil.jpg                 # Photo Cédric (About)
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
-│   ├── nsy-ia.mp4                       # Sphère hero
+│   ├── nsy-hero.mp4                     # Vidéo hero (monogramme NSY, grand cercle)
 │   ├── nsy-og.jpg                       # Bannière Open Graph 1200×630
 │   ├── prv-concept.jpg                  # Vignette Réalisations (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Modèle 3D wireframe arêtes vives (575 Ko)

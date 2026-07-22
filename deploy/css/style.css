@@ -592,10 +592,12 @@ section.block:first-of-type { border-top: 0; }
 }
 .glyph-core {
   position: relative;
-  width: 56%;
+  width: 92%;
   aspect-ratio: 1;
   display: grid;
   place-items: center;
+  border-radius: 50%;
+  box-shadow: 0 0 120px -20px rgba(0,229,255,0.45);
 }
 .glyph-disc {
   position: absolute;
@@ -681,19 +683,14 @@ section.block:first-of-type { border-top: 0; }
 .glyph-loader.error .glyph-loader-progress { stroke: #ff6b6b; }
 .glyph-rings {
   position: absolute;
-  inset: -18%;
+  inset: -3%;
   border-radius: 50%;
   border: 1px dashed rgba(0,229,255,0.3);
   animation: spin 40s linear infinite;
 }
-.glyph-rings::before, .glyph-rings::after {
-  content: "";
-  position: absolute;
-  border-radius: 50%;
-  border: 1px solid rgba(0,229,255,0.15);
-}
-.glyph-rings::before { inset: 12%; }
-.glyph-rings::after { inset: 28%; border-color: rgba(240,138,44,0.18); }
+/* Sous-anneaux masqués : la vidéo occupe désormais le grand cercle, ils la
+   chargeraient inutilement. Conserve l'anneau tournant extérieur seul. */
+.glyph-rings::before, .glyph-rings::after { content: none; }
 
 @keyframes spin {
   to { transform: rotate(360deg); }
@@ -756,6 +753,15 @@ section.block:first-of-type { border-top: 0; }
 
 .tag-1 { top: 38%; right: -2%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
 .tag-2 { bottom: 32%; left: -4%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
+
+/* Mobile : la vidéo NSY occupe le grand cercle ; on rétrécit les terminaux et
+   on les pousse dans les coins pour dégager le monogramme au centre. */
+@media (max-width: 600px) {
+  .t-1 { width: 158px; font-size: 9.5px; line-height: 1.55; padding: 9px 11px; top: -3%; right: -7%; }
+  .t-2 { width: 166px; font-size: 9.5px; line-height: 1.55; padding: 9px 11px; bottom: -3%; left: -9%; }
+  .tag-1 { top: 30%; }
+  .tag-2 { bottom: 24%; }
+}
 
 /* marquee strip */
 .marquee {

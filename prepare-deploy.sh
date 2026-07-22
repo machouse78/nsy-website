@@ -109,7 +109,7 @@ cp public/cropped-NSY-logo-192x192.png  deploy/public/
 cp public/cropped-NSY-logo-270x270.png  deploy/public/
 
 # Vidéos
-cp public/nsy-ia.mp4                    deploy/public/
+cp public/nsy-hero.mp4                  deploy/public/
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
 # Note: public/animation.mp4 n'est plus déployée — l'animation 3D de la
@@ -187,7 +187,7 @@ required=(
   "deploy/public/cropped-NSY-logo-180x180.png"
   "deploy/public/cropped-NSY-logo-192x192.png"
   "deploy/public/cropped-NSY-logo-270x270.png"
-  "deploy/public/nsy-ia.mp4"
+  "deploy/public/nsy-hero.mp4"
   "deploy/public/finance-assurance.mp4"
   "deploy/public/web-ia.mp4"
   "deploy/public/renault-wireframe.glb"

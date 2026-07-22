@@ -82,7 +82,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 - **Sticky nav** (`position: sticky`) + a cyan **reading gauge** under the menu (composited scaleX). Gotcha solved: `overflow-x: hidden` on `html/body` silently disabled sticky → replaced with `overflow-x: clip` (same fix as prv-concept.com), with `scroll-padding-top` so anchors land below the menu
 - **Nav scroll-spy** via `IntersectionObserver` — the active item turns cyan
 - **Animations & micro-interactions** (UX pass): staggered hero entrance, scroll reveals with per-container stagger, **animated counters** on scroll-in (14+, 3 max…), **mouse parallax** on the hero visual (5 depth planes, damped lerp, desktop only), sheen on the main CTA, step/chip/arrow hovers, animated footer underlines, marquee paused on hover — all **`transform`/`opacity` only**, rAF loops that auto-stop at rest, and **full `prefers-reduced-motion` support**
-- **Hero sphere** : `nsy-ia.mp4` video with `object-fit: cover`, circle-masked, floating ASCII terminals
+- **Hero video** : `nsy-hero.mp4` with `object-fit: cover`, masked inside the **large outer circle**, floating ASCII terminals — animated NSY monogram at the heart of an energy orb (cyan finance network + orange AI mesh)
 - **Service cards** : on hover, the PNG image cross-fades to an MP4 video; back to `currentTime = 0` on mouseleave
 - **CTA banner** : 2 radial gradients (cyan + orange) that follow the mouse via `--mx` / `--my`, easing back (550 ms) thanks to `@property`
 - **3D Design** — dedicated page `conception-3d.html` / `3d-design.html` (section `#creations`), plus a **model preview** at the bottom of the Services page:
@@ -140,7 +140,7 @@ Verification tools (I learned never to ship without looking at the render):
 A "cyber" site with videos, real-time 3D and animations can heat up the CPU/GPU fast. Everything that loops is paused the moment it isn't visible — the principle: **only decode / animate / render what the user is looking at**.
 
 - **Videos** : a `<video loop>` re-decodes every frame continuously (there is no "decoded frame cache"). An `IntersectionObserver` (`js/app.js`) **pauses each looping video when it leaves the screen** and resumes it on return; a `visibilitychange` listener **pauses everything when the tab is hidden**. On load, only visible videos decode.
-- **Hero video** (`nsy-ia.mp4`) : recompressed from **1080p (4.8 MB)** to a **square 720×720 crop (1.7 MB)** — it shows inside a ~300px circle-masked sphere, so the 1080p and the 16:9 edges were pointless. Decoding cut by ~4×.
+- **Hero video** (`nsy-hero.mp4`) : AI-generated (Higgsfield, image-to-video from the NSY logo), square **960×960**, **crossfade loop** (blended seam, no hard cut), **no audio track**, recompressed to **0.64 MB**. Paused off-screen like the other videos.
 - **CSS animations** : the `.anim-paused` class, placed on a section via `IntersectionObserver` when it leaves the viewport, freezes all its animations (`animation-play-state: paused`, pseudo-elements included); removed when the section comes back.
 - **3D model** : `<model-viewer>` already pauses WebGL rendering off-screen; we additionally stop `auto-rotate` when the 3D Design section isn't visible. The ×2 supersampling (sharpness) only applies to DPR 1 screens, so it costs nothing on mobile/Retina.
 - **JS animations** (hero parallax, counters, reading gauge) : `requestAnimationFrame` loops that **stop by themselves at rest** (converged lerp, finished counter) — no infinite loops; all cut by `prefers-reduced-motion`.
@@ -195,7 +195,7 @@ nsy-website/
 │   ├── photo-profil.jpg                 # Cédric's photo (About)
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
-│   ├── nsy-ia.mp4                       # Hero sphere
+│   ├── nsy-hero.mp4                     # Hero video (NSY monogram, large circle)
 │   ├── nsy-og.jpg                       # Open Graph banner 1200×630
 │   ├── prv-concept.jpg                  # Work thumbnail (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Sharp-edge wireframe 3D model (575 KB)
