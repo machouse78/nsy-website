@@ -927,7 +927,22 @@ section.block:first-of-type { border-top: 0; }
     radial-gradient(circle at 80% 80%, rgba(77,125,255,0.18), transparent 55%),
     linear-gradient(135deg, #0c1628, #060a14);
 }
-@media (max-width: 920px) { .svc-cover { border-right: 0; border-bottom: 1px solid var(--line); min-height: 280px; } }
+/* Empilé : le cover passe pleine largeur. Sa hauteur devient FLUIDE (clamp,
+   proportionnelle à la largeur de fenêtre) — il reste plein cadre à toutes les
+   tailles et le cadrage des vidéos portrait (9:16) évolue de façon cohérente au
+   redimensionnement, sans bande fixe sur-zoomée ni trou. */
+@media (max-width: 920px) {
+  .svc-cover {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    min-height: 0;
+    height: clamp(320px, 50vw, 460px);
+  }
+  /* Cadre sur le sujet (haut/centre des rendus portrait) et moins de sur-zoom
+     que sur la colonne étroite desktop. */
+  .svc-bg, .svc-bg-video { object-position: center 32%; }
+  .svc-bg-video, .svc.warm .svc-bg-video { transform: scale(1.04); }
+}
 .svc.warm .svc-cover {
   background:
     radial-gradient(circle at 25% 25%, rgba(240,138,44,0.20), transparent 55%),
