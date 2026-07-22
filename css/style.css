@@ -938,10 +938,9 @@ section.block:first-of-type { border-top: 0; }
     min-height: 0;
     height: clamp(320px, 50vw, 460px);
   }
-  /* Cadre sur le sujet (haut/centre des rendus portrait) et moins de sur-zoom
-     que sur la colonne étroite desktop. */
-  .svc-bg, .svc-bg-video { object-position: center 32%; }
-  .svc-bg-video, .svc.warm .svc-bg-video { transform: scale(1.04); }
+  /* Cadre légèrement recentré sur le sujet, zoom minimal (vidéos plein cadre). */
+  .svc-bg, .svc-bg-video { object-position: center 40%; }
+  .svc-bg-video, .svc.warm .svc-bg-video { transform: scale(1.02); }
 }
 .svc.warm .svc-cover {
   background:
@@ -1001,12 +1000,12 @@ section.block:first-of-type { border-top: 0; }
   opacity: 0;
   transition: opacity .35s ease;
   background: #060a14;
-  transform: scale(1.06);
+  transform: scale(1.02);
   transform-origin: center center;
 }
 .svc-cover-image.video-ready .svc-bg { opacity: 0; }
 .svc-cover-image.video-ready .svc-bg-video { opacity: 1; }
-.svc.warm .svc-bg-video { transform: scale(1.16); }
+.svc.warm .svc-bg-video { transform: scale(1.02); }
 .svc-cover-image { background: #060a14; }
 .svc-cover-image::before { display: none; }
 .svc-cover-image::after {
@@ -2687,8 +2686,8 @@ footer.foot {
 /* Couverture des cartes service : zoom léger du visuel au hover */
 .svc-bg { transition: opacity .35s ease, transform .65s var(--ease-out); }
 .svc:hover .svc-bg { transform: scale(1.04); }
-.svc:hover .svc-bg-video { transform: scale(1.10); }
-.svc.warm:hover .svc-bg-video { transform: scale(1.20); }
+.svc:hover .svc-bg-video { transform: scale(1.05); }
+.svc.warm:hover .svc-bg-video { transform: scale(1.05); }
 
 /* Soulignés animés : footer (liens directs des colonnes + barre légale) */
 .foot-col > a,
