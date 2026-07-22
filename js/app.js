@@ -877,6 +877,31 @@
 
     // Edge case: video already cached / fully buffered before listeners attach
     if (glyphVideo.readyState >= 4) hideLoader();
+
+    // ───── Fondu de boucle : fade-in / fade-out vers transparent ─────
+    // La vidéo reste opaque ; on anime son opacité selon currentTime pour qu'au
+    // raccord de boucle elle se dissolve vers le disque bleu derrière (vrai
+    // « fondu vers transparent », sans vidéo à canal alpha que Safari gère mal).
+    // Le rAF ne tourne QUE pendant la lecture — la vidéo est mise en pause
+    // hors-écran, donc l'animation s'arrête d'elle-même (philosophie perf).
+    const FADE = 0.6; // secondes de fondu à chaque extrémité
+    let fadeRAF = null;
+    const fadeTick = () => {
+      const d = glyphVideo.duration;
+      if (d && isFinite(d)) {
+        const t = glyphVideo.currentTime;
+        let op = 1;
+        if (t < FADE) op = t / FADE;
+        else if (t > d - FADE) op = Math.max(0, (d - t) / FADE);
+        glyphVideo.style.opacity = op.toFixed(3);
+      }
+      fadeRAF = requestAnimationFrame(fadeTick);
+    };
+    const startFade = () => { if (fadeRAF == null) fadeRAF = requestAnimationFrame(fadeTick); };
+    const stopFade = () => { if (fadeRAF != null) { cancelAnimationFrame(fadeRAF); fadeRAF = null; } };
+    glyphVideo.addEventListener('play', startFade);
+    glyphVideo.addEventListener('pause', stopFade);
+    if (!glyphVideo.paused) startFade();
   }
 
   // ───── CTA banner: gradients react to input ─────
