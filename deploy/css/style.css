@@ -460,6 +460,8 @@ section.block:first-of-type { border-top: 0; }
 }
 @media (max-width: 980px) {
   .hero-grid { grid-template-columns: 1fr; gap: 48px; }
+  /* Écrans étroits : le visuel (grand cercle vidéo) passe AU-DESSUS du texte. */
+  .hero-visual { order: -1; margin-inline: auto; }
 }
 
 .hero-eyebrow {
