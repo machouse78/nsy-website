@@ -34,7 +34,7 @@ Allow: /public/cropped-NSY-logo-270x270.png
 # Bloquer les vidéos lourdes du crawl général,
 # mais les autoriser dans le video sitemap (référencées explicitement).
 Disallow: /public/*.mp4
-Allow: /public/nsy-ia.mp4
+Allow: /public/nsy-hero.mp4
 Allow: /public/finance-assurance.mp4
 Allow: /public/web-ia.mp4
 

@@ -49,9 +49,9 @@
     <!-- Vidéo hero -->
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
-      <video:title>NSY — Animation IA du hero</video:title>
-      <video:description>Animation cyber IA présentée dans la section hero du site NSY</video:description>
-      <video:content_loc>https://www.nsy.fr/public/nsy-ia.mp4</video:content_loc>
+      <video:title>NSY — double compétence conseil technique &amp; IA</video:title>
+      <video:description>Animation du logo NSY au cœur d'un orbe énergétique : conseil technique finance/assurance et création web propulsée par l'IA.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/nsy-hero.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
 
