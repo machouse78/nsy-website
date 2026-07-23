@@ -37,6 +37,10 @@ echo "🔄 Reconstruction de deploy/ ..."
 ./prepare-deploy.sh >/dev/null
 echo "🚀 Envoi FTPS vers ${FTP_HOST}/${base} ..."
 
+# On EXCLUT :
+#  - deploy/_secret/*  → ne jamais écraser le config.php SMTP du serveur
+#    (déjà en place ; à uploader une seule fois à la main lors du 1er setup) ;
+#  - les miroirs de l'ancien site (old-wp/_old/boutique/forum) s'ils existent.
 sent=0
 while IFS= read -r -d '' f; do
   rel="${f#deploy/}"
@@ -46,7 +50,10 @@ while IFS= read -r -d '' f; do
     || { echo "❌ Échec sur ${rel}"; exit 1; }
   sent=$((sent + 1))
   printf '  ↑ %s\n' "$rel"
-done < <(find deploy -type f ! -name '.DS_Store' -print0)
+done < <(find deploy -type f ! -name '.DS_Store' \
+           ! -path 'deploy/_secret/*' \
+           ! -path 'deploy/old-wp/*' ! -path 'deploy/_old/*' \
+           ! -path 'deploy/boutique/*' ! -path 'deploy/forum/*' -print0)
 
 echo "✅ Terminé — ${sent} fichier(s) envoyé(s) vers ${FTP_HOST}/${base}"
 echo "   Vérifie : https://www.nsy.fr"
