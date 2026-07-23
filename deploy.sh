@@ -34,7 +34,18 @@ FTP_DIR="${FTP_DIR:-}"
 base="${FTP_DIR#/}"; base="${base%/}"; [ -n "$base" ] && base="$base/"
 
 echo "🔄 Reconstruction de deploy/ ..."
-./prepare-deploy.sh >/dev/null
+pdlog="$(mktemp)"
+if ! ./prepare-deploy.sh >"$pdlog" 2>&1; then
+  # prepare-deploy sort en 1 si un fichier requis manque. Le seul toléré ici est
+  # _secret/config.php (absent en local, présent sur le serveur ; et de toute
+  # façon _secret/ est exclu de l'envoi). Tout autre manquant => abandon.
+  if grep "MANQUANT" "$pdlog" | grep -qv "_secret/config.php"; then
+    echo "❌ prepare-deploy : fichier(s) requis manquant(s) (hors _secret/) :"
+    grep "MANQUANT" "$pdlog"; rm -f "$pdlog"; exit 1
+  fi
+  echo "  ⚠️  _secret/config.php absent en local (normal) — exclu de l'envoi, on continue."
+fi
+rm -f "$pdlog"
 echo "🚀 Envoi FTPS vers ${FTP_HOST}/${base} ..."
 
 # On EXCLUT :
