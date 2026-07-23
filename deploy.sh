@@ -46,25 +46,12 @@ if ! ./prepare-deploy.sh >"$pdlog" 2>&1; then
   echo "  ⚠️  _secret/config.php absent en local (normal) — exclu de l'envoi, on continue."
 fi
 rm -f "$pdlog"
-echo "🚀 Envoi FTPS vers ${FTP_HOST}/${base} ..."
+echo "🚀 Envoi FTPS (connexion unique) vers ${FTP_HOST}/${base} ..."
 
-# On EXCLUT :
-#  - deploy/_secret/*  → ne jamais écraser le config.php SMTP du serveur
-#    (déjà en place ; à uploader une seule fois à la main lors du 1er setup) ;
-#  - les miroirs de l'ancien site (old-wp/_old/boutique/forum) s'ils existent.
-sent=0
-while IFS= read -r -d '' f; do
-  rel="${f#deploy/}"
-  curl -sS --ssl-reqd --ftp-create-dirs --connect-timeout 25 \
-    -K <(printf 'user = "%s:%s"\n' "$FTP_USER" "$FTP_PASS") \
-    -T "$f" "ftp://${FTP_HOST}/${base}${rel}" \
-    || { echo "❌ Échec sur ${rel}"; exit 1; }
-  sent=$((sent + 1))
-  printf '  ↑ %s\n' "$rel"
-done < <(find deploy -type f ! -name '.DS_Store' \
-           ! -path 'deploy/_secret/*' \
-           ! -path 'deploy/old-wp/*' ! -path 'deploy/_old/*' \
-           ! -path 'deploy/boutique/*' ! -path 'deploy/forum/*' -print0)
+# Une SEULE connexion FTPS pour tous les fichiers (un curl par fichier
+# déclenchait le 450 anti-flood d'Infomaniak). Le script Python gère les
+# exclusions (_secret/, old-wp/, miroirs) et n'efface jamais rien côté serveur.
+# Les identifiants sont déjà exportés (set -a; source) → lus depuis l'env.
+python3 scripts/ftp-deploy.py
 
-echo "✅ Terminé — ${sent} fichier(s) envoyé(s) vers ${FTP_HOST}/${base}"
 echo "   Vérifie : https://www.nsy.fr"
