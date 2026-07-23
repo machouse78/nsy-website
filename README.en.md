@@ -249,12 +249,20 @@ The `.htaccess` configures:
 - **Anti-hotlink** on proprietary media (`mp4`, `glb`…) via Referer checking
 - **GZIP**, **caching** (1 month media, 1 week CSS/JS, 1h HTML), **security headers** (`X-Frame-Options`, `Strict-Transport-Security`…)
 
-### Automated FTP deploy (on demand)
+### FTP deploy (on demand)
 
-The [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) workflow uploads
-`deploy/` to Infomaniak over **FTPS**. It is **manual** (`workflow_dispatch`),
+**Direct option — `./deploy.sh`** (recommended): rebuilds `deploy/` and uploads
+it over **FTPS** (curl, `--ssl-reqd`) with **no remote deletion**. One command,
+nothing ships without running it. Credentials live in **`_secret/ftp.env`**
+(gitignored, like `_secret/config.php`; template: `_secret/ftp.env.example`) —
+the password is handed to curl via an ephemeral config file (never in the process
+list). For NSY: `FTP_DIR="web"`.
+
+**Cloud option — GitHub Actions**: the [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+workflow uploads `deploy/` over **FTPS** too. It is **manual** (`workflow_dispatch`),
 **decoupled from push**: nothing ships until it's triggered
 (**Actions → Déploiement FTP → Run workflow**, or `gh workflow run deploy.yml`).
+Handy to deploy from anywhere without local credentials.
 
 - **Incremental** upload (only changed files) and **no deletion**
   (`dangerous-clean-slate: false`): `_secret/config.php` — absent from the
