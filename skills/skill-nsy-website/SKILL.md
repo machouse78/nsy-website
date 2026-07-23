@@ -245,5 +245,16 @@ must hold in every change.
    (fast-forward), then `git pull --ff-only origin main` in the primary worktree.
 5. Keep **`README.md`** and the **GitHub repo "About"** (description + topics)
    up to date when scope changes.
-6. Deploy = upload the **contents of `deploy/`** into Infomaniak `public_html/`
-   (include `.htaccess` and `_secret/`); remind the owner which files changed.
+6. **Deploy = `./deploy.sh`, on explicit request only** (the owner wants me to
+   push to the FTP directly, not click a GitHub button). It rebuilds `deploy/`
+   then uploads via `scripts/ftp-deploy.py` — **one persistent FTPS connection**
+   for every file (a `curl` per file opens ~63 rapid connections → Infomaniak
+   returns **450 anti-flood**). Target/announce the files first, get the owner's
+   OK, then run it.
+   - **`FTP_DIR=""`** — the dedicated NSY FTP account **lands directly on the web
+     root**; a `"web"` value creates a nested `web/` the live site does NOT serve.
+   - **No remote deletion**; `_secret/config.php` (SMTP) is excluded and never
+     overwritten. **Never write or echo the FTP password** — the owner fills
+     `_secret/ftp.env` (gitignored) himself.
+   - Verify live: compare the HTTP `content-length` to the FTP size (a media cache
+     can serve a stale copy), and `/_secret/*` must return **403**.
