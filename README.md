@@ -257,14 +257,14 @@ Le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) envoi
 (onglet **Actions → Déploiement FTP → Run workflow**, ou `gh workflow run deploy.yml`).
 
 - Envoi **incrémental** (seuls les fichiers modifiés partent) et **sans suppression**
-  (`dangerous-clean-slate: false`) : `_secret/config.php`, `boutique/`, `forum/`
-  — absents du `deploy/` versionné — ne sont **jamais** touchés sur le serveur.
+  (`dangerous-clean-slate: false`) : `_secret/config.php` — absent du `deploy/`
+  versionné — n'est **jamais** touché sur le serveur.
 - **Secrets à créer une fois** (GitHub → *Settings → Secrets and variables → Actions → Secrets*) :
   `FTP_SERVER` (hôte FTP Infomaniak), `FTP_USERNAME`, `FTP_PASSWORD`.
-  **Variable optionnelle** `FTP_SERVER_DIR` (onglet *Variables*) = le chemin exact
-  que montre ton client FTP (ex. `/public_html/`) ; défaut : racine de l'utilisateur FTP.
-- `_secret/config.php` (SMTP, gitignored) et le miroir `boutique/forum` ne sont pas
-  dans le repo : à uploader **une seule fois à la main**, ensuite le workflow ne s'en occupe pas.
+  **Variable** `FTP_SERVER_DIR` (onglet *Variables*) = le chemin exact que montre
+  ton client FTP (pour NSY : `web`) ; défaut : racine de l'utilisateur FTP.
+- `_secret/config.php` (SMTP, gitignored) n'est pas dans le repo : à uploader
+  **une seule fois à la main**, ensuite le workflow ne s'en occupe pas.
 
 ## SEO, GEO & partage social
 
