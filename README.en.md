@@ -251,28 +251,32 @@ The `.htaccess` configures:
 
 ### FTP deploy (on demand)
 
-**Direct option — `./deploy.sh`** (recommended): rebuilds `deploy/` and uploads
-it over **FTPS** (curl, `--ssl-reqd`) with **no remote deletion**. One command,
-nothing ships without running it. Credentials live in **`_secret/ftp.env`**
-(gitignored, like `_secret/config.php`; template: `_secret/ftp.env.example`) —
-the password is handed to curl via an ephemeral config file (never in the process
-list). For NSY: `FTP_DIR="web"`.
+Deployment is **on demand** via **`./deploy.sh`**: the script rebuilds `deploy/`
+then uploads its contents over **FTPS** through
+[`scripts/ftp-deploy.py`](scripts/ftp-deploy.py), with **no remote deletion**
+(never touches `_secret/config.php` on the server). One command, nothing ships
+until you run it.
 
-**Cloud option — GitHub Actions**: the [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
-workflow uploads `deploy/` over **FTPS** too. It is **manual** (`workflow_dispatch`),
-**decoupled from push**: nothing ships until it's triggered
-(**Actions → Déploiement FTP → Run workflow**, or `gh workflow run deploy.yml`).
-Handy to deploy from anywhere without local credentials.
+```bash
+./deploy.sh
+```
 
-- **Incremental** upload (only changed files) and **no deletion**
-  (`dangerous-clean-slate: false`): `_secret/config.php` — absent from the
-  versioned `deploy/` — is **never** touched on the server.
-- **Secrets to create once** (GitHub → *Settings → Secrets and variables → Actions → Secrets*):
-  `FTP_SERVER` (Infomaniak FTP host), `FTP_USERNAME`, `FTP_PASSWORD`.
-  **Variable** `FTP_SERVER_DIR` (*Variables* tab) = the exact path your FTP client
-  shows (for NSY: `web`); defaults to the FTP user's home.
-- `_secret/config.php` (SMTP, gitignored) isn't in the repo: upload it **once by
-  hand**, then the workflow leaves it alone.
+- **Credentials**: in `_secret/ftp.env` (gitignored, like `_secret/config.php`;
+  template: `_secret/ftp.env.example`). The password never appears in the process
+  list.
+- **`FTP_DIR=""`** (empty): the dedicated NSY FTP account **already lands on the
+  web root** served by the domain. Only set a subfolder if your account lands one
+  level above the docroot (otherwise you create a nested `web/` the site doesn't
+  serve).
+- **A single persistent FTPS connection** for every file: one `curl` per file
+  opened ~63 rapid connections → Infomaniak returns **450 (anti-flood)**.
+  `scripts/ftp-deploy.py` fixes this (sequential STOR + retry).
+- **Exclusions**: `_secret/`, mirrors (`old-wp/`…), `.DS_Store`. `_secret/config.php`
+  (SMTP, gitignored) is uploaded **once by hand** on first setup; deployment
+  leaves it alone afterwards.
+
+> A manual GitHub Actions workflow ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
+> `workflow_dispatch`) also exists as a fallback, but `./deploy.sh` is the chosen path.
 
 ## SEO, GEO & social sharing
 
