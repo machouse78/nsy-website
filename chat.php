@@ -198,19 +198,34 @@ function callProvider(string $url, string $key, array $payload): array
     return [$status, is_string($res) ? $res : ''];
 }
 
-$payload = [
-    'model'       => $model,
-    'messages'    => array_merge([['role' => 'system', 'content' => $system]], $messages),
-    'temperature' => 0.35,
-    'max_tokens'  => 500,
-];
+// Cascade de modèles : le palier gratuit a un pool de capacité PAR MODÈLE
+// (« Service tier capacity exceeded », code 3505) — quand le premier est
+// saturé, on bascule sur un frère. Surchargable via 'fallback_models' dans
+// _secret/ai.php.
+$models = array_values(array_unique(array_merge(
+    [$model],
+    (array)($ai['fallback_models'] ?? ['ministral-8b-latest', 'open-mistral-nemo'])
+)));
 
-[$status, $res] = callProvider($apiUrl, $apiKey, $payload);
-// Le palier gratuit Mistral est limité à ~1 req/s : sur un 429 fournisseur
-// (deux visiteurs simultanés), on retente une fois après une courte pause.
-if ($status === 429) {
-    usleep(1200000);
+$status = 0;
+$res = '';
+$usedModel = $model;
+foreach ($models as $idx => $tryModel) {
+    $payload = [
+        'model'       => $tryModel,
+        'messages'    => array_merge([['role' => 'system', 'content' => $system]], $messages),
+        'temperature' => 0.35,
+        'max_tokens'  => 500,
+    ];
     [$status, $res] = callProvider($apiUrl, $apiKey, $payload);
+    // Sur le dernier modèle uniquement : un retry après une courte pause
+    // (cas « 1 req/s » du palier gratuit — deux visiteurs simultanés).
+    if ($status === 429 && $idx === count($models) - 1) {
+        usleep(1200000);
+        [$status, $res] = callProvider($apiUrl, $apiKey, $payload);
+    }
+    if ($status !== 429) { $usedModel = $tryModel; break; }
+    $usedModel = $tryModel;
 }
 
 if ($status < 200 || $status >= 300) {
@@ -280,4 +295,4 @@ $reply = preg_replace_callback(
 );
 
 // Modèle affiché dans le badge de transparence du widget (famille, pas la clé).
-respond(['ok' => true, 'reply' => $reply, 'model' => $model]);
+respond(['ok' => true, 'reply' => $reply, 'model' => $usedModel]);
