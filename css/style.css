@@ -705,10 +705,10 @@ section.block:first-of-type { border-top: 0; }
   backdrop-filter: blur(12px);
   border: 1px solid var(--line-strong);
   border-radius: 12px;
-  padding: 14px 16px;
+  padding: 10px 12px;
   font-family: var(--font-mono);
-  font-size: 11.5px;
-  line-height: 1.7;
+  font-size: 10px;
+  line-height: 1.6;
   color: var(--fg-1);
   box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
 }
@@ -728,8 +728,8 @@ section.block:first-of-type { border-top: 0; }
 
 /* --px/--py : décalage parallaxe (souris) écrit par JS — translate3d composité,
    0 par défaut donc inerte sans JS / sur tactile / en reduced-motion. */
-.t-1 { top: 4%; right: -6%; width: 230px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(2deg); }
-.t-2 { bottom: 8%; left: -8%; width: 250px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(-3deg); }
+.t-1 { top: -5%; right: -4%; width: 152px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(2deg); }
+.t-2 { bottom: -5%; left: -6%; width: 160px; transform: translate3d(var(--px, 0px), var(--py, 0px), 0) rotate(-3deg); }
 
 .tag {
   position: absolute;
@@ -753,16 +753,16 @@ section.block:first-of-type { border-top: 0; }
 .tag.cyan i { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
 .tag.warm i { background: var(--warm); box-shadow: 0 0 8px var(--warm); }
 
-.tag-1 { top: 38%; right: -2%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
-.tag-2 { bottom: 32%; left: -4%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
+.tag-1 { top: 30%; right: -4%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
+.tag-2 { bottom: 24%; left: -5%; transform: translate3d(var(--px, 0px), var(--py, 0px), 0); }
 
 /* Mobile : la vidéo NSY occupe le grand cercle ; on rétrécit les terminaux et
    on les pousse dans les coins pour dégager le monogramme au centre. */
 @media (max-width: 600px) {
-  .t-1 { width: 158px; font-size: 9.5px; line-height: 1.55; padding: 9px 11px; top: -3%; right: -7%; }
-  .t-2 { width: 166px; font-size: 9.5px; line-height: 1.55; padding: 9px 11px; bottom: -3%; left: -9%; }
-  .tag-1 { top: 30%; }
-  .tag-2 { bottom: 24%; }
+  .t-1 { width: 138px; font-size: 8.5px; line-height: 1.5; padding: 8px 10px; top: -5%; right: -4%; }
+  .t-2 { width: 144px; font-size: 8.5px; line-height: 1.5; padding: 8px 10px; bottom: -5%; left: -5%; }
+  .tag-1 { top: 28%; font-size: 10px; }
+  .tag-2 { bottom: 22%; font-size: 10px; }
 }
 
 /* marquee strip */
