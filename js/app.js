@@ -222,10 +222,106 @@
     return wrap;
   }
 
-  // The 3D creations now live in a section of the homepage (#creations),
-  // not a standalone page. The chatbot only runs on the index pages, so a
-  // same-page anchor works for both languages.
+  // Le widget est injecté sur les 36 pages via partials/chatbot.{fr,en}.html
+  // (script sync-partials) — le code ne s'active que si le markup est présent.
   const hobbiePath = pageLang === 'en' ? 'the 3D Design page' : 'la page Conception 3D';
+
+  // ───── Assistant IA (LLM via chat.php) ─────
+  // Le widget interroge d'abord le proxy serveur chat.php : un LLM (Mistral,
+  // hébergé en UE) ancré dans llms-full.txt (RAG). Le moteur de règles local
+  // ci-dessous reste le filet de sécurité : pas de clé configurée, quota
+  // atteint, API en panne ou hors-ligne → le bot répond quand même.
+  const AI_PAGE = location.pathname.split('/').pop() || 'index.html';
+  const HIST_KEY = 'nsy-cbot-hist';
+  const AI_OFF_KEY = 'nsy-cbot-ai-off';
+  let aiFails = 0; // 2 échecs réseau/serveur → mode local pour la session
+  const aiOff = () => {
+    try { if (sessionStorage.getItem(AI_OFF_KEY) === '1') return true; } catch (e) { /* private mode */ }
+    return aiFails >= 2;
+  };
+
+  const aiBadge = document.getElementById('cbot-ai-badge');
+  const aiStatus = document.getElementById('cbot-status');
+  const aiNote = document.getElementById('cbot-note');
+
+  function setAiBadge(model) {
+    if (!aiBadge || !model) return;
+    const fam = /mistral/i.test(model) ? 'Mistral'
+      : /llama/i.test(model) ? 'Llama'
+      : /qwen/i.test(model) ? 'Qwen' : model.split('-')[0];
+    aiBadge.textContent = (pageLang === 'en' ? 'AI · ' : 'IA · ') + fam;
+  }
+
+  // Bascule d'affichage honnête quand on répond via le moteur de règles local.
+  function rulesModeUI() {
+    if (aiStatus) aiStatus.innerHTML = '<span class="cbot-online"></span>'
+      + (pageLang === 'en' ? 'Online · Instant reply' : 'En ligne · Réponse instantanée');
+    if (aiNote) aiNote.textContent = pageLang === 'en'
+      ? 'Automated answers · double-check key points'
+      : 'Réponses automatisées · vérifiez les points clés';
+  }
+
+  // Rendu Markdown minimal et SÛR pour la sortie du LLM : on échappe tout le
+  // HTML, puis on ne réintroduit que **gras** et les liens INTERNES relatifs
+  // (page.html#ancre). Aucun lien externe, aucun javascript: possible.
+  function mdToHtml(text) {
+    const esc = String(text)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    return esc
+      .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, label, url) =>
+        /^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(url) ? `<a href="${url}">${label}</a>` : label)
+      .replace(/^\s*[-*•]\s+/gm, '• ')
+      .replace(/\n/g, '<br>');
+  }
+
+  // Effet machine à écrire : le HTML final est posé d'un coup (liens/gras ok),
+  // puis les nœuds texte se dévoilent progressivement. Désactivé si l'visiteur
+  // préfère réduire les animations.
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function typewrite(bubble, html) {
+    if (!bubble) return;
+    bubble.innerHTML = html;
+    if (reduceMotion) return;
+    const nodes = [];
+    (function collect(n) {
+      for (const c of n.childNodes) {
+        if (c.nodeType === 3) nodes.push([c, c.nodeValue]);
+        else collect(c);
+      }
+    })(bubble);
+    for (const [n] of nodes) n.nodeValue = '';
+    let i = 0, j = 0;
+    // setInterval plutôt que requestAnimationFrame : le rAF est suspendu dans
+    // les onglets masqués/throttlés — le texte resterait invisible. L'interval
+    // continue (throttlé à ~1s en fond, acceptable) et se coupe à la fin.
+    const timer = setInterval(() => {
+      let budget = 4; // ≈160 caractères/s
+      while (budget-- > 0 && i < nodes.length) {
+        const pair = nodes[i];
+        pair[0].nodeValue = pair[1].slice(0, ++j);
+        if (j >= pair[1].length) { i++; j = 0; }
+      }
+      if (body) body.scrollTop = body.scrollHeight;
+      if (i >= nodes.length) clearInterval(timer);
+    }, 25);
+  }
+
+  // Mémoire de conversation (sessionStorage) : l'échange suit le visiteur de
+  // page en page. Contenu stocké en texte/markdown — jamais de HTML brut.
+  const loadHist = () => {
+    try { return JSON.parse(sessionStorage.getItem(HIST_KEY)) || []; } catch (e) { return []; }
+  };
+  const saveHist = (h) => {
+    try { sessionStorage.setItem(HIST_KEY, JSON.stringify(h.slice(-12))); } catch (e) { /* private mode */ }
+  };
+  const hist = loadHist();
+  if (hist.length && body) {
+    for (const m of hist) {
+      appendMessage(m.role, m.role === 'assistant' ? mdToHtml(m.content) : m.content);
+    }
+    suggestions?.classList.add('hidden');
+  }
 
   // ───── Chatbot knowledge engine (rule-based, bilingual) ─────
   // Each intent declares accent-free keyword cues + several response variants
@@ -569,17 +665,67 @@
     return pick(FALLBACKS[lang]);
   }
 
-  function send(text) {
+  async function send(text) {
     const content = (text ?? input?.value ?? '').trim();
     if (!content) return;
     if (input) input.value = '';
     suggestions?.classList.add('hidden');
     appendMessage('user', content);
+    hist.push({ role: 'user', content });
+    saveHist(hist);
     const typing = appendTyping();
-    setTimeout(() => {
+    const t0 = Date.now();
+
+    // 1) Voie IA : proxy serveur (LLM ancré dans les faits du site)
+    let reply = null;
+    if (!aiOff()) {
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 25000);
+        const res = await fetch('chat.php', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ messages: hist.slice(-12), page: AI_PAGE }),
+          signal: ctrl.signal,
+        });
+        clearTimeout(timer);
+        const data = await res.json();
+        if (data && data.ok && data.reply) {
+          reply = String(data.reply);
+          setAiBadge(data.model);
+        } else if (data && data.code === 'noconfig') {
+          // Pas de clé côté serveur : inutile de réessayer cette session.
+          try { sessionStorage.setItem(AI_OFF_KEY, '1'); } catch (e) { /* private mode */ }
+        } else if (data && data.code === 'ratelimit') {
+          // Temporaire (quota/minute) : repli local ce tour-ci, on retentera.
+        } else {
+          aiFails++;
+        }
+      } catch (e) {
+        aiFails++;
+      }
+    }
+
+    // 2) Repli : moteur de règles local (le délai simule une frappe naturelle)
+    if (reply === null) {
+      const elapsed = Date.now() - t0;
+      if (elapsed < 650) await new Promise((r) => setTimeout(r, 650 - elapsed));
       typing?.remove();
-      appendMessage('assistant', botReply(content));
-    }, 600 + Math.random() * 400);
+      rulesModeUI();
+      const html = botReply(content);
+      appendMessage('assistant', html);
+      // Historique en texte : <b>→**…**, autres balises retirées.
+      hist.push({
+        role: 'assistant',
+        content: html.replace(/<b>(.*?)<\/b>/g, '**$1**').replace(/<[^>]+>/g, ''),
+      });
+    } else {
+      typing?.remove();
+      const bubble = appendMessage('assistant', '');
+      typewrite(bubble, mdToHtml(reply));
+      hist.push({ role: 'assistant', content: reply });
+    }
+    saveHist(hist);
   }
 
   sendBtn?.addEventListener('click', () => send());

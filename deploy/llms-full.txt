@@ -102,8 +102,10 @@ associations et indépendants en transition numérique.
   bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré) ;
   FAQ de 87 questions ; forum phpBB et boutique intégrés ; graphe d'entités
   JSON-LD, sitemaps site + forum, optimisation GEO/LLMO.
-- Démonstrateur : le site https://www.nsy.fr lui-même (bilingue, chatbot sans LLM,
-  3D temps réel, données structurées, optimisation CPU/GPU).
+- Démonstrateur : le site https://www.nsy.fr lui-même (bilingue, assistant IA
+  conversationnel — LLM Mistral ancré dans les contenus du site (RAG), avec repli
+  hors-ligne à base de règles —, 3D temps réel, données structurées,
+  optimisation CPU/GPU).
 
 ## 7. Graphe d'entités (relations)
 

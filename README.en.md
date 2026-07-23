@@ -89,20 +89,27 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
   - **YouTube video** from NSY's channel, embedded via `youtube-nocookie.com` (no cookie before playback)
   - **Interactive wireframe model** of a 1992 Renault R25 Baccara (`<model-viewer>`) — neon cyan wireframe render, auto-rotate + mouse/touch drag; **×2 supersampling on non-Retina screens** (crisp lines at DPR 1) and a "Drag to rotate" pill auto-hidden after the first interaction
   - Dedicated page in **2 columns** on desktop (enlarged video left, wireframe right), **stacked** on mobile (≤ 920 px); the Services preview shows only the model (`loading="lazy"`) with an "Explore 3D Design" link
-- **Smart chatbot** (see below)
+- **Conversational AI assistant** — free Mistral LLM (EU) grounded in the site's content (RAG), API-less local fallback (see below)
 - **Contact form** : service choice, start horizon, free-text message → handled by `contact.php` (real send + auto-reply)
 - **Feasibility questionnaire** (`faisabilite.html` / `feasibility.html`) : a **7-step** wizard (~80 fields) in the site's theme, reachable from the Contact section. Submission mirrors the contact form → `faisabilite.php` (same SMTP / Turnstile / anti-bot, admin email + auto-reply in the same style). Labels live in the HTML (FR/EN); the JS serialises them into a structured payload rendered generically by PHP, so FR / EN / email never drift
 
-### Chatbot — bilingual rule engine
+### AI assistant — free LLM + RAG, local fallback
 
-Cyan FAB bottom-right, glassmorphic panel. **No LLM, no API** (deliberate: free, instant, keyless, works offline) — a carefully tuned intent engine:
+Cyan FAB bottom-right, glassmorphic panel, present on **all 36 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
 
-- **Input normalisation** : lowercasing + accent stripping + punctuation removal ("coût", "cout", "Combien ?" → same intent)
-- **Specificity-weighted scoring** : each intent is scored by the cumulative length of its matched keywords (multi-word phrases win), stem matching (tarif→tarifs)
-- **~16 topics** : pricing, availability, web/AI, finance & insurance, 3D, services, Cédric's background, tech stack, how an engagement runs, location, references (NDA), data/GDPR, why NSY, contact — plus greetings (hello / thanks / goodbye)
-- **2 reply variants** per topic, drawn at random → no repetition
-- **Per-message language detection** : replies in FR or EN based on the question's language (not just the page's); tie → page language
-- **Lightweight follow-up** : "and?", "more details", "tell me more" reopens the previous topic; a **fallback** lists what the bot can do
+**Tier 1 — generative AI (`chat.php`)**: the widget queries a PHP proxy that
+calls a **Mistral** LLM (free "Experiment" tier, French company, data processed
+in the EU) through the OpenAI-compatible API.
+
+- **Homemade RAG**: the proxy injects `llms-full.txt` (the knowledge base already maintained for GEO) as system context → the bot answers with the **site's real facts**, in **the visitor's language** (any language), and knows how to say "I don't know". One source of truth, zero duplication.
+- **Prompt guardrails**: never a price nor an email address, internal links only, systematic redirect to the contact form, polite refusal of off-topic, resistance to hijacking attempts.
+- **Free-quota protection**: API key server-side only (`_secret/ai.php`, gitignored), origin check, per-IP rate limiting (8/min, 60/day, hashed — no content logged) + global cap (1,500/day), retry on provider 429.
+- **Conversation memory**: history in `sessionStorage`, the discussion **follows the visitor from page to page**; typewriter effect (disabled under `prefers-reduced-motion`); minimal **safe** Markdown rendering (full escaping, only `**bold**` and internal `page.html` links reintroduced).
+- **Transparency**: "AI · Mistral" badge in the header, EU/sensitive-data note in the widget footer, dedicated GDPR section in the privacy pages.
+
+**Tier 2 — local fallback (rules)**: the previous bilingual intent engine (16 topics, specificity-weighted scoring, reply variants, per-message language detection) stays embedded. No key configured, quota reached, API down or offline → it answers instantly, and the UI says so honestly ("Automated answers").
+
+**Setup** (once): create a free key on [console.mistral.ai](https://console.mistral.ai) (Experiment plan), copy `_secret/ai.php.example` → `_secret/ai.php` on the server and paste the key. Without this file, the bot runs in rules mode.
 
 ### Contact form — PHP backend
 
@@ -171,10 +178,11 @@ nsy-website/
 ├── SEO-GEO-LLMO.md                      # Internal SEO/GEO strategy (not deployed)
 ├── contact.php                          # Contact form backend (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
+├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
 ├── css/style.css                        # Complete styles (includes the .qz- questionnaire namespace)
 ├── js/app.js                            # Chatbot, i18n, video swaps, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Questionnaire wizard (navigation + collection + send)
-├── partials/                            # ⭐ Single source of the nav + footer (FR/EN)
+├── partials/                            # ⭐ Single source of the nav + footer + assistant widget (FR/EN)
 │   ├── nav.fr.html / nav.en.html        #    Top menu ({{P}} token = anchor base path)
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
@@ -222,7 +230,7 @@ python3 -m http.server 8080
 open http://localhost:8080
 ```
 
-> The static server is enough for everything **except the form** (`contact.php` needs PHP + SMTP access, so it's only testable in production or with `php -S`). The 3D and the chatbot work locally. Cloudflare Turnstile shows a benign error on `localhost`.
+> The static server is enough for everything **except PHP** (`contact.php` needs PHP + SMTP access; `chat.php` needs PHP + the `_secret/ai.php` key — testable in production or with `php -S`). The 3D works locally; the AI assistant automatically switches to its **local rules mode** (its offline fallback). Cloudflare Turnstile shows a benign error on `localhost`.
 
 ## Prepare a deployment
 
