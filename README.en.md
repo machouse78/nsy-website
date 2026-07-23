@@ -257,14 +257,14 @@ The [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) workflow uplo
 (**Actions → Déploiement FTP → Run workflow**, or `gh workflow run deploy.yml`).
 
 - **Incremental** upload (only changed files) and **no deletion**
-  (`dangerous-clean-slate: false`): `_secret/config.php`, `boutique/`, `forum/`
-  — absent from the versioned `deploy/` — are **never** touched on the server.
+  (`dangerous-clean-slate: false`): `_secret/config.php` — absent from the
+  versioned `deploy/` — is **never** touched on the server.
 - **Secrets to create once** (GitHub → *Settings → Secrets and variables → Actions → Secrets*):
   `FTP_SERVER` (Infomaniak FTP host), `FTP_USERNAME`, `FTP_PASSWORD`.
-  Optional **variable** `FTP_SERVER_DIR` (*Variables* tab) = the exact path your FTP
-  client shows (e.g. `/public_html/`); defaults to the FTP user's home.
-- `_secret/config.php` (SMTP, gitignored) and the `boutique/forum` mirror aren't in
-  the repo: upload them **once by hand**, then the workflow leaves them alone.
+  **Variable** `FTP_SERVER_DIR` (*Variables* tab) = the exact path your FTP client
+  shows (for NSY: `web`); defaults to the FTP user's home.
+- `_secret/config.php` (SMTP, gitignored) isn't in the repo: upload it **once by
+  hand**, then the workflow leaves it alone.
 
 ## SEO, GEO & social sharing
 

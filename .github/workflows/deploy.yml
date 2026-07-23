@@ -42,8 +42,8 @@ jobs:
           server-dir: ${{ vars.FTP_SERVER_DIR != '' && vars.FTP_SERVER_DIR || './' }}
           # dangerous-clean-slate:false (défaut) = ne vide JAMAIS le serveur.
           # L'action ne supprime que les fichiers qu'elle a elle-même déjà
-          # envoyés ; _secret/config.php, boutique/, forum/ (absents de deploy/)
-          # ne sont jamais touchés.
+          # envoyés ; _secret/config.php (SMTP, absent du deploy/ versionné)
+          # n'est jamais touché. (NSY n'a ni boutique ni forum — c'est PRV Concept.)
           dangerous-clean-slate: false
           exclude: |
             **/.DS_Store
