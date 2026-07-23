@@ -249,12 +249,20 @@ Le `.htaccess` configure :
 - **Anti-hotlink** sur les médias propriétaires (`mp4`, `glb`…) via contrôle du Referer
 - **GZIP**, **cache** (1 mois médias, 1 semaine CSS/JS, 1h HTML), **security headers** (`X-Frame-Options`, `Strict-Transport-Security`…)
 
-### Déploiement FTP automatisé (à la demande)
+### Déploiement FTP (à la demande)
 
-Le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml) envoie
-`deploy/` en **FTPS** sur Infomaniak. Il est **manuel** (`workflow_dispatch`),
+**Option directe — `./deploy.sh`** (recommandée) : reconstruit `deploy/` et
+l'envoie en **FTPS** (curl, `--ssl-reqd`) **sans suppression distante**. Une
+commande, rien ne part sans la lancer. Identifiants dans **`_secret/ftp.env`**
+(gitignoré, comme `_secret/config.php` ; modèle : `_secret/ftp.env.example`) —
+le mot de passe est passé à curl via un fichier de config éphémère (jamais dans
+la liste des processus). Pour NSY : `FTP_DIR="web"`.
+
+**Option cloud — GitHub Actions** : le workflow [`.github/workflows/deploy.yml`](.github/workflows/deploy.yml)
+envoie `deploy/` en **FTPS** aussi. Il est **manuel** (`workflow_dispatch`),
 **décorrélé du push** : rien ne part tant que l'on ne le déclenche pas
 (onglet **Actions → Déploiement FTP → Run workflow**, ou `gh workflow run deploy.yml`).
+Utile pour déployer depuis n'importe où sans identifiants en local.
 
 - Envoi **incrémental** (seuls les fichiers modifiés partent) et **sans suppression**
   (`dangerous-clean-slate: false`) : `_secret/config.php` — absent du `deploy/`

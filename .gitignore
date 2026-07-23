@@ -105,3 +105,6 @@ jspm_packages/
 
 # npm: build tooling uses npm install --no-save, so the lockfile is noise
 package-lock.json
+
+# FTP credentials for ./deploy.sh (like _secret/config.php — never commit)
+_secret/ftp.env
