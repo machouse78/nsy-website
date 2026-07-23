@@ -226,5 +226,52 @@ if ($reply === '') {
 }
 if (mb_strlen($reply) > 4000) $reply = mb_substr($reply, 0, 4000);
 
+// ───── Liens cohérents avec la langue de la réponse (déterministe) ─────
+// Le modèle mélange parfois les URLs FR/EN malgré le prompt : on réécrit tout
+// lien Markdown interne vers la variante correspondant à la langue détectée
+// de la réponse. Détection par marqueurs — uniquement pour ce mapping.
+function replyIsEnglish(string $t): bool
+{
+    $t = ' ' . mb_strtolower($t) . ' ';
+    $en = 0; $fr = 0;
+    foreach ([' the ', ' you ', ' your ', ' we ', ' with ', ' can ', ' more ', ' and '] as $w) {
+        if (str_contains($t, $w)) $en++;
+    }
+    foreach ([' le ', ' la ', ' les ', ' vous ', ' votre ', ' nous ', ' avec ', ' pour ', ' une ', ' et '] as $w) {
+        if (str_contains($t, $w)) $fr++;
+    }
+    return $en > $fr;
+}
+
+$frToEn = [
+    'index.html'                          => 'index-en.html',
+    'services.html'                       => 'services-en.html',
+    'contact.html'                        => 'contact-en.html',
+    'faisabilite.html'                    => 'feasibility.html',
+    'a-propos.html'                       => 'about.html',
+    'realisations.html'                   => 'portfolio.html',
+    'conception-3d.html'                  => '3d-design.html',
+    'faq.html'                            => 'faq-en.html',
+    'mentions-legales.html'               => 'legal-notice.html',
+    'confidentialite.html'                => 'privacy.html',
+    'creation-site-ia.html'               => 'ai-website-creation.html',
+    'conformite-dora.html'                => 'dora-compliance.html',
+    'integration-claude-entreprise.html'  => 'claude-integration.html',
+    'expertise-migration-java-ee.html'    => 'java-ee-migration.html',
+    'expertise-wildfly-jboss.html'        => 'wildfly-jboss-expert.html',
+    'expertise-openshift-kubernetes.html' => 'openshift-kubernetes-expert.html',
+    'expertise-kafka-messagerie.html'     => 'kafka-messaging-expert.html',
+    'glossaire-ia-web.html'               => 'ai-web-glossary.html',
+];
+$linkMap = replyIsEnglish($reply) ? $frToEn : array_flip($frToEn);
+$reply = preg_replace_callback(
+    '/\]\(([a-z0-9.\-]+\.html)(#[\w-]*)?\)/i',
+    static function (array $m) use ($linkMap): string {
+        $url = strtolower($m[1]);
+        return '](' . ($linkMap[$url] ?? $url) . ($m[2] ?? '') . ')';
+    },
+    $reply
+);
+
 // Modèle affiché dans le badge de transparence du widget (famille, pas la clé).
 respond(['ok' => true, 'reply' => $reply, 'model' => $model]);
