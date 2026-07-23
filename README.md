@@ -89,20 +89,27 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   - **Vidéo YouTube** de la chaîne NSY, intégrée via `youtube-nocookie.com` (aucun cookie avant lecture)
   - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile ; **supersampling ×2 sur écrans non-Retina** (lignes lisses en DPR 1) et pastille « Faites pivoter » auto-masquée après la première manipulation
   - Page dédiée en **2 colonnes** desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px) ; l'aperçu Services ne montre que le modèle (`loading="lazy"`) avec un lien « Découvrir la Conception 3D »
-- **Chatbot intelligent** (voir ci-dessous)
+- **Assistant IA conversationnel** — LLM Mistral (gratuit, UE) ancré dans les contenus du site (RAG), repli local sans API (voir ci-dessous)
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
 - **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **7 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
 
-### Chatbot — moteur de règles bilingue
+### Assistant IA — LLM gratuit + RAG, repli local
 
-FAB cyan en bas-droite, panneau glassmorphic. **Pas de LLM ni d'API** (volontaire : gratuit, instantané, sans clé, fonctionne hors-ligne) — un moteur d'intentions soigné :
+FAB cyan en bas-droite, panneau glassmorphic, présent sur **les 36 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
 
-- **Normalisation** de l'entrée : minuscules + suppression des accents + ponctuation (« coût », « cout », « Combien ? » → même intention)
-- **Scoring pondéré par spécificité** : chaque intention est notée par la longueur cumulée de ses mots-clés trouvés (les expressions multi-mots l'emportent), correspondance par racine (tarif→tarifs)
-- **~16 sujets** : tarifs, disponibilité, web/IA, finance & assurance, 3D, services, parcours de Cédric, stack technique, déroulé d'une mission, localisation, références (NDA), données/RGPD, pourquoi NSY, contact — plus politesses (bonjour / merci / au revoir)
-- **2 variantes de réponse** par sujet, tirées au hasard → pas de répétition
-- **Détection de langue par message** : répond en FR ou EN selon la langue de la question (pas seulement celle de la page) ; égalité → langue de la page
-- **Suivi léger** : « et ? », « plus de détails », « tell me more » rouvre le sujet précédent ; **fallback** qui liste ce que le bot sait faire
+**Étage 1 — IA générative (`chat.php`)** : le widget interroge un proxy PHP qui
+appelle un LLM **Mistral** (palier gratuit « Experiment », société française,
+données traitées en UE) via l'API OpenAI-compatible.
+
+- **RAG maison** : le proxy injecte `llms-full.txt` (la base de connaissances déjà maintenue pour le GEO) comme contexte système → le bot répond avec les **vrais faits du site**, dans **la langue du visiteur** (quelle qu'elle soit), et sait dire « je ne sais pas ». Une seule source de vérité, zéro duplication.
+- **Garde-fous prompt** : jamais de prix ni d'email, liens internes uniquement, renvoi systématique vers le formulaire de contact, refus poli du hors-sujet, résistance aux tentatives de détournement.
+- **Protection du quota gratuit** : clé API côté serveur uniquement (`_secret/ai.php`, gitignoré), contrôle d'origine, rate-limiting par IP (8/min, 60/jour, hachée — aucun contenu journalisé) + plafond global (1 500/jour), retry sur le 429 fournisseur.
+- **Mémoire de conversation** : historique en `sessionStorage`, la discussion **suit le visiteur de page en page** ; effet machine à écrire (désactivé si `prefers-reduced-motion`) ; rendu Markdown minimal **sécurisé** (échappement complet, seuls `**gras**` et liens internes `page.html` réintroduits).
+- **Transparence** : badge « IA · Mistral » dans l'en-tête, note UE/données sensibles dans le pied du widget, section RGPD dédiée dans les pages de confidentialité.
+
+**Étage 2 — repli local (règles)** : l'ancien moteur d'intentions bilingue (16 sujets, scoring par spécificité, variantes, détection de langue par message) reste embarqué. Pas de clé configurée, quota atteint, API en panne ou hors-ligne → il répond instantanément, et l'UI l'affiche honnêtement (« Réponses automatisées »).
+
+**Mise en service** (une fois) : créer une clé gratuite sur [console.mistral.ai](https://console.mistral.ai) (plan Experiment), copier `_secret/ai.php.example` → `_secret/ai.php` sur le serveur et y coller la clé. Sans ce fichier, le bot fonctionne en mode règles.
 
 ### Formulaire contact — backend PHP
 
@@ -171,10 +178,11 @@ nsy-website/
 ├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
+├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
-├── partials/                            # ⭐ Source unique de la nav + du footer (FR/EN)
+├── partials/                            # ⭐ Source unique de la nav + footer + widget assistant (FR/EN)
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
 ├── scripts/                             # Outillage build (3D + synchro partials)
@@ -222,7 +230,7 @@ python3 -m http.server 8080
 open http://localhost:8080
 ```
 
-> Le serveur statique suffit pour tout **sauf le formulaire** (`contact.php` nécessite PHP + accès SMTP, donc testable seulement en prod ou avec `php -S`). La 3D et le chatbot fonctionnent en local. Cloudflare Turnstile affiche une erreur bénigne sur `localhost`.
+> Le serveur statique suffit pour tout **sauf le PHP** (`contact.php` nécessite PHP + accès SMTP ; `chat.php` nécessite PHP + la clé `_secret/ai.php` — testables en prod ou avec `php -S`). La 3D fonctionne en local ; l'assistant IA bascule automatiquement en **mode règles local** (son repli hors-ligne). Cloudflare Turnstile affiche une erreur bénigne sur `localhost`.
 
 ## Préparer un déploiement
 

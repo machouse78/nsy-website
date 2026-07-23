@@ -24,6 +24,9 @@ build/
 .env.production.local
 _secret/config.php
 deploy/_secret/config.php
+# Clé API du chatbot IA (chat.php) — jamais commitée, comme la config SMTP
+_secret/ai.php
+deploy/_secret/ai.php
 
 # Live-site mirrors copied into deploy/ for FTP upload only — NOT part of the
 # repo (old WordPress site, boutique, forum…). Kept locally for the upload,

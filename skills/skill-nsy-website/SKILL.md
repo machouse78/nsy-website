@@ -155,10 +155,31 @@ must hold in every change.
   must document it and stay accurate ("no tracking cookies"). Any fact change
   (price, date…) must propagate to legal pages and the chatbot too.
 
-## Chatbot
-- **Rule-based intent engine, no LLM/API** (deliberate: free, offline, no key).
-- **Detects the language of each message and replies in that language** (not
-  just the page language). Keep its answers consistent with the facts above.
+## Chatbot (AI assistant)
+- **Two tiers, 100% free** (the owner insists on AI + intelligence + free):
+  1. **LLM via `chat.php`** — PHP proxy calling Mistral (free "Experiment" tier,
+     EU-hosted, OpenAI-compatible; provider swappable in `_secret/ai.php`).
+     Grounded by injecting **`llms-full.txt`** as system context (RAG — one
+     source of truth, keep it in sync and the bot follows). Guardrails in the
+     prompt: no prices, no email/phone, internal links only, visitor's language.
+     Quota protection: origin check, per-IP rate limit (8/min, 60/day, hashed
+     IP, no content logged) + global cap; retry on provider 429.
+  2. **Rule-based intent engine as fallback** — kept intact in `js/app.js`. No
+     key / quota hit / API down / offline → it answers instantly and the UI
+     switches honestly to "Réponses automatisées". Keep its answers consistent
+     with the facts above.
+- Widget markup lives in **`partials/chatbot.{fr,en}.html`**, injected on all
+  36 pages by `scripts/sync-partials.mjs` (auto-inserts markers before the
+  app.js script tag). Conversation history follows the visitor across pages
+  (sessionStorage). LLM output rendered via the safe minimal-Markdown pass
+  (escape everything, reintroduce only bold + internal .html links) — never
+  render raw LLM HTML.
+- **`_secret/ai.php` = the API key, owner-managed** — never write the key, never
+  commit it (gitignored, like the SMTP config); `_secret/ai.php.example` is the
+  committed template. Server upload is done once by hand (deploy excludes
+  `_secret/`).
+- Transparency is a feature: "IA · Mistral" badge, EU note in the widget foot,
+  dedicated GDPR section in confidentialite/privacy — keep them when editing.
 - Do **NOT** pause/alter the chatbot's CSS animations.
 
 ## 3D Renault model

@@ -49,6 +49,7 @@ cp creation-site-ia.html               deploy/
 cp glossaire-ia-web.html               deploy/
 cp contact.php           deploy/
 cp faisabilite.php       deploy/
+cp chat.php              deploy/
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp llms.txt              deploy/
@@ -86,6 +87,7 @@ echo "📁 Copie de _secret/ (credentials SMTP)..."
 mkdir -p deploy/_secret
 cp _secret/.htaccess          deploy/_secret/
 cp _secret/config.php.example deploy/_secret/
+cp _secret/ai.php.example     deploy/_secret/
 if [ -f _secret/config.php ]; then
   cp _secret/config.php deploy/_secret/
 else
@@ -164,6 +166,7 @@ required=(
   "deploy/ai-web-glossary.html"
   "deploy/contact.php"
   "deploy/faisabilite.php"
+  "deploy/chat.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
   "deploy/llms.txt"

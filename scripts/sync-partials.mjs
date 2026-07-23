@@ -30,8 +30,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
 
 const partials = {
-  fr: { nav: read('partials/nav.fr.html').trim(), footer: read('partials/footer.fr.html').trim() },
-  en: { nav: read('partials/nav.en.html').trim(), footer: read('partials/footer.en.html').trim() },
+  fr: { nav: read('partials/nav.fr.html').trim(), footer: read('partials/footer.fr.html').trim(), chatbot: read('partials/chatbot.fr.html').trim() },
+  en: { nav: read('partials/nav.en.html').trim(), footer: read('partials/footer.en.html').trim(), chatbot: read('partials/chatbot.en.html').trim() },
 };
 
 // [file, language, base-path for {{P}}, active nav data-target]
@@ -99,6 +99,15 @@ for (const [file, lang, P, active = 'top'] of pages) {
   const footer = partials[lang].footer.replaceAll('{{P}}', P);
   html = replaceRegion(html, 'nav', nav, file);
   html = replaceRegion(html, 'footer', footer, file);
+  // Chatbot : présent sur TOUTES les pages (vitrine IA du site). Si une page
+  // n'a pas encore les marqueurs, on les insère juste avant le <script app.js>
+  // (chargé par les 36 pages) — puis le remplacement standard fait le reste.
+  if (!html.includes('<!-- @partial:chatbot -->')) {
+    // (les sous-pages chargent app.js avec `defer` → tolérer les attributs)
+    html = html.replace(/<script src="js\/app\.js"[^>]*>/,
+      (m) => `<!-- @partial:chatbot -->\n<!-- @endpartial:chatbot -->\n\n${m}`);
+  }
+  html = replaceRegion(html, 'chatbot', partials[lang].chatbot, file);
   if (html !== before) { writeFileSync(join(ROOT, file), html); changed++; }
   console.log(`✓ ${file.padEnd(24)} (lang=${lang}, P='${P}')`);
 }

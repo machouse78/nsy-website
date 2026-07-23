@@ -1,0 +1,25 @@
+<?php
+/**
+ * NSY — Config du proxy IA du chatbot (chat.php).
+ *
+ * Copier ce fichier en `_secret/ai.php` SUR LE SERVEUR et renseigner la clé.
+ * `_secret/ai.php` est gitignoré et inaccessible en HTTP (_secret/.htaccess).
+ *
+ * Clé gratuite Mistral (recommandé — société française, données UE) :
+ *   1. Créer un compte sur https://console.mistral.ai
+ *   2. Choisir le plan « Experiment » (gratuit, vérification par téléphone)
+ *   3. API Keys → Create new key → coller ci-dessous
+ *
+ * Le proxy parle le format OpenAI-compatible : pour basculer sur Groq
+ * (gratuit aussi), il suffit de changer api_url + model :
+ *   'api_url' => 'https://api.groq.com/openai/v1/chat/completions',
+ *   'model'   => 'llama-3.3-70b-versatile',
+ */
+
+return [
+    'api_url' => 'https://api.mistral.ai/v1/chat/completions',
+    'api_key' => 'CHANGE_ME_SET_THE_MISTRAL_API_KEY',
+    // mistral-small-latest : rapide, excellent en français, largement suffisant
+    // pour un assistant de site ancré dans llms-full.txt.
+    'model'   => 'mistral-small-latest',
+];
