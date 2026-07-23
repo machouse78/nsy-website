@@ -84,4 +84,5 @@ for lp in files:
     print("  ↑ " + rel, flush=True)
 
 ftp.quit()
-print("\n✅ %d fichiers envoyés (%.1f Mo) vers %s/%s/" % (count, total / 1048576, HOST, BASE))
+dest = HOST + "/" + BASE + "/" if BASE else HOST + "/ (racine)"
+print("\n✅ %d fichiers envoyés (%.1f Mo) vers %s" % (count, total / 1048576, dest))
