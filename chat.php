@@ -214,7 +214,10 @@ if ($status === 429) {
 }
 
 if ($status < 200 || $status >= 300) {
-    error_log('NSY chat: upstream HTTP ' . $status); // jamais le contenu des messages
+    // Journalise le message d'erreur du FOURNISSEUR (diagnostic : quota, plan
+    // inactif, throttling…) — jamais le contenu des messages du visiteur.
+    $diag = substr(preg_replace('/\s+/', ' ', (string)$res), 0, 300);
+    error_log('NSY chat: upstream HTTP ' . $status . ' — ' . $diag);
     respond(['ok' => false, 'code' => $status === 429 ? 'ratelimit' : 'upstream'], 502);
 }
 
