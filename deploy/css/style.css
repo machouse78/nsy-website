@@ -2291,13 +2291,16 @@ footer.foot {
 }
 .cbot-input input {
   flex: 1;
+  min-width: 0; /* autorise le champ à rétrécir → le bouton envoyer reste visible */
   background: rgba(5,8,15,0.6);
   border: 1px solid var(--line);
   border-radius: 999px;
   padding: 10px 16px;
   color: var(--fg-0);
   font-family: var(--font-body);
-  font-size: 14px;
+  /* 16px minimum : en dessous, iOS Safari zoome sur le champ au focus
+     (viewport décalé, bouton d'envoi coupé). Ne jamais repasser sous 16px. */
+  font-size: 16px;
   outline: none;
   transition: border-color .15s;
 }
