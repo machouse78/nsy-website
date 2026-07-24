@@ -15,6 +15,9 @@ Read `references/constraints.md` for the full detail. The non-negotiables below
 must hold in every change.
 
 ## Always-true facts (keep accurate everywhere — pages, chatbot, legal, meta)
+- **NSY = New Software Yard** (« chantier logiciel ») — the name evokes taking on
+  new "yards"/worksites (technical missions or web projects) and carrying them
+  through to completion. Lives in llms.txt/llms-full.txt (chatbot RAG) + FAQ.
 - NSY founded **2018** (not 2026). Owner/founder: **Cédric Barme**. EURL,
   capital 100 €, SIREN 842 078 453, Epieds-en-Beauce (Centre-Val de Loire).
 - **Display rule (owner request):** the **share capital** and the **registered
