@@ -114,6 +114,7 @@ cp public/cropped-NSY-logo-270x270.png  deploy/public/
 cp public/nsy-hero.mp4                  deploy/public/
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
+cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 # Note: public/animation.mp4 n'est plus déployée — l'animation 3D de la
 # section Loisirs est désormais une intégration YouTube (chaîne NSY).
 
@@ -183,6 +184,7 @@ required=(
   "deploy/public/nsy-logo.png"
   "deploy/public/nsy-og.jpg"
   "deploy/public/photo-profil.jpg"
+  "deploy/public/nsy-about.mp4"
   "deploy/public/finance-assurance.png"
   "deploy/public/web-ia.png"
   "deploy/public/prv-concept.jpg"
