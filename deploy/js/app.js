@@ -1166,7 +1166,9 @@
   // Hero sphere video reads better with the raw loop — only fade
   // the service card videos.
   document.querySelectorAll('video[loop]').forEach((v) => {
-    if (v.id === 'glyph-video') return;
+    // glyph-video (hero) et about-video (portrait) ont déjà une boucle sans
+    // couture intégrée (crossfade encodé dans le fichier) — pas de fondu JS.
+    if (v.id === 'glyph-video' || v.id === 'about-video') return;
     setupLoopFade(v);
   });
 

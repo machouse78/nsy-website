@@ -22,4 +22,8 @@ return [
     // mistral-small-latest : rapide, excellent en français, largement suffisant
     // pour un assistant de site ancré dans llms-full.txt.
     'model'   => 'mistral-small-latest',
+    // Le palier gratuit a un pool de capacité PAR modèle (« Service tier
+    // capacity exceeded ») : si le modèle principal est saturé, chat.php
+    // bascule automatiquement sur ces frères (surchargable ici).
+    // 'fallback_models' => ['ministral-8b-latest', 'open-mistral-nemo'],
 ];
