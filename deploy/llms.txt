@@ -3,6 +3,7 @@
 > NSY est un cabinet de conseil technique indépendant français (EURL fondée en 2018 par Cédric Barme, Centre-Val de Loire). Deux activités : (1) conseil technique senior pour la banque, l'assurance, la finance et les grands comptes — architecture distribuée, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, migration legacy, audit, conformité DORA, cloud privé/hybride, tech lead, expertise production, apport d'expertise IA en mission (productivité des équipes) ; (2) création de sites web propulsés par l'IA — intégration LLM (Claude, OpenAI, Mistral), chatbots, agents IA, recherche sémantique, SEO sémantique/GEO, Next.js, Astro, Vercel, Cloudflare, Supabase.
 
 Points clés :
+- Signification du nom : NSY = New Software Yard (« chantier logiciel »). Le nom évoque la capacité de la société à prendre en charge de nouveaux chantiers — missions techniques comme projets web — et à les mener jusqu'à leur accomplissement.
 - Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (plateformes de trading et de risque temps réel), tech lead.
 - Modèle « sans pyramide » : la personne qui vend la mission est celle qui la livre. Trois clients en parallèle maximum.
 - Secteurs de référence : banque de détail, banque privée, assurance vie, asset management, paiement, fintech. Environnements régulés (ACPR, AMF, RGPD, DORA).
@@ -39,4 +40,4 @@ Points clés :
 
 ## In English
 
-NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, priced on the need. Based in Centre-Val de Loire, France; works remotely across France and Europe. Contact: https://www.nsy.fr/contact-en.html
+NSY stands for **New Software Yard** — a "software yard/worksite", a nod to its ability to take on new projects (technical missions as well as web builds) and see them through to completion. NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, priced on the need. Based in Centre-Val de Loire, France; works remotely across France and Europe. Contact: https://www.nsy.fr/contact-en.html
