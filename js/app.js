@@ -161,6 +161,8 @@
     fab.addEventListener('click', () => {
       const isOpen = panel.classList.toggle('open');
       fab.classList.toggle('open', isOpen);
+      // À l'ouverture : sonde la disponibilité de l'IA → pose le voyant vert/orange.
+      if (isOpen) refreshHealth();
     });
     closeBtn?.addEventListener('click', () => {
       panel.classList.remove('open');
@@ -243,22 +245,77 @@
   const aiBadge = document.getElementById('cbot-ai-badge');
   const aiStatus = document.getElementById('cbot-status');
   const aiNote = document.getElementById('cbot-note');
+  const AI_HEALTH_KEY = 'nsy-cbot-health';
+  let lastModel = '';
 
   function setAiBadge(model) {
-    if (!aiBadge || !model) return;
-    const fam = /mistral/i.test(model) ? 'Mistral'
-      : /llama/i.test(model) ? 'Llama'
-      : /qwen/i.test(model) ? 'Qwen' : model.split('-')[0];
+    if (model) lastModel = model;
+    const m = model || lastModel;
+    if (!aiBadge || !m) return;
+    const fam = /ministral|mistral|nemo|magistral/i.test(m) ? 'Mistral'
+      : /llama/i.test(m) ? 'Llama'
+      : /qwen/i.test(m) ? 'Qwen' : m.split('-')[0];
     aiBadge.textContent = (pageLang === 'en' ? 'AI · ' : 'IA · ') + fam;
   }
 
-  // Bascule d'affichage honnête quand on répond via le moteur de règles local.
-  function rulesModeUI() {
-    if (aiStatus) aiStatus.innerHTML = '<span class="cbot-online"></span>'
-      + (pageLang === 'en' ? 'Online · Instant reply' : 'En ligne · Réponse instantanée');
-    if (aiNote) aiNote.textContent = pageLang === 'en'
-      ? 'Automated answers · double-check key points'
-      : 'Réponses automatisées · vérifiez les points clés';
+  // Voyant d'état : 'ai' = vert (IA générative Mistral) · 'rules' = orange
+  // (Mistral indisponible → réponses par le moteur de règles local). Met à jour
+  // la pastille, le libellé de statut et la note de bas de widget.
+  function setStatus(mode) {
+    const en = pageLang === 'en';
+    if (aiStatus) {
+      aiStatus.innerHTML = mode === 'rules'
+        ? '<span class="cbot-online is-degraded"></span>' + (en ? 'AI unavailable · local replies' : 'IA indisponible · réponses locales')
+        : '<span class="cbot-online"></span>' + (en ? 'Online · Generative AI' : 'En ligne · IA générative');
+    }
+    if (aiNote) {
+      aiNote.textContent = mode === 'rules'
+        ? (en ? 'Automated answers · double-check key points' : 'Réponses automatisées · vérifiez les points clés')
+        : (en ? 'AI-generated answers (Mistral, EU) · no sensitive data' : 'Réponses générées par IA (Mistral, UE) · pas de données sensibles');
+    }
+    if (aiBadge && mode === 'rules') aiBadge.textContent = en ? 'AI' : 'IA';
+  }
+  // Compat : ancien nom utilisé dans le flux d'envoi.
+  function rulesModeUI() { setStatus('rules'); }
+
+  const cacheHealth = (available, model) => {
+    try { sessionStorage.setItem(AI_HEALTH_KEY, JSON.stringify({ available, model: model || lastModel, ts: Date.now() })); } catch (e) { /* private mode */ }
+  };
+  const applyHealth = (available, model) => {
+    if (available) { setStatus('ai'); if (model) setAiBadge(model); }
+    else setStatus('rules');
+  };
+
+  // Health-check : demande à chat.php si l'IA (Mistral) est disponible, et pose
+  // le voyant en conséquence — AVANT tout message. Résultat mis en cache 3 min
+  // (sessionStorage) ; côté serveur une sonde /v1/models gratuite + cache 90 s
+  // évite de solliciter le fournisseur à chaque ouverture.
+  async function refreshHealth() {
+    if (aiOff()) { setStatus('rules'); return; }
+    try {
+      const c = JSON.parse(sessionStorage.getItem(AI_HEALTH_KEY) || 'null');
+      if (c && Date.now() - c.ts < 180000) { applyHealth(c.available, c.model); return; }
+    } catch (e) { /* private mode */ }
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 8000);
+      const res = await fetch('chat.php', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ health: true }), signal: ctrl.signal,
+      });
+      clearTimeout(timer);
+      const data = await res.json();
+      const available = !!(data && data.ok && data.available);
+      if (data && data.reason === 'noconfig') {
+        try { sessionStorage.setItem(AI_OFF_KEY, '1'); } catch (e) { /* private mode */ }
+      }
+      applyHealth(available, data && data.model);
+      cacheHealth(available, data && data.model);
+    } catch (e) {
+      // Ping impossible → l'IA est probablement injoignable (la génération
+      // échouerait aussi) : on affiche le mode règles, honnêtement.
+      setStatus('rules');
+    }
   }
 
   // Rendu Markdown minimal et SÛR pour la sortie du LLM : on échappe tout le
@@ -678,6 +735,7 @@
 
     // 1) Voie IA : proxy serveur (LLM ancré dans les faits du site)
     let reply = null;
+    let aiDown = false; // vraie indispo IA (≠ mon throttle par IP) → voyant orange
     if (!aiOff()) {
       try {
         const ctrl = new AbortController();
@@ -693,15 +751,21 @@
         if (data && data.ok && data.reply) {
           reply = String(data.reply);
           setAiBadge(data.model);
+          setStatus('ai');
+          cacheHealth(true, data.model);
         } else if (data && data.code === 'noconfig') {
           // Pas de clé côté serveur : inutile de réessayer cette session.
+          aiDown = true;
           try { sessionStorage.setItem(AI_OFF_KEY, '1'); } catch (e) { /* private mode */ }
         } else if (data && data.code === 'ratelimit') {
-          // Temporaire (quota/minute) : repli local ce tour-ci, on retentera.
+          // Throttle par IP (le mien) OU capacité amont : repli local ce tour-ci.
+          // On ne bascule PAS le voyant ici — le health-check tranche la vraie dispo.
         } else {
+          aiDown = true;
           aiFails++;
         }
       } catch (e) {
+        aiDown = true;
         aiFails++;
       }
     }
@@ -711,7 +775,8 @@
       const elapsed = Date.now() - t0;
       if (elapsed < 650) await new Promise((r) => setTimeout(r, 650 - elapsed));
       typing?.remove();
-      rulesModeUI();
+      // Voyant orange seulement en cas de vraie indispo IA (pas sur un throttle IP).
+      if (aiDown) { setStatus('rules'); cacheHealth(false); }
       const html = botReply(content);
       appendMessage('assistant', html);
       // Historique en texte : <b>→**…**, autres balises retirées.

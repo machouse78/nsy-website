@@ -59,7 +59,59 @@ if ($raw === false || strlen($raw) > 32768) {
     respond(['ok' => false, 'code' => 'payload'], 413);
 }
 $body = json_decode($raw, true);
-if (!is_array($body) || !isset($body['messages']) || !is_array($body['messages'])) {
+if (!is_array($body)) {
+    respond(['ok' => false, 'code' => 'payload'], 400);
+}
+
+// ───── Config IA (clé côté serveur) — chargée tôt : health + génération ─────
+$configPath = __DIR__ . '/_secret/ai.php';
+$ai = file_exists($configPath) ? require $configPath : null;
+$apiUrl = (string)(is_array($ai) ? ($ai['api_url'] ?? '') : '') ?: 'https://api.mistral.ai/v1/chat/completions';
+$apiKey = (string)(is_array($ai) ? ($ai['api_key'] ?? '') : '');
+$model  = (string)(is_array($ai) ? ($ai['model'] ?? '') : '') ?: 'mistral-small-latest';
+$hasKey = $apiKey !== '' && !str_starts_with($apiKey, 'CHANGE_ME');
+
+$rlDir = sys_get_temp_dir() . '/nsy-chat';
+if (!is_dir($rlDir)) { @mkdir($rlDir, 0700, true); }
+$healthFile = $rlDir . '/health.json';
+
+/** Mémorise le dernier état de disponibilité connu (voyant du widget). */
+function writeHealth(string $file, bool $available, string $model, string $reason): void
+{
+    @file_put_contents($file, json_encode([
+        'available' => $available, 'model' => $model, 'reason' => $reason, 'ts' => time(),
+    ]));
+}
+
+// ───── Health-check : disponibilité de l'IA (voyant vert / orange) ─────
+// Réponse rapide, SANS génération. Cache 90 s alimenté par les vraies requêtes ;
+// sur cache périmé, sonde GRATUITE GET /v1/models (valide la clé + l'API amont).
+if (!empty($body['health'])) {
+    if (!$hasKey) {
+        respond(['ok' => true, 'available' => false, 'reason' => 'noconfig']);
+    }
+    $h = @json_decode((string)@file_get_contents($healthFile), true);
+    if (is_array($h) && isset($h['ts']) && (time() - (int)$h['ts']) < 90) {
+        respond(['ok' => true, 'available' => (bool)$h['available'], 'model' => (string)($h['model'] ?? $model)]);
+    }
+    $modelsUrl = preg_replace('#/chat/completions.*$#', '/models', $apiUrl);
+    $ch = curl_init($modelsUrl);
+    curl_setopt_array($ch, [
+        CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 6,
+        CURLOPT_CONNECTTIMEOUT => 4,
+    ]);
+    curl_exec($ch);
+    $pstatus = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    curl_close($ch);
+    $avail = ($pstatus >= 200 && $pstatus < 300);
+    writeHealth($healthFile, $avail, $model, $avail ? '' : ('probe' . $pstatus));
+    respond(['ok' => true, 'available' => $avail, 'model' => $model]);
+}
+
+// ───── Génération : l'historique est requis à partir d'ici ─────
+if (!isset($body['messages']) || !is_array($body['messages'])) {
     respond(['ok' => false, 'code' => 'payload'], 400);
 }
 
@@ -81,24 +133,14 @@ if ($messages === [] || end($messages)['role'] !== 'user') {
 $page = preg_replace('/[^a-z0-9.\-]/i', '', (string)($body['page'] ?? ''));
 if ($page === '' || strlen($page) > 60) $page = 'index.html';
 
-// ───── Config IA (clé côté serveur uniquement) ─────
-$configPath = __DIR__ . '/_secret/ai.php';
-if (!file_exists($configPath)) {
-    respond(['ok' => false, 'code' => 'noconfig'], 503);
-}
-$ai = require $configPath;
-$apiUrl = (string)($ai['api_url'] ?? 'https://api.mistral.ai/v1/chat/completions');
-$apiKey = (string)($ai['api_key'] ?? '');
-$model  = (string)($ai['model'] ?? 'mistral-small-latest');
-if ($apiKey === '' || str_starts_with($apiKey, 'CHANGE_ME')) {
+// ───── Config requise pour la génération ─────
+if (!$hasKey) {
     respond(['ok' => false, 'code' => 'noconfig'], 503);
 }
 
 // ───── Rate-limiting (fichiers, IP hachée — aucun contenu stocké) ─────
 // Par IP : 8 requêtes / minute et 60 / jour. Global : 1500 / jour, pour que le
 // quota gratuit du fournisseur ne puisse pas être siphonné.
-$rlDir = sys_get_temp_dir() . '/nsy-chat';
-if (!is_dir($rlDir)) { @mkdir($rlDir, 0700, true); }
 
 /** @return bool true si la limite est dépassée */
 function rateLimited(string $file, int $perMinute, int $perDay): bool
@@ -236,6 +278,7 @@ if ($status < 200 || $status >= 300) {
     $line = date('c') . ' upstream HTTP ' . $status . ' — ' . $diag . "\n";
     @error_log($line, 3, __DIR__ . '/_secret/chat-errors.log');
     error_log('NSY chat: upstream HTTP ' . $status . ' — ' . $diag);
+    writeHealth($healthFile, false, $usedModel, $status === 429 ? 'capacity' : ('upstream' . $status));
     respond(['ok' => false, 'code' => $status === 429 ? 'ratelimit' : 'upstream'], 502);
 }
 
@@ -243,6 +286,7 @@ $data = json_decode($res, true);
 $reply = trim((string)($data['choices'][0]['message']['content'] ?? ''));
 if ($reply === '') {
     error_log('NSY chat: empty completion');
+    writeHealth($healthFile, false, $usedModel, 'empty');
     respond(['ok' => false, 'code' => 'upstream'], 502);
 }
 if (mb_strlen($reply) > 4000) $reply = mb_substr($reply, 0, 4000);
@@ -294,5 +338,7 @@ $reply = preg_replace_callback(
     $reply
 );
 
+// L'IA a répondu → voyant vert pour les prochains health-checks.
+writeHealth($healthFile, true, $usedModel, '');
 // Modèle affiché dans le badge de transparence du widget (famille, pas la clé).
 respond(['ok' => true, 'reply' => $reply, 'model' => $usedModel]);

@@ -2178,6 +2178,11 @@ footer.foot {
   background: #22d39c;
   box-shadow: 0 0 6px #22d39c;
 }
+/* Voyant orange : IA (Mistral) indisponible → réponses via moteur de règles. */
+.cbot-online.is-degraded {
+  background: #f5a623;
+  box-shadow: 0 0 6px #f5a623;
+}
 .cbot-close {
   width: 30px; height: 30px;
   border-radius: 8px;
