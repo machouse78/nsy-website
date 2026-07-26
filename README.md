@@ -109,6 +109,8 @@ données traitées en UE) via l'API OpenAI-compatible.
 
 **Étage 2 — repli local (règles)** : l'ancien moteur d'intentions bilingue (16 sujets, scoring par spécificité, variantes, détection de langue par message) reste embarqué. Pas de clé configurée, quota atteint, API en panne ou hors-ligne → il répond instantanément, et l'UI l'affiche honnêtement (« Réponses automatisées »).
 
+**Voyant de disponibilité** : l'en-tête du widget reflète l'état réel de Mistral — **vert** « En ligne · IA générative » si disponible, **orange** « IA indisponible · réponses locales » sinon. Piloté par un endpoint **health** de `chat.php` (`POST {health:true}` → `{available}`, sans génération) : cache serveur 90 s alimenté par les vraies requêtes + sonde gratuite `GET /v1/models` sur cache périmé ; ping client à l'ouverture du panneau (cache 3 min). Un throttle par IP ne fait **pas** basculer le voyant — seule une vraie indisponibilité le fait.
+
 **Mise en service** (une fois) : créer une clé gratuite sur [console.mistral.ai](https://console.mistral.ai) (plan Experiment), copier `_secret/ai.php.example` → `_secret/ai.php` sur le serveur et y coller la clé. Sans ce fichier, le bot fonctionne en mode règles.
 
 ### Formulaire contact — backend PHP

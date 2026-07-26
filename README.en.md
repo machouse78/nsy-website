@@ -109,6 +109,8 @@ in the EU) through the OpenAI-compatible API.
 
 **Tier 2 — local fallback (rules)**: the previous bilingual intent engine (16 topics, specificity-weighted scoring, reply variants, per-message language detection) stays embedded. No key configured, quota reached, API down or offline → it answers instantly, and the UI says so honestly ("Automated answers").
 
+**Availability indicator**: the widget header reflects Mistral's real state — **green** "Online · Generative AI" when available, **orange** "AI unavailable · local replies" otherwise. Driven by a `chat.php` **health** endpoint (`POST {health:true}` → `{available}`, no generation): a 90 s server cache fed by real request outcomes + a free `GET /v1/models` probe on cache miss; client pings on panel open (3 min cache). A per-IP throttle does **not** flip the dot — only genuine unavailability does.
+
 **Setup** (once): create a free key on [console.mistral.ai](https://console.mistral.ai) (Experiment plan), copy `_secret/ai.php.example` → `_secret/ai.php` on the server and paste the key. Without this file, the bot runs in rules mode.
 
 ### Contact form — PHP backend
