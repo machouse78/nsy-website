@@ -171,6 +171,14 @@ must hold in every change.
      key / quota hit / API down / offline → it answers instantly and the UI
      switches honestly to "Réponses automatisées". Keep its answers consistent
      with the facts above.
+- **Availability dot** (owner request, like PRV Concept): the header status shows
+  Mistral's real state — **green** "En ligne · IA générative" when available,
+  **orange** (`.cbot-online.is-degraded`) "IA indisponible · réponses locales"
+  when not. Driven by a `chat.php` **health endpoint** (`POST {health:true}` →
+  `{available}`, no generation): 90 s server cache fed by real request outcomes
+  (success→up, 429/error→down) + a free `GET /v1/models` probe on cache miss.
+  Client pings on panel open (3 min sessionStorage cache); a per-IP throttle does
+  NOT flip the dot (only genuine unavailability does).
 - Widget markup lives in **`partials/chatbot.{fr,en}.html`**, injected on all
   36 pages by `scripts/sync-partials.mjs` (auto-inserts markers before the
   app.js script tag). Conversation history follows the visitor across pages
