@@ -202,6 +202,22 @@ must hold in every change.
 - **Never push a 3D change without first rendering/screenshotting the result**
   and confirming it looks right (use `scripts/screenshot-glb.mjs`).
 
+## Media — AI videos (hero + About portrait)
+- Videos are AI-generated via the **Higgsfield** MCP connector (image→video:
+  Kling / kling3_0_turbo; image upscale: bytedance/Topaz). Always **strip audio**
+  (`-an`), keep files small, and let the generic `video[loop]` off-screen pause
+  in `js/app.js` manage them.
+- **Hero** `public/nsy-hero.mp4` (960×960): loops via opacity fade-to-transparent
+  driven by `currentTime` — do NOT alter its raw-loop handling.
+- **About portrait** `public/nsy-about.mp4` (960×720, 4:3, silent, ~0.32 MB): the
+  profile card is a **`<video id="about-video">`** (poster = `photo-profil.jpg`),
+  not an `<img>`. The **seamless loop is baked into the file** (end→start crossfade
+  in ffmpeg), so `about-video` is **excluded from `setupLoopFade`** in `js/app.js`
+  (like `glyph-video`) — never re-add the JS fade or you get a visible dip.
+  Pipeline: 4K-upscale the photo → pad to 16:9 (blurred sides) → Kling image→video
+  → ffmpeg seamless-loop + center-crop back to 4:3. `photo-profil.jpg` is the
+  retina still (also JSON-LD image) and the video poster.
+
 ## Client realizations — DEDICATED PAGE (`realisations.html` / `portfolio.html`)
 - A **standalone bilingual page** (NOT a homepage section — owner moved it out),
   showing delivered client websites as a `.realisations-grid` of

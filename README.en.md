@@ -5,7 +5,7 @@
 
 [🇫🇷 Français](README.md) · 🇬🇧 **English**
 
-**Multi-page bilingual (FR/EN)** website for **NSY**, a French single-member company (EURL) founded by Cédric Barme in 2018. Dual positioning: senior technical consulting for finance / insurance, and AI-powered website creation for SMEs going through their digital transition.
+**Multi-page bilingual (FR/EN)** website for **NSY** (*New Software Yard*), a French single-member company (EURL) founded by Cédric Barme in 2018. Dual positioning: senior technical consulting for finance / insurance, and AI-powered website creation for SMEs going through their digital transition.
 
 ## Art direction
 
@@ -150,6 +150,7 @@ A "cyber" site with videos, real-time 3D and animations can heat up the CPU/GPU 
 
 - **Videos** : a `<video loop>` re-decodes every frame continuously (there is no "decoded frame cache"). An `IntersectionObserver` (`js/app.js`) **pauses each looping video when it leaves the screen** and resumes it on return; a `visibilitychange` listener **pauses everything when the tab is hidden**. On load, only visible videos decode.
 - **Hero video** (`nsy-hero.mp4`) : AI-generated (Higgsfield, image-to-video from the NSY logo), square **960×960**, **no audio track**, recompressed to **0.60 MB**. **Fade-to-transparent loop**: the element opacity is animated from `currentTime` (`js/app.js`) — fade-in at the start, fade-out at the end — so at the seam the video dissolves into the blue disc behind (no alpha-channel video). Paused off-screen like the other videos.
+- **Animated portrait (About)** (`nsy-about.mp4`) : Cédric's portrait brought to life — moving holographic tech background, subject held still — AI-generated (Higgsfield, Kling image-to-video from the photo, first 4K-upscaled then padded to 16:9). **960×720 (4:3), silent, ~0.32 MB**, **seamless loop** (end→start crossfade baked into the file). The profile card uses a `<video id="about-video">` (poster = `photo-profil.jpg`) instead of an `<img>`; excluded from the JS loop-fade (already seamless) but subject to the off-screen pause.
 - **CSS animations** : the `.anim-paused` class, placed on a section via `IntersectionObserver` when it leaves the viewport, freezes all its animations (`animation-play-state: paused`, pseudo-elements included); removed when the section comes back.
 - **3D model** : `<model-viewer>` already pauses WebGL rendering off-screen; we additionally stop `auto-rotate` when the 3D Design section isn't visible. The ×2 supersampling (sharpness) only applies to DPR 1 screens, so it costs nothing on mobile/Retina.
 - **JS animations** (hero parallax, counters, reading gauge) : `requestAnimationFrame` loops that **stop by themselves at rest** (converged lerp, finished counter) — no infinite loops; all cut by `prefers-reduced-motion`.
@@ -202,10 +203,11 @@ nsy-website/
 │   └── .htaccess                        # Deny all
 ├── public/                              # Publicly served assets
 │   ├── nsy-logo.png + cropped-NSY-logo-*.png (favicons)
-│   ├── photo-profil.jpg                 # Cédric's photo (About)
+│   ├── photo-profil.jpg                 # Cédric's portrait, AI retina upscale (About) + video poster
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
 │   ├── nsy-hero.mp4                     # Hero video (NSY monogram, large circle)
+│   ├── nsy-about.mp4                    # Animated About portrait (tech bg, seamless loop)
 │   ├── nsy-og.jpg                       # Open Graph banner 1200×630
 │   ├── prv-concept.jpg                  # Work thumbnail (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Sharp-edge wireframe 3D model (575 KB)
