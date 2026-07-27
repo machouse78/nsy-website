@@ -187,10 +187,10 @@ Tu es l'assistant IA du site nsy.fr — NSY, l'EURL de Cédric Barme : conseil t
 
 RÈGLES IMPÉRATIVES :
 1. Réponds TOUJOURS dans la langue du dernier message du visiteur (français, anglais ou autre).
-2. Appuie-toi EXCLUSIVEMENT sur les FAITS ci-dessous. Si une information n'y figure pas, dis-le honnêtement et oriente vers le formulaire de contact. N'invente jamais de faits, de chiffres, de clients ou de références.
+2. RESTE STRICTEMENT FACTUEL. Appuie-toi EXCLUSIVEMENT sur les FAITS ci-dessous ; n'invente, ne devine et n'extrapole JAMAIS — aucun fait, chiffre, date, client, référence, fonctionnalité, technologie, délai ni disponibilité qui n'y figure pas. Ne « brode » pas et n'ajoute aucun détail plausible mais non vérifié. Si l'information manque, dis simplement que tu ne l'as pas et oriente vers le formulaire de contact.
 3. Ne cite JAMAIS de prix, de taux journalier ni de fourchette : la tarification s'établit en fonction du besoin, après cadrage. Oriente vers la page contact (réponse sous 48 h ouvrées).
 4. Ne donne JAMAIS d'adresse e-mail ni de numéro de téléphone. Les canaux : la page Contact ou la demande de faisabilité pour un projet web (URLs selon la langue, voir la table PAGES).
-5. Réponses courtes : 2 à 5 phrases, concrètes, ton professionnel et chaleureux. Tu peux utiliser **gras** et des liens Markdown, mais UNIQUEMENT vers des pages internes en chemin relatif — jamais de lien externe. IMPÉRATIF : les liens suivent la langue de TA réponse — réponse en anglais → colonne EN de la table PAGES, réponse en français → colonne FR. Le libellé d'un lien est toujours un mot lisible (« Contact », « feasibility form »), jamais un nom de fichier.
+5. NE POINTE JAMAIS HORS DU SITE NSY. N'évoque, ne nomme, ne suggère et ne lie AUCUNE ressource externe : aucun autre site, marque, boutique, concurrent, outil, produit tiers, réseau social, moteur de recherche, ni URL externe ou brute. Les SEULS liens/URLs autorisés sont les pages internes de nsy.fr (chemin relatif .html). Si bien répondre supposerait d'envoyer le visiteur ailleurs, ne le fais pas — oriente plutôt vers le contact NSY. Réponses courtes : 2 à 5 phrases, concrètes, ton professionnel et chaleureux ; **gras** et liens Markdown internes autorisés. Les liens suivent la langue de TA réponse — anglais → colonne EN de la table PAGES, français → colonne FR ; le libellé est un mot lisible (« Contact », « feasibility form »), jamais un nom de fichier.
 
 PAGES (FR → EN) :
 - accueil : index.html → index-en.html
@@ -337,6 +337,28 @@ $reply = preg_replace_callback(
     },
     $reply
 );
+
+// ───── Anti-hors-site : aucun lien/URL hors nsy.fr (garde-fou serveur) ─────
+// Le prompt l'interdit déjà, mais on ne fait pas confiance au modèle : on
+// neutralise côté serveur tout ce qui pointe ailleurs. Les liens INTERNES
+// (chemin relatif .html, sans schéma) ne sont pas touchés.
+$nsyHosts = ['www.nsy.fr', 'nsy.fr'];
+$isNsy = static function (?string $url) use ($nsyHosts): bool {
+    return in_array(strtolower((string)parse_url((string)$url, PHP_URL_HOST)), $nsyHosts, true);
+};
+// 1) Liens Markdown externes → on ne garde que le libellé (le lien saute).
+$reply = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/i',
+    static function (array $m) use ($isNsy): string {
+        return $isNsy($m[2]) ? $m[0] : $m[1];
+    }, $reply);
+// 2) URLs nues externes → supprimées, avec l'espace qui les précède (pour ne
+//    pas laisser d'espace avant la ponctuation). Les URLs nsy.fr restent.
+$reply = preg_replace_callback('/(\s?)(https?:\/\/[^\s)\]]+)/i',
+    static function (array $m) use ($isNsy): string {
+        return $isNsy($m[2]) ? $m[0] : '';
+    }, $reply);
+// Espaces doubles éventuels laissés par une suppression (ponctuation intacte).
+$reply = trim(preg_replace('/[ \t]{2,}/', ' ', $reply));
 
 // L'IA a répondu → voyant vert pour les prochains health-checks.
 writeHealth($healthFile, true, $usedModel, '');
