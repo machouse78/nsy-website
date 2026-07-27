@@ -859,6 +859,33 @@ section.block:first-of-type { border-top: 0; }
 }
 .cap.warm .cap-shape { background: radial-gradient(circle, rgba(240,138,44,0.18), transparent 60%); }
 
+/* ── Cartes capacités avec vidéo de fond (mêmes vidéos que la page Services) ── */
+.cap.has-media > *:not(.cap-bg):not(.cap-bg-video) { position: relative; z-index: 2; }
+.cap.has-media .cap-shape { display: none; } /* la vidéo remplace le halo décoratif */
+.cap-bg,
+.cap-bg-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+.cap-bg-video { background: #060a14; } /* évite un flash clair avant la 1re frame */
+/* Voile sombre pour garder le texte parfaitement lisible par-dessus la vidéo. */
+.cap.has-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(180deg, rgba(6,10,20,0.74) 0%, rgba(6,10,20,0.9) 100%);
+  pointer-events: none;
+}
+.cap.warm.has-media::after {
+  background: linear-gradient(180deg, rgba(10,7,4,0.72) 0%, rgba(8,10,20,0.9) 100%);
+}
+
 /* ───── Process timeline ───── */
 .process {
   display: grid;
