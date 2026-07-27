@@ -163,8 +163,12 @@ must hold in every change.
   1. **LLM via `chat.php`** — PHP proxy calling Mistral (free "Experiment" tier,
      EU-hosted, OpenAI-compatible; provider swappable in `_secret/ai.php`).
      Grounded by injecting **`llms-full.txt`** as system context (RAG — one
-     source of truth, keep it in sync and the bot follows). Guardrails in the
-     prompt: no prices, no email/phone, internal links only, visitor's language.
+     source of truth, keep it in sync and the bot follows). Guardrails: no
+     prices, no email/phone, visitor's language, **strictly factual (never
+     invent — FACTS only, else route to contact)**, and **never points outside
+     nsy.fr** (no external site/brand/tool, no external URL). The no-external
+     rule is **enforced server-side** in `chat.php` (external Markdown link →
+     label only; bare non-nsy.fr URL stripped), not prompt-only.
      Quota protection: origin check, per-IP rate limit (8/min, 60/day, hashed
      IP, no content logged) + global cap; retry on provider 429.
   2. **Rule-based intent engine as fallback** — kept intact in `js/app.js`. No

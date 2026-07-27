@@ -102,7 +102,7 @@ calls a **Mistral** LLM (free "Experiment" tier, French company, data processed
 in the EU) through the OpenAI-compatible API.
 
 - **Homemade RAG**: the proxy injects `llms-full.txt` (the knowledge base already maintained for GEO) as system context → the bot answers with the **site's real facts**, in **the visitor's language** (any language), and knows how to say "I don't know". One source of truth, zero duplication.
-- **Prompt guardrails**: never a price nor an email address, internal links only, systematic redirect to the contact form, polite refusal of off-topic, resistance to hijacking attempts.
+- **Guardrails**: never a price nor an email address, **strictly factual** (no invention — the FACTS only, otherwise redirect to contact), **never points outside nsy.fr** (no external site/brand/tool, no external URL), systematic redirect to the contact form, polite refusal of off-topic, resistance to hijacking attempts. The "no external link" rule is **enforced server-side** (`chat.php` strips external Markdown links → label only, and removes any bare non-nsy.fr URL), not just via the prompt.
 - **Free-quota protection**: API key server-side only (`_secret/ai.php`, gitignored), origin check, per-IP rate limiting (8/min, 60/day, hashed — no content logged) + global cap (1,500/day), retry on provider 429.
 - **Conversation memory**: history in `sessionStorage`, the discussion **follows the visitor from page to page**; typewriter effect (disabled under `prefers-reduced-motion`); minimal **safe** Markdown rendering (full escaping, only `**bold**` and internal `page.html` links reintroduced).
 - **Transparency**: "AI · Mistral" badge in the header, EU/sensitive-data note in the widget footer, dedicated GDPR section in the privacy pages.
