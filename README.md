@@ -5,7 +5,7 @@
 
 🇫🇷 **Français** · [🇬🇧 English](README.en.md)
 
-Site **multi-pages bilingue (FR/EN)** pour **NSY**, EURL fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
+Site **multi-pages bilingue (FR/EN)** pour **NSY** (*New Software Yard*), EURL fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
 
 ## Direction artistique
 
@@ -150,6 +150,7 @@ Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire c
 
 - **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
 - **Vidéo hero** (`nsy-hero.mp4`) : générée via IA (Higgsfield, image→vidéo à partir du logo NSY), carrée **960×960**, **sans piste audio**, recompressée à **0,60 Mo**. **Boucle en fondu vers transparent** : l'opacité est animée selon `currentTime` (`js/app.js`) — fade-in au début, fade-out en fin — donc au raccord la vidéo se dissout vers le disque bleu derrière (pas de vidéo à canal alpha). Mise en pause hors-écran comme les autres vidéos.
+- **Portrait animé (À propos)** (`nsy-about.mp4`) : le portrait de Cédric animé — fond tech holographique en mouvement, sujet immobile — généré par IA (Higgsfield, image→vidéo Kling depuis la photo, préalablement upscalée en 4K puis paddée en 16:9). **960×720 (4:3), muet, ~0,32 Mo**, **boucle sans couture** (crossfade fin→début encodé dans le fichier). La carte profil utilise un `<video id="about-video">` (poster = `photo-profil.jpg`) au lieu d'un `<img>` ; exclu du fondu JS de boucle (déjà seamless) mais soumis à la pause hors-écran.
 - **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
 - **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible. Le supersampling ×2 (netteté) ne s'applique qu'aux écrans DPR 1 et ne coûte donc rien sur mobile/Retina.
 - **Animations JS** (parallaxe hero, compteurs, jauge de lecture) : boucles `requestAnimationFrame` qui **s'arrêtent d'elles-mêmes au repos** (lerp convergé, compteur fini) — aucune boucle infinie ; tout est coupé par `prefers-reduced-motion`.
@@ -202,10 +203,11 @@ nsy-website/
 │   └── .htaccess                        # Deny all
 ├── public/                              # Assets servis publiquement
 │   ├── nsy-logo.png + cropped-NSY-logo-*.png (favicons)
-│   ├── photo-profil.jpg                 # Photo Cédric (About)
+│   ├── photo-profil.jpg                 # Portrait Cédric, upscale IA rétina (About) + poster vidéo
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
 │   ├── nsy-hero.mp4                     # Vidéo hero (monogramme NSY, grand cercle)
+│   ├── nsy-about.mp4                    # Portrait animé À propos (fond tech, boucle seamless)
 │   ├── nsy-og.jpg                       # Bannière Open Graph 1200×630
 │   ├── prv-concept.jpg                  # Vignette Réalisations (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Modèle 3D wireframe arêtes vives (575 Ko)
