@@ -1,6 +1,6 @@
 # Skills Claude Code
 
-Cinq [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills)
+Six [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills)
 versionnés avec le projet. Ce sont de la **documentation passive** chargée par
 Claude quand elle est pertinente — ils n'exécutent rien et ne modifient pas le
 site par eux-mêmes.
@@ -10,6 +10,7 @@ site par eux-mêmes.
 | **`skill-nsy-website/`** | Le « quoi » spécifique au projet : faits (fondée 2018, tarification en fonction du besoin, SIREN…), conventions bilingues, terminologie (Conception 3D/Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite d'avoir à re-préciser ces règles à chaque session. |
 | **`frontend-responsive-perf/`** | Le « comment » technique réutilisable (framework-agnostique) : responsive parfait mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless. |
 | **`seo-geo-llmo/`** | Le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA dans robots.txt, llms.txt/llms-full.txt, JSON-LD `@graph` entitaire, FAQ conversationnelle, inscriptions externes (Bing Webmaster Tools, propriété de domaine GSC via TXT DNS, Google Business Profile, LinkedIn, backlinks) — avec les pièges vécus et les vérifications curl/dig/headless. |
+| **`antispam/`** | Défense anti-spam réutilisable pour formulaires web (contact/devis) : défense en profondeur (honeypot, Turnstile, scoring de contenu, rate-limit + plafond journalier, abandon silencieux + log d'audit) avec un module PHP `antispam.php` prêt à coller. Réutilisable sur nsy.fr, prv-concept.com, sites clients. |
 | **`frontend-design/`** | Création d'interfaces front distinctives et production-grade, sans esthétique « IA générique » — le skill utilisé pour concevoir le design du site. |
 | **`video-to-website/`** | Transformer une vidéo en site scroll-animé premium (GSAP, rendu canvas, chorégraphie d'animations par couches). |
 
@@ -24,7 +25,7 @@ synchronisés avec le repo) :
 cp -R skills/* ~/.claude/skills/
 
 # …ou liens symboliques (les éditions du repo se répercutent automatiquement)
-for s in skill-nsy-website frontend-responsive-perf seo-geo-llmo frontend-design video-to-website; do
+for s in skill-nsy-website frontend-responsive-perf seo-geo-llmo antispam frontend-design video-to-website; do
   ln -sfn "$(pwd)/skills/$s" ~/.claude/skills/$s
 done
 ```

@@ -338,11 +338,12 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 ## Skills Claude Code (`skills/`)
 
-Le dépôt versionne cinq [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
+Le dépôt versionne six [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
 
 - **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, tarification en fonction du besoin…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
 - **`seo-geo-llmo`** — le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA, llms.txt, JSON-LD `@graph`, FAQ conversationnelle, inscriptions externes (Bing WT, propriété de domaine GSC, Google Business, backlinks) avec les pièges vécus et les méthodes de vérification.
+- **`antispam`** — défense anti-spam réutilisable pour formulaires web : défense en profondeur (honeypot, Turnstile, scoring de contenu, rate-limit + plafond journalier, abandon silencieux + log d'audit) avec un module PHP `antispam.php` prêt à coller. Extrait du `antispam.php` de nsy.fr, réutilisable sur prv-concept.com et sites clients.
 - **`frontend-design`** et **`video-to-website`** — les deux skills créatifs utilisés pour concevoir le site (design distinctif, site scroll-animé depuis une vidéo). Historiquement dans `.claude/skills/` (skills de projet) ; déplacés dans `skills/` + symlink pour être disponibles dans toutes les sessions.
 
 **Activation** : Claude Code lit les skills depuis `~/.claude/skills/`. Copier ou lier les dossiers (`cp -R skills/* ~/.claude/skills/` ou `ln -s`). Détails dans [`skills/README.md`](skills/README.md).
