@@ -115,12 +115,13 @@ in the EU) through the OpenAI-compatible API.
 
 ### Contact form — PHP backend
 
-`contact.php` :
+`contact.php` (shares `antispam.php` with `faisabilite.php`) :
 1. Verifies the **Cloudflare Turnstile token** (anti-bot) server-side
 2. **Honeypot** anti-spam (hidden field only bots fill in)
-3. Sends the message to the NSY inbox via **PHPMailer + Infomaniak SMTP** (internal notification in FR). The address appears **nowhere on the public site nor in this README** (anti-scraping): visitors go through the form, the auto-reply carries an internal `Reply-To`
-4. Sends an **HTML auto-reply** to the prospect, **localised FR/EN** based on the hidden `lang` field (subject, HTML body, text version, `<html lang>`, service label)
-5. Responds in JSON (`{ ok: true }` or `{ ok: false, error }`) → front-end toast
+3. **Content anti-spam** (`antispam.php`): heuristic score (URLs, shorteners like `telegra.ph`/`t.me`, crypto/casino/backlink keywords, `$…` amounts, shouty ALL-CAPS). Above the threshold → **silent drop** (fake `{ ok: true }`, no email) + a trace in `_secret/spam.log` (403 over HTTP, readable over FTP) to catch a false positive. Plus a **per-IP daily cap** (5/day) on top of the **1 send / IP / 60 s** throttle
+4. Sends the message to the NSY inbox via **PHPMailer + Infomaniak SMTP** (internal notification in FR). The address appears **nowhere on the public site nor in this README** (anti-scraping): visitors go through the form, the auto-reply carries an internal `Reply-To`
+5. Sends an **HTML auto-reply** to the prospect, **localised FR/EN** based on the hidden `lang` field (subject, HTML body, text version, `<html lang>`, service label)
+6. Responds in JSON (`{ ok: true }` or `{ ok: false, error }`) → front-end toast
 
 **Bilingual end to end** : every JSON error message sent back to the front (via a `$L(fr, en)` helper) **and** the auto-reply email follow the visitor's language (hidden `lang` field). On the browser side, the button states (`Envoi…/Sending…`, `Envoyé ✓/Sent ✓`, `Réessayer/Retry`) and toasts are driven by `pageLang` in `js/app.js`.
 
@@ -182,6 +183,7 @@ nsy-website/
 ├── contact.php                          # Contact form backend (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
 ├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
+├── antispam.php                         # Shared anti-spam filter (contact + feasibility)
 ├── css/style.css                        # Complete styles (includes the .qz- questionnaire namespace)
 ├── js/app.js                            # Chatbot, i18n, video swaps, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Questionnaire wizard (navigation + collection + send)

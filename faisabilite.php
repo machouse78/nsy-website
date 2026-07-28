@@ -121,6 +121,24 @@ if (file_exists($rateFile) && (time() - filemtime($rateFile)) < 60) {
 }
 @touch($rateFile);
 
+// ───── Anti-spam renforcé (contenu + plafond journalier par IP) ─────
+require_once __DIR__ . '/antispam.php';
+
+if (nsy_over_daily_cap('faisa', $ip, 5)) {
+    http_response_code(429);
+    echo json_encode(['ok' => false, 'error' => $L('Trop de demandes aujourd\'hui — réessayez plus tard.', 'Too many requests today — please try later.')]);
+    exit;
+}
+
+// Le contenu libre vit dans le payload JSON (réponses du questionnaire) : on
+// score l'ensemble. Abandon silencieux + log si spam (comme contact.php).
+$spamScore = nsy_spam_score($payloadRaw, $email, $name);
+if ($spamScore >= NSY_SPAM_THRESHOLD) {
+    nsy_spam_log('faisa', ['name' => $name, 'email' => $email, 'message' => $payloadRaw], $spamScore, $ip);
+    echo json_encode(['ok' => true]);
+    exit;
+}
+
 // ───── Build the admin notification email (same light-card style as contact) ─────
 $esc = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 

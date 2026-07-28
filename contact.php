@@ -119,6 +119,26 @@ if (file_exists($rateFile) && (time() - filemtime($rateFile)) < 60) {
 }
 @touch($rateFile);
 
+// ───── Anti-spam renforcé (contenu + plafond journalier par IP) ─────
+require_once __DIR__ . '/antispam.php';
+
+// Plafond journalier par IP (en plus du throttle 60 s ci-dessus).
+if (nsy_over_daily_cap('contact', $ip, 5)) {
+    http_response_code(429);
+    echo json_encode(['ok' => false, 'error' => $L('Trop de demandes aujourd\'hui — réessayez plus tard.', 'Too many requests today — please try later.')]);
+    exit;
+}
+
+// Filtrage de contenu : au-delà du seuil, on abandonne SILENCIEUSEMENT (faux
+// succès, comme le honeypot) pour ne pas renseigner le spammeur. Journalisé
+// dans _secret/spam.log pour repérer un éventuel faux positif.
+$spamScore = nsy_spam_score($message, $email, $name, $company);
+if ($spamScore >= NSY_SPAM_THRESHOLD) {
+    nsy_spam_log('contact', ['name' => $name, 'email' => $email, 'message' => $message], $spamScore, $ip);
+    echo json_encode(['ok' => true]);
+    exit;
+}
+
 // ───── Map IDs → libellés humains ─────
 $serviceMap = [
     'consulting' => 'Conseil technique',

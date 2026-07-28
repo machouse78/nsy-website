@@ -117,6 +117,13 @@ must hold in every change.
 - Submission mirrors the contact form: POST → **`faisabilite.php`** (same SMTP /
   Turnstile / honeypot / rate-limit) → admin email (light card, like contact)
   **+ dark NSY auto-responder** to the visitor. Bilingual via the hidden `lang`.
+- **Anti-spam:** both `contact.php` and `faisabilite.php` share **`antispam.php`**
+  (deployed) — content scoring (URLs, shorteners like telegra.ph/t.me, crypto/
+  casino/backlink keywords, `$…` amounts, ALL-CAPS) → **silent drop** above the
+  threshold (fake `{ok:true}`, no email, logged to `_secret/spam.log`) + a per-IP
+  daily cap. Keep the threshold conservative so a real "création web" lead sharing
+  ONE clean URL still passes. Cloudflare Turnstile is the first line — if spam
+  gets through, check that `turnstile_secret` is actually set in `_secret/config.php`.
 - **DRY rule:** question/answer labels live ONLY in the HTML (translated per
   page). `js/faisabilite.js` reads them from the DOM into a structured JSON
   `payload` `[{section, items:[{label,value,sub}]}]`; `faisabilite.php` renders
