@@ -50,6 +50,7 @@ cp glossaire-ia-web.html               deploy/
 cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp chat.php              deploy/
+cp antispam.php          deploy/   # filtre anti-spam partage (contact + faisabilite)
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp llms.txt              deploy/
@@ -168,6 +169,7 @@ required=(
   "deploy/contact.php"
   "deploy/faisabilite.php"
   "deploy/chat.php"
+  "deploy/antispam.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
   "deploy/llms.txt"

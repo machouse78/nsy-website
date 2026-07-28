@@ -115,12 +115,13 @@ données traitées en UE) via l'API OpenAI-compatible.
 
 ### Formulaire contact — backend PHP
 
-`contact.php` :
+`contact.php` (partage `antispam.php` avec `faisabilite.php`) :
 1. Vérifie le **token Cloudflare Turnstile** (anti-bot) côté serveur
 2. **Honeypot** anti-spam (champ caché que seuls les bots remplissent)
-3. Envoie le message à la boîte NSY via **PHPMailer + SMTP Infomaniak** (notification interne en FR). L'adresse n'apparaît **nulle part sur le site public ni dans ce README** (anti-scraping) : les visiteurs passent par le formulaire, l'auto-réponse porte un `Reply-To` interne
-4. Envoie une **auto-réponse HTML** au prospect, **localisée FR/EN** selon le champ caché `lang` (objet, corps HTML, version texte, `<html lang>`, libellé du service)
-5. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → toast côté front
+3. **Anti-spam de contenu** (`antispam.php`) : score heuristique (URLs, raccourcisseurs type `telegra.ph`/`t.me`, mots-clés crypto/casino/backlinks, montants `$…`, MAJUSCULES criardes). Au-delà du seuil → **abandon silencieux** (faux `{ ok: true }`, aucun email) + trace dans `_secret/spam.log` (403 en HTTP, lisible en FTP) pour repérer un faux positif. Plus un **plafond journalier par IP** (5/jour) en plus du throttle **1 envoi / IP / 60 s**
+4. Envoie le message à la boîte NSY via **PHPMailer + SMTP Infomaniak** (notification interne en FR). L'adresse n'apparaît **nulle part sur le site public ni dans ce README** (anti-scraping) : les visiteurs passent par le formulaire, l'auto-réponse porte un `Reply-To` interne
+5. Envoie une **auto-réponse HTML** au prospect, **localisée FR/EN** selon le champ caché `lang` (objet, corps HTML, version texte, `<html lang>`, libellé du service)
+6. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → toast côté front
 
 **Bilingue de bout en bout** : tous les messages d'erreur JSON renvoyés au front (via un helper `$L(fr, en)`) **et** l'email d'auto-réponse suivent la langue du visiteur (champ caché `lang`). Côté navigateur, les états du bouton (`Envoi…/Sending…`, `Envoyé ✓/Sent ✓`, `Réessayer/Retry`) et les toasts sont pilotés par `pageLang` dans `js/app.js`.
 
@@ -182,6 +183,7 @@ nsy-website/
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
+├── antispam.php                         # Filtre anti-spam partagé (contact + faisabilité)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
