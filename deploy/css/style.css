@@ -2051,8 +2051,9 @@ footer.foot {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 66px;
-  height: 66px;
+  /* Fermé : grande vignette de la mascotte Ansley (buste + logo NSY lisible). */
+  width: 192px;
+  height: 192px;
   border-radius: 999px;
   background: var(--accent);
   color: #021018;
@@ -2060,13 +2061,20 @@ footer.foot {
   place-items: center;
   box-shadow:
     0 0 0 1px rgba(0,229,255,0.3),
-    0 14px 36px -8px var(--accent-glow),
+    0 18px 44px -10px var(--accent-glow),
     0 4px 12px rgba(0,0,0,0.4);
   z-index: 300;
-  transition: transform .2s ease, box-shadow .2s, background .2s;
+  transition: width .25s ease, height .25s ease, transform .2s ease, box-shadow .2s, background .2s;
 }
-.cbot-fab:hover { transform: translateY(-2px); }
-.cbot-fab.open { background: var(--bg-3); color: var(--fg-0); box-shadow: 0 0 0 1px var(--line-strong), 0 8px 20px rgba(0,0,0,0.4); }
+.cbot-fab:hover { transform: translateY(-3px); }
+/* Ouvert : redevient un petit bouton de fermeture (ne recouvre pas le panneau). */
+.cbot-fab.open {
+  width: 56px;
+  height: 56px;
+  background: var(--bg-3);
+  color: var(--fg-0);
+  box-shadow: 0 0 0 1px var(--line-strong), 0 8px 20px rgba(0,0,0,0.4);
+}
 .cbot-fab .icon-close { display: none; }
 .cbot-fab.open .icon-open { display: none; }
 .cbot-fab.open .icon-close { display: block; }
@@ -2385,7 +2393,9 @@ footer.foot {
 
 @media (max-width: 480px) {
   .cbot { right: 12px; left: 12px; width: auto; bottom: 90px; }
-  .cbot-fab { right: 16px; bottom: 16px; }
+  /* Mascotte plafonnée sur petit écran (192px serait trop imposant). */
+  .cbot-fab { right: 16px; bottom: 16px; width: 132px; height: 132px; }
+  .cbot-fab.open { width: 52px; height: 52px; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════
