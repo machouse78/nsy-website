@@ -65,6 +65,30 @@ Pourquoi ça marche en GEO : les assistants citent les pages qui répondent à
 UNE question d'expertise par URL, avec un auteur identifiable relié à une
 entité Organization cohérente.
 
+## 3bis. Vague 3 — journal + positionnement national (juillet 2026) ✅ livrée
+
+Ajouté suite à un test : ChatGPT (mode privé) ne remontait pas encore NSY (site
+neuf). L'audit externe reprochait à tort des manques déjà couverts (JSON-LD, FAQ,
+pages dédiées) — le vrai frein est l'âge du site + les signaux hors-site (§6).
+Actions on-page réellement utiles, livrées :
+
+- **Positionnement NATIONAL assumé** (owner : viser toutes les grandes villes de
+  France, surtout en distanciel). `areaServed` = France (déjà dans le graphe) ;
+  titles/meta/H1 accueil + services + creation-site-ia et copy contact ajustés
+  « partout en France, sur site ou à distance ». Pas de refonte : ajustements ciblés.
+- **Blog / journal** : `blog.html` ↔ `blog-en.html` (index) + 1er article de fond
+  `seo-geo-etre-cite-par-les-ia.html` ↔ `seo-geo-getting-cited-by-ai.html`
+  (~1500 mots, `BlogPosting` JSON-LD, table SEO vs GEO). Lien **footer** (« Journal »),
+  PAS dans le top-nav (nav tight). ⚠️ **Aucun prix dans les articles** (règle owner).
+- **2 pages villes à contenu UNIQUE** (pas une ferme de doorway pages — anti-pattern
+  Google pour un solo en distanciel) : `consultant-technique-paris.html` (angle réel
+  finance/La Défense) + `creation-site-internet-orleans.html` (ancrage région).
+  Paires FR/EN, `Service` JSON-LD `areaServed` City+France, liens éditoriaux entrants
+  depuis creation-site-ia. **Modèle** pour n'ajouter d'autres villes QUE si contenu
+  réellement différencié.
+- Câblage complet : sitemap (+8 URLs hreflang), `sync-partials` (44 pages),
+  slug-map, footer, `chat.php` (PAGES + map FR↔EN), `prepare-deploy`.
+
 ## 4. Mots-clés
 
 **SEO classiques** : consultant technique senior banque · expert WildFly
@@ -134,9 +158,14 @@ même fait sur ≥2 sources indépendantes).
   ancienne propriété préfixe supprimée.
 
 **⏳ Reste à faire :**
-1. **Google Business Profile** (catégorie « consultant informatique », zone
-   Centre-Val de Loire, sans adresse exacte) : nourrit le Knowledge Graph →
-   Gemini.
+1. **Google Business Profile** — LE dernier gros levier restant. Catégorie
+   « consultant informatique / concepteur de sites web ». Créer en **prestataire
+   de services** → « Je livre des biens et services à mes clients » → **ne pas
+   afficher l'adresse** (surtout distanciel). **Zone de service = France** (ou les
+   grandes villes visées : Paris, Lyon, Marseille, Toulouse, Bordeaux, Lille,
+   Nantes, Orléans, Tours…). Nom = « NSY » SEUL (mots-clés dans le nom = motif n°1
+   de suspension), pas d'URL/tél dans la description (champs dédiés). Nourrit le
+   Knowledge Graph → Gemini.
 3. **Annuaires B2B crédibles** (Malt, Collective.work, France Num) —
    cohérence NAP stricte (nom/téléphone/région identiques partout).
 4. **Contenu daté et signé** : les pages vague 2 (§3) avec auteur visible

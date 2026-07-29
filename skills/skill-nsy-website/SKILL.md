@@ -152,9 +152,22 @@ must hold in every change.
   WebSite + 2 Service/Offer, nodes linked by `@id`
   (`https://www.nsy.fr/#org`, `#person`…). New pages should REFERENCE those
   `@id`s, not redeclare the entities.
-- **Strategy doc: `SEO-GEO-LLMO.md`** (repo root, NOT deployed) — wave-2
+- **Strategy doc: `SEO-GEO-LLMO.md`** (repo root, NOT deployed) — wave-2 + wave-3
   pages, keywords, per-engine mechanics, external trust-signal backlog.
   Keep it updated when SEO work lands.
+- **National + remote positioning (owner, July 2026):** target all major French
+  cities, mostly remote. `areaServed` = France (in the graph); home/services/
+  creation-site-ia titles + contact copy say "partout en France, sur site ou à
+  distance". **Do NOT build a city-page doorway farm** (spam risk for a solo remote
+  consultant); win on the differentiated niche + GEO. City pages only with UNIQUE
+  content — 2 examples exist: `consultant-technique-paris.html` (finance/La Défense
+  angle) + `creation-site-internet-orleans.html` (region), linked from creation-site-ia.
+- **Blog / journal** (`blog.html`↔`blog-en.html` + articles like
+  `seo-geo-etre-cite-par-les-ia.html`↔`seo-geo-getting-cited-by-ai.html`): footer
+  link only (not top-nav), `BlogPosting` JSON-LD, ~1500 words. **No prices in articles.**
+- **Already done externally** (`SEO-GEO-LLMO.md` §6): GSC domain property, Bing WMT,
+  LinkedIn company page. **Remaining:** Google Business Profile (service-area = France),
+  B2B directories, client reviews.
 - LLM crawlers do NOT execute JS → anything they must read (FAQ text,
   nav/footer links, facts) must exist in the static HTML. The baked-in
   partials system already guarantees this — keep it that way.

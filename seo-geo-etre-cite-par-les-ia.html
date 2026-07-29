@@ -3,28 +3,28 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kafka & Artemis JMS pour la finance — expert | NSY</title>
-<meta name="description" content="Streaming Kafka, messagerie Artemis JMS / MQ : conception, haute disponibilité, migration de brokers legacy pour les systèmes financiers. Par Cédric Barme, sur ces infrastructures depuis 2012." />
+<title>SEO vs GEO : être cité par ChatGPT, Claude et Perplexity | NSY</title>
+<meta name="description" content="Être bien classé sur Google ne suffit plus : les assistants IA choisissent leurs sources autrement. SEO vs GEO expliqué par un praticien, avec le cas concret de nsy.fr — allowlist des crawlers IA, llms.txt, graphe d'entités, FAQ." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
-<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
-<link rel="alternate" hreflang="en" href="https://www.nsy.fr/kafka-messaging-expert.html" />
-<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
+<link rel="canonical" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="NSY" />
 <meta property="og:locale" content="fr_FR" />
-<meta property="og:url" content="https://www.nsy.fr/expertise-kafka-messagerie.html" />
-<meta property="og:title" content="Kafka & Artemis JMS pour la finance — expert | NSY" />
-<meta property="og:description" content="Streaming Kafka, messagerie Artemis/MQ : conception, HA, migration de brokers legacy." />
+<meta property="og:url" content="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+<meta property="og:title" content="SEO vs GEO : être cité par ChatGPT, Claude et Perplexity" />
+<meta property="og:description" content="Les assistants IA choisissent leurs sources autrement que Google. Le retour d'expérience concret de nsy.fr." />
 <meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Kafka & Artemis JMS pour la finance — expert | NSY" />
-<meta name="twitter:description" content="Streaming Kafka, messagerie Artemis/MQ : conception, HA, migration de brokers legacy." />
+<meta name="twitter:title" content="SEO vs GEO — être cité par les IA | NSY" />
+<meta name="twitter:description" content="Comment un site devient une source citée par ChatGPT, Claude et Perplexity." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
@@ -34,26 +34,57 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<style>
+  /* Blog : cartes d'articles + typo de lecture */
+  .blog-list { display: grid; gap: 18px; margin-top: 34px; }
+  .blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
+    padding: 24px 26px; background: rgba(255,255,255,0.02);
+    transition: border-color .2s, transform .2s; }
+  .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+    color: var(--fg-2); text-transform: uppercase; }
+  .blog-card h2 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
+  .blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
+  .blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
+  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
+  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
+</style>
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html#article",
+      "headline": "SEO vs GEO : être cité par ChatGPT, Claude et Perplexity",
+      "description": "Être bien classé sur Google ne suffit plus : les assistants IA choisissent leurs sources autrement. SEO vs GEO expliqué par un praticien, avec le cas concret de nsy.fr.",
+      "inLanguage": "fr",
+      "author": { "@id": "https://www.nsy.fr/#person" },
+      "publisher": { "@id": "https://www.nsy.fr/#org" },
+      "datePublished": "2026-07-29",
+      "dateModified": "2026-07-29",
+      "image": "https://www.nsy.fr/public/nsy-og.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog.html#blog" }
+    },
+    {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
-        { "@type": "ListItem", "position": 2, "name": "Kafka & messagerie", "item": "https://www.nsy.fr/expertise-kafka-messagerie.html" }
+        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" },
+        { "@type": "ListItem", "position": 3, "name": "SEO vs GEO", "item": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" }
       ]
-    },
-    {
-      "@type": "Service",
-      "serviceType": "Expertise Kafka et messagerie Artemis JMS",
-      "name": "Streaming Kafka et messagerie d'entreprise",
-      "description": "Conception et fiabilisation d'architectures Kafka, Artemis JMS et MQ pour les systèmes financiers : haute disponibilité, sémantique de livraison, migration de brokers legacy.",
-      "provider": { "@id": "https://www.nsy.fr/#org" },
-      "areaServed": { "@type": "Country", "name": "France" },
-      "audience": { "@type": "BusinessAudience", "name": "Banque, assurance, asset management" }
     }
   ]
 }
@@ -72,9 +103,9 @@
     </a>
     <div class="nav-links">
       <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
-      <a class="nav-link active" data-target="services" href="services.html">Services</a>
+      <a class="nav-link" data-target="services" href="services.html">Services</a>
       <a class="nav-link" data-target="realisations" href="realisations.html">Réalisations</a>
-      <a class="nav-link" data-target="about" href="a-propos.html">À propos</a>
+      <a class="nav-link active" data-target="about" href="a-propos.html">À propos</a>
       <a class="nav-link" data-target="contact" href="contact.html">Contact</a>
     </div>
     <div class="nav-social">
@@ -101,44 +132,59 @@
 <section class="block" style="padding-top: 64px;">
   <div class="container">
     <div class="eyebrow-row">
-      <span class="block-eyebrow">Expertise</span>
+      <span class="block-eyebrow">Journal</span>
       <span class="line"></span>
-      <span class="mono">Kafka · Artemis JMS · MQ</span>
+      <span class="mono"><a href="blog.html" style="color: inherit;">← Tous les articles</a></span>
     </div>
+    <article class="legal-page article">
+      <div class="article-meta">29 juillet 2026 · Cédric Barme · Lecture ≈ 6 min</div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">SEO vs GEO : être cité par ChatGPT,<br />Claude et Perplexity</h1>
+      <p class="lede" style="font-size: 17px;">Être bien classé sur Google ne suffit plus. Une part croissante des recherches se fait dans un assistant IA — qui ne renvoie pas dix liens bleus, mais <strong>une réponse</strong>, appuyée sur quelques sources choisies. Si votre site n'en fait pas partie, vous n'existez pas dans la conversation. Voici comment ça fonctionne, et ce que nous avons mis en place concrètement sur ce site.</p>
 
-    <article class="legal-page">
-      <h1 style="font-size: clamp(32px, 4.5vw, 50px); margin-bottom: 16px;">Kafka et Artemis JMS en environnement financier</h1>
-      <p class="mono" style="margin-bottom: 32px;">Par Cédric Barme · Fondateur de NSY</p>
+      <h2>SEO et GEO : deux logiques différentes</h2>
+      <p>Le <strong>SEO</strong> (Search Engine Optimization) vise le classement dans une page de résultats : des positions, gagnées par la pertinence, la technique et la popularité.</p>
+      <p>Le <strong>GEO</strong> (Generative Engine Optimization — on parle aussi de LLMO) vise autre chose : être <strong>compris, retenu et cité</strong> par un moteur génératif — ChatGPT, Claude, Gemini, Perplexity, Copilot. Un assistant ne classe pas dix liens : il synthétise une réponse et attribue quelques sources. La compétition ne porte plus sur la position, mais sur <strong>l'attribution</strong>.</p>
+      <table>
+        <tr><th></th><th>SEO (Google, Bing)</th><th>GEO (assistants IA)</th></tr>
+        <tr><td>Unité de succès</td><td>Une position dans les résultats</td><td>Une citation dans la réponse</td></tr>
+        <tr><td>Ce qui est lu</td><td>La page, ses liens, ses signaux</td><td>Des faits attribuables à une entité nommée</td></tr>
+        <tr><td>Format gagnant</td><td>Contenu complet, maillage, backlinks</td><td>Faits datés, sourcés, recoupables ; questions/réponses</td></tr>
+        <tr><td>Rythme</td><td>Continu</td><td>Search : jours/semaines · modèles de base : mois</td></tr>
+      </table>
 
-      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 36px; max-width: 720px;">
-        Dans un système financier, la messagerie n'est pas de la plomberie : c'est elle qui garantit qu'un ordre n'est ni perdu ni exécuté deux fois. NSY conçoit et fiabilise ces infrastructures — Kafka pour le streaming, Artemis JMS et MQ pour la messagerie transactionnelle — depuis les plateformes de trading jusqu'aux cœurs assurantiels.
-      </p>
+      <h2>Comment un assistant choisit ses sources</h2>
+      <p>Trois conditions reviennent systématiquement :</p>
+      <ol>
+        <li><strong>Pouvoir lire.</strong> Chaque éditeur d'IA a ses crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended…). S'ils sont bloqués — volontairement ou par un pare-feu trop zélé — vous sortez du corpus.</li>
+        <li><strong>Pouvoir attribuer.</strong> Un modèle cite ce qu'il peut rattacher à une <em>entité</em> claire : un nom, une activité, des faits datés, une URL stable. Un site « joli mais flou » est inutilisable pour lui.</li>
+        <li><strong>Pouvoir recouper.</strong> Un fait présent sur une seule page pèse peu. Le même fait sur le site, un registre officiel et un profil LinkedIn devient citable.</li>
+      </ol>
 
-      <h2>Deux mondes, deux outils</h2>
-      <p>Kafka et JMS ne sont pas interchangeables, et beaucoup de dérives d'architecture naissent de cette confusion. Kafka excelle en flux : ingestion à haut débit, relecture, diffusion vers plusieurs consommateurs, event sourcing. La messagerie JMS (Artemis, MQ) excelle en transactionnel : livraison garantie à un consommateur, transactions XA avec la base de données, files point-à-point. Le bon choix — et souvent la bonne <em>combinaison</em> — se décide sur les invariants métier, pas sur la mode.</p>
-
-      <h2>Les chantiers types</h2>
+      <h2>Ce que nous avons mis en place sur nsy.fr</h2>
+      <p>Ce site sert de terrain d'essai — chaque point est vérifiable :</p>
       <ul>
-        <li><strong>Architecture Kafka</strong> — dimensionnement des partitions, sémantique de livraison (at-least-once, exactly-once et ce qu'il coûte vraiment), gouvernance des topics et des schémas, raccordement aux cœurs bancaires.</li>
-        <li><strong>Haute disponibilité Artemis / MQ</strong> — clusters, réplication, bascule automatique testée ; files persistantes qui survivent aux incidents plutôt que de les amplifier.</li>
-        <li><strong>Migration de brokers legacy</strong> — remplacement progressif d'anciens brokers par Artemis ou Kafka : réplication des flux en parallèle, double écoute, bascule consommateur par consommateur — jamais de coupure sèche.</li>
-        <li><strong>Diagnostic de production</strong> — files qui gonflent, consommateurs qui décrochent, messages empoisonnés : analyse des causes racines et remédiation durable, pas de redémarrage rituel.</li>
+        <li><strong>Allowlist explicite des crawlers IA</strong> dans <code>robots.txt</code> : GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, CCBot, Amazonbot, Applebot-Extended, MistralAI-User… Ne pas les bloquer « par prudence », c'est rester dans les corpus.</li>
+        <li><strong><code>llms.txt</code> et <code>llms-full.txt</code></strong> à la racine : l'identité, les offres, la zone d'intervention et un graphe de faits en phrases courtes — le format que les modèles assimilent le mieux.</li>
+        <li><strong>Un graphe d'entités JSON-LD</strong> (Organization, Person, Service, FAQPage…) avec des identifiants stables, le SIREN et les profils officiels en <code>sameAs</code> : l'entité « NSY » devient recoupable.</li>
+        <li><strong>Une FAQ conversationnelle</strong> de plus de cinquante questions formulées comme on les pose à un assistant.</li>
+        <li><strong>Des faits datés en absolu</strong> (« fondée en 2018 », « depuis 2012 ») : un modèle ne peut rien faire d'un « depuis 14 ans » qui périme.</li>
       </ul>
+      <p>Résultat observable : dès la première semaine de mise en ligne, les journaux du serveur montrent <strong>ClaudeBot</strong> (Anthropic) lisant <code>robots.txt</code> puis le <code>sitemap</code> plusieurs fois par jour, aux côtés de Googlebot, Bingbot, Applebot ou Amazonbot. La mécanique d'ingestion est en route — l'attribution, elle, se construit sur des semaines.</p>
 
-      <h2>L'intégration avec le socle applicatif</h2>
-      <p>Une messagerie ne vit pas seule : elle s'intègre aux serveurs d'applications (<a href="expertise-wildfly-jboss.html">WildFly / JBoss EAP</a>, où Artemis est le broker embarqué), aux plateformes conteneurisées (<a href="expertise-openshift-kubernetes.html">OpenShift / Kubernetes</a>) et aux contraintes de traçabilité des environnements régulés. NSY intervient sur toute la chaîne — c'est ce qui évite les diagnostics en silo où chacun renvoie la faute à la couche voisine.</p>
+      <h2>Ce qu'il faut en retenir pour votre site</h2>
+      <ol>
+        <li>Vérifiez votre <code>robots.txt</code> : les crawlers IA sont-ils autorisés ?</li>
+        <li>Publiez un <code>llms.txt</code> : identité, offres, faits datés, pages clés.</li>
+        <li>Structurez l'entité en JSON-LD, reliée à vos profils officiels.</li>
+        <li>Ajoutez une vraie page de questions/réponses — celle qu'un assistant peut citer telle quelle.</li>
+        <li>Recoupez : les mêmes faits sur votre site, vos registres et vos réseaux.</li>
+        <li>Mesurez : journaux serveur (passages des crawlers), puis tests directs dans les assistants en mode recherche.</li>
+      </ol>
 
-      <h2>Pourquoi NSY</h2>
-      <p>Cédric Barme a conçu des plateformes de trading et de calcul de risque temps réel en banque d'investissement — des systèmes où la perte d'un message se mesure en exposition financière. Cette exigence-là est le standard appliqué à chaque mission depuis la création de NSY en 2018. Les <a href="faq.html">questions fréquentes</a> couvrent les cas d'usage ; pour un contexte précis, réponse sous 48 heures ouvrées.</p>
+      <h2>Les limites, honnêtement</h2>
+      <p>Il n'existe pas de tableau de bord « combien de fois ChatGPT m'a cité ». Les modes <em>recherche</em> des assistants reflètent le web en quelques jours ou semaines ; les modèles de base, eux, n'intègrent de nouveaux acteurs qu'au fil de leurs réentraînements — plusieurs mois. Le GEO est une course de fond : ce qui compte, c'est d'être lisible, attribuable et recoupable <em>avant</em> les autres acteurs de votre niche.</p>
 
-      <a class="faisa-cta" href="contact.html" style="margin-top: 36px;">
-        <div>
-          <div class="l">Un flux critique à fiabiliser ?</div>
-          <h3>Décrivez votre architecture — lecture honnête sous 48 h ouvrées</h3>
-          <p>Kafka, Artemis, MQ ou les trois : diagnostic d'abord, engagement ensuite.</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
+      <p style="margin-top: 30px;">C'est exactement ce que nous industrialisons pour nos clients — la <a href="creation-site-ia.html">création de sites pensés pour l'IA</a> intègre ce dispositif GEO dès la conception. Un projet, une question ? <a href="contact.html">Parlons-en</a> — réponse sous 48 h ouvrées.</p>
     </article>
   </div>
 </section>
@@ -210,6 +256,32 @@
 </footer>
 <!-- @endpartial:footer -->
 
+<script>
+// DefinedTermSet JSON-LD généré depuis le contenu visible (source unique :
+// le HTML ci-dessus). Googlebot rend le JS ; les crawlers IA lisent le texte.
+(function () {
+  var terms = [];
+  document.querySelectorAll('.glossaire h3').forEach(function (h) {
+    var p = h.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    terms.push({
+      '@type': 'DefinedTerm',
+      name: h.textContent.trim(),
+      description: p.textContent.trim()
+    });
+  });
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'Glossaire IA & web — NSY',
+    inLanguage: 'fr',
+    hasDefinedTerm: terms
+  });
+  document.head.appendChild(s);
+})();
+</script>
 <!-- @partial:chatbot -->
 <!-- ───── Chatbot (assistant IA — Ansley, architecte NSY) ───── -->
 <button class="cbot-fab" id="cbot-fab" aria-label="Ouvrir le chat avec Ansley">

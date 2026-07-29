@@ -435,4 +435,78 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faisabilite.html" />
   </url>
 
+
+  <!-- Journal + pages géo (ajout 2026-07-29) -->
+  <url>
+    <loc>https://www.nsy.fr/blog.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/blog-en.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/consultant-technique-paris.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/consultant-technique-paris.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/technical-consultant-paris.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/consultant-technique-paris.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/technical-consultant-paris.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/consultant-technique-paris.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/technical-consultant-paris.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/consultant-technique-paris.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-orleans.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-orleans.html</loc>
+    <lastmod>2026-07-29</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+  </url>
 </urlset>
