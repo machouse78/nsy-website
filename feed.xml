@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Le journal NSY</title>
+  <link>https://www.nsy.fr/blog.html</link>
+  <description>Retours d'expérience d'un praticien : IA appliquée au web, SEO/GEO, systèmes critiques. Par Cédric Barme (NSY).</description>
+  <language>fr</language>
+  <atom:link href="https://www.nsy.fr/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>SEO vs GEO : être cité par ChatGPT, Claude et Perplexity</title>
+    <link>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</guid>
+    <pubDate>Wed, 29 Jul 2026 12:00:00 +0200</pubDate>
+    <description>Être bien classé sur Google ne suffit plus : les assistants IA choisissent leurs sources autrement. SEO vs GEO expliqué par un praticien, avec le cas concret de nsy.fr — allowlist des crawlers IA, llms.txt, graphe d'entités, FAQ.</description>
+  </item>
+</channel>
+</rss>

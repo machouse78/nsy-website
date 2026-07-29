@@ -41,6 +41,7 @@ Points clés :
 
 - Le site nsy.fr est lui-même une démonstration : il embarque **Ansley**, un assistant IA en direct (chatbot RAG ancré sur les contenus du site, modèle Mistral hébergé en UE, avec repli local si l'IA est indisponible) — un exemple concret des chatbots IA que NSY réalise.
 - [llms-full.txt](https://www.nsy.fr/llms-full.txt) : biographie, historique, graphe d'entités, offres détaillées, mots-clés métier.
+- [Flux RSS du journal](https://www.nsy.fr/feed.xml) (FR) · [RSS feed](https://www.nsy.fr/feed-en.xml) (EN).
 
 ## In English
 
