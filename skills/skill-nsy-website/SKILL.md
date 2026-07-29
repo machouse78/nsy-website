@@ -242,29 +242,33 @@ must hold in every change.
 - **The card preview is an ANIMATED loop** (owner request, July 2026 — "pas juste
   un screenshot mais une petite animation des 1res secondes"): a short muted
   looping `<video>` of the live site's opening seconds, poster = a still frame.
-  - **Capture (reusable):** `node scripts/record-realisation.mjs <url> <name> [warmupMs] [captureMs] [fps]`
-    → writes `public/<name>.mp4` (**768×480**, 30 fps, ~5 s, ~0,3 Mo) +
+  - **Capture (reusable):** `node scripts/record-realisation.mjs <url> <name> [settleMs] [captureMs] [fps]`
+    → writes `public/<name>.mp4` (**768×480**, 24 fps, ~5 s, ~0,35 Mo) +
     `public/<name>.jpg` (poster). Spawns headless Chrome, encodes with ffmpeg —
     **no npm deps** (needs Chrome + ffmpeg on PATH).
-  - **① Smoothness — DETERMINISTIC capture (don't go back to screencast).** The
-    first version filmed in real time (`Page.startScreencast`): frames arrived at an
-    IRREGULAR ~20 fps (gaps up to 280 ms) → resampling to CFR **judders** (owner:
-    "l'animation lag"). Now the recorder drives Chrome's **virtual clock**
-    (`Emulation.setVirtualTimePolicy`) and takes **one screenshot per exact 1/fps
-    step** → perfectly even 30 fps, CSS animations (marquee, counters) smooth.
-    Encode with `-framerate 30` (no fps filter). ⚠️ **Advance virtual time in SMALL
-    steps only** (1/fps) — a big `advance` gives `requestAnimationFrame` a giant
-    delta and JS animations derail (counter jumps/resets, reveal restarts). Warmup
-    uses the same tiny steps, just without saving frames.
+  - **① Smoothness AND correct speed — REAL-TIME screencast at TUNED quality.** Two
+    dead ends were tried and rejected: (a) real-time `Page.startScreencast` at
+    `quality:82` delivered frames IRREGULARLY (~20 fps, gaps up to 280 ms) →
+    resampling to CFR **judders** ("lag"); (b) **virtual clock**
+    (`Emulation.setVirtualTimePolicy`) is smooth but gives the **WRONG SPEED** — the
+    marquee is `requestAnimationFrame`-driven and only advances on a PAINT, not with
+    the virtual budget (measured: 3 px/2 s virtual vs 102 px/2 s real → "trop
+    rapide"); `Page.captureScreenshot` in a loop is too slow (~155 ms/frame). **The
+    fix:** screencast at **`quality:60`** — delivery becomes REGULAR (~28 fps, max
+    gap ~72 ms) — and **encode using each frame's real `metadata.timestamp`**
+    (concat manifest + `fps=24` filter): real time ⇒ correct speed, regular source
+    ⇒ smooth CFR. Don't raise quality (brings back the gaps); the 768 downscale hides
+    it. Don't use virtual time.
   - **② Weight — encode at the DISPLAY size (768×480), not the capture size.** The
     card shows the clip at ~600 px (375 px mobile); a looped `<video>` decodes
-    ≈ w×h×fps continuously, so capture crisp at 1280×800 then **downscale (lanczos)
-    to 768×480** — keeps it sharp while cutting decode ~2.8× (`crf 27, maxrate 900k`).
-    Off-screen pause is handled by the `video[loop]` IntersectionObserver in `app.js`.
-  - **`warmupMs`** = ms of animation played (small steps) AFTER load, BEFORE capturing
+    ≈ w×h×fps continuously, so capture crisp at 1280×800 (desktop layout — never a
+    narrow viewport, it'd trigger mobile breakpoints) then **downscale (lanczos) to
+    768×480** — sharp while cutting decode ~2.8× (`crf 27, maxrate 900k`). Off-screen
+    pause is handled by the `video[loop]` IntersectionObserver in `app.js`.
+  - **`settleMs`** = REAL ms waited after `window.load` BEFORE capturing
     → the hero intro finishes and images/engine are shown first (owner rejected a
-    capture done "pendant le chargement du moteur"). **Tune per site**: PRV Concept
-    needs **~5000** (long engine reveal); default 3500.
+    capture done "pendant le chargement du moteur"). Default **2500** (works for PRV
+    Concept — engine fully revealed); bump it if a site's intro runs longer.
 - **Card markup** (both `realisations.html` + `portfolio.html`, keep symmetric):
   inside `.realisation-shot` (which is `aspect-ratio:16/10; overflow:hidden`):
   ```html
