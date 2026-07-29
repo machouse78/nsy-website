@@ -8,7 +8,7 @@
  *   node scripts/record-realisation.mjs <url> <nom> [settleMs] [captureMs]
  *   ex : node scripts/record-realisation.mjs https://www.prv-concept.com prv-concept
  *
- * Produit  public/<nom>.mp4  (1280×800, ~5 s, boucle, crf 28 ~0,6 Mo)
+ * Produit  public/<nom>.mp4  (768×480 = taille d'affichage, capturé en 1280×800, ~5 s, boucle, ~0,4 Mo)
  *      et  public/<nom>.jpg  (poster, extrait ~3,6 s).
  *
  * Pourquoi « après chargement » : on attend window.load + un délai de
@@ -122,8 +122,12 @@ try {
   const manifest = await record(await wsUrl());
   const mp4 = join(PUBLIC, `${name}.mp4`);
   const jpg = join(PUBLIC, `${name}.jpg`);
+  // Capture en 1280×800 (net) mais on ENCODE en 768×480 = la taille d'affichage
+  // réelle de la carte (≈600 px desktop / 375 px mobile) : le décodage d'une
+  // vidéo en boucle ≈ largeur×hauteur×fps → 1280×800 saccadait un peu. Downscale
+  // supersamplé (lanczos) = net, décodage ~2,7× moins lourd.
   await run('ffmpeg', ['-y', '-f', 'concat', '-safe', '0', '-i', manifest,
-    '-vf', 'fps=24,scale=1280:800:flags=lanczos,format=yuv420p', '-t', '5',
+    '-vf', 'fps=24,scale=768:480:flags=lanczos,format=yuv420p', '-t', '5',
     '-c:v', 'libx264', '-profile:v', 'high', '-pix_fmt', 'yuv420p',
     '-crf', '28', '-maxrate', '1100k', '-bufsize', '2200k', '-preset', 'slower',
     '-movflags', '+faststart', '-an', mp4]);
