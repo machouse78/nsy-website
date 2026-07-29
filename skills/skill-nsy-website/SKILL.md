@@ -166,9 +166,10 @@ must hold in every change.
   (price, date…) must propagate to legal pages and the chatbot too.
 
 ## Chatbot (AI assistant)
-> **Architecture, mascot pipeline, and the visual charte graphique live in the
-> dedicated `chatbot` skill** (reusable across nsy.fr/Ansley + prv-concept.com).
-> The section below is the NSY-specific essentials; edit both when things change.
+> **Full chatbot docs are split into two skills:** `chatbot-core` (shared
+> architecture, mascot pipeline, charte method, iOS fix, guardrails) and
+> **`chatbot-nsy`** (Ansley specifics: persona, cyan charte, file map, FAB spec).
+> Read those for anything chatbot; the section below is just the NSY essentials.
 - **Two tiers, 100% free** (the owner insists on AI + intelligence + free):
   1. **LLM via `chat.php`** — PHP proxy calling Mistral (free "Experiment" tier,
      EU-hosted, OpenAI-compatible; provider swappable in `_secret/ai.php`).

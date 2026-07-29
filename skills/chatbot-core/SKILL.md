@@ -1,43 +1,51 @@
 ---
-name: chatbot
-description: Reusable animated-mascot chat widget for a website — portable front-end (`.cbot-*` widget injected on every page) + optional grounded LLM server proxy + an AI-generated animated mascot (FAB, header/message avatars, greeter bubble). Carries the per-site GRAPHIC CHARTER (design tokens: palette, fonts, accent halo/glow) so ornaments respect the brand. Covers the mascot video pipeline (generate → composite on brand-dark → boomerang → de-bob → head crop), performance, the iOS "video frozen after switching apps" fix, and the grounded/zero-invention server guardrails. Use when building, theming, animating, or debugging the chatbot on nsy.fr (Ansley) or prv-concept.com (Père Hervé), or standing one up on a new site. Two reference implementations. Battle-tested (2026).
+name: chatbot-core
+description: SHARED base playbook for the animated-mascot chat widget reused across sites — portable `.cbot-*` front-end + optional grounded-LLM server proxy + an AI-generated animated mascot (FAB, header/message avatars, greeter bubble). Covers the reusable ARCHITECTURE, the mascot video pipeline (generate → composite on brand-dark → boomerang → de-bob → head crop), performance, the iOS "video frozen after switching apps" fix, the charte-by-tokens theming method, and the grounded/zero-invention server guardrails — everything common to every site. The per-site specifics (persona, palette values, exact file map, live-data rules) live in the site skills that build on this one: `chatbot-nsy` (Ansley) and `chatbot-prv` (Père Hervé). Use whenever building, theming, animating, or debugging a mascot chatbot, or standing one up on a new site — then read the matching site skill. Battle-tested (2026).
 ---
 
-# Chatbot à mascotte animée — playbook réutilisable
+# Chatbot à mascotte animée — socle commun (playbook réutilisable)
 
 Un assistant de site **avec une identité** : une mascotte animée en bas à droite
 (FAB), une bulle d'accroche (greeter), un panneau de chat, des avatars animés, et
 — sous le capot — soit un vrai LLM ancré sur les données du site, soit un moteur
-de règles local. **Portable** (vitrine + boutique WordPress + forum phpBB) et
-**thémé par la charte graphique** du site.
+de règles local. **Portable** et **thémé par la charte graphique** du site.
 
-Deux implémentations de référence :
-- **NSY (nsy.fr)** — « **Ansley** », mascotte robot, charte marine + cyan, badge
-  « IA · MISTRAL » affiché (public tech).
-- **PRV Concept (prv-concept.com)** — « **Père Hervé** » (jeu de mots P-R-V),
-  mascotte tête-de-piston mécano, charte dark chaud + orange, IA **masquée**.
+> **Ce skill = le SOCLE COMMUN** (architecture, pipeline mascotte, perf/iOS,
+> méthode de charte, garde-fous serveur). Il ne contient AUCUNE valeur propre à
+> un site. Les spécificités (persona, valeurs de palette, carte des fichiers,
+> données live) vivent dans les skills de site qui **héritent** de ce socle —
+> lis d'abord celui-ci, puis le skill du site :
+>
+> - **`chatbot-nsy`** — nsy.fr, « **Ansley** », mascotte robot, charte marine +
+>   cyan, IA **affichée** (badge « IA · MISTRAL ») ; widget dans
+>   `partials/chatbot.{fr,en}.html` + `.cbot-*` de `css/style.css` + `chat.php`.
+> - **`chatbot-prv`** — prv-concept.com, « **Père Hervé** », mascotte
+>   tête-de-piston, charte dark chaud + orange, IA **masquée** ; widget autonome
+>   `assets/prevy.js` + `assets/prevy.css`, branché boutique WooCommerce + forum phpBB.
 
-Le code canonique vit dans chaque repo : **`assets/prevy.js` + `assets/prevy.css`**
-(PRV) — un widget autonome de ~30 Ko injecté par `js/app.js`. La **charte
-graphique** (les seuls tokens à changer d'un site à l'autre) est dans
-[`reference/charte-graphique.md`](reference/charte-graphique.md).
+La **charte graphique** (méthode + correspondance token→composant, commune à
+tous les sites) est dans [`reference/charte-graphique.md`](reference/charte-graphique.md) ;
+les **valeurs** de palette de chaque site sont dans son skill de site.
 
 ## 1. Architecture front — un widget portable et autonome
 
-- **Source unique** : tout le widget (`initChatbot()` + helpers) dans un seul JS
-  (`prevy.js`) + un seul CSS (`prevy.css`). Aucune des pages HTML ne le connaît ;
-  `app.js` les **injecte** avec un cache-buster `?v=`. La boutique/forum le
-  chargent avec 2 lignes (`<link …/prevy.css>` + `<script …/prevy.js defer>`).
-- **Autonome** : le CSS embarque **ses propres variables** de charte (voir §4) —
-  il ne dépend pas du `:root` de la page (la boutique/forum n'ont pas la charte
-  vitrine). Préfixe de classes `.cbot-*` pour ne rien casser autour.
+- **Structure `.cbot-*`, identique partout** : FAB + greeter + panneau + avatars.
+  Deux façons de la livrer selon le site (détail dans le skill de site) :
+  - **widget autonome** — un seul JS + un seul CSS embarquant leurs propres
+    tokens de charte, injectés par `app.js` (ex. `prevy.js`/`prevy.css` sur PRV) :
+    obligatoire quand le widget doit tourner **hors** de la vitrine (boutique
+    WordPress, forum phpBB) qui n'ont pas le `:root` du site ;
+  - **widget intégré** — markup dans un partial injecté sur chaque page + styles
+    dans le CSS global (ex. `partials/chatbot.*.html` + `.cbot-*` de `style.css`
+    sur NSY) : suffisant quand toutes les pages partagent la même charte.
 - **Persistance** : conversation en `sessionStorage` (suit le visiteur de page en
-  page). Rendu : copie assistant en `innerHTML` (gras/liens), saisie visiteur en
-  `textContent` (jamais en HTML — anti-XSS).
-- **⚠️ Cache-busting** : après CHAQUE modif de `prevy.js`/`prevy.css`, incrémenter
-  le token `?v=` sur `app.js`+`styles.css` dans **toutes** les pages HTML (script
-  le sed, puis régénère les pages EN) **et** le `V` du chargeur prevy dans
-  `app.js`. Sinon les navigateurs servent l'ancien widget malgré `no-cache`.
+  page). Rendu : copie assistant en `innerHTML` (gras + liens **internes**), saisie
+  visiteur en `textContent` (jamais en HTML — anti-XSS).
+- **⚠️ Cache-busting** (widget autonome) : après CHAQUE modif du JS/CSS du widget,
+  incrémenter le token `?v=` sur `app.js`/`styles.css` dans **toutes** les pages
+  HTML **et** le `V` du chargeur, puis régénérer les pages EN. Sinon les
+  navigateurs servent l'ancien widget malgré `no-cache`. (Widget intégré : le
+  versioning du CSS/JS global du site suffit.)
 
 ## 2. La mascotte animée (le cœur de l'identité)
 
@@ -85,9 +93,11 @@ mécanique. Rejette : bobbing, logo qui nage, coupure de boucle.
 Tout ornement « signal » (anneau FAB, **halo avatar**, greeter, bouton envoyer,
 liens, puces) porte la **couleur d'accent de la charte du site**, jamais une
 couleur arbitraire. Adapter un site = changer **uniquement** le bloc de tokens du
-CSS (`--bg*`, `--ink*`/`--fg*`, `--orange`/accent, `--line*`). Table complète des
-2 chartes de référence (PRV orange `#ED7D2B` / NSY cyan `#00E5FF`), polices, et
-correspondance token→composant : [`reference/charte-graphique.md`](reference/charte-graphique.md).
+CSS (`--bg*`, `--ink*`/`--fg*`, `--orange`/accent, `--line*`). La **méthode**
+(bloc de tokens, correspondance token→composant, règle d'or) est dans
+[`reference/charte-graphique.md`](reference/charte-graphique.md) ; les **valeurs**
+de chaque site (PRV orange `#ED7D2B`, NSY cyan `#00E5FF`, polices) sont dans son
+skill de site (`chatbot-prv` / `chatbot-nsy`).
 
 **Leçon greeter (PRV)** : un fond **sombre** pour la bulle d'accroche — même avec
 un liseré d'accent — **se fond** dans le fond quasi-noir du site. Mettre un **fond
@@ -130,9 +140,10 @@ si le LLM tombe (429/panne), on sert quand même les données réelles récupér
   côté serveur, sans jamais l'annoncer.
 - **Identifiants ≠ dates** ; n'afficher une date que si la donnée la fournit.
 
-Les **règles de contenu spécifiques** à chaque site (véhicules, périmètre forum,
-etc.) vivent dans les skills de site (`skill-prv-concept`, `skill-nsy-website`),
-pas ici.
+Les **règles de contenu spécifiques** à chaque site (persona, périmètre, données
+live boutique/forum, véhicules…) vivent dans le skill de site (`chatbot-nsy`,
+`chatbot-prv`) — et le contenu métier de fond dans `skill-nsy-website` /
+`skill-prv-concept`. Pas ici.
 
 ## 7. Vérifier (avant de livrer)
 
@@ -145,8 +156,16 @@ pas ici.
   avatars repartent (au retour ou au 1er toucher).
 - **Cache** : après modif prevy, vérifier le nouveau `?v=` **en ligne**.
 
+## Skills qui héritent de ce socle
+
+- **`chatbot-nsy`** — l'implémentation NSY (Ansley) : persona, charte cyan, carte
+  des fichiers (`partials/chatbot.*.html`, `chat.php`, `.cbot-*`), FAB 132×168.
+- **`chatbot-prv`** — l'implémentation PRV (Père Hervé) : persona, charte orange,
+  widget `prevy.js/css`, données live boutique WooCommerce + forum phpBB et leurs
+  règles de remontée.
+
 ## Related skills
 
 `frontend-responsive-perf` (mesure headless, vidéos en boucle, moteur de règles) ·
 `video-to-website` (pipeline vidéo) · `antispam` (formulaires) ·
-`skill-nsy-website` / `skill-prv-concept` (branchements & contenu par site).
+`skill-nsy-website` / `skill-prv-concept` (contenu métier par site).
