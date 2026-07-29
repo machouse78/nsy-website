@@ -163,7 +163,7 @@
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/realisations.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -176,11 +176,19 @@
       <image:title>PRV Concept — site réalisé par NSY</image:title>
       <image:caption>Réalisation NSY : site vitrine de l'association PRV Concept, dédiée au V6 PRV (Peugeot · Renault · Volvo)</image:caption>
     </image:image>
+
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/prv-concept.jpg</video:thumbnail_loc>
+      <video:title>Aperçu du site PRV Concept — réalisation NSY</video:title>
+      <video:description>Aperçu animé du site prv-concept.com conçu par NSY : intro du hero, moteur V6 PRV et assistant conversationnel de l'association.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/prv-concept.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-07-29</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 

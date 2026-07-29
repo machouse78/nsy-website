@@ -60,6 +60,11 @@ ErrorDocument 404 /index.html
     AddType font/woff2 .woff2
     AddType font/woff .woff
     AddType application/javascript .js
+    # UTF-8 explicite pour les fichiers texte servis bruts (llms.txt,
+    # llms-full.txt, robots.txt…). Sans ça, le serveur envoie « text/plain »
+    # sans charset et, avec X-Content-Type-Options: nosniff, le navigateur
+    # décode l'UTF-8 en Latin-1 → accents cassés (« indÃ©pendant »).
+    AddCharset utf-8 .txt
 </IfModule>
 
 # (Le cache des vidéos est désormais géré dans le bloc « Cache navigateur »
