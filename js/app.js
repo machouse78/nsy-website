@@ -157,20 +157,29 @@
   const suggestions = document.getElementById('cbot-suggestions');
   const escalate = document.getElementById('cbot-escalate');
 
+  // Avatar animé d'Ansley (mascotte) : la vidéo ne joue QUE panneau ouvert
+  // (économie CPU/batterie ; elle est en preload="none" donc rien ne charge tant
+  // que le chat n'est pas ouvert). Boomerang seamless → pas de fondu de boucle JS.
+  const ansleyVid = document.getElementById('ansley-video');
+  const playAnsley = () => ansleyVid && ansleyVid.play().catch(() => {});
+  const pauseAnsley = () => ansleyVid && ansleyVid.pause();
+
   if (fab && panel) {
     fab.addEventListener('click', () => {
       const isOpen = panel.classList.toggle('open');
       fab.classList.toggle('open', isOpen);
-      // À l'ouverture : sonde la disponibilité de l'IA → pose le voyant vert/orange.
-      if (isOpen) refreshHealth();
+      if (isOpen) { refreshHealth(); playAnsley(); }  // sonde la dispo IA + anime Ansley
+      else pauseAnsley();
     });
     closeBtn?.addEventListener('click', () => {
       panel.classList.remove('open');
       fab.classList.remove('open');
+      pauseAnsley();
     });
     escalate?.addEventListener('click', () => {
       panel.classList.remove('open');
       fab.classList.remove('open');
+      pauseAnsley();
       // Site multi-pages : la section contact vit sur contact.html / contact-en.html.
       const c = document.getElementById('contact');
       if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -182,8 +191,8 @@
     const a = document.createElement('div');
     a.className = 'cbot-msg-avatar';
     const img = document.createElement('img');
-    img.src = 'public/nsy-logo.png';
-    img.alt = 'NSY';
+    img.src = 'public/ansley.png';
+    img.alt = 'Ansley';
     a.appendChild(img);
     return a;
   }
@@ -1231,9 +1240,11 @@
   // Hero sphere video reads better with the raw loop — only fade
   // the service card videos.
   document.querySelectorAll('video[loop]').forEach((v) => {
-    // glyph-video (hero) et about-video (portrait) ont déjà une boucle sans
-    // couture intégrée (crossfade encodé dans le fichier) — pas de fondu JS.
-    if (v.id === 'glyph-video' || v.id === 'about-video') return;
+    // glyph-video (hero), about-video (portrait), ansley-video (avatar) et
+    // ansley-fab-video (mascotte du FAB) ont déjà une boucle sans couture
+    // (crossfade encodé / boomerang) — pas de fondu JS.
+    if (v.id === 'glyph-video' || v.id === 'about-video'
+        || v.id === 'ansley-video' || v.id === 'ansley-fab-video') return;
     setupLoopFade(v);
   });
 
@@ -1244,7 +1255,11 @@
   //   • off-screen (scrolled out of view) — the 2 service videos sit below
   //     the fold and were decoding for nothing;
   //   • hidden tab — no point decoding what the user can't see.
-  const loopingVideos = Array.from(document.querySelectorAll('video[loop]'));
+  // ansley-video (avatar du chat) est exclu : il est piloté par l'ouverture du
+  // panneau (play/pause), pas par le défilement — sinon l'observer le lancerait
+  // alors que le chat est fermé (panneau en opacity:0 mais géométriquement visible).
+  const loopingVideos = Array.from(document.querySelectorAll('video[loop]'))
+    .filter((v) => v.id !== 'ansley-video');
   if (loopingVideos.length && 'IntersectionObserver' in window) {
     const onScreen = new WeakSet();
     const resume = (v) => {
