@@ -243,16 +243,23 @@ must hold in every change.
   un screenshot mais une petite animation des 1res secondes"): a short muted
   looping `<video>` of the live site's opening seconds, poster = a still frame.
   - **Capture (reusable):** `node scripts/record-realisation.mjs <url> <name>`
-    → writes `public/<name>.mp4` (1280×800, ~5 s, crf 28 ~0,6 Mo) + `public/<name>.jpg`
-    (poster). It spawns headless Chrome (CDP `Page.startScreencast`) and encodes
-    with ffmpeg — **no npm deps** (needs Chrome + ffmpeg on PATH).
+    → writes `public/<name>.mp4` (**768×480** = display size, captured at 1280×800,
+    ~5 s, ~0,4 Mo) + `public/<name>.jpg` (poster). It spawns headless Chrome (CDP
+    `Page.startScreencast`) and encodes with ffmpeg — **no npm deps** (needs Chrome
+    + ffmpeg on PATH).
   - **CRITICAL: capture starts only AFTER `window.load` + a settle delay** (default
     1600 ms) so the hero intro is finished and images/engine are shown — otherwise
     you film the site still building (owner rejected a capture done during load).
     Bump the settle arg if a site's intro is long: `... <url> <name> 2500`.
-  - **Video params** (in the script): viewport 1280×800 dsf 1, jpeg screencast →
-    ffmpeg `fps=24, scale=1280:800:lanczos, yuv420p, libx264 crf 28,
+  - **Video params** (in the script): viewport 1280×800 dsf 1 (crisp capture), jpeg
+    screencast → ffmpeg `fps=24, scale=768:480:lanczos, yuv420p, libx264 crf 28,
     maxrate 1100k, +faststart, -an, -t 5`; poster extracted at ~3.6 s.
+  - **⚠️ Encode at the DISPLAY size (768×480), not the capture size (1280×800).**
+    The card shows the clip at ~600 px (375 px mobile); a looped `<video>` decodes
+    ≈ w×h×fps continuously, so a 1280×800 loop **stuttered** a bit. Capturing at 1280
+    then downscaling (lanczos) keeps it crisp while cutting decode ~2.7× (24 → 8
+    Mpx/s, 628 K → 412 K). Off-screen pause is handled by the `video[loop]`
+    IntersectionObserver in `app.js`. (Reusable lesson: `frontend-responsive-perf`.)
 - **Card markup** (both `realisations.html` + `portfolio.html`, keep symmetric):
   inside `.realisation-shot` (which is `aspect-ratio:16/10; overflow:hidden`):
   ```html
