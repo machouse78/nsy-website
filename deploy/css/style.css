@@ -2060,11 +2060,27 @@ footer.foot {
   display: grid;
   place-items: center;
   box-shadow:
-    0 0 0 1px rgba(0,229,255,0.3),
+    0 0 0 1px rgba(0,229,255,0.35),
+    0 0 32px 2px rgba(0,229,255,0.42),
     0 18px 44px -10px var(--accent-glow),
     0 4px 12px rgba(0,0,0,0.4);
   z-index: 300;
   transition: width .25s ease, height .25s ease, transform .2s ease, box-shadow .2s, background .2s;
+}
+/* Halo « présence » : ping cyan pulsé autour du FAB fermé (comme PRV Concept). */
+.cbot-fab::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  pointer-events: none;
+  animation: cbot-fab-halo 2.6s ease-out infinite;
+}
+.cbot-fab.open::after { animation: none; }
+@keyframes cbot-fab-halo {
+  0%   { box-shadow: 0 0 0 0 rgba(0,229,255,0.55); }
+  70%  { box-shadow: 0 0 0 26px rgba(0,229,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
 }
 .cbot-fab:hover { transform: translateY(-3px); }
 /* Ouvert : redevient un petit bouton de fermeture (ne recouvre pas le panneau). */
@@ -2089,6 +2105,54 @@ footer.foot {
   display: block;
 }
 .cbot-fab.open .cbot-fab-face { display: none; }
+
+/* ── Bulle de présentation d'Ansley (près du FAB fermé, comme PRV Concept) ── */
+.cbot-greeter {
+  position: fixed;
+  right: 24px;
+  bottom: 232px; /* au-dessus du FAB (bottom 24 + hauteur 192 + marge) */
+  width: min(272px, calc(100vw - 48px));
+  background: var(--accent);
+  color: #04141b;
+  padding: 15px 34px 15px 18px;
+  border-radius: 16px;
+  box-shadow: 0 14px 34px -8px var(--accent-glow), 0 4px 12px rgba(0,0,0,0.45);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.42;
+  z-index: 299;
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transform-origin: bottom right;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .35s cubic-bezier(.2,.7,.2,1);
+  cursor: pointer;
+}
+.cbot-greeter.show { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
+.cbot-greeter p { margin: 0; color: #04141b; } /* forcé : un p{color} global l'écraserait */
+.cbot-greeter b { font-weight: 700; color: #04141b; }
+.cbot-greeter::after { /* flèche pointant vers le FAB */
+  content: "";
+  position: absolute;
+  right: 44px;
+  bottom: -7px;
+  width: 16px; height: 16px;
+  background: var(--accent);
+  border-radius: 0 0 4px 0;
+  transform: rotate(45deg);
+}
+.cbot-greeter-close {
+  position: absolute;
+  top: 7px; right: 9px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  color: #04141b;
+  font-size: 17px;
+  line-height: 21px;
+  text-align: center;
+  opacity: 0.6;
+}
+.cbot-greeter-close:hover { opacity: 1; background: rgba(4,20,27,0.12); }
 .cbot-fab-dot {
   position: absolute;
   top: 8px; right: 8px;
@@ -2396,6 +2460,7 @@ footer.foot {
   /* Mascotte plafonnée sur petit écran (192px serait trop imposant). */
   .cbot-fab { right: 16px; bottom: 16px; width: 132px; height: 132px; }
   .cbot-fab.open { width: 52px; height: 52px; }
+  .cbot-greeter { right: 16px; bottom: 160px; } /* au-dessus du FAB mobile (16 + 132 + marge) */
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2820,6 +2885,7 @@ footer.foot {
   .tron-floor-fx { display: none; }
   .cbot-fab-dot::after { animation: none; }
   .cbot-avatar-pulse { animation: none; }
+  .cbot-fab::after { animation: none; }
   .cbot-typing span { animation: none; opacity: 1; }
   .terminal .cursor { animation: none; opacity: 1; }
 
