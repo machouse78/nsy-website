@@ -39,8 +39,17 @@ les **valeurs** de palette de chaque site sont dans son skill de site.
     dans le CSS global (ex. `partials/chatbot.*.html` + `.cbot-*` de `style.css`
     sur NSY) : suffisant quand toutes les pages partagent la même charte.
 - **Persistance** : conversation en `sessionStorage` (suit le visiteur de page en
-  page). Rendu : copie assistant en `innerHTML` (gras + liens **internes**), saisie
-  visiteur en `textContent` (jamais en HTML — anti-XSS).
+  page). Rendu : copie assistant en `innerHTML` (gras + liens), saisie visiteur en
+  `textContent` (jamais en HTML — anti-XSS).
+- **Rendu des liens (Markdown SÛR + filet)** : on échappe tout, puis on réintroduit
+  `**gras**` et les liens `[libellé](url)` (internes `.html` = même onglet ;
+  forum/boutique = **nouvel onglet** `target="_blank" rel="noopener"`). **Filet
+  indispensable** : le LLM sort parfois une **URL BRUTE** du site au lieu d'un lien
+  Markdown → elle resterait en **texte non cliquable**. Le renderer **auto-relie**
+  donc les URLs brutes du domaine (forum/boutique → nouvel onglet + libellé court
+  « voir le sujet / view topic » ; pages internes → même onglet). Pour ne pas
+  re-traiter un lien déjà formé : la classe de l'URL **exclut `"`** (le `href="…"`
+  d'un `<a>` existant n'est jamais recapté) — évite aussi le lookbehind (Safari &lt; 16.4).
 - **⚠️ Cache-busting** (widget autonome) : après CHAQUE modif du JS/CSS du widget,
   incrémenter le token `?v=` sur `app.js`/`styles.css` dans **toutes** les pages
   HTML **et** le `V` du chargeur, puis régénérer les pages EN. Sinon les
@@ -139,6 +148,14 @@ si le LLM tombe (429/panne), on sert quand même les données réelles récupér
 - **Rédaction sensible SILENCIEUSE** (ex. modifications non homologuées) : omettre
   côté serveur, sans jamais l'annoncer.
 - **Identifiants ≠ dates** ; n'afficher une date que si la donnée la fournit.
+- **LANGUE de réponse — la DÉTECTER côté serveur, ne pas se fier au LLM** : Mistral
+  répondait en français à une question anglaise sur le site EN. On détecte la
+  langue du **dernier message** du visiteur de façon **déterministe** (heuristique
+  mots-outils FR vs EN + accents = signal FR fort), et on l'injecte dans le prompt
+  comme langue **imposée** (règle prioritaire + rappel final). La langue de la
+  **page/UI** (ex. chemin `en/…` envoyé par le widget) n'est que le **départage**
+  d'un message trop court/ambigu. Résultat : la langue du **message** prime
+  (EN page + msg EN → EN ; FR page + msg EN → EN ; EN page + msg FR → FR).
 
 Les **règles de contenu spécifiques** à chaque site (persona, périmètre, données
 live boutique/forum, véhicules…) vivent dans le skill de site (`chatbot-nsy`,
