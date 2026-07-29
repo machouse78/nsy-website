@@ -1412,29 +1412,39 @@
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  // ───── Barre de progression de lecture (toutes pages) ─────
-  // Feedback lié au geste de l'utilisateur → autorisée même en reduced-motion.
-  // transform: scaleX (composité), mise à jour au plus 1×/frame via rAF-guard.
+  // ───── Barre de CHARGEMENT de page (toutes pages) ─────
+  // Fine ligne d'accent en haut du viewport : elle se remplit pendant le
+  // chargement puis disparaît une fois la page prête. (Remplace l'ancienne
+  // jauge de scroll.) transform: scaleX (composité) → aucun reflow.
   {
     const bar = document.createElement('div');
-    bar.className = 'scroll-progress';
+    bar.className = 'load-bar';
     bar.setAttribute('aria-hidden', 'true');
-    // Dans la nav sticky (ancrée sous le menu, façon PRV Concept) ;
-    // fallback en haut du viewport si une page n'avait pas de nav.
-    (document.querySelector('.nav') || document.body).appendChild(bar);
-    let ticking = false;
-    const update = () => {
-      const doc = document.documentElement;
-      const max = doc.scrollHeight - doc.clientHeight;
-      bar.style.transform = `scaleX(${max > 0 ? Math.min(1, doc.scrollTop / max).toFixed(4) : 0})`;
-      ticking = false;
+    document.body.appendChild(bar);
+    let p = 0;
+    const set = (v) => { p = Math.min(1, v); bar.style.transform = `scaleX(${p.toFixed(4)})`; };
+    // Départ visible dès l'exécution du script (defer → HTML déjà parsé).
+    requestAnimationFrame(() => set(0.1));
+
+    let trickle = null;
+    const stopTrickle = () => { if (trickle) { clearInterval(trickle); trickle = null; } };
+    const finish = () => {
+      stopTrickle();
+      set(1);
+      bar.classList.add('is-done');           // fondu (opacity → 0)
+      setTimeout(() => bar.remove(), 700);     // retrait du DOM après la transition
     };
-    const onScroll = () => {
-      if (!ticking) { ticking = true; requestAnimationFrame(update); }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    update();
+
+    if (document.readyState === 'complete') {
+      // Page déjà chargée (cache, exécution tardive) : petit flash puis disparition.
+      finish();
+    } else {
+      // Trickle : on avance vers ~90 % en ralentissant à l'approche.
+      trickle = setInterval(() => { if (p < 0.9) set(p + (0.9 - p) * 0.14 + 0.004); }, 240);
+      // DOM prêt → on assure un minimum visible ; chargement complet → 100 % + fondu.
+      document.addEventListener('DOMContentLoaded', () => set(Math.max(p, 0.5)), { once: true });
+      window.addEventListener('load', finish, { once: true });
+    }
   }
 
   // ───── Compteurs animés (hero-meta + signaux About) ─────
