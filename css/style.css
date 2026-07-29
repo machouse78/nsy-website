@@ -2651,11 +2651,13 @@ footer.foot {
   position: relative; aspect-ratio: 16 / 10; overflow: hidden;
   border-bottom: 1px solid var(--line); background: var(--bg-3);
 }
-.realisation-shot img {
+.realisation-shot img,
+.realisation-shot video {
   width: 100%; height: 100%; object-fit: cover; object-position: top center;
   display: block; transition: transform .45s ease;
 }
-.realisation-card:hover .realisation-shot img { transform: scale(1.035); }
+.realisation-card:hover .realisation-shot img,
+.realisation-card:hover .realisation-shot video { transform: scale(1.035); }
 .realisation-visit {
   position: absolute; left: 16px; bottom: 16px;
   display: inline-flex; align-items: center; gap: 6px;
