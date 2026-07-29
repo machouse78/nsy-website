@@ -3,28 +3,28 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>WildFly / JBoss EAP expert in France | NSY</title>
-<meta name="description" content="Tuning, high availability, version upgrades and containerisation of WildFly / JBoss EAP in regulated banking and insurance environments. By Cédric Barme, on these application servers since 2012." />
+<title>SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity | NSY</title>
+<meta name="description" content="Ranking on Google is no longer enough: AI assistants pick their sources differently. SEO vs GEO explained by a practitioner, with the concrete nsy.fr case — AI-crawler allowlist, llms.txt, entity graph, FAQ." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://www.nsy.fr/wildfly-jboss-expert.html" />
-<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
-<link rel="alternate" hreflang="en" href="https://www.nsy.fr/wildfly-jboss-expert.html" />
-<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
+<link rel="canonical" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="NSY" />
 <meta property="og:locale" content="en_GB" />
-<meta property="og:url" content="https://www.nsy.fr/wildfly-jboss-expert.html" />
-<meta property="og:title" content="WildFly / JBoss EAP expert in France | NSY" />
-<meta property="og:description" content="Tuning, HA, version upgrades and containerisation of WildFly / JBoss EAP in regulated environments." />
+<meta property="og:url" content="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+<meta property="og:title" content="SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity" />
+<meta property="og:description" content="AI assistants pick their sources differently from Google. The concrete nsy.fr field report." />
 <meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="NSY — AI at the service of digital" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="WildFly / JBoss EAP expert in France | NSY" />
-<meta name="twitter:description" content="Tuning, HA, version upgrades and containerisation of WildFly / JBoss EAP." />
+<meta name="twitter:title" content="SEO vs GEO — getting cited by AI | NSY" />
+<meta name="twitter:description" content="How a website becomes a source cited by ChatGPT, Claude and Perplexity." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
@@ -34,26 +34,57 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<style>
+  /* Blog : cartes d'articles + typo de lecture */
+  .blog-list { display: grid; gap: 18px; margin-top: 34px; }
+  .blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
+    padding: 24px 26px; background: rgba(255,255,255,0.02);
+    transition: border-color .2s, transform .2s; }
+  .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+    color: var(--fg-2); text-transform: uppercase; }
+  .blog-card h2 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
+  .blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
+  .blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
+  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
+  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
+</style>
 
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html#article",
+      "headline": "SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity",
+      "description": "Ranking on Google is no longer enough: AI assistants pick their sources differently. SEO vs GEO explained by a practitioner, with the concrete nsy.fr case.",
+      "inLanguage": "en",
+      "author": { "@id": "https://www.nsy.fr/#person" },
+      "publisher": { "@id": "https://www.nsy.fr/#org" },
+      "datePublished": "2026-07-29",
+      "dateModified": "2026-07-29",
+      "image": "https://www.nsy.fr/public/nsy-og.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog-en.html#blog" }
+    },
+    {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
-        { "@type": "ListItem", "position": 2, "name": "WildFly / JBoss EAP", "item": "https://www.nsy.fr/wildfly-jboss-expert.html" }
+        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog-en.html" },
+        { "@type": "ListItem", "position": 3, "name": "SEO vs GEO", "item": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" }
       ]
-    },
-    {
-      "@type": "Service",
-      "serviceType": "WildFly / JBoss EAP expertise",
-      "name": "WildFly and JBoss EAP application-server expertise",
-      "description": "Tuning, high availability, version upgrades, migration and containerisation of WildFly / JBoss EAP in banking and insurance environments.",
-      "provider": { "@id": "https://www.nsy.fr/#org" },
-      "areaServed": { "@type": "Country", "name": "France" },
-      "audience": { "@type": "BusinessAudience", "name": "Banking, insurance, asset management" }
     }
   ]
 }
@@ -70,9 +101,9 @@
     </a>
     <div class="nav-links">
       <a class="nav-link" data-target="top" href="index-en.html#top">Home</a>
-      <a class="nav-link active" data-target="services" href="services-en.html">Services</a>
+      <a class="nav-link" data-target="services" href="services-en.html">Services</a>
       <a class="nav-link" data-target="realisations" href="portfolio.html">Work</a>
-      <a class="nav-link" data-target="about" href="about.html">About</a>
+      <a class="nav-link active" data-target="about" href="about.html">About</a>
       <a class="nav-link" data-target="contact" href="contact-en.html">Contact</a>
     </div>
     <div class="nav-social">
@@ -99,44 +130,58 @@
 <section class="block" style="padding-top: 64px;">
   <div class="container">
     <div class="eyebrow-row">
-      <span class="block-eyebrow">Expertise</span>
+      <span class="block-eyebrow">Journal</span>
       <span class="line"></span>
-      <span class="mono">WildFly · JBoss EAP</span>
+      <span class="mono"><a href="blog-en.html" style="color: inherit;">← All articles</a></span>
     </div>
+    <article class="legal-page article">
+      <div class="article-meta">July 29, 2026 · Cédric Barme · ≈ 6 min read</div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">SEO vs GEO: getting cited by ChatGPT,<br />Claude and Perplexity</h1>
+      <p class="lede" style="font-size: 17px;">Ranking well on Google is no longer enough. A growing share of searches happens inside an AI assistant — which does not return ten blue links but <strong>one answer</strong>, backed by a handful of chosen sources. If your site is not among them, you do not exist in the conversation. Here is how it works, and what we concretely put in place on this site.</p>
 
-    <article class="legal-page">
-      <h1 style="font-size: clamp(32px, 4.5vw, 50px); margin-bottom: 16px;">WildFly &amp; JBoss EAP: application-server expertise</h1>
-      <p class="mono" style="margin-bottom: 32px;">By Cédric Barme · Founder of NSY</p>
+      <h2>SEO and GEO: two different logics</h2>
+      <p><strong>SEO</strong> (Search Engine Optimization) targets rankings in a results page: positions, earned through relevance, technique and popularity.</p>
+      <p><strong>GEO</strong> (Generative Engine Optimization — also called LLMO) targets something else: being <strong>understood, retained and cited</strong> by a generative engine — ChatGPT, Claude, Gemini, Perplexity, Copilot. An assistant does not rank ten links: it synthesises an answer and attributes a few sources. The competition is no longer about position — it is about <strong>attribution</strong>.</p>
+      <table>
+        <tr><th></th><th>SEO (Google, Bing)</th><th>GEO (AI assistants)</th></tr>
+        <tr><td>Unit of success</td><td>A position in the results</td><td>A citation in the answer</td></tr>
+        <tr><td>What gets read</td><td>The page, its links, its signals</td><td>Facts attributable to a named entity</td></tr>
+        <tr><td>Winning format</td><td>Complete content, internal links, backlinks</td><td>Dated, sourced, cross-checkable facts; Q&amp;A</td></tr>
+        <tr><td>Pace</td><td>Continuous</td><td>Search modes: days/weeks · base models: months</td></tr>
+      </table>
 
-      <p class="lede" style="font-size: 17px; color: var(--fg-1); margin-bottom: 36px; max-width: 720px;">
-        WildFly and JBoss EAP carry a considerable share of the critical systems in French banking and insurance. Cédric Barme has worked on these application servers since 2012: fine-grained tuning, high availability, major version upgrades and cloud moves — in environments where downtime is measured in regulatory exposure, not just minutes.
-      </p>
+      <h2>How an assistant picks its sources</h2>
+      <ol>
+        <li><strong>Being able to read.</strong> Every AI vendor runs crawlers (GPTBot, ClaudeBot, PerplexityBot, Google-Extended…). Block them — on purpose or through an overzealous firewall — and you drop out of the corpus.</li>
+        <li><strong>Being able to attribute.</strong> A model cites what it can attach to a clear <em>entity</em>: a name, an activity, dated facts, a stable URL. A "pretty but vague" site is unusable to it.</li>
+        <li><strong>Being able to cross-check.</strong> A fact that lives on a single page carries little weight. The same fact on the site, an official register and a LinkedIn profile becomes citable.</li>
+      </ol>
 
-      <h2>Typical engagements</h2>
+      <h2>What we put in place on nsy.fr</h2>
+      <p>This site doubles as a test bench — every point is verifiable:</p>
       <ul>
-        <li><strong>Major version upgrades</strong> — JBoss EAP 6/7 → 8, or EAP → WildFly moves: compatibility assessment (deprecated APIs, Jakarta namespace), configuration migration (standalone/domain, profiles, subsystems), non-regression testing and controlled cutover.</li>
-        <li><strong>High availability</strong> — clustering, session replication, HA JMS queues (see the <a href="kafka-messaging-expert.html">messaging expertise</a>), load balancing and failure tolerance tested under real conditions.</li>
-        <li><strong>Tuning and stability</strong> — JVM sizing (GC, heap, threads), connection pools, cascading timeouts; diagnosing the leaks and slow degradations that end up as production incidents.</li>
-        <li><strong>Containerisation</strong> — WildFly on OpenShift/Kubernetes while preserving Java EE constraints: sessions, XA distributed transactions, startup ordering (<a href="openshift-kubernetes-expert.html">OpenShift expertise</a>).</li>
+        <li><strong>An explicit AI-crawler allowlist</strong> in <code>robots.txt</code>: GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, PerplexityBot, Google-Extended, CCBot, Amazonbot, Applebot-Extended, MistralAI-User… Not blocking them "out of caution" keeps you in the corpora.</li>
+        <li><strong><code>llms.txt</code> and <code>llms-full.txt</code></strong> at the root: identity, offerings, service area and a graph of facts in short sentences — the format models digest best.</li>
+        <li><strong>A JSON-LD entity graph</strong> (Organization, Person, Service, FAQPage…) with stable identifiers, the company registration number and official profiles as <code>sameAs</code>: the "NSY" entity becomes cross-checkable.</li>
+        <li><strong>A conversational FAQ</strong> of fifty-plus questions phrased the way people ask an assistant.</li>
+        <li><strong>Absolute dates</strong> ("founded in 2018", "since 2012"): a model cannot do anything with a "for 14 years" that expires.</li>
       </ul>
+      <p>Observable result: within the first week online, the server logs show <strong>ClaudeBot</strong> (Anthropic) reading <code>robots.txt</code> then the <code>sitemap</code> several times a day, alongside Googlebot, Bingbot, Applebot and Amazonbot. The ingestion machinery is running — attribution itself builds over weeks.</p>
 
-      <h2>A server that "runs" versus a server that is mastered</h2>
-      <p>Many JBoss installations run on inertia: the original configuration was never revisited, and default settings absorb the load until the day they don't. Mastery means knowing <em>why</em> each subsystem is configured the way it is, having metrics that warn before the incident, and upgrading without holding your breath. That is the state NSY leaves platforms in at the end of an engagement — documentation and skills handover included.</p>
+      <h2>What to take away for your own site</h2>
+      <ol>
+        <li>Check your <code>robots.txt</code>: are AI crawlers allowed?</li>
+        <li>Publish an <code>llms.txt</code>: identity, offerings, dated facts, key pages.</li>
+        <li>Structure the entity in JSON-LD, linked to your official profiles.</li>
+        <li>Add a real Q&amp;A page — one an assistant can quote as-is.</li>
+        <li>Cross-check: the same facts on your site, your registers, your networks.</li>
+        <li>Measure: server logs (crawler visits), then direct tests in the assistants&rsquo; search modes.</li>
+      </ol>
 
-      <h2>The regulated context is not optional</h2>
-      <p>In banking and insurance, touching the application platform means working under constraints: auditable changes, segregated environments, negotiated maintenance windows, ACPR/AMF requirements and now DORA (<a href="dora-compliance.html">see the DORA support</a>). NSY has worked within these frameworks since 2018 — the procedures are not an obstacle discovered mid-flight, they are built into the plan from scoping.</p>
+      <h2>The limits, honestly</h2>
+      <p>There is no dashboard for "how many times ChatGPT cited me". The assistants&rsquo; <em>search</em> modes reflect the web within days or weeks; base models only absorb new players across retraining cycles — months. GEO is a long-distance race: what matters is being readable, attributable and cross-checkable <em>before</em> the other players in your niche.</p>
 
-      <h2>How to start</h2>
-      <p>The most effective format: a short audit of your installation (configuration, versions, metrics, recent incidents) leading to a prioritised action plan. The <a href="faq-en.html">FAQ</a> gives the ballparks; for a specific context, the contact form gets a reply within 48 business hours.</p>
-
-      <a class="faisa-cta" href="contact-en.html" style="margin-top: 36px;">
-        <div>
-          <div class="l">A JBoss / WildFly to harden or migrate?</div>
-          <h3>Describe your installation — honest read within 48 business hours</h3>
-          <p>Short audit, prioritised action plan, then delivery if you wish.</p>
-        </div>
-        <span class="arrow">→</span>
-      </a>
+      <p style="margin-top: 30px;">This is exactly what we industrialise for our clients — our <a href="ai-website-creation.html">AI-powered website creation</a> bakes this GEO setup in from day one. A project, a question? <a href="contact-en.html">Let&rsquo;s talk</a> — reply within 48 business hours.</p>
     </article>
   </div>
 </section>
@@ -208,6 +253,32 @@
 </footer>
 <!-- @endpartial:footer -->
 
+<script>
+// DefinedTermSet JSON-LD generated from the visible content (single source of
+// truth: the HTML above). Googlebot renders JS; AI crawlers read the text.
+(function () {
+  var terms = [];
+  document.querySelectorAll('.glossaire h3').forEach(function (h) {
+    var p = h.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    terms.push({
+      '@type': 'DefinedTerm',
+      name: h.textContent.trim(),
+      description: p.textContent.trim()
+    });
+  });
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'AI & web glossary — NSY',
+    inLanguage: 'en',
+    hasDefinedTerm: terms
+  });
+  document.head.appendChild(s);
+})();
+</script>
 <!-- @partial:chatbot -->
 <!-- ───── Chatbot (AI assistant — Ansley, NSY architect) ───── -->
 <button class="cbot-fab" id="cbot-fab" aria-label="Open chat with Ansley">

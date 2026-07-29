@@ -76,6 +76,14 @@ cp dora-compliance.html             deploy/
 cp claude-integration.html          deploy/
 cp ai-website-creation.html         deploy/
 cp ai-web-glossary.html             deploy/
+cp blog.html                        deploy/
+cp blog-en.html                     deploy/
+cp seo-geo-etre-cite-par-les-ia.html deploy/
+cp seo-geo-getting-cited-by-ai.html deploy/
+cp consultant-technique-paris.html  deploy/
+cp technical-consultant-paris.html  deploy/
+cp creation-site-internet-orleans.html deploy/
+cp website-creation-orleans.html    deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."

@@ -59,6 +59,10 @@ const pages = [
   ['integration-claude-entreprise.html',  'fr', 'index.html', 'services'],
   ['creation-site-ia.html',               'fr', 'index.html', 'services'],
   ['glossaire-ia-web.html',               'fr', 'index.html', 'services'],
+  ['blog.html',                           'fr', 'index.html', 'about'],
+  ['seo-geo-etre-cite-par-les-ia.html',   'fr', 'index.html', 'about'],
+  ['consultant-technique-paris.html',     'fr', 'index.html', 'services'],
+  ['creation-site-internet-orleans.html', 'fr', 'index.html', 'services'],
   ['legal-notice.html',     'en', 'index-en.html',  'top'],
   ['privacy.html',          'en', 'index-en.html',  'top'],
   ['feasibility.html',      'en', 'index-en.html',  'contact'],
@@ -76,6 +80,10 @@ const pages = [
   ['claude-integration.html',           'en', 'index-en.html', 'services'],
   ['ai-website-creation.html',          'en', 'index-en.html', 'services'],
   ['ai-web-glossary.html',              'en', 'index-en.html', 'services'],
+  ['blog-en.html',                      'en', 'index-en.html', 'about'],
+  ['seo-geo-getting-cited-by-ai.html',  'en', 'index-en.html', 'about'],
+  ['technical-consultant-paris.html',   'en', 'index-en.html', 'services'],
+  ['website-creation-orleans.html',     'en', 'index-en.html', 'services'],
 ];
 
 function replaceRegion(html, name, content, file) {
