@@ -2763,10 +2763,11 @@ footer.foot {
    ponctuelles (paint transitoire, pas de coût continu).
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Barre de progression de lecture (élément injecté par JS sur chaque page).
-   Insérée DANS la nav sticky → elle reste ancrée sous le menu au scroll,
-   comme la jauge de lecture de PRV Concept. Fallback fixed si nav absente. */
-.scroll-progress {
+/* Barre de CHARGEMENT de page (élément injecté par JS sur chaque page).
+   Fine ligne d'accent tout en haut du viewport : elle se remplit pendant le
+   chargement (trickle → 100 % au window.load) puis s'efface. Ce n'est plus une
+   jauge de scroll. */
+.load-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -2776,14 +2777,14 @@ footer.foot {
   box-shadow: 0 0 8px var(--accent-glow);
   transform: scaleX(0);
   transform-origin: left;
-  z-index: 60; /* au-dessus de la nav (50) */
+  z-index: 70; /* au-dessus de la nav (50) */
   pointer-events: none;
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1), opacity .4s ease .1s;
+  will-change: transform, opacity;
 }
-.nav .scroll-progress {
-  position: absolute;
-  top: auto;
-  bottom: -1px; /* recouvre le border-bottom de la nav */
-  z-index: 1;
+/* Page prête : on efface la barre (elle est retirée du DOM après la transition). */
+.load-bar.is-done {
+  opacity: 0;
 }
 
 /* Compteurs animés : chiffres tabulaires = zéro décalage pendant le comptage */
