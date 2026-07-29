@@ -116,6 +116,10 @@ cp public/nsy-hero.mp4                  deploy/public/
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
+cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
+cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)
+cp public/ansley-fab.mp4                deploy/public/   # mascotte FAB (Ansley buste + logo, boomerang)
+cp public/ansley-fab.png                deploy/public/   # poster Ansley buste (FAB)
 # Note: public/animation.mp4 n'est plus déployée — l'animation 3D de la
 # section Loisirs est désormais une intégration YouTube (chaîne NSY).
 
@@ -187,6 +191,10 @@ required=(
   "deploy/public/nsy-og.jpg"
   "deploy/public/photo-profil.jpg"
   "deploy/public/nsy-about.mp4"
+  "deploy/public/ansley.mp4"
+  "deploy/public/ansley.png"
+  "deploy/public/ansley-fab.mp4"
+  "deploy/public/ansley-fab.png"
   "deploy/public/finance-assurance.png"
   "deploy/public/web-ia.png"
   "deploy/public/prv-concept.jpg"
