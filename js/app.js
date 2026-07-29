@@ -164,11 +164,18 @@
   const playAnsley = () => ansleyVid && ansleyVid.play().catch(() => {});
   const pauseAnsley = () => ansleyVid && ansleyVid.pause();
 
+  // Bulle de présentation d'Ansley (près du FAB fermé) — masquée une fois vue.
+  const greeter = document.getElementById('cbot-greeter');
+  const greeterClose = document.getElementById('cbot-greeter-close');
+  const GREET_KEY = 'nsy-cbot-greeted';
+  const hideGreeter = () => greeter && greeter.classList.remove('show');
+  const dismissGreeter = () => { hideGreeter(); try { sessionStorage.setItem(GREET_KEY, '1'); } catch (e) { /* private mode */ } };
+
   if (fab && panel) {
     fab.addEventListener('click', () => {
       const isOpen = panel.classList.toggle('open');
       fab.classList.toggle('open', isOpen);
-      if (isOpen) { refreshHealth(); playAnsley(); }  // sonde la dispo IA + anime Ansley
+      if (isOpen) { refreshHealth(); playAnsley(); dismissGreeter(); }  // sonde l'IA, anime Ansley, masque la bulle
       else pauseAnsley();
     });
     closeBtn?.addEventListener('click', () => {
@@ -185,6 +192,16 @@
       if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
       else window.location.href = pageLang === 'en' ? 'contact-en.html' : 'contact.html';
     });
+
+    // Apparition de la bulle : peu après le chargement, si pas déjà rejetée ni le
+    // chat ouvert. Clic sur la bulle → ouvre le chat ; clic sur la croix → masque.
+    let alreadyGreeted = false;
+    try { alreadyGreeted = sessionStorage.getItem(GREET_KEY) === '1'; } catch (e) { /* private mode */ }
+    if (greeter && !alreadyGreeted) {
+      setTimeout(() => { if (!panel.classList.contains('open')) greeter.classList.add('show'); }, 1800);
+    }
+    greeterClose?.addEventListener('click', (e) => { e.stopPropagation(); dismissGreeter(); });
+    greeter?.addEventListener('click', () => { if (!panel.classList.contains('open')) fab.click(); });
   }
 
   function makeAvatar() {
