@@ -34,6 +34,12 @@ Spec llmstxt.org : H1 = nom, blockquote = résumé dense, sections de liens.
   2012 »), jamais des compteurs qui périment (« 14 ans »).
 - **Règle de synchro** : tout fait modifié sur le site (prix, offre, contact)
   doit être propagé ici le jour même.
+- **⚠️ Servir en UTF-8** : `llms.txt`/`llms-full.txt` (et `robots.txt`) sont des
+  `.txt` → Apache les envoie en `text/plain` **sans charset** ; combiné à
+  `X-Content-Type-Options: nosniff`, le navigateur ET les crawlers retombent en
+  Latin-1 → **accents cassés (mojibake)** alors que le fichier est de l'UTF-8
+  valide. Déclarer le charset dans `.htaccess` : **`AddCharset UTF-8 .txt`**.
+  Vérifier : `curl -sI …/llms.txt` doit montrer `content-type: text/plain; charset=utf-8`.
 
 ### JSON-LD — un @graph, des @id, pas de redéclaration
 Sur la page d'accueil : `@graph` avec nœuds reliés par `@id` stables
