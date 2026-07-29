@@ -236,16 +236,43 @@ must hold in every change.
 ## Client realizations — DEDICATED PAGE (`realisations.html` / `portfolio.html`)
 - A **standalone bilingual page** (NOT a homepage section — owner moved it out),
   showing delivered client websites as a `.realisations-grid` of
-  `.realisation-card`s (screenshot thumbnail → live site, name, URL, need +
+  `.realisation-card`s (animated preview → live site, name, URL, need +
   technical/SEO specs, tags — see the "fiche réalisation" bullet below). First
-  entry: **PRV Concept** (www.prv-concept.com), thumbnail
-  `public/prv-concept.jpg`. **Thumbnails are captured automatically from the
-  live sites** via `npm run capture:realisations`
-  (`scripts/capture-realisation.mjs`: headless render at 1440px desktop
-  layout, resampled to 1100px JPEG ~110 KB — no iframe, zero runtime cost;
-  re-run before a deploy to refresh). To add a client: copy one
-  `.realisation-card` block in **both** pages + add a capture line to the
-  npm script.
+  entry: **PRV Concept** (www.prv-concept.com).
+- **The card preview is an ANIMATED loop** (owner request, July 2026 — "pas juste
+  un screenshot mais une petite animation des 1res secondes"): a short muted
+  looping `<video>` of the live site's opening seconds, poster = a still frame.
+  - **Capture (reusable):** `node scripts/record-realisation.mjs <url> <name>`
+    → writes `public/<name>.mp4` (1280×800, ~5 s, crf 28 ~0,6 Mo) + `public/<name>.jpg`
+    (poster). It spawns headless Chrome (CDP `Page.startScreencast`) and encodes
+    with ffmpeg — **no npm deps** (needs Chrome + ffmpeg on PATH).
+  - **CRITICAL: capture starts only AFTER `window.load` + a settle delay** (default
+    1600 ms) so the hero intro is finished and images/engine are shown — otherwise
+    you film the site still building (owner rejected a capture done during load).
+    Bump the settle arg if a site's intro is long: `... <url> <name> 2500`.
+  - **Video params** (in the script): viewport 1280×800 dsf 1, jpeg screencast →
+    ffmpeg `fps=24, scale=1280:800:lanczos, yuv420p, libx264 crf 28,
+    maxrate 1100k, +faststart, -an, -t 5`; poster extracted at ~3.6 s.
+- **Card markup** (both `realisations.html` + `portfolio.html`, keep symmetric):
+  inside `.realisation-shot` (which is `aspect-ratio:16/10; overflow:hidden`):
+  ```html
+  <video class="realisation-vid" autoplay loop muted playsinline preload="none"
+         poster="public/<name>.jpg" width="1280" height="800" aria-label="…">
+    <source src="public/<name>.mp4" type="video/mp4" />
+    <img src="public/<name>.jpg" alt="…" loading="lazy" width="1280" height="800" />
+  </video>
+  ```
+  CSS already covers it (`.realisation-shot img, .realisation-shot video` fill via
+  `object-fit:cover`). Autoplay/pause is **automatic**: the existing `video[loop]`
+  IntersectionObserver in `js/app.js` plays it in-view / pauses off-screen (+ a
+  loop-fade masks the 5 s seam) — no extra JS.
+- **To add a client card** (e.g. the next site): (1) run the recorder on its URL;
+  (2) copy one `.realisation-card` block in **both** pages, updating href/name/URL,
+  the `<video>` src+poster, the specs and tags; (3) add `cp public/<name>.mp4` **and**
+  keep `public/<name>.jpg` in **`prepare-deploy.sh`**'s public-asset list (both are
+  uploaded); (4) update `sitemap.xml` if the preview image URL changed.
+  (`scripts/capture-realisation.mjs` — the old static-screenshot capturer — is
+  superseded by the recorder but still works for a plain poster if ever needed.)
 - **Card content = a compact "fiche réalisation" (owner request, July 2026)** —
   each `.realisation-card` states, concisely (no over-detailing): (1) the
   **functional need** in `.realisation-desc` (lead with a bold "Le besoin :" /
