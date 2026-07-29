@@ -55,6 +55,9 @@ cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp llms.txt              deploy/
 cp llms-full.txt         deploy/
+cp feed.xml              deploy/   # flux RSS du journal (FR)
+cp feed-en.xml           deploy/   # flux RSS du journal (EN)
+cp d41a70502f0e94a59a054e4eecc623c8.txt deploy/   # clé IndexNow (ping Bing après deploy)
 cp .htaccess             deploy/
 
 echo "📁 Copie des fichiers racine (EN)..."
@@ -112,7 +115,9 @@ cp public/nsy-logo.png                  deploy/public/
 cp public/nsy-og.jpg                    deploy/public/
 cp public/photo-profil.jpg              deploy/public/
 cp public/finance-assurance.png         deploy/public/
+cp public/finance-assurance.webp        deploy/public/   # version allégée (-90%) chargée par les pages
 cp public/web-ia.png                    deploy/public/
+cp public/web-ia.webp                   deploy/public/   # (les .png restent : thumbnails du video sitemap)
 cp public/prv-concept.jpg               deploy/public/
 cp public/cropped-NSY-logo-32x32.png    deploy/public/
 cp public/cropped-NSY-logo-180x180.png  deploy/public/

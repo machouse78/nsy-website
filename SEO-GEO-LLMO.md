@@ -180,10 +180,29 @@ descriptif dans l'`alt` du logo (l'alt = l'ancre d'un lien-image), pas
 d'`aria-label` court qui l'écraserait, et jamais d'ancre sur-optimisée sur
 un lien sitewide (risque spam).
 
+## 6bis. Ajouts techniques (juillet 2026) ✅
+
+- **WebP** : `finance-assurance.webp` + `web-ia.webp` (−90 %, 2,1 Mo → 227 Ko)
+  chargées par accueil/services (`cap-bg`, `svc-bg`). Les `.png` restent déployées
+  (thumbnails du video sitemap + robots). Toute nouvelle image lourde → WebP
+  (Pillow, quality 82, method 6).
+- **RSS** : `feed.xml` (FR) + `feed-en.xml` (EN) + `<link rel="alternate">` sur les
+  pages du journal, référencés dans llms.txt. **À mettre à jour à chaque article**
+  (nouvel `<item>` en tête de channel).
+- **IndexNow** : clé `d41a70502f0e94a59a054e4eecc623c8.txt` à la racine (déployée).
+  Après CHAQUE déploiement qui ajoute/modifie des pages :
+  `node scripts/indexnow-ping.mjs` (toutes les URLs du sitemap) ou
+  `node scripts/indexnow-ping.mjs <url>…` (ciblé). Bing = l'index de ChatGPT
+  Search/Copilot → indexation quasi immédiate. (Google n'utilise pas IndexNow :
+  passer par GSC → Inspection d'URL.)
+
 ## 7. Maintenance
 
 - Toute nouvelle page : paire FR/EN + hreflang + sitemap + `sync-partials.mjs`
   + `prepare-deploy.sh` + slug map `js/app.js` (+ ce document).
+- **Nouvel article de journal** : paire FR/EN + `BlogPosting` + cartes des index
+  blog(.en).html + `<item>` RSS (feed.xml/feed-en.xml) + sitemap + llms.txt +
+  `indexnow-ping` après deploy. Rythme cible : ~2/mois, jamais de prix.
 - llms.txt / llms-full.txt : à tenir en phase avec les faits (prix, offres,
   références). Même règle que le chatbot : un fait modifié = propagation partout.
 - Vérifier périodiquement les logs Infomaniak : hits de GPTBot/ClaudeBot/

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>The NSY journal</title>
+  <link>https://www.nsy.fr/blog-en.html</link>
+  <description>Practitioner field notes: AI applied to the web, SEO/GEO, critical systems. By Cédric Barme (NSY).</description>
+  <language>en</language>
+  <atom:link href="https://www.nsy.fr/feed-en.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity</title>
+    <link>https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</guid>
+    <pubDate>Wed, 29 Jul 2026 12:00:00 +0200</pubDate>
+    <description>Ranking on Google is no longer enough: AI assistants pick their sources differently. SEO vs GEO explained by a practitioner, with the concrete nsy.fr case.</description>
+  </item>
+</channel>
+</rss>

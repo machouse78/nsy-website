@@ -24,7 +24,9 @@ Allow: /public/nsy-logo.png
 Allow: /public/nsy-og.jpg
 Allow: /public/photo-profil.jpg
 Allow: /public/finance-assurance.png
+Allow: /public/finance-assurance.webp
 Allow: /public/web-ia.png
+Allow: /public/web-ia.webp
 Allow: /public/prv-concept.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png

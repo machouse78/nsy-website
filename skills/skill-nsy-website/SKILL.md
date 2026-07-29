@@ -163,8 +163,18 @@ must hold in every change.
   content — 2 examples exist: `consultant-technique-paris.html` (finance/La Défense
   angle) + `creation-site-internet-orleans.html` (region), linked from creation-site-ia.
 - **Blog / journal** (`blog.html`↔`blog-en.html` + articles like
-  `seo-geo-etre-cite-par-les-ia.html`↔`seo-geo-getting-cited-by-ai.html`): footer
-  link only (not top-nav), `BlogPosting` JSON-LD, ~1500 words. **No prices in articles.**
+  `seo-geo-etre-cite-par-les-ia.html`↔`seo-geo-getting-cited-by-ai.html`): top-nav
+  « Journal » (data-target=blog) + footer link, `BlogPosting` JSON-LD, ~1500 words.
+  **No prices in articles.** New article = FR/EN pair + blog-index cards + RSS
+  `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
+- **RSS + IndexNow (July 2026):** `feed.xml`/`feed-en.xml` (linked from journal
+  pages + llms.txt); IndexNow key file `d41a70502f0e94a59a054e4eecc623c8.txt` at
+  root — after any deploy that adds/changes pages run
+  `node scripts/indexnow-ping.mjs` (Bing index → ChatGPT Search/Copilot; for
+  Google use GSC URL inspection instead).
+- **Heavy images → WebP** (Pillow q82 m6): `finance-assurance.webp`/`web-ia.webp`
+  are the loaded versions (−90%); keep the `.png` deployed (video-sitemap
+  thumbnails + robots allowlist).
 - **Already done externally** (`SEO-GEO-LLMO.md` §6): GSC domain property, Bing WMT,
   LinkedIn company page. **Remaining:** Google Business Profile (service-area = France),
   B2B directories, client reviews.
