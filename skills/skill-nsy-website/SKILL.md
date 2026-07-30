@@ -319,9 +319,13 @@ must hold in every change.
   `object-fit:cover`). Autoplay/pause is **automatic**: the existing `video[loop]`
   IntersectionObserver in `js/app.js` plays it in-view / pauses off-screen (+ a
   loop-fade masks the 5 s seam) — no extra JS.
+- **Card ORDER = chronological by delivery date, oldest first (owner, July 2026):**
+  PRV Concept (1st, July 2026) → Le Cerf Thym (2nd, 30 July 2026) → … A new card
+  is **APPENDED at the END** of `.realisations-grid`, never inserted on top.
 - **To add a client card** (e.g. the next site): (1) run the recorder on its URL;
-  (2) copy one `.realisation-card` block in **both** pages, updating href/name/URL,
-  the `<video>` src+poster, the specs and tags; (3) add `cp public/<name>.mp4` **and**
+  (2) copy one `.realisation-card` block in **both** pages (append at the END —
+  chronological order), updating href/name/URL, the `<video>` src+poster, the specs
+  and tags; (3) add `cp public/<name>.mp4` **and**
   keep `public/<name>.jpg` in **`prepare-deploy.sh`**'s public-asset list (both are
   uploaded); (4) update `sitemap.xml` if the preview image URL changed.
   (`scripts/capture-realisation.mjs` — the old static-screenshot capturer — is
