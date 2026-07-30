@@ -2765,6 +2765,20 @@ footer.foot {
    ponctuelles (paint transitoire, pas de coût continu).
    ═══════════════════════════════════════════════════════════════════ */
 
+/* ── Cartes d'articles du journal (composant global : accueil + pages blog).
+   Les pages blog embarquent les mêmes règles en <style> local (valeurs
+   identiques) — garder les deux en phase. ── */
+.blog-list { display: grid; gap: 18px; margin-top: 34px; }
+.blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
+  padding: 24px 26px; background: rgba(255,255,255,0.02);
+  transition: border-color .2s, transform .2s; }
+.blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+  color: var(--fg-2); text-transform: uppercase; }
+.blog-card h2, .blog-card h3 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
+.blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
+.blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
+
 /* Barre de CHARGEMENT de page (élément injecté par JS sur chaque page).
    Fine ligne d'accent tout en haut du viewport : elle se remplit pendant le
    chargement (trickle → 100 % au window.load) puis s'efface. Ce n'est plus une

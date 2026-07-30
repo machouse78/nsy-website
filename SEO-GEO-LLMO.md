@@ -201,8 +201,11 @@ un lien sitewide (risque spam).
 - Toute nouvelle page : paire FR/EN + hreflang + sitemap + `sync-partials.mjs`
   + `prepare-deploy.sh` + slug map `js/app.js` (+ ce document).
 - **Nouvel article de journal** : paire FR/EN + `BlogPosting` + cartes des index
-  blog(.en).html + `<item>` RSS (feed.xml/feed-en.xml) + sitemap + llms.txt +
+  blog(.en).html + **carte du teaser accueil (index.html + index-en.html = le
+  DERNIER article)** + `<item>` RSS (feed.xml/feed-en.xml) + sitemap + llms.txt +
   `indexnow-ping` après deploy. Rythme cible : ~2/mois, jamais de prix.
+- Nommage : FR « Journal » (nav juste après Accueil) · EN « **Insights** »
+  (nav/footer/blog-en/feed-en — choix owner, juillet 2026).
 - llms.txt / llms-full.txt : à tenir en phase avec les faits (prix, offres,
   références). Même règle que le chatbot : un fait modifié = propagation partout.
 - Vérifier périodiquement les logs Infomaniak : hits de GPTBot/ClaudeBot/

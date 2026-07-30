@@ -164,8 +164,14 @@ must hold in every change.
   angle) + `creation-site-internet-orleans.html` (region), linked from creation-site-ia.
 - **Blog / journal** (`blog.html`↔`blog-en.html` + articles like
   `seo-geo-etre-cite-par-les-ia.html`↔`seo-geo-getting-cited-by-ai.html`): top-nav
-  « Journal » (data-target=blog) + footer link, `BlogPosting` JSON-LD, ~1500 words.
-  **No prices in articles.** New article = FR/EN pair + blog-index cards + RSS
+  link **right after Accueil/Home** (owner request, July 2026), data-target=blog,
+  + footer link. **EN name = « Insights »** (owner choice — nav, footer, blog-en
+  title/H1/OG/JSON-LD, feed-en title; FR stays « Journal »). `BlogPosting`
+  JSON-LD, ~1500 words. **No prices in articles.** The **homepage has a journal
+  teaser section** (FR + EN, `.blog-list`/`.blog-card` — component CSS is global
+  in `css/style.css`, blog pages also embed identical local copies).
+  **New article checklist** = FR/EN pair + blog-index cards + **homepage teaser
+  card (index.html + index-en.html — keep it = the LATEST article)** + RSS
   `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
 - **RSS + IndexNow (July 2026):** `feed.xml`/`feed-en.xml` (linked from journal
   pages + llms.txt); IndexNow key file `d41a70502f0e94a59a054e4eecc623c8.txt` at
