@@ -1265,7 +1265,8 @@
     // ansley-fab-video (mascotte du FAB) ont déjà une boucle sans couture
     // (crossfade encodé / boomerang) — pas de fondu JS.
     if (v.id === 'glyph-video' || v.id === 'about-video'
-        || v.id === 'ansley-video' || v.id === 'ansley-fab-video') return;
+        || v.id === 'ansley-video' || v.id === 'ansley-fab-video'
+        || v.id === 'seo-geo-video') return; // boomerang déjà sans couture
     setupLoopFade(v);
   });
 
