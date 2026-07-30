@@ -109,9 +109,10 @@ associations et indépendants en transition numérique.
 - Référence publique (création web) : Le Cerf Thym — https://lecerfthym.fr —
   site vitrine du restaurant Le Cerf Thym à Sully-sur-Loire (Loiret), livré en
   2026. Site en 4 langues (français, anglais, allemand, néerlandais) avec choix
-  persistant ; carte et ardoise du jour ; 24 avis clients Google ; galeries
-  photos/vidéos ; carte interactive du territoire et plan d'accès (itinéraires
-  Google Maps/Waze) ; données structurées Restaurant, Open Graph, SEO local.
+  persistant ; carte et ardoise du jour ; avis clients Google mis en avant ;
+  galeries photos/vidéos ; carte interactive du territoire et plan d'accès
+  (itinéraires Google Maps/Waze) ; données structurées Restaurant, Open Graph,
+  SEO local.
 - Démonstrateur : le site https://www.nsy.fr lui-même (bilingue, assistant IA
   conversationnel — LLM Mistral ancré dans les contenus du site (RAG), avec repli
   hors-ligne à base de règles —, 3D temps réel, données structurées,
