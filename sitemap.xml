@@ -163,13 +163,27 @@
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/realisations.html</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/realisations.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/portfolio.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/realisations.html" />
+
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/le-cerf-thym.jpg</image:loc>
+      <image:title>Le Cerf Thym — site réalisé par NSY</image:title>
+      <image:caption>Réalisation NSY : site vitrine en 4 langues du restaurant Le Cerf Thym à Sully-sur-Loire</image:caption>
+    </image:image>
+
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/le-cerf-thym.jpg</video:thumbnail_loc>
+      <video:title>Aperçu du site Le Cerf Thym — réalisation NSY</video:title>
+      <video:description>Aperçu animé du site lecerfthym.fr conçu par NSY : visite de la page d'accueil du restaurant de Sully-sur-Loire (4 langues, avis clients, cartes interactives).</video:description>
+      <video:content_loc>https://www.nsy.fr/public/le-cerf-thym.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
 
     <image:image>
       <image:loc>https://www.nsy.fr/public/prv-concept.jpg</image:loc>
@@ -188,7 +202,7 @@
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-07-29</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 

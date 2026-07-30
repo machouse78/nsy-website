@@ -129,6 +129,8 @@ cp public/nsy-hero.mp4                  deploy/public/
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
 cp public/prv-concept.mp4               deploy/public/   # apercu anime PRV Concept (page realisations)
+cp public/le-cerf-thym.jpg              deploy/public/   # poster Le Cerf Thym (page realisations)
+cp public/le-cerf-thym.mp4              deploy/public/   # apercu anime Le Cerf Thym (page realisations)
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

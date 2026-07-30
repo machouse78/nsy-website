@@ -173,6 +173,11 @@ même fait sur ≥2 sources indépendantes).
 5. **Avis clients** publics (Google Business / Malt) une fois les profils
    créés — signal E-E-A-T le plus dur à falsifier, donc le plus valorisé.
 
+- **Backlink Le Cerf Thym** ✅ (juillet 2026) : crédit « Propulsé par NSY » en
+  pied de page sitewide de lecerfthym.fr (aligné sur la règle PRV : logo + alt
+  SEO complet, dofollow vers https://www.nsy.fr). 2e site client en production —
+  fiche ajoutée sur realisations.html/portfolio.html + llms(-full).txt.
+
 **Backlink PRV — appliqué ✅** (voir l'entrée dans « Fait » ci-dessus).
 Règle conservée pour les prochains crédits « Propulsé par NSY » sur les
 sites clients : lien `dofollow` vers l'URL canonique exacte, marque + court

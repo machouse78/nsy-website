@@ -37,14 +37,19 @@ import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const [url, name, setArg, capArg, fpsArg] = process.argv.slice(2);
+const [url, name, setArg, capArg, fpsArg, scrollArg] = process.argv.slice(2);
 if (!url || !name) {
-  console.error('usage: node scripts/record-realisation.mjs <url> <nom> [settleMs] [captureMs] [fps]');
+  console.error('usage: node scripts/record-realisation.mjs <url> <nom> [settleMs] [captureMs] [fps] [scrollPx]');
   process.exit(1);
 }
 const SETTLE = parseInt(setArg || '2500', 10);     // attente réelle après window.load, avant capture
 const CAPTURE = parseInt(capArg || '5000', 10);    // durée finale (s. après trim)
 const FPS = parseInt(fpsArg || '24', 10);
+// scrollPx : pixels défilés (en douceur) PENDANT la capture. INDISPENSABLE pour un
+// site au hero statique : le screencast n'émet des frames QUE quand la page repeint
+// — sans animation ni scroll, on ne reçoit qu'UNE frame. Un défilement lent force
+// les repaints ET fait une jolie « visite » du site (ex. 2200 pour un one-page).
+const SCROLL = parseInt(scrollArg || '0', 10);
 const OUT_W = 768, OUT_H = 480;                     // taille d'affichage de la carte
 const PORT = 9315;
 const CHROME = process.env.CHROME || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -110,7 +115,17 @@ async function capture(WSURL) {
   // la cible pour pouvoir trimmer proprement à CAPTURE.
   recording = true;
   await cmd('Page.startScreencast', { format: 'jpeg', quality: 60, maxWidth: 1280, maxHeight: 800, everyNthFrame: 1 }, session);
-  await sleep(CAPTURE + 600);
+  if (SCROLL > 0) {
+    // Défilement doux par paliers pendant la capture (repaints réguliers).
+    const steps = 10;
+    for (let i = 1; i <= steps; i++) {
+      cmd('Runtime.evaluate', { expression: `window.scrollTo({top: ${Math.round((SCROLL / steps) * i)}, behavior: 'smooth'})` }, session).catch(() => {});
+      await sleep(CAPTURE / steps);
+    }
+    await sleep(600);
+  } else {
+    await sleep(CAPTURE + 600);
+  }
   recording = false;
   await cmd('Page.stopScreencast', {}, session).catch(() => {});
   ws.close();

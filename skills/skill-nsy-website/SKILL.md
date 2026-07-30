@@ -271,7 +271,7 @@ must hold in every change.
 - **The card preview is an ANIMATED loop** (owner request, July 2026 — "pas juste
   un screenshot mais une petite animation des 1res secondes"): a short muted
   looping `<video>` of the live site's opening seconds, poster = a still frame.
-  - **Capture (reusable):** `node scripts/record-realisation.mjs <url> <name> [settleMs] [captureMs] [fps]`
+  - **Capture (reusable):** `node scripts/record-realisation.mjs <url> <name> [settleMs] [captureMs] [fps] [scrollPx]`
     → writes `public/<name>.mp4` (**768×480**, 24 fps, ~5 s, ~0,35 Mo) +
     `public/<name>.jpg` (poster). Spawns headless Chrome, encodes with ffmpeg —
     **no npm deps** (needs Chrome + ffmpeg on PATH).
@@ -288,6 +288,11 @@ must hold in every change.
     (concat manifest + `fps=24` filter): real time ⇒ correct speed, regular source
     ⇒ smooth CFR. Don't raise quality (brings back the gaps); the 768 downscale hides
     it. Don't use virtual time.
+  - **⚠️ Static hero = 1 frame → pass `scrollPx`.** The screencast only emits frames
+    when the page REPAINTS: a site with a static hero (Le Cerf Thym) yields a single
+    frame over 5 s. Pass a `scrollPx` total (e.g. **2200**) — the recorder smooth-
+    scrolls in 10 steps during capture: forces repaints AND makes a nice "site tour"
+    preview. PRV needs none (its marquee animates); Le Cerf Thym = 2200.
   - **② Weight — encode at the DISPLAY size (768×480), not the capture size.** The
     card shows the clip at ~600 px (375 px mobile); a looped `<video>` decodes
     ≈ w×h×fps continuously, so capture crisp at 1280×800 (desktop layout — never a
