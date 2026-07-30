@@ -39,7 +39,10 @@ must hold in every change.
   a mailto: or a written-out address.
 - **Static text uses absolute dates** ("depuis 2012", "fondée en 2018") instead
   of ageing counts ("14 ans") — the dynamic `data-years` spans are the only
-  place the computed number lives.
+  place the computed number lives. **Same rule for any evolving count** on
+  client-site facts (owner, July 2026): e.g. NOT "24 avis clients Google" on the
+  Le Cerf Thym card (reviews keep growing) but "les avis clients Google mis en
+  avant". Counts allowed only when frozen (87-question FAQ at delivery, 23 fiches).
 - Official profiles (JSON-LD sameAs + llms.txt; the nav/footer social icons
   point to the COMPANY page, the personal profile stays only on the contact
   « 30 min » card): LinkedIn company page
