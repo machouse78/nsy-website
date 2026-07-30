@@ -176,6 +176,14 @@ must hold in every change.
   **New article checklist** = FR/EN pair + blog-index cards + **homepage teaser
   card (index.html + index-en.html — keep it = the LATEST article)** + RSS
   `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
+- **Article ANIMATED illustration** (pattern, July 2026 — SEO vs GEO article):
+  still image → Higgsfield `kling3_0_turbo` (prompt MUST demand static/rigid
+  text & logos) → ffmpeg **boomerang** → encode at article width (`scale=760:-2`
+  — the `-2` matters: odd heights break yuv420p) ≈0,55 Mo. `<figure>` +
+  `<video autoplay loop muted playsinline preload="none">` after the lede, id
+  added to the `setupLoopFade` exclusion list in `js/app.js` (seamless boomerang);
+  poster jpg doubles as the article's **og:image** + BlogPosting `image`; robots
+  Allow + `video:video` sitemap entry; both languages.
 - **RSS + IndexNow (July 2026):** `feed.xml`/`feed-en.xml` (linked from journal
   pages + llms.txt); IndexNow key file `d41a70502f0e94a59a054e4eecc623c8.txt` at
   root — after any deploy that adds/changes pages run
