@@ -325,7 +325,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 | Bing Webmaster Tools (alimente ChatGPT Search & Copilot) — vérifié par meta `msvalidate.01` | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
 | Registre officiel (SIRENE) | https://annuaire-entreprises.data.gouv.fr/entreprise/842078453 |
 | LinkedIn entreprise | https://www.linkedin.com/company/nsy-new-software-yard |
-| Backlinks éditoriaux | prv-concept.com et lecerfthym.fr → footer « Propulsé par NSY » |
+| Backlinks éditoriaux | prv-concept.com et www.lecerfthym.fr → footer « Propulsé par NSY » |
 
 La page LinkedIn entreprise est référencée dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
 
