@@ -81,5 +81,12 @@ nœud manipulé en direct) → attendu `60×60, 50%`.
 Hérités du socle + propres à NSY (aussi dans `skill-nsy-website`) : **jamais de
 prix / taux** (devis après cadrage → Contact, réponse < 48 h ouvrées), **jamais
 d'e-mail ni de téléphone**, langue = celle du visiteur, liens internes FR/EN
-réécrits serveur-side. La transparence est une feature (badge, note UE, section
+réécrits serveur-side.
+**Nuance « jamais hors-site » (owner, juillet 2026)** : les liens OFFICIELS de
+NSY sont **whitelistés** — sites clients réalisés (prv-concept.com,
+lecerfthym.fr), LinkedIn entreprise + profil fondateur, GitHub machouse78,
+YouTube @new-software-yard. Triple étage : prompt (règle 5), garde-fou
+`chat.php` (`$ownHosts` + `$officialPrefixes` — les `()` vides après strip sont
+purgés), et `mdToHtml` (`EXT_OK`, rendu cliquable `target="_blank"`). Tout AUTRE
+lien externe reste neutralisé (zéro invention). La transparence est une feature (badge, note UE, section
 RGPD) — la garder.

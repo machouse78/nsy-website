@@ -350,10 +350,36 @@
   function mdToHtml(text) {
     const esc = String(text)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Liens externes OFFICIELS autorisés (même whitelist que chat.php, owner
+    // juillet 2026) : réalisations clientes + profils publics. Ouverts dans un
+    // nouvel onglet. Tout autre lien externe reste du texte inerte.
+    const EXT_OK = [
+      'https://www.prv-concept.com', 'https://prv-concept.com',
+      'https://www.lecerfthym.fr', 'https://lecerfthym.fr',
+      'https://www.linkedin.com/company/nsy-new-software-yard',
+      'https://www.linkedin.com/in/c%c3%a9dric-barme',
+      'https://www.linkedin.com/in/cédric-barme',
+      'https://github.com/machouse78',
+      'https://youtube.com/@new-software-yard',
+      'https://www.youtube.com/@new-software-yard',
+    ];
+    const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
       .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
-      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, label, url) =>
-        /^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(url) ? `<a href="${url}">${label}</a>` : label)
+      // Une seule passe lien Markdown OU URL nue : un href déjà posé ne peut
+      // pas être re-capturé par la branche « URL nue ».
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)|(https?:\/\/[^\s<)\]]+)/g, (m, label, url, bare) => {
+        if (label) {
+          if (/^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(url)) return `<a href="${url}">${label}</a>`;
+          if (extOk(url)) return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+          return label;
+        }
+        const clean = bare.replace(/[.,;:!?]+$/, '');
+        const tail = bare.slice(clean.length);
+        return extOk(clean)
+          ? `<a href="${clean}" target="_blank" rel="noopener">${clean.replace(/^https?:\/\//, '')}</a>${tail}`
+          : m;
+      })
       .replace(/^\s*[-*•]\s+/gm, '• ')
       .replace(/\n/g, '<br>');
   }

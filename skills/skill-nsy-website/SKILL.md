@@ -223,9 +223,14 @@ must hold in every change.
      source of truth, keep it in sync and the bot follows). Guardrails: no
      prices, no email/phone, visitor's language, **strictly factual (never
      invent — FACTS only, else route to contact)**, and **never points outside
-     nsy.fr** (no external site/brand/tool, no external URL). The no-external
-     rule is **enforced server-side** in `chat.php` (external Markdown link →
-     label only; bare non-nsy.fr URL stripped), not prompt-only.
+     nsy.fr** (no external site/brand/tool, no external URL) — with ONE
+     whitelist (owner, July 2026): NSY's OFFICIAL links (client sites
+     prv-concept.com + lecerfthym.fr, LinkedIn company + founder profile,
+     GitHub machouse78, YouTube @new-software-yard) are allowed and rendered
+     clickable (`target="_blank"`). The no-external rule is **enforced
+     server-side** in `chat.php` (external Markdown link → label only; bare
+     non-whitelisted URL stripped; leftover empty `()` purged), mirrored in
+     `mdToHtml`'s `EXT_OK` — not prompt-only.
      Quota protection: origin check, per-IP rate limit (8/min, 60/day, hashed
      IP, no content logged) + global cap; retry on provider 429.
   2. **Rule-based intent engine as fallback** — kept intact in `js/app.js`. No
