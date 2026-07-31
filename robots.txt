@@ -31,6 +31,7 @@ Allow: /public/prv-concept.jpg
 Allow: /public/le-cerf-thym.jpg
 Allow: /public/seo-geo.jpg
 Allow: /public/seo-geo-card.jpg
+Allow: /public/seo-geo-card-en.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
