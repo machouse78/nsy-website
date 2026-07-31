@@ -106,7 +106,7 @@ associations et indépendants en transition numérique.
   bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré) ;
   FAQ de 87 questions ; forum phpBB et boutique intégrés ; graphe d'entités
   JSON-LD, sitemaps site + forum, optimisation GEO/LLMO.
-- Référence publique (création web) : Le Cerf Thym — https://lecerfthym.fr —
+- Référence publique (création web) : Le Cerf Thym — https://www.lecerfthym.fr —
   site vitrine du restaurant Le Cerf Thym à Sully-sur-Loire (Loiret), livré en
   2026. Site en 4 langues (français, anglais, allemand, néerlandais) avec choix
   persistant ; carte et ardoise du jour ; avis clients Google mis en avant ;
@@ -138,7 +138,7 @@ NSY :
 - crée → des sites web propulsés par l'IA (tarification en fonction du besoin)
 - sert → la banque, l'assurance, la finance, les PME/ETI en transition IA
 - a réalisé → le site PRV Concept (www.prv-concept.com)
-- a réalisé → le site du restaurant Le Cerf Thym (lecerfthym.fr) : vitrine en
+- a réalisé → le site du restaurant Le Cerf Thym (www.lecerfthym.fr) : vitrine en
   4 langues (FR/EN/DE/NL), avis clients, cartes interactives, SEO local (2026)
 - démontre son savoir-faire IA en direct via → Ansley, l'assistant IA de nsy.fr
   (chatbot RAG ancré sur les données du site, modèle Mistral hébergé en UE)

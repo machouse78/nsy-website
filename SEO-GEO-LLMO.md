@@ -174,7 +174,7 @@ même fait sur ≥2 sources indépendantes).
    créés — signal E-E-A-T le plus dur à falsifier, donc le plus valorisé.
 
 - **Backlink Le Cerf Thym** ✅ (juillet 2026) : crédit « Propulsé par NSY » en
-  pied de page sitewide de lecerfthym.fr (aligné sur la règle PRV : logo + alt
+  pied de page sitewide de www.lecerfthym.fr (aligné sur la règle PRV : logo + alt
   SEO complet, dofollow vers https://www.nsy.fr). 2e site client en production —
   fiche ajoutée sur realisations.html/portfolio.html + llms(-full).txt.
 
