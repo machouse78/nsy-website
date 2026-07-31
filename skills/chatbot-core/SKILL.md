@@ -157,6 +157,39 @@ si le LLM tombe (429/panne), on sert quand même les données réelles récupér
   d'un message trop court/ambigu. Résultat : la langue du **message** prime
   (EN page + msg EN → EN ; FR page + msg EN → EN ; EN page + msg FR → FR).
 
+**Fiabilité avec un PETIT modèle (mistral-small) — leçons durement acquises,
+chacune vécue en prod sur PRV.** Une règle de prompt seule NE SUFFIT JAMAIS ;
+l'échelle de fiabilité, du plus faible au plus fort :
+1. **Règle au milieu du prompt** : survolée dès que le contexte est riche.
+2. **DONNÉES LIVE** : bien mieux exploitées que les FAITS — ce que le modèle doit
+   citer, l'**injecter dans le live** (filtré serveur, mots ENTIERS + stopwords
+   des termes omniprésents du site pour éviter le spam).
+3. **RAPPEL FINAL** en toute fin de prompt, ajouté **conditionnellement** quand le
+   cas se présente : nettement plus suivi qu'une règle enfouie… mais encore
+   probabiliste.
+4. **Post-traitement DÉTERMINISTE de la réponse** — le seul étage sûr :
+   - **Appendice** : si une donnée obligatoire (actu, produit) n'est pas liée dans
+     la réponse, le serveur l'**appende** lui-même (bloc standard, un lien Markdown
+     par élément ; compléter précisément les éléments MANQUANTS, pas tout ou rien).
+   - **Retrait** : si un lien n'a pas lieu d'être (ex. fiche préparateurs sans
+     préparateur en cause), le serveur le **retire** — sur un critère déterministe
+     (le TITRE du sujet pour une synthèse, pas la prose qui varie d'un run à l'autre).
+- **Anti-RECOPIE (historique pollué)** : face à sa vieille réponse VERBATIM dans
+  l'historique, le modèle la REJOUE (liste périmée, liens inventés) malgré tout
+  rappel — une instruction ne bat jamais du contenu verbatim en contexte. Remède :
+  quand le tour apporte des données fraîches, **tronquer les anciennes réponses de
+  l'assistant (~220 car.) dans le payload LLM** (les messages serveur restent
+  entiers pour le suivi référentiel).
+- **Liens externes du widget : liste blanche par PROFIL, pas par domaine**
+  (`youtube.com/@compte`, pas `youtube.com`) + formes de contenus (`watch?v=`,
+  `/p/`, `/share/` — elles ne portent pas le profil mais ne sortent que des FAITS).
+  Tout le reste → libellé seul.
+- **Suite de RÉGRESSION rejouable** (`tests/chatbot-regression.py` côté site) : un
+  cas par bug vécu, assertions sur signaux ROBUSTES (liens exacts, comptages,
+  absences interdites, heuristique de langue — jamais la prose), retry d'assertion
+  (le 429 du palier gratuit bascule sur un modèle de repli moins obéissant).
+  À rejouer après CHAQUE modif déployée ; tout bug corrigé = un cas ajouté.
+
 Les **règles de contenu spécifiques** à chaque site (persona, périmètre, données
 live boutique/forum, véhicules…) vivent dans le skill de site (`chatbot-nsy`,
 `chatbot-prv`) — et le contenu métier de fond dans `skill-nsy-website` /
