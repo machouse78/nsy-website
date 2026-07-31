@@ -190,7 +190,7 @@ RÈGLES IMPÉRATIVES :
 2. RESTE STRICTEMENT FACTUEL. Appuie-toi EXCLUSIVEMENT sur les FAITS ci-dessous ; n'invente, ne devine et n'extrapole JAMAIS — aucun fait, chiffre, date, client, référence, fonctionnalité, technologie, délai ni disponibilité qui n'y figure pas. Ne « brode » pas et n'ajoute aucun détail plausible mais non vérifié. Si l'information manque, dis simplement que tu ne l'as pas et oriente vers le formulaire de contact.
 3. Ne cite JAMAIS de prix, de taux journalier ni de fourchette : la tarification s'établit en fonction du besoin, après cadrage. Oriente vers la page contact (réponse sous 48 h ouvrées).
 4. Ne donne JAMAIS d'adresse e-mail ni de numéro de téléphone. Les canaux : la page Contact ou la demande de faisabilité pour un projet web (URLs selon la langue, voir la table PAGES).
-5. NE POINTE JAMAIS HORS DU SITE NSY. N'évoque, ne nomme, ne suggère et ne lie AUCUNE ressource externe : aucun autre site, marque, boutique, concurrent, outil, produit tiers, réseau social, moteur de recherche, ni URL externe ou brute. Les SEULS liens/URLs autorisés sont les pages internes de nsy.fr (chemin relatif .html). Si bien répondre supposerait d'envoyer le visiteur ailleurs, ne le fais pas — oriente plutôt vers le contact NSY. Réponses courtes : 2 à 5 phrases, concrètes, ton professionnel et chaleureux ; **gras** et liens Markdown internes autorisés. Les liens suivent la langue de TA réponse — anglais → colonne EN de la table PAGES, français → colonne FR ; le libellé est un mot lisible (« Contact », « feasibility form »), jamais un nom de fichier.
+5. NE POINTE JAMAIS HORS DU SITE NSY. N'évoque, ne nomme, ne suggère et ne lie AUCUNE ressource externe : aucun autre site, marque, boutique, concurrent, outil, produit tiers, réseau social, moteur de recherche, ni URL externe ou brute. Les SEULS liens/URLs autorisés sont : les pages internes de nsy.fr (chemin relatif .html) et les liens OFFICIELS de NSY — ses réalisations https://www.prv-concept.com et https://www.lecerfthym.fr, sa page LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard, le profil LinkedIn du fondateur https://www.linkedin.com/in/cédric-barme/, son GitHub https://github.com/machouse78 et sa chaîne YouTube https://youtube.com/@new-software-yard (de préférence en lien Markdown au libellé lisible). Si bien répondre supposerait d'envoyer le visiteur ailleurs, ne le fais pas — oriente plutôt vers le contact NSY. Réponses courtes : 2 à 5 phrases, concrètes, ton professionnel et chaleureux ; **gras** et liens Markdown internes autorisés. Les liens suivent la langue de TA réponse — anglais → colonne EN de la table PAGES, français → colonne FR ; le libellé est un mot lisible (« Contact », « feasibility form »), jamais un nom de fichier.
 
 PAGES (FR → EN) :
 - accueil : index.html → index-en.html
@@ -351,8 +351,25 @@ $reply = preg_replace_callback(
 // neutralise côté serveur tout ce qui pointe ailleurs. Les liens INTERNES
 // (chemin relatif .html, sans schéma) ne sont pas touchés.
 $nsyHosts = ['www.nsy.fr', 'nsy.fr'];
-$isNsy = static function (?string $url) use ($nsyHosts): bool {
-    return in_array(strtolower((string)parse_url((string)$url, PHP_URL_HOST)), $nsyHosts, true);
+// Liens OFFICIELS autorisés hors nsy.fr (owner, juillet 2026) : les sites
+// clients réalisés + les profils publics de NSY/du fondateur. Tout AUTRE lien
+// externe reste neutralisé (zéro invention, pas de concurrents/outils tiers).
+$ownHosts = ['www.prv-concept.com', 'prv-concept.com', 'www.lecerfthym.fr', 'lecerfthym.fr'];
+$officialPrefixes = [
+    'https://www.linkedin.com/company/nsy-new-software-yard',
+    'https://www.linkedin.com/in/c%c3%a9dric-barme',
+    'https://www.linkedin.com/in/cédric-barme',
+    'https://github.com/machouse78',
+    'https://youtube.com/@new-software-yard',
+    'https://www.youtube.com/@new-software-yard',
+];
+$isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
+    $u = mb_strtolower((string)$url);
+    foreach ($officialPrefixes as $p) {
+        if (str_starts_with($u, $p)) { return true; }
+    }
+    $host = strtolower((string)parse_url((string)$url, PHP_URL_HOST));
+    return in_array($host, $nsyHosts, true) || in_array($host, $ownHosts, true);
 };
 // 1) Liens Markdown externes → on ne garde que le libellé (le lien saute).
 $reply = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/i',
@@ -365,6 +382,8 @@ $reply = preg_replace_callback('/(\s?)(https?:\/\/[^\s)\]]+)/i',
     static function (array $m) use ($isNsy): string {
         return $isNsy($m[2]) ? $m[0] : '';
     }, $reply);
+// Parenthèses laissées vides par une suppression d'URL → purgées.
+$reply = preg_replace('/\s*\(\s*\)/', '', $reply);
 // Espaces doubles éventuels laissés par une suppression (ponctuation intacte).
 $reply = trim(preg_replace('/[ \t]{2,}/', ' ', $reply));
 
