@@ -101,14 +101,17 @@ associations et indépendants en transition numérique.
   opérationnelle (banque/assurance).
 - Référence publique (création web) : PRV Concept — https://www.prv-concept.com —
   site vitrine de l'association de référence du moteur V6 PRV (Peugeot · Renault ·
-  Volvo). Design sur mesure ; 8 rubriques + 23 fiches moteurs/véhicules/protos,
+  Volvo). Techniquement : site STATIQUE HTML/CSS/JS sans framework, responsive
+  et léger, hébergement mutualisé. Design sur mesure ; 8 rubriques + 23 fiches moteurs/véhicules/protos,
   toutes bilingues FR/EN (pages anglaises générées par un pipeline maison) ;
   bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré) ;
   FAQ de 87 questions ; forum phpBB et boutique intégrés ; graphe d'entités
   JSON-LD, sitemaps site + forum, optimisation GEO/LLMO.
 - Référence publique (création web) : Le Cerf Thym — https://www.lecerfthym.fr —
   site vitrine du restaurant Le Cerf Thym à Sully-sur-Loire (Loiret), livré en
-  2026. Site en 4 langues (français, anglais, allemand, néerlandais) avec choix
+  2026. Techniquement : site STATIQUE HTML/CSS/JS sans framework (pas de
+  Next.js/Astro), responsive et léger, hébergement mutualisé Infomaniak.
+  Site en 4 langues (français, anglais, allemand, néerlandais) avec choix
   persistant ; carte et ardoise du jour ; avis clients Google mis en avant ;
   galeries photos/vidéos ; carte interactive du territoire et plan d'accès
   (itinéraires Google Maps/Waze) ; données structurées Restaurant, Open Graph,
