@@ -461,10 +461,18 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
   
     <image:image>
-      <image:loc>https://www.nsy.fr/public/seo-geo-card.jpg</image:loc>
+      <image:loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</image:loc>
       <image:title>SEO vs GEO — illustration du journal NSY</image:title>
       <image:caption>Infographie de l'article : être cité par ChatGPT, Claude et Perplexity</image:caption>
     </image:image>
+  
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</video:thumbnail_loc>
+      <video:title>SEO vs GEO — illustration animée</video:title>
+      <video:description>Deux robots face à face : le SEO (recherche Google) contre le GEO (assistants IA génératifs) — la vignette animée du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
@@ -476,7 +484,7 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
   
     <image:image>
-      <image:loc>https://www.nsy.fr/public/seo-geo-card-en.jpg</image:loc>
+      <image:loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</image:loc>
       <image:title>SEO vs GEO — NSY journal illustration</image:title>
       <image:caption>Article infographic: getting cited by ChatGPT, Claude and Perplexity</image:caption>
     </image:image>
@@ -490,13 +498,11 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
   
-    <video:video>
-      <video:thumbnail_loc>https://www.nsy.fr/public/seo-geo.jpg</video:thumbnail_loc>
-      <video:title>SEO vs GEO — illustration animée</video:title>
-      <video:description>Deux robots face à face : le SEO (recherche Google) contre le GEO (assistants IA génératifs) — l'illustration de l'article du journal NSY.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/seo-geo.mp4</video:content_loc>
-      <video:family_friendly>yes</video:family_friendly>
-    </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/seo-geo-article.jpg</image:loc>
+      <image:title>SEO vs GEO — infographie de l'article</image:title>
+      <image:caption>Classement Google contre citations IA : l'infographie de l'article du journal NSY</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</loc>
@@ -506,6 +512,12 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/seo-geo-article-en.jpg</image:loc>
+      <image:title>SEO vs GEO — article infographic</image:title>
+      <image:caption>Google rankings versus AI citations: the NSY journal article infographic</image:caption>
+    </image:image>
   </url>
   <url>
     <loc>https://www.nsy.fr/consultant-technique-paris.html</loc>

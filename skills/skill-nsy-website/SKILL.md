@@ -176,14 +176,20 @@ must hold in every change.
   **New article checklist** = FR/EN pair + blog-index cards + **homepage teaser
   card (index.html + index-en.html — keep it = the LATEST article)** + RSS
   `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
-- **Article ANIMATED illustration** (pattern, July 2026 — SEO vs GEO article):
-  still image → Higgsfield `kling3_0_turbo` (prompt MUST demand static/rigid
-  text & logos) → ffmpeg **boomerang** → encode at article width (`scale=760:-2`
-  — the `-2` matters: odd heights break yuv420p) ≈0,55 Mo. `<figure>` +
-  `<video autoplay loop muted playsinline preload="none">` after the lede, id
-  added to the `setupLoopFade` exclusion list in `js/app.js` (seamless boomerang);
-  poster jpg doubles as the article's **og:image** + BlogPosting `image`; robots
-  Allow + `video:video` sitemap entry; both languages.
+- **Article media pattern (owner, July 2026 — SEO vs GEO article): ANIMATION on
+  the card, INFOGRAPHIC in the article.**
+  - **Card/teaser thumbnail = the animated boomerang video** (`seo-geo-thumb.mp4`,
+    560w ≈0,33 Mo + poster jpg) inside `.blog-card .thumb` — language-neutral,
+    id `seo-geo-video` is in the `setupLoopFade` exclusion list in `js/app.js`
+    (seamless boomerang). Pipeline: still → Higgsfield `kling3_0_turbo` (prompt
+    MUST demand static/rigid text & logos) → ffmpeg boomerang → `scale=560:-2`
+    (the `-2` matters: odd heights break yuv420p).
+  - **In-article figure = the LOCALIZED infographic jpg** (1140w ≈180 Ko, FR + EN
+    variants: `seo-geo-article(.-en).jpg`) after the lede; it is also each
+    article's **og:image/twitter:image + BlogPosting `image`**.
+  - Wiring: robots Allow (thumb mp4+jpg, article jpgs); sitemap `video:video`
+    under the **blog** entry (the video lives on blog + homepage teaser),
+    `image:image` under each article entry.
 - **RSS + IndexNow (July 2026):** `feed.xml`/`feed-en.xml` (linked from journal
   pages + llms.txt); IndexNow key file `d41a70502f0e94a59a054e4eecc623c8.txt` at
   root — after any deploy that adds/changes pages run

@@ -29,9 +29,9 @@ Allow: /public/web-ia.png
 Allow: /public/web-ia.webp
 Allow: /public/prv-concept.jpg
 Allow: /public/le-cerf-thym.jpg
-Allow: /public/seo-geo.jpg
-Allow: /public/seo-geo-card.jpg
-Allow: /public/seo-geo-card-en.jpg
+Allow: /public/seo-geo-thumb.jpg
+Allow: /public/seo-geo-article.jpg
+Allow: /public/seo-geo-article-en.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
@@ -45,7 +45,7 @@ Allow: /public/finance-assurance.mp4
 Allow: /public/web-ia.mp4
 Allow: /public/prv-concept.mp4
 Allow: /public/le-cerf-thym.mp4
-Allow: /public/seo-geo.mp4
+Allow: /public/seo-geo-thumb.mp4
 
 # Modèles 3D — pas crawlables par défaut, ils ne servent pas le SEO texte
 Disallow: /public/*.glb
