@@ -35,14 +35,15 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 |---|---|---|
 | **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + bandeau CTA (→ Contact) |
 | **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs + aperçu 3D (→ Conception 3D) |
-| **Réalisations** | `realisations.html` ↔ `portfolio.html` | Portfolio des sites clients (vignettes auto-capturées ; 1ʳᵉ : PRV Concept) |
+| **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser du dernier article sur l'accueil |
+| **Réalisations** | `realisations.html` ↔ `portfolio.html` | Fiches clients avec **aperçus animés** (`record-realisation.mjs`), en ordre chronologique : PRV Concept puis Le Cerf Thym |
 | **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme, signaux, parcours, secteurs, principes |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
 | **Conception 3D** | `conception-3d.html` ↔ `3d-design.html` | Modèle wireframe Renault interactif + animation YouTube (démonstrateurs 3D) |
 
-Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **5 liens** (Accueil, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
+Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
 
-Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html`, pages légales.
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (1ᵉʳ : « SEO vs GEO », avec illustration animée), **2 pages villes** (consultant Paris · création de site Orléans), **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html`, pages légales — **44 pages** au total.
 
 ## Bilingue (FR / EN)
 
@@ -71,7 +72,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 36 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 44 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -93,9 +94,9 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
 - **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **7 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
 
-### Assistant IA — LLM gratuit + RAG, repli local
+### Assistant IA « Ansley » — LLM gratuit + RAG, repli local
 
-FAB cyan en bas-droite, panneau glassmorphic, présent sur **les 36 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
+L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 44 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
 
 **Étage 1 — IA générative (`chat.php`)** : le widget interroge un proxy PHP qui
 appelle un LLM **Mistral** (palier gratuit « Experiment », société française,
@@ -190,9 +191,12 @@ nsy-website/
 ├── partials/                            # ⭐ Source unique de la nav + footer + widget assistant (FR/EN)
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
-├── scripts/                             # Outillage build (3D + synchro partials)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer dans les 36 pages (npm run partials)
-│   ├── capture-realisation.mjs          # Vignette Réalisations auto (npm run capture:realisations)
+├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 44 pages (npm run partials)
+│   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
+│   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
+│   ├── seo-crawl-report.mjs             # Rapport crawlers IA/moteurs depuis les access logs
+│   ├── capture-realisation.mjs          # (historique) vignette statique — remplacé par record-realisation
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
 │   ├── process-renault.py               # Blender headless : décimation, matériau, export
 │   ├── tris-to-lines.mjs                # Triangles → GL_LINES
@@ -294,11 +298,14 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 36 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos, avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 36 pages
+- **Sitemap** : 44 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 44 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`
+- **Flux RSS du journal** : `feed.xml` (FR) / `feed-en.xml` (EN) — à mettre à jour à chaque article
+- **IndexNow** : clé à la racine + `node scripts/indexnow-ping.mjs` après chaque déploiement (indexation quasi immédiate côté Bing → ChatGPT Search/Copilot)
+- **Images lourdes en WebP** (−90 % : `finance-assurance.webp`, `web-ia.webp`) — les `.png` restent pour les thumbnails du video sitemap
 
 ### GEO / LLMO (référencement dans les moteurs génératifs)
 
@@ -318,7 +325,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 | Bing Webmaster Tools (alimente ChatGPT Search & Copilot) — vérifié par meta `msvalidate.01` | https://www.bing.com/webmasters/sitemaps?siteUrl=https://www.nsy.fr |
 | Registre officiel (SIRENE) | https://annuaire-entreprises.data.gouv.fr/entreprise/842078453 |
 | LinkedIn entreprise | https://www.linkedin.com/company/nsy-new-software-yard |
-| Backlink éditorial | prv-concept.com → footer « Propulsé par NSY » |
+| Backlinks éditoriaux | prv-concept.com et lecerfthym.fr → footer « Propulsé par NSY » |
 
 La page LinkedIn entreprise est référencée dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
 
@@ -338,9 +345,11 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 ## Skills Claude Code (`skills/`)
 
-Le dépôt versionne six [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
+Le dépôt versionne huit [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
 
 - **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, tarification en fonction du besoin…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
+- **`chatbot-core`** — socle réutilisable du chatbot à mascotte animée (architecture du widget `.cbot-*`, pipeline mascotte, perf/iOS, charte par design tokens, garde-fous zéro-invention) ; partagé avec prv-concept.com.
+- **`chatbot-nsy`** — les spécificités Ansley (persona IA affichée, charte cyan, carte des fichiers, spec du FAB) — hérite de `chatbot-core`.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
 - **`seo-geo-llmo`** — le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA, llms.txt, JSON-LD `@graph`, FAQ conversationnelle, inscriptions externes (Bing WT, propriété de domaine GSC, Google Business, backlinks) avec les pièges vécus et les méthodes de vérification.
 - **`antispam`** — défense anti-spam réutilisable pour formulaires web : défense en profondeur (honeypot, Turnstile, scoring de contenu, rate-limit + plafond journalier, abandon silencieux + log d'audit) avec un module PHP `antispam.php` prêt à coller. Extrait du `antispam.php` de nsy.fr, réutilisable sur prv-concept.com et sites clients.
