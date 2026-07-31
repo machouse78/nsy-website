@@ -131,10 +131,10 @@ cp public/web-ia.mp4                    deploy/public/
 cp public/prv-concept.mp4               deploy/public/   # apercu anime PRV Concept (page realisations)
 cp public/le-cerf-thym.jpg              deploy/public/   # poster Le Cerf Thym (page realisations)
 cp public/le-cerf-thym.mp4              deploy/public/   # apercu anime Le Cerf Thym (page realisations)
-cp public/seo-geo.jpg                   deploy/public/   # illustration article SEO vs GEO (poster + OG)
-cp public/seo-geo-card.jpg              deploy/public/   # vignette des cartes du journal
-cp public/seo-geo-card-en.jpg           deploy/public/   # vignette EN des cartes du journal
-cp public/seo-geo.mp4                   deploy/public/   # illustration animee article SEO vs GEO
+cp public/seo-geo-thumb.jpg             deploy/public/   # poster vignette animee du journal
+cp public/seo-geo-thumb.mp4             deploy/public/   # vignette ANIMEE des cartes du journal
+cp public/seo-geo-article.jpg           deploy/public/   # infographie FR dans l'article (+ OG)
+cp public/seo-geo-article-en.jpg        deploy/public/   # infographie EN dans l'article (+ OG)
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

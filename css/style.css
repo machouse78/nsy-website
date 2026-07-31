@@ -2781,7 +2781,7 @@ footer.foot {
 /* Variante avec vignette : image à gauche, texte à droite (empilés sur mobile). */
 .blog-card.has-thumb { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: center; }
 .blog-card .thumb { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
-.blog-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.blog-card .thumb img, .blog-card .thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
 @media (max-width: 680px) { .blog-card.has-thumb { grid-template-columns: 1fr; gap: 16px; } }
 
 /* Barre de CHARGEMENT de page (élément injecté par JS sur chaque page).
