@@ -72,6 +72,20 @@ noir pur ni un `--fg-*`). Voir la méthode dans `chatbot-core/reference/charte-g
 - **Mobile (≤480px)** : FAB `116×148`, ouvert `54×54`, greeter `bottom:176px`.
 - Input : `font-size:16px` **minimum** (sinon iOS zoome au focus).
 
+## Tests unitaires — OBLIGATOIRES avant tout commit chatbot
+
+`./tests/run-tests.sh` (lint + suites) teste le **code réel** : `nsy_sanitize_reply()`
+de `chat.php` (chargé via la garde `define('NSY_CHAT_TEST', true)` qui court-circuite
+le endpoint — les fonctions top-level restent définies) et `mdToHtml` de `js/app.js`
+(extrait par équilibrage d'accolades puis évalué). Couvre : whitelist officielle
+(markdown + nu), neutralisation des externes, purge des `()`, linkmap FR/EN + ancres,
+cap 4000, échappement XSS/`javascript:`. **À lancer avant CHAQUE commit touchant
+`chat.php` ou `js/app.js`** ; ajouter un cas de test avec chaque nouvelle règle.
+
+Autres règles du prompt (owner) : URL de la réalisation dès la 1re mention ; ne
+jamais mêler la stack générale NSY aux faits d'une réalisation ; **toute réponse
+sur une réalisation se termine par l'offre [Création de site IA](creation-site-ia.html)**.
+
 Vérifier (headless) : FAB fermé `132×168 r22` en desktop ; l'état ouvert se
 mesure sur un **clone** de `.cbot-fab.open` (ce navigateur corrompt la CSSOM d'un
 nœud manipulé en direct) → attendu `60×60, 50%`.

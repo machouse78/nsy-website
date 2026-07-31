@@ -35,6 +35,11 @@ function respond(array $payload, int $status = 200): never
     exit;
 }
 
+// ───── Mode test : expose les fonctions pures sans exécuter le endpoint ─────
+// (tests/run-tests.sh — les déclarations de fonctions PHP top-level sont
+// compilées avant ce return, elles restent donc disponibles.)
+if (defined('NSY_CHAT_TEST')) { return; }
+
 // ───── Méthode ─────
 if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') {
     respond(['ok' => false, 'code' => 'method'], 405);
@@ -190,7 +195,7 @@ RÈGLES IMPÉRATIVES :
 2. RESTE STRICTEMENT FACTUEL. Appuie-toi EXCLUSIVEMENT sur les FAITS ci-dessous ; n'invente, ne devine et n'extrapole JAMAIS — aucun fait, chiffre, date, client, référence, fonctionnalité, technologie, délai ni disponibilité qui n'y figure pas. Ne « brode » pas et n'ajoute aucun détail plausible mais non vérifié. Si l'information manque, dis simplement que tu ne l'as pas et oriente vers le formulaire de contact.
 3. Ne cite JAMAIS de prix, de taux journalier ni de fourchette : la tarification s'établit en fonction du besoin, après cadrage. Oriente vers la page contact (réponse sous 48 h ouvrées).
 4. Ne donne JAMAIS d'adresse e-mail ni de numéro de téléphone. Les canaux : la page Contact ou la demande de faisabilité pour un projet web (URLs selon la langue, voir la table PAGES).
-5. NE POINTE JAMAIS HORS DU SITE NSY. N'évoque, ne nomme, ne suggère et ne lie AUCUNE ressource externe : aucun autre site, marque, boutique, concurrent, outil, produit tiers, réseau social, moteur de recherche, ni URL externe ou brute. Les SEULS liens/URLs autorisés sont : les pages internes de nsy.fr (chemin relatif .html) et les liens OFFICIELS de NSY — ses réalisations https://www.prv-concept.com et https://www.lecerfthym.fr, sa page LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard, le profil LinkedIn du fondateur https://www.linkedin.com/in/cédric-barme/, son GitHub https://github.com/machouse78 et sa chaîne YouTube https://youtube.com/@new-software-yard (de préférence en lien Markdown au libellé lisible). Quand tu évoques une réalisation (PRV Concept, Le Cerf Thym), donne SYSTÉMATIQUEMENT son URL en lien Markdown dès la première mention. Ne mélange JAMAIS les technologies générales de NSY (Next.js, Astro, Vercel…) avec celles d'une réalisation précise : chaque réalisation a ses propres FAITS — ne cite pour elle que ce que sa fiche indique. Si bien répondre supposerait d'envoyer le visiteur ailleurs, ne le fais pas — oriente plutôt vers le contact NSY. Réponses courtes : 2 à 5 phrases, concrètes, ton professionnel et chaleureux ; **gras** et liens Markdown internes autorisés. Les liens suivent la langue de TA réponse — anglais → colonne EN de la table PAGES, français → colonne FR ; le libellé est un mot lisible (« Contact », « feasibility form »), jamais un nom de fichier.
+5. NE POINTE JAMAIS HORS DU SITE NSY. N'évoque, ne nomme, ne suggère et ne lie AUCUNE ressource externe : aucun autre site, marque, boutique, concurrent, outil, produit tiers, réseau social, moteur de recherche, ni URL externe ou brute. Les SEULS liens/URLs autorisés sont : les pages internes de nsy.fr (chemin relatif .html) et les liens OFFICIELS de NSY — ses réalisations https://www.prv-concept.com et https://www.lecerfthym.fr, sa page LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard, le profil LinkedIn du fondateur https://www.linkedin.com/in/cédric-barme/, son GitHub https://github.com/machouse78 et sa chaîne YouTube https://youtube.com/@new-software-yard (de préférence en lien Markdown au libellé lisible). Quand tu évoques une réalisation (PRV Concept, Le Cerf Thym), donne SYSTÉMATIQUEMENT son URL en lien Markdown dès la première mention. Ne mélange JAMAIS les technologies générales de NSY (Next.js, Astro, Vercel…) avec celles d'une réalisation précise : chaque réalisation a ses propres FAITS — ne cite pour elle que ce que sa fiche indique. Et termine TOUJOURS une réponse sur une réalisation en proposant l'offre correspondante : [Création de site IA](creation-site-ia.html). Si bien répondre supposerait d'envoyer le visiteur ailleurs, ne le fais pas — oriente plutôt vers le contact NSY. Réponses courtes : 2 à 5 phrases, concrètes, ton professionnel et chaleureux ; **gras** et liens Markdown internes autorisés. Les liens suivent la langue de TA réponse — anglais → colonne EN de la table PAGES, français → colonne FR ; le libellé est un mot lisible (« Contact », « feasibility form »), jamais un nom de fichier.
 
 PAGES (FR → EN) :
 - accueil : index.html → index-en.html
@@ -293,8 +298,6 @@ if ($reply === '') {
     writeHealth($healthFile, false, $usedModel, 'empty');
     respond(['ok' => false, 'code' => 'upstream'], 502);
 }
-if (mb_strlen($reply) > 4000) $reply = mb_substr($reply, 0, 4000);
-
 // ───── Liens cohérents avec la langue de la réponse (déterministe) ─────
 // Le modèle mélange parfois les URLs FR/EN malgré le prompt : on réécrit tout
 // lien Markdown interne vers la variante correspondant à la langue détectée
@@ -312,80 +315,87 @@ function replyIsEnglish(string $t): bool
     return $en > $fr;
 }
 
-$frToEn = [
-    'index.html'                          => 'index-en.html',
-    'services.html'                       => 'services-en.html',
-    'contact.html'                        => 'contact-en.html',
-    'faisabilite.html'                    => 'feasibility.html',
-    'a-propos.html'                       => 'about.html',
-    'realisations.html'                   => 'portfolio.html',
-    'conception-3d.html'                  => '3d-design.html',
-    'faq.html'                            => 'faq-en.html',
-    'mentions-legales.html'               => 'legal-notice.html',
-    'confidentialite.html'                => 'privacy.html',
-    'creation-site-ia.html'               => 'ai-website-creation.html',
-    'conformite-dora.html'                => 'dora-compliance.html',
-    'integration-claude-entreprise.html'  => 'claude-integration.html',
-    'expertise-migration-java-ee.html'    => 'java-ee-migration.html',
-    'expertise-wildfly-jboss.html'        => 'wildfly-jboss-expert.html',
-    'expertise-openshift-kubernetes.html' => 'openshift-kubernetes-expert.html',
-    'expertise-kafka-messagerie.html'     => 'kafka-messaging-expert.html',
-    'glossaire-ia-web.html'               => 'ai-web-glossary.html',
-    'blog.html'                           => 'blog-en.html',
-    'seo-geo-etre-cite-par-les-ia.html'   => 'seo-geo-getting-cited-by-ai.html',
-    'consultant-technique-paris.html'     => 'technical-consultant-paris.html',
-    'creation-site-internet-orleans.html' => 'website-creation-orleans.html',
-];
-$linkMap = replyIsEnglish($reply) ? $frToEn : array_flip($frToEn);
-$reply = preg_replace_callback(
-    '/\]\(([a-z0-9.\-]+\.html)(#[\w-]*)?\)/i',
-    static function (array $m) use ($linkMap): string {
-        $url = strtolower($m[1]);
-        return '](' . ($linkMap[$url] ?? $url) . ($m[2] ?? '') . ')';
-    },
-    $reply
-);
+/**
+ * Sanitisation de la réponse du LLM (pure, testée par tests/chat-sanitize.test.php) :
+ * cap 4000 → liens internes alignés sur la langue détectée → anti-hors-site
+ * (whitelist des liens officiels) → purge des () vides → espaces normalisés.
+ */
+function nsy_sanitize_reply(string $reply): string
+{
+    if (mb_strlen($reply) > 4000) $reply = mb_substr($reply, 0, 4000);
 
-// ───── Anti-hors-site : aucun lien/URL hors nsy.fr (garde-fou serveur) ─────
-// Le prompt l'interdit déjà, mais on ne fait pas confiance au modèle : on
-// neutralise côté serveur tout ce qui pointe ailleurs. Les liens INTERNES
-// (chemin relatif .html, sans schéma) ne sont pas touchés.
-$nsyHosts = ['www.nsy.fr', 'nsy.fr'];
-// Liens OFFICIELS autorisés hors nsy.fr (owner, juillet 2026) : les sites
-// clients réalisés + les profils publics de NSY/du fondateur. Tout AUTRE lien
-// externe reste neutralisé (zéro invention, pas de concurrents/outils tiers).
-$ownHosts = ['www.prv-concept.com', 'prv-concept.com', 'www.lecerfthym.fr', 'lecerfthym.fr'];
-$officialPrefixes = [
-    'https://www.linkedin.com/company/nsy-new-software-yard',
-    'https://www.linkedin.com/in/c%c3%a9dric-barme',
-    'https://www.linkedin.com/in/cédric-barme',
-    'https://github.com/machouse78',
-    'https://youtube.com/@new-software-yard',
-    'https://www.youtube.com/@new-software-yard',
-];
-$isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
-    $u = mb_strtolower((string)$url);
-    foreach ($officialPrefixes as $p) {
-        if (str_starts_with($u, $p)) { return true; }
-    }
-    $host = strtolower((string)parse_url((string)$url, PHP_URL_HOST));
-    return in_array($host, $nsyHosts, true) || in_array($host, $ownHosts, true);
-};
-// 1) Liens Markdown externes → on ne garde que le libellé (le lien saute).
-$reply = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/i',
-    static function (array $m) use ($isNsy): string {
-        return $isNsy($m[2]) ? $m[0] : $m[1];
-    }, $reply);
-// 2) URLs nues externes → supprimées, avec l'espace qui les précède (pour ne
-//    pas laisser d'espace avant la ponctuation). Les URLs nsy.fr restent.
-$reply = preg_replace_callback('/(\s?)(https?:\/\/[^\s)\]]+)/i',
-    static function (array $m) use ($isNsy): string {
-        return $isNsy($m[2]) ? $m[0] : '';
-    }, $reply);
-// Parenthèses laissées vides par une suppression d'URL → purgées.
-$reply = preg_replace('/\s*\(\s*\)/', '', $reply);
-// Espaces doubles éventuels laissés par une suppression (ponctuation intacte).
-$reply = trim(preg_replace('/[ \t]{2,}/', ' ', $reply));
+    $frToEn = [
+        'index.html'                          => 'index-en.html',
+        'services.html'                       => 'services-en.html',
+        'contact.html'                        => 'contact-en.html',
+        'faisabilite.html'                    => 'feasibility.html',
+        'a-propos.html'                       => 'about.html',
+        'realisations.html'                   => 'portfolio.html',
+        'conception-3d.html'                  => '3d-design.html',
+        'faq.html'                            => 'faq-en.html',
+        'mentions-legales.html'               => 'legal-notice.html',
+        'confidentialite.html'                => 'privacy.html',
+        'creation-site-ia.html'               => 'ai-website-creation.html',
+        'conformite-dora.html'                => 'dora-compliance.html',
+        'integration-claude-entreprise.html'  => 'claude-integration.html',
+        'expertise-migration-java-ee.html'    => 'java-ee-migration.html',
+        'expertise-wildfly-jboss.html'        => 'wildfly-jboss-expert.html',
+        'expertise-openshift-kubernetes.html' => 'openshift-kubernetes-expert.html',
+        'expertise-kafka-messagerie.html'     => 'kafka-messaging-expert.html',
+        'glossaire-ia-web.html'               => 'ai-web-glossary.html',
+        'blog.html'                           => 'blog-en.html',
+        'seo-geo-etre-cite-par-les-ia.html'   => 'seo-geo-getting-cited-by-ai.html',
+        'consultant-technique-paris.html'     => 'technical-consultant-paris.html',
+        'creation-site-internet-orleans.html' => 'website-creation-orleans.html',
+    ];
+    $linkMap = replyIsEnglish($reply) ? $frToEn : array_flip($frToEn);
+    $reply = preg_replace_callback(
+        '/\]\(([a-z0-9.\-]+\.html)(#[\w-]*)?\)/i',
+        static function (array $m) use ($linkMap): string {
+            $url = strtolower($m[1]);
+            return '](' . ($linkMap[$url] ?? $url) . ($m[2] ?? '') . ')';
+        },
+        $reply
+    );
+
+    // ── Anti-hors-site : aucun lien/URL hors nsy.fr, SAUF les liens OFFICIELS
+    // (owner, juillet 2026) : sites clients réalisés + profils publics. Tout
+    // AUTRE lien externe reste neutralisé (zéro invention).
+    $nsyHosts = ['www.nsy.fr', 'nsy.fr'];
+    $ownHosts = ['www.prv-concept.com', 'prv-concept.com', 'www.lecerfthym.fr', 'lecerfthym.fr'];
+    $officialPrefixes = [
+        'https://www.linkedin.com/company/nsy-new-software-yard',
+        'https://www.linkedin.com/in/c%c3%a9dric-barme',
+        'https://www.linkedin.com/in/cédric-barme',
+        'https://github.com/machouse78',
+        'https://youtube.com/@new-software-yard',
+        'https://www.youtube.com/@new-software-yard',
+    ];
+    $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
+        $u = mb_strtolower((string)$url);
+        foreach ($officialPrefixes as $p) {
+            if (str_starts_with($u, $p)) { return true; }
+        }
+        $host = strtolower((string)parse_url((string)$url, PHP_URL_HOST));
+        return in_array($host, $nsyHosts, true) || in_array($host, $ownHosts, true);
+    };
+    // 1) Liens Markdown externes → on ne garde que le libellé (le lien saute).
+    $reply = preg_replace_callback('/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/i',
+        static function (array $m) use ($isNsy): string {
+            return $isNsy($m[2]) ? $m[0] : $m[1];
+        }, $reply);
+    // 2) URLs nues externes → supprimées, avec l'espace qui les précède.
+    $reply = preg_replace_callback('/(\s?)(https?:\/\/[^\s)\]]+)/i',
+        static function (array $m) use ($isNsy): string {
+            return $isNsy($m[2]) ? $m[0] : '';
+        }, $reply);
+    // Parenthèses laissées vides par une suppression d'URL → purgées.
+    $reply = preg_replace('/\s*\(\s*\)/', '', $reply);
+    // Espaces doubles éventuels laissés par une suppression (ponctuation intacte).
+    return trim(preg_replace('/[ \t]{2,}/', ' ', $reply));
+}
+
+$reply = nsy_sanitize_reply($reply);
 
 // L'IA a répondu → voyant vert pour les prochains health-checks.
 writeHealth($healthFile, true, $usedModel, '');
