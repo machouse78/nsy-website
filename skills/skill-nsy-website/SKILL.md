@@ -401,6 +401,9 @@ must hold in every change.
   avoids re-download, **not** re-decode — pausing is what saves CPU/GPU.
 
 ## Workflow (how to actually ship a change)
+- **Touching `chat.php` or `js/app.js` (chatbot)? Run `./tests/run-tests.sh` FIRST**
+  (unit suite on the REAL code — see `chatbot-nsy` skill for details) and add a
+  test case with every new rule.
 1. **Autonomous**: run commands without asking; only pause for destructive/
    irreversible ops.
 2. Edit in the git worktree. **Verify visually** with headless Chrome /

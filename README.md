@@ -33,11 +33,11 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 
 | Page | URL FR ↔ EN | Contenu |
 |---|---|---|
-| **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + bandeau CTA (→ Contact) |
+| **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + **news du journal** (→ Journal, avec vignette animée) + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + références + bandeau CTA (→ Contact) |
 | **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs + aperçu 3D (→ Conception 3D) |
 | **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser du dernier article sur l'accueil |
 | **Réalisations** | `realisations.html` ↔ `portfolio.html` | Fiches clients avec **aperçus animés** (`record-realisation.mjs`), en ordre chronologique : PRV Concept puis Le Cerf Thym |
-| **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme, signaux, parcours, secteurs, principes |
+| **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme (bouton « Me suivre sur LinkedIn »), signaux, parcours, secteurs, principes |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
 | **Conception 3D** | `conception-3d.html` ↔ `3d-design.html` | Modèle wireframe Renault interactif + animation YouTube (démonstrateurs 3D) |
 
@@ -103,7 +103,7 @@ appelle un LLM **Mistral** (palier gratuit « Experiment », société français
 données traitées en UE) via l'API OpenAI-compatible.
 
 - **RAG maison** : le proxy injecte `llms-full.txt` (la base de connaissances déjà maintenue pour le GEO) comme contexte système → le bot répond avec les **vrais faits du site**, dans **la langue du visiteur** (quelle qu'elle soit), et sait dire « je ne sais pas ». Une seule source de vérité, zéro duplication.
-- **Garde-fous** : jamais de prix ni d'email, **strictement factuel** (aucune invention — uniquement les FAITS, sinon renvoi au contact), **ne pointe jamais hors de nsy.fr** (aucun site/marque/outil externe, aucune URL externe), renvoi systématique vers le formulaire de contact, refus poli du hors-sujet, résistance aux tentatives de détournement. Le « pas de lien externe » est **appliqué côté serveur** (`chat.php` neutralise tout lien Markdown externe → libellé seul, et supprime toute URL nue hors nsy.fr), pas seulement via le prompt.
+- **Garde-fous** : jamais de prix ni d'email, **strictement factuel** (aucune invention — uniquement les FAITS, sinon renvoi au contact), **ne pointe jamais hors de nsy.fr** — à une exception près (juillet 2026) : les **liens officiels de NSY** sont whitelistés (sites clients réalisés prv-concept.com et lecerfthym.fr, LinkedIn entreprise + profil fondateur, GitHub, YouTube) et rendus cliquables en nouvel onglet ; tout AUTRE lien externe reste neutralisé. Renvoi systématique vers le formulaire de contact, refus poli du hors-sujet, résistance aux tentatives de détournement. Le « pas de lien externe » est **appliqué côté serveur** (`chat.php` : lien Markdown non whitelisté → libellé seul, URL nue supprimée, parenthèses vides purgées), pas seulement via le prompt. Quand une réalisation est évoquée : son URL dès la première mention + le lien vers l'offre [Création de site IA](https://www.nsy.fr/creation-site-ia.html) en fin de réponse.
 - **Protection du quota gratuit** : clé API côté serveur uniquement (`_secret/ai.php`, gitignoré), contrôle d'origine, rate-limiting par IP (8/min, 60/jour, hachée — aucun contenu journalisé) + plafond global (1 500/jour), retry sur le 429 fournisseur.
 - **Mémoire de conversation** : historique en `sessionStorage`, la discussion **suit le visiteur de page en page** ; effet machine à écrire (désactivé si `prefers-reduced-motion`) ; rendu Markdown minimal **sécurisé** (échappement complet, seuls `**gras**` et liens internes `page.html` réintroduits).
 - **Transparence** : badge « IA · Mistral » dans l'en-tête, note UE/données sensibles dans le pied du widget, section RGPD dédiée dans les pages de confidentialité.
@@ -191,6 +191,10 @@ nsy-website/
 ├── partials/                            # ⭐ Source unique de la nav + footer + widget assistant (FR/EN)
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
+├── tests/                               # Tests unitaires du chatbot (code réel)
+│   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js
+│   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
+│   └── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
 │   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 44 pages (npm run partials)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
@@ -231,6 +235,13 @@ nsy-website/
 ├── README.md                            # Ce fichier (FR)
 └── README.en.md                         # Version anglaise
 ```
+
+## Tests unitaires (chatbot)
+
+`./tests/run-tests.sh` — lint + suites sur le **code réel** : `nsy_sanitize_reply()`
+de `chat.php` (whitelist des liens officiels, linkmap FR/EN, purge des `()`, cap)
+via Docker PHP 8.3, et `mdToHtml` de `js/app.js` (liens cliquables, échappement
+XSS) via Node. **À lancer avant tout commit qui touche `chat.php` ou `js/app.js`.**
 
 ## Tester en local
 
