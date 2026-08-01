@@ -26,6 +26,10 @@ must hold in every change.
   appear elsewhere — footer, contact card, About, JSON-LD, emails, chatbot,
   sitemap captions, etc. Only "France" (or at most "Centre-Val de Loire") is
   acceptable outside the legal pages.
+- **Never say « EURL » publicly** (owner, July 2026): pages, chatbot, llms,
+  footer all say « société (indépendante) » / « cabinet indépendant » — the legal
+  form appears ONLY on mentions-legales.html / legal-notice.html (LCEN), where it
+  must stay. (The fact itself — EURL — remains here for internal accuracy.)
 - **NO prices displayed anywhere** (owner, July 2026): pricing is « en fonction du besoin / devis après cadrage » — never reintroduce an amount (the old « from 5 800 € HT » is obsolete) nor day-rate/fixed-fee wording.
 - **NO availability badge displayed** (owner, July 2026): the nav CTA
   « Disponible maintenant » was removed. Availability is only discussed in

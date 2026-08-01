@@ -8,7 +8,7 @@ requirements, not suggestions.
 
 | Field | Value |
 |---|---|
-| Company | NSY — EURL |
+| Company | NSY — société indépendante (forme juridique EURL : jamais affichée hors mentions légales) |
 | Founder / owner | Cédric Barme |
 | **Founded** | **2018** (the "NSY · Fondateur" timeline entry is `2018 →`, never 2026) |
 | Capital | 100 € |
