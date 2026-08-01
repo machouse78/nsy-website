@@ -392,6 +392,15 @@ function nsy_sanitize_reply(string $reply): string
         static function (array $m) use ($isNsy): string {
             return $isNsy($m[2]) ? $m[0] : '';
         }, $reply);
+    // 3) Formulations bannies (positionnement ESN, owner août 2026) — réécriture
+    //    déterministe : le prompt les interdit mais le modèle paraphrase parfois.
+    $reply = preg_replace('/\bsans\s+(?:sur)?couche\s+commerciale\b/iu', 'en prise directe', $reply);
+    $reply = preg_replace('/\bsans\s+intermédiaires?\b/iu', 'en prise directe', $reply);
+    $reply = preg_replace('/\bpas\s+d[\'’]\s?intermédiaires?\b/iu', 'un seul interlocuteur', $reply);
+    $reply = preg_replace('/\bsans\s+pyramide\b/iu', 'en prise directe', $reply);
+    $reply = preg_replace('/\bno\s+pyramid\b/iu', 'direct accountability', $reply);
+    $reply = preg_replace('/\bno\s+middlem[ae]n\b/iu', 'a single point of contact', $reply);
+    $reply = preg_replace('/\bno\s+sales\s+layer\b/iu', 'direct accountability', $reply);
     // Parenthèses laissées vides par une suppression d'URL → purgées.
     $reply = preg_replace('/\s*\(\s*\)/', '', $reply);
     // Espaces doubles éventuels laissés par une suppression (ponctuation intacte).

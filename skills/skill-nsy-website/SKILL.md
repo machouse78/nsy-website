@@ -45,7 +45,10 @@ must hold in every change.
   JSON-LD, articles and LinkedIn posts. Hierarchy (owner): DIRECT is the
   preferred channel when possible (no intermediation cost) but is very rare at
   grands comptes; the ESN channel is the market's standard framework — never
-  present it as « privilégié », preferred or frequent.
+  present it as « privilégié », preferred or frequent. Enforced at THREE
+  levels: site copy, chat.php prompt rule 4, AND server-side rewrite in
+  `nsy_sanitize_reply()` (banned phrases → « en prise directe » / « un seul
+  interlocuteur », unit-tested) — small models paraphrase past prompt bans.
 - **NO prices displayed anywhere** (owner, July 2026): pricing is « en fonction du besoin / devis après cadrage » — never reintroduce an amount (the old « from 5 800 € HT » is obsolete) nor day-rate/fixed-fee wording.
 - **NO availability badge displayed** (owner, July 2026): the nav CTA
   « Disponible maintenant » was removed. Availability is only discussed in

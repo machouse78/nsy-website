@@ -63,5 +63,23 @@ t('cap 4000 caractères', mb_strlen(nsy_sanitize_reply(str_repeat('aé ', 3000))
 t('replyIsEnglish: EN', replyIsEnglish('The site and the team can help you with more of this.'));
 t('replyIsEnglish: FR', !replyIsEnglish('Le site et la page vous aident avec une réponse pour nous.'));
 
+// ── Formulations bannies (positionnement ESN) → réécrites côté serveur ──
+t('« sans intermédiaire » → « en prise directe »',
+  nsy_sanitize_reply('Un modèle sans intermédiaire.') === 'Un modèle en prise directe.');
+t("« pas d'intermédiaire » (apostrophe droite) → « un seul interlocuteur »",
+  str_contains(nsy_sanitize_reply("Pas de junior, pas d'intermédiaire — top."), 'un seul interlocuteur'));
+t('« pas d’intermédiaire » (apostrophe typographique) réécrit',
+  str_contains(nsy_sanitize_reply('Pas de junior, pas d’intermédiaire — top.'), 'un seul interlocuteur'));
+t('« sans pyramide » → « en prise directe »',
+  str_contains(nsy_sanitize_reply('Le modèle sans pyramide de NSY.'), 'en prise directe'));
+t('« sans surcouche commerciale » → « en prise directe »',
+  str_contains(nsy_sanitize_reply('Une mission sans surcouche commerciale.'), 'en prise directe'));
+t('« no middleman » → « a single point of contact »',
+  str_contains(nsy_sanitize_reply('Great: no middleman involved here.'), 'a single point of contact'));
+t('« no pyramid » → « direct accountability »',
+  str_contains(nsy_sanitize_reply('The no pyramid model works.'), 'direct accountability'));
+t('texte sain intact',
+  nsy_sanitize_reply('Un interlocuteur unique senior et voilà.') === 'Un interlocuteur unique senior et voilà.');
+
 echo $fail === 0 ? "CHAT-SANITIZE : TOUS LES TESTS PASSENT\n" : "CHAT-SANITIZE : $fail ÉCHEC(S)\n";
 exit($fail === 0 ? 0 : 1);
