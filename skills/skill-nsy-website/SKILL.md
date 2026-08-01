@@ -30,6 +30,10 @@ must hold in every change.
   footer all say « société (indépendante) » / « cabinet indépendant » — the legal
   form appears ONLY on mentions-legales.html / legal-notice.html (LCEN), where it
   must stay. (The fact itself — EURL — remains here for internal accuracy.)
+  Chatbot nuance (owner, Aug 2026): if the visitor THEMSELVES asks « est-ce une
+  EURL ? » (word present in their question), Ansley confirms in one sentence then
+  returns to « société » ; any other legal-status question → name no form,
+  redirect to mentions légales. Never deny the form (factually wrong).
 - **NO prices displayed anywhere** (owner, July 2026): pricing is « en fonction du besoin / devis après cadrage » — never reintroduce an amount (the old « from 5 800 € HT » is obsolete) nor day-rate/fixed-fee wording.
 - **NO availability badge displayed** (owner, July 2026): the nav CTA
   « Disponible maintenant » was removed. Availability is only discussed in
