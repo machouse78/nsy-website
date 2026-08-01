@@ -63,6 +63,7 @@ const pages = [
   ['seo-geo-etre-cite-par-les-ia.html',   'fr', 'index.html', 'blog'],
   ['consultant-technique-paris.html',     'fr', 'index.html', 'services'],
   ['creation-site-internet-orleans.html', 'fr', 'index.html', 'services'],
+  ['pourquoi-nsy.html',                   'fr', 'index.html', 'about'],
   ['legal-notice.html',     'en', 'index-en.html',  'top'],
   ['privacy.html',          'en', 'index-en.html',  'top'],
   ['feasibility.html',      'en', 'index-en.html',  'contact'],
@@ -84,6 +85,7 @@ const pages = [
   ['seo-geo-getting-cited-by-ai.html',  'en', 'index-en.html', 'blog'],
   ['technical-consultant-paris.html',   'en', 'index-en.html', 'services'],
   ['website-creation-orleans.html',     'en', 'index-en.html', 'services'],
+  ['why-nsy.html',                      'en', 'index-en.html', 'about'],
 ];
 
 function replaceRegion(html, name, content, file) {

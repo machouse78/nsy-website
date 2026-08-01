@@ -37,13 +37,14 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 | **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs + aperçu 3D (→ Conception 3D) |
 | **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser du dernier article sur l'accueil |
 | **Réalisations** | `realisations.html` ↔ `portfolio.html` | Fiches clients avec **aperçus animés** (`record-realisation.mjs`), en ordre chronologique : PRV Concept puis Le Cerf Thym |
-| **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme (bouton « Me suivre sur LinkedIn »), signaux, parcours, secteurs, principes |
+| **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme (bouton « Me suivre sur LinkedIn »), signaux, parcours, **récit « Pourquoi NSY existe »**, principes |
+| **Pourquoi NSY ?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | La philosophie : indépendant vs ESN, modèle « sans pyramide », 3 clients max — FAQPage JSON-LD, liée depuis le footer et À propos |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
 | **Conception 3D** | `conception-3d.html` ↔ `3d-design.html` | Modèle wireframe Renault interactif + animation YouTube (démonstrateurs 3D) |
 
 Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
 
-Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (1ᵉʳ : « SEO vs GEO », avec illustration animée), **2 pages villes** (consultant Paris · création de site Orléans), **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html`, pages légales — **44 pages** au total.
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (1ᵉʳ : « SEO vs GEO », avec illustration animée), **2 pages villes** (consultant Paris · création de site Orléans), **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html`, pages légales — **46 pages** au total.
 
 ## Bilingue (FR / EN)
 
@@ -67,12 +68,13 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `glossaire-ia-web.html` | `ai-web-glossary.html` |
 | `services.html` | `services-en.html` |
 | `a-propos.html` | `about.html` |
+| `pourquoi-nsy.html` | `why-nsy.html` |
 | `contact.html` | `contact-en.html` |
 | `conception-3d.html` | `3d-design.html` |
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 44 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 46 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -96,7 +98,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 ### Assistant IA « Ansley » — LLM gratuit + RAG, repli local
 
-L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 44 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
+L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 46 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
 
 **Étage 1 — IA générative (`chat.php`)** : le widget interroge un proxy PHP qui
 appelle un LLM **Mistral** (palier gratuit « Experiment », société française,
@@ -167,6 +169,7 @@ nsy-website/
 ├── index.html / index-en.html          # Accueil (landing) FR / EN
 ├── services.html / services-en.html     # Services : 2 offres + méthode + aperçu 3D FR / EN
 ├── a-propos.html / about.html           # À propos : profil de Cédric Barme FR / EN
+├── pourquoi-nsy.html / why-nsy.html     # Pourquoi NSY ? : la philosophie (indépendant vs ESN) FR / EN
 ├── contact.html / contact-en.html       # Contact : formulaire PHP + canaux directs FR / EN
 ├── conception-3d.html / 3d-design.html  # Conception 3D : modèle wireframe + animation YouTube FR / EN
 ├── mentions-legales.html / legal-notice.html
@@ -196,7 +199,7 @@ nsy-website/
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
 │   └── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 44 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 46 pages (npm run partials)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
 │   ├── seo-crawl-report.mjs             # Rapport crawlers IA/moteurs depuis les access logs
@@ -309,8 +312,8 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 44 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 44 pages
+- **Sitemap** : 46 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 46 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`

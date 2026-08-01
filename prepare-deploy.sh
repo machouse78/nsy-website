@@ -86,7 +86,9 @@ cp seo-geo-getting-cited-by-ai.html deploy/
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
 cp creation-site-internet-orleans.html deploy/
+cp pourquoi-nsy.html                deploy/
 cp website-creation-orleans.html    deploy/
+cp why-nsy.html                     deploy/
 
 # ───── Dossiers CSS, JS, vendor (PHPMailer) ─────
 echo "📁 Copie de css/, js/, vendor/..."

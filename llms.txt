@@ -19,6 +19,7 @@ Points clés :
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
 - [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + création web IA), méthode, valeurs, démonstrateur 3D temps réel.
 - [À propos](https://www.nsy.fr/a-propos.html) : parcours de Cédric Barme, secteurs de référence, principes de travail.
+- [Pourquoi NSY ?](https://www.nsy.fr/pourquoi-nsy.html) : la philosophie — pourquoi un indépendant plutôt qu'une ESN, le modèle « sans pyramide », trois clients en parallèle maximum.
 - [Contact](https://www.nsy.fr/contact.html) : formulaire, canaux directs, demande de faisabilité (réponse sous 48 h ouvrées).
 - [Conception 3D](https://www.nsy.fr/conception-3d.html) : animations et modèles 3D optimisés pour le web (démonstrateurs).
 - [FAQ](https://www.nsy.fr/faq.html) : plus de 50 questions/réponses sur les expertises (WildFly, OpenShift, migration Java EE, intégration Claude/OpenAI/Mistral, tarifs, process).

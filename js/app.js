@@ -1079,6 +1079,7 @@
     'seo-geo-etre-cite-par-les-ia.html': 'seo-geo-getting-cited-by-ai.html',
     'consultant-technique-paris.html': 'technical-consultant-paris.html',
     'creation-site-internet-orleans.html': 'website-creation-orleans.html',
+    'pourquoi-nsy.html': 'why-nsy.html',
     'services.html': 'services-en.html',
     'a-propos.html': 'about.html',
     'contact.html': 'contact-en.html',
