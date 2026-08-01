@@ -42,7 +42,10 @@ must hold in every change.
   pyramid", "no middleman", "sales layer". Say instead: « interlocuteur
   (senior) unique », « en prise directe » / "direct accountability", « en
   direct ou via votre ESN référencée ». Applies to pages, chatbot, llms,
-  JSON-LD, articles and LinkedIn posts.
+  JSON-LD, articles and LinkedIn posts. Hierarchy (owner): DIRECT is the
+  preferred channel when possible (no intermediation cost) but is very rare at
+  grands comptes; the ESN channel is the market's standard framework — never
+  present it as « privilégié », preferred or frequent.
 - **NO prices displayed anywhere** (owner, July 2026): pricing is « en fonction du besoin / devis après cadrage » — never reintroduce an amount (the old « from 5 800 € HT » is obsolete) nor day-rate/fixed-fee wording.
 - **NO availability badge displayed** (owner, July 2026): the nav CTA
   « Disponible maintenant » was removed. Availability is only discussed in
