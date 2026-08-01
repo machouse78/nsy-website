@@ -5,7 +5,7 @@
 
 🇫🇷 **Français** · [🇬🇧 English](README.en.md)
 
-Site **multi-pages bilingue (FR/EN)** pour **NSY** (*New Software Yard*), EURL fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
+Site **multi-pages bilingue (FR/EN)** pour **NSY** (*New Software Yard*), société indépendante fondée par Cédric Barme en 2018. Positionnement double : missions techniques senior pour la finance / assurance, et création de sites web propulsés par l'IA pour les PME/ETI en transition.
 
 ## Direction artistique
 
@@ -384,4 +384,4 @@ Le dépôt versionne huit [skills Claude Code](https://docs.claude.com/en/docs/c
 
 ---
 
-© 2026 NSY · EURL · SIREN 842 078 453 · Mention "Site créé avec l'IA — transparence totale" en footer.
+© 2026 NSY · SIREN 842 078 453 · Mention "Site créé avec l'IA — transparence totale" en footer.

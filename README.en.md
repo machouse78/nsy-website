@@ -5,7 +5,7 @@
 
 [🇫🇷 Français](README.md) · 🇬🇧 **English**
 
-**Multi-page bilingual (FR/EN)** website for **NSY** (*New Software Yard*), a French single-member company (EURL) founded by Cédric Barme in 2018. Dual positioning: senior technical consulting for finance / insurance, and AI-powered website creation for SMEs going through their digital transition.
+**Multi-page bilingual (FR/EN)** website for **NSY** (*New Software Yard*), an independent French company founded by Cédric Barme in 2018. Dual positioning: senior technical consulting for finance / insurance, and AI-powered website creation for SMEs going through their digital transition.
 
 ## Art direction
 
@@ -364,4 +364,4 @@ The repo versions several [Claude Code skills](https://docs.claude.com/en/docs/c
 
 ---
 
-© 2026 NSY · EURL · SIREN 842 078 453 · "Site built with AI — full transparency" mention in the footer.
+© 2026 NSY · SIREN 842 078 453 · "Site built with AI — full transparency" mention in the footer.
