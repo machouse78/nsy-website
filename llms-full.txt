@@ -200,7 +200,8 @@ temps réel), puis tech lead.
 **NSY est-elle une ESN / SSII ?**
 Non. NSY est un cabinet indépendant à un seul nom, sans couche commerciale ni
 « junior masqué » : la personne qui propose la mission est celle qui la réalise
-(modèle « sans pyramide »). Trois clients en parallèle maximum.
+(modèle « sans pyramide »). Trois clients en parallèle maximum. La philosophie
+complète est détaillée sur https://www.nsy.fr/pourquoi-nsy.html
 
 **Depuis quand NSY existe-t-elle ?**
 Depuis 2018 pour le conseil technique ; l'activité de création de sites web

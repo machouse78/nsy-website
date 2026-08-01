@@ -36,7 +36,8 @@
 | **Home** | `index.html` ↔ `index-en.html` | Landing: hero + marquee + preview of the 2 offerings (→ Services) + profile teaser (→ About) + CTA banner (→ Contact) |
 | **Services** | `services.html` ↔ `services-en.html` | 2 detailed cards (consulting / AI web) + method (4 steps) + values + 3D preview (→ 3D Design) |
 | **Work** | `realisations.html` ↔ `portfolio.html` | Portfolio of client sites (auto-captured thumbnails; first: PRV Concept) |
-| **About** | `a-propos.html` ↔ `about.html` | Cédric Barme's profile, signals, background, sectors, principles |
+| **About** | `a-propos.html` ↔ `about.html` | Cédric Barme's profile, signals, background, **"Why NSY exists" story**, principles |
+| **Why NSY?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | The philosophy: independent vs consulting firm, "no pyramid" model, 3 clients max — FAQPage JSON-LD, linked from the footer and About |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Form (PHP) + direct channels + feasibility request |
 | **3D Design** | `conception-3d.html` ↔ `3d-design.html` | Interactive Renault wireframe model + YouTube animation (3D demos) |
 
@@ -66,6 +67,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 | `glossaire-ia-web.html` | `ai-web-glossary.html` |
 | `services.html` | `services-en.html` |
 | `a-propos.html` | `about.html` |
+| `pourquoi-nsy.html` | `why-nsy.html` |
 | `contact.html` | `contact-en.html` |
 | `conception-3d.html` | `3d-design.html` |
 
@@ -166,6 +168,7 @@ nsy-website/
 ├── index.html / index-en.html          # Home (landing) FR / EN
 ├── services.html / services-en.html     # Services: 2 offerings + method + 3D preview FR / EN
 ├── a-propos.html / about.html           # About: Cédric Barme's profile FR / EN
+├── pourquoi-nsy.html / why-nsy.html     # Why NSY?: the philosophy (independent vs firm) FR / EN
 ├── contact.html / contact-en.html       # Contact: PHP form + direct channels FR / EN
 ├── conception-3d.html / 3d-design.html  # 3D Design: wireframe model + YouTube animation FR / EN
 ├── mentions-legales.html / legal-notice.html

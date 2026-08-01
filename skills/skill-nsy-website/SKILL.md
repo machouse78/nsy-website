@@ -169,6 +169,13 @@ must hold in every change.
   consultant); win on the differentiated niche + GEO. City pages only with UNIQUE
   content — 2 examples exist: `consultant-technique-paris.html` (finance/La Défense
   angle) + `creation-site-internet-orleans.html` (region), linked from creation-site-ia.
+- **« Pourquoi NSY ? » page pair** (`pourquoi-nsy.html`↔`why-nsy.html`, Aug 2026):
+  working-philosophy page (independent vs ESN, « sans pyramide » model, 3 clients
+  max) with FAQPage JSON-LD — linked from the footer nav column + the « Pourquoi
+  NSY existe » story block on À propos/About. Prime GEO target; keep its facts
+  aligned with FAQ/à-propos when they evolve. New-page checklist it followed:
+  sync-partials table + footer partial + sitemap + llms.txt/llms-full + chat.php
+  PAGES table + `$frToEn` + app.js `SLUG_FR_TO_EN` + prepare-deploy list + READMEs.
 - **Blog / journal** (`blog.html`↔`blog-en.html` + articles like
   `seo-geo-etre-cite-par-les-ia.html`↔`seo-geo-getting-cited-by-ai.html`): top-nav
   link **right after Accueil/Home** (owner request, July 2026), data-target=blog,
