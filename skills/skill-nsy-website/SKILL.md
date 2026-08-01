@@ -34,6 +34,15 @@ must hold in every change.
   EURL ? » (word present in their question), Ansley confirms in one sentence then
   returns to « société » ; any other legal-status question → name no form,
   redirect to mentions légales. Never deny the form (factually wrong).
+- **ESN-friendly wording** (owner, Aug 2026): grands comptes (banque/assurance)
+  require going through a REFERENCED ESN (payroll capacity) — NSY cannot be
+  referenced directly and WELCOMES ESN sous-traitance proposals. NEVER frame
+  ESNs as adversaries. Banned phrasings: « sans pyramide », « sans
+  intermédiaire », « (sur)couche commerciale », « plutôt qu'une ESN », "no
+  pyramid", "no middleman", "sales layer". Say instead: « interlocuteur
+  (senior) unique », « en prise directe » / "direct accountability", « en
+  direct ou via votre ESN référencée ». Applies to pages, chatbot, llms,
+  JSON-LD, articles and LinkedIn posts.
 - **NO prices displayed anywhere** (owner, July 2026): pricing is « en fonction du besoin / devis après cadrage » — never reintroduce an amount (the old « from 5 800 € HT » is obsolete) nor day-rate/fixed-fee wording.
 - **NO availability badge displayed** (owner, July 2026): the nav CTA
   « Disponible maintenant » was removed. Availability is only discussed in
@@ -174,8 +183,8 @@ must hold in every change.
   content — 2 examples exist: `consultant-technique-paris.html` (finance/La Défense
   angle) + `creation-site-internet-orleans.html` (region), linked from creation-site-ia.
 - **« Pourquoi NSY ? » page pair** (`pourquoi-nsy.html`↔`why-nsy.html`, Aug 2026):
-  working-philosophy page (independent vs ESN, « sans pyramide » model, 3 clients
-  max) with FAQPage JSON-LD — linked from the footer nav column + the « Pourquoi
+  working-philosophy page (interlocuteur unique, « en prise directe » model, ESN
+  partnerships, 3 clients max) with FAQPage JSON-LD — linked from the footer nav column + the « Pourquoi
   NSY existe » story block on À propos/About. Prime GEO target; keep its facts
   aligned with FAQ/à-propos when they evolve. New-page checklist it followed:
   sync-partials table + footer partial + sitemap + llms.txt/llms-full + chat.php

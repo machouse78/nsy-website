@@ -5,7 +5,7 @@
 Points clés :
 - Signification du nom : NSY = New Software Yard (« chantier logiciel »). Le nom évoque la capacité de la société à prendre en charge de nouveaux chantiers — missions techniques comme projets web — et à les mener jusqu'à leur accomplissement.
 - Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (plateformes de trading et de risque temps réel), tech lead.
-- Modèle « sans pyramide » : la personne qui vend la mission est celle qui la livre. Trois clients en parallèle maximum.
+- Modèle « en prise directe » : la personne présentée est celle qui livre. Trois clients en parallèle maximum. Interventions en direct ou, chez les grands comptes, en sous-traitance d'une ESN référencée — les propositions de mission des ESN sont bienvenues.
 - Secteurs de référence : banque de détail, banque privée, assurance vie, asset management, paiement, fintech. Environnements régulés (ACPR, AMF, RGPD, DORA).
 - Création web IA : offre clé en main, tarification en fonction du besoin (devis après cadrage).
 - Zone : France entière et Europe, principalement à distance ; présence possible à Paris / La Défense et en région.
@@ -19,7 +19,7 @@ Points clés :
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
 - [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + création web IA), méthode, valeurs, démonstrateur 3D temps réel.
 - [À propos](https://www.nsy.fr/a-propos.html) : parcours de Cédric Barme, secteurs de référence, principes de travail.
-- [Pourquoi NSY ?](https://www.nsy.fr/pourquoi-nsy.html) : la philosophie — pourquoi un indépendant plutôt qu'une ESN, le modèle « sans pyramide », trois clients en parallèle maximum.
+- [Pourquoi NSY ?](https://www.nsy.fr/pourquoi-nsy.html) : la philosophie — l'interlocuteur unique, le partenariat avec les ESN référencées chez les grands comptes, trois clients en parallèle maximum.
 - [Contact](https://www.nsy.fr/contact.html) : formulaire, canaux directs, demande de faisabilité (réponse sous 48 h ouvrées).
 - [Conception 3D](https://www.nsy.fr/conception-3d.html) : animations et modèles 3D optimisés pour le web (démonstrateurs).
 - [FAQ](https://www.nsy.fr/faq.html) : plus de 50 questions/réponses sur les expertises (WildFly, OpenShift, migration Java EE, intégration Claude/OpenAI/Mistral, tarifs, process).

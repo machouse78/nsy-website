@@ -38,7 +38,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 | **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser du dernier article sur l'accueil |
 | **Réalisations** | `realisations.html` ↔ `portfolio.html` | Fiches clients avec **aperçus animés** (`record-realisation.mjs`), en ordre chronologique : PRV Concept puis Le Cerf Thym |
 | **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme (bouton « Me suivre sur LinkedIn »), signaux, parcours, **récit « Pourquoi NSY existe »**, principes |
-| **Pourquoi NSY ?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | La philosophie : indépendant vs ESN, modèle « sans pyramide », 3 clients max — FAQPage JSON-LD, liée depuis le footer et À propos |
+| **Pourquoi NSY ?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | La philosophie : interlocuteur unique, modèle « en prise directe », partenariat ESN (grands comptes), 3 clients max — FAQPage JSON-LD, liée depuis le footer et À propos |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
 | **Conception 3D** | `conception-3d.html` ↔ `3d-design.html` | Modèle wireframe Renault interactif + animation YouTube (démonstrateurs 3D) |
 
@@ -169,7 +169,7 @@ nsy-website/
 ├── index.html / index-en.html          # Accueil (landing) FR / EN
 ├── services.html / services-en.html     # Services : 2 offres + méthode + aperçu 3D FR / EN
 ├── a-propos.html / about.html           # À propos : profil de Cédric Barme FR / EN
-├── pourquoi-nsy.html / why-nsy.html     # Pourquoi NSY ? : la philosophie (indépendant vs ESN) FR / EN
+├── pourquoi-nsy.html / why-nsy.html     # Pourquoi NSY ? : la philosophie (interlocuteur unique, partenariat ESN) FR / EN
 ├── contact.html / contact-en.html       # Contact : formulaire PHP + canaux directs FR / EN
 ├── conception-3d.html / 3d-design.html  # Conception 3D : modèle wireframe + animation YouTube FR / EN
 ├── mentions-legales.html / legal-notice.html
