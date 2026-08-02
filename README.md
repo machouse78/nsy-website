@@ -351,7 +351,7 @@ Chaque article du journal suit le même cycle de publication :
 2. **Publier le couple de posts** : version **pro sur LinkedIn** + version **grand public sur Facebook** — deux réécritures distinctes, pas un copier-coller (pas de prix, formulations ESN-compatibles, CTA vers l'offre).
 3. **Archiver les URLs des posts** dans [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 — signaux de confiance : mentions + liens depuis des corpus fortement crawlés (recoupement GEO de l'entité NSY).
 4. **Ajouter les boutons « Lire sur LinkedIn / Facebook »** en fin d'article FR (bloc bordé, `btn-ghost` + icônes SVG de marque, `target="_blank" rel="noopener"` — modèle : `seo-geo-etre-cite-par-les-ia.html`), puis redéployer. La version EN ne reçoit les boutons que si des posts EN existent.
-5. **Câbler Ansley** : les URLs des publications dans `llms-full.txt` (bloc « Journal ») pour qu'il les propose quand il parle de l'article, whitelist aux 3 étages (`chat.php` + `js/app.js`, préfixes en minuscules) et un cas dans chacune des deux suites de tests.
+5. **Câbler Ansley** : les URLs des publications dans `llms-full.txt` (bloc « Journal »), whitelist aux 3 étages (`chat.php` + `js/app.js`, préfixes en minuscules), la paire slug→URLs dans la map `$journalSocials` de `chat.php` (ajout **déterministe** des liens à toute réponse FR citant l'article sans eux) et des cas dans les deux suites de tests.
 
 1ᵉʳ article servi par ce cycle : « SEO vs GEO » (posts LinkedIn + Facebook en ligne, boutons actifs).
 

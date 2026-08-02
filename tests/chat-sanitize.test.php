@@ -65,6 +65,17 @@ t('cap 4000 caractères', mb_strlen(nsy_sanitize_reply(str_repeat('aé ', 3000))
 t('replyIsEnglish: EN', replyIsEnglish('The site and the team can help you with more of this.'));
 t('replyIsEnglish: FR', !replyIsEnglish('Le site et la page vous aident avec une réponse pour nous.'));
 
+// ── Publications sociales : ajout déterministe quand un article est cité ──
+$r = nsy_sanitize_reply("Voir notre [article](seo-geo-etre-cite-par-les-ia.html) sur le sujet et voilà.");
+t('article cité sans socials → LinkedIn Pulse ajouté', str_contains($r, 'linkedin.com/pulse/seo-vs-geo'));
+t('article cité sans socials → Facebook ajouté', str_contains($r, 'facebook.com/share/17vyLQjakE'));
+$r = nsy_sanitize_reply("Voir [article](seo-geo-etre-cite-par-les-ia.html) et [LinkedIn](https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee) et voilà.");
+t('socials déjà présents → pas de doublon', substr_count($r, 'linkedin.com/pulse/') === 1);
+$r = nsy_sanitize_reply("Read the [article](seo-geo-getting-cited-by-ai.html) about this and more of the topic here.");
+t('réponse EN → pas d\'ajout (publications FR)', !str_contains($r, 'facebook.com'));
+$r = nsy_sanitize_reply('Bonjour, la page [Contact](contact.html) et voilà.');
+t('pas d\'article cité → rien d\'ajouté', !str_contains($r, 'facebook.com'));
+
 // ── Formulations bannies (positionnement ESN) → réécrites côté serveur ──
 t('« sans intermédiaire » → « en prise directe »',
   nsy_sanitize_reply('Un modèle sans intermédiaire.') === 'Un modèle en prise directe.');
