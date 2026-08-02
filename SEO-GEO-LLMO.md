@@ -178,6 +178,14 @@ même fait sur ≥2 sources indépendantes).
   SEO complet, dofollow vers https://www.nsy.fr). 2e site client en production —
   fiche ajoutée sur realisations.html/portfolio.html + llms(-full).txt.
 
+- **Distribution sociale de l'article SEO vs GEO** ✅ (août 2026) — l'article
+  https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html publié sur :
+  - LinkedIn : https://www.linkedin.com/posts/ia-craezationdesiteweb-conseiltechnique-share-7488699941771558912-n96r
+  - Facebook : https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr
+  Effet GEO : mentions + liens depuis des corpus fortement crawlés
+  (recoupement de l'entité NSY). Réutiliser ce couple de posts (pro LinkedIn /
+  grand public Facebook) pour chaque nouvel article du journal.
+
 **Backlink PRV — appliqué ✅** (voir l'entrée dans « Fait » ci-dessus).
 Règle conservée pour les prochains crédits « Propulsé par NSY » sur les
 sites clients : lien `dofollow` vers l'URL canonique exacte, marque + court
