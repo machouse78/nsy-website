@@ -79,7 +79,8 @@ de `chat.php` (chargé via la garde `define('NSY_CHAT_TEST', true)` qui court-ci
 le endpoint — les fonctions top-level restent définies) et `mdToHtml` de `js/app.js`
 (extrait par équilibrage d'accolades puis évalué). Couvre : whitelist officielle
 (markdown + nu), neutralisation des externes, purge des `()`, linkmap FR/EN + ancres,
-cap 4000, échappement XSS/`javascript:`. **À lancer avant CHAQUE commit touchant
+cap 4000, échappement XSS/`javascript:`, réécriture des formulations bannies
+(ESN), ajout déterministe des publications sociales (`$journalSocials`). **À lancer avant CHAQUE commit touchant
 `chat.php` ou `js/app.js`** ; ajouter un cas de test avec chaque nouvelle règle.
 
 Autres règles du prompt (owner) : URL de la réalisation dès la 1re mention ; ne
