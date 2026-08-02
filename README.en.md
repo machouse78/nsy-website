@@ -314,7 +314,7 @@ until you run it.
 ## SEO, GEO & social sharing
 
 - **Sitemap** : 46 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 36 pages
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 46 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
 - **Robots.txt** : explicit Allow of the media in use, Disallow of `.glb`/`.gltf`
