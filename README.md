@@ -343,6 +343,17 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 
 La page LinkedIn entreprise est référencée dans les `sameAs` du JSON-LD et dans `llms.txt` / `llms-full.txt` — toute nouvelle inscription externe doit y être ajoutée aussi.
 
+### Distribution sociale des articles du journal
+
+Chaque article du journal suit le même cycle de publication :
+
+1. **Publier l'article** (checklist complète dans `skills/skill-nsy-website/SKILL.md` : paire FR/EN, cards du blog, teaser accueil, RSS, sitemap, llms, IndexNow).
+2. **Publier le couple de posts** : version **pro sur LinkedIn** + version **grand public sur Facebook** — deux réécritures distinctes, pas un copier-coller (pas de prix, formulations ESN-compatibles, CTA vers l'offre).
+3. **Archiver les URLs des posts** dans [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 — signaux de confiance : mentions + liens depuis des corpus fortement crawlés (recoupement GEO de l'entité NSY).
+4. **Ajouter les boutons « Lire sur LinkedIn / Facebook »** en fin d'article FR (bloc bordé, `btn-ghost` + icônes SVG de marque, `target="_blank" rel="noopener"` — modèle : `seo-geo-etre-cite-par-les-ia.html`), puis redéployer. La version EN ne reçoit les boutons que si des posts EN existent.
+
+1ᵉʳ article servi par ce cycle : « SEO vs GEO » (posts LinkedIn + Facebook en ligne, boutons actifs).
+
 ### Open Graph & Twitter Card
 
 Chaque page embarque un bloc OG/Twitter complet. Bannière (`public/nsy-og.jpg`, **145 Ko**, 1200×630) dérivée du master `public/nsy-logo-ai.png` :
