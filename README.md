@@ -35,7 +35,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 |---|---|---|
 | **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + **news du journal** (→ Journal, avec vignette animée) + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + références + bandeau CTA (→ Contact) |
 | **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs + aperçu 3D (→ Conception 3D) |
-| **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser du dernier article sur l'accueil |
+| **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser du dernier article sur l'accueil ; boutons « Lire sur LinkedIn / Facebook » en fin d'article vers les posts publiés |
 | **Réalisations** | `realisations.html` ↔ `portfolio.html` | Fiches clients avec **aperçus animés** (`record-realisation.mjs`), en ordre chronologique : PRV Concept puis Le Cerf Thym |
 | **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme (bouton « Me suivre sur LinkedIn »), signaux, parcours, **récit « Pourquoi NSY existe »**, principes |
 | **Pourquoi NSY ?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | La philosophie : interlocuteur unique, modèle « en prise directe », partenariat ESN (grands comptes), 3 clients max — FAQPage JSON-LD, liée depuis le footer et À propos |

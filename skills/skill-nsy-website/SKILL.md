@@ -206,6 +206,11 @@ must hold in every change.
   **New article checklist** = FR/EN pair + blog-index cards + **homepage teaser
   card (index.html + index-en.html — keep it = the LATEST article)** + RSS
   `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
+  Once the LinkedIn + Facebook posts are published (pattern: pro LinkedIn /
+  grand-public Facebook, URLs archived in SEO-GEO-LLMO.md §6): add « Lire sur
+  LinkedIn / Facebook » `btn-ghost` buttons at the end of the FR article
+  (bordered block, brand SVG icons, target=_blank rel=noopener — see
+  seo-geo-etre-cite-par-les-ia.html).
 - **Article media pattern (owner, July 2026 — SEO vs GEO article): ANIMATION on
   the card, INFOGRAPHIC in the article.**
   - **Card/teaser thumbnail = the animated boomerang video** (`seo-geo-thumb.mp4`,
