@@ -220,7 +220,11 @@ must hold in every change.
      with « les proposer quand on parle de l'article ») + whitelist them at
      the 3 layers (`chat.php` `$officialPrefixes` — LOWERCASE prefixes —,
      `js/app.js` `EXT_OK`, prompt rule 5 already generic) + add both URLs to
-     the officials lists of BOTH test suites, run `./tests/run-tests.sh`.
+     the officials lists of BOTH test suites, AND add the slug→URLs pair to
+     the `$journalSocials` map in `nsy_sanitize_reply()` (chat.php) — the
+     DETERMINISTIC layer that appends « Cet article vit aussi sur les
+     réseaux… » to any FR reply citing the article without its socials (the
+     prompt alone is unreliable). Run `./tests/run-tests.sh`.
 - **Article media pattern (owner, July 2026 — SEO vs GEO article): ANIMATION on
   the card, INFOGRAPHIC in the article.**
   - **Card/teaser thumbnail = the animated boomerang video** (`seo-geo-thumb.mp4`,

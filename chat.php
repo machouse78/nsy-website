@@ -405,6 +405,26 @@ function nsy_sanitize_reply(string $reply): string
     $reply = preg_replace('/\bno\s+pyramid\b/iu', 'direct accountability', $reply);
     $reply = preg_replace('/\bno\s+middlem[ae]n\b/iu', 'a single point of contact', $reply);
     $reply = preg_replace('/\bno\s+sales\s+layer\b/iu', 'direct accountability', $reply);
+    // 4) Publications sociales des articles du journal — ajout DÉTERMINISTE :
+    //    la règle 5 le demande mais le modèle oublie parfois. Réponses FR
+    //    uniquement (publications en français ; la page EN n'a pas de boutons).
+    //    Un couple d'URLs par article — à compléter à chaque nouvel article.
+    $journalSocials = [
+        'seo-geo-etre-cite-par-les-ia.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee',
+            'facebook' => 'https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr',
+        ],
+    ];
+    if (!replyIsEnglish($reply)) {
+        $low = mb_strtolower($reply);
+        foreach ($journalSocials as $slug => $links) {
+            if (str_contains($reply, $slug)
+                && !str_contains($low, 'linkedin.com/pulse/')
+                && !str_contains($low, 'facebook.com/share/')) {
+                $reply .= "\n\nCet article vit aussi sur les réseaux : [Lire sur LinkedIn]({$links['linkedin']}) · [Lire sur Facebook]({$links['facebook']})";
+            }
+        }
+    }
     // Parenthèses laissées vides par une suppression d'URL → purgées.
     $reply = preg_replace('/\s*\(\s*\)/', '', $reply);
     // Espaces doubles éventuels laissés par une suppression (ponctuation intacte).
