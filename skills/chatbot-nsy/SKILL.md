@@ -112,3 +112,9 @@ article sans eux (le prompt seul est non fiable). Triple étage : prompt (règle
 purgés), et `mdToHtml` (`EXT_OK`, rendu cliquable `target="_blank"`). Tout AUTRE
 lien externe reste neutralisé (zéro invention). La transparence est une feature (badge, note UE, section
 RGPD) — la garder.
+**Autres nuances de la règle 4** : forme juridique (jamais « EURL »
+spontanément ; confirmer uniquement si le visiteur emploie le mot, sinon
+renvoi mentions légales — ne JAMAIS nier) et positionnement ESN (canal normal
+des grands comptes, jamais « privilégié/fréquent », jamais dénigrer ;
+formulations bannies réécrites côté serveur). Détails et listes exactes dans
+`skill-nsy-website` (Always-true facts).
