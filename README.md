@@ -242,7 +242,9 @@ nsy-website/
 ## Tests unitaires (chatbot)
 
 `./tests/run-tests.sh` — lint + suites sur le **code réel** : `nsy_sanitize_reply()`
-de `chat.php` (whitelist des liens officiels, linkmap FR/EN, purge des `()`, cap)
+de `chat.php` (whitelist des liens officiels, linkmap FR/EN, purge des `()`, cap,
+réécriture des formulations bannies — positionnement ESN —, ajout déterministe
+des publications sociales quand un article du journal est cité)
 via Docker PHP 8.3, et `mdToHtml` de `js/app.js` (liens cliquables, échappement
 XSS) via Node. **À lancer avant tout commit qui touche `chat.php` ou `js/app.js`.**
 
