@@ -180,8 +180,10 @@ même fait sur ≥2 sources indépendantes).
 
 - **Distribution sociale de l'article SEO vs GEO** ✅ (août 2026) — l'article
   https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html publié sur :
-  - LinkedIn : https://www.linkedin.com/posts/ia-craezationdesiteweb-conseiltechnique-share-7488699941771558912-n96r
-  - Facebook : https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr
+  - Article LinkedIn (Pulse, long format — cible du bouton « Lire sur LinkedIn ») :
+    https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee
+  - Post LinkedIn (accroche courte) : https://www.linkedin.com/posts/ia-craezationdesiteweb-conseiltechnique-share-7488699941771558912-n96r
+  - Facebook (cible du bouton « Lire sur Facebook ») : https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr
   Effet GEO : mentions + liens depuis des corpus fortement crawlés
   (recoupement de l'entité NSY). Réutiliser ce couple de posts (pro LinkedIn /
   grand public Facebook) pour chaque nouvel article du journal.
