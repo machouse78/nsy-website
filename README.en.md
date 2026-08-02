@@ -33,17 +33,18 @@
 
 | Page | FR ↔ EN URL | Content |
 |---|---|---|
-| **Home** | `index.html` ↔ `index-en.html` | Landing: hero + marquee + preview of the 2 offerings (→ Services) + profile teaser (→ About) + CTA banner (→ Contact) |
+| **Home** | `index.html` ↔ `index-en.html` | Landing: hero + marquee + **journal news** (→ Insights, animated thumbnail) + preview of the 2 offerings (→ Services) + profile teaser (→ About) + CTA banner (→ Contact) |
+| **Insights** | `blog.html` ↔ `blog-en.html` (FR: « Journal ») | Field notes (bilingual articles, RSS feeds `feed.xml`/`feed-en.xml`); latest-article teaser on the home page; « Read on LinkedIn / Facebook » buttons at the end of articles |
 | **Services** | `services.html` ↔ `services-en.html` | 2 detailed cards (consulting / AI web) + method (4 steps) + values + 3D preview (→ 3D Design) |
-| **Work** | `realisations.html` ↔ `portfolio.html` | Portfolio of client sites (auto-captured thumbnails; first: PRV Concept) |
+| **Work** | `realisations.html` ↔ `portfolio.html` | Client cards with **animated previews** (`record-realisation.mjs`), in chronological order: PRV Concept then Le Cerf Thym |
 | **About** | `a-propos.html` ↔ `about.html` | Cédric Barme's profile, signals, background, **"Why NSY exists" story**, principles |
 | **Why NSY?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | The philosophy: single point of contact, direct-accountability model, ESN partnerships (large accounts), 3 clients max — FAQPage JSON-LD, linked from the footer and About |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Form (PHP) + direct channels + feasibility request |
 | **3D Design** | `conception-3d.html` ↔ `3d-design.html` | Interactive Renault wireframe model + YouTube animation (3D demos) |
 
-The contact form is still served by `contact.php` (unchanged). The top nav has **5 links** (Home, Services, Work, About, Contact); 3D Design and the FAQ are reachable from the footer.
+The contact form is still served by `contact.php` (unchanged). The top nav has **6 links** (Home, Insights, Services, Work, About, Contact); 3D Design and the FAQ are reachable from the footer.
 
-Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **feasibility questionnaire** `faisabilite.html` / `feasibility.html`, legal pages.
+Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (1st: « SEO vs GEO », with an animated illustration), **2 city pages** (Paris consultant · Orléans website creation), **feasibility questionnaire** `faisabilite.html` / `feasibility.html`, legal pages — **46 pages** in total.
 
 ## Bilingual (FR / EN)
 
@@ -73,7 +74,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 - **Language switch** : 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. Explicit slug mapping in `js/app.js`.
 - **Auto-detection** : on `/` (no cookie), `.htaccess` reads `Accept-Language` and 302-redirects to `/index-en.html` if the browser is in English. The user's choice (cookie) then takes precedence.
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 36 pages, self-referencing canonicals.
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 46 pages, self-referencing canonicals.
 - **`nsy_lang` cookie** : the only functional cookie, set on explicit action (flag click) — consent-exempt (CNIL deliberation 2020-091). Documented on the legal pages.
 
 > ⚠️ **A language change applies to the WHOLE site, at every layer** — not just the visible text. Remember: the visible HTML (FR + EN), the **JS-injected UI strings** (form button states and toasts in `js/app.js`, driven by `pageLang`), the **server responses + the email** (`contact.php`, driven by the hidden `lang` field), the **hidden `lang` field on every form**, the meta/OG/JSON-LD, the legal pages, the sitemap and the chatbot. The contact form is bilingual end to end (front + server errors + auto-reply email).
@@ -97,14 +98,14 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 ### AI assistant — free LLM + RAG, local fallback
 
-Cyan FAB bottom-right, glassmorphic panel, present on **all 36 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
+The assistant has an identity: **Ansley, NSY's AI architect** — an animated mascot (portrait FAB with halo + greeter bubble, animated avatar in the panel header, AI-generated boomerang loops). Glassmorphic panel, present on **all 46 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
 
 **Tier 1 — generative AI (`chat.php`)**: the widget queries a PHP proxy that
 calls a **Mistral** LLM (free "Experiment" tier, French company, data processed
 in the EU) through the OpenAI-compatible API.
 
 - **Homemade RAG**: the proxy injects `llms-full.txt` (the knowledge base already maintained for GEO) as system context → the bot answers with the **site's real facts**, in **the visitor's language** (any language), and knows how to say "I don't know". One source of truth, zero duplication.
-- **Guardrails**: never a price nor an email address, **strictly factual** (no invention — the FACTS only, otherwise redirect to contact), **never points outside nsy.fr** (no external site/brand/tool, no external URL), systematic redirect to the contact form, polite refusal of off-topic, resistance to hijacking attempts. The "no external link" rule is **enforced server-side** (`chat.php` strips external Markdown links → label only, and removes any bare non-nsy.fr URL), not just via the prompt.
+- **Guardrails**: never a price nor an email address, **strictly factual** (no invention — the FACTS only, otherwise redirect to contact), **never points outside nsy.fr** — with one exception (July 2026): NSY's **official links** are whitelisted (delivered client sites prv-concept.com and lecerfthym.fr, company LinkedIn + founder profile, GitHub, YouTube, and the official social publications of journal articles) and rendered clickable in a new tab; any OTHER external link stays neutralised. Systematic redirect to the contact form, polite refusal of off-topic, resistance to hijacking attempts. Enforcement is **server-side**, not just via the prompt (`chat.php`: non-whitelisted Markdown link → label only, bare URL removed, empty `()` purged, banned ESN-unfriendly phrasings rewritten, and any FR reply citing a journal article gets its LinkedIn/Facebook links appended deterministically — `$journalSocials`). When a delivered site is mentioned: its URL from the first mention + the AI-website-creation offer link at the end of the reply.
 - **Free-quota protection**: API key server-side only (`_secret/ai.php`, gitignored), origin check, per-IP rate limiting (8/min, 60/day, hashed — no content logged) + global cap (1,500/day), retry on provider 429.
 - **Conversation memory**: history in `sessionStorage`, the discussion **follows the visitor from page to page**; typewriter effect (disabled under `prefers-reduced-motion`); minimal **safe** Markdown rendering (full escaping, only `**bold**` and internal `page.html` links reintroduced).
 - **Transparency**: "AI · Mistral" badge in the header, EU/sensitive-data note in the widget footer, dedicated GDPR section in the privacy pages.
@@ -174,7 +175,12 @@ nsy-website/
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
 ├── faisabilite.html / feasibility.html  # Feasibility questionnaire (7-step wizard) FR / EN
-├── realisations.html / portfolio.html   # Client work (auto-captured thumbnails)
+├── realisations.html / portfolio.html   # Client work (animated previews)
+├── blog.html / blog-en.html             # Journal / Insights: article index FR / EN
+├── seo-geo-etre-cite-par-les-ia.html    # 1st article: SEO vs GEO (EN: seo-geo-getting-cited-by-ai.html)
+├── consultant-technique-paris.html      # City page: Paris (EN: technical-consultant-paris.html)
+├── creation-site-internet-orleans.html  # City page: Orléans (EN: website-creation-orleans.html)
+├── feed.xml / feed-en.xml               # Journal RSS feeds
 ├── faq.html / faq-en.html               # GEO/LLMO FAQ: 52 bilingual Q&As + FAQPage JSON-LD
 ├── (8 pairs of GEO pillar pages)        # One expertise per URL, FR ↔ EN (see slug table):
 │                                        #   expertise-migration-java-ee, expertise-wildfly-jboss,
@@ -194,8 +200,9 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Top menu ({{P}} token = anchor base path)
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
-│   ├── sync-partials.mjs                # ⭐ Injects nav/footer into all 36 pages (npm run partials)
-│   ├── capture-realisation.mjs          # Auto Work thumbnail (npm run capture:realisations)
+│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 46 pages (npm run partials)
+│   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
+│   ├── indexnow-ping.mjs                # IndexNow ping after deploys
 │   ├── build-wireframe.sh               # Blender → GL_LINES orchestrator
 │   ├── process-renault.py               # Headless Blender: decimation, material, export
 │   ├── tris-to-lines.mjs                # Triangles → GL_LINES
@@ -230,6 +237,15 @@ nsy-website/
 ├── README.md                            # French version
 └── README.en.md                         # This file (EN)
 ```
+
+## Unit tests (chatbot)
+
+`./tests/run-tests.sh` — lint + suites on the **real code**: `nsy_sanitize_reply()`
+from `chat.php` (official-links whitelist, FR/EN linkmap, `()` purge, cap,
+banned-phrasing rewrite — ESN positioning —, deterministic append of article
+social links) via Docker PHP, and `mdToHtml` from `js/app.js` (clickable
+whitelisted links, XSS escaping) via Node. **Run before any commit touching
+`chat.php` or `js/app.js`.**
 
 ## Test locally
 
@@ -297,11 +313,13 @@ until you run it.
 
 ## SEO, GEO & social sharing
 
-- **Sitemap** : 36 pages (real URLs, no more `#` anchors) + key images + videos, with `xhtml:link` hreflang
+- **Sitemap** : 46 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
 - **Reciprocal hreflang** `fr` / `en` / `x-default` on all 36 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
 - **Robots.txt** : explicit Allow of the media in use, Disallow of `.glb`/`.gltf`
+- **Journal RSS feeds** : `feed.xml` (FR) / `feed-en.xml` (EN) — updated with every article
+- **IndexNow** : key at the root + `node scripts/indexnow-ping.mjs` after each deployment (near-instant indexing on Bing → ChatGPT Search/Copilot)
 
 ### GEO / LLMO (ranking inside generative engines)
 
@@ -324,6 +342,16 @@ Goal: be understood and **cited** by ChatGPT, Claude, Gemini, Perplexity, Copilo
 | Editorial backlink | prv-concept.com → footer "Powered by NSY" |
 
 The LinkedIn company page is referenced in the JSON-LD `sameAs` and in `llms.txt` / `llms-full.txt` — any new external registration must be added there too.
+
+### Social distribution of journal articles
+
+Every journal article follows the same publication cycle:
+
+1. **Publish the article** (full checklist in `skills/skill-nsy-website/SKILL.md`: FR/EN pair, blog cards, home teaser, RSS, sitemap, llms, IndexNow).
+2. **Publish the two posts**: a **professional LinkedIn** version + a **general-public Facebook** version — two distinct rewrites (no prices, ESN-friendly wording, CTA to the offer).
+3. **Archive the post URLs** in [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 (trust signals — GEO cross-referencing of the NSY entity).
+4. **Add the « Read on LinkedIn / Facebook » buttons** at the end of the FR article (template: `seo-geo-etre-cite-par-les-ia.html`), then redeploy. The EN article only gets buttons if EN posts exist.
+5. **Wire Ansley**: publication URLs in `llms-full.txt` (« Journal » block), 3-layer whitelist (`chat.php` + `js/app.js`, lowercase prefixes), the slug→URLs pair in `chat.php`'s `$journalSocials` map (deterministic append) and cases in both test suites.
 
 ### Open Graph & Twitter Card
 
