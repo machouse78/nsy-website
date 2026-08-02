@@ -99,7 +99,12 @@ réécrits serveur-side.
 **Nuance « jamais hors-site » (owner, juillet 2026)** : les liens OFFICIELS de
 NSY sont **whitelistés** — sites clients réalisés (prv-concept.com,
 lecerfthym.fr), LinkedIn entreprise + profil fondateur, GitHub machouse78,
-YouTube @new-software-yard. Triple étage : prompt (règle 5), garde-fou
+YouTube @new-software-yard, **et les publications sociales officielles des
+articles du journal** (article LinkedIn Pulse + post Facebook, URLs exactes ;
+préfixes stockés en MINUSCULES — la comparaison lowercase l'exige). Pour chaque
+nouvel article : URLs dans `llms-full.txt` (bloc « Journal ») + les 3 étages +
+un cas dans CHAQUE suite de tests ; la règle 5 demande à Ansley de proposer ces
+liens quand il parle d'un article. Triple étage : prompt (règle 5), garde-fou
 `chat.php` (`$ownHosts` + `$officialPrefixes` — les `()` vides après strip sont
 purgés), et `mdToHtml` (`EXT_OK`, rendu cliquable `target="_blank"`). Tout AUTRE
 lien externe reste neutralisé (zéro invention). La transparence est une feature (badge, note UE, section

@@ -216,6 +216,11 @@ must hold in every change.
      the FR article (bordered block, brand SVG icons, target=_blank
      rel=noopener — template: seo-geo-etre-cite-par-les-ia.html), redeploy.
      The EN article gets buttons only if EN posts exist.
+  4. Wire Ansley: add both social URLs to `llms-full.txt` (« Journal » block,
+     with « les proposer quand on parle de l'article ») + whitelist them at
+     the 3 layers (`chat.php` `$officialPrefixes` — LOWERCASE prefixes —,
+     `js/app.js` `EXT_OK`, prompt rule 5 already generic) + add both URLs to
+     the officials lists of BOTH test suites, run `./tests/run-tests.sh`.
 - **Article media pattern (owner, July 2026 — SEO vs GEO article): ANIMATION on
   the card, INFOGRAPHIC in the article.**
   - **Card/teaser thumbnail = the animated boomerang video** (`seo-geo-thumb.mp4`,
