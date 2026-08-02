@@ -206,11 +206,16 @@ must hold in every change.
   **New article checklist** = FR/EN pair + blog-index cards + **homepage teaser
   card (index.html + index-en.html — keep it = the LATEST article)** + RSS
   `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
-  Once the LinkedIn + Facebook posts are published (pattern: pro LinkedIn /
-  grand-public Facebook, URLs archived in SEO-GEO-LLMO.md §6): add « Lire sur
-  LinkedIn / Facebook » `btn-ghost` buttons at the end of the FR article
-  (bordered block, brand SVG icons, target=_blank rel=noopener — see
-  seo-geo-etre-cite-par-les-ia.html).
+  THEN the social cycle — EVERY article, same order:
+  1. Write TWO distinct posts (not one copy-paste): pro tone for LinkedIn,
+     grand-public tone for Facebook — no prices, ESN-friendly wording, CTA to
+     the matching offer page; the owner publishes them.
+  2. Archive both post URLs in SEO-GEO-LLMO.md §6 (trust signals — GEO
+     recoupement of the NSY entity from heavily-crawled corpora).
+  3. Add « Lire sur LinkedIn / Facebook » `btn-ghost` buttons at the end of
+     the FR article (bordered block, brand SVG icons, target=_blank
+     rel=noopener — template: seo-geo-etre-cite-par-les-ia.html), redeploy.
+     The EN article gets buttons only if EN posts exist.
 - **Article media pattern (owner, July 2026 — SEO vs GEO article): ANIMATION on
   the card, INFOGRAPHIC in the article.**
   - **Card/teaser thumbnail = the animated boomerang video** (`seo-geo-thumb.mp4`,
