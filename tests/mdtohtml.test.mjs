@@ -34,6 +34,12 @@ t('officiel nu auto-lié', o.includes('<a href="https://www.lecerfthym.fr"') && 
 o = mdToHtml('Profil https://www.linkedin.com/in/c%C3%A9dric-barme/ ici.');
 t('profil fondateur (%C3%A9) auto-lié', o.includes('href="https://www.linkedin.com/in/c%C3%A9dric-barme/"'));
 
+o = mdToHtml('Article [SEO vs GEO](https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee) ici.');
+t('article LinkedIn Pulse whitelisté', o.includes('href="https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee"'));
+
+o = mdToHtml('Post [Facebook](https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr) ici.');
+t('post Facebook whitelisté', o.includes('href="https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr"'));
+
 o = mdToHtml('Essayez [Wix](https://www.wix.com) ou https://evil.com/x directement.');
 t('externe markdown → libellé inerte', o.includes('Wix') && !o.includes('href="https://www.wix.com'));
 t('externe nu reste texte inerte', !o.includes('href="https://evil.com'));

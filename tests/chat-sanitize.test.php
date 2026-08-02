@@ -28,6 +28,8 @@ $officials = [
     'https://github.com/machouse78/nsy-website',
     'https://youtube.com/@new-software-yard',
     'https://www.youtube.com/@new-software-yard',
+    'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee',
+    'https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));

@@ -362,6 +362,8 @@
       'https://github.com/machouse78',
       'https://youtube.com/@new-software-yard',
       'https://www.youtube.com/@new-software-yard',
+      'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%c3%a9-sur-google-0znee',
+      'https://www.facebook.com/share/17vylqjake',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
