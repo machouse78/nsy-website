@@ -239,14 +239,30 @@ nsy-website/
 └── README.en.md                         # Version anglaise
 ```
 
-## Tests unitaires (chatbot)
+## Tests unitaires (chatbot + formulaires)
 
-`./tests/run-tests.sh` — lint + suites sur le **code réel** : `nsy_sanitize_reply()`
-de `chat.php` (whitelist des liens officiels, linkmap FR/EN, purge des `()`, cap,
-réécriture des formulations bannies — positionnement ESN —, ajout déterministe
-des publications sociales quand un article du journal est cité)
-via Docker PHP 8.3, et `mdToHtml` de `js/app.js` (liens cliquables, échappement
-XSS) via Node. **À lancer avant tout commit qui touche `chat.php` ou `js/app.js`.**
+`./tests/run-tests.sh` — lint + suites sur le **code réel** (Docker PHP + Node) :
+
+- `nsy_sanitize_reply()` de `chat.php` : whitelist des liens officiels, linkmap
+  FR/EN, purge des `()`, cap, réécriture des formulations bannies (positionnement
+  ESN), ajout déterministe des publications sociales des articles ;
+- `mdToHtml` de `js/app.js` : liens cliquables whitelistés, échappement XSS ;
+- `antispam.php` : scoring de contenu (URLs, raccourcisseurs, mots-clés,
+  majuscules, montants), seuil, plafond journalier par IP ;
+- **formulaires en intégration HTTP** : `contact.php` + `faisabilite.php` copiés
+  tels quels dans un bac à sable `php -S` avec `_secret` factice
+  (`turnstile_secret` vide → vérification sautée, SMTP sur port fermé → une
+  soumission valide atteint l'étape d'envoi **sans qu'aucun email ne parte**) —
+  405, honeypot, validation FR/EN, spam silencieux + journal, throttle 60 s,
+  plafond 5/jour, chemin d'envoi.
+
+**À lancer avant tout commit qui touche `chat.php`, `js/app.js`, `contact.php`,
+`faisabilite.php` ou `antispam.php`.**
+
+Et à la demande, après un déploiement : `./tests/forms-live.sh` — smoke test
+**production** des deux formulaires sans jamais pouvoir envoyer d'email (405,
+honeypot, et détection « Turnstile actif côté serveur » via des champs
+volontairement invalides).
 
 ## Tester en local
 
