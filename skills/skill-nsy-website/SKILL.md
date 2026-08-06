@@ -177,7 +177,11 @@ must hold in every change.
   ProfessionalService + LocalBusiness (region only — display rule) + Person +
   WebSite + 2 Service/Offer, nodes linked by `@id`
   (`https://www.nsy.fr/#org`, `#person`…). New pages should REFERENCE those
-  `@id`s, not redeclare the entities.
+  `@id`s, not redeclare the entities — EXCEPT when a rich-result type REQUIRES
+  a typed node on-page: Google validates per page, a bare `{"@id": …}` in a
+  required field is « Type d'objet non valide » (GSC critical, Aug 2026 —
+  ProfilePage.mainEntity on a-propos/about). Fix: inline the full node WITH
+  the same `@id` (identity preserved, page self-sufficient).
 - **Strategy doc: `SEO-GEO-LLMO.md`** (repo root, NOT deployed) — wave-2 + wave-3
   pages, keywords, per-engine mechanics, external trust-signal backlog.
   Keep it updated when SEO work lands.
