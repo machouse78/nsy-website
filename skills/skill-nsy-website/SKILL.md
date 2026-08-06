@@ -1,13 +1,6 @@
 ---
 name: skill-nsy-website
-d (chatbot suites + antispam unit tests + forms
-  HTTP-integration in a `php -S` sandbox — real code copied verbatim, fake
-  `_secret` with EMPTY `turnstile_secret` so the Cloudflare check is skipped and
-  SMTP on a closed port so a valid submission reaches the send stage WITHOUT
-  sending mail). Post-deploy: `./tests/forms-live.sh` = email-proof prod smoke
-  (405, honeypot, Turnstile-active detection via invalid fields — NEVER post
-  valid fields at prod: if Turnstile is off server-side it WOULD send a real
-  email; learned the hard way, Aug 2026)escription: Conventions, facts, and workflow for the NSY website project (nsy.fr) — Cédric Barme's consulting/AI-web vitrine. Use whenever working in the nsy-website repo or on anything for nsy.fr (HTML/CSS/JS/PHP edits, the FR/EN bilingual setup, the chatbot, the 3D Renault wireframe, SEO/GEO/LLMO (llms.txt, FAQ, JSON-LD), .htaccess, deployment, README/GitHub upkeep). Carries the owner's specific, durable constraints so they don't have to be re-stated.
+description: Conventions, facts, and workflow for the NSY website project (nsy.fr) — Cédric Barme's consulting/AI-web vitrine. Use whenever working in the nsy-website repo or on anything for nsy.fr (HTML/CSS/JS/PHP edits, the FR/EN bilingual setup, the chatbot, the 3D Renault wireframe, SEO/GEO/LLMO (llms.txt, FAQ, JSON-LD), .htaccess, deployment, README/GitHub upkeep). Carries the owner's specific, durable constraints so they don't have to be re-stated.
 ---
 
 # NSY website — project rules
@@ -461,7 +454,16 @@ must hold in every change.
   avoids re-download, **not** re-decode — pausing is what saves CPU/GPU.
 
 ## Workflow (how to actually ship a change)
-- **Touching `chat.php` or `js/app.js` (chatbot)? Run `./tests/run-tests.sh` FIRST**
+- **Touching `chat.php`, `js/app.js`, `contact.php`, `faisabilite.php` or
+  `antispam.php`? Run `./tests/run-tests.sh` FIRST** — chatbot suites +
+  antispam unit tests + forms HTTP-integration in a `php -S` sandbox (real
+  code copied verbatim, fake `_secret` with EMPTY `turnstile_secret` so the
+  Cloudflare check is skipped, SMTP on a closed port so a valid submission
+  reaches the send stage WITHOUT sending mail). Post-deploy, on demand:
+  `./tests/forms-live.sh` = email-proof prod smoke (405, honeypot,
+  Turnstile-active detection via INVALID fields — NEVER post valid fields at
+  prod: if Turnstile is off server-side it WOULD send a real email; learned
+  the hard way, Aug 2026).
   (unit suite on the REAL code — see `chatbot-nsy` skill for details) and add a
   test case with every new rule.
 1. **Autonomous**: run commands without asking; only pause for destructive/
