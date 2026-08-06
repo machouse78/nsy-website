@@ -1,6 +1,13 @@
 ---
 name: skill-nsy-website
-description: Conventions, facts, and workflow for the NSY website project (nsy.fr) — Cédric Barme's consulting/AI-web vitrine. Use whenever working in the nsy-website repo or on anything for nsy.fr (HTML/CSS/JS/PHP edits, the FR/EN bilingual setup, the chatbot, the 3D Renault wireframe, SEO/GEO/LLMO (llms.txt, FAQ, JSON-LD), .htaccess, deployment, README/GitHub upkeep). Carries the owner's specific, durable constraints so they don't have to be re-stated.
+d (chatbot suites + antispam unit tests + forms
+  HTTP-integration in a `php -S` sandbox — real code copied verbatim, fake
+  `_secret` with EMPTY `turnstile_secret` so the Cloudflare check is skipped and
+  SMTP on a closed port so a valid submission reaches the send stage WITHOUT
+  sending mail). Post-deploy: `./tests/forms-live.sh` = email-proof prod smoke
+  (405, honeypot, Turnstile-active detection via invalid fields — NEVER post
+  valid fields at prod: if Turnstile is off server-side it WOULD send a real
+  email; learned the hard way, Aug 2026)escription: Conventions, facts, and workflow for the NSY website project (nsy.fr) — Cédric Barme's consulting/AI-web vitrine. Use whenever working in the nsy-website repo or on anything for nsy.fr (HTML/CSS/JS/PHP edits, the FR/EN bilingual setup, the chatbot, the 3D Renault wireframe, SEO/GEO/LLMO (llms.txt, FAQ, JSON-LD), .htaccess, deployment, README/GitHub upkeep). Carries the owner's specific, durable constraints so they don't have to be re-stated.
 ---
 
 # NSY website — project rules
