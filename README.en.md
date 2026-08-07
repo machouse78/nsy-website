@@ -317,7 +317,7 @@ until you run it.
 - **Reciprocal hreflang** `fr` / `en` / `x-default` on all 46 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
-- **Structured-data compliance** (3 Search Console alerts resolved in Aug 2026): a **required** field of a rich-result type carries the **inlined typed node** (same `@id` — `ProfilePage.mainEntity`), dates (`dateModified`, `datePublished`) are **full ISO 8601 with timezone**, and every `<video>` has a `poster=` plus its `video:video` block under **every** page that displays it. Causes, fixes and audit method: `seo-geo-llmo` skill §5
+- **Structured-data compliance** (3 Search Console alerts resolved in Aug 2026): every **required** field of a rich-result type carries the **inlined typed node** (same `@id`) — `ProfilePage.mainEntity`, but also `author` and `publisher` on articles, dates (`dateModified`, `datePublished`) are **full ISO 8601 with timezone**, and every `<video>` has a `poster=` plus its `video:video` block under **every** page that displays it. Causes, fixes and audit method: `seo-geo-llmo` skill §5
 - **Robots.txt** : explicit Allow of the media in use, Disallow of `.glb`/`.gltf`
 - **Journal RSS feeds** : `feed.xml` (FR) / `feed-en.xml` (EN) — updated with every article
 - **IndexNow** : key at the root + `node scripts/indexnow-ping.mjs` after each deployment (near-instant indexing on Bing → ChatGPT Search/Copilot)
