@@ -181,7 +181,11 @@ must hold in every change.
   a typed node on-page: Google validates per page, a bare `{"@id": …}` in a
   required field is « Type d'objet non valide » (GSC critical, Aug 2026 —
   ProfilePage.mainEntity on a-propos/about). Fix: inline the full node WITH
-  the same `@id` (identity preserved, page self-sufficient).
+  the same `@id` (identity preserved, page self-sufficient). Second GSC nag on the
+  same block (Aug 2026): `dateModified`/`dateCreated` on schema.org types must
+  be FULL ISO 8601 datetimes WITH timezone (`2026-08-03T12:00:00+02:00`) — a
+  bare `YYYY-MM-DD` triggers « Valeur de date et heure incorrecte ».
+  (Sitemap `<lastmod>` is the opposite: date-only is fine there.)
 - **Video indexing is per page too** (GSC alert, Aug 2026 — « Aucune URL de
   vignette fournie »): EVERY `<video>` must carry a thumbnail source ON the
   page that shows it — `poster=` attribute (the static PNG/JPG always exists)
