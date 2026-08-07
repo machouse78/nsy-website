@@ -163,3 +163,29 @@ trouvées d'un coup sur prv-concept.com, dont 36 propagées par le générateur 
   subit du spam (formulaire + téléphone), compteurs d'années codés en dur,
   fiches Wikidata non sourcées, propriété GSC préfixe sur le mauvais host,
   bloquer CCBot « par prudence » (c'est se rayer des corpus d'entraînement).
+
+## 7. Attributs traduisibles : les `alt` d'images (a11y + SEO images)
+
+Écart vécu sur prv-concept.com (août 2026), invisible dans tous les audits
+classiques : le pipeline FR→EN traduisait le **texte** des éléments porteurs de
+`data-en`, mais les `<img>` étant auto-fermantes n'ont pas d'inner text — leurs
+**`alt` restaient en français sur les pages anglaises**. Conséquences : un
+lecteur d'écran anglophone entend du français (défaut d'accessibilité réel), et
+Google Images reçoit des légendes dans la mauvaise langue.
+
+- **Règle** : tout attribut porteur de sens (`alt`, `title`, `aria-label`,
+  `content` des meta) doit être traduit comme le texte. Sur un site généré,
+  prévoir un mécanisme dédié — ici `data-en-alt="…"` appliqué **avant** la purge
+  des `data-*`, en gérant les deux ordres d'attributs (`alt` avant ou après).
+- **Ne traduire que ce qui est du langage** : les noms de modèles, marques et
+  codes moteurs restent identiques (« Alpine A610 », « Volvo 264 TE ») — sur 61
+  `alt`, 22 seulement contenaient du français.
+- **Sitemap images** : `image:title`/`image:caption` doivent être dans la langue
+  de l'URL. Tant que les `alt` EN ne sont pas traduits, **ne pas déclarer** les
+  images sous les URLs EN (des légendes FR y seraient un signal incohérent) —
+  puis les ajouter une fois la traduction faite.
+- **Piège d'extraction** : un filtre d'images en `\.(jpg|png|webp)$` rate les
+  `src` avec query string (`photo.jpg?v=2`). Utiliser `\.(jpg|png|webp)(\?|$)`,
+  sinon l'audit se croit complet en ayant sauté des images.
+- **Vérifier** : re-scanner les pages générées après régénération, et contrôler
+  qu'aucun attribut `data-en-alt` ne subsiste dans le HTML livré.
