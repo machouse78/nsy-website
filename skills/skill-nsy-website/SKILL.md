@@ -182,6 +182,15 @@ must hold in every change.
   required field is « Type d'objet non valide » (GSC critical, Aug 2026 —
   ProfilePage.mainEntity on a-propos/about). Fix: inline the full node WITH
   the same `@id` (identity preserved, page self-sufficient).
+- **Video indexing is per page too** (GSC alert, Aug 2026 — « Aucune URL de
+  vignette fournie »): EVERY `<video>` must carry a thumbnail source ON the
+  page that shows it — `poster=` attribute (the static PNG/JPG always exists)
+  — AND the sitemap `video:video` blocks must sit under EVERY `<url>` that
+  displays the video, EN pages included (index-en/portfolio/blog-en were
+  missing them; the bare hero/card-bg videos had no `poster=`). New-video
+  checklist: `poster=` on the tag + `video:video` (thumbnail_loc/title/
+  description/content_loc, titles translated on EN blocks) under every page
+  that embeds it + robots Allow of the mp4 and its thumbnail.
 - **Strategy doc: `SEO-GEO-LLMO.md`** (repo root, NOT deployed) — wave-2 + wave-3
   pages, keywords, per-engine mechanics, external trust-signal backlog.
   Keep it updated when SEO work lands.
