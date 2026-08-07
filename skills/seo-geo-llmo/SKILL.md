@@ -110,7 +110,47 @@ images/vidéos légendées (les captions nourrissent aussi les LLM).
 - Transverse : contenu **daté, signé, attribuable** ; le même fait sur
   plusieurs sources indépendantes (site + registre + LinkedIn).
 
-## 5. Anti-patterns
+## 5. Erreurs GSC vécues (données structurées & vidéos)
+
+Les trois alertes reçues sur nsy.fr en août 2026 partagent une seule cause :
+**Google valide chaque page ISOLÉMENT**. Tout ce qu'une page affiche ou déclare
+doit être autoportant sur cette page — le graphe d'entités inter-pages ne
+suffit pas au validateur.
+
+| Message GSC | Gravité | Cause réelle | Correctif |
+|---|---|---|---|
+| « Type d'objet non valide pour le champ `mainEntity` » | **critique** | `ProfilePage.mainEntity` ne contenait qu'une référence `{"@id": "…#person"}` vers un nœud déclaré uniquement sur l'accueil | **Inliner le nœud typé complet** (`@type` + propriétés) **en gardant le même `@id`** : identité du graphe préservée, page autosuffisante |
+| « Valeur de date et heure incorrecte pour `dateModified` » | non critique | date seule `2026-08-01` | **ISO 8601 complet avec fuseau** : `2026-08-03T12:00:00+02:00`. Vaut pour `dateModified`, `datePublished`, `dateCreated` de TOUS les types (BlogPosting, TechArticle, ProfilePage…) |
+| « Aucune URL de vignette fournie » (vidéos) | non critique | `<video>` sans `poster=`, et blocs `video:video` du sitemap présents seulement sur les pages FR | `poster=` sur **chaque** `<video>` + bloc `video:video` sous **chaque** `<url>` qui affiche la vidéo, pages EN comprises |
+
+**Règles à appliquer d'emblée sur tout site :**
+
+- **Champ requis d'un type à résultat enrichi → nœud typé inline** (même `@id`).
+  Partout ailleurs, continuer à référencer les `@id` (pas de redéclaration).
+- **Dates : ISO 8601 complet avec fuseau**, calculé selon la saison
+  (`Europe/Paris` = +02:00 l'été, +01:00 l'hiver — un `zoneinfo` évite l'erreur).
+  Exceptions légitimes : `startDate`/`endDate` d'un `Event` historique sans
+  heure connue, `foundingDate` en année seule — ne pas inventer une précision.
+  À l'inverse, le `<lastmod>` d'un **sitemap** accepte la date seule.
+- **Cohérence RSS ↔ JSON-LD** : si un flux existe, reprendre l'heure exacte de
+  son `pubDate` plutôt que d'en inventer une autre.
+- **Générateurs de pages** (pipeline FR→EN, templates) : ils propagent le
+  format fautif à l'échelle. Corriger la **source** (table de métadonnées,
+  gabarit) puis régénérer — sinon les pages générées réintroduisent l'écart.
+  Vérifier aussi que le générateur réécrit les attributs de chemin ajoutés
+  (`poster` a dû être ajouté à la liste `href|src|data-*` de `gen-en.py`).
+- **Après correction** : redéployer, pinger IndexNow, puis cliquer
+  **« Valider la correction »** dans le rapport GSC concerné (sans ce clic,
+  Google reteste à son rythme).
+
+**Méthode d'audit (à relancer périodiquement, pas seulement sur alerte) :**
+parser tous les blocs `<script type="application/ld+json">` du site, valider
+le JSON, puis contrôler par regex le format de chaque champ date et la
+présence d'un `poster=` sur chaque `<video>`. Un écart signalé sur une page
+est presque toujours présent sur des dizaines d'autres (35 dates non conformes
+trouvées d'un coup sur prv-concept.com, dont 36 propagées par le générateur EN).
+
+## 6. Anti-patterns
 
 - Mots-clés dans le nom GBP, ancres sur-optimisées sitewide, FAQ en JSON-LD
   sans contenu visible équivalent, adresses email en clair si le propriétaire

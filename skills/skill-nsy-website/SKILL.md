@@ -177,24 +177,10 @@ must hold in every change.
   ProfessionalService + LocalBusiness (region only — display rule) + Person +
   WebSite + 2 Service/Offer, nodes linked by `@id`
   (`https://www.nsy.fr/#org`, `#person`…). New pages should REFERENCE those
-  `@id`s, not redeclare the entities — EXCEPT when a rich-result type REQUIRES
-  a typed node on-page: Google validates per page, a bare `{"@id": …}` in a
-  required field is « Type d'objet non valide » (GSC critical, Aug 2026 —
-  ProfilePage.mainEntity on a-propos/about). Fix: inline the full node WITH
-  the same `@id` (identity preserved, page self-sufficient). Second GSC nag on the
-  same block (Aug 2026): `dateModified`/`dateCreated` on schema.org types must
-  be FULL ISO 8601 datetimes WITH timezone (`2026-08-03T12:00:00+02:00`) — a
-  bare `YYYY-MM-DD` triggers « Valeur de date et heure incorrecte ».
-  (Sitemap `<lastmod>` is the opposite: date-only is fine there.)
-- **Video indexing is per page too** (GSC alert, Aug 2026 — « Aucune URL de
-  vignette fournie »): EVERY `<video>` must carry a thumbnail source ON the
-  page that shows it — `poster=` attribute (the static PNG/JPG always exists)
-  — AND the sitemap `video:video` blocks must sit under EVERY `<url>` that
-  displays the video, EN pages included (index-en/portfolio/blog-en were
-  missing them; the bare hero/card-bg videos had no `poster=`). New-video
-  checklist: `poster=` on the tag + `video:video` (thumbnail_loc/title/
-  description/content_loc, titles translated on EN blocks) under every page
-  that embeds it + robots Allow of the mp4 and its thumbnail.
+  `@id`s, not redeclare the entities. ⚠️ Exceptions and the GSC errors they
+  cause (typed node inline in required fields, full ISO 8601 dates, video
+  thumbnails per page) → **`seo-geo-llmo` skill, §5 « Erreurs GSC vécues »**,
+  which is the single home for every Google-validation lesson.
 - **Strategy doc: `SEO-GEO-LLMO.md`** (repo root, NOT deployed) — wave-2 + wave-3
   pages, keywords, per-engine mechanics, external trust-signal backlog.
   Keep it updated when SEO work lands.
