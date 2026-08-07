@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -77,13 +77,34 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/index-en.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/" />
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
+      <video:title>NSY — dual expertise: technical consulting &amp; AI</video:title>
+      <video:description>The NSY logo animated inside an energy orb: finance/insurance technical consulting and AI-powered web creation.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/nsy-hero.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/finance-assurance.png</video:thumbnail_loc>
+      <video:title>Finance and insurance technical consulting — NSY</video:title>
+      <video:description>Visual presentation of the senior technical consulting service for finance and insurance</video:description>
+      <video:content_loc>https://www.nsy.fr/public/finance-assurance.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/web-ia.png</video:thumbnail_loc>
+      <video:title>AI-powered web creation — NSY</video:title>
+      <video:description>Visual presentation of the AI-powered website creation service</video:description>
+      <video:content_loc>https://www.nsy.fr/public/web-ia.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <!-- Pages du menu (structure multi-pages, juillet 2026) -->
@@ -220,13 +241,27 @@
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/realisations.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/portfolio.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/realisations.html" />
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/le-cerf-thym.jpg</video:thumbnail_loc>
+      <video:title>Le Cerf Thym website preview — an NSY build</video:title>
+      <video:description>Aperçu animé du site www.lecerfthym.fr conçu par NSY : visite de la page d'accueil du restaurant de Sully-sur-Loire (4 langues, avis clients, cartes interactives).</video:description>
+      <video:content_loc>https://www.nsy.fr/public/le-cerf-thym.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/prv-concept.jpg</video:thumbnail_loc>
+      <video:title>PRV Concept website preview — an NSY build</video:title>
+      <video:description>Aperçu animé du site prv-concept.com conçu par NSY : intro du hero, moteur V6 PRV et assistant conversationnel de l'association.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/prv-concept.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <!-- Pages légales FR -->
@@ -494,7 +529,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -506,6 +541,13 @@
       <image:title>SEO vs GEO — NSY journal illustration</image:title>
       <image:caption>Article infographic: getting cited by ChatGPT, Claude and Perplexity</image:caption>
     </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</video:thumbnail_loc>
+      <video:title>SEO vs GEO — animated illustration</video:title>
+      <video:description>Deux robots face à face : le SEO (recherche Google) contre le GEO (assistants IA génératifs) — la vignette animée du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</loc>
