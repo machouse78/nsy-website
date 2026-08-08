@@ -82,7 +82,9 @@ cp ai-web-glossary.html             deploy/
 cp blog.html                        deploy/
 cp blog-en.html                     deploy/
 cp seo-geo-etre-cite-par-les-ia.html deploy/
+cp chatbot-ia-forum-base-de-connaissances.html deploy/
 cp seo-geo-getting-cited-by-ai.html deploy/
+cp ai-chatbot-forum-knowledge-base.html deploy/
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
 cp creation-site-internet-orleans.html deploy/

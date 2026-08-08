@@ -3,28 +3,28 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Journal — IA, SEO/GEO &amp; syst&egrave;mes critiques | NSY</title>
-<meta name="description" content="Le journal de NSY : retours d&rsquo;exp&eacute;rience concrets sur l&rsquo;IA appliqu&eacute;e au web, le SEO/GEO et les syst&egrave;mes critiques — par C&eacute;dric Barme, praticien." />
+<title>Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances | NSY</title>
+<meta name="description" content="Des années de discussions de passionnés dorment dans les forums. Retour d'expérience sur prv-concept.com : un chatbot IA qui interroge directement la base du forum phpBB, avec les garde-fous anti-hallucination qui font la différence." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://www.nsy.fr/blog.html" />
-<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
-<link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
-<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+<link rel="canonical" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="NSY" />
 <meta property="og:locale" content="fr_FR" />
-<meta property="og:url" content="https://www.nsy.fr/blog.html" />
-<meta property="og:title" content="Le journal NSY" />
-<meta property="og:description" content="Retours d&rsquo;exp&eacute;rience : IA appliqu&eacute;e au web, SEO/GEO, syst&egrave;mes critiques." />
+<meta property="og:url" content="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+<meta property="og:title" content="Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances" />
+<meta property="og:description" content="Comment le chatbot de prv-concept.com répond avec le forum phpBB comme base de faits — architecture, performance, anti-hallucination et garde-fous serveur." />
 <meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Le journal NSY" />
-<meta name="twitter:description" content="Retours d&rsquo;exp&eacute;rience concrets — IA, SEO/GEO, syst&egrave;mes critiques." />
+<meta name="twitter:title" content="Un chatbot IA branché sur un forum | NSY" />
+<meta name="twitter:description" content="Le web 1.0 comme base de connaissances d'une IA : le cas PRV Concept, garde-fous compris." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
@@ -36,26 +36,12 @@
 <link rel="alternate" type="application/rss+xml" title="NSY — Journal" href="https://www.nsy.fr/feed.xml" />
 <link rel="stylesheet" href="css/style.css" />
 <style>
-  /* Blog : cartes d'articles + typo de lecture */
-  .blog-list { display: grid; gap: 18px; margin-top: 34px; }
-  .blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
-    padding: 24px 26px; background: rgba(255,255,255,0.02);
-    transition: border-color .2s, transform .2s; }
-  .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
-    color: var(--fg-2); text-transform: uppercase; }
-  .blog-card h2 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
-  .blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
-  .blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
   .article h2 { font-size: 24px; margin: 38px 0 12px; }
   .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
   .article p, .article li { color: var(--fg-1); line-height: 1.65; }
   .article p { margin: 0 0 16px; }
   .article ul, .article ol { margin: 0 0 16px 22px; }
   .article li { margin-bottom: 8px; }
-  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
-  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
-  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
   .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
     color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
   .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
@@ -66,19 +52,25 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Blog",
-      "@id": "https://www.nsy.fr/blog.html#blog",
-      "name": "Le journal NSY",
-      "description": "Retours d’expérience d’un praticien : IA appliquée au web, SEO/GEO, systèmes critiques.",
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html#article",
+      "headline": "Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances",
+      "description": "Retour d'expérience sur prv-concept.com : un chatbot IA qui interroge directement la base du forum phpBB, avec les garde-fous anti-hallucination qui font la différence.",
       "inLanguage": "fr",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/a-propos.html"},
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
-      "blogPost": [ { "@id": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html#article" } ]
+      "datePublished": "2026-08-08T12:00:00+02:00",
+      "dateModified": "2026-08-08T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/nsy-og.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog.html#blog" }
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
-        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" }
+        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" },
+        { "@type": "ListItem", "position": 3, "name": "Chatbot IA et forum", "item": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" }
       ]
     }
   ]
@@ -130,36 +122,60 @@
     <div class="eyebrow-row">
       <span class="block-eyebrow">Journal</span>
       <span class="line"></span>
-      <span class="mono">Retours de terrain</span>
+      <span class="mono"><a href="blog.html" style="color: inherit;">← Tous les articles</a></span>
     </div>
-    <div class="section-head">
-      <h1 style="font-size: clamp(32px, 5vw, 52px);">Le journal.</h1>
-      <p class="lede">Des retours d&rsquo;exp&eacute;rience concrets — IA appliqu&eacute;e au web, SEO &amp; GEO, syst&egrave;mes critiques. Pas de g&eacute;n&eacute;ralit&eacute;s : ce qui a &eacute;t&eacute; fait, mesur&eacute; et v&eacute;rifi&eacute;.</p>
-    </div>
-    <div class="blog-list">
-      <a class="blog-card" href="chatbot-ia-forum-base-de-connaissances.html">
-        <div class="meta">8 ao&ucirc;t 2026 · IA · Chatbot · RAG</div>
-        <h2>Un chatbot IA branch&eacute; sur un forum : le web 1.0 comme base de connaissances</h2>
-        <p>Des ann&eacute;es de discussions de passionn&eacute;s dorment dans les forums. Comment le chatbot de PRV Concept interroge directement la base phpBB — et les garde-fous anti-hallucination qui font la diff&eacute;rence.</p>
-        <span class="more">Lire l&rsquo;article →</span>
-      </a>
-      <a class="blog-card has-thumb" href="seo-geo-etre-cite-par-les-ia.html">
-        <div class="thumb"><video id="seo-geo-video" autoplay loop muted playsinline preload="none" poster="public/seo-geo-thumb.jpg" width="560" height="374" aria-label="Illustration animée : SEO contre GEO, deux robots à la loupe">
-          <source src="public/seo-geo-thumb.mp4" type="video/mp4" />
-          <img src="public/seo-geo-thumb.jpg" alt="SEO vs GEO — un robot Google et un robot IA face à face" width="560" height="374" />
-        </video></div>
-        <div>
-        <div class="meta">29 juillet 2026 · SEO · GEO · IA</div>
-        <h2>SEO vs GEO : &ecirc;tre cit&eacute; par ChatGPT, Claude et Perplexity</h2>
-        <p>&Ecirc;tre bien class&eacute; sur Google ne suffit plus : les assistants IA choisissent leurs sources autrement. Comment un site devient une source cit&eacute;e — avec le dispositif mis en place sur nsy.fr et les premiers passages de crawlers observ&eacute;s.</p>
-        <span class="more">Lire l&rsquo;article →</span>
-      </div>
-      </a>
-    </div>
-    <div style="margin-top: 32px;">
-      <a class="btn btn-ghost" href="feed.xml" title="Flux RSS">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>Flux RSS</a>
-    </div>
+    <article class="legal-page article">
+      <div class="article-meta">8 août 2026 · Cédric Barme · Lecture ≈ 7 min</div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Un chatbot IA branché sur un forum :<br />le web 1.0 comme base de connaissances</h1>
+      <p class="lede" style="font-size: 17px;">Des années de pannes résolues, de restaurations documentées, de réponses de spécialistes — les forums sont des mines de savoir. Mais ce savoir dort dans un format que les assistants IA ignorent. Retour d&rsquo;expérience concret : depuis l&rsquo;été 2026, le chatbot de <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — le « Père Hervé », mascotte chef d&rsquo;atelier de l&rsquo;association dédiée au V6 PRV — répond aux visiteurs en s&rsquo;appuyant sur le forum phpBB de la communauté. Voici comment, et surtout avec quels garde-fous.</p>
+
+      <h2>Le paradoxe du web 1.0</h2>
+      <p>Un forum de passionnés est ce qui se rapproche le plus d&rsquo;une base de connaissances vivante : les questions y sont posées avec les mots réels des utilisateurs, les réponses viennent de gens qui ont démonté le moteur, et chaque cas résolu reste archivé. C&rsquo;est précisément ce qu&rsquo;aucun modèle de langage ne sait restituer : ces discussions ne sont pas dans ses corpus d&rsquo;entraînement, ou n&rsquo;y figurent que par fragments. Interrogé « à froid », un LLM sur un sujet aussi pointu que le V6 PRV fait ce qu&rsquo;il fait toujours quand il ne sait pas : il improvise avec aplomb.</p>
+      <p>Le réflexe classique serait de moderniser le forum ou de réécrire son contenu. Mauvaise idée : la communauté y vit très bien, et la valeur est justement dans son historique. La bonne question est : <strong>comment faire de cet existant, sans le toucher, la source de vérité d&rsquo;une IA moderne ?</strong></p>
+
+      <h2>L&rsquo;architecture : un modèle qui ne « sait » rien — et c&rsquo;est voulu</h2>
+      <p>Le Père Hervé fonctionne en <strong>RAG</strong> (retrieval-augmented generation) : le modèle de langage n&rsquo;a aucune connaissance propre du site. À chaque question, le serveur assemble un dossier de faits, et le modèle a pour instruction de répondre <em>uniquement</em> à partir de ce dossier. Trois sources l&rsquo;alimentent :</p>
+      <ul>
+        <li><strong>Un socle rédigé</strong> — l&rsquo;identité de l&rsquo;association, l&rsquo;histoire du moteur, les fiches véhicules : des faits stables, maintenus comme du contenu éditorial ;</li>
+        <li><strong>Le forum, en direct</strong> — les sujets et l&rsquo;activité de la communauté au moment où la question est posée ;</li>
+        <li><strong>La boutique, en direct</strong> — les produits réellement disponibles, via l&rsquo;API du site marchand.</li>
+      </ul>
+
+      <h3>Pourquoi interroger directement la base de données du forum</h3>
+      <p>Le chatbot ne « lit » pas les pages du forum : il interroge <strong>directement sa base de données</strong>, par des requêtes ciblées sur les tables de phpBB. Ce choix est d&rsquo;abord une affaire de <strong>performance</strong> : pas d&rsquo;allers-retours HTTP ni de HTML à analyser — quelques requêtes indexées, exécutées en millisecondes sur le même hébergement, là où parcourir les pages aurait ajouté des secondes à chaque réponse. Il garantit ensuite la <strong>fraîcheur</strong> : un sujet posté il y a une minute est déjà interrogeable, sans réindexation ni cache à invalider. Il donne enfin un <strong>contrôle fin</strong> : on choisit précisément les colonnes exposées — titres, forums publics, dates — et rien d&rsquo;autre n&rsquo;atteint jamais le modèle.</p>
+
+      <h2>Apprendre à l&rsquo;IA à ne pas inventer</h2>
+      <p>Brancher les sources ne suffit pas : il faut apprendre au modèle à s&rsquo;en tenir aux faits. Quatre règles, toutes nées d&rsquo;un dérapage observé puis corrigé :</p>
+      <ol>
+        <li><strong>Zéro connaissance implicite.</strong> Si le dossier de faits ne contient pas la réponse, le chatbot le dit et oriente vers le forum ou l&rsquo;association — il ne complète jamais avec sa « culture générale », premier réservoir à hallucinations.</li>
+        <li><strong>Citer les titres de sujets mot pour mot.</strong> Un titre paraphrasé est un sujet inventé : le visiteur ne le retrouvera pas. Les titres remontés de la base sont restitués verbatim, avec leur lien.</li>
+        <li><strong>Ne rien présumer des membres.</strong> Sur le forum d&rsquo;une association dédiée à un moteur V6, tous les véhicules des membres n&rsquo;ont pas ce moteur — il y a là-bas une Renault 25 turbo-Diesel. Le chatbot a appris à ne pas « corriger » la réalité pour la rendre plus cohérente.</li>
+        <li><strong>Une température basse et des réponses courtes.</strong> Moins on laisse le modèle « créer », moins il dérive ; et une réponse concise se vérifie d&rsquo;un coup d&rsquo;œil.</li>
+      </ol>
+
+      <h2>Les garde-fous : côté serveur, pas seulement dans le prompt</h2>
+      <p>La leçon la plus importante de ces semaines de mise au point : <strong>les instructions données au modèle ne sont pas des garanties</strong>. Un modèle économique paraphrase, oublie, se laisse embarquer par la formulation d&rsquo;une question. Chaque règle critique existe donc en deux exemplaires : une consigne dans le prompt, et un mécanisme déterministe côté serveur qui s&rsquo;applique quoi qu&rsquo;il arrive.</p>
+      <ul>
+        <li><strong>Filtrage du contenu sensible.</strong> Un forum automobile contient des discussions sur des préparations non homologuées pour la route : elles sont écartées des réponses côté serveur, silencieusement — pas seulement « interdites » au modèle.</li>
+        <li><strong>Vie privée des membres.</strong> Le chatbot ne publie des personnes que ce que le site rend public : les rôles au bureau, rien de plus.</li>
+        <li><strong>Aucun lien externe.</strong> Le chatbot ne pointe jamais hors du site — les URLs sont vérifiées et réécrites au besoin après génération.</li>
+        <li><strong>Un repli résilient.</strong> Si le modèle est indisponible, les données réelles — sujets du forum, produits de la boutique — restent servies telles quelles, et l&rsquo;interface l&rsquo;annonce honnêtement.</li>
+        <li><strong>Des tests de régression sur le vrai chatbot.</strong> Chaque règle a son test automatisé, exécuté contre le chatbot en production : des assertions vérifient ce qu&rsquo;il doit dire, et surtout ce qu&rsquo;il ne doit jamais dire. Aucun déploiement sans suite verte.</li>
+      </ul>
+
+      <h2>Quand le chatbot devient membre du forum</h2>
+      <p>Dernière étape, la plus inattendue : le Père Hervé n&rsquo;est pas qu&rsquo;un guichet de réponses — il participe. La validation des inscriptions au forum est automatisée par un script planifié, et c&rsquo;est le compte « Père Hervé » qui envoie les messages privés de bienvenue et répond aux présentations des nouveaux membres. Même identité des deux côtés : quand on demande au chatbot comment se passe une inscription, il répond « je t&rsquo;enverrai un message de bienvenue » — à la première personne, parce que c&rsquo;est vrai.</p>
+
+      <h2>Ce que ce chantier démontre</h2>
+      <p>Ce qui vaut pour un forum phpBB vaut pour tout patrimoine documentaire : wiki interne, FAQ historique, base de tickets, archives métier. Trois enseignements transposables :</p>
+      <ul>
+        <li><strong>L&rsquo;existant est un actif IA.</strong> Pas besoin de refondre ni de migrer : le RAG se branche sur ce qui est là, et l&rsquo;interrogation directe des données en fait une source rapide et toujours fraîche.</li>
+        <li><strong>Pas de réentraînement.</strong> Le savoir reste dans vos données, sous votre contrôle — le modèle n&rsquo;apprend rien, il consulte. Le jour où un fait change, la réponse change.</li>
+        <li><strong>La confiance vient des garde-fous.</strong> La différence entre un gadget et un outil que l&rsquo;association assume publiquement, ce ne sont pas les capacités du modèle : ce sont les règles apprises, les protections serveur et les tests qui les verrouillent.</li>
+      </ul>
+
+      <p style="margin-top: 30px;">Le résultat se teste en direct sur <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — et la fiche complète de la réalisation est sur notre page <a href="realisations.html">Réalisations</a>. Un patrimoine documentaire à valoriser, un chatbot à ancrer dans vos données ? C&rsquo;est le cœur de notre offre de <a href="creation-site-ia.html">création de sites propulsés par l&rsquo;IA</a> — <a href="contact.html">parlons-en</a>, réponse sous 48 h ouvrées.</p>
+    </article>
   </div>
 </section>
 </main>
@@ -231,32 +247,6 @@
 </footer>
 <!-- @endpartial:footer -->
 
-<script>
-// DefinedTermSet JSON-LD généré depuis le contenu visible (source unique :
-// le HTML ci-dessus). Googlebot rend le JS ; les crawlers IA lisent le texte.
-(function () {
-  var terms = [];
-  document.querySelectorAll('.glossaire h3').forEach(function (h) {
-    var p = h.nextElementSibling;
-    if (!p || p.tagName !== 'P') return;
-    terms.push({
-      '@type': 'DefinedTerm',
-      name: h.textContent.trim(),
-      description: p.textContent.trim()
-    });
-  });
-  var s = document.createElement('script');
-  s.type = 'application/ld+json';
-  s.textContent = JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'DefinedTermSet',
-    name: 'Glossaire IA & web — NSY',
-    inLanguage: 'fr',
-    hasDefinedTerm: terms
-  });
-  document.head.appendChild(s);
-})();
-</script>
 <!-- @partial:chatbot -->
 <!-- ───── Chatbot (assistant IA — Ansley, architecte NSY) ───── -->
 <button class="cbot-fab" id="cbot-fab" aria-label="Ouvrir le chat avec Ansley">

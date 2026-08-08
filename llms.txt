@@ -32,7 +32,7 @@ Points clés :
 - [Création de site IA](https://www.nsy.fr/creation-site-ia.html) : l'offre clé en main détaillée (tarification en fonction du besoin).
 - [Glossaire IA & web](https://www.nsy.fr/glossaire-ia-web.html) : LLM, RAG, GEO, LLMO… expliqués simplement.
 - [Réalisations](https://www.nsy.fr/realisations.html) : sites clients livrés et en production — Le Cerf Thym (www.lecerfthym.fr, restaurant à Sully-sur-Loire, site en 4 langues) et PRV Concept (www.prv-concept.com).
-- [Journal / blog](https://www.nsy.fr/blog.html) : retours d'expérience (IA appliquée au web, SEO/GEO, systèmes critiques). Article : [SEO vs GEO — être cité par les IA](https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html).
+- [Journal / blog](https://www.nsy.fr/blog.html) : retours d'expérience (IA appliquée au web, SEO/GEO, systèmes critiques). Articles : [SEO vs GEO — être cité par les IA](https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html) · [Un chatbot IA branché sur un forum — le cas PRV Concept](https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html).
 - [Consultant technique senior à Paris](https://www.nsy.fr/consultant-technique-paris.html) : missions finance/systèmes critiques + web IA, sur site (Paris, La Défense) ou à distance.
 - [Création de site internet à Orléans](https://www.nsy.fr/creation-site-internet-orleans.html) : sites web IA pour les entreprises d'Orléans et du Loiret (prestataire basé en Centre-Val de Loire).
 - [Demande de faisabilité](https://www.nsy.fr/faisabilite.html) : questionnaire guidé pour cadrer un projet web/IA.

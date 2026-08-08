@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-08-07</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -77,7 +77,7 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-08-07</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -506,7 +506,7 @@
   <!-- Journal + pages géo (ajout 2026-07-29) -->
   <url>
     <loc>https://www.nsy.fr/blog.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -529,7 +529,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-08-07</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -548,6 +548,26 @@
       <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+  
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+  
   </url>
   <url>
     <loc>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</loc>
