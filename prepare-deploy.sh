@@ -139,6 +139,10 @@ cp public/seo-geo-thumb.jpg             deploy/public/   # poster vignette anime
 cp public/seo-geo-thumb.mp4             deploy/public/   # vignette ANIMEE des cartes du journal
 cp public/seo-geo-article.jpg           deploy/public/   # infographie FR dans l'article (+ OG)
 cp public/seo-geo-article-en.jpg        deploy/public/   # infographie EN dans l'article (+ OG)
+cp public/chatbot-forum-thumb.jpg       deploy/public/   # poster vignette article chatbot & forum
+cp public/chatbot-forum-thumb.mp4       deploy/public/   # vignette ANIMEE article chatbot & forum
+cp public/chatbot-forum-article.jpg     deploy/public/   # infographie FR article chatbot & forum (+ OG)
+cp public/chatbot-forum-article-en.jpg  deploy/public/   # infographie EN article chatbot & forum (+ OG)
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

@@ -17,15 +17,15 @@
 <meta property="og:url" content="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
 <meta property="og:title" content="Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances" />
 <meta property="og:description" content="Comment le chatbot de prv-concept.com répond avec le forum phpBB comme base de faits — architecture, performance, anti-hallucination et garde-fous serveur." />
-<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
+<meta property="og:image" content="https://www.nsy.fr/public/chatbot-forum-article.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="760" />
+<meta property="og:image:alt" content="Un chatbot IA branché sur le forum phpBB — infographie" />
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Un chatbot IA branché sur un forum | NSY" />
 <meta name="twitter:description" content="Le web 1.0 comme base de connaissances d'une IA : le cas PRV Concept, garde-fous compris." />
-<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta name="twitter:image" content="https://www.nsy.fr/public/chatbot-forum-article.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
 <link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
@@ -61,7 +61,7 @@
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
       "datePublished": "2026-08-08T12:00:00+02:00",
       "dateModified": "2026-08-08T12:00:00+02:00",
-      "image": "https://www.nsy.fr/public/nsy-og.jpg",
+      "image": "https://www.nsy.fr/public/chatbot-forum-article.jpg",
       "mainEntityOfPage": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html",
       "isPartOf": { "@id": "https://www.nsy.fr/blog.html#blog" }
     },
@@ -128,9 +128,13 @@
       <div class="article-meta">8 août 2026 · Cédric Barme · Lecture ≈ 7 min</div>
       <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Un chatbot IA branché sur un forum :<br />le web 1.0 comme base de connaissances</h1>
       <p class="lede" style="font-size: 17px;">Des années de pannes résolues, de restaurations documentées, de réponses de spécialistes — les forums sont des mines de savoir. Mais ce savoir dort dans un format que les assistants IA ignorent. Retour d&rsquo;expérience concret : depuis l&rsquo;été 2026, le chatbot de <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — le « Père Hervé », mascotte chef d&rsquo;atelier de l&rsquo;association dédiée au V6 PRV — répond aux visiteurs en s&rsquo;appuyant sur le forum phpBB de la communauté. Voici comment, et surtout avec quels garde-fous.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/chatbot-forum-article.jpg" alt="Infographie — un chatbot IA branché sur le forum phpBB : la base de données interrogée en direct, avec garde-fous anti-hallucination" loading="lazy" width="1140" height="760" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+
 
       <h2>Le paradoxe du web 1.0</h2>
-      <p>Un forum de passionnés est ce qui se rapproche le plus d&rsquo;une base de connaissances vivante : les questions y sont posées avec les mots réels des utilisateurs, les réponses viennent de gens qui ont démonté le moteur, et chaque cas résolu reste archivé. C&rsquo;est précisément ce qu&rsquo;aucun modèle de langage ne sait restituer : ces discussions ne sont pas dans ses corpus d&rsquo;entraînement, ou n&rsquo;y figurent que par fragments. Interrogé « à froid », un LLM sur un sujet aussi pointu que le V6 PRV fait ce qu&rsquo;il fait toujours quand il ne sait pas : il improvise avec aplomb.</p>
+      <p>Un forum de passionnés est ce qui se rapproche le plus d&rsquo;une base de connaissances vivante : les questions y sont posées avec les mots réels des utilisateurs, les réponses viennent de gens qui ont démonté le moteur, et chaque cas résolu reste archivé. C&rsquo;est précisément ce qu&rsquo;aucun modèle de langage ne sait restituer : ces discussions ne sont pas dans ses corpus d&rsquo;entraînement, ou n&rsquo;y figurent que par fragments. Interrogé « à froid », un LLM sur un sujet aussi pointu que le V6 PRV fait ce qu&rsquo;il fait toujours quand il ne sait pas : il improvise avec aplomb. Les puristes objecteront qu&rsquo;un forum — du contenu créé par ses membres — relève techniquement des prémices du web participatif, le « 2.0 » avant la lettre ; « web 1.0 » est ici le raccourci que tout le monde emploie pour ce web d&rsquo;avant, rendu côté serveur et fier de sa pagination.</p>
       <p>Le réflexe classique serait de moderniser le forum ou de réécrire son contenu. Mauvaise idée : la communauté y vit très bien, et la valeur est justement dans son historique. La bonne question est : <strong>comment faire de cet existant, sans le toucher, la source de vérité d&rsquo;une IA moderne ?</strong></p>
 
       <h2>L&rsquo;architecture : un modèle qui ne « sait » rien — et c&rsquo;est voulu</h2>

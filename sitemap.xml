@@ -526,6 +526,13 @@
       <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</video:thumbnail_loc>
+      <video:title>Un chatbot IA branché sur un forum — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : un chatbot IA connecté au forum phpBB de PRV Concept.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/chatbot-forum-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
@@ -548,6 +555,10 @@
       <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</image:loc>
+      <image:title>An AI chatbot wired into a forum — illustration</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</loc>
@@ -558,6 +569,10 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
   
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/chatbot-forum-article.jpg</image:loc>
+      <image:title>Infographie — un chatbot IA branché sur le forum phpBB</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</loc>
@@ -568,6 +583,10 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
   
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/chatbot-forum-article-en.jpg</image:loc>
+      <image:title>Infographic — an AI chatbot wired into the phpBB forum</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</loc>
