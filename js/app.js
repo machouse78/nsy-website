@@ -364,6 +364,8 @@
       'https://www.youtube.com/@new-software-yard',
       'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%c3%a9-sur-google-0znee',
       'https://www.facebook.com/share/17vylqjake',
+      'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25c3%25a0-condition-1icee',
+      'https://www.facebook.com/share/p/1ey4fxbyda',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
