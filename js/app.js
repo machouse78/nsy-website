@@ -1296,7 +1296,8 @@
     // (crossfade encodé / boomerang) — pas de fondu JS.
     if (v.id === 'glyph-video' || v.id === 'about-video'
         || v.id === 'ansley-video' || v.id === 'ansley-fab-video'
-        || v.id === 'seo-geo-video') return; // boomerang déjà sans couture
+        || v.id === 'seo-geo-video'
+        || v.id === 'chatbot-forum-video') return; // boomerang déjà sans couture
     setupLoopFade(v);
   });
 
