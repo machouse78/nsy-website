@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances | NSY</title>
-<meta name="description" content="Des années de discussions de passionnés dorment dans les forums. Retour d'expérience : sur le site d'une association automobile, un chatbot IA interroge directement la base du forum phpBB — avec les garde-fous anti-hallucination qui font la différence." />
+<meta name="description" content="Des années de discussions de passionnés dorment dans les forums. Retour d'expérience sur prv-concept.com : un chatbot IA qui interroge directement la base du forum phpBB, avec les garde-fous anti-hallucination qui font la différence." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
 <link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
@@ -16,7 +16,7 @@
 <meta property="og:locale" content="fr_FR" />
 <meta property="og:url" content="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
 <meta property="og:title" content="Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances" />
-<meta property="og:description" content="Comment le chatbot d'une association automobile répond avec le forum phpBB comme base de faits — architecture, performance, anti-hallucination et garde-fous serveur." />
+<meta property="og:description" content="Comment le chatbot de prv-concept.com répond avec le forum phpBB comme base de faits — architecture, performance, anti-hallucination et garde-fous serveur." />
 <meta property="og:image" content="https://www.nsy.fr/public/chatbot-forum-article.jpg" />
 <meta property="og:image:width" content="1140" />
 <meta property="og:image:height" content="760" />
@@ -24,7 +24,7 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Un chatbot IA branché sur un forum | NSY" />
-<meta name="twitter:description" content="Le web 1.0 comme base de connaissances d'une IA : un retour d'expérience concret, garde-fous compris." />
+<meta name="twitter:description" content="Le web 1.0 comme base de connaissances d'une IA : le cas PRV Concept, garde-fous compris." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/chatbot-forum-article.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
@@ -55,7 +55,7 @@
       "@type": "BlogPosting",
       "@id": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html#article",
       "headline": "Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances",
-      "description": "Retour d'expérience : sur le site d'une association automobile, un chatbot IA interroge directement la base du forum phpBB — avec les garde-fous anti-hallucination qui font la différence.",
+      "description": "Retour d'expérience sur prv-concept.com : un chatbot IA qui interroge directement la base du forum phpBB, avec les garde-fous anti-hallucination qui font la différence.",
       "inLanguage": "fr",
       "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/a-propos.html"},
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
@@ -127,18 +127,18 @@
     <article class="legal-page article">
       <div class="article-meta">8 août 2026 · Cédric Barme · Lecture ≈ 7 min</div>
       <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Un chatbot IA branché sur un forum :<br />le web 1.0 comme base de connaissances</h1>
-      <p class="lede" style="font-size: 17px;">Des années de pannes résolues, de restaurations documentées, de réponses de spécialistes — les forums sont des mines de savoir. Mais ce savoir dort dans un format que les assistants IA ignorent. Retour d&rsquo;expérience concret : depuis l&rsquo;été 2026, sur le site d&rsquo;une association de passionnés d&rsquo;automobiles anciennes réalisé par NSY, la mascotte du site — un « chef d&rsquo;atelier » virtuel — répond aux visiteurs en s&rsquo;appuyant sur le forum phpBB de la communauté. Voici comment, et surtout avec quels garde-fous.</p>
+      <p class="lede" style="font-size: 17px;">Des années de pannes résolues, de restaurations documentées, de réponses de spécialistes — les forums sont des mines de savoir. Mais ce savoir dort dans un format que les assistants IA ignorent. Retour d&rsquo;expérience concret : depuis l&rsquo;été 2026, le chatbot de <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — le « Père Hervé », mascotte chef d&rsquo;atelier de l&rsquo;association dédiée au V6 PRV — répond aux visiteurs en s&rsquo;appuyant sur le forum phpBB de la communauté. Voici comment, et surtout avec quels garde-fous.</p>
       <figure style="margin: 26px 0 6px;">
         <img src="public/chatbot-forum-article.jpg" alt="Infographie — un chatbot IA branché sur le forum phpBB : la base de données interrogée en direct, avec garde-fous anti-hallucination" loading="lazy" width="1140" height="760" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
       </figure>
 
 
       <h2>Le paradoxe du web 1.0</h2>
-      <p>Un forum de passionnés est ce qui se rapproche le plus d&rsquo;une base de connaissances vivante : les questions y sont posées avec les mots réels des utilisateurs, les réponses viennent de gens qui ont démonté le moteur, et chaque cas résolu reste archivé. C&rsquo;est précisément ce qu&rsquo;aucun modèle de langage ne sait restituer : ces discussions ne sont pas dans ses corpus d&rsquo;entraînement, ou n&rsquo;y figurent que par fragments. Interrogé « à froid » sur une mécanique de collection pointue, un LLM fait ce qu&rsquo;il fait toujours quand il ne sait pas : il improvise avec aplomb. Les puristes objecteront qu&rsquo;un forum — du contenu créé par ses membres — relève techniquement des prémices du web participatif, le « 2.0 » avant la lettre ; « web 1.0 » est ici le raccourci que tout le monde emploie pour ce web d&rsquo;avant, rendu côté serveur et fier de sa pagination.</p>
+      <p>Un forum de passionnés est ce qui se rapproche le plus d&rsquo;une base de connaissances vivante : les questions y sont posées avec les mots réels des utilisateurs, les réponses viennent de gens qui ont démonté le moteur, et chaque cas résolu reste archivé. C&rsquo;est précisément ce qu&rsquo;aucun modèle de langage ne sait restituer : ces discussions ne sont pas dans ses corpus d&rsquo;entraînement, ou n&rsquo;y figurent que par fragments. Interrogé « à froid », un LLM sur un sujet aussi pointu que le V6 PRV fait ce qu&rsquo;il fait toujours quand il ne sait pas : il improvise avec aplomb. Les puristes objecteront qu&rsquo;un forum — du contenu créé par ses membres — relève techniquement des prémices du web participatif, le « 2.0 » avant la lettre ; « web 1.0 » est ici le raccourci que tout le monde emploie pour ce web d&rsquo;avant, rendu côté serveur et fier de sa pagination.</p>
       <p>Le réflexe classique serait de moderniser le forum ou de réécrire son contenu. Mauvaise idée : la communauté y vit très bien, et la valeur est justement dans son historique. La bonne question est : <strong>comment faire de cet existant, sans le toucher, la source de vérité d&rsquo;une IA moderne ?</strong></p>
 
       <h2>L&rsquo;architecture : un modèle qui ne « sait » rien — et c&rsquo;est voulu</h2>
-      <p>Le chatbot fonctionne en <strong>RAG</strong> (retrieval-augmented generation) : le modèle de langage n&rsquo;a aucune connaissance propre du site. À chaque question, le serveur assemble un dossier de faits, et le modèle a pour instruction de répondre <em>uniquement</em> à partir de ce dossier. Trois sources l&rsquo;alimentent :</p>
+      <p>Le Père Hervé fonctionne en <strong>RAG</strong> (retrieval-augmented generation) : le modèle de langage n&rsquo;a aucune connaissance propre du site. À chaque question, le serveur assemble un dossier de faits, et le modèle a pour instruction de répondre <em>uniquement</em> à partir de ce dossier. Trois sources l&rsquo;alimentent :</p>
       <ul>
         <li><strong>Un socle rédigé</strong> — l&rsquo;identité de l&rsquo;association, l&rsquo;histoire du moteur, les fiches véhicules : des faits stables, maintenus comme du contenu éditorial ;</li>
         <li><strong>Le forum, en direct</strong> — les sujets et l&rsquo;activité de la communauté au moment où la question est posée ;</li>
@@ -153,14 +153,14 @@
       <ol>
         <li><strong>Zéro connaissance implicite.</strong> Si le dossier de faits ne contient pas la réponse, le chatbot le dit et oriente vers le forum ou l&rsquo;association — il ne complète jamais avec sa « culture générale », premier réservoir à hallucinations.</li>
         <li><strong>Citer les titres de sujets mot pour mot.</strong> Un titre paraphrasé est un sujet inventé : le visiteur ne le retrouvera pas. Les titres remontés de la base sont restitués verbatim, avec leur lien.</li>
-        <li><strong>Ne rien présumer des membres.</strong> Sur le forum d&rsquo;une association dédiée à un moteur bien précis, tous les véhicules des membres n&rsquo;ont pas ce moteur — certains roulent même en diesel quand le club célèbre un essence. Le chatbot a appris à ne pas « corriger » la réalité pour la rendre plus cohérente.</li>
+        <li><strong>Ne rien présumer des membres.</strong> Sur le forum d&rsquo;une association dédiée à un moteur V6, tous les véhicules des membres n&rsquo;ont pas ce moteur — il y a là-bas une Renault 25 turbo-Diesel. Le chatbot a appris à ne pas « corriger » la réalité pour la rendre plus cohérente.</li>
         <li><strong>Une température basse et des réponses courtes.</strong> Moins on laisse le modèle « créer », moins il dérive ; et une réponse concise se vérifie d&rsquo;un coup d&rsquo;œil.</li>
       </ol>
 
       <h2>Les garde-fous : côté serveur, pas seulement dans le prompt</h2>
       <p>La leçon la plus importante de ces semaines de mise au point : <strong>les instructions données au modèle ne sont pas des garanties</strong>. Un modèle économique paraphrase, oublie, se laisse embarquer par la formulation d&rsquo;une question. Chaque règle critique existe donc en deux exemplaires : une consigne dans le prompt, et un mécanisme déterministe côté serveur qui s&rsquo;applique quoi qu&rsquo;il arrive.</p>
       <ul>
-        <li><strong>Filtrage du contenu sensible.</strong> Un forum automobile contient des discussions sur des préparations non homologuées pour la route : elles sont écartées des réponses côté serveur, silencieusement — pas seulement « interdites » au modèle.</li>
+        <li><strong>Filtrage du contenu sensible.</strong> Tout forum vivant contient des échanges qui n&rsquo;ont pas leur place dans la bouche de l&rsquo;assistant officiel du site : certains sujets sont écartés des réponses côté serveur, silencieusement — pas seulement « interdits » au modèle.</li>
         <li><strong>Vie privée des membres.</strong> Le chatbot ne publie des personnes que ce que le site rend public : les rôles au bureau, rien de plus.</li>
         <li><strong>Aucun lien externe.</strong> Le chatbot ne pointe jamais hors du site — les URLs sont vérifiées et réécrites au besoin après génération.</li>
         <li><strong>Un repli résilient.</strong> Si le modèle est indisponible, les données réelles — sujets du forum, produits de la boutique — restent servies telles quelles, et l&rsquo;interface l&rsquo;annonce honnêtement.</li>
@@ -168,7 +168,7 @@
       </ul>
 
       <h2>Quand le chatbot devient membre du forum</h2>
-      <p>Dernière étape, la plus inattendue : la mascotte n&rsquo;est pas qu&rsquo;un guichet de réponses — elle participe. La validation des inscriptions au forum est automatisée par un script planifié, et c&rsquo;est son compte de membre qui envoie les messages privés de bienvenue et répond aux présentations des nouveaux membres. Même identité des deux côtés : demandez au chatbot comment se passe une inscription, il répond « je t&rsquo;enverrai un message de bienvenue » — à la première personne, parce que c&rsquo;est vrai.</p>
+      <p>Dernière étape, la plus inattendue : le Père Hervé n&rsquo;est pas qu&rsquo;un guichet de réponses — il participe. La validation des inscriptions au forum est automatisée par un script planifié, et c&rsquo;est le compte « Père Hervé » qui envoie les messages privés de bienvenue et répond aux présentations des nouveaux membres. Même identité des deux côtés : quand on demande au chatbot comment se passe une inscription, il répond « je t&rsquo;enverrai un message de bienvenue » — à la première personne, parce que c&rsquo;est vrai.</p>
 
       <h2>Ce que ce chantier démontre</h2>
       <p>Ce qui vaut pour un forum phpBB vaut pour tout patrimoine documentaire : wiki interne, FAQ historique, base de tickets, archives métier. Trois enseignements transposables :</p>

@@ -4,7 +4,7 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base | NSY</title>
-<meta name="description" content="Years of enthusiast discussions sleep inside forums. Field report: on a car club's website, an AI chatbot queries the phpBB forum database directly — with the anti-hallucination guardrails that make the difference." />
+<meta name="description" content="Years of enthusiast discussions sleep inside forums. Field report from prv-concept.com: an AI chatbot that queries the phpBB database directly, with the anti-hallucination guardrails that make the difference." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
 <link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
@@ -16,7 +16,7 @@
 <meta property="og:locale" content="en_GB" />
 <meta property="og:url" content="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
 <meta property="og:title" content="Wiring an AI chatbot into a forum: web 1.0 as a knowledge base" />
-<meta property="og:description" content="How a car club's chatbot answers from a phpBB forum — architecture, performance, anti-hallucination training and server-side guardrails." />
+<meta property="og:description" content="How the prv-concept.com chatbot answers from a phpBB forum — architecture, performance, anti-hallucination training and server-side guardrails." />
 <meta property="og:image" content="https://www.nsy.fr/public/chatbot-forum-article-en.jpg" />
 <meta property="og:image:width" content="1140" />
 <meta property="og:image:height" content="760" />
@@ -24,7 +24,7 @@
 
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Wiring an AI chatbot into a forum | NSY" />
-<meta name="twitter:description" content="Web 1.0 as an AI knowledge base: a concrete field report, guardrails included." />
+<meta name="twitter:description" content="Web 1.0 as an AI knowledge base: the PRV Concept case, guardrails included." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/chatbot-forum-article-en.jpg" />
 
 <link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
@@ -55,7 +55,7 @@
       "@type": "BlogPosting",
       "@id": "https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html#article",
       "headline": "Wiring an AI chatbot into a forum: web 1.0 as a knowledge base",
-      "description": "Field report: on a car club's website, an AI chatbot queries the phpBB forum database directly — with the anti-hallucination guardrails that make the difference.",
+      "description": "Field report from prv-concept.com: an AI chatbot that queries the phpBB database directly, with the anti-hallucination guardrails that make the difference.",
       "inLanguage": "en",
       "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/about.html"},
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
@@ -125,18 +125,18 @@
     <article class="legal-page article">
       <div class="article-meta">8 August 2026 · Cédric Barme · Reading ≈ 7 min</div>
       <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Wiring an AI chatbot into a forum:<br />web 1.0 as a knowledge base</h1>
-      <p class="lede" style="font-size: 17px;">Years of solved breakdowns, documented restorations and specialist answers — forums are gold mines of knowledge. But that knowledge sleeps in a format AI assistants ignore. A concrete field report: since summer 2026, on the website of a classic-car enthusiasts&rsquo; association built by NSY, the site&rsquo;s mascot — a virtual "workshop foreman" — answers visitors using the community&rsquo;s phpBB forum. Here is how, and above all with which guardrails.</p>
+      <p class="lede" style="font-size: 17px;">Years of solved breakdowns, documented restorations and specialist answers — forums are gold mines of knowledge. But that knowledge sleeps in a format AI assistants ignore. A concrete field report: since summer 2026, the chatbot on <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — « Père Hervé », the workshop-foreman mascot of the association dedicated to the PRV V6 engine — answers visitors using the community&rsquo;s phpBB forum. Here is how, and above all with which guardrails.</p>
       <figure style="margin: 26px 0 6px;">
         <img src="public/chatbot-forum-article-en.jpg" alt="Infographic — an AI chatbot wired into the phpBB forum: the database queried live, with anti-hallucination guardrails" loading="lazy" width="1140" height="760" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
       </figure>
 
 
       <h2>The web 1.0 paradox</h2>
-      <p>An enthusiast forum is the closest thing there is to a living knowledge base: questions are asked in users&rsquo; real words, answers come from people who have actually taken the engine apart, and every solved case stays archived. It is precisely what no language model can reproduce: those discussions are not in its training corpora, or only as fragments. Asked cold about a niche piece of classic mechanical engineering, an LLM does what it always does when it does not know: it improvises with confidence. Purists will object that a forum — content created by its members — technically belongs to the early participatory web, "2.0" before the term existed; "web 1.0" is used here as the shorthand everyone understands for that earlier web, server-rendered and proud of its pagination.</p>
+      <p>An enthusiast forum is the closest thing there is to a living knowledge base: questions are asked in users&rsquo; real words, answers come from people who have actually taken the engine apart, and every solved case stays archived. It is precisely what no language model can reproduce: those discussions are not in its training corpora, or only as fragments. Asked cold about a subject as niche as the PRV V6, an LLM does what it always does when it does not know: it improvises with confidence. Purists will object that a forum — content created by its members — technically belongs to the early participatory web, "2.0" before the term existed; "web 1.0" is used here as the shorthand everyone understands for that earlier web, server-rendered and proud of its pagination.</p>
       <p>The classic reflex would be to modernise the forum or rewrite its content. Bad idea: the community lives there happily, and the value lies precisely in its history. The right question is: <strong>how do you make this untouched legacy the source of truth of a modern AI?</strong></p>
 
       <h2>The architecture: a model that "knows" nothing — by design</h2>
-      <p>The chatbot runs on <strong>RAG</strong> (retrieval-augmented generation): the language model has no knowledge of the site of its own. For every question, the server assembles a folder of facts, and the model is instructed to answer <em>only</em> from that folder. Three sources feed it:</p>
+      <p>Père Hervé runs on <strong>RAG</strong> (retrieval-augmented generation): the language model has no knowledge of the site of its own. For every question, the server assembles a folder of facts, and the model is instructed to answer <em>only</em> from that folder. Three sources feed it:</p>
       <ul>
         <li><strong>A written foundation</strong> — the association&rsquo;s identity, the engine&rsquo;s history, the vehicle files: stable facts, maintained like editorial content;</li>
         <li><strong>The forum, live</strong> — the community&rsquo;s topics and activity at the moment the question is asked;</li>
@@ -151,14 +151,14 @@
       <ol>
         <li><strong>Zero implicit knowledge.</strong> If the folder of facts does not contain the answer, the chatbot says so and points to the forum or the association — it never fills in with its "general culture", the primary reservoir of hallucinations.</li>
         <li><strong>Quote topic titles word for word.</strong> A paraphrased title is an invented topic: the visitor will never find it. Titles surfaced from the database are rendered verbatim, with their link.</li>
-        <li><strong>Assume nothing about members.</strong> On the forum of an association devoted to one specific engine, not every member&rsquo;s car has that engine — some members even run diesels while the club celebrates a petrol unit. The chatbot has learned not to "fix" reality to make it more consistent.</li>
+        <li><strong>Assume nothing about members.</strong> On the forum of an association devoted to a V6 engine, not every member&rsquo;s car has that engine — there is a turbo-diesel Renault 25 over there. The chatbot has learned not to "fix" reality to make it more consistent.</li>
         <li><strong>Low temperature, short answers.</strong> The less the model is allowed to "create", the less it drifts; and a concise answer can be checked at a glance.</li>
       </ol>
 
       <h2>The guardrails: server-side, not just in the prompt</h2>
       <p>The most important lesson of these weeks of tuning: <strong>instructions given to the model are not guarantees</strong>. An economical model paraphrases, forgets, gets carried along by how a question is phrased. Every critical rule therefore exists twice: as a prompt instruction, and as a deterministic server-side mechanism that applies no matter what.</p>
       <ul>
-        <li><strong>Sensitive-content filtering.</strong> A car forum contains discussions about road-illegal tuning: those are excluded from answers server-side, silently — not merely "forbidden" to the model.</li>
+        <li><strong>Sensitive-content filtering.</strong> Every living forum holds exchanges that do not belong in the mouth of the site&rsquo;s official assistant: some topics are excluded from answers server-side, silently — not merely "forbidden" to the model.</li>
         <li><strong>Members&rsquo; privacy.</strong> The chatbot only shares what the site makes public about people: committee roles, nothing more.</li>
         <li><strong>No external links, ever.</strong> The chatbot never points outside the site — URLs are checked and rewritten after generation if needed.</li>
         <li><strong>A resilient fallback.</strong> If the model is unavailable, the real data — forum topics, shop products — keeps being served as-is, and the interface says so honestly.</li>
@@ -166,7 +166,7 @@
       </ul>
 
       <h2>When the chatbot becomes a forum member</h2>
-      <p>The last step is the most unexpected: the mascot is not just an answer desk — it takes part. Forum registration validation is automated by a scheduled script, and it is its own member account that sends the welcome private messages and replies to new members&rsquo; introduction posts. One identity on both sides: ask the chatbot how registration works and it answers "I will send you a welcome message" — in the first person, because it is true.</p>
+      <p>The last step is the most unexpected: Père Hervé is not just an answer desk — he takes part. Forum registration validation is automated by a scheduled script, and it is the « Père Hervé » account that sends the welcome private messages and replies to new members&rsquo; introduction posts. One identity on both sides: ask the chatbot how registration works and it answers "I will send you a welcome message" — in the first person, because it is true.</p>
 
       <h2>What this project demonstrates</h2>
       <p>What holds for a phpBB forum holds for any documentary heritage: internal wikis, historical FAQs, ticket archives, business records. Three transferable lessons:</p>
