@@ -379,6 +379,8 @@ function nsy_sanitize_reply(string $reply): string
         // en MINUSCULES — la comparaison lowercase l'exige) :
         'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%c3%a9-sur-google-0znee',
         'https://www.facebook.com/share/17vylqjake',
+        'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25c3%25a0-condition-1icee',
+        'https://www.facebook.com/share/p/1ey4fxbyda',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -415,6 +417,10 @@ function nsy_sanitize_reply(string $reply): string
         'seo-geo-etre-cite-par-les-ia.html' => [
             'linkedin' => 'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee',
             'facebook' => 'https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr',
+        ],
+        'chatbot-ia-forum-base-de-connaissances.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee',
+            'facebook' => 'https://www.facebook.com/share/p/1Ey4FXBYDA',
         ],
     ];
     if (!replyIsEnglish($reply)) {

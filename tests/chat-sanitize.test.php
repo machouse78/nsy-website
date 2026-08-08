@@ -30,6 +30,8 @@ $officials = [
     'https://www.youtube.com/@new-software-yard',
     'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%C3%A9-sur-google-0znee',
     'https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr',
+    'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee',
+    'https://www.facebook.com/share/p/1Ey4FXBYDA',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));
@@ -75,6 +77,10 @@ $r = nsy_sanitize_reply("Read the [article](seo-geo-getting-cited-by-ai.html) ab
 t('réponse EN → pas d\'ajout (publications FR)', !str_contains($r, 'facebook.com'));
 $r = nsy_sanitize_reply('Bonjour, la page [Contact](contact.html) et voilà.');
 t('pas d\'article cité → rien d\'ajouté', !str_contains($r, 'facebook.com'));
+
+$r = nsy_sanitize_reply("Voir notre [article](chatbot-ia-forum-base-de-connaissances.html) sur le sujet et voilà.");
+t('article 2 cité sans socials → LinkedIn + Facebook ajoutés',
+  str_contains($r, 'linkedin.com/pulse/votre-forum') && str_contains($r, 'facebook.com/share/p/1Ey4FXBYDA'));
 
 // ── Formulations bannies (positionnement ESN) → réécrites côté serveur ──
 t('« sans intermédiaire » → « en prise directe »',

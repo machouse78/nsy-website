@@ -40,6 +40,12 @@ t('article LinkedIn Pulse whitelisté', o.includes('href="https://www.linkedin.c
 o = mdToHtml('Post [Facebook](https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr) ici.');
 t('post Facebook whitelisté', o.includes('href="https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr"'));
 
+o = mdToHtml('Article [forum & IA](https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee) ici.');
+t('article LinkedIn Pulse n°2 whitelisté', o.includes('href="https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee"'));
+
+o = mdToHtml('Post [Facebook](https://www.facebook.com/share/p/1Ey4FXBYDA) ici.');
+t('post Facebook n°2 whitelisté', o.includes('href="https://www.facebook.com/share/p/1Ey4FXBYDA"'));
+
 o = mdToHtml('Essayez [Wix](https://www.wix.com) ou https://evil.com/x directement.');
 t('externe markdown → libellé inerte', o.includes('Wix') && !o.includes('href="https://www.wix.com'));
 t('externe nu reste texte inerte', !o.includes('href="https://evil.com'));

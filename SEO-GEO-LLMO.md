@@ -188,6 +188,12 @@ même fait sur ≥2 sources indépendantes).
   (recoupement de l'entité NSY). Réutiliser ce couple de posts (pro LinkedIn /
   grand public Facebook) pour chaque nouvel article du journal.
 
+- **Distribution sociale de l'article « Chatbot IA & forum »** ✅ (août 2026) —
+  l'article https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html publié sur :
+  - Article LinkedIn (Pulse, cible du bouton « Lire sur LinkedIn ») :
+    https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee
+  - Post Facebook (cible du bouton « Lire sur Facebook ») : https://www.facebook.com/share/p/1Ey4FXBYDA
+
 **Backlink PRV — appliqué ✅** (voir l'entrée dans « Fait » ci-dessus).
 Règle conservée pour les prochains crédits « Propulsé par NSY » sur les
 sites clients : lien `dofollow` vers l'URL canonique exacte, marque + court
