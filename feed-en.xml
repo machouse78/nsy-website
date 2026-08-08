@@ -7,6 +7,13 @@
   <language>en</language>
   <atom:link href="https://www.nsy.fr/feed-en.xml" rel="self" type="application/rss+xml" />
   <item>
+    <title>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base</title>
+    <link>https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</guid>
+    <pubDate>Sat, 08 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Years of enthusiast discussions sleep inside forums. Field report from prv-concept.com: an AI chatbot that queries the phpBB database directly, with the anti-hallucination guardrails that make the difference.</description>
+  </item>
+  <item>
     <title>SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity</title>
     <link>https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</link>
     <guid isPermaLink="true">https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</guid>

@@ -7,6 +7,13 @@
   <language>fr</language>
   <atom:link href="https://www.nsy.fr/feed.xml" rel="self" type="application/rss+xml" />
   <item>
+    <title>Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances</title>
+    <link>https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</guid>
+    <pubDate>Sat, 08 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Des années de discussions de passionnés dorment dans les forums. Retour d'expérience sur prv-concept.com : un chatbot IA qui interroge directement la base du forum phpBB, avec les garde-fous anti-hallucination qui font la différence.</description>
+  </item>
+  <item>
     <title>SEO vs GEO : être cité par ChatGPT, Claude et Perplexity</title>
     <link>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</link>
     <guid isPermaLink="true">https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</guid>

@@ -128,6 +128,14 @@ associations et indépendants en transition numérique.
 
 ### Journal — retours d'expérience publiés
 
+- « Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances »
+  (8 août 2026) : https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html
+  Sujet : le cas PRV Concept — le chatbot « Père Hervé » ancré en RAG sur le
+  forum phpBB, interrogé DIRECTEMENT en base de données (performance, fraîcheur,
+  contrôle fin), règles anti-hallucination (zéro connaissance implicite, titres
+  cités verbatim) et garde-fous côté serveur (filtrage, vie privée, repli
+  résilient, tests de régression).
+
 - « SEO vs GEO : être cité par ChatGPT, Claude et Perplexity » (29 juillet 2026) :
   https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html
   Sujet : le SEO vise le classement Google ; le GEO (Generative Engine
