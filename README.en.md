@@ -34,7 +34,7 @@
 | Page | FR ↔ EN URL | Content |
 |---|---|---|
 | **Home** | `index.html` ↔ `index-en.html` | Landing: hero + marquee + **journal news** (→ Insights, animated thumbnail) + preview of the 2 offerings (→ Services) + profile teaser (→ About) + CTA banner (→ Contact) |
-| **Insights** | `blog.html` ↔ `blog-en.html` (FR: « Journal ») | Field notes (bilingual articles, RSS feeds `feed.xml`/`feed-en.xml`); latest-article teaser on the home page; « Read on LinkedIn / Facebook » buttons at the end of articles |
+| **Insights** | `blog.html` ↔ `blog-en.html` (FR: « Journal ») | Field notes (bilingual articles, RSS feeds `feed.xml`/`feed-en.xml`); 5-latest-articles teaser on the home page (newest first); « Read on LinkedIn / Facebook » buttons at the end of articles |
 | **Services** | `services.html` ↔ `services-en.html` | 2 detailed cards (consulting / AI web) + method (4 steps) + values + 3D preview (→ 3D Design) |
 | **Work** | `realisations.html` ↔ `portfolio.html` | Client cards with **animated previews** (`record-realisation.mjs`), in chronological order: PRV Concept then Le Cerf Thym |
 | **About** | `a-propos.html` ↔ `about.html` | Cédric Barme's profile, signals, background, **"Why NSY exists" story**, principles |

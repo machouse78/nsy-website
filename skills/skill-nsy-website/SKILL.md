@@ -207,7 +207,8 @@ must hold in every change.
   teaser section** (FR + EN, `.blog-list`/`.blog-card` — component CSS is global
   in `css/style.css`, blog pages also embed identical local copies).
   **New article checklist** = FR/EN pair + blog-index cards + **homepage teaser
-  card (index.html + index-en.html — keep it = the LATEST article)** + RSS
+  cards (index.html + index-en.html — the 5 LATEST articles, newest first ;
+  drop the oldest card once there are more than 5)** + RSS
   `<item>` (feed.xml/feed-en.xml) + sitemap + llms.txt + `indexnow-ping` post-deploy.
   THEN the social cycle — EVERY article, same order:
   1. Write TWO distinct posts (not one copy-paste): pro tone for LinkedIn,
