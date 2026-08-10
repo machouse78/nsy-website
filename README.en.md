@@ -81,6 +81,12 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 ## Interactive features
 
+- **Journal view/like counters**: a discreet bar under each article's date
+  (`journal-stats.php`, file storage in `_secret/`, no personal data — per-article
+  aggregates only, one shared counter per FR/EN pair). View counted once per
+  session, toggleable like (state in localStorage), hashed-IP daily cap,
+  dedicated unit + HTTP tests.
+
 - **Dynamic year & experience** : `data-current-year`, `data-years`, `data-years-fr` injected in JS (based on `2026 - 14 = 2012` as the career start year)
 - **Sticky nav** (`position: sticky`) + a cyan **reading gauge** under the menu (composited scaleX). Gotcha solved: `overflow-x: hidden` on `html/body` silently disabled sticky → replaced with `overflow-x: clip` (same fix as prv-concept.com), with `scroll-padding-top` so anchors land below the menu
 - **Nav scroll-spy** via `IntersectionObserver` — the active item turns cyan
@@ -193,6 +199,7 @@ nsy-website/
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
 ├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
 ├── antispam.php                         # Shared anti-spam filter (contact + feasibility)
+├── journal-stats.php                    # Journal view/like counters (file storage in _secret/)
 ├── css/style.css                        # Complete styles (includes the .qz- questionnaire namespace)
 ├── js/app.js                            # Chatbot, i18n, video swaps, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Questionnaire wizard (navigation + collection + send)
@@ -240,12 +247,13 @@ nsy-website/
 
 ## Unit tests (chatbot)
 
-`./tests/run-tests.sh` — lint + suites on the **real code**: `nsy_sanitize_reply()`
+`./tests/run-tests.sh` — lint + suites on the **real code** (incl. the journal
+counters endpoint, HTTP-tested in a `php -S` sandbox): `nsy_sanitize_reply()`
 from `chat.php` (official-links whitelist, FR/EN linkmap, `()` purge, cap,
 banned-phrasing rewrite — ESN positioning —, deterministic append of article
 social links) via Docker PHP, and `mdToHtml` from `js/app.js` (clickable
-whitelisted links, XSS escaping) via Node. **Run before any commit touching
-`chat.php` or `js/app.js`.**
+whitelisted links, XSS escaping) via Node. **Run before any commit touching `chat.php`, `js/app.js`, `contact.php`,
+`faisabilite.php`, `antispam.php` or `journal-stats.php`.**
 
 ## Test locally
 

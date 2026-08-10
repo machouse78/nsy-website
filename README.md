@@ -193,6 +193,7 @@ nsy-website/
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
 ├── antispam.php                         # Filtre anti-spam partagé (contact + faisabilité)
+├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
@@ -254,7 +255,8 @@ nsy-website/
 - `mdToHtml` de `js/app.js` : liens cliquables whitelistés, échappement XSS ;
 - `antispam.php` : scoring de contenu (URLs, raccourcisseurs, mots-clés,
   majuscules, montants), seuil, plafond journalier par IP ;
-- **formulaires en intégration HTTP** : `contact.php` + `faisabilite.php` copiés
+- **formulaires + compteurs du journal en intégration HTTP** : `contact.php`,
+  `faisabilite.php` et `journal-stats.php` copiés
   tels quels dans un bac à sable `php -S` avec `_secret` factice
   (`turnstile_secret` vide → vérification sautée, SMTP sur port fermé → une
   soumission valide atteint l'étape d'envoi **sans qu'aucun email ne parte**) —
@@ -262,7 +264,7 @@ nsy-website/
   plafond 5/jour, chemin d'envoi.
 
 **À lancer avant tout commit qui touche `chat.php`, `js/app.js`, `contact.php`,
-`faisabilite.php` ou `antispam.php`.**
+`faisabilite.php`, `antispam.php` ou `journal-stats.php`.**
 
 Et à la demande, après un déploiement : `./tests/forms-live.sh` — smoke test
 **production** des deux formulaires sans jamais pouvoir envoyer d'email (405,
