@@ -118,6 +118,7 @@ mkdir -p deploy/public
 # Images
 cp public/nsy-logo.png                  deploy/public/
 cp public/nsy-og.jpg                    deploy/public/
+cp public/nsy-hero-poster.jpg           deploy/public/   # vignette OPAQUE du hero (GSC refuse l'alpha)
 cp public/photo-profil.jpg              deploy/public/
 cp public/finance-assurance.png         deploy/public/
 cp public/finance-assurance.webp        deploy/public/   # version allégée (-90%) chargée par les pages
