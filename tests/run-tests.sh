@@ -5,7 +5,7 @@ set -e
 cd "$(dirname "$0")/.."
 echo "── Lint ──"
 node --check js/app.js && echo "  ✓ js/app.js"
-docker run --rm -v "$PWD:/app" php:8.3-cli-alpine sh -c 'php -l /app/chat.php && php -l /app/contact.php && php -l /app/faisabilite.php && php -l /app/antispam.php' | sed 's/^/  ✓ /'
+docker run --rm -v "$PWD:/app" php:8.3-cli-alpine sh -c 'php -l /app/chat.php && php -l /app/contact.php && php -l /app/faisabilite.php && php -l /app/antispam.php && php -l /app/journal-stats.php' | sed 's/^/  ✓ /'
 echo "── mdToHtml (js/app.js, code réel) ──"
 node tests/mdtohtml.test.mjs
 echo "── nsy_sanitize_reply (chat.php, code réel) ──"

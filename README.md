@@ -81,6 +81,11 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 ## Fonctionnalités interactives
 
+- **Compteurs de vues / « j'aime » du journal** : barre discrète sous la date de
+  chaque article (`journal-stats.php`, stockage fichier dans `_secret/`, aucun
+  contenu personnel — des agrégats par article, un seul compteur pour la paire
+  FR/EN). Vue comptée une fois par session, « j'aime » togglable (état en
+  localStorage), plafond journalier par IP hachée, tests unitaires + HTTP dédiés
 - **Année & expérience dynamiques** : `data-current-year`, `data-years`, `data-years-fr` injectés en JS (basé sur `2026 - 14 = 2012` comme année de début de carrière)
 - **Nav ancrée** (`position: sticky`) + **jauge de lecture** cyan sous le menu (scaleX composité). Piège résolu : `overflow-x: hidden` sur `html/body` désactivait silencieusement le sticky → remplacé par `overflow-x: clip` (même correctif que prv-concept.com), avec `scroll-padding-top` pour que les ancres atterrissent sous le menu
 - **Scroll-spy nav** via `IntersectionObserver` — la rubrique active passe en cyan

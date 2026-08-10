@@ -1568,3 +1568,53 @@
     }
   }
 })();
+
+/* ───── Journal : compteurs de vues / « j'aime » (journal-stats.php) ─────
+   Clé = slug FR (data-slug, partagé par la paire FR/EN). La vue n'est comptée
+   qu'une fois par session (sessionStorage) ; l'état « aimé » vit en
+   localStorage. Tout échec réseau laisse simplement la barre masquée. */
+(function () {
+  var el = document.querySelector('[data-journal-stats]');
+  if (!el || !window.fetch) return;
+  var slug = el.getAttribute('data-slug');
+  var en = (document.documentElement.lang || 'fr') === 'en';
+  var viewsEl = el.querySelector('.js-views');
+  var likeBtn = el.querySelector('.js-like');
+  var likeLabel = el.querySelector('.js-like-label');
+  var likedKey = 'nsy_liked_' + slug, viewedKey = 'nsy_viewed_' + slug;
+  var liked = false;
+  try { liked = localStorage.getItem(likedKey) === '1'; } catch (e) {}
+
+  function fmt(n) { return Number(n || 0).toLocaleString(en ? 'en-GB' : 'fr-FR'); }
+  function render(d) {
+    viewsEl.textContent = fmt(d.views) + (en ? (d.views > 1 ? ' views' : ' view') : (d.views > 1 ? ' vues' : ' vue'));
+    likeLabel.textContent = (en ? 'Like' : 'J\u2019aime') + ' (' + fmt(d.likes) + ')';
+    likeBtn.classList.toggle('liked', liked);
+    likeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+    el.hidden = false;
+  }
+  function call(action) {
+    return fetch('journal-stats.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: slug, action: action })
+    }).then(function (r) { return r.json(); });
+  }
+
+  var first = 'get';
+  try {
+    if (!sessionStorage.getItem(viewedKey)) { first = 'view'; sessionStorage.setItem(viewedKey, '1'); }
+  } catch (e) {}
+  call(first).then(function (d) { if (d && d.ok) render(d); }).catch(function () {});
+
+  var busy = false;
+  likeBtn.addEventListener('click', function () {
+    if (busy) return;
+    busy = true;
+    var action = liked ? 'unlike' : 'like';
+    liked = !liked;
+    try { localStorage.setItem(likedKey, liked ? '1' : '0'); } catch (e) {}
+    call(action).then(function (d) { if (d && d.ok) render(d); })
+      .catch(function () {}).finally(function () { busy = false; });
+  });
+})();

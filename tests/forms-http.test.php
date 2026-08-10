@@ -24,7 +24,8 @@ $SB  = sys_get_temp_dir() . '/nsy-forms-sb';
 exec('rm -rf ' . escapeshellarg($SB));
 @mkdir($SB . '/_secret', 0777, true);
 @mkdir($SB . '/vendor/PHPMailer/src', 0777, true);
-foreach (['contact.php', 'faisabilite.php', 'antispam.php'] as $f) copy("$APP/$f", "$SB/$f");
+foreach (['contact.php', 'faisabilite.php', 'antispam.php', 'journal-stats.php'] as $f) copy("$APP/$f", "$SB/$f");
+file_put_contents("$SB/fake-article.html", '<html></html>');
 foreach (glob("$APP/vendor/PHPMailer/src/*.php") as $f) copy($f, "$SB/vendor/PHPMailer/src/" . basename($f));
 file_put_contents("$SB/_secret/config.php", <<<'CFG'
 <?php return [
@@ -127,6 +128,35 @@ resetLimits();
 [$c, $j] = req('/faisabilite.php', ['lang' => 'fr', 'contact_nom' => 'Marie Dupont', 'contact_email' => 'm@exemple.fr',
     'payload' => json_encode(['projet' => 'Site vitrine avec chatbot', 'delai' => 'à cadrer'])]);
 t("faisabilite valide → atteint l'envoi SMTP (échec propre en bac à sable)", $c === 500, "code $c");
+
+// ── journal-stats.php ──
+resetLimits();
+[$c, $j] = req('/journal-stats.php', null);
+t('jstats GET → 405', $c === 405, "code $c");
+
+function jreq(array $payload): array {
+    global $port;
+    $opts = ['http' => ['method' => 'POST', 'ignore_errors' => true, 'timeout' => 20,
+        'header' => "Content-Type: application/json\r\nOrigin: http://localhost\r\n",
+        'content' => json_encode($payload)]];
+    $body = file_get_contents("http://127.0.0.1:$port/journal-stats.php", false, stream_context_create($opts));
+    preg_match('#HTTP/\S+ (\d+)#', $http_response_header[0] ?? '', $m);
+    return [(int)($m[1] ?? 0), json_decode((string)$body, true) ?: []];
+}
+[$c, $j] = jreq(['slug' => 'nexiste-pas.html', 'action' => 'view']);
+t('jstats slug inconnu → 400', $c === 400, "code $c");
+[$c, $j] = jreq(['slug' => '../_secret/config.php', 'action' => 'view']);
+t('jstats slug hors pattern → 400', $c === 400, "code $c");
+[$c, $j] = jreq(['slug' => 'fake-article.html', 'action' => 'view']);
+t('jstats vue comptée', $c === 200 && ($j['views'] ?? 0) === 1, "code $c views " . ($j['views'] ?? '—'));
+[$c, $j] = jreq(['slug' => 'fake-article.html', 'action' => 'like']);
+t('jstats like', ($j['likes'] ?? 0) === 1);
+[$c, $j] = jreq(['slug' => 'fake-article.html', 'action' => 'unlike']);
+t('jstats unlike (plancher 0 ensuite)', ($j['likes'] ?? -1) === 0);
+[$c, $j] = jreq(['slug' => 'fake-article.html', 'action' => 'unlike']);
+t('jstats unlike sous 0 impossible', ($j['likes'] ?? -1) === 0);
+[$c, $j] = jreq(['slug' => 'fake-article.html', 'action' => 'get']);
+t('jstats get sans effet de bord', ($j['views'] ?? 0) === 1 && ($j['likes'] ?? -1) === 0);
 
 proc_terminate($proc);
 exec('rm -rf ' . escapeshellarg($SB));

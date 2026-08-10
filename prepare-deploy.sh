@@ -51,6 +51,7 @@ cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp chat.php              deploy/
 cp antispam.php          deploy/   # filtre anti-spam partage (contact + faisabilite)
+cp journal-stats.php     deploy/   # compteurs vues / j'aime du journal
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
 cp llms.txt              deploy/
