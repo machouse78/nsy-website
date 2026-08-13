@@ -33,6 +33,19 @@ t('lien BBCode injecté → +4 cumulés', nsy_spam_score('Hello [url=http://x]cl
 t('TLD .ru + URL → spam', nsy_is_spam('Visit https://promo.example.ru now'));
 t('MAJUSCULES + $ + mot-clé → spam', nsy_is_spam('EARN UNLIMITED CASH TODAY GUARANTEED $1,500 viagra'));
 
+// ── Régression : LE spam réel passé au travers le 13 août 2026 ──
+t('spam réel du 13/08 (psee.io + clique ici + 950K€ + Roman9f) → BLOQUÉ',
+  nsy_is_spam('Un inconnu vient de gagner 950K€. Sa seule astuce? Avoir clique ici => psee.io/8qtcnn',
+              'elsieiah7@mail.com', 'Roman9f', 'google'));
+t('montant chiffre AVANT le symbole (950K€) détecté', nsy_spam_score('offre exceptionnelle 950K€ pour vous') >= 2);
+t('« clique ici » (français) détecté', nsy_spam_score('Pour en profiter clique ici sans attendre') >= 3);
+t('raccourcisseur sans schéma (psee.io/x) → spam', nsy_is_spam('Regarde psee.io/8qtcnn vite'));
+t('domaine/chemin sans schéma détecté', nsy_spam_score('super offre sur promo-site.biz/go') >= 2);
+t('nom avec chiffres (Roman9f) détecté', nsy_spam_score('Bonjour, je souhaite un devis pour mon site.', 'a@b.fr', 'Roman9f') >= 2);
+t('URL légitime AVEC chemin : pas de double comptage (< seuil)',
+  nsy_spam_score('Notre site actuel : https://www.exemple.fr/nos-services — refonte à prévoir.') < NSY_SPAM_THRESHOLD);
+t('montant rédigé légitime toujours < seuil', nsy_spam_score('Le budget est de 15 000 € environ, à affiner ensemble.') < NSY_SPAM_THRESHOLD);
+
 // ── Plafond journalier (code réel sur fichiers temp, clé isolée) ──
 $key = 'test' . substr(md5((string)mt_rand()), 0, 8);
 $ip  = '203.0.113.42';

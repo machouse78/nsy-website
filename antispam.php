@@ -39,6 +39,7 @@ function nsy_spam_score(string $message, string $email = '', string $name = '', 
     $badHosts = [
         'telegra.ph', 't.me', 'bit.ly', 'tinyurl', 'cutt.ly', 'is.gd', 'goo.gl',
         'wa.me', 'api.whatsapp', 'rebrand.ly', 'shorturl', 'ow.ly', 'tiny.cc',
+        'psee.io', 'rb.gy', 's.id', 'v.ht', 'clck.ru', 'u.to', 'soo.gd',
     ];
     foreach ($badHosts as $h) {
         if (str_contains($blob, $h)) {
@@ -58,6 +59,10 @@ function nsy_spam_score(string $message, string $email = '', string $name = '', 
         'passive income', 'work from home', 'investment opportunity', 'binary option',
         'get rich', 'free money', 'click here', 'limited offer', 'act now', 'weight loss',
         'gambling', 'jackpot', 'win big', 'webcam', 'adult content', 'nude',
+        // — français (expressions précises pour éviter les faux positifs) —
+        'cliquez ici', 'clique ici', 'vient de gagner', 'vous avez gagné',
+        'argent facile', 'revenu passif', 'revenus passifs', 'devenir riche',
+        "gagner de l'argent", 'sans rien faire', 'offre limitée', 'agissez vite',
     ];
     foreach ($kw as $k) {
         if (str_contains($blob, $k)) {
@@ -65,8 +70,19 @@ function nsy_spam_score(string $message, string $email = '', string $name = '', 
         }
     }
 
-    // 4) Montants « $1,500 », « €500/day »…
-    if (preg_match('#[$€£]\s?\d[\d.,]{2,}#u', $text)) {
+    // 4) Montants « $1,500 », « €500/day »… et « 950K€ », « 1 500 € »
+    // (chiffre avant OU après le symbole — le spam FR écrit le montant d'abord).
+    if (preg_match('#[$€£]\s?\d[\d.,]{2,}#u', $text)
+        || preg_match('#\d[\d\s.,]*\s?[km]?\s?[$€£]#iu', $text)) {
+        $score += 2;
+    }
+    // 4 bis) Domaine/chemin SANS schéma (« psee.io/8qtcnn ») — le lookbehind
+    // évite de recompter l'intérieur d'une URL https:// déjà scorée en (1).
+    if (preg_match('#(?<![\w./-])[a-z0-9-]{2,}\.[a-z]{2,6}/[a-z0-9]#i', $message)) {
+        $score += 2;
+    }
+    // 4 ter) Nom contenant des chiffres (« Roman9f ») — rare chez un humain.
+    if ($name !== '' && preg_match('/\d/', $name)) {
         $score += 2;
     }
     // 5) Longue séquence EN MAJUSCULES (typique des pubs criardes).
