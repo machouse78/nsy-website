@@ -106,7 +106,16 @@ cp _secret/.htaccess          deploy/_secret/
 cp _secret/config.php.example deploy/_secret/
 cp _secret/ai.php.example     deploy/_secret/
 if [ -f _secret/config.php ]; then
-  cp _secret/config.php deploy/_secret/
+  if grep -q "CHANGE_ME_SET_THE_TURNSTILE_SECRET_KEY" _secret/config.php; then
+    # Garde-fou (13/08/2026) : la clé Turnstile a été posée DIRECTEMENT sur le
+    # serveur ; expédier une config locale encore en CHANGE_ME l'écraserait et
+    # redésactiverait le captcha en silence (vécu — c'est comme ça qu'il est
+    # tombé). L'upload FTP n'efface rien à distance : ne pas copier = le
+    # serveur garde sa config complète.
+    echo "  🛡  _secret/config.php local INCOMPLET (turnstile_secret=CHANGE_ME) — NON expédié, le serveur garde sa config."
+  else
+    cp _secret/config.php deploy/_secret/
+  fi
 else
   echo "  ⚠️  _secret/config.php absent — le formulaire ne fonctionnera PAS sans ce fichier."
 fi
