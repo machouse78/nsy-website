@@ -354,10 +354,10 @@ The LinkedIn company page is referenced in the JSON-LD `sameAs` and in `llms.txt
 
 ### Social distribution of journal articles
 
-Every journal article follows the same publication cycle:
+Every journal article follows the same publication cycle — covered end to end in the dedicated skill [`skills/journal-nsy/SKILL.md`](skills/journal-nsy/SKILL.md):
 
-1. **Publish the article** (full checklist in `skills/skill-nsy-website/SKILL.md`: FR/EN pair, blog cards, home teaser, RSS, sitemap, llms, IndexNow).
-2. **Publish the two posts**: a **professional LinkedIn** version + a **general-public Facebook** version — two distinct rewrites (no prices, ESN-friendly wording, CTA to the offer).
+1. **Publish the article** (full checklist in the skill: FR/EN pair, blog cards, home teaser, RSS, sitemap, llms, IndexNow).
+2. **Publish the two posts**: a **professional article on the NSY LinkedIn page** + a **general-public Facebook** version — two distinct rewrites (no prices, ESN-friendly wording, CTA to the offer). **Backlinks to nsy.fr go in the FIRST COMMENT of each post, never in the body** — the algorithms deprioritise posts with external links; the first comment preserves both reach and backlink.
 3. **Archive the post URLs** in [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 (trust signals — GEO cross-referencing of the NSY entity).
 4. **Add the « Read on LinkedIn / Facebook » buttons** at the end of the FR article (template: `seo-geo-etre-cite-par-les-ia.html`), then redeploy. The EN article only gets buttons if EN posts exist.
 5. **Wire Ansley**: publication URLs in `llms-full.txt` (« Journal » block), 3-layer whitelist (`chat.php` + `js/app.js`, lowercase prefixes), the slug→URLs pair in `chat.php`'s `$journalSocials` map (deterministic append) and cases in both test suites.
@@ -381,6 +381,7 @@ ffmpeg -i public/nsy-logo-ai.png \
 The repo versions several [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills) — **passive documentation** loaded by Claude when relevant (they execute nothing and don't change the site by themselves). They are **not deployed** (excluded from `deploy/`).
 
 - **`skill-nsy-website`** — the project-specific "what": facts (founded 2018, pricing based on the need…), bilingual conventions, terminology (3D Design / Wireframe), chatbot constraints, 3D pipeline, deployment workflow. Saves re-stating these rules every session.
+- **`journal-nsy`** — the full lifecycle of a journal article (single source of truth): the nsy.fr publication checklist, the Facebook/LinkedIn social deliverables with the **first-comment backlink rule**, return backlinks on the article, the Ansley wiring (`$journalSocials`) and the automation state of play (Facebook automatable via the Graph API, LinkedIn manual — no API for articles).
 - **`frontend-responsive-perf`** — the reusable, framework-agnostic technical "how": mobile/tablet/desktop/landscape responsiveness, nav/widget alignment, CPU/GPU optimisations (off-screen pausing of videos/animations/3D, media recompression), lightweight LLM-free chatbot, and the headless-Chrome verification method.
 - **`seo-geo-llmo`** — the reusable SEO + GEO/LLMO playbook (nsy.fr, prv-concept.com, client sites): AI-crawler allowlist, llms.txt, JSON-LD `@graph`, conversational FAQ, external registrations (Bing WT, GSC domain property, Google Business, backlinks) with the pitfalls lived through and the verification methods.
 - **`antispam`** — reusable anti-spam defense for web forms: defense in depth (honeypot, Turnstile, content scoring, rate-limit + daily cap, silent-drop + audit log) with a drop-in PHP `antispam.php` module. Extracted from nsy.fr's `antispam.php`, reusable on prv-concept.com and client sites.

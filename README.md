@@ -371,10 +371,10 @@ La page LinkedIn entreprise est référencée dans les `sameAs` du JSON-LD et da
 
 ### Distribution sociale des articles du journal
 
-Chaque article du journal suit le même cycle de publication :
+Chaque article du journal suit le même cycle de publication — détaillé de bout en bout dans le skill dédié [`skills/journal-nsy/SKILL.md`](skills/journal-nsy/SKILL.md) :
 
-1. **Publier l'article** (checklist complète dans `skills/skill-nsy-website/SKILL.md` : paire FR/EN, cards du blog, teaser accueil, RSS, sitemap, llms, IndexNow).
-2. **Publier le couple de posts** : version **pro sur LinkedIn** + version **grand public sur Facebook** — deux réécritures distinctes, pas un copier-coller (pas de prix, formulations ESN-compatibles, CTA vers l'offre).
+1. **Publier l'article** (checklist complète dans le skill : paire FR/EN, cards du blog, teaser accueil, RSS, sitemap, llms, IndexNow).
+2. **Publier le couple de posts** : article **pro sur la page LinkedIn NSY** + version **grand public sur la page Facebook** — deux réécritures distinctes, pas un copier-coller (pas de prix, formulations ESN-compatibles, CTA vers l'offre). **Les backlinks vers nsy.fr vont dans le PREMIER COMMENTAIRE de chaque post, jamais dans le corps** — les algorithmes dépriorisent les posts à lien externe ; le 1ᵉʳ commentaire préserve la portée ET le backlink.
 3. **Archiver les URLs des posts** dans [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 — signaux de confiance : mentions + liens depuis des corpus fortement crawlés (recoupement GEO de l'entité NSY).
 4. **Ajouter les boutons « Lire sur LinkedIn / Facebook »** en fin d'article FR (bloc bordé, `btn-ghost` + icônes SVG de marque, `target="_blank" rel="noopener"` — modèle : `seo-geo-etre-cite-par-les-ia.html`), puis redéployer. La version EN ne reçoit les boutons que si des posts EN existent.
 5. **Câbler Ansley** : les URLs des publications dans `llms-full.txt` (bloc « Journal »), whitelist aux 3 étages (`chat.php` + `js/app.js`, préfixes en minuscules), la paire slug→URLs dans la map `$journalSocials` de `chat.php` (ajout **déterministe** des liens à toute réponse FR citant l'article sans eux) et des cas dans les deux suites de tests.
@@ -397,9 +397,10 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 ## Skills Claude Code (`skills/`)
 
-Le dépôt versionne huit [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
+Le dépôt versionne neuf [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
 
 - **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, tarification en fonction du besoin…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
+- **`journal-nsy`** — le cycle de vie complet d'un article du journal (source unique de vérité) : checklist de publication sur nsy.fr, livrables sociaux Facebook/LinkedIn avec la règle des **backlinks en premier commentaire**, backlinks retour sur l'article, câblage Ansley (`$journalSocials`) et état des lieux de l'automatisation (Facebook automatisable via l'API Graph, LinkedIn manuel — pas d'API pour les articles).
 - **`chatbot-core`** — socle réutilisable du chatbot à mascotte animée (architecture du widget `.cbot-*`, pipeline mascotte, perf/iOS, charte par design tokens, garde-fous zéro-invention) ; partagé avec prv-concept.com.
 - **`chatbot-nsy`** — les spécificités Ansley (persona IA affichée, charte cyan, carte des fichiers, spec du FAB) — hérite de `chatbot-core`.
 - **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
