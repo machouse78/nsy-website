@@ -6,6 +6,8 @@
  * les algorithmes dépriorisent les posts à lien externe ; le 1ᵉʳ commentaire
  * préserve la portée ET le backlink). Cycle complet : skills/journal-nsy.
  *
+ *   node scripts/meta-publish.mjs setup                      → depuis un jeton UTILISATEUR COURT (+ app id/secret) :
+ *                                                              échange longue durée + jeton de PAGE, écrits dans meta.env
  *   node scripts/meta-publish.mjs check                      → vérifie token + page (aucune écriture)
  *   node scripts/meta-publish.mjs smoke                      → post NON PUBLIÉ créé puis supprimé (invisible au public)
  *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt          → RÉPÉTITION (dry-run, n'écrit rien)
@@ -20,17 +22,18 @@
  *   - lien http(s) ou nsy.fr dans le CORPS du post → refus (--allow-link-in-body pour outrepasser) ;
  *   - 1ᵉʳ commentaire sans backlink nsy.fr → refus (c'est sa raison d'être).
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+const ENV_PATH = join(ROOT, '_secret', 'meta.env');
 
 // ── Credentials ───────────────────────────────────────────────────────────────
-function loadEnv() {
+function loadEnv({ requirePage = true } = {}) {
   let raw;
   try {
-    raw = readFileSync(join(ROOT, '_secret', 'meta.env'), 'utf8');
+    raw = readFileSync(ENV_PATH, 'utf8');
   } catch {
     die("_secret/meta.env introuvable — copier _secret/meta.env.example et le remplir (voir skills/journal-nsy §3).");
   }
@@ -39,8 +42,11 @@ function loadEnv() {
     const m = line.match(/^\s*([A-Z_]+)\s*=\s*(.*?)\s*$/);
     if (m && !line.trim().startsWith('#')) env[m[1]] = m[2].replace(/^["']|["']$/g, '');
   }
-  for (const k of ['FB_PAGE_ID', 'FB_PAGE_TOKEN']) {
-    if (!env[k] || env[k].startsWith('CHANGE_ME')) die(`_secret/meta.env : ${k} manquant ou encore sur CHANGE_ME.`);
+  for (const k of Object.keys(env)) if ((env[k] || '').startsWith('CHANGE_ME')) delete env[k];
+  if (requirePage) {
+    for (const k of ['FB_PAGE_ID', 'FB_PAGE_TOKEN']) {
+      if (!env[k]) die(`_secret/meta.env : ${k} manquant — remplir FB_APP_ID + FB_APP_SECRET + FB_USER_TOKEN puis lancer \`setup\`.`);
+    }
   }
   env.FB_GRAPH_VERSION = env.FB_GRAPH_VERSION || 'v21.0';
   return env;
@@ -49,9 +55,9 @@ function loadEnv() {
 function die(msg) { console.error(`✗ ${msg}`); process.exit(1); }
 
 // ── Appels Graph ──────────────────────────────────────────────────────────────
-async function graph(env, method, path, params = {}) {
+async function graph(env, method, path, params = {}, token = env.FB_PAGE_TOKEN) {
   const url = new URL(`https://graph.facebook.com/${env.FB_GRAPH_VERSION}/${path}`);
-  const body = new URLSearchParams({ ...params, access_token: env.FB_PAGE_TOKEN });
+  const body = new URLSearchParams(token ? { ...params, access_token: token } : params);
   const res = method === 'GET'
     ? await fetch(`${url}?${body}`)
     : await fetch(url, { method, body });
@@ -65,6 +71,60 @@ async function graph(env, method, path, params = {}) {
 }
 
 // ── Commandes ─────────────────────────────────────────────────────────────────
+/**
+ * setup — fait TOUT depuis un jeton utilisateur COURT collé dans meta.env :
+ *   1. échange courte → longue durée (oauth/access_token, fb_exchange_token) ;
+ *   2. me/accounts → repère la Page NSY (FB_PAGE_ID si présent, sinon nom
+ *      contenant « nsy », sinon liste les Pages et s'arrête) ;
+ *   3. réécrit _secret/meta.env avec le jeton de PAGE (n'expire pas).
+ * Aucun jeton n'est jamais affiché ; le script écrit le fichier lui-même.
+ */
+async function setup(env) {
+  for (const k of ['FB_APP_ID', 'FB_APP_SECRET', 'FB_USER_TOKEN']) {
+    if (!env[k]) die(`_secret/meta.env : ${k} manquant pour \`setup\` (app « Journal Auto Publisher » → Paramètres → Général pour id/secret ; Graph Explorer pour le jeton utilisateur court).`);
+  }
+  const ll = await graph(env, 'GET', 'oauth/access_token', {
+    grant_type: 'fb_exchange_token',
+    client_id: env.FB_APP_ID,
+    client_secret: env.FB_APP_SECRET,
+    fb_exchange_token: env.FB_USER_TOKEN,
+  }, '');
+  console.log(`✓ Jeton utilisateur étendu en longue durée (expire dans ~${Math.round((ll.expires_in || 5184000) / 86400)} j)`);
+
+  const acc = await graph(env, 'GET', 'me/accounts', { fields: 'name,id,access_token', limit: '100' }, ll.access_token);
+  const pages = acc.data || [];
+  if (!pages.length) die('me/accounts ne renvoie aucune Page — vérifier que le jeton a bien pages_show_list et que la Page NSY a été cochée dans la boîte de dialogue.');
+
+  let page = env.FB_PAGE_ID ? pages.find((p) => p.id === env.FB_PAGE_ID) : null;
+  if (!page) {
+    const hits = pages.filter((p) => /nsy/i.test(p.name));
+    if (hits.length === 1) page = hits[0];
+  }
+  if (!page && pages.length === 1) page = pages[0];
+  if (!page) {
+    console.log('Pages accessibles :');
+    for (const p of pages) console.log(`  - ${p.name}  (id ${p.id})`);
+    die('Impossible de choisir seul — poser FB_PAGE_ID=<id de la Page NSY> dans _secret/meta.env puis relancer `setup`.');
+  }
+
+  const stamp = new Date().toISOString().slice(0, 10);
+  writeFileSync(ENV_PATH, `# Rempli par \`node scripts/meta-publish.mjs setup\` le ${stamp} — NE PAS committer (gitignoré).
+FB_PAGE_ID=${page.id}
+FB_PAGE_TOKEN=${page.access_token}
+
+# Conservés pour une éventuelle régénération future (relancer setup avec un
+# nouveau FB_USER_TOKEN court si l'API renvoie un jour une erreur code 190) :
+FB_APP_ID=${env.FB_APP_ID}
+FB_APP_SECRET=${env.FB_APP_SECRET}
+FB_USER_TOKEN=
+${env.FB_GRAPH_VERSION !== 'v21.0' ? `FB_GRAPH_VERSION=${env.FB_GRAPH_VERSION}\n` : ''}`, { mode: 0o600 });
+  console.log(`✓ Jeton de PAGE écrit dans _secret/meta.env pour « ${page.name} » (id ${page.id}) — le jeton utilisateur court a été effacé du fichier`);
+
+  const me = await graph(env, 'GET', 'me', { fields: 'id,name' }, page.access_token);
+  if (me.id !== page.id) die('le jeton de Page fraîchement écrit ne répond pas pour la bonne Page — relancer `setup`.');
+  console.log(`✓ Vérification : le jeton répond bien pour « ${me.name} ». Prochaine étape : \`node scripts/meta-publish.mjs smoke\``);
+}
+
 async function check(env) {
   const me = await graph(env, 'GET', 'me', { fields: 'id,name,link' });
   if (me.id !== env.FB_PAGE_ID) {
@@ -121,8 +181,8 @@ async function post(env, args) {
 
 // ── Entrée ────────────────────────────────────────────────────────────────────
 const [cmd, ...args] = process.argv.slice(2);
-const env = loadEnv();
-if (cmd === 'check') await check(env);
-else if (cmd === 'smoke') await smoke(env);
-else if (cmd === 'post') await post(env, args);
-else die('commande attendue : check | smoke | post (voir l\'en-tête du script)');
+if (cmd === 'setup') await setup(loadEnv({ requirePage: false }));
+else if (cmd === 'check') await check(loadEnv());
+else if (cmd === 'smoke') await smoke(loadEnv());
+else if (cmd === 'post') await post(loadEnv(), args);
+else die('commande attendue : setup | check | smoke | post (voir l\'en-tête du script)');
