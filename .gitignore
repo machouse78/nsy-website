@@ -111,3 +111,7 @@ package-lock.json
 
 # FTP credentials for ./deploy.sh (like _secret/config.php — never commit)
 _secret/ftp.env
+
+# Token API Meta — publication auto du journal sur la page Facebook NSY
+# (scripts/meta-publish.mjs — LOCAL uniquement, jamais déployé)
+_secret/meta.env
