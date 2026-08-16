@@ -10,8 +10,10 @@
  *                                                              échange longue durée + jeton de PAGE, écrits dans meta.env
  *   node scripts/meta-publish.mjs check                      → vérifie token + page (aucune écriture)
  *   node scripts/meta-publish.mjs smoke                      → post NON PUBLIÉ créé puis supprimé (invisible au public)
- *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt          → RÉPÉTITION (dry-run, n'écrit rien)
- *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt --go     → publie réellement post + 1ᵉʳ commentaire
+ *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--image-url https://…]       → RÉPÉTITION (dry-run)
+ *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--image-url https://…] --go  → publie réellement
+ *   (--image-url : post PHOTO — image déjà en ligne sur nsy.fr ; règle owner :
+ *    toujours lui demander l'image AVANT de publier, jamais de post texte nu)
  *
  * Credentials dans _secret/meta.env (gitignoré, local uniquement — jamais
  * déployé, jamais commité ; modèle : _secret/meta.env.example). Le token
@@ -156,6 +158,11 @@ async function post(env, args) {
   const body = readText('--post-file', args);
   const comment = readText('--comment-file', args);
   const go = args.includes('--go');
+  const iu = args.indexOf('--image-url');
+  const imageUrl = iu !== -1 ? args[iu + 1] : null;
+  if (iu !== -1 && !/^https:\/\/(www\.)?nsy\.fr\//.test(imageUrl || '')) {
+    die('--image-url doit pointer sur une image déjà en ligne sur nsy.fr (déployer d\'abord).');
+  }
 
   // Garde-fous — règle owner : les backlinks vivent dans le 1ᵉʳ commentaire.
   if (!args.includes('--allow-link-in-body') && /(https?:\/\/|nsy\.fr)/i.test(body)) {
@@ -165,15 +172,23 @@ async function post(env, args) {
     die("Le 1ᵉʳ commentaire ne contient aucun lien nsy.fr — c'est sa raison d'être (backlinks vers l'article).");
   }
 
-  console.log(`── POST (${body.length} car.) ──\n${body}\n── 1ᵉʳ COMMENTAIRE (${comment.length} car.) ──\n${comment}\n`);
+  console.log(`── POST (${body.length} car.)${imageUrl ? ` + IMAGE ${imageUrl}` : ' — SANS IMAGE'} ──\n${body}\n── 1ᵉʳ COMMENTAIRE (${comment.length} car.) ──\n${comment}\n`);
   if (!go) {
     console.log('Répétition (dry-run) : rien n\'a été publié. Relancer avec --go pour publier réellement.');
     return;
   }
 
-  const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/feed`, { message: body });
-  console.log(`✓ Post publié (${created.id})`);
-  const com = await graph(env, 'POST', `${created.id}/comments`, { message: comment });
+  let postId;
+  if (imageUrl) {
+    const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/photos`, { url: imageUrl, message: body });
+    postId = created.post_id || created.id;
+    console.log(`✓ Post PHOTO publié (${postId})`);
+  } else {
+    const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/feed`, { message: body });
+    postId = created.id;
+    console.log(`✓ Post publié (${postId})`);
+  }
+  const com = await graph(env, 'POST', `${postId}/comments`, { message: comment });
   console.log(`✓ 1ᵉʳ commentaire posté (${com.id})`);
   const perma = await graph(env, 'GET', created.id, { fields: 'permalink_url' });
   console.log(`\nURL de la publication (pour le câblage §4 du skill journal-nsy) :\n${perma.permalink_url}`);
