@@ -506,7 +506,7 @@
   <!-- Journal + pages géo (ajout 2026-07-29) -->
   <url>
     <loc>https://www.nsy.fr/blog.html</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-08-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -533,10 +533,17 @@
       <video:content_loc>https://www.nsy.fr/public/chatbot-forum-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/weekend-site-thumb.jpg</video:thumbnail_loc>
+      <video:title>Créer son site avec l'IA en un week-end — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : une IA holographique assemble un site web sous les yeux d'un dirigeant — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/weekend-site-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-08-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -558,6 +565,10 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</image:loc>
       <image:title>An AI chatbot wired into a forum — illustration</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/weekend-site-thumb.jpg</image:loc>
+      <image:title>Building your website with AI in a weekend — illustration</image:title>
     </image:image>
   </url>
   <url>
@@ -586,6 +597,34 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/chatbot-forum-article-en.jpg</image:loc>
       <image:title>Infographic — an AI chatbot wired into the phpBB forum</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/site-ia-en-un-week-end.html</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-in-a-weekend.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/weekend-site-article.jpg</image:loc>
+      <image:title>Infographie — l'IA crée votre site web en un week-end, la promesse testée sur nsy.fr</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/ai-website-in-a-weekend.html</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-in-a-weekend.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/weekend-site-article-en.jpg</image:loc>
+      <image:title>Infographic — AI builds your website in a weekend, the promise tested on nsy.fr</image:title>
     </image:image>
   </url>
   <url>

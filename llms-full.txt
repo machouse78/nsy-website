@@ -128,6 +128,17 @@ associations et indépendants en transition numérique.
 
 ### Journal — retours d'expérience publiés
 
+- « Créer son site avec l'IA en un week-end : on a pris la promesse au mot »
+  (16 août 2026) : https://www.nsy.fr/site-ia-en-un-week-end.html
+  Sujet : la promesse du vibe coding testée sur nsy.fr lui-même, chiffres
+  mesurés — V1 en 4 soirées (une dizaine d'heures), puis ≈ 140 heures de
+  pilotage humain (formulaire réel ≈ 8 h, bilingue + 3D ≈ 4 h, studio 3D
+  Blender ≈ 55 h, gros œuvre invisible ≈ 20 h, couche professionnelle ≈ 30 h,
+  usine à contenu ≈ 12 h). Règle des 10/90 (la V1 = moins de 10 % de l'effort,
+  100 % de l'apparence), distinction pilotage humain / heures machine, et la
+  thèse : l'IA ne sert pas qu'à aller plus vite, elle permet d'aller plus loin
+  (3D, assistant IA, GEO) à budget égal.
+
 - « Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances »
   (8 août 2026) : https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html
   Sujet : le cas PRV Concept — le chatbot « Père Hervé » ancré en RAG sur le

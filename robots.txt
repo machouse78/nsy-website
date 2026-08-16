@@ -32,6 +32,12 @@ Allow: /public/le-cerf-thym.jpg
 Allow: /public/seo-geo-thumb.jpg
 Allow: /public/seo-geo-article.jpg
 Allow: /public/seo-geo-article-en.jpg
+Allow: /public/chatbot-forum-thumb.jpg
+Allow: /public/chatbot-forum-article.jpg
+Allow: /public/chatbot-forum-article-en.jpg
+Allow: /public/weekend-site-thumb.jpg
+Allow: /public/weekend-site-article.jpg
+Allow: /public/weekend-site-article-en.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
@@ -46,6 +52,8 @@ Allow: /public/web-ia.mp4
 Allow: /public/prv-concept.mp4
 Allow: /public/le-cerf-thym.mp4
 Allow: /public/seo-geo-thumb.mp4
+Allow: /public/chatbot-forum-thumb.mp4
+Allow: /public/weekend-site-thumb.mp4
 
 # Modèles 3D — pas crawlables par défaut, ils ne servent pas le SEO texte
 Disallow: /public/*.glb

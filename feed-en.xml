@@ -7,6 +7,13 @@
   <language>en</language>
   <atom:link href="https://www.nsy.fr/feed-en.xml" rel="self" type="application/rss+xml" />
   <item>
+    <title>Building your website with AI in a weekend: we took the promise at its word</title>
+    <link>https://www.nsy.fr/ai-website-in-a-weekend.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/ai-website-in-a-weekend.html</guid>
+    <pubDate>Sun, 16 Aug 2026 12:00:00 +0200</pubDate>
+    <description>The vibe-coding promise tested on a real case: nsy.fr. V1 in 4 evenings, then nearly 140 hours of piloting measured action by action — the 10/90 rule, and why AI isn't just about going faster but going further.</description>
+  </item>
+  <item>
     <title>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base</title>
     <link>https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</link>
     <guid isPermaLink="true">https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</guid>

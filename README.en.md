@@ -44,7 +44,7 @@
 
 The contact form is still served by `contact.php` (unchanged). The top nav has **6 links** (Home, Insights, Services, Work, About, Contact); 3D Design and the FAQ are reachable from the footer.
 
-Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (1st: « SEO vs GEO », with an animated illustration), **2 city pages** (Paris consultant · Orléans website creation), **feasibility questionnaire** `faisabilite.html` / `feasibility.html`, legal pages — **46 pages** in total.
+Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (3: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend » — animated thumbnails), **2 city pages** (Paris consultant · Orléans website creation), **feasibility questionnaire** `faisabilite.html` / `feasibility.html`, legal pages — **50 pages** in total.
 
 ## Bilingual (FR / EN)
 
@@ -74,7 +74,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 - **Language switch** : 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. Explicit slug mapping in `js/app.js`.
 - **Auto-detection** : on `/` (no cookie), `.htaccess` reads `Accept-Language` and 302-redirects to `/index-en.html` if the browser is in English. The user's choice (cookie) then takes precedence.
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 46 pages, self-referencing canonicals.
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 50 pages, self-referencing canonicals.
 - **`nsy_lang` cookie** : the only functional cookie, set on explicit action (flag click) — consent-exempt (CNIL deliberation 2020-091). Documented on the legal pages.
 
 > ⚠️ **A language change applies to the WHOLE site, at every layer** — not just the visible text. Remember: the visible HTML (FR + EN), the **JS-injected UI strings** (form button states and toasts in `js/app.js`, driven by `pageLang`), the **server responses + the email** (`contact.php`, driven by the hidden `lang` field), the **hidden `lang` field on every form**, the meta/OG/JSON-LD, the legal pages, the sitemap and the chatbot. The contact form is bilingual end to end (front + server errors + auto-reply email).
@@ -104,7 +104,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 ### AI assistant — free LLM + RAG, local fallback
 
-The assistant has an identity: **Ansley, NSY's AI architect** — an animated mascot (portrait FAB with halo + greeter bubble, animated avatar in the panel header, AI-generated boomerang loops). Glassmorphic panel, present on **all 46 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
+The assistant has an identity: **Ansley, NSY's AI architect** — an animated mascot (portrait FAB with halo + greeter bubble, animated avatar in the panel header, AI-generated boomerang loops). Glassmorphic panel, present on **all 50 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
 
 **Tier 1 — generative AI (`chat.php`)**: the widget queries a PHP proxy that
 calls a **Mistral** LLM (free "Experiment" tier, French company, data processed
@@ -207,7 +207,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Top menu ({{P}} token = anchor base path)
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
-│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 46 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 50 pages (npm run partials)
 │   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
 │   ├── indexnow-ping.mjs                # IndexNow ping after deploys
 │   ├── build-wireframe.sh               # Blender → GL_LINES orchestrator
@@ -321,8 +321,8 @@ until you run it.
 
 ## SEO, GEO & social sharing
 
-- **Sitemap** : 46 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 46 pages
+- **Sitemap** : 50 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 50 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
 - **Structured-data compliance** (3 Search Console alerts resolved in Aug 2026): every **required** field of a rich-result type carries the **inlined typed node** (same `@id`) — `ProfilePage.mainEntity`, but also `author` and `publisher` on articles, dates (`dateModified`, `datePublished`) are **full ISO 8601 with timezone**, and every `<video>` has a `poster=` plus its `video:video` block under **every** page that displays it. Causes, fixes and audit method: `seo-geo-llmo` skill §5

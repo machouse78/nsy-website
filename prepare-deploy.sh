@@ -86,6 +86,8 @@ cp seo-geo-etre-cite-par-les-ia.html deploy/
 cp chatbot-ia-forum-base-de-connaissances.html deploy/
 cp seo-geo-getting-cited-by-ai.html deploy/
 cp ai-chatbot-forum-knowledge-base.html deploy/
+cp site-ia-en-un-week-end.html deploy/
+cp ai-website-in-a-weekend.html deploy/
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
 cp creation-site-internet-orleans.html deploy/
@@ -154,6 +156,10 @@ cp public/chatbot-forum-thumb.jpg       deploy/public/   # poster vignette artic
 cp public/chatbot-forum-thumb.mp4       deploy/public/   # vignette ANIMEE article chatbot & forum
 cp public/chatbot-forum-article.jpg     deploy/public/   # infographie FR article chatbot & forum (+ OG)
 cp public/chatbot-forum-article-en.jpg  deploy/public/   # infographie EN article chatbot & forum (+ OG)
+cp public/weekend-site-thumb.jpg        deploy/public/   # poster vignette article site IA week-end
+cp public/weekend-site-thumb.mp4        deploy/public/   # vignette ANIMEE article site IA week-end
+cp public/weekend-site-article.jpg      deploy/public/   # infographie FR article site IA week-end (+ OG)
+cp public/weekend-site-article-en.jpg   deploy/public/   # infographie EN article site IA week-end (+ OG)
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

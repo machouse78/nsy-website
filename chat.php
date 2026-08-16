@@ -217,6 +217,7 @@ PAGES (FR → EN) :
 - journal / blog : blog.html → blog-en.html
 - article SEO vs GEO : seo-geo-etre-cite-par-les-ia.html → seo-geo-getting-cited-by-ai.html
 - article chatbot & forum (cas PRV Concept) : chatbot-ia-forum-base-de-connaissances.html → ai-chatbot-forum-knowledge-base.html
+- article « un site avec l'IA en un week-end » (10/90) : site-ia-en-un-week-end.html → ai-website-in-a-weekend.html
 - consultant technique Paris : consultant-technique-paris.html → technical-consultant-paris.html
 - création de site Orléans : creation-site-internet-orleans.html → website-creation-orleans.html
 - pourquoi NSY (philosophie, interlocuteur unique, partenariats ESN) : pourquoi-nsy.html → why-nsy.html
@@ -349,6 +350,7 @@ function nsy_sanitize_reply(string $reply): string
         'blog.html'                           => 'blog-en.html',
         'seo-geo-etre-cite-par-les-ia.html'   => 'seo-geo-getting-cited-by-ai.html',
         'chatbot-ia-forum-base-de-connaissances.html' => 'ai-chatbot-forum-knowledge-base.html',
+        'site-ia-en-un-week-end.html' => 'ai-website-in-a-weekend.html',
         'consultant-technique-paris.html'     => 'technical-consultant-paris.html',
         'creation-site-internet-orleans.html' => 'website-creation-orleans.html',
         'pourquoi-nsy.html'                   => 'why-nsy.html',
