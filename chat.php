@@ -383,6 +383,8 @@ function nsy_sanitize_reply(string $reply): string
         'https://www.facebook.com/share/17vylqjake',
         'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25c3%25a0-condition-1icee',
         'https://www.facebook.com/share/p/1ey4fxbyda',
+        'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25c3%25a2ce-%25c3%25a0-lia-verdict-chiffr%25c3%25a9-hqq8e',
+        'https://www.facebook.com/1593243622503731/posts/1593243555837071',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -423,6 +425,10 @@ function nsy_sanitize_reply(string $reply): string
         'chatbot-ia-forum-base-de-connaissances.html' => [
             'linkedin' => 'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee',
             'facebook' => 'https://www.facebook.com/share/p/1Ey4FXBYDA',
+        ],
+        'site-ia-en-un-week-end.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e',
+            'facebook' => 'https://www.facebook.com/1593243622503731/posts/1593243555837071',
         ],
     ];
     if (!replyIsEnglish($reply)) {

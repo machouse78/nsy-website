@@ -42,6 +42,10 @@ t('post Facebook whitelisté', o.includes('href="https://www.facebook.com/share/
 
 o = mdToHtml('Article [forum & IA](https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee) ici.');
 t('article LinkedIn Pulse n°2 whitelisté', o.includes('href="https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee"'));
+o = mdToHtml('Article [un site IA en un week-end](https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e) ici.');
+t('article LinkedIn Pulse n°3 whitelisté', o.includes('href="https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e"'));
+o = mdToHtml('Post https://www.facebook.com/1593243622503731/posts/1593243555837071 ici.');
+t('post Facebook n°3 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/1593243622503731/posts/1593243555837071"'));
 
 o = mdToHtml('Post [Facebook](https://www.facebook.com/share/p/1Ey4FXBYDA) ici.');
 t('post Facebook n°2 whitelisté', o.includes('href="https://www.facebook.com/share/p/1Ey4FXBYDA"'));

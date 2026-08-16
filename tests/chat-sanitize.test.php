@@ -32,6 +32,8 @@ $officials = [
     'https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr',
     'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25C3%25A0-condition-1icee',
     'https://www.facebook.com/share/p/1Ey4FXBYDA',
+    'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e',
+    'https://www.facebook.com/1593243622503731/posts/1593243555837071',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));
