@@ -18,11 +18,20 @@
   h1 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 26px; }
   h2 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 16px; margin: 34px 0 12px; }
   .mono { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg2); }
-  .head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+  .head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
+  .timebar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--bg2);
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 18px; }
+  .timebar button { background: transparent; border: 1px solid var(--line); border-radius: 8px; color: var(--fg1);
+    font: 600 12.5px Manrope, sans-serif; padding: 6px 12px; cursor: pointer; }
+  .timebar button:hover { border-color: var(--accent); color: var(--fg0); }
+  .timebar button.on { background: rgba(0, 229, 255, .12); border-color: var(--accent); color: var(--accent); }
+  .timebar input[type=date] { background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    color: var(--fg1); font: 500 12.5px "JetBrains Mono", monospace; padding: 5px 8px; color-scheme: dark; }
+  .timebar .sep { color: var(--fg2); }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 12px; }
   .card { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
-  .card .v { font-family: "Space Grotesk", sans-serif; font-size: 28px; font-weight: 700; color: var(--fg0); }
-  .card .v small { font-size: 13px; font-weight: 500; }
+  .card .v { font-family: "Space Grotesk", sans-serif; font-size: 26px; font-weight: 700; color: var(--fg0); }
+  .card .v small { font-size: 13px; font-weight: 500; color: var(--fg2); }
   .card .d { font-size: 12px; margin-top: 2px; }
   .up { color: #4ADE80; } .down { color: #F87171; } .flat { color: var(--fg2); }
   svg { display: block; width: 100%; height: auto; }
@@ -37,6 +46,7 @@
   @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
   .pill { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; font-size: 12px; margin: 2px 4px 2px 0; color: var(--fg1); }
   .pill b { color: var(--accent); font-weight: 600; }
+  .note { font-size: 12px; color: var(--fg2); margin-top: 8px; }
   #err { color: #F87171; margin: 18px 0; display: none; }
 </style>
 </head>
@@ -46,21 +56,34 @@
     <h1>KPI nsy.fr</h1>
     <span class="mono" id="stamp">chargement…</span>
   </div>
+
+  <div class="timebar" id="timebar">
+    <span class="mono">Période</span>
+    <button data-r="7">7 j</button>
+    <button data-r="30" class="on">30 j</button>
+    <button data-r="90">90 j</button>
+    <button data-r="365">1 an</button>
+    <button data-r="all">Tout</button>
+    <span class="sep">·</span>
+    <input type="date" id="from" /> <span class="sep">→</span> <input type="date" id="to" />
+    <button id="apply">Appliquer</button>
+  </div>
   <div id="err">Impossible de charger les données (data.php).</div>
 
   <div class="grid" id="cards"></div>
+  <div class="note" id="range-note"></div>
 
-  <h2>Visiteurs humains — 30 jours</h2>
+  <h2 id="h-vis">Visiteurs</h2>
   <div class="chart"><svg id="c-vis" viewBox="0 0 1000 220" preserveAspectRatio="none"></svg></div>
 
-  <h2>Lectures par les IA (hits robots IA) — 30 jours</h2>
+  <h2 id="h-ai">Lectures par les IA (hits robots IA)</h2>
   <div class="chart"><svg id="c-ai" viewBox="0 0 1000 220" preserveAspectRatio="none"></svg></div>
 
   <div class="cols">
     <div>
-      <h2>Robots IA — dernier jour</h2>
+      <h2>Robots IA — période</h2>
       <div id="ai-pills"></div>
-      <h2>Top pages — dernier jour</h2>
+      <h2>Top pages — période</h2>
       <table id="t-pages"><thead><tr><th>Page</th><th class="num">Vues</th></tr></thead><tbody></tbody></table>
     </div>
     <div>
@@ -78,42 +101,54 @@
   try {
     hist = await (await fetch('data.php', { cache: 'no-store' })).json();
   } catch { document.getElementById('err').style.display = 'block'; return; }
-  const days = Object.keys(hist.days || {}).sort();
-  if (!days.length) { document.getElementById('err').textContent = 'Aucune donnée encore — le collecteur n\'a pas tourné.'; document.getElementById('err').style.display = 'block'; return; }
-  const last = hist.days[days.at(-1)];
-  const prev = days.length > 1 ? hist.days[days.at(-2)] : null;
+  const allDays = Object.keys(hist.days || {}).sort();
+  if (!allDays.length) { const e = document.getElementById('err'); e.textContent = 'Aucune donnée — le collecteur n\'a pas encore tourné.'; e.style.display = 'block'; return; }
+
+  const $ = (id) => document.getElementById(id);
   const fmt = (n) => (n ?? 0).toLocaleString('fr-FR');
-  const dstr = new Date(days.at(-1) + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
-  document.getElementById('stamp').textContent = `dernier jour collecté : ${dstr} · ${days.length} jours d'historique`;
+  const D = hist.days;
+  const first = allDays[0], lastDay = allDays.at(-1);
+  $('from').min = first; $('from').max = lastDay; $('to').min = first; $('to').max = lastDay;
 
-  const delta = (cur, old) => {
-    if (old == null || cur == null) return '<span class="flat">—</span>';
-    const d = cur - old;
-    return d === 0 ? '<span class="flat">=</span>'
-      : `<span class="${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${Math.abs(d).toLocaleString('fr-FR')}</span>`;
-  };
-  const sum7 = (k) => days.slice(-7).reduce((a, d) => a + (hist.days[d][k] ?? 0), 0);
-  const cards = [
-    ['Visiteurs humains J-1', fmt(last.visiteurs), delta(last.visiteurs, prev?.visiteurs)],
-    ['Pages vues J-1', fmt(last.pages_vues), delta(last.pages_vues, prev?.pages_vues)],
-    ['Lectures IA J-1', fmt(last.ai_hits), delta(last.ai_hits, prev?.ai_hits)],
-    ['Visiteurs · 7 jours', fmt(sum7('visiteurs')), ''],
-    ['Lectures IA · 7 jours', fmt(sum7('ai_hits')), ''],
-    ['Abonnés Facebook', fmt(last.fb?.abonnes), delta(last.fb?.abonnes, prev?.fb?.abonnes)],
-    ['Conversations Ansley J-1', fmt(last.chat_calls), delta(last.chat_calls, prev?.chat_calls)],
-    ['llms.txt lus J-1', fmt(last.llms_hits), delta(last.llms_hits, prev?.llms_hits)],
-    ['Referrals Facebook J-1', fmt(last.referrals?.facebook), ''],
-    ['Referrals LinkedIn J-1', fmt(last.referrals?.linkedin), ''],
-    ['404 / scans J-1', `${fmt(last.status?.['404'])}<small> / ${fmt(last.scan_hits)}</small>`, ''],
-    ['Moteurs (SE) J-1', fmt(last.se_hits), ''],
-  ];
-  document.getElementById('cards').innerHTML = cards.map(([t, v, d]) =>
-    `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+  // ── état de la période (façon ELK : quick select OU bornes absolues) ──
+  let range = { from: null, to: null, quick: '30' };
+  const daysIn = (a, b) => allDays.filter((d) => d >= a && d <= b);
+  const shiftISO = (iso, n) => { const t = new Date(iso + 'T12:00:00'); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
 
-  const line = (svgId, key, color) => {
-    const svg = document.getElementById(svgId);
-    const pts = days.slice(-30).map((d) => hist.days[d][key] ?? 0);
-    const dd = days.slice(-30);
+  function currentWindow() {
+    if (range.quick === 'all') return [first, lastDay];
+    if (range.quick) return [shiftISO(lastDay, -(parseInt(range.quick, 10) - 1)), lastDay];
+    return [range.from, range.to];
+  }
+
+  // ── agrégation en buckets (jour / semaine / mois selon l'étendue) ──
+  function buckets(sel) {
+    const span = sel.length;
+    const mode = span <= 92 ? 'jour' : span <= 550 ? 'semaine' : 'mois';
+    const keyOf = (d) => {
+      if (mode === 'jour') return d;
+      if (mode === 'mois') return d.slice(0, 7);
+      const t = new Date(d + 'T12:00:00');
+      const monday = new Date(t); monday.setDate(t.getDate() - ((t.getDay() + 6) % 7));
+      return monday.toISOString().slice(0, 10);
+    };
+    const out = new Map();
+    for (const d of sel) {
+      const k = keyOf(d);
+      const b = out.get(k) || { visiteurs: 0, ai_hits: 0, brut: false };
+      b.visiteurs += D[d].visiteurs ?? 0;
+      b.ai_hits += D[d].ai_hits ?? 0;
+      if ((D[d].source || '') !== 'logs') b.brut = true;
+      out.set(k, b);
+    }
+    return { mode, entries: [...out.entries()] };
+  }
+
+  function line(svgId, entries, field, color) {
+    const svg = $(svgId);
+    const pts = entries.map(([, b]) => b[field]);
+    const labels = entries.map(([k]) => k);
+    const brut = entries.map(([, b]) => b.brut);
     const max = Math.max(...pts, 1);
     const W = 1000, H = 220, P = 26;
     const x = (i) => P + i * (W - 2 * P) / Math.max(pts.length - 1, 1);
@@ -126,25 +161,92 @@
       </linearGradient></defs>
       <path d="${area}" fill="url(#g-${svgId})"/>
       <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
-      ${pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="${color}"><title>${dd[i]} : ${v}</title></circle>`).join('')}
-      <text x="${P}" y="16" fill="#8993AF" font-size="12" font-family="JetBrains Mono">max ${max.toLocaleString('fr-FR')}</text>`;
+      ${pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${pts.length > 120 ? 1.6 : 3}" fill="${color}"${brut[i] ? ' fill-opacity=".45"' : ''}><title>${labels[i]} : ${fmt(v)}${brut[i] ? ' (source brute, bots inclus)' : ''}</title></circle>`).join('')}
+      <text x="${P}" y="16" fill="#8993AF" font-size="12" font-family="JetBrains Mono">max ${fmt(max)}</text>`;
+  }
+
+  const sumKey = (sel, k) => sel.reduce((a, d) => a + (D[d][k] ?? 0), 0);
+  const delta = (cur, old) => {
+    if (old == null || cur == null || !isFinite(old)) return '<span class="flat">—</span>';
+    const d = cur - old;
+    return d === 0 ? '<span class="flat">=</span>'
+      : `<span class="${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${fmt(Math.abs(d))}</span>`;
   };
-  line('c-vis', 'visiteurs', '#00E5FF');
-  line('c-ai', 'ai_hits', '#F08A2C');
 
-  document.getElementById('ai-pills').innerHTML = Object.entries(last.ai || {})
-    .map(([n, h]) => `<span class="pill">${n} <b>${fmt(h)}</b></span>`).join('') || '<span class="mono">aucun</span>';
+  function render() {
+    const [a, b] = currentWindow();
+    const sel = daysIn(a, b);
+    if (!sel.length) return;
+    $('from').value = a; $('to').value = b;
+    const span = Math.round((new Date(b) - new Date(a)) / 86400000) + 1;
+    const [pa, pb] = [shiftISO(a, -span), shiftISO(a, -1)];
+    const prev = daysIn(pa, pb);
+    const cmp = prev.length >= Math.min(sel.length, 2) ? prev : null;
 
-  document.querySelector('#t-pages tbody').innerHTML = Object.entries(last.top_pages || {})
-    .map(([p, v]) => `<tr><td><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('');
+    const nbBrut = sel.filter((d) => (D[d].source || '') !== 'logs').length;
+    const lastSel = D[sel.at(-1)];
+    const firstFb = sel.map((d) => D[d].fb?.abonnes).find((v) => v != null);
+    const lastFb = [...sel].reverse().map((d) => D[d].fb?.abonnes).find((v) => v != null);
 
-  document.querySelector('#t-fb tbody').innerHTML = (last.fb?.posts || [])
-    .map((p) => `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a></td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`).join('')
-    || '<tr><td colspan="4" class="mono">pas de données Facebook</td></tr>';
+    const cards = [
+      ['Visiteurs · période', fmt(sumKey(sel, 'visiteurs')), cmp ? delta(sumKey(sel, 'visiteurs'), sumKey(cmp, 'visiteurs')) : ''],
+      ['Pages vues · période', fmt(sumKey(sel, 'pages_vues')), cmp ? delta(sumKey(sel, 'pages_vues'), sumKey(cmp, 'pages_vues')) : ''],
+      ['Lectures IA · période', fmt(sumKey(sel, 'ai_hits')), cmp ? delta(sumKey(sel, 'ai_hits'), sumKey(cmp, 'ai_hits')) : ''],
+      ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, 'visiteurs') / sel.length)), ''],
+      ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
+      ['Conversations Ansley', fmt(sumKey(sel, 'chat_calls')), ''],
+      ['llms.txt lus', fmt(sumKey(sel, 'llms_hits')), ''],
+      ['Referrals FB / LinkedIn', `${fmt(sel.reduce((x, d) => x + (D[d].referrals?.facebook ?? 0), 0))}<small> / ${fmt(sel.reduce((x, d) => x + (D[d].referrals?.linkedin ?? 0), 0))}</small>`, ''],
+      ['404 / scans', `${fmt(sel.reduce((x, d) => x + (D[d].status?.['404'] ?? 0), 0))}<small> / ${fmt(sumKey(sel, 'scan_hits'))}</small>`, ''],
+      ['Moteurs (SE)', fmt(sumKey(sel, 'se_hits')), ''],
+    ];
+    $('cards').innerHTML = cards.map(([t, v, d]) =>
+      `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
-  document.querySelector('#t-journal tbody').innerHTML = Object.entries(last.journal || {})
-    .map(([s, v]) => `<tr><td><a href="https://www.nsy.fr/${s}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
-    || '<tr><td colspan="3" class="mono">—</td></tr>';
+    const bk = buckets(sel);
+    $('h-vis').textContent = `Visiteurs — par ${bk.mode}`;
+    $('h-ai').textContent = `Lectures par les IA — par ${bk.mode}`;
+    line('c-vis', bk.entries, 'visiteurs', '#00E5FF');
+    line('c-ai', bk.entries, 'ai_hits', '#F08A2C');
+
+    const dFmt = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+    $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
+      (cmp ? ` · comparé à ${dFmt(pa)} → ${dFmt(pb)}` : '') +
+      (nbBrut ? ` · ⚠ ${nbBrut} jour(s) en source brute AWStats (bots inclus)` : '');
+
+    const ai = {};
+    for (const d of sel) for (const [n, h] of Object.entries(D[d].ai || {})) ai[n] = (ai[n] || 0) + h;
+    $('ai-pills').innerHTML = Object.entries(ai).sort((x, y) => y[1] - x[1])
+      .map(([n, h]) => `<span class="pill">${n} <b>${fmt(h)}</b></span>`).join('') || '<span class="mono">aucun</span>';
+
+    const pages = {};
+    for (const d of sel) for (const [p, v] of Object.entries(D[d].top_pages || {})) pages[p] = (pages[p] || 0) + v;
+    document.querySelector('#t-pages tbody').innerHTML = Object.entries(pages).sort((x, y) => y[1] - x[1]).slice(0, 12)
+      .map(([p, v]) => `<tr><td><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('')
+      || '<tr><td colspan="2" class="mono">—</td></tr>';
+
+    document.querySelector('#t-fb tbody').innerHTML = (lastSel.fb?.posts || [])
+      .map((p) => `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a></td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`).join('')
+      || '<tr><td colspan="4" class="mono">pas de données Facebook sur le dernier jour de la période</td></tr>';
+
+    document.querySelector('#t-journal tbody').innerHTML = Object.entries(lastSel.journal || {})
+      .map(([s, v]) => `<tr><td><a href="https://www.nsy.fr/${s}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
+      || '<tr><td colspan="3" class="mono">—</td></tr>';
+
+    document.querySelectorAll('#timebar button[data-r]').forEach((btn) =>
+      btn.classList.toggle('on', btn.dataset.r === range.quick));
+  }
+
+  document.querySelectorAll('#timebar button[data-r]').forEach((btn) =>
+    btn.addEventListener('click', () => { range = { quick: btn.dataset.r, from: null, to: null }; render(); }));
+  $('apply').addEventListener('click', () => {
+    const f = $('from').value, t = $('to').value;
+    if (f && t && f <= t) { range = { quick: null, from: f, to: t }; render(); }
+  });
+
+  $('stamp').textContent = `historique : ${dLabel(first)} → ${dLabel(lastDay)} · ${allDays.length} jours`;
+  function dLabel(iso) { return new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  render();
 })();
 </script>
 </body>

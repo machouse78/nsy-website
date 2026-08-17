@@ -186,9 +186,9 @@ $fh = fopen($histFile, 'c+');
 flock($fh, LOCK_EX);
 $hist = json_decode((string) stream_get_contents($fh), true);
 if (!is_array($hist)) $hist = ['site' => 'nsy.fr', 'days' => []];
-$hist['days'][$target] = $day + ['fb' => $fb, 'journal' => $journal, 'collecte' => date('c')];
+$hist['days'][$target] = $day + ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
 ksort($hist['days']);
-if (count($hist['days']) > 400) $hist['days'] = array_slice($hist['days'], -400, null, true);
+// Historique ILLIMITÉ (owner, 17/08/2026) : aucune purge — l'archive court depuis la V1 du site.
 ftruncate($fh, 0);
 rewind($fh);
 fwrite($fh, json_encode($hist, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
