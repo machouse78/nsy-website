@@ -217,8 +217,10 @@
       ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
       ['Conversations Ansley', fmt(sumKey(sel, 'chat_calls')), ''],
       ['llms.txt lus', fmt(sumKey(sel, 'llms_hits')), ''],
-      ['Referrals FB / LinkedIn', `${fmt(sel.reduce((x, d) => x + (D[d].referrals?.facebook ?? 0), 0))}<small> / ${fmt(sel.reduce((x, d) => x + (D[d].referrals?.linkedin ?? 0), 0))}</small>`, ''],
-      ['404 / scans', `${fmt(sel.reduce((x, d) => x + (D[d].status?.['404'] ?? 0), 0))}<small> / ${fmt(sumKey(sel, 'scan_hits'))}</small>`, ''],
+      ['Visites venues de Facebook', fmt(sel.reduce((x, d) => x + (D[d].referrals?.facebook ?? 0), 0)), ''],
+      ['Visites venues de LinkedIn', fmt(sel.reduce((x, d) => x + (D[d].referrals?.linkedin ?? 0), 0)), ''],
+      ['Erreurs 404 (bruit scanners)', fmt(sel.reduce((x, d) => x + (D[d].status?.['404'] ?? 0), 0)), ''],
+      ['Hits de scanners identifiés', fmt(sumKey(sel, 'scan_hits')), ''],
       ['Moteurs (SE)', fmt(sumKey(sel, 'se_hits')), ''],
     ];
     $('cards').innerHTML = cards.map(([t, v, d]) =>
