@@ -224,6 +224,7 @@ nsy-website/
 │   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 50 pages (npm run partials)
 │   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
 │   ├── indexnow-ping.mjs                # IndexNow ping after deploys
+│   ├── utm.mjs                          # UTM-tagged publication links — know which post/group drives traffic
 │   ├── build-wireframe.sh               # Blender → GL_LINES orchestrator
 │   ├── process-renault.py               # Headless Blender: decimation, material, export
 │   ├── tris-to-lines.mjs                # Triangles → GL_LINES
