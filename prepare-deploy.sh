@@ -88,6 +88,9 @@ cp seo-geo-getting-cited-by-ai.html deploy/
 cp ai-chatbot-forum-knowledge-base.html deploy/
 cp site-ia-en-un-week-end.html deploy/
 cp ai-website-in-a-weekend.html deploy/
+cp stats-collector.php deploy/
+mkdir -p deploy/stats
+cp stats/.htaccess stats/index.html stats/data.php deploy/stats/
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
 cp creation-site-internet-orleans.html deploy/
@@ -107,6 +110,15 @@ mkdir -p deploy/_secret
 cp _secret/.htaccess          deploy/_secret/
 cp _secret/config.php.example deploy/_secret/
 cp _secret/ai.php.example     deploy/_secret/
+cp _secret/kpi.php.example    deploy/_secret/
+if [ -f _secret/kpi.php ] && ! grep -q "CHANGE_ME" _secret/kpi.php; then
+  cp _secret/kpi.php deploy/_secret/
+else
+  echo "  🛡  _secret/kpi.php absent ou incomplet — NON expédié (collecteur KPI inactif)."
+fi
+if [ -f _secret/.htpasswd ]; then
+  cp _secret/.htpasswd deploy/_secret/
+fi
 if [ -f _secret/config.php ]; then
   if grep -q "CHANGE_ME_SET_THE_TURNSTILE_SECRET_KEY" _secret/config.php; then
     # Garde-fou (13/08/2026) : la clé Turnstile a été posée DIRECTEMENT sur le

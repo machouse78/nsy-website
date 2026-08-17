@@ -81,6 +81,12 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 ## Interactive features
 
+- **Private KPI dashboard** (`/stats/`, Basic Auth): human visitors (bots
+  excluded), pageviews, **AI readings** (ChatGPT-User, OAI-SearchBot… — the GEO
+  KPI), Facebook followers/engagement, referrals, Ansley conversations, journal
+  counters — collected every morning at D-1 by `stats-collector.php`
+  (Infomaniak scheduled task) from the access logs and the Graph API, stored as
+  JSON history, **no personal data** (aggregates only)
 - **Journal view/like counters**: a discreet bar under each article's date
   (`journal-stats.php`, file storage in `_secret/`, no personal data — per-article
   aggregates only, one shared counter per FR/EN pair). View counted once per
@@ -199,6 +205,8 @@ nsy-website/
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
 ├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
 ├── antispam.php                         # Shared anti-spam filter (contact + feasibility)
+├── stats-collector.php                  # Daily KPI collector (ik-logs + FB Graph API + counters) → _secret/kpi-history.json
+├── stats/                               # Private KPI dashboard (Basic Auth) — cards, SVG charts, tables (index.html + data.php)
 ├── journal-stats.php                    # Journal view/like counters (file storage in _secret/)
 ├── css/style.css                        # Complete styles (includes the .qz- questionnaire namespace)
 ├── js/app.js                            # Chatbot, i18n, video swaps, scroll-spy, 3D framing

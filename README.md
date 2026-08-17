@@ -81,6 +81,12 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 ## Fonctionnalités interactives
 
+- **Dashboard KPI privé** (`/stats/`, Basic Auth) : visiteurs humains (bots
+  exclus), pages vues, **lectures par les IA** (ChatGPT-User, OAI-SearchBot… —
+  le KPI GEO), abonnés/engagement Facebook, referrals, conversations Ansley,
+  compteurs du journal — collecté chaque matin à J-1 par `stats-collector.php`
+  (tâche planifiée Infomaniak) depuis les access logs et l'API Graph, historisé
+  en JSON, **aucune donnée personnelle** (agrégats seuls)
 - **Compteurs de vues / « j'aime » du journal** : barre discrète sous la date de
   chaque article (`journal-stats.php`, stockage fichier dans `_secret/`, aucun
   contenu personnel — des agrégats par article, un seul compteur pour la paire
@@ -193,6 +199,8 @@ nsy-website/
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
 ├── antispam.php                         # Filtre anti-spam partagé (contact + faisabilité)
+├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + compteurs) → _secret/kpi-history.json
+├── stats/                               # Dashboard KPI privé (Basic Auth) — cartes, courbes SVG, tables (index.html + data.php)
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing

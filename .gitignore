@@ -115,3 +115,12 @@ _secret/ftp.env
 # Token API Meta — publication auto du journal sur la page Facebook NSY
 # (scripts/meta-publish.mjs — LOCAL uniquement, jamais déployé)
 _secret/meta.env
+
+# Config du collecteur KPI (cle cron + jeton de Page Facebook — serveur + local)
+_secret/kpi.php
+deploy/_secret/kpi.php
+# Historique KPI (genere par stats-collector.php sur le serveur)
+_secret/kpi-history.json
+# Acces au dashboard /stats/ (htpasswd — owner)
+_secret/.htpasswd
+deploy/_secret/.htpasswd

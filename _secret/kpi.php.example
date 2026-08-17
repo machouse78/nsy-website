@@ -1,0 +1,9 @@
+<?php
+// Config du collecteur KPI (stats-collector.php) — JAMAIS commité.
+// cron_key : protège l'endpoint de collecte (tâche planifiée Infomaniak).
+// fb_* : jeton de PAGE Facebook (copié de _secret/meta.env local).
+return [
+    'cron_key'      => 'CHANGE_ME_CLE_CRON_ALEATOIRE',
+    'fb_page_id'    => 'CHANGE_ME_ID_PAGE_FACEBOOK',
+    'fb_page_token' => 'CHANGE_ME_JETON_DE_PAGE',
+];

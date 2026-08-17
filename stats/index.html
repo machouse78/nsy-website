@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>KPI — nsy.fr</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" type="image/png" sizes="32x32" href="../public/cropped-NSY-logo-32x32.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Manrope:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root { --bg: #0A0F1C; --bg2: #0F1626; --line: #1C2740; --accent: #00E5FF; --warm: #F08A2C;
+    --fg0: #F2F6FF; --fg1: #B8C2DC; --fg2: #8993AF; }
+  * { box-sizing: border-box; margin: 0; }
+  body { background: var(--bg); color: var(--fg1); font-family: Manrope, sans-serif; padding: 28px 20px 60px; }
+  .wrap { max-width: 1080px; margin: 0 auto; }
+  h1 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 26px; }
+  h2 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 16px; margin: 34px 0 12px; }
+  .mono { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg2); }
+  .head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 12px; }
+  .card { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+  .card .v { font-family: "Space Grotesk", sans-serif; font-size: 28px; font-weight: 700; color: var(--fg0); }
+  .card .v small { font-size: 13px; font-weight: 500; }
+  .card .d { font-size: 12px; margin-top: 2px; }
+  .up { color: #4ADE80; } .down { color: #F87171; } .flat { color: var(--fg2); }
+  svg { display: block; width: 100%; height: auto; }
+  .chart { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  table { width: 100%; border-collapse: collapse; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 13.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
+  th { color: var(--fg2); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tr:last-child td { border-bottom: 0; }
+  a { color: var(--accent); text-decoration: none; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
+  .pill { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; font-size: 12px; margin: 2px 4px 2px 0; color: var(--fg1); }
+  .pill b { color: var(--accent); font-weight: 600; }
+  #err { color: #F87171; margin: 18px 0; display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">
+    <h1>KPI nsy.fr</h1>
+    <span class="mono" id="stamp">chargement…</span>
+  </div>
+  <div id="err">Impossible de charger les données (data.php).</div>
+
+  <div class="grid" id="cards"></div>
+
+  <h2>Visiteurs humains — 30 jours</h2>
+  <div class="chart"><svg id="c-vis" viewBox="0 0 1000 220" preserveAspectRatio="none"></svg></div>
+
+  <h2>Lectures par les IA (hits robots IA) — 30 jours</h2>
+  <div class="chart"><svg id="c-ai" viewBox="0 0 1000 220" preserveAspectRatio="none"></svg></div>
+
+  <div class="cols">
+    <div>
+      <h2>Robots IA — dernier jour</h2>
+      <div id="ai-pills"></div>
+      <h2>Top pages — dernier jour</h2>
+      <table id="t-pages"><thead><tr><th>Page</th><th class="num">Vues</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div>
+      <h2>Facebook — derniers posts</h2>
+      <table id="t-fb"><thead><tr><th>Post</th><th class="num">👍</th><th class="num">💬</th><th class="num">↗</th></tr></thead><tbody></tbody></table>
+      <h2>Articles du journal (cumul site)</h2>
+      <table id="t-journal"><thead><tr><th>Article</th><th class="num">Vues</th><th class="num">❤</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+</div>
+
+<script>
+(async () => {
+  let hist;
+  try {
+    hist = await (await fetch('data.php', { cache: 'no-store' })).json();
+  } catch { document.getElementById('err').style.display = 'block'; return; }
+  const days = Object.keys(hist.days || {}).sort();
+  if (!days.length) { document.getElementById('err').textContent = 'Aucune donnée encore — le collecteur n\'a pas tourné.'; document.getElementById('err').style.display = 'block'; return; }
+  const last = hist.days[days.at(-1)];
+  const prev = days.length > 1 ? hist.days[days.at(-2)] : null;
+  const fmt = (n) => (n ?? 0).toLocaleString('fr-FR');
+  const dstr = new Date(days.at(-1) + 'T12:00:00').toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
+  document.getElementById('stamp').textContent = `dernier jour collecté : ${dstr} · ${days.length} jours d'historique`;
+
+  const delta = (cur, old) => {
+    if (old == null || cur == null) return '<span class="flat">—</span>';
+    const d = cur - old;
+    return d === 0 ? '<span class="flat">=</span>'
+      : `<span class="${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${Math.abs(d).toLocaleString('fr-FR')}</span>`;
+  };
+  const sum7 = (k) => days.slice(-7).reduce((a, d) => a + (hist.days[d][k] ?? 0), 0);
+  const cards = [
+    ['Visiteurs humains J-1', fmt(last.visiteurs), delta(last.visiteurs, prev?.visiteurs)],
+    ['Pages vues J-1', fmt(last.pages_vues), delta(last.pages_vues, prev?.pages_vues)],
+    ['Lectures IA J-1', fmt(last.ai_hits), delta(last.ai_hits, prev?.ai_hits)],
+    ['Visiteurs · 7 jours', fmt(sum7('visiteurs')), ''],
+    ['Lectures IA · 7 jours', fmt(sum7('ai_hits')), ''],
+    ['Abonnés Facebook', fmt(last.fb?.abonnes), delta(last.fb?.abonnes, prev?.fb?.abonnes)],
+    ['Conversations Ansley J-1', fmt(last.chat_calls), delta(last.chat_calls, prev?.chat_calls)],
+    ['llms.txt lus J-1', fmt(last.llms_hits), delta(last.llms_hits, prev?.llms_hits)],
+    ['Referrals Facebook J-1', fmt(last.referrals?.facebook), ''],
+    ['Referrals LinkedIn J-1', fmt(last.referrals?.linkedin), ''],
+    ['404 / scans J-1', `${fmt(last.status?.['404'])}<small> / ${fmt(last.scan_hits)}</small>`, ''],
+    ['Moteurs (SE) J-1', fmt(last.se_hits), ''],
+  ];
+  document.getElementById('cards').innerHTML = cards.map(([t, v, d]) =>
+    `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+  const line = (svgId, key, color) => {
+    const svg = document.getElementById(svgId);
+    const pts = days.slice(-30).map((d) => hist.days[d][key] ?? 0);
+    const dd = days.slice(-30);
+    const max = Math.max(...pts, 1);
+    const W = 1000, H = 220, P = 26;
+    const x = (i) => P + i * (W - 2 * P) / Math.max(pts.length - 1, 1);
+    const y = (v) => H - P - v * (H - 2 * P) / max;
+    const path = pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    const area = `${path} L${x(pts.length - 1).toFixed(1)},${H - P} L${x(0).toFixed(1)},${H - P} Z`;
+    svg.innerHTML = `
+      <defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${color}" stop-opacity=".28"/><stop offset="1" stop-color="${color}" stop-opacity="0"/>
+      </linearGradient></defs>
+      <path d="${area}" fill="url(#g-${svgId})"/>
+      <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
+      ${pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="3" fill="${color}"><title>${dd[i]} : ${v}</title></circle>`).join('')}
+      <text x="${P}" y="16" fill="#8993AF" font-size="12" font-family="JetBrains Mono">max ${max.toLocaleString('fr-FR')}</text>`;
+  };
+  line('c-vis', 'visiteurs', '#00E5FF');
+  line('c-ai', 'ai_hits', '#F08A2C');
+
+  document.getElementById('ai-pills').innerHTML = Object.entries(last.ai || {})
+    .map(([n, h]) => `<span class="pill">${n} <b>${fmt(h)}</b></span>`).join('') || '<span class="mono">aucun</span>';
+
+  document.querySelector('#t-pages tbody').innerHTML = Object.entries(last.top_pages || {})
+    .map(([p, v]) => `<tr><td><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('');
+
+  document.querySelector('#t-fb tbody').innerHTML = (last.fb?.posts || [])
+    .map((p) => `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a></td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`).join('')
+    || '<tr><td colspan="4" class="mono">pas de données Facebook</td></tr>';
+
+  document.querySelector('#t-journal tbody').innerHTML = Object.entries(last.journal || {})
+    .map(([s, v]) => `<tr><td><a href="https://www.nsy.fr/${s}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
+    || '<tr><td colspan="3" class="mono">—</td></tr>';
+})();
+</script>
+</body>
+</html>
