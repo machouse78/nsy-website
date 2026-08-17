@@ -68,6 +68,10 @@
   .hbar .fl { height: 100%; background: var(--accent); border-radius: 4px; }
   .hbar .val { width: 90px; text-align: right; font-variant-numeric: tabular-nums; color: var(--fg2); }
   .note { font-size: 12px; color: var(--fg2); margin-top: 8px; }
+  .resume { background: var(--bg2); border: 1px solid var(--line); border-left: 3px solid var(--accent);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 14px; font-size: 14.5px; line-height: 1.65; }
+  .resume p { margin: 0 0 8px; } .resume p:last-child { margin-bottom: 0; }
+  .resume b { color: var(--fg0); } .resume .alerte { color: var(--warm); }
   .resh { font-size: 11.5px; margin-top: 3px; color: var(--fg2); line-height: 1.5; }
   .resh a { color: var(--warm); }
   #err { color: #F87171; margin: 18px 0; display: none; }
@@ -108,6 +112,8 @@
     <input type="text" id="kql" placeholder="ex. page:/expertise-* · bot:claude · ia:perplexity — Entrée pour appliquer" />
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
+
+  <div class="resume" id="resume"></div>
 
   <div class="grid" id="cards"></div>
   <div class="note" id="range-note"></div>
@@ -428,6 +434,58 @@
     ];
     $('cards').innerHTML = cards.map(([t, v, d]) =>
       `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+    // ── Résumé en clair (se recalcule avec la période ET les filtres) ──
+    {
+      const n = (v) => fmt(Math.round(v));
+      const vis = sumKey(sel, (v) => v.visiteurs ?? 0);
+      const pv = sumKey(sel, vPages);
+      const ia = sumKey(sel, vAI);
+      const parJour = Math.round(vis / sel.length);
+      const visPrev = cmp ? sumKey(cmp, (v) => v.visiteurs ?? 0) : null;
+      const evol = visPrev ? Math.round((vis - visPrev) / Math.max(visPrev, 1) * 100) : null;
+      const iaTop = aggMap(sel, (v) => v.ai).slice(0, 3);
+      const pagesTop = aggMap(sel, (v) => v.top_pages).slice(0, 2);
+      const iaRef = aggMap(sel, (v) => v.ref_ia);
+      const fb = sumKey(sel, (v) => vRef(v, 'facebook')), li = sumKey(sel, (v) => vRef(v, 'linkedin'));
+      const goo = sumKey(sel, (v) => vRef(v, 'google'));
+      const chat = sumKey(sel, (v) => v.chat_calls ?? 0), llms = sumKey(sel, (v) => v.llms_hits ?? 0);
+      const e404 = sumKey(sel, (v) => v.status?.['404'] ?? 0), scans = sumKey(sel, (v) => v.scan_hits ?? 0);
+      const devs = Object.fromEntries(aggMap(sel, (v) => v.devices));
+      const totDev = (devs.mobile || 0) + (devs.desktop || 0) + (devs.tablette || 0);
+      const camp = aggMap(sel, (v) => v.campagnes).slice(0, 1);
+      const par = [];
+
+      par.push(`Du <b>${dFmt(a)}</b> au <b>${dFmt(b)}</b> (${sel.length} jour${sel.length > 1 ? 's' : ''} de données) : ` +
+        `<b>${n(vis)} visiteur${vis > 1 ? 's' : ''} humain${vis > 1 ? 's' : ''}</b> (≈ ${n(parJour)}/jour) pour ${n(pv)} page${pv > 1 ? 's' : ''} vue${pv > 1 ? 's' : ''}` +
+        (evol !== null ? `, soit <b>${evol > 0 ? '+' : ''}${evol} %</b> par rapport à la période précédente${nbBrutCmp ? ' (comparaison partiellement en source brute — à relativiser)' : ''}.` : '.') +
+        (totDev ? ` ${Math.round((devs.mobile || 0) / totDev * 100)} % des pages sont vues sur mobile.` : ''));
+
+      if (ia) {
+        par.push(`Les assistants IA ont lu le site <b>${n(ia)} fois</b>` +
+          (iaTop.length ? ` — ${iaTop.map(([k, v], i) => `${i === 0 ? '<b>' + k + '</b>' : k} (${n(v)})`).join(', ')}` : '') +
+          `${llms ? `, et <code>llms.txt</code> a été consulté ${n(llms)} fois` : ''}. ` +
+          (iaRef.length
+            ? `Surtout : <b>${n(iaRef.reduce((x, [, v]) => x + v, 0))} visite${iaRef.reduce((x, [, v]) => x + v, 0) > 1 ? 's' : ''} humaine${iaRef.reduce((x, [, v]) => x + v, 0) > 1 ? 's' : ''}</b> sont arrivées <b>depuis une réponse d'IA</b> (${iaRef.map(([k, v]) => `${k} ${n(v)}`).join(', ')}) — la preuve que le site est cité.`
+            : `Aucune visite n'est encore arrivée depuis une réponse d'IA sur cette période.`));
+      }
+
+      const prov = [];
+      if (goo) prov.push(`${n(goo)} depuis Google`);
+      if (fb) prov.push(`${n(fb)} depuis Facebook`);
+      if (li) prov.push(`${n(li)} depuis LinkedIn`);
+      par.push((prov.length ? `Provenance des clics : ${prov.join(', ')}. ` : 'Aucun clic entrant identifié depuis les réseaux ou les moteurs. ') +
+        (pagesTop.length ? `La page la plus lue est <b>${pagesTop[0][0]}</b> (${n(pagesTop[0][1])} vues)${pagesTop[1] ? `, devant ${pagesTop[1][0]}` : ''}. ` : '') +
+        (chat ? `L'assistant Ansley a tenu ${n(chat)} conversation${chat > 1 ? 's' : ''}. ` : '') +
+        (camp.length ? `Campagne la plus efficace : <b>${camp[0][0]}</b> (${n(camp[0][1])} visites).` : ''));
+
+      const alertes = [];
+      if (e404 || scans) alertes.push(`${n(e404)} erreur${e404 > 1 ? 's' : ''} 404 et ${n(scans)} requête${scans > 1 ? 's' : ''} de scanners de vulnérabilités — du bruit sans effet sur un site statique`);
+      if (nbBrut) alertes.push(`${nbBrut} jour${nbBrut > 1 ? 's' : ''} de la période ${nbBrut > 1 ? 'proviennent' : 'provient'} des anciens exports (bots inclus, chiffres non comparables)`);
+      if (alertes.length) par.push(`<span class="alerte">À noter :</span> ${alertes.join(' ; ')}.`);
+
+      $('resume').innerHTML = par.map((p) => `<p>${p}</p>`).join('');
+    }
 
     $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
       (recale ? ` · période recalée sur les jours porteurs des filtres (demandé : ${dFmt(wa)} → ${dFmt(wb)})` : '') +
