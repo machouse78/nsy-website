@@ -67,7 +67,11 @@ $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/
 $stats = [
     'pageviews' => 0, 'uniques' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
-    'pages' => [], 'referrals' => ['facebook' => 0, 'linkedin' => 0, 'google' => 0, 'bing' => 0, 'autres' => 0],
+    'pages' => [], 'referrals' => ['ia' => 0, 'facebook' => 0, 'linkedin' => 0, 'google' => 0, 'bing' => 0, 'autres' => 0],
+    'ref_ia' => [], // détail par assistant (ChatGPT, Claude, Perplexity…) — provenance GEO
+    'campagnes' => [], // UTM : source/medium/campagne — le SEUL moyen de savoir de quel
+                       // groupe ou post vient un clic (Facebook ne transmet que l'origine)
+    'fbclid' => 0,     // clic Facebook confirmé même sans referer (app mobile)
     'llms_hits' => 0, 'chat_calls' => 0,
     // Profils (agrégats depuis le UA) + provenance détaillée + parcours par session.
     'devices' => ['mobile' => 0, 'desktop' => 0, 'tablette' => 0],
@@ -120,6 +124,20 @@ foreach ($files as $f) {
             $stats['uniques'][$vh] = 1;
             $stats['pages'][$clean] = ($stats['pages'][$clean] ?? 0) + 1;
 
+            // Campagnes UTM + fbclid (query de l'URL demandée)
+            $qs = parse_url($path, PHP_URL_QUERY);
+            $fbclid = false;
+            if ($qs) {
+                parse_str($qs, $q);
+                $fbclid = isset($q['fbclid']);
+                if (!empty($q['utm_source'])) {
+                    $clean3 = static fn($x) => mb_substr(preg_replace('/[^\w\-. ]/u', '', (string) $x), 0, 40) ?: '-';
+                    $camp = $clean3($q['utm_source']) . ' / ' . $clean3($q['utm_medium'] ?? '-') . ' / ' . $clean3($q['utm_campaign'] ?? '-');
+                    $stats['campagnes'][$camp] = ($stats['campagnes'][$camp] ?? 0) + 1;
+                }
+                if ($fbclid) $stats['fbclid']++;
+            }
+
             // Profil (familles uniquement — aucune donnée individuelle conservée)
             if (preg_match('/iPad|Tablet/i', $ua))                    $stats['devices']['tablette']++;
             elseif (preg_match('/Mobile|iPhone|Android/i', $ua))       $stats['devices']['mobile']++;
@@ -150,9 +168,34 @@ foreach ($files as $f) {
             $prev = end($stats['visites'][$vh]['pages']);
             if ($prev !== $clean) $stats['visites'][$vh]['pages'][] = $clean;
             $rh = strtolower((string) parse_url($ref, PHP_URL_HOST));
-            if ($rh !== '' && !str_contains($rh, 'nsy.fr') && !str_contains($rh, 'new-software-yard')) {
+            if ($rh === '' && $fbclid) { $stats['referrals']['facebook']++; } // app FB : referer vide, fbclid présent
+            elseif ($rh !== '' && !str_contains($rh, 'nsy.fr') && !str_contains($rh, 'new-software-yard')) {
                 $stats['ref_hosts'][$rh] = ($stats['ref_hosts'][$rh] ?? 0) + 1;
-                if (str_contains($rh, 'facebook') || str_contains($rh, 'fb.'))      $stats['referrals']['facebook']++;
+                // ⚠️ Les assistants IA se testent AVANT les moteurs : gemini.google.com
+                // contient « google », copilot.microsoft.com renvoie vers Bing, etc.
+                $ia = null;
+                foreach ([
+                    'ChatGPT'     => ['chatgpt.com', 'chat.openai.com', 'openai.com'],
+                    'Claude'      => ['claude.ai', 'anthropic.com'],
+                    'Perplexity'  => ['perplexity.ai'],
+                    'Gemini'      => ['gemini.google.com', 'bard.google.com', 'aistudio.google.com'],
+                    'Copilot'     => ['copilot.microsoft.com', 'bing.com/chat'],
+                    'Mistral'     => ['chat.mistral.ai', 'mistral.ai'],
+                    'Grok'        => ['grok.com', 'x.ai'],
+                    'DeepSeek'    => ['chat.deepseek.com', 'deepseek.com'],
+                    'Poe'         => ['poe.com'],
+                    'You.com'     => ['you.com'],
+                    'Phind'       => ['phind.com'],
+                ] as $nom => $hosts) {
+                    foreach ($hosts as $needle) {
+                        if (str_contains($rh, $needle)) { $ia = $nom; break 2; }
+                    }
+                }
+                if ($ia !== null) {
+                    $stats['referrals']['ia']++;
+                    $stats['ref_ia'][$ia] = ($stats['ref_ia'][$ia] ?? 0) + 1;
+                }
+                elseif (str_contains($rh, 'facebook') || str_contains($rh, 'fb.'))    $stats['referrals']['facebook']++;
                 elseif (str_contains($rh, 'linkedin') || $rh === 'lnkd.in')          $stats['referrals']['linkedin']++;
                 elseif (str_contains($rh, 'google'))                                 $stats['referrals']['google']++;
                 elseif (str_contains($rh, 'bing'))                                   $stats['referrals']['bing']++;
@@ -167,6 +210,8 @@ arsort($stats['ai']);
 arsort($stats['os']);
 arsort($stats['browsers']);
 arsort($stats['ref_hosts']);
+arsort($stats['ref_ia']);
+arsort($stats['campagnes']);
 
 // Parcours agrégés — puis la table des sessions est jetée.
 $entrees = []; $sorties = []; $transitions = []; $pv = ['1' => 0, '2_3' => 0, '4p' => 0];
@@ -207,6 +252,9 @@ $day = [
     'top_pages'   => array_slice($stats['pages'], 0, 25, true),
     'referrals'   => $stats['referrals'],
     'ref_hosts'   => array_slice($stats['ref_hosts'], 0, 10, true),
+    'ref_ia'      => $stats['ref_ia'],
+    'campagnes'   => array_slice($stats['campagnes'], 0, 15, true),
+    'fbclid'      => $stats['fbclid'],
     'devices'     => $stats['devices'],
     'os'          => array_slice($stats['os'], 0, 6, true),
     'browsers'    => array_slice($stats['browsers'], 0, 8, true),

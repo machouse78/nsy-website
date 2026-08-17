@@ -93,7 +93,7 @@
 
   <div class="bar">
     <span class="mono">Filtres</span>
-    <input type="text" id="kql" placeholder="ex. bot:chatgpt · page:/journal* · referral:facebook · source:logs — Entrée pour appliquer" />
+    <input type="text" id="kql" placeholder="ex. bot:chatgpt · ia:claude · page:/journal* · referral:facebook · source:logs — Entrée" />
     <span id="pills"></span>
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
@@ -126,6 +126,10 @@
       <div id="ai-pills"></div>
       <h2>Top pages — période <span class="mono">(⊕ = filtre)</span></h2>
       <table id="t-pages"><thead><tr><th>Page</th><th class="num">Vues</th></tr></thead><tbody></tbody></table>
+      <h2>Provenance — assistants IA <span class="mono">(clic = filtre)</span></h2>
+      <table id="t-refia"><thead><tr><th>Assistant</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
+      <h2>Campagnes UTM <span class="mono">(source / support / campagne)</span></h2>
+      <table id="t-camp"><thead><tr><th>Campagne</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
       <h2>Provenance — référents externes</h2>
       <table id="t-refh"><thead><tr><th>Site d'origine</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
     </div>
@@ -199,6 +203,13 @@
     return Object.entries(v.top_pages || {}).reduce((a, [k, n]) => a + (re.test(k) ? n : 0), 0);
   };
   const vRef = (v, src) => v.referrals?.[src] ?? 0;
+  // Provenance IA : total, ou l'assistant ciblé si un filtre ia: est actif.
+  const vRefIa = (v) => {
+    const a = fOf('ia');
+    if (!a) return v.referrals?.ia ?? 0;
+    const nm = Object.keys(v.ref_ia || {}).find((n) => n.toLowerCase().includes(a.toLowerCase()));
+    return nm ? v.ref_ia[nm] : 0;
+  };
 
   const METRICS = [
     ['visiteurs', 'Visiteurs humains', (v) => v.visiteurs ?? 0],
@@ -210,6 +221,7 @@
     ['s404', 'Erreurs 404', (v) => v.status?.['404'] ?? 0],
     ['scans', 'Hits scanners', (v) => v.scan_hits ?? 0],
     ['bots', 'Bots génériques', (v) => v.bot_hits ?? 0],
+    ['ref_ia', 'Visites depuis les IA (ChatGPT, Claude…)', (v) => vRefIa(v)],
     ['ref_facebook', 'Visites depuis Facebook', (v) => vRef(v, 'facebook')],
     ['ref_linkedin', 'Visites depuis LinkedIn', (v) => vRef(v, 'linkedin')],
     ['ref_google', 'Visites depuis Google', (v) => vRef(v, 'google')],
@@ -300,11 +312,25 @@
     if (e.key !== 'Enter') return;
     const toks = $('kql').value.trim().split(/\s+/).filter(Boolean);
     for (const t of toks) {
-      const m = t.match(/^(bot|page|referral|source):(.+)$/i);
+      const m = t.match(/^(bot|page|referral|source|ia):(.+)$/i);
       if (m) addFilter(m[1].toLowerCase(), m[2]);
     }
     $('kql').value = '';
   });
+
+  // Un jour est-il concerné par les filtres actifs ? (sert au RECALAGE des bornes
+  // de période : une sélection filtrée se resserre sur les jours réellement porteurs)
+  function keepDay(d) {
+    const v = D[d];
+    for (const f of filters) {
+      if (f.type === 'source' && (v.source || '') !== f.value) return false;
+      if (f.type === 'bot' && vAI(v) <= 0) return false;
+      if (f.type === 'page' && vPages(v) <= 0) return false;
+      if (f.type === 'referral' && vRef(v, f.value) <= 0) return false;
+      if (f.type === 'ia' && vRefIa(v) <= 0) return false;
+    }
+    return true;
+  }
 
   const sumKey = (sel, fn) => sel.reduce((a, d) => a + fn(D[d]), 0);
   const delta = (cur, old) => {
@@ -322,15 +348,20 @@
 
   function render() {
     renderPills();
-    let [a, b] = currentWindow();
-    let sel = daysIn(a, b);
-    if (fOf('source') === 'logs') sel = sel.filter((d) => (D[d].source || '') === 'logs');
-    if (!sel.length) { $('range-note').textContent = 'Aucun jour de données sur cette sélection.'; return; }
+    const [wa, wb] = currentWindow();
+    let sel = daysIn(wa, wb).filter(keepDay);
+    if (!sel.length) {
+      $('cards').innerHTML = '';
+      $('range-note').textContent = 'Aucun jour ne porte de données pour ces filtres sur la période choisie.';
+      return;
+    }
+    // RECALAGE : les bornes affichées collent aux jours réellement retenus.
+    const a = sel[0], b = sel.at(-1);
+    const recale = (a !== wa || b !== wb) && filters.length > 0;
     $('from').value = a; $('to').value = b;
     const span = Math.round((new Date(b) - new Date(a)) / 86400000) + 1;
     const [pa, pb] = [shiftISO(a, -span), shiftISO(a, -1)];
-    let prev = daysIn(pa, pb);
-    if (fOf('source') === 'logs') prev = prev.filter((d) => (D[d].source || '') === 'logs');
+    const prev = daysIn(pa, pb).filter(keepDay);
     const cmp = prev.length >= Math.min(sel.length, 2) ? prev : null;
     const nbBrut = sel.filter((d) => (D[d].source || '') !== 'logs').length;
     const nbBrutCmp = cmp ? cmp.filter((d) => (D[d].source || '') !== 'logs').length : 0;
@@ -347,6 +378,7 @@
       ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
       ['Conversations Ansley', fmt(sumKey(sel, (v) => v.chat_calls ?? 0)), ''],
       ['llms.txt lus', fmt(sumKey(sel, (v) => v.llms_hits ?? 0)), ''],
+      [fOf('ia') ? `Visites depuis ${fOf('ia')}` : 'Visites venues des IA', fmt(sumKey(sel, vRefIa)), ''],
       ['Visites venues de Facebook', fmt(sumKey(sel, (v) => vRef(v, 'facebook'))), ''],
       ['Visites venues de LinkedIn', fmt(sumKey(sel, (v) => vRef(v, 'linkedin'))), ''],
       ['Erreurs 404 (bruit scanners)', fmt(sumKey(sel, (v) => v.status?.['404'] ?? 0)), ''],
@@ -357,6 +389,7 @@
       `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
     $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
+      (recale ? ` · période recalée sur les jours porteurs des filtres (demandé : ${dFmt(wa)} → ${dFmt(wb)})` : '') +
       (cmp ? ` · comparé à ${dFmt(pa)} → ${dFmt(pb)}` : '') +
       (nbBrut ? ` · ⚠ ${nbBrut} jour(s) en source brute AWStats (bots inclus)` : '') +
       (nbBrutCmp ? ` · ⚠ comparaison partiellement en source brute — deltas à relativiser` : '');
@@ -375,7 +408,7 @@
       const top = aggMap(sel, (v) => v.ai).slice(0, 5);
       series = top.map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ai?.[nm] ?? 0), filt: ['bot', nm] }));
     } else if (splitMode === 'ref') {
-      series = ['facebook', 'linkedin', 'google', 'bing', 'autres'].map((src, i) =>
+      series = ['ia', 'facebook', 'linkedin', 'google', 'bing', 'autres'].map((src, i) =>
         ({ label: src, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => vRef(v, src)), filt: ['referral', src] }));
     } else {
       series = ['mobile', 'desktop', 'tablette'].map((dv, i) =>
@@ -401,6 +434,19 @@
       .map(([p, v]) => `<tr><td><span class="flt" data-p="${p}" title="Filtrer sur cette page">⊕</span><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('')
       || '<tr><td colspan="2" class="mono">—</td></tr>';
     document.querySelectorAll('#t-pages .flt').forEach((el) => el.addEventListener('click', () => addFilter('page', el.dataset.p)));
+
+    // Provenance — assistants IA (le KPI GEO ultime : un humain a cliqué depuis une réponse d'IA)
+    const iaRows = aggMap(sel, (v) => v.ref_ia);
+    document.querySelector('#t-refia tbody').innerHTML = iaRows.length
+      ? iaRows.map(([n, v]) => `<tr><td><span class="flt" data-ia="${n}" title="Filtrer sur cet assistant">⊕</span>${n}</td><td class="num">${fmt(v)}</td></tr>`).join('')
+      : '<tr><td colspan="2" class="mono">aucune visite depuis un assistant IA sur la période</td></tr>';
+    document.querySelectorAll('#t-refia .flt').forEach((el) => el.addEventListener('click', () => addFilter('ia', el.dataset.ia)));
+
+    // Campagnes UTM — le SEUL moyen de savoir de quel groupe/post vient un clic
+    const campRows = aggMap(sel, (v) => v.campagnes);
+    document.querySelector('#t-camp tbody').innerHTML = campRows.length
+      ? campRows.slice(0, 10).map(([c, v]) => `<tr><td>${c}</td><td class="num">${fmt(v)}</td></tr>`).join('')
+      : '<tr><td colspan="2" class="mono">aucune visite tracée — publier avec des liens ?utm_source=… (voir scripts/utm.mjs)</td></tr>';
 
     // Provenance — référents externes détaillés
     document.querySelector('#t-refh tbody').innerHTML = aggMap(sel, (v) => v.ref_hosts).slice(0, 10)
