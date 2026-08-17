@@ -367,7 +367,7 @@
       'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25c3%25a0-condition-1icee',
       'https://www.facebook.com/share/p/1ey4fxbyda',
       'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25c3%25a2ce-%25c3%25a0-lia-verdict-chiffr%25c3%25a9-hqq8e',
-      'https://www.facebook.com/1593243622503731/posts/1593243555837071',
+      'https://www.facebook.com/reel/2812928635744339',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
