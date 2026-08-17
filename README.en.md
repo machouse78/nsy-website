@@ -83,10 +83,16 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 - **Private KPI dashboard** (`/stats/`, Basic Auth): human visitors (bots
   excluded), pageviews, **AI readings** (ChatGPT-User, OAI-SearchBot… — the GEO
-  KPI), Facebook followers/engagement, referrals, Ansley conversations, journal
-  counters — collected every morning at D-1 by `stats-collector.php`
-  (Infomaniak scheduled task) from the access logs and the Graph API, stored as
-  JSON history, **no personal data** (aggregates only)
+  KPI), Facebook followers/engagement/public reshares, provenance (referrals +
+  detailed referrer hosts), **visitor profiles** (devices/OS/browsers) and
+  **journeys** (entry/exit pages, transitions, depth, duration), journal
+  counters — **ELK-like** time navigation (quick/absolute ranges,
+  day/week/month buckets, prior-period comparison) + **filters** (clickable
+  pills, KQL bar `bot:` `page:` `referral:` `source:`, metric selector,
+  split series). Collected daily at D-1 by `stats-collector.php` (Infomaniak
+  scheduled task) from access logs and the Graph API, **unlimited** JSON
+  history (+ AWStats import for pre-retention), **no personal data**
+  (aggregates only)
 - **Journal view/like counters**: a discreet bar under each article's date
   (`journal-stats.php`, file storage in `_secret/`, no personal data — per-article
   aggregates only, one shared counter per FR/EN pair). View counted once per

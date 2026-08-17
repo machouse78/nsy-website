@@ -17,17 +17,23 @@
   .wrap { max-width: 1080px; margin: 0 auto; }
   h1 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 26px; }
   h2 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 16px; margin: 34px 0 12px; }
+  h3 { font-family: "Space Grotesk", sans-serif; color: var(--fg1); font-size: 13px; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: .04em; }
   .mono { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg2); }
   .head { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 14px; }
-  .timebar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--bg2);
-    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 18px; }
-  .timebar button { background: transparent; border: 1px solid var(--line); border-radius: 8px; color: var(--fg1);
+  .bar { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; background: var(--bg2);
+    border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; margin-bottom: 12px; }
+  .bar button, .bar select { background: transparent; border: 1px solid var(--line); border-radius: 8px; color: var(--fg1);
     font: 600 12.5px Manrope, sans-serif; padding: 6px 12px; cursor: pointer; }
-  .timebar button:hover { border-color: var(--accent); color: var(--fg0); }
-  .timebar button.on { background: rgba(0, 229, 255, .12); border-color: var(--accent); color: var(--accent); }
-  .timebar input[type=date] { background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
-    color: var(--fg1); font: 500 12.5px "JetBrains Mono", monospace; padding: 5px 8px; color-scheme: dark; }
-  .timebar .sep { color: var(--fg2); }
+  .bar select option { background: var(--bg2); }
+  .bar button:hover { border-color: var(--accent); color: var(--fg0); }
+  .bar button.on { background: rgba(0, 229, 255, .12); border-color: var(--accent); color: var(--accent); }
+  .bar input[type=date], .bar input[type=text] { background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
+    color: var(--fg1); font: 500 12.5px "JetBrains Mono", monospace; padding: 6px 8px; color-scheme: dark; }
+  .bar input[type=text] { min-width: 320px; flex: 1; }
+  .bar .sep { color: var(--fg2); }
+  .fpill { display: inline-flex; align-items: center; gap: 6px; background: rgba(240, 138, 44, .12);
+    border: 1px solid var(--warm); border-radius: 99px; padding: 3px 6px 3px 12px; font-size: 12.5px; color: var(--warm); font-weight: 600; }
+  .fpill button { border: 0; background: transparent; color: var(--warm); font-size: 14px; cursor: pointer; padding: 0 4px; }
   .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(158px, 1fr)); gap: 12px; }
   .card { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
   .card .v { font-family: "Space Grotesk", sans-serif; font-size: 26px; font-weight: 700; color: var(--fg0); }
@@ -36,16 +42,30 @@
   .up { color: #4ADE80; } .down { color: #F87171; } .flat { color: var(--fg2); }
   svg { display: block; width: 100%; height: auto; }
   .chart { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .chart-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin: 34px 0 12px; }
+  .chart-head h2 { margin: 0; }
+  .legend { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; cursor: pointer; }
+  .legend i { width: 12px; height: 3px; border-radius: 2px; display: inline-block; }
   table { width: 100%; border-collapse: collapse; background: var(--bg2); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; font-size: 13.5px; }
   th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--line); }
   th { color: var(--fg2); font-size: 11px; text-transform: uppercase; letter-spacing: .05em; font-weight: 600; }
   td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
   tr:last-child td { border-bottom: 0; }
+  td .flt { cursor: pointer; color: var(--fg2); margin-right: 6px; }
+  td .flt:hover { color: var(--warm); }
   a { color: var(--accent); text-decoration: none; }
   .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
   @media (max-width: 760px) { .cols { grid-template-columns: 1fr; } }
-  .pill { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; font-size: 12px; margin: 2px 4px 2px 0; color: var(--fg1); }
+  .pill { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; font-size: 12px; margin: 2px 4px 2px 0; color: var(--fg1); cursor: pointer; }
+  .pill:hover { border-color: var(--warm); }
+  .pill.on { border-color: var(--warm); color: var(--warm); }
   .pill b { color: var(--accent); font-weight: 600; }
+  .hbar { display: flex; align-items: center; gap: 8px; margin: 4px 0; font-size: 12.5px; }
+  .hbar .lab { width: 110px; color: var(--fg1); }
+  .hbar .tr { flex: 1; background: var(--bg); border-radius: 4px; height: 10px; overflow: hidden; }
+  .hbar .fl { height: 100%; background: var(--accent); border-radius: 4px; }
+  .hbar .val { width: 90px; text-align: right; font-variant-numeric: tabular-nums; color: var(--fg2); }
   .note { font-size: 12px; color: var(--fg2); margin-top: 8px; }
   .resh { font-size: 11.5px; margin-top: 3px; color: var(--fg2); line-height: 1.5; }
   .resh a { color: var(--warm); }
@@ -59,7 +79,7 @@
     <span class="mono" id="stamp">chargement…</span>
   </div>
 
-  <div class="timebar" id="timebar">
+  <div class="bar" id="timebar">
     <span class="mono">Période</span>
     <button data-r="7">7 j</button>
     <button data-r="30" class="on">30 j</button>
@@ -70,29 +90,68 @@
     <input type="date" id="from" /> <span class="sep">→</span> <input type="date" id="to" />
     <button id="apply">Appliquer</button>
   </div>
+
+  <div class="bar">
+    <span class="mono">Filtres</span>
+    <input type="text" id="kql" placeholder="ex. bot:chatgpt · page:/journal* · referral:facebook · source:logs — Entrée pour appliquer" />
+    <span id="pills"></span>
+  </div>
   <div id="err">Impossible de charger les données (data.php).</div>
 
   <div class="grid" id="cards"></div>
   <div class="note" id="range-note"></div>
 
   <h2 id="h-vis">Visiteurs</h2>
-  <div class="chart"><svg id="c-vis" viewBox="0 0 1000 220" preserveAspectRatio="none"></svg></div>
+  <div class="chart"><svg id="c-vis"></svg></div>
 
-  <h2 id="h-ai">Lectures par les IA (hits robots IA)</h2>
-  <div class="chart"><svg id="c-ai" viewBox="0 0 1000 220" preserveAspectRatio="none"></svg></div>
+  <div class="chart-head">
+    <h2 id="h-metric">Métrique</h2>
+    <select id="metric"></select>
+  </div>
+  <div class="chart"><svg id="c-metric"></svg></div>
+
+  <div class="chart-head">
+    <h2>Répartition</h2>
+    <select id="split">
+      <option value="ia">Robots IA (top 5)</option>
+      <option value="ref">Referrals par source</option>
+      <option value="dev">Appareils</option>
+    </select>
+  </div>
+  <div class="chart"><div class="legend" id="legend"></div><svg id="c-split"></svg></div>
 
   <div class="cols">
     <div>
-      <h2>Robots IA — période</h2>
+      <h2>Robots IA — période <span class="mono">(clic = filtre)</span></h2>
       <div id="ai-pills"></div>
-      <h2>Top pages — période</h2>
+      <h2>Top pages — période <span class="mono">(⊕ = filtre)</span></h2>
       <table id="t-pages"><thead><tr><th>Page</th><th class="num">Vues</th></tr></thead><tbody></tbody></table>
+      <h2>Provenance — référents externes</h2>
+      <table id="t-refh"><thead><tr><th>Site d'origine</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
     </div>
     <div>
       <h2>Facebook — derniers posts</h2>
       <table id="t-fb"><thead><tr><th>Post</th><th class="num">👍</th><th class="num">💬</th><th class="num">↗</th></tr></thead><tbody></tbody></table>
       <h2>Articles du journal (cumul site)</h2>
       <table id="t-journal"><thead><tr><th>Article</th><th class="num">Vues</th><th class="num">❤</th></tr></thead><tbody></tbody></table>
+      <h2>Profils des visiteurs</h2>
+      <div id="profils"></div>
+    </div>
+  </div>
+
+  <h2>Parcours sur le site — période</h2>
+  <div class="cols">
+    <div>
+      <h3>Pages d'entrée</h3>
+      <table id="t-in"><tbody></tbody></table>
+      <h3>Pages de sortie</h3>
+      <table id="t-out"><tbody></tbody></table>
+    </div>
+    <div>
+      <h3>Enchaînements les plus fréquents</h3>
+      <table id="t-trans"><tbody></tbody></table>
+      <h3>Profondeur des visites</h3>
+      <div id="depth"></div>
     </div>
   </div>
 </div>
@@ -112,157 +171,277 @@
   const first = allDays[0], lastDay = allDays.at(-1);
   $('from').min = first; $('from').max = lastDay; $('to').min = first; $('to').max = lastDay;
 
-  // ── état de la période (façon ELK : quick select OU bornes absolues) ──
+  // ── état : période + filtres (façon ELK) ──
   let range = { from: null, to: null, quick: '30' };
+  let filters = []; // {type:'bot'|'page'|'referral'|'source', value}
+  const fOf = (t) => filters.find((f) => f.type === t)?.value ?? null;
+
   const daysIn = (a, b) => allDays.filter((d) => d >= a && d <= b);
   const shiftISO = (iso, n) => { const t = new Date(iso + 'T12:00:00'); t.setDate(t.getDate() + n); return t.toISOString().slice(0, 10); };
+  const currentWindow = () => range.quick === 'all' ? [first, lastDay]
+    : range.quick ? [shiftISO(lastDay, -(parseInt(range.quick, 10) - 1)), lastDay]
+    : [range.from, range.to];
 
-  function currentWindow() {
-    if (range.quick === 'all') return [first, lastDay];
-    if (range.quick) return [shiftISO(lastDay, -(parseInt(range.quick, 10) - 1)), lastDay];
-    return [range.from, range.to];
-  }
+  const globRe = (pat) => new RegExp('^' + pat.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i');
+  const AI_NAMES = [...new Set(allDays.flatMap((d) => Object.keys(D[d].ai || {})))];
 
-  // ── agrégation en buckets (jour / semaine / mois selon l'étendue) ──
-  function buckets(sel) {
-    const span = sel.length;
-    const mode = span <= 92 ? 'jour' : span <= 550 ? 'semaine' : 'mois';
-    const keyOf = (d) => {
-      if (mode === 'jour') return d;
-      if (mode === 'mois') return d.slice(0, 7);
-      const t = new Date(d + 'T12:00:00');
-      const monday = new Date(t); monday.setDate(t.getDate() - ((t.getDay() + 6) % 7));
-      return monday.toISOString().slice(0, 10);
-    };
-    const out = new Map();
-    for (const d of sel) {
-      const k = keyOf(d);
-      const b = out.get(k) || { visiteurs: 0, ai_hits: 0, brut: false };
-      b.visiteurs += D[d].visiteurs ?? 0;
-      b.ai_hits += D[d].ai_hits ?? 0;
-      if ((D[d].source || '') !== 'logs') b.brut = true;
-      out.set(k, b);
-    }
-    return { mode, entries: [...out.entries()] };
-  }
+  // valeurs journalières « conscientes des filtres »
+  const vAI = (v) => {
+    const b = fOf('bot');
+    if (!b) return v.ai_hits ?? 0;
+    const nm = AI_NAMES.find((n) => n.toLowerCase().includes(b.toLowerCase())) ?? b;
+    return v.ai?.[nm] ?? 0;
+  };
+  const vPages = (v) => {
+    const p = fOf('page');
+    if (!p) return v.pages_vues ?? 0;
+    const re = globRe(p);
+    return Object.entries(v.top_pages || {}).reduce((a, [k, n]) => a + (re.test(k) ? n : 0), 0);
+  };
+  const vRef = (v, src) => v.referrals?.[src] ?? 0;
 
+  const METRICS = [
+    ['visiteurs', 'Visiteurs humains', (v) => v.visiteurs ?? 0],
+    ['pages_vues', 'Pages vues', vPages],
+    ['ai_hits', 'Lectures IA', vAI],
+    ['se_hits', 'Moteurs de recherche', (v) => v.se_hits ?? 0],
+    ['llms', 'Lectures llms.txt', (v) => v.llms_hits ?? 0],
+    ['ansley', 'Conversations Ansley', (v) => v.chat_calls ?? 0],
+    ['s404', 'Erreurs 404', (v) => v.status?.['404'] ?? 0],
+    ['scans', 'Hits scanners', (v) => v.scan_hits ?? 0],
+    ['bots', 'Bots génériques', (v) => v.bot_hits ?? 0],
+    ['ref_facebook', 'Visites depuis Facebook', (v) => vRef(v, 'facebook')],
+    ['ref_linkedin', 'Visites depuis LinkedIn', (v) => vRef(v, 'linkedin')],
+    ['ref_google', 'Visites depuis Google', (v) => vRef(v, 'google')],
+    ['mobile', 'Pages vues mobile', (v) => v.devices?.mobile ?? 0],
+    ['desktop', 'Pages vues desktop', (v) => v.devices?.desktop ?? 0],
+  ];
+  $('metric').innerHTML = METRICS.map(([id, lab]) => `<option value="${id}">${lab}</option>`).join('');
+  $('metric').value = 'ai_hits';
+
+  // ── graphes ──
+  const COLORS = ['#00E5FF', '#F08A2C', '#4ADE80', '#A78BFA', '#FBBF24', '#F87171'];
   function niceMax(v) {
     if (v <= 5) return 5;
     const p = Math.pow(10, Math.floor(Math.log10(v)));
     for (const m of [1, 2, 2.5, 5, 10]) if (v <= m * p) return m * p;
     return 10 * p;
   }
-  function xLabel(key, mode) {
-    if (mode === 'mois') { const [y, m] = key.split('-'); return `${m}/${y}`; }
-    const t = new Date(key + 'T12:00:00');
-    return t.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
-  }
-  function line(svgId, entries, field, color, mode) {
-    const svg = $(svgId);
-    const pts = entries.map(([, b]) => b[field]);
-    const labels = entries.map(([k]) => k);
-    const brut = entries.map(([, b]) => b.brut);
-    const max = niceMax(Math.max(...pts, 1));
-    const W = 1000, H = 250, PL = 62, PR = 16, PT = 14, PB = 34;
-    const x = (i) => PL + i * (W - PL - PR) / Math.max(pts.length - 1, 1);
-    const y = (v) => H - PB - v * (H - PT - PB) / max;
-    const path = pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-    const area = `${path} L${x(pts.length - 1).toFixed(1)},${H - PB} L${x(PL === x(0) ? 0 : 0).toFixed(1)},${H - PB} Z`;
-    const yTicks = [0, .25, .5, .75, 1].map((f) => Math.round(max * f));
-    const step = Math.max(1, Math.ceil(pts.length / 6));
-    const xIdx = [];
-    for (let i = 0; i < pts.length; i += step) xIdx.push(i);
-    if (xIdx.at(-1) !== pts.length - 1) xIdx.push(pts.length - 1);
-    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
-    svg.innerHTML = `
-      <defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0" stop-color="${color}" stop-opacity=".28"/><stop offset="1" stop-color="${color}" stop-opacity="0"/>
-      </linearGradient></defs>
-      ${yTicks.map((v) => `<line x1="${PL}" y1="${y(v).toFixed(1)}" x2="${W - PR}" y2="${y(v).toFixed(1)}" stroke="#1C2740" stroke-width="1"${v ? ' stroke-dasharray="3 5"' : ''}/>
-        <text x="${PL - 8}" y="${(y(v) + 4).toFixed(1)}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="end">${fmt(v)}</text>`).join('')}
-      ${xIdx.map((i) => `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="middle">${xLabel(labels[i], mode)}</text>`).join('')}
-      <path d="${area}" fill="url(#g-${svgId})"/>
-      <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
-      ${pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${pts.length > 120 ? 1.6 : 3}" fill="${color}"${brut[i] ? ' fill-opacity=".45"' : ''}><title>${labels[i]} : ${fmt(v)}${brut[i] ? ' (source brute, bots inclus)' : ''}</title></circle>`).join('')}`;
+  const xLabel = (key, mode) => mode === 'mois'
+    ? `${key.slice(5, 7)}/${key.slice(0, 4)}`
+    : new Date(key + 'T12:00:00').toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+
+  function buckets(sel) {
+    const mode = sel.length <= 92 ? 'jour' : sel.length <= 550 ? 'semaine' : 'mois';
+    const keyOf = (d) => {
+      if (mode === 'jour') return d;
+      if (mode === 'mois') return d.slice(0, 7);
+      const t = new Date(d + 'T12:00:00');
+      t.setDate(t.getDate() - ((t.getDay() + 6) % 7));
+      return t.toISOString().slice(0, 10);
+    };
+    const keys = [];
+    const map = new Map();
+    for (const d of sel) {
+      const k = keyOf(d);
+      if (!map.has(k)) { map.set(k, []); keys.push(k); }
+      map.get(k).push(d);
+    }
+    return { mode, keys, map };
   }
 
-  const sumKey = (sel, k) => sel.reduce((a, d) => a + (D[d][k] ?? 0), 0);
+  function drawChart(svgId, bk, series) {
+    const svg = $(svgId);
+    const n = bk.keys.length;
+    const allVals = series.flatMap((s) => s.pts);
+    const max = niceMax(Math.max(...allVals, 1));
+    const W = 1000, H = 250, PL = 62, PR = 16, PT = 14, PB = 34;
+    const x = (i) => PL + i * (W - PL - PR) / Math.max(n - 1, 1);
+    const y = (v) => H - PB - v * (H - PT - PB) / max;
+    const yTicks = [0, .25, .5, .75, 1].map((f) => Math.round(max * f));
+    const step = Math.max(1, Math.ceil(n / 6));
+    const xIdx = [];
+    for (let i = 0; i < n; i += step) xIdx.push(i);
+    if (xIdx.at(-1) !== n - 1) xIdx.push(n - 1);
+    const brut = bk.keys.map((k) => bk.map.get(k).some((d) => (D[d].source || '') !== 'logs'));
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    svg.innerHTML = `
+      ${series.length === 1 ? `<defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${series[0].color}" stop-opacity=".28"/><stop offset="1" stop-color="${series[0].color}" stop-opacity="0"/>
+      </linearGradient></defs>` : ''}
+      ${yTicks.map((v) => `<line x1="${PL}" y1="${y(v).toFixed(1)}" x2="${W - PR}" y2="${y(v).toFixed(1)}" stroke="#1C2740" stroke-width="1"${v ? ' stroke-dasharray="3 5"' : ''}/>
+        <text x="${PL - 8}" y="${(y(v) + 4).toFixed(1)}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="end">${fmt(v)}</text>`).join('')}
+      ${xIdx.map((i) => `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="middle">${xLabel(bk.keys[i], bk.mode)}</text>`).join('')}
+      ${series.map((s) => {
+        const path = s.pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+        const area = series.length === 1
+          ? `<path d="${path} L${x(n - 1).toFixed(1)},${H - PB} L${x(0).toFixed(1)},${H - PB} Z" fill="url(#g-${svgId})"/>` : '';
+        return `${area}<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>
+          ${s.pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${n > 120 ? 1.5 : 2.8}" fill="${s.color}"${brut[i] ? ' fill-opacity=".45"' : ''}><title>${bk.keys[i]} · ${s.label} : ${fmt(v)}${brut[i] ? ' (source brute, bots inclus)' : ''}</title></circle>`).join('')}`;
+      }).join('')}`;
+  }
+
+  const bkSum = (bk, fn) => bk.keys.map((k) => bk.map.get(k).reduce((a, d) => a + fn(D[d]), 0));
+
+  // ── filtres : pills + KQL ──
+  function addFilter(type, value) {
+    filters = filters.filter((f) => f.type !== type);
+    filters.push({ type, value });
+    if (type === 'referral') $('metric').value = 'ref_' + value;
+    render();
+  }
+  function removeFilter(type) { filters = filters.filter((f) => f.type !== type); render(); }
+  function renderPills() {
+    $('pills').innerHTML = filters.map((f) =>
+      `<span class="fpill">${f.type}:${f.value}<button data-t="${f.type}" title="Retirer">✕</button></span>`).join(' ');
+    $('pills').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => removeFilter(b.dataset.t)));
+  }
+  $('kql').addEventListener('keydown', (e) => {
+    if (e.key !== 'Enter') return;
+    const toks = $('kql').value.trim().split(/\s+/).filter(Boolean);
+    for (const t of toks) {
+      const m = t.match(/^(bot|page|referral|source):(.+)$/i);
+      if (m) addFilter(m[1].toLowerCase(), m[2]);
+    }
+    $('kql').value = '';
+  });
+
+  const sumKey = (sel, fn) => sel.reduce((a, d) => a + fn(D[d]), 0);
   const delta = (cur, old) => {
     if (old == null || cur == null || !isFinite(old)) return '<span class="flat">—</span>';
     const d = cur - old;
     return d === 0 ? '<span class="flat">=</span>'
       : `<span class="${d > 0 ? 'up' : 'down'}">${d > 0 ? '▲' : '▼'} ${fmt(Math.abs(d))}</span>`;
   };
+  const aggMap = (sel, get) => {
+    const out = {};
+    for (const d of sel) for (const [k, v] of Object.entries(get(D[d]) || {})) out[k] = (out[k] || 0) + v;
+    return Object.entries(out).sort((a, b) => b[1] - a[1]);
+  };
+  const dFmt = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 
   function render() {
-    const [a, b] = currentWindow();
-    const sel = daysIn(a, b);
-    if (!sel.length) return;
+    renderPills();
+    let [a, b] = currentWindow();
+    let sel = daysIn(a, b);
+    if (fOf('source') === 'logs') sel = sel.filter((d) => (D[d].source || '') === 'logs');
+    if (!sel.length) { $('range-note').textContent = 'Aucun jour de données sur cette sélection.'; return; }
     $('from').value = a; $('to').value = b;
     const span = Math.round((new Date(b) - new Date(a)) / 86400000) + 1;
     const [pa, pb] = [shiftISO(a, -span), shiftISO(a, -1)];
-    const prev = daysIn(pa, pb);
+    let prev = daysIn(pa, pb);
+    if (fOf('source') === 'logs') prev = prev.filter((d) => (D[d].source || '') === 'logs');
     const cmp = prev.length >= Math.min(sel.length, 2) ? prev : null;
-
     const nbBrut = sel.filter((d) => (D[d].source || '') !== 'logs').length;
+    const nbBrutCmp = cmp ? cmp.filter((d) => (D[d].source || '') !== 'logs').length : 0;
     const lastSel = D[sel.at(-1)];
     const firstFb = sel.map((d) => D[d].fb?.abonnes).find((v) => v != null);
     const lastFb = [...sel].reverse().map((d) => D[d].fb?.abonnes).find((v) => v != null);
 
+    const pageF = fOf('page'), botF = fOf('bot');
     const cards = [
-      ['Visiteurs · période', fmt(sumKey(sel, 'visiteurs')), cmp ? delta(sumKey(sel, 'visiteurs'), sumKey(cmp, 'visiteurs')) : ''],
-      ['Pages vues · période', fmt(sumKey(sel, 'pages_vues')), cmp ? delta(sumKey(sel, 'pages_vues'), sumKey(cmp, 'pages_vues')) : ''],
-      ['Lectures IA · période', fmt(sumKey(sel, 'ai_hits')), cmp ? delta(sumKey(sel, 'ai_hits'), sumKey(cmp, 'ai_hits')) : ''],
-      ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, 'visiteurs') / sel.length)), ''],
+      ['Visiteurs · période', fmt(sumKey(sel, (v) => v.visiteurs ?? 0)), cmp ? delta(sumKey(sel, (v) => v.visiteurs ?? 0), sumKey(cmp, (v) => v.visiteurs ?? 0)) : ''],
+      [pageF ? `Pages vues · ${pageF}` : 'Pages vues · période', fmt(sumKey(sel, vPages)), cmp ? delta(sumKey(sel, vPages), sumKey(cmp, vPages)) : ''],
+      [botF ? `Lectures IA · ${botF}` : 'Lectures IA · période', fmt(sumKey(sel, vAI)), cmp ? delta(sumKey(sel, vAI), sumKey(cmp, vAI)) : ''],
+      ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, (v) => v.visiteurs ?? 0) / sel.length)), ''],
       ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
-      ['Conversations Ansley', fmt(sumKey(sel, 'chat_calls')), ''],
-      ['llms.txt lus', fmt(sumKey(sel, 'llms_hits')), ''],
-      ['Visites venues de Facebook', fmt(sel.reduce((x, d) => x + (D[d].referrals?.facebook ?? 0), 0)), ''],
-      ['Visites venues de LinkedIn', fmt(sel.reduce((x, d) => x + (D[d].referrals?.linkedin ?? 0), 0)), ''],
-      ['Erreurs 404 (bruit scanners)', fmt(sel.reduce((x, d) => x + (D[d].status?.['404'] ?? 0), 0)), ''],
-      ['Hits de scanners identifiés', fmt(sumKey(sel, 'scan_hits')), ''],
-      ['Moteurs (SE)', fmt(sumKey(sel, 'se_hits')), ''],
+      ['Conversations Ansley', fmt(sumKey(sel, (v) => v.chat_calls ?? 0)), ''],
+      ['llms.txt lus', fmt(sumKey(sel, (v) => v.llms_hits ?? 0)), ''],
+      ['Visites venues de Facebook', fmt(sumKey(sel, (v) => vRef(v, 'facebook'))), ''],
+      ['Visites venues de LinkedIn', fmt(sumKey(sel, (v) => vRef(v, 'linkedin'))), ''],
+      ['Erreurs 404 (bruit scanners)', fmt(sumKey(sel, (v) => v.status?.['404'] ?? 0)), ''],
+      ['Hits de scanners identifiés', fmt(sumKey(sel, (v) => v.scan_hits ?? 0)), ''],
+      ['Moteurs (SE)', fmt(sumKey(sel, (v) => v.se_hits ?? 0)), ''],
     ];
     $('cards').innerHTML = cards.map(([t, v, d]) =>
       `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
-    const bk = buckets(sel);
-    $('h-vis').textContent = `Visiteurs — par ${bk.mode}`;
-    $('h-ai').textContent = `Lectures par les IA — par ${bk.mode}`;
-    line('c-vis', bk.entries, 'visiteurs', '#00E5FF', bk.mode);
-    line('c-ai', bk.entries, 'ai_hits', '#F08A2C', bk.mode);
-
-    const dFmt = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
-    const nbBrutCmp = cmp ? cmp.filter((d) => (D[d].source || '') !== 'logs').length : 0;
     $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
       (cmp ? ` · comparé à ${dFmt(pa)} → ${dFmt(pb)}` : '') +
       (nbBrut ? ` · ⚠ ${nbBrut} jour(s) en source brute AWStats (bots inclus)` : '') +
       (nbBrutCmp ? ` · ⚠ comparaison partiellement en source brute — deltas à relativiser` : '');
 
-    const ai = {};
-    for (const d of sel) for (const [n, h] of Object.entries(D[d].ai || {})) ai[n] = (ai[n] || 0) + h;
-    $('ai-pills').innerHTML = Object.entries(ai).sort((x, y) => y[1] - x[1])
-      .map(([n, h]) => `<span class="pill">${n} <b>${fmt(h)}</b></span>`).join('') || '<span class="mono">aucun</span>';
+    const bk = buckets(sel);
+    $('h-vis').textContent = `Visiteurs — par ${bk.mode}`;
+    drawChart('c-vis', bk, [{ label: 'Visiteurs', color: '#00E5FF', pts: bkSum(bk, (v) => v.visiteurs ?? 0) }]);
 
-    const pages = {};
-    for (const d of sel) for (const [p, v] of Object.entries(D[d].top_pages || {})) pages[p] = (pages[p] || 0) + v;
-    document.querySelector('#t-pages tbody').innerHTML = Object.entries(pages).sort((x, y) => y[1] - x[1]).slice(0, 12)
-      .map(([p, v]) => `<tr><td><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('')
+    const mDef = METRICS.find(([id]) => id === $('metric').value) ?? METRICS[2];
+    $('h-metric').textContent = `${mDef[1]} — par ${bk.mode}`;
+    drawChart('c-metric', bk, [{ label: mDef[1], color: '#F08A2C', pts: bkSum(bk, mDef[2]) }]);
+
+    const splitMode = $('split').value;
+    let series = [];
+    if (splitMode === 'ia') {
+      const top = aggMap(sel, (v) => v.ai).slice(0, 5);
+      series = top.map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ai?.[nm] ?? 0), filt: ['bot', nm] }));
+    } else if (splitMode === 'ref') {
+      series = ['facebook', 'linkedin', 'google', 'bing', 'autres'].map((src, i) =>
+        ({ label: src, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => vRef(v, src)), filt: ['referral', src] }));
+    } else {
+      series = ['mobile', 'desktop', 'tablette'].map((dv, i) =>
+        ({ label: dv, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.devices?.[dv] ?? 0) }));
+    }
+    $('legend').innerHTML = series.map((s) =>
+      `<span data-f='${s.filt ? JSON.stringify(s.filt) : ''}'><i style="background:${s.color}"></i>${s.label}</span>`).join('');
+    $('legend').querySelectorAll('span[data-f]').forEach((el) => el.addEventListener('click', () => {
+      if (el.dataset.f) { const [t, v] = JSON.parse(el.dataset.f); addFilter(t, v); }
+    }));
+    drawChart('c-split', bk, series);
+
+    // Robots IA (clic = filtre)
+    $('ai-pills').innerHTML = aggMap(sel, (v) => v.ai)
+      .map(([n, h]) => `<span class="pill${botF && n.toLowerCase().includes(botF.toLowerCase()) ? ' on' : ''}" data-b="${n}">${n} <b>${fmt(h)}</b></span>`).join('') || '<span class="mono">aucun</span>';
+    $('ai-pills').querySelectorAll('.pill').forEach((el) => el.addEventListener('click', () =>
+      botF === el.dataset.b ? removeFilter('bot') : addFilter('bot', el.dataset.b)));
+
+    // Top pages (filtrées si page:) — ⊕ = filtre
+    const re = pageF ? globRe(pageF) : null;
+    const pages = aggMap(sel, (v) => v.top_pages).filter(([p]) => !re || re.test(p)).slice(0, 12);
+    document.querySelector('#t-pages tbody').innerHTML = pages
+      .map(([p, v]) => `<tr><td><span class="flt" data-p="${p}" title="Filtrer sur cette page">⊕</span><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('')
       || '<tr><td colspan="2" class="mono">—</td></tr>';
+    document.querySelectorAll('#t-pages .flt').forEach((el) => el.addEventListener('click', () => addFilter('page', el.dataset.p)));
 
+    // Provenance — référents externes détaillés
+    document.querySelector('#t-refh tbody').innerHTML = aggMap(sel, (v) => v.ref_hosts).slice(0, 10)
+      .map(([h, v]) => `<tr><td>${h}</td><td class="num">${fmt(v)}</td></tr>`).join('')
+      || '<tr><td colspan="2" class="mono">— (référents détaillés collectés à partir des jours en source « logs » v3)</td></tr>';
+
+    // FB + journal
     document.querySelector('#t-fb tbody').innerHTML = (lastSel.fb?.posts || [])
       .map((p) => {
         const resh = (p.reshares || []).length
-          ? `<div class="resh">↗ visibles : ${p.reshares.map((r) => r.url
-              ? `<a href="${r.url}" target="_blank" rel="noopener">${r.nom}</a>` : r.nom).join(' · ')}</div>`
+          ? `<div class="resh">↗ visibles : ${p.reshares.map((r) => r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.nom}</a>` : r.nom).join(' · ')}</div>`
           : (p.shares ? '<div class="resh">↗ repartages privés/groupes (non exposés par Meta)</div>' : '');
         return `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a>${resh}</td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`;
-      }).join('')
-      || '<tr><td colspan="4" class="mono">pas de données Facebook sur le dernier jour de la période</td></tr>';
-
+      }).join('') || '<tr><td colspan="4" class="mono">pas de données Facebook</td></tr>';
     document.querySelector('#t-journal tbody').innerHTML = Object.entries(lastSel.journal || {})
       .map(([s, v]) => `<tr><td><a href="https://www.nsy.fr/${s}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
       || '<tr><td colspan="3" class="mono">—</td></tr>';
+
+    // Profils (familles agrégées — aucune donnée individuelle)
+    const bars = (entries, color) => {
+      const tot = entries.reduce((x, [, v]) => x + v, 0) || 1;
+      return entries.map(([k, v]) => `<div class="hbar"><span class="lab">${k}</span><span class="tr"><span class="fl" style="width:${(v / tot * 100).toFixed(1)}%;background:${color}"></span></span><span class="val">${(v / tot * 100).toFixed(0)} % · ${fmt(v)}</span></div>`).join('');
+    };
+    const devs = aggMap(sel, (v) => v.devices);
+    $('profils').innerHTML = devs.length
+      ? `<h3>Appareils</h3>${bars(devs, '#00E5FF')}<h3>Systèmes</h3>${bars(aggMap(sel, (v) => v.os).slice(0, 5), '#F08A2C')}<h3>Navigateurs</h3>${bars(aggMap(sel, (v) => v.browsers).slice(0, 6), '#4ADE80')}`
+      : '<span class="mono">profils disponibles sur les jours en source « logs » (collecteur v3)</span>';
+
+    // Parcours (agrégats de sessions journalières)
+    const mini = (entries) => entries.slice(0, 6).map(([k, v]) =>
+      `<tr><td>${k}</td><td class="num">${fmt(v)}</td></tr>`).join('') || '<tr><td class="mono">— (jours « logs » v3 uniquement)</td></tr>';
+    document.querySelector('#t-in tbody').innerHTML = mini(aggMap(sel, (v) => v.parcours?.entrees));
+    document.querySelector('#t-out tbody').innerHTML = mini(aggMap(sel, (v) => v.parcours?.sorties));
+    document.querySelector('#t-trans tbody').innerHTML = mini(aggMap(sel, (v) => v.parcours?.transitions));
+    const pvMap = Object.fromEntries(aggMap(sel, (v) => v.parcours?.pages_visite));
+    const durees = sel.map((d) => D[d].parcours?.duree_moy_s ?? 0).filter(Boolean);
+    const dm = durees.length ? Math.round(durees.reduce((x, y) => x + y, 0) / durees.length) : 0;
+    $('depth').innerHTML = (Object.keys(pvMap).length
+      ? bars([['1 page', pvMap['1'] ?? 0], ['2-3 pages', pvMap['2_3'] ?? 0], ['4 pages et +', pvMap['4p'] ?? 0]], '#A78BFA')
+      : '<span class="mono">—</span>')
+      + (dm ? `<div class="note">Durée moyenne d'une visite multi-pages : ≈ ${Math.floor(dm / 60)} min ${String(dm % 60).padStart(2, '0')} s (sessions intra-journée)</div>` : '');
 
     document.querySelectorAll('#timebar button[data-r]').forEach((btn) =>
       btn.classList.toggle('on', btn.dataset.r === range.quick));
@@ -274,9 +453,10 @@
     const f = $('from').value, t = $('to').value;
     if (f && t && f <= t) { range = { quick: null, from: f, to: t }; render(); }
   });
+  $('metric').addEventListener('change', render);
+  $('split').addEventListener('change', render);
 
-  $('stamp').textContent = `historique : ${dLabel(first)} → ${dLabel(lastDay)} · ${allDays.length} jours`;
-  function dLabel(iso) { return new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' }); }
+  $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   render();
 })();
 </script>

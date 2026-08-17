@@ -83,10 +83,16 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Dashboard KPI privé** (`/stats/`, Basic Auth) : visiteurs humains (bots
   exclus), pages vues, **lectures par les IA** (ChatGPT-User, OAI-SearchBot… —
-  le KPI GEO), abonnés/engagement Facebook, referrals, conversations Ansley,
-  compteurs du journal — collecté chaque matin à J-1 par `stats-collector.php`
-  (tâche planifiée Infomaniak) depuis les access logs et l'API Graph, historisé
-  en JSON, **aucune donnée personnelle** (agrégats seuls)
+  le KPI GEO), abonnés/engagement/repartages publics Facebook, provenance
+  (referrals + référents détaillés), **profils** (appareils/OS/navigateurs) et
+  **parcours** (entrées, sorties, enchaînements, profondeur, durée), compteurs
+  du journal — navigation temporelle **façon ELK** (périodes rapides/absolues,
+  buckets jour/semaine/mois, comparaison N-1) + **filtres** (pills cliquables,
+  barre KQL `bot:` `page:` `referral:` `source:`, métrique au choix, séries
+  superposées). Collecté chaque matin à J-1 par `stats-collector.php` (tâche
+  planifiée Infomaniak) depuis les access logs et l'API Graph, historique JSON
+  **illimité** (+ import AWStats pré-rétention), **aucune donnée personnelle**
+  (agrégats seuls)
 - **Compteurs de vues / « j'aime » du journal** : barre discrète sous la date de
   chaque article (`journal-stats.php`, stockage fichier dans `_secret/`, aucun
   contenu personnel — des agrégats par article, un seul compteur pour la paire

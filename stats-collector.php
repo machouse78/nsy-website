@@ -69,6 +69,10 @@ $stats = [
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
     'pages' => [], 'referrals' => ['facebook' => 0, 'linkedin' => 0, 'google' => 0, 'bing' => 0, 'autres' => 0],
     'llms_hits' => 0, 'chat_calls' => 0,
+    // Profils (agrégats depuis le UA) + provenance détaillée + parcours par session.
+    'devices' => ['mobile' => 0, 'desktop' => 0, 'tablette' => 0],
+    'os' => [], 'browsers' => [], 'ref_hosts' => [],
+    'visites' => [], // hash éphémère => ['first','last','pages'[]] — JETÉ après agrégation
 ];
 $logDir = (getenv('HOME') ?: dirname(__DIR__)) . '/ik-logs';
 $files = array_merge(glob("$logDir/access.log") ?: [], glob("$logDir/access.log-*") ?: []);
@@ -112,10 +116,42 @@ foreach ($files as $f) {
         $isPage = $clean === '/' || str_ends_with($clean, '.html');
         if ($isPage && in_array($status, ['200', '304'], true) && $method === 'GET') {
             $stats['pageviews']++;
-            $stats['uniques'][substr(md5($ip . '|' . $ua), 0, 12)] = 1;
+            $vh = substr(md5($ip . '|' . $ua), 0, 12); // ≠ $h (handle de fichier de la boucle !)
+            $stats['uniques'][$vh] = 1;
             $stats['pages'][$clean] = ($stats['pages'][$clean] ?? 0) + 1;
+
+            // Profil (familles uniquement — aucune donnée individuelle conservée)
+            if (preg_match('/iPad|Tablet/i', $ua))                    $stats['devices']['tablette']++;
+            elseif (preg_match('/Mobile|iPhone|Android/i', $ua))       $stats['devices']['mobile']++;
+            else                                                       $stats['devices']['desktop']++;
+            $os = preg_match('/iPhone|iPad|iOS/i', $ua) ? 'iOS'
+                : (preg_match('/Android/i', $ua) ? 'Android'
+                : (preg_match('/Windows/i', $ua) ? 'Windows'
+                : (preg_match('/Macintosh|Mac OS/i', $ua) ? 'macOS'
+                : (preg_match('/Linux/i', $ua) ? 'Linux' : 'autre'))));
+            $stats['os'][$os] = ($stats['os'][$os] ?? 0) + 1;
+            $br = preg_match('/Edg/i', $ua) ? 'Edge'
+                : (preg_match('/OPR|Opera/i', $ua) ? 'Opera'
+                : (preg_match('/SamsungBrowser/i', $ua) ? 'Samsung'
+                : (preg_match('/Firefox|FxiOS/i', $ua) ? 'Firefox'
+                : (preg_match('/Chrome|CriOS/i', $ua) ? 'Chrome'
+                : (preg_match('/Safari/i', $ua) ? 'Safari'
+                : (preg_match('/LinkedInApp/i', $ua) ? 'App LinkedIn'
+                : (preg_match('/FBAN|FBAV|FB_IAB/i', $ua) ? 'App Facebook'
+                : (preg_match('/Instagram/i', $ua) ? 'App Instagram' : 'autre'))))))));
+            $stats['browsers'][$br] = ($stats['browsers'][$br] ?? 0) + 1;
+
+            // Parcours : horodatage + séquence de pages par session (hash éphémère)
+            $dt = DateTime::createFromFormat('d/M/Y:H:i:s O', $m[2]);
+            $ts = $dt ? $dt->getTimestamp() : 0;
+            if (!isset($stats['visites'][$vh])) $stats['visites'][$vh] = ['first' => $ts, 'last' => $ts, 'pages' => []];
+            $stats['visites'][$vh]['last'] = max($stats['visites'][$vh]['last'], $ts);
+            $stats['visites'][$vh]['first'] = min($stats['visites'][$vh]['first'], $ts) ?: $ts;
+            $prev = end($stats['visites'][$vh]['pages']);
+            if ($prev !== $clean) $stats['visites'][$vh]['pages'][] = $clean;
             $rh = strtolower((string) parse_url($ref, PHP_URL_HOST));
             if ($rh !== '' && !str_contains($rh, 'nsy.fr') && !str_contains($rh, 'new-software-yard')) {
+                $stats['ref_hosts'][$rh] = ($stats['ref_hosts'][$rh] ?? 0) + 1;
                 if (str_contains($rh, 'facebook') || str_contains($rh, 'fb.'))      $stats['referrals']['facebook']++;
                 elseif (str_contains($rh, 'linkedin') || $rh === 'lnkd.in')          $stats['referrals']['linkedin']++;
                 elseif (str_contains($rh, 'google'))                                 $stats['referrals']['google']++;
@@ -128,6 +164,35 @@ foreach ($files as $f) {
 }
 arsort($stats['pages']);
 arsort($stats['ai']);
+arsort($stats['os']);
+arsort($stats['browsers']);
+arsort($stats['ref_hosts']);
+
+// Parcours agrégés — puis la table des sessions est jetée.
+$entrees = []; $sorties = []; $transitions = []; $pv = ['1' => 0, '2_3' => 0, '4p' => 0];
+$durees = [];
+foreach ($stats['visites'] as $v) {
+    $p = $v['pages'];
+    if (!$p) continue;
+    $entrees[$p[0]] = ($entrees[$p[0]] ?? 0) + 1;
+    $sorties[end($p)] = ($sorties[end($p)] ?? 0) + 1;
+    $n = count($p);
+    $pv[$n === 1 ? '1' : ($n <= 3 ? '2_3' : '4p')]++;
+    for ($i = 1; $i < $n; $i++) {
+        $t = $p[$i - 1] . ' → ' . $p[$i];
+        $transitions[$t] = ($transitions[$t] ?? 0) + 1;
+    }
+    if ($n > 1 && $v['last'] > $v['first']) $durees[] = $v['last'] - $v['first'];
+}
+arsort($entrees); arsort($sorties); arsort($transitions);
+$parcours = [
+    'entrees'      => array_slice($entrees, 0, 10, true),
+    'sorties'      => array_slice($sorties, 0, 10, true),
+    'transitions'  => array_slice($transitions, 0, 10, true),
+    'pages_visite' => $pv,
+    'duree_moy_s'  => $durees ? (int) round(array_sum($durees) / count($durees)) : 0,
+];
+
 $day = [
     'visiteurs'   => count($stats['uniques']),
     'pages_vues'  => $stats['pageviews'],
@@ -139,8 +204,13 @@ $day = [
     'scan_hits'   => $stats['scan_hits'],
     'llms_hits'   => $stats['llms_hits'],
     'chat_calls'  => $stats['chat_calls'],
-    'top_pages'   => array_slice($stats['pages'], 0, 10, true),
+    'top_pages'   => array_slice($stats['pages'], 0, 25, true),
     'referrals'   => $stats['referrals'],
+    'ref_hosts'   => array_slice($stats['ref_hosts'], 0, 10, true),
+    'devices'     => $stats['devices'],
+    'os'          => array_slice($stats['os'], 0, 6, true),
+    'browsers'    => array_slice($stats['browsers'], 0, 8, true),
+    'parcours'    => $parcours,
     'status'      => $stats['status'],
     'log_files'   => $parsedFiles,
 ];
