@@ -88,10 +88,10 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
   **journeys** (entry/exit pages, transitions, depth, duration), journal
   counters — **ELK-like** time navigation (quick/absolute ranges,
   day/week/month buckets, prior-period comparison) + **filters** (clickable
-  pills, KQL bar `bot:` `page:` `referral:` `source:`, metric selector,
+  pills, query bar `bot:` `page:` `referral:` `ia:`, metric selector,
   split series). Collected daily at D-1 by `stats-collector.php` (Infomaniak
-  scheduled task) from access logs and the Graph API, **unlimited** JSON
-  history (+ AWStats import for pre-retention), **no personal data**
+  scheduled task) from access logs and the Graph API, **unlimited** JSON history, **logs only** (never AWStats exports: bots
+  included, broken scale), **no personal data**
   (aggregates only)
 - **Journal view/like counters**: a discreet bar under each article's date
   (`journal-stats.php`, file storage in `_secret/`, no personal data — per-article

@@ -114,7 +114,6 @@
     <select id="f-page"><option value="">Page : toutes</option></select>
     <select id="f-referral"><option value="">Provenance : toutes</option></select>
     <select id="f-ia"><option value="">Assistant IA : tous</option></select>
-    <select id="f-source"><option value="">Source : toutes</option></select>
     <button id="f-reset" title="Retirer tous les filtres">Réinitialiser</button>
     <span id="pills"></span>
   </div>
@@ -303,7 +302,6 @@
     const xIdx = [];
     for (let i = 0; i < n; i += step) xIdx.push(i);
     if (xIdx.at(-1) !== n - 1) xIdx.push(n - 1);
-    const brut = bk.keys.map((k) => bk.map.get(k).some((d) => (D[d].source || '') !== 'logs'));
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = `
       ${series.length === 1 ? `<defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
@@ -318,7 +316,7 @@
         const area = series.length === 1
           ? `<path d="${path} L${x(n - 1).toFixed(1)},${H - PB} L${x(0).toFixed(1)},${H - PB} Z" fill="url(#g-${svgId})"/>` : '';
         return `${area}<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>
-          ${s.pts.map((v, i) => `<circle class="pt" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${n > 120 ? 1.5 : 2.8}" fill="${s.color}"${brut[i] ? ' fill-opacity=".45"' : ''}/>`).join('')}`;
+          ${s.pts.map((v, i) => `<circle class="pt" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${n > 120 ? 1.5 : 2.8}" fill="${s.color}"/>`).join('')}`;
       }).join('')}
       ${bk.keys.map((_, i) => {
         const w = (W - PL - PR) / Math.max(n - 1, 1);
@@ -340,7 +338,7 @@
       const jours = bk.map.get(bk.keys[i]).length;
       tip.innerHTML = `<div class="d">${label}${bk.mode !== 'jour' ? ` · ${jours} j` : ''}</div>` +
         series.map((s) => `<div class="r"><span><i style="background:${s.color}"></i>${s.label}</span> <b>${fmt(s.pts[i])}</b></div>`).join('') +
-        (brut[i] ? '<div class="src">source brute — bots inclus</div>' : '');
+        '';
       tip.style.display = 'block';
       const r = tip.getBoundingClientRect();
       const left = Math.min(evt.clientX + 14, window.innerWidth - r.width - 10);
@@ -362,7 +360,7 @@
   const bkSum = (bk, fn) => bk.keys.map((k) => bk.map.get(k).reduce((a, d) => a + fn(D[d]), 0));
 
   // ── filtres : listes déroulantes (valeurs réelles de l'historique) ──
-  const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia', source: 'f-source' };
+  const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia' };
   function fillSelects() {
     const totals = (get) => {
       const o = {};
@@ -379,9 +377,7 @@
     opt($('f-page'), totals((v) => v.top_pages).slice(0, 30), 'Page : toutes');
     opt($('f-referral'), totals((v) => v.referrals), 'Provenance : toutes');
     opt($('f-ia'), totals((v) => v.ref_ia), 'Assistant IA : tous');
-    const srcs = {};
-    for (const d of allDays) { const k = D[d].source || 'awstats-brut'; srcs[k] = (srcs[k] || 0) + 1; }
-    opt($('f-source'), Object.entries(srcs).map(([k, n]) => [k, n]), 'Source : toutes');
+
   }
   function syncSelects() {
     for (const [type, id] of Object.entries(SEL)) $(id).value = fOf(type) ?? '';
@@ -408,7 +404,7 @@
     if (e.key !== 'Enter') return;
     const toks = $('kql').value.trim().split(/\s+/).filter(Boolean);
     for (const t of toks) {
-      const m = t.match(/^(bot|page|referral|source|ia):(.+)$/i);
+      const m = t.match(/^(bot|page|referral|ia):(.+)$/i);
       if (m) addFilter(m[1].toLowerCase(), m[2]);
     }
     $('kql').value = '';
@@ -419,7 +415,6 @@
   function keepDay(d) {
     const v = D[d];
     for (const f of filters) {
-      if (f.type === 'source' && (v.source || '') !== f.value) return false;
       if (f.type === 'bot' && vAI(v) <= 0) return false;
       if (f.type === 'page' && vPages(v) <= 0) return false;
       if (f.type === 'referral' && vRef(v, f.value) <= 0) return false;
@@ -459,8 +454,6 @@
     const [pa, pb] = [shiftISO(a, -span), shiftISO(a, -1)];
     const prev = daysIn(pa, pb).filter(keepDay);
     const cmp = prev.length >= Math.min(sel.length, 2) ? prev : null;
-    const nbBrut = sel.filter((d) => (D[d].source || '') !== 'logs').length;
-    const nbBrutCmp = cmp ? cmp.filter((d) => (D[d].source || '') !== 'logs').length : 0;
     const lastSel = D[sel.at(-1)];
     const firstFb = sel.map((d) => D[d].fb?.abonnes).find((v) => v != null);
     const lastFb = [...sel].reverse().map((d) => D[d].fb?.abonnes).find((v) => v != null);
@@ -507,7 +500,7 @@
 
       par.push(`Du <b>${dFmt(a)}</b> au <b>${dFmt(b)}</b> (${sel.length} jour${sel.length > 1 ? 's' : ''} de données) : ` +
         `<b>${n(vis)} visiteur${vis > 1 ? 's' : ''} humain${vis > 1 ? 's' : ''}</b> (≈ ${n(parJour)}/jour) pour ${n(pv)} page${pv > 1 ? 's' : ''} vue${pv > 1 ? 's' : ''}` +
-        (evol !== null ? `, soit <b>${evol > 0 ? '+' : ''}${evol} %</b> par rapport à la période précédente${nbBrutCmp ? ' (comparaison partiellement en source brute — à relativiser)' : ''}.` : '.') +
+        (evol !== null ? `, soit <b>${evol > 0 ? '+' : ''}${evol} %</b> par rapport à la période précédente.` : '.') +
         (totDev ? ` ${Math.round((devs.mobile || 0) / totDev * 100)} % des pages sont vues sur mobile.` : ''));
 
       if (ia) {
@@ -530,7 +523,6 @@
 
       const alertes = [];
       if (e404 || scans) alertes.push(`${n(e404)} erreur${e404 > 1 ? 's' : ''} 404 et ${n(scans)} requête${scans > 1 ? 's' : ''} de scanners de vulnérabilités — du bruit sans effet sur un site statique`);
-      if (nbBrut) alertes.push(`${nbBrut} jour${nbBrut > 1 ? 's' : ''} de la période ${nbBrut > 1 ? 'proviennent' : 'provient'} des anciens exports (bots inclus, chiffres non comparables)`);
       if (alertes.length) par.push(`<span class="alerte">À noter :</span> ${alertes.join(' ; ')}.`);
 
       $('resume').innerHTML = par.map((p) => `<p>${p}</p>`).join('');
@@ -538,9 +530,7 @@
 
     $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
       (recale ? ` · période recalée sur les jours porteurs des filtres (demandé : ${dFmt(wa)} → ${dFmt(wb)})` : '') +
-      (cmp ? ` · comparé à ${dFmt(pa)} → ${dFmt(pb)}` : '') +
-      (nbBrut ? ` · ⚠ ${nbBrut} jour(s) en source brute AWStats (bots inclus)` : '') +
-      (nbBrutCmp ? ` · ⚠ comparaison partiellement en source brute — deltas à relativiser` : '');
+      (cmp ? ` · comparé à ${dFmt(pa)} → ${dFmt(pb)}` : '');
 
     const bk = buckets(sel);
     $('h-vis').textContent = `Visiteurs — par ${bk.mode}`;
