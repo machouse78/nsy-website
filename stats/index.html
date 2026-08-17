@@ -30,6 +30,7 @@
   .bar input[type=date], .bar input[type=text] { background: var(--bg); border: 1px solid var(--line); border-radius: 8px;
     color: var(--fg1); font: 500 12.5px "JetBrains Mono", monospace; padding: 6px 8px; color-scheme: dark; }
   .bar input[type=text] { min-width: 320px; flex: 1; }
+  .bar select { max-width: 260px; }
   .bar .sep { color: var(--fg2); }
   .fpill { display: inline-flex; align-items: center; gap: 6px; background: rgba(240, 138, 44, .12);
     border: 1px solid var(--warm); border-radius: 99px; padding: 3px 6px 3px 12px; font-size: 12.5px; color: var(--warm); font-weight: 600; }
@@ -93,8 +94,17 @@
 
   <div class="bar">
     <span class="mono">Filtres</span>
-    <input type="text" id="kql" placeholder="ex. bot:chatgpt · ia:claude · page:/journal* · referral:facebook · source:logs — Entrée" />
+    <select id="f-bot"><option value="">Robot IA : tous</option></select>
+    <select id="f-page"><option value="">Page : toutes</option></select>
+    <select id="f-referral"><option value="">Provenance : toutes</option></select>
+    <select id="f-ia"><option value="">Assistant IA : tous</option></select>
+    <select id="f-source"><option value="">Source : toutes</option></select>
+    <button id="f-reset" title="Retirer tous les filtres">Réinitialiser</button>
     <span id="pills"></span>
+  </div>
+  <div class="bar">
+    <span class="mono" title="Syntaxe libre — accepte les jokers, ex. page:/journal*">Requête</span>
+    <input type="text" id="kql" placeholder="ex. page:/expertise-* · bot:claude · ia:perplexity — Entrée pour appliquer" />
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
 
@@ -295,7 +305,36 @@
 
   const bkSum = (bk, fn) => bk.keys.map((k) => bk.map.get(k).reduce((a, d) => a + fn(D[d]), 0));
 
-  // ── filtres : pills + KQL ──
+  // ── filtres : listes déroulantes (valeurs réelles de l'historique) ──
+  const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia', source: 'f-source' };
+  function fillSelects() {
+    const totals = (get) => {
+      const o = {};
+      for (const d of allDays) for (const [k, v] of Object.entries(get(D[d]) || {})) o[k] = (o[k] || 0) + v;
+      return Object.entries(o).sort((x, y) => y[1] - x[1]);
+    };
+    const opt = (el, rows, label) => {
+      const cur = el.value;
+      el.innerHTML = `<option value="">${label}</option>` +
+        rows.map(([k, n]) => `<option value="${k}">${k}${n != null ? ` (${fmt(n)})` : ''}</option>`).join('');
+      el.value = cur;
+    };
+    opt($('f-bot'), totals((v) => v.ai), 'Robot IA : tous');
+    opt($('f-page'), totals((v) => v.top_pages).slice(0, 30), 'Page : toutes');
+    opt($('f-referral'), totals((v) => v.referrals), 'Provenance : toutes');
+    opt($('f-ia'), totals((v) => v.ref_ia), 'Assistant IA : tous');
+    const srcs = {};
+    for (const d of allDays) { const k = D[d].source || 'awstats-brut'; srcs[k] = (srcs[k] || 0) + 1; }
+    opt($('f-source'), Object.entries(srcs).map(([k, n]) => [k, n]), 'Source : toutes');
+  }
+  function syncSelects() {
+    for (const [type, id] of Object.entries(SEL)) $(id).value = fOf(type) ?? '';
+  }
+  for (const [type, id] of Object.entries(SEL)) {
+    $(id).addEventListener('change', (e) => e.target.value ? addFilter(type, e.target.value) : removeFilter(type));
+  }
+  $('f-reset').addEventListener('click', () => { filters = []; render(); });
+
   function addFilter(type, value) {
     filters = filters.filter((f) => f.type !== type);
     filters.push({ type, value });
@@ -304,6 +343,7 @@
   }
   function removeFilter(type) { filters = filters.filter((f) => f.type !== type); render(); }
   function renderPills() {
+    syncSelects();
     $('pills').innerHTML = filters.map((f) =>
       `<span class="fpill">${f.type}:${f.value}<button data-t="${f.type}" title="Retirer">✕</button></span>`).join(' ');
     $('pills').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => removeFilter(b.dataset.t)));
@@ -503,6 +543,7 @@
   $('split').addEventListener('change', render);
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
+  fillSelects();
   render();
 })();
 </script>
