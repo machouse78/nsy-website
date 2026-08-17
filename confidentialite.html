@@ -105,7 +105,7 @@
       <p>NSY est une structure unipersonnelle sans DPO désigné (non requis au regard de l'article 37 du RGPD). Cédric Barme assure personnellement le suivi des demandes liées aux données personnelles.</p>
 
       <h2>Données collectées</h2>
-      <p>Le site nsy.fr collecte uniquement les données que vous nous transmettez <strong>volontairement</strong> via le formulaire de contact :</p>
+      <p>Le site nsy.fr collecte uniquement les données que vous nous transmettez <strong>volontairement</strong> via le formulaire de contact ou le questionnaire de faisabilité :</p>
       <ul>
         <li><strong>Nom complet</strong> (requis)</li>
         <li><strong>Email professionnel</strong> (requis)</li>
@@ -114,8 +114,20 @@
         <li><strong>Service concerné</strong> (Conseil technique ou Création web · IA)</li>
         <li><strong>Horizon de démarrage</strong></li>
         <li><strong>Description de votre besoin</strong> (texte libre)</li>
+        <li><strong>Réponses du questionnaire de faisabilité</strong> (nature du projet, contexte, échéance — choix guidés et texte libre)</li>
       </ul>
       <p>Aucune autre donnée n'est collectée. Le site n'utilise <strong>aucun cookie de suivi</strong>, aucun outil d'analyse tiers (pas de Google Analytics, Matomo, Plausible, etc.), ni pixel de tracking publicitaire. Voir la section <a href="#cookies">Cookies</a> ci-dessous pour le détail du seul cookie fonctionnel utilisé (préférence de langue).</p>
+
+      <h2>Protection des formulaires (anti-robots et anti-spam)</h2>
+      <p>Pour protéger les formulaires contre les robots spammeurs, le site s'appuie sur deux mécanismes :</p>
+      <ul>
+        <li><strong>Cloudflare Turnstile</strong> — un test anti-robot affiché sur les formulaires. Le widget analyse des signaux techniques de votre navigateur (dont l'adresse IP) pour distinguer un humain d'un robot ; il est opéré par Cloudflare, Inc. Le contenu de votre message ne lui est <strong>jamais</strong> transmis — seul le verdict nous parvient.</li>
+        <li><strong>Analyse anti-spam côté serveur</strong> — les soumissions sont analysées automatiquement (contenu, et adresse IP utilisée sous forme hachée pour des plafonds journaliers). Les soumissions identifiées comme spam sont journalisées brièvement dans un fichier technique hors web, à seule fin de contrôle du dispositif.</li>
+      </ul>
+      <p>Base légale : l'<strong>intérêt légitime</strong> (article 6.1.f du RGPD) à protéger le service contre les abus.</p>
+
+      <h2>Compteurs de lecture du journal</h2>
+      <p>Les articles du journal affichent des compteurs de vues et de « j'aime ». Ce sont des <strong>agrégats anonymes par article</strong> : aucune donnée personnelle n'est enregistrée, aucun profil n'est constitué. Votre état « déjà lu / déjà aimé » reste dans votre propre navigateur (<code>sessionStorage</code> / <code>localStorage</code>) ; un plafond technique par adresse IP hachée protège le dispositif contre les abus.</p>
 
       <h2>Finalités du traitement</h2>
       <p>Les données collectées sont utilisées exclusivement pour :</p>
@@ -146,6 +158,7 @@
       <ul>
         <li><strong>Infomaniak Network SA</strong> (Suisse, pays adéquat au sens du RGPD) — hébergeur du site et fournisseur de la messagerie email</li>
         <li><strong>Mistral AI</strong> (France, Union européenne) — uniquement si vous utilisez l'assistant conversationnel : vos messages lui sont relayés le temps de générer la réponse (voir la section « Assistant IA » ci-dessous)</li>
+        <li><strong>Cloudflare, Inc.</strong> (États-Unis — société certifiée au Data Privacy Framework UE-É.-U.) — uniquement le test anti-robot Turnstile des formulaires : des signaux techniques de votre navigateur, jamais le contenu de vos messages</li>
       </ul>
 
       <h2>Assistant IA (chatbot)</h2>

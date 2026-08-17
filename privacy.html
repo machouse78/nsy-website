@@ -99,7 +99,7 @@
       <p>NSY is a single-member structure with no designated DPO (not required under article 37 of GDPR). Cédric Barme personally handles requests related to personal data.</p>
 
       <h2>Data collected</h2>
-      <p>The nsy.fr website only collects data that you submit <strong>voluntarily</strong> via the contact form:</p>
+      <p>The nsy.fr website only collects data that you submit <strong>voluntarily</strong> via the contact form or the feasibility questionnaire:</p>
       <ul>
         <li><strong>Full name</strong> (required)</li>
         <li><strong>Business email</strong> (required)</li>
@@ -108,8 +108,20 @@
         <li><strong>Service of interest</strong> (Technical consulting or Web creation · AI)</li>
         <li><strong>Project timeline</strong></li>
         <li><strong>Description of your need</strong> (free text)</li>
+        <li><strong>Feasibility questionnaire answers</strong> (project type, context, timeline — guided choices and free text)</li>
       </ul>
       <p>No other data is collected. The website uses <strong>no tracking cookies</strong>, no third-party analytics (no Google Analytics, Matomo, Plausible, etc.), and no advertising tracking pixels. See the <a href="#cookies">Cookies</a> section below for details on the single functional cookie used (language preference).</p>
+
+      <h2>Form protection (anti-bot and anti-spam)</h2>
+      <p>To protect the forms against spam robots, the site relies on two mechanisms:</p>
+      <ul>
+        <li><strong>Cloudflare Turnstile</strong> — an anti-bot check displayed on the forms. The widget analyses technical signals from your browser (including the IP address) to tell humans and robots apart; it is operated by Cloudflare, Inc. The content of your message is <strong>never</strong> sent to it — only the verdict reaches us.</li>
+        <li><strong>Server-side anti-spam screening</strong> — submissions are analysed automatically (content, and the IP address used in hashed form for daily caps). Submissions identified as spam are briefly logged in a technical file outside the web root, solely to monitor the mechanism.</li>
+      </ul>
+      <p>Legal basis: <strong>legitimate interest</strong> (article 6.1.f GDPR) in protecting the service against abuse.</p>
+
+      <h2>Journal reading counters</h2>
+      <p>Journal articles display view and like counters. These are <strong>anonymous per-article aggregates</strong>: no personal data is stored and no profile is built. Your "already read / already liked" state stays in your own browser (<code>sessionStorage</code> / <code>localStorage</code>); a technical cap per hashed IP address protects the mechanism against abuse.</p>
 
       <h2>Processing purposes</h2>
       <p>The data collected is used exclusively to:</p>
@@ -140,6 +152,7 @@
       <ul>
         <li><strong>Infomaniak Network SA</strong> (Switzerland, adequate country under GDPR) — host of the website and email provider</li>
         <li><strong>Mistral AI</strong> (France, European Union) — only if you use the conversational assistant: your messages are relayed to them for the time needed to generate the reply (see the "AI assistant" section below)</li>
+        <li><strong>Cloudflare, Inc.</strong> (United States — certified under the EU-US Data Privacy Framework) — only for the Turnstile anti-bot check on the forms: technical signals from your browser, never the content of your messages</li>
       </ul>
 
       <h2>AI assistant (chatbot)</h2>
