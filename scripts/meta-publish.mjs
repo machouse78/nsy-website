@@ -18,6 +18,12 @@
  *    --image-url : repli photo si l'article n'a pas de déclinaison vidéo.
  *    Dans les deux cas, média montré au owner et validé AVANT --go — jamais de post nu.)
  *
+ * Les liens nsy.fr du 1ᵉʳ commentaire sont AUTOMATIQUEMENT tagués UTM
+ * (utm_source=facebook&utm_medium=page&utm_campaign=<slug de l'article>) — le
+ * dashboard KPI sait alors quelles visites viennent de ce post précis. Facebook
+ * ne transmet jamais l'origine réelle d'un clic : c'est le seul moyen.
+ * `--no-utm` désactive le tag pour un cas exceptionnel.
+ *
  * Credentials dans _secret/meta.env (gitignoré, local uniquement — jamais
  * déployé, jamais commité ; modèle : _secret/meta.env.example). Le token
  * n'est JAMAIS affiché. Publier est une action PUBLIQUE : `post --go` ne se
@@ -58,6 +64,24 @@ function loadEnv({ requirePage = true } = {}) {
 }
 
 function die(msg) { console.error(`✗ ${msg}`); process.exit(1); }
+
+/** Tague les liens nsy.fr d'un texte avec les UTM (campagne = slug de la page). */
+function tagUtm(text, source, medium) {
+  return text.replace(/https:\/\/(?:www\.)?nsy\.fr\/\S*/g, (raw) => {
+    const clean = raw.replace(/[.,;:!?)\]]+$/, '');       // ponctuation finale hors URL
+    const tail = raw.slice(clean.length);
+    try {
+      const u = new URL(clean);
+      if (u.searchParams.has('utm_source')) return raw;    // déjà tagué
+      const file = u.pathname.split('/').pop() || 'accueil';
+      const campaign = file.replace(/\.html$/, '') || 'accueil';
+      u.searchParams.set('utm_source', source);
+      u.searchParams.set('utm_medium', medium);
+      u.searchParams.set('utm_campaign', campaign);
+      return u.toString() + tail;
+    } catch { return raw; }
+  });
+}
 
 // ── Appels Graph ──────────────────────────────────────────────────────────────
 async function graph(env, method, path, params = {}, token = env.FB_PAGE_TOKEN) {
@@ -159,8 +183,13 @@ function readText(flagName, args) {
 
 async function post(env, args) {
   const body = readText('--post-file', args);
-  const comment = readText('--comment-file', args);
+  let comment = readText('--comment-file', args);
   const go = args.includes('--go');
+  if (!args.includes('--no-utm')) {
+    const tagged = tagUtm(comment, 'facebook', 'page');
+    if (tagged !== comment) console.log('ℹ️  liens du 1ᵉʳ commentaire tagués UTM (traçage de la provenance)');
+    comment = tagged;
+  }
   const iu = args.indexOf('--image-url');
   const imageUrl = iu !== -1 ? args[iu + 1] : null;
   if (iu !== -1 && !/^https:\/\/(www\.)?nsy\.fr\//.test(imageUrl || '')) {
