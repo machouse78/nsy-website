@@ -161,14 +161,24 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
     $page = graphGet((string) $cfg['fb_page_id'], $tok, ['fields' => 'fan_count,followers_count']);
     $fb['abonnes'] = $page['followers_count'] ?? $page['fan_count'] ?? null;
     $posts = graphGet($cfg['fb_page_id'] . '/posts', $tok,
-        ['fields' => 'created_time,permalink_url,likes.summary(true),comments.summary(true),shares', 'limit' => '5']);
+        ['fields' => 'id,created_time,permalink_url,likes.summary(true),comments.summary(true),shares', 'limit' => '5']);
     foreach ($posts['data'] ?? [] as $p) {
+        // Repartages VISIBLES du post (publics uniquement — Meta masque par design
+        // les partages privés et ceux des groupes fermés ; « shares » reste le total).
+        $reshares = [];
+        if (!empty($p['id'])) {
+            $sp = graphGet($p['id'] . '/sharedposts', $tok, ['fields' => 'from{name},permalink_url', 'limit' => '25']);
+            foreach ($sp['data'] ?? [] as $r) {
+                $reshares[] = ['nom' => $r['from']['name'] ?? '(profil privé)', 'url' => $r['permalink_url'] ?? ''];
+            }
+        }
         $fb['posts'][] = [
             'date'     => substr((string) ($p['created_time'] ?? ''), 0, 10),
             'url'      => $p['permalink_url'] ?? '',
             'likes'    => $p['likes']['summary']['total_count'] ?? 0,
             'comments' => $p['comments']['summary']['total_count'] ?? 0,
             'shares'   => $p['shares']['count'] ?? 0,
+            'reshares' => $reshares,
         ];
     }
 }

@@ -47,6 +47,8 @@
   .pill { display: inline-block; border: 1px solid var(--line); border-radius: 99px; padding: 2px 10px; font-size: 12px; margin: 2px 4px 2px 0; color: var(--fg1); }
   .pill b { color: var(--accent); font-weight: 600; }
   .note { font-size: 12px; color: var(--fg2); margin-top: 8px; }
+  .resh { font-size: 11.5px; margin-top: 3px; color: var(--fg2); line-height: 1.5; }
+  .resh a { color: var(--warm); }
   #err { color: #F87171; margin: 18px 0; display: none; }
 </style>
 </head>
@@ -144,25 +146,44 @@
     return { mode, entries: [...out.entries()] };
   }
 
-  function line(svgId, entries, field, color) {
+  function niceMax(v) {
+    if (v <= 5) return 5;
+    const p = Math.pow(10, Math.floor(Math.log10(v)));
+    for (const m of [1, 2, 2.5, 5, 10]) if (v <= m * p) return m * p;
+    return 10 * p;
+  }
+  function xLabel(key, mode) {
+    if (mode === 'mois') { const [y, m] = key.split('-'); return `${m}/${y}`; }
+    const t = new Date(key + 'T12:00:00');
+    return t.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit' });
+  }
+  function line(svgId, entries, field, color, mode) {
     const svg = $(svgId);
     const pts = entries.map(([, b]) => b[field]);
     const labels = entries.map(([k]) => k);
     const brut = entries.map(([, b]) => b.brut);
-    const max = Math.max(...pts, 1);
-    const W = 1000, H = 220, P = 26;
-    const x = (i) => P + i * (W - 2 * P) / Math.max(pts.length - 1, 1);
-    const y = (v) => H - P - v * (H - 2 * P) / max;
+    const max = niceMax(Math.max(...pts, 1));
+    const W = 1000, H = 250, PL = 62, PR = 16, PT = 14, PB = 34;
+    const x = (i) => PL + i * (W - PL - PR) / Math.max(pts.length - 1, 1);
+    const y = (v) => H - PB - v * (H - PT - PB) / max;
     const path = pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-    const area = `${path} L${x(pts.length - 1).toFixed(1)},${H - P} L${x(0).toFixed(1)},${H - P} Z`;
+    const area = `${path} L${x(pts.length - 1).toFixed(1)},${H - PB} L${x(PL === x(0) ? 0 : 0).toFixed(1)},${H - PB} Z`;
+    const yTicks = [0, .25, .5, .75, 1].map((f) => Math.round(max * f));
+    const step = Math.max(1, Math.ceil(pts.length / 6));
+    const xIdx = [];
+    for (let i = 0; i < pts.length; i += step) xIdx.push(i);
+    if (xIdx.at(-1) !== pts.length - 1) xIdx.push(pts.length - 1);
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = `
       <defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="${color}" stop-opacity=".28"/><stop offset="1" stop-color="${color}" stop-opacity="0"/>
       </linearGradient></defs>
+      ${yTicks.map((v) => `<line x1="${PL}" y1="${y(v).toFixed(1)}" x2="${W - PR}" y2="${y(v).toFixed(1)}" stroke="#1C2740" stroke-width="1"${v ? ' stroke-dasharray="3 5"' : ''}/>
+        <text x="${PL - 8}" y="${(y(v) + 4).toFixed(1)}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="end">${fmt(v)}</text>`).join('')}
+      ${xIdx.map((i) => `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="middle">${xLabel(labels[i], mode)}</text>`).join('')}
       <path d="${area}" fill="url(#g-${svgId})"/>
       <path d="${path}" fill="none" stroke="${color}" stroke-width="2.5" stroke-linejoin="round"/>
-      ${pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${pts.length > 120 ? 1.6 : 3}" fill="${color}"${brut[i] ? ' fill-opacity=".45"' : ''}><title>${labels[i]} : ${fmt(v)}${brut[i] ? ' (source brute, bots inclus)' : ''}</title></circle>`).join('')}
-      <text x="${P}" y="16" fill="#8993AF" font-size="12" font-family="JetBrains Mono">max ${fmt(max)}</text>`;
+      ${pts.map((v, i) => `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${pts.length > 120 ? 1.6 : 3}" fill="${color}"${brut[i] ? ' fill-opacity=".45"' : ''}><title>${labels[i]} : ${fmt(v)}${brut[i] ? ' (source brute, bots inclus)' : ''}</title></circle>`).join('')}`;
   }
 
   const sumKey = (sel, k) => sel.reduce((a, d) => a + (D[d][k] ?? 0), 0);
@@ -206,13 +227,15 @@
     const bk = buckets(sel);
     $('h-vis').textContent = `Visiteurs — par ${bk.mode}`;
     $('h-ai').textContent = `Lectures par les IA — par ${bk.mode}`;
-    line('c-vis', bk.entries, 'visiteurs', '#00E5FF');
-    line('c-ai', bk.entries, 'ai_hits', '#F08A2C');
+    line('c-vis', bk.entries, 'visiteurs', '#00E5FF', bk.mode);
+    line('c-ai', bk.entries, 'ai_hits', '#F08A2C', bk.mode);
 
     const dFmt = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+    const nbBrutCmp = cmp ? cmp.filter((d) => (D[d].source || '') !== 'logs').length : 0;
     $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
       (cmp ? ` · comparé à ${dFmt(pa)} → ${dFmt(pb)}` : '') +
-      (nbBrut ? ` · ⚠ ${nbBrut} jour(s) en source brute AWStats (bots inclus)` : '');
+      (nbBrut ? ` · ⚠ ${nbBrut} jour(s) en source brute AWStats (bots inclus)` : '') +
+      (nbBrutCmp ? ` · ⚠ comparaison partiellement en source brute — deltas à relativiser` : '');
 
     const ai = {};
     for (const d of sel) for (const [n, h] of Object.entries(D[d].ai || {})) ai[n] = (ai[n] || 0) + h;
@@ -226,7 +249,13 @@
       || '<tr><td colspan="2" class="mono">—</td></tr>';
 
     document.querySelector('#t-fb tbody').innerHTML = (lastSel.fb?.posts || [])
-      .map((p) => `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a></td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`).join('')
+      .map((p) => {
+        const resh = (p.reshares || []).length
+          ? `<div class="resh">↗ visibles : ${p.reshares.map((r) => r.url
+              ? `<a href="${r.url}" target="_blank" rel="noopener">${r.nom}</a>` : r.nom).join(' · ')}</div>`
+          : (p.shares ? '<div class="resh">↗ repartages privés/groupes (non exposés par Meta)</div>' : '');
+        return `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a>${resh}</td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`;
+      }).join('')
       || '<tr><td colspan="4" class="mono">pas de données Facebook sur le dernier jour de la période</td></tr>';
 
     document.querySelector('#t-journal tbody').innerHTML = Object.entries(lastSel.journal || {})
