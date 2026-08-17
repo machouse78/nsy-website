@@ -222,7 +222,8 @@ nsy-website/
 │   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 50 pages (npm run partials)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
-│   ├── utm.mjs                          # Liens tracés (UTM) des publications — savoir quel post/groupe amène du trafic
+│   ├── partage-page.py                  # ⭐ Génère /stats/partage.html — tous les articles × registre de groupes
+│   ├── utm.mjs                          # Liens tracés (UTM) à l'unité — savoir quel post/groupe amène du trafic
 │   ├── meta-publish.mjs                 # Publication auto du journal sur la page Facebook — VIDÉO/réel au format original (+ 1ᵉʳ commentaire backlinks)
 │   ├── seo-crawl-report.mjs             # Rapport crawlers IA/moteurs depuis les access logs
 │   ├── capture-realisation.mjs          # (historique) vignette statique — remplacé par record-realisation

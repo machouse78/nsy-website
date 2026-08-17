@@ -78,6 +78,7 @@
   <div class="head">
     <h1>KPI nsy.fr</h1>
     <span class="mono" id="stamp">chargement…</span>
+    <a class="mono" href="partage.html" style="color: var(--warm);">→ Partager un article</a>
   </div>
 
   <div class="bar" id="timebar">
@@ -152,28 +153,6 @@
       <div id="profils"></div>
     </div>
   </div>
-
-  <h2>Partager un lien tracé <span class="mono">(pour savoir d'où viennent les clics)</span></h2>
-  <div class="bar" style="align-items: flex-end;">
-    <select id="g-page" style="max-width: 320px;"></select>
-    <select id="g-source">
-      <option value="facebook">Facebook</option>
-      <option value="linkedin">LinkedIn</option>
-      <option value="instagram">Instagram</option>
-      <option value="email">E-mail</option>
-      <option value="autre">Autre</option>
-    </select>
-    <select id="g-medium">
-      <option value="groupe">dans un groupe</option>
-      <option value="page">sur ma page</option>
-      <option value="profil">sur mon profil</option>
-      <option value="commentaire">en commentaire</option>
-      <option value="message">en message privé</option>
-    </select>
-    <input type="text" id="g-camp" placeholder="nom du groupe / de la campagne" style="min-width: 220px;" />
-    <button id="g-copy">Copier le lien</button>
-  </div>
-  <div class="note" id="g-out" style="word-break: break-all;"></div>
 
   <h2>Parcours sur le site — période</h2>
   <div class="cols">
@@ -563,35 +542,6 @@
   });
   $('metric').addEventListener('change', render);
   $('split').addEventListener('change', render);
-
-  // ── Générateur de lien tracé (zéro terminal) ──
-  {
-    const pagesSeen = {};
-    for (const d of allDays) for (const [p, n] of Object.entries(D[d].top_pages || {})) pagesSeen[p] = (pagesSeen[p] || 0) + n;
-    const list = Object.entries(pagesSeen).sort((a, b) => b[1] - a[1]).map(([p]) => p);
-    $('g-page').innerHTML = list.map((p) => `<option value="${p}">${p}</option>`).join('');
-    const slugify = (s) => s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const build = () => {
-      const u = new URL('https://www.nsy.fr' + $('g-page').value);
-      u.searchParams.set('utm_source', $('g-source').value);
-      u.searchParams.set('utm_medium', $('g-medium').value);
-      const c = slugify($('g-camp').value) || (u.pathname.split('/').pop() || 'accueil').replace(/\.html$/, '') || 'accueil';
-      u.searchParams.set('utm_campaign', c);
-      return u.toString();
-    };
-    const refresh = () => { $('g-out').textContent = build(); };
-    ['g-page', 'g-source', 'g-medium'].forEach((id) => $(id).addEventListener('change', refresh));
-    $('g-camp').addEventListener('input', refresh);
-    $('g-copy').addEventListener('click', async () => {
-      const link = build();
-      try { await navigator.clipboard.writeText(link); $('g-copy').textContent = '✓ Copié !'; }
-      catch { $('g-copy').textContent = 'Copie manuelle ↓'; }
-      $('g-out').textContent = link;
-      setTimeout(() => { $('g-copy').textContent = 'Copier le lien'; }, 2000);
-    });
-    refresh();
-  }
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   fillSelects();

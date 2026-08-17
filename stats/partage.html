@@ -1,0 +1,82 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="noindex, nofollow">
+<title>Partager — NSY</title><style>
+:root{--bg:#0A0F1C;--bg2:#0F1626;--line:#1C2740;--fg:#B8C2DC;--fg2:#8993AF;--acc:#00E5FF}
+*{box-sizing:border-box;margin:0} body{background:var(--bg);color:var(--fg);font:15px/1.55 system-ui,-apple-system,sans-serif;padding:26px 20px 60px}
+.wrap{max-width:920px;margin:0 auto} h1{font-size:23px} .sub{color:var(--fg2);font-size:13px;margin:6px 0 20px}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px;position:sticky;top:0;z-index:5}
+select,button,.btn,input{background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--fg);font:600 13px system-ui;padding:8px 12px;cursor:pointer}
+select{max-width:420px} .prim{background:var(--acc);color:var(--bg);border-color:var(--acc)}
+.prog{color:var(--fg2);font-size:12.5px;margin:0 0 16px}
+.g{background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.g.ok{opacity:.45} .g h3{font-size:15.5px;display:flex;align-items:center;gap:9px;margin-bottom:2px}
+.meta{color:var(--fg2);font-size:12px;margin:2px 0 9px} code{color:var(--acc)}
+textarea{width:100%;height:104px;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:8px;padding:10px;font:13px/1.5 system-ui;resize:vertical}
+.act{display:flex;gap:9px;margin-top:9px;flex-wrap:wrap} a{color:var(--acc);text-decoration:none}
+.empty{background:var(--bg2);border:1px dashed var(--line);border-radius:12px;padding:22px;color:var(--fg2)}
+</style></head><body><div class="wrap">
+<h1>Partager un article — NSY</h1>
+<div style="margin:-4px 0 10px"><a href="index.html" style="font-size:13px">← Retour au dashboard KPI</a></div>
+<div class="sub">Publier dans un groupe via l'API est impossible (Meta l'a fermé en 2018) : ici tout est prêt —
+ouvrir le groupe, coller, publier. Chaque texte porte le lien tracé du groupe, le dashboard KPI dira lequel a marché.</div>
+<div class="bar">
+  <select id="art"></select>
+  <select id="filtre"><option value="">Tous les thèmes</option></select>
+  <button id="hide">Masquer les faits</button>
+  <button id="reset">Décocher tout</button>
+</div>
+<div class="prog" id="prog"></div>
+<div id="list"></div>
+</div>
+<script>
+const DATA = {"site": "NSY", "articles": []};
+const $ = (i) => document.getElementById(i);
+const KEY = 'partage-nsy';
+const st = JSON.parse(localStorage.getItem(KEY) || '{}');
+const save = () => localStorage.setItem(KEY, JSON.stringify(st));
+let masque = false;
+
+$('art').innerHTML = DATA.articles.map((a, i) => `<option value="${i}">${a.titre}</option>`).join('')
+  || '<option>aucun article</option>';
+
+function render() {
+  const a = DATA.articles[$('art').value | 0];
+  if (!a) { $('list').innerHTML = `<div class="empty"><b>Rien à partager pour l'instant.</b><br><br>
+    1. Renseigner les groupes ciblés dans <code>reseaux/groupes.md</code> (le fichier explique le format).<br>
+    2. Créer le kit de textes d'un article : <code>reseaux/partages-&lt;slug&gt;.md</code>
+       (sections <code>## Texte « thème »</code>, un thème par public visé).<br>
+    3. Régénérer cette page : <code>python3 scripts/partage-page.py</code>.</div>`; return; }
+  const themes = [...new Set(a.cartes.map((c) => c.theme))];
+  const cur = $('filtre').value;
+  $('filtre').innerHTML = '<option value="">Tous les thèmes</option>' +
+    themes.map((t) => `<option value="${t}">${t}</option>`).join('');
+  $('filtre').value = cur;
+  const vis = a.cartes.filter((c) => !cur || c.theme === cur);
+  const faits = vis.filter((c) => st[a.slug + '|' + c.camp]).length;
+  $('prog').textContent = `${vis.length} groupe(s) · ${faits} déjà partagé(s) · ${vis.length - faits} restant(s)`;
+  $('list').innerHTML = vis.filter((c) => !(masque && st[a.slug + '|' + c.camp])).map((c) => {
+    const k = a.slug + '|' + c.camp, done = !!st[k];
+    return `<div class="g ${done ? 'ok' : ''}" data-k="${k}">
+      <h3><input type="checkbox" ${done ? 'checked' : ''}> ${c.nom}</h3>
+      <div class="meta">${c.reseau} · thème <code>${c.theme}</code>${c.precision ? ' · ' + c.precision : ''} · campagne <code>${c.camp}</code>${c.regles && !/^EN$/i.test(c.regles) ? ' · ⚠ ' + c.regles : ''}</div>
+      <textarea readonly>${c.texte.replace(/</g, '&lt;')}</textarea>
+      <div class="act"><button class="prim copy">Copier le texte</button>
+      <a class="btn" href="${c.url}" target="_blank" rel="noopener">Ouvrir le groupe →</a></div>
+    </div>`;
+  }).join('') || '<div class="empty">Rien à afficher (tout est fait, ou aucun groupe pour ce thème).</div>';
+
+  document.querySelectorAll('.g').forEach((g) => {
+    g.querySelector('input').addEventListener('change', (e) => { st[g.dataset.k] = e.target.checked; save(); render(); });
+    g.querySelector('.copy').addEventListener('click', async (e) => {
+      await navigator.clipboard.writeText(g.querySelector('textarea').value);
+      e.target.textContent = '✓ Copié'; setTimeout(() => e.target.textContent = 'Copier le texte', 1400);
+    });
+  });
+}
+$('art').addEventListener('change', render);
+$('filtre').addEventListener('change', render);
+$('hide').addEventListener('click', (e) => { masque = !masque; e.target.textContent = masque ? 'Afficher tout' : 'Masquer les faits'; render(); });
+$('reset').addEventListener('click', () => { const a = DATA.articles[$('art').value | 0]; if (!a) return;
+  a.cartes.forEach((c) => delete st[a.slug + '|' + c.camp]); save(); render(); });
+render();
+</script></body></html>
