@@ -10,10 +10,13 @@
  *                                                              échange longue durée + jeton de PAGE, écrits dans meta.env
  *   node scripts/meta-publish.mjs check                      → vérifie token + page (aucune écriture)
  *   node scripts/meta-publish.mjs smoke                      → post NON PUBLIÉ créé puis supprimé (invisible au public)
- *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--image-url https://…]       → RÉPÉTITION (dry-run)
- *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--image-url https://…] --go  → publie réellement
- *   (--image-url : post PHOTO — image déjà en ligne sur nsy.fr ; règle owner :
- *    toujours lui demander l'image AVANT de publier, jamais de post texte nu)
+ *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--video-url https://…]       → RÉPÉTITION (dry-run)
+ *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--video-url https://…] --go  → publie réellement
+ *   (--video-url : post VIDÉO/réel — règle owner 17/08/2026 : le journal se
+ *    publie en vidéo AU FORMAT ORIGINAL, jamais recomposée ; la vidéo doit être
+ *    déjà en ligne sur nsy.fr, Meta la télécharge depuis le site.
+ *    --image-url : repli photo si l'article n'a pas de déclinaison vidéo.
+ *    Dans les deux cas, média montré au owner et validé AVANT --go — jamais de post nu.)
  *
  * Credentials dans _secret/meta.env (gitignoré, local uniquement — jamais
  * déployé, jamais commité ; modèle : _secret/meta.env.example). Le token
@@ -163,6 +166,12 @@ async function post(env, args) {
   if (iu !== -1 && !/^https:\/\/(www\.)?nsy\.fr\//.test(imageUrl || '')) {
     die('--image-url doit pointer sur une image déjà en ligne sur nsy.fr (déployer d\'abord).');
   }
+  const vu = args.indexOf('--video-url');
+  const videoUrl = vu !== -1 ? args[vu + 1] : null;
+  if (vu !== -1 && !/^https:\/\/(www\.)?nsy\.fr\//.test(videoUrl || '')) {
+    die('--video-url doit pointer sur une vidéo déjà en ligne sur nsy.fr (déployer d\'abord).');
+  }
+  if (imageUrl && videoUrl) die('--image-url et --video-url sont exclusifs.');
 
   // Garde-fous — règle owner : les backlinks vivent dans le 1ᵉʳ commentaire.
   if (!args.includes('--allow-link-in-body') && /(https?:\/\/|nsy\.fr)/i.test(body)) {
@@ -172,14 +181,18 @@ async function post(env, args) {
     die("Le 1ᵉʳ commentaire ne contient aucun lien nsy.fr — c'est sa raison d'être (backlinks vers l'article).");
   }
 
-  console.log(`── POST (${body.length} car.)${imageUrl ? ` + IMAGE ${imageUrl}` : ' — SANS IMAGE'} ──\n${body}\n── 1ᵉʳ COMMENTAIRE (${comment.length} car.) ──\n${comment}\n`);
+  console.log(`── POST (${body.length} car.)${videoUrl ? ` + VIDÉO ${videoUrl}` : imageUrl ? ` + IMAGE ${imageUrl}` : ' — SANS MÉDIA'} ──\n${body}\n── 1ᵉʳ COMMENTAIRE (${comment.length} car.) ──\n${comment}\n`);
   if (!go) {
     console.log('Répétition (dry-run) : rien n\'a été publié. Relancer avec --go pour publier réellement.');
     return;
   }
 
   let postId;
-  if (imageUrl) {
+  if (videoUrl) {
+    const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/videos`, { file_url: videoUrl, description: body });
+    postId = created.id;
+    console.log(`✓ Post VIDÉO publié (${postId})`);
+  } else if (imageUrl) {
     const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/photos`, { url: imageUrl, message: body });
     postId = created.post_id || created.id;
     console.log(`✓ Post PHOTO publié (${postId})`);
@@ -190,8 +203,10 @@ async function post(env, args) {
   }
   const com = await graph(env, 'POST', `${postId}/comments`, { message: comment });
   console.log(`✓ 1ᵉʳ commentaire posté (${com.id})`);
-  const perma = await graph(env, 'GET', created.id, { fields: 'permalink_url' });
-  console.log(`\nURL de la publication (pour le câblage §4 du skill journal-nsy) :\n${perma.permalink_url}`);
+  const perma = await graph(env, 'GET', postId, { fields: 'permalink_url' });
+  let purl = perma.permalink_url || '';
+  if (purl.startsWith('/')) purl = 'https://www.facebook.com' + purl;
+  console.log(`\nURL de la publication (pour le câblage §4 du skill journal-nsy) :\n${purl}`);
 }
 
 // ── Entrée ────────────────────────────────────────────────────────────────────

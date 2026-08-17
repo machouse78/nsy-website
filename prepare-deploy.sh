@@ -160,6 +160,7 @@ cp public/weekend-site-thumb.jpg        deploy/public/   # poster vignette artic
 cp public/weekend-site-thumb.mp4        deploy/public/   # vignette ANIMEE article site IA week-end
 cp public/weekend-site-article.jpg      deploy/public/   # infographie FR article site IA week-end (+ OG)
 cp public/weekend-site-article-en.jpg   deploy/public/   # infographie EN article site IA week-end (+ OG)
+cp public/weekend-site-video.mp4        deploy/public/   # video pleine res article week-end (publication Facebook)
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)
