@@ -298,10 +298,20 @@
     const x = (i) => PL + i * (W - PL - PR) / Math.max(n - 1, 1);
     const y = (v) => H - PB - v * (H - PT - PB) / max;
     const yTicks = [0, .25, .5, .75, 1].map((f) => Math.round(max * f));
+    // Étiquettes X : pas régulier, PUIS filtrage anti-chevauchement en partant de
+    // la fin (la dernière date est toujours gardée) — sinon « 15/08 » et « 16/08 »
+    // se superposent quand le dernier point tombe juste après un tick.
     const step = Math.max(1, Math.ceil(n / 6));
+    const cand = [];
+    for (let i = 0; i < n; i += step) cand.push(i);
+    if (cand.at(-1) !== n - 1) cand.push(n - 1);
+    const minGap = bk.mode === 'mois' ? 90 : 72;   // unités viewBox (~largeur d'une étiquette)
     const xIdx = [];
-    for (let i = 0; i < n; i += step) xIdx.push(i);
-    if (xIdx.at(-1) !== n - 1) xIdx.push(n - 1);
+    for (let k = cand.length - 1; k >= 0; k--) {
+      const i = cand[k];
+      if (!xIdx.length || x(xIdx.at(-1)) - x(i) >= minGap) xIdx.push(i);
+    }
+    xIdx.reverse();
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     svg.innerHTML = `
       ${series.length === 1 ? `<defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
@@ -309,7 +319,10 @@
       </linearGradient></defs>` : ''}
       ${yTicks.map((v) => `<line x1="${PL}" y1="${y(v).toFixed(1)}" x2="${W - PR}" y2="${y(v).toFixed(1)}" stroke="#1C2740" stroke-width="1"${v ? ' stroke-dasharray="3 5"' : ''}/>
         <text x="${PL - 8}" y="${(y(v) + 4).toFixed(1)}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="end">${fmt(v)}</text>`).join('')}
-      ${xIdx.map((i) => `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="middle">${xLabel(bk.keys[i], bk.mode)}</text>`).join('')}
+      ${xIdx.map((i) => {
+        const anchor = i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle';
+        return `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="${anchor}">${xLabel(bk.keys[i], bk.mode)}</text>`;
+      }).join('')}
       <line id="cross-${svgId}" x1="0" y1="${PT}" x2="0" y2="${H - PB}" stroke="#8993AF" stroke-width="1" stroke-dasharray="3 4" opacity="0"/>
       ${series.map((s) => {
         const path = s.pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
