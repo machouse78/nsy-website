@@ -209,7 +209,14 @@
 
   <div class="sec-h" id="r-reseaux"><h2>Réseaux sociaux</h2><span>lecture des pages et des publications</span></div>
   <div class="grid" id="soc-cards"></div>
-  <div class="chart-head"><h2 id="h-soc">Lecture des pages — Facebook et Instagram</h2></div>
+  <div class="chart-head">
+    <h2 id="h-soc">Lecture des pages</h2>
+    <select id="soc-net">
+      <option value="tout">Facebook + Instagram</option>
+      <option value="fb">Facebook</option>
+      <option value="ig" hidden>Instagram</option>
+    </select>
+  </div>
   <div class="chart"><div class="legend" id="soc-legend"></div><svg id="c-soc"></svg></div>
 
   <div class="chart-head">
@@ -878,13 +885,30 @@
                    ['Comptes atteints · Instagram', fmt(igR), '']] : []),
       ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
-      const socSeries = [
+      // Filtre de réseau, comme sur le graphe par publication. L'option
+      // Instagram reste masquée tant qu'aucun compte n'est relié au site.
+      const socSel = $('soc-net');
+      // Sans compte Instagram, il n'y a rien à choisir : le sélecteur disparaît
+      // plutôt que d'afficher un intitulé « Facebook + Instagram » mensonger.
+      socSel.hidden = !aIg;
+      if (!aIg) socSel.value = 'fb';
+      const reseau = socSel.value;
+      const socFb = [
         { label: 'Vues de la Page Facebook', color: COLORS[0], pts: bkSum(bk, (v) => v.fb?.vues ?? 0) },
         { label: 'Vues vidéo Facebook', color: COLORS[1], pts: bkSum(bk, (v) => v.fb?.vues_video ?? 0) },
-        ...(aIg ? [{ label: 'Vues Instagram', color: COLORS[2], pts: bkSum(bk, (v) => v.fb?.ig?.views ?? 0) },
-                   { label: 'Portée Instagram', color: COLORS[3], pts: bkSum(bk, (v) => v.fb?.ig?.reach ?? 0) }] : []),
+        { label: 'Engagements Facebook', color: COLORS[4], pts: bkSum(bk, (v) => v.fb?.engagements ?? 0) },
       ];
-      $('h-soc').textContent = `Lecture des pages — par ${bk.mode}`;
+      const socIg = [
+        { label: 'Vues Instagram', color: COLORS[2], pts: bkSum(bk, (v) => v.fb?.ig?.views ?? 0) },
+        { label: 'Portée Instagram', color: COLORS[3], pts: bkSum(bk, (v) => v.fb?.ig?.reach ?? 0) },
+        { label: 'Interactions Instagram', color: COLORS[5], pts: bkSum(bk, (v) => v.fb?.ig?.total_interactions ?? 0) },
+      ];
+      const socSeries = reseau === 'fb' ? socFb
+        : reseau === 'ig' ? socIg
+        : [socFb[0], socFb[1], ...(aIg ? [socIg[0], socIg[1]] : [])];
+      $('h-soc').textContent = !aIg
+        ? `Lecture de la Page Facebook — par ${bk.mode}`
+        : `Lecture des pages — ${reseau === 'fb' ? 'Facebook' : reseau === 'ig' ? 'Instagram' : 'Facebook + Instagram'}, par ${bk.mode}`;
       $('soc-legend').innerHTML = socSeries.map((x) =>
         `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
       drawChart('c-soc', bk, socSeries);
@@ -1030,6 +1054,7 @@
   $('metric').addEventListener('change', render);
   $('split').addEventListener('change', render);
   $('posts-net').addEventListener('change', render);
+  $('soc-net').addEventListener('change', render);
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   fillSelects();
