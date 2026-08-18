@@ -221,7 +221,11 @@
 
   <div class="chart-head">
     <h2 id="h-posts">Lecture par publication</h2>
-    <select id="posts-net"><option value="fb">Facebook</option><option value="ig">Instagram</option></select>
+    <select id="posts-net">
+      <option value="tout">Facebook + Instagram</option>
+      <option value="fb">Facebook</option>
+      <option value="ig" hidden>Instagram</option>
+    </select>
   </div>
   <div class="chart"><div class="legend" id="posts-legend"></div><svg id="c-posts"></svg></div>
   <div class="note" id="posts-note"></div>
@@ -890,6 +894,9 @@
       const socSel = $('soc-net');
       // Sans compte Instagram, il n'y a rien à choisir : le sélecteur disparaît
       // plutôt que d'afficher un intitulé « Facebook + Instagram » mensonger.
+      // (L'option est masquée dans le HTML : il faut la RÉAFFICHER quand un
+      // compte existe — l'oublier laisse un choix invisible mais actif.)
+      socSel.querySelector('option[value="ig"]').hidden = !aIg;
       socSel.hidden = !aIg;
       if (!aIg) socSel.value = 'fb';
       const reseau = socSel.value;
@@ -916,32 +923,43 @@
       // Lecture PAR PUBLICATION. Les valeurs de Meta sont CUMULÉES depuis la
       // parution : la courbe monte en marches à chaque collecte, elle ne
       // devient parlante qu'à partir du premier jour collecté.
-      const net = $('posts-net').value;
-      const champ = net === 'fb' ? 'posts' : 'ig_posts';
-      const lect = net === 'fb' ? ((x) => x.vues_video || x.clics || 0) : ((x) => x.vues || 0);
-      const derniers = D[sel.at(-1)]?.fb?.[champ] || [];
-      const tops = [...derniers].sort((a, b) => lect(b) - lect(a)).slice(0, 5);
-      const serie = tops.map((post, i) => ({
-        label: `${post.date} · ${(post.titre || '').slice(0, 26) || 'publication'}`,
+      const postsSel = $('posts-net');
+      postsSel.querySelector('option[value="ig"]').hidden = !aIg;
+      postsSel.hidden = !aIg;                 // rien à choisir sans Instagram
+      if (!aIg) postsSel.value = 'fb';
+      const net = postsSel.value;
+      // Chaque réseau a sa mesure de « lecture » : les vues vidéo (à défaut les
+      // clics) côté Facebook, les vues côté Instagram. En vue combinée, les
+      // publications des deux réseaux concourent et portent leur préfixe.
+      const SRC = {
+        fb: { champ: 'posts', lect: (x) => x.vues_video || x.clics || 0, tag: 'FB' },
+        ig: { champ: 'ig_posts', lect: (x) => x.vues || 0, tag: 'IG' },
+      };
+      const reseaux = net === 'tout' ? ['fb', 'ig'] : [net];
+      const dernier = D[sel.at(-1)]?.fb || {};
+      const cands = reseaux.flatMap((r) => (dernier[SRC[r].champ] || []).map((post) => ({ post, r })));
+      const tops = cands.sort((a, b) => SRC[b.r].lect(b.post) - SRC[a.r].lect(a.post)).slice(0, 5);
+      const serie = tops.map(({ post, r }, i) => ({
+        label: `${net === 'tout' ? SRC[r].tag + ' · ' : ''}${post.date} · ${(post.titre || '').slice(0, 24) || 'publication'}`,
         color: COLORS[i % COLORS.length],
         pts: bkSum(bk, (v) => {
-          const l = (v.fb?.[champ] || []).find((x) => x.id === post.id);
-          return l ? lect(l) : 0;
+          const l = (v.fb?.[SRC[r].champ] || []).find((x) => x.id === post.id);
+          return l ? SRC[r].lect(l) : 0;
         }),
       }));
-      $('h-posts').textContent = `Lecture par publication — ${net === 'fb' ? 'Facebook' : 'Instagram'}`;
+      $('h-posts').textContent = `Lecture par publication — ${net === 'fb' ? 'Facebook' : net === 'ig' ? 'Instagram' : 'Facebook + Instagram'}`;
       $('posts-legend').innerHTML = serie.map((x) =>
         `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('') || '<span class="mono">aucune publication</span>';
       drawChart('c-posts', bk, serie.length ? serie : [{ label: '—', color: COLORS[0], pts: bk.keys.map(() => 0) }]);
-      $('posts-note').textContent = net === 'fb'
-        ? "Vues des vidéos, à défaut clics — Meta a retiré les impressions au niveau d'une publication. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte."
-        : 'Vues cumulées depuis la parution : la courbe monte par paliers à chaque collecte.';
+      $('posts-note').textContent = (net === 'ig'
+        ? 'Vues Instagram'
+        : "Facebook : vues des vidéos, à défaut clics — Meta a retiré les impressions au niveau d'une publication" + (net === 'tout' ? ' ; Instagram : vues' : '')) +
+        '. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte.';
 
-      const tbl = (rows) => rows.length ? rows : null;
-      document.querySelector('#t-fbposts tbody').innerHTML = (derniers.length && net === 'fb' ? derniers : (D[sel.at(-1)]?.fb?.posts || []))
+      document.querySelector('#t-fbposts tbody').innerHTML = (dernier.posts || [])
         .map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues_video || 0)}</td><td class="num">${fmt(x.clics || 0)}</td><td class="num">${fmt(x.likes || 0)}</td></tr>`).join('')
         || '<tr><td colspan="4" class="mono">pas de publication</td></tr>';
-      const igp = D[sel.at(-1)]?.fb?.ig_posts || [];
+      const igp = dernier.ig_posts || [];
       document.querySelector('#t-igposts tbody').innerHTML = igp.length
         ? igp.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues || 0)}</td><td class="num">${fmt(x.portee || 0)}</td><td class="num">${fmt(x.interactions || 0)}</td></tr>`).join('')
         : '<tr><td colspan="4" class="mono">aucun compte Instagram relié</td></tr>';
