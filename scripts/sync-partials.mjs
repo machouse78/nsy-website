@@ -65,6 +65,11 @@ const pages = [
   ['site-ia-en-un-week-end.html', 'fr', 'index.html', 'blog'],
   ['consultant-technique-paris.html',     'fr', 'index.html', 'services'],
   ['creation-site-internet-orleans.html', 'fr', 'index.html', 'services'],
+  ['creation-site-internet-tours.html', 'fr', 'index.html', 'services'],
+  ['creation-site-internet-paris.html', 'fr', 'index.html', 'services'],
+  ['creation-site-internet-lyon.html', 'fr', 'index.html', 'services'],
+  ['creation-site-internet-bordeaux.html', 'fr', 'index.html', 'services'],
+  ['refonte-site-internet.html',          'fr', 'index.html', 'services'],
   ['pourquoi-nsy.html',                   'fr', 'index.html', 'about'],
   ['legal-notice.html',     'en', 'index-en.html',  'top'],
   ['privacy.html',          'en', 'index-en.html',  'top'],
@@ -89,6 +94,11 @@ const pages = [
   ['ai-website-in-a-weekend.html', 'en', 'index-en.html', 'blog'],
   ['technical-consultant-paris.html',   'en', 'index-en.html', 'services'],
   ['website-creation-orleans.html',     'en', 'index-en.html', 'services'],
+  ['website-creation-tours.html',     'en', 'index-en.html', 'services'],
+  ['website-creation-paris.html',     'en', 'index-en.html', 'services'],
+  ['website-creation-lyon.html',     'en', 'index-en.html', 'services'],
+  ['website-creation-bordeaux.html',     'en', 'index-en.html', 'services'],
+  ['website-redesign.html',             'en', 'index-en.html', 'services'],
   ['why-nsy.html',                      'en', 'index-en.html', 'about'],
 ];
 

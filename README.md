@@ -203,6 +203,9 @@ nsy-website/
 │                                        #   expertise-openshift-kubernetes, expertise-kafka-messagerie,
 │                                        #   conformite-dora, integration-claude-entreprise,
 │                                        #   creation-site-ia, glossaire-ia-web
+├── refonte-site-internet.html / website-redesign.html   # Offre refonte (FR/EN)
+├── creation-site-internet-<ville>.html  # Pages locales : orleans, tours, paris, lyon, bordeaux
+│   / website-creation-<ville>.html      # (+ jumelles EN) — angle PROPRE à chaque ville, jamais dupliqué
 ├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
 ├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── reseaux/                             # Non déployé : groupes.md (registre des groupes à partager)

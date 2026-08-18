@@ -43,7 +43,7 @@ Ingénieur logiciel depuis 2012. Parcours :
   grandes institutions financières françaises et européennes : migration de socles
   Java EE, supervision de production, développements transverses pour de grandes
   assurances européennes.
-- Depuis 2026 : extension de l'activité à la création de sites web propulsés par
+- Depuis 2026 : extension de l'activité à la réalisation — création ET refonte — de sites web propulsés par
   l'intelligence artificielle.
 
 Principes de travail revendiqués : « en prise directe » (pas de junior masqué — la
@@ -239,7 +239,7 @@ accomplissement.
 **Qu'est-ce que NSY exactement ?**
 Une société française indépendante fondée en 2018 par Cédric Barme,
 avec deux activités : le conseil technique senior (banque, assurance, finance)
-et la création de sites web propulsés par l'IA. Un seul interlocuteur, qui vend
+et la réalisation (création ou refonte) de sites web propulsés par l'IA. Un seul interlocuteur, qui vend
 et livre lui-même les missions.
 
 **Qui est derrière NSY ?**

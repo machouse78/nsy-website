@@ -534,16 +534,18 @@
     },
     {
       id: 'web_ai',
-      cues: ['site','site web','web','website','application','appli','app','saas','plateforme','platform',
+      cues: ['site','site web','web','website','refonte','refondre','redesign','refaire','moderniser','application','appli','app','saas','plateforme','platform',
               'ia','intelligence artificielle','llm','claude','openai','mistral','gpt','chatbot','agent',
               'rag','recherche semantique','semantic','ai','automatis','automation'],
       fr: [
         `La création web NSY, c'est des sites et plateformes nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots métier, recherche sémantique, génération de contenu, agents. Le tout pensé pour la performance et le SEO — tarification en fonction du besoin.`,
-        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Offre clé en main, chiffrée selon le périmètre.`
+        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Offre clé en main, chiffrée selon le périmètre.`,
+        `Deux parcours : la création d'un site neuf, ou la refonte d'un site existant — préserver le référencement acquis, reprendre les contenus et les données, planifier les redirections. Le questionnaire de faisabilité distingue les deux dès sa première question.`
       ],
       en: [
         `NSY web creation means next-generation sites and platforms with AI at the core: LLM integration (Claude, OpenAI, Mistral), business chatbots, semantic search, content generation, agents — all built for performance and SEO — pricing based on your need.`,
-        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. A turnkey offering, quoted on scope.`
+        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. A turnkey offering, quoted on scope.`,
+        `Two paths: a brand-new site, or a redesign of an existing one — preserving earned rankings, carrying over content and data, planning redirects. The feasibility questionnaire separates the two from its first question.`
       ]
     },
     {
