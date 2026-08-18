@@ -142,7 +142,8 @@ in the EU) through the OpenAI-compatible API.
 `contact.php` (shares `antispam.php` with `faisabilite.php`) :
 1. Verifies the **Cloudflare Turnstile token** (anti-bot) server-side
 2. **Honeypot** anti-spam (hidden field only bots fill in)
-3. **Content anti-spam** (`antispam.php`): heuristic score (URLs, shorteners like `telegra.ph`/`t.me`, crypto/casino/backlink keywords, `$…` amounts, shouty ALL-CAPS). Above the threshold → **silent drop** (fake `{ ok: true }`, no email) + a trace in `_secret/spam.log` (403 over HTTP, readable over FTP) to catch a false positive. Plus a **per-IP daily cap** (5/day) on top of the **1 send / IP / 60 s** throttle
+3. **Content anti-spam** (`antispam.php`): heuristic score over several signals — links and URL shorteners, risky TLDs, spam phrases, money amounts, shouty ALL-CAPS, digits in the name. Above the threshold → **silent drop** (fake `{ ok: true }`, no email) + a trace in `_secret/spam.log` (403 over HTTP, readable over FTP) to catch a false positive. Plus a per-IP daily cap and a per-send throttle.
+   ⚠️ **The values — threshold, lists, weights, caps — are not in this repository**: they live in `_secret/antispam-rules.php` (template: `_secret/antispam-rules.php.example`). Publishing them would hand over the recipe to bypass them; the code itself stays readable and auditable. The file is optional — without it, minimal built-in defaults apply
 4. Sends the message to the NSY inbox via **PHPMailer + Infomaniak SMTP** (internal notification in FR). The address appears **nowhere on the public site nor in this README** (anti-scraping): visitors go through the form, the auto-reply carries an internal `Reply-To`
 5. Sends an **HTML auto-reply** to the prospect, **localised FR/EN** based on the hidden `lang` field (subject, HTML body, text version, `<html lang>`, service label)
 6. Responds in JSON (`{ ok: true }` or `{ ok: false, error }`) → front-end toast
@@ -212,7 +213,6 @@ nsy-website/
 ├── creation-site-internet-<city>.html   # Local pages: orleans, tours, paris, lyon, bordeaux
 │   / website-creation-<city>.html       # (+ EN twins) — each with its OWN angle, never duplicated
 ├── llms.txt / llms-full.txt             # Structured context for AI (llmstxt.org spec)
-├── SEO-GEO-LLMO.md                      # Internal SEO/GEO strategy (not deployed)
 ├── contact.php                          # Contact form backend (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
 ├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
@@ -359,7 +359,7 @@ Goal: be understood and **cited** by ChatGPT, Claude, Gemini, Perplexity, Copilo
 - **`llms.txt` / `llms-full.txt`** : identity, expertise, offerings, entity graph and recommendation rules, in an LLM-readable format — to be kept in sync with the site's facts (same rule as the chatbot)
 - **Bilingual 52-Q&A FAQ** (`faq.html` / `faq-en.html`) targeting conversational queries ("Who is a WildFly expert in France?", "Who can integrate Claude?"…); the `FAQPage` JSON-LD is **generated from the DOM** (single source = the visible HTML)
 - **Absolute dates** in static text ("since 2012", "founded in 2018") — never stale
-- Full strategy, pages to create and external actions: [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md)
+- Full strategy, pages to create and external actions: `SEO-GEO-LLMO.md` (private repo `nsy-strategie`)
 
 ### External registrations & entities
 
@@ -379,7 +379,7 @@ Every journal article follows the same publication cycle — covered end to end 
 
 1. **Publish the article** (full checklist in the skill: FR/EN pair, blog cards, home teaser, RSS, sitemap, llms, IndexNow).
 2. **Publish the two posts**: a **professional article on the NSY LinkedIn page** + a **general-public Facebook** version — two distinct rewrites (no prices, ESN-friendly wording, CTA to the offer). **Backlinks to nsy.fr go in the FIRST COMMENT of each post, never in the body** — the algorithms deprioritise posts with external links; the first comment preserves both reach and backlink. The Facebook side is **automated and VIDEO-first**: `node scripts/meta-publish.mjs post … --video-url … --go` publishes the article's animated video **in its original format** (never recomposed — Meta classifies it as a Reel) then the first comment via the Graph API (`--image-url` as a photo fallback; page token in `_secret/meta.env`, dry-run by default, media approved by the owner before any `--go`, guard rails: refuses a link in the body, refuses a comment without the backlink). LinkedIn stays a manual paste (no API for articles).
-3. **Archive the post URLs** in [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 (trust signals — GEO cross-referencing of the NSY entity).
+3. **Archive the post URLs** in `SEO-GEO-LLMO.md` (private repo `nsy-strategie`) §6 (trust signals — GEO cross-referencing of the NSY entity).
 4. **Add the « Read on LinkedIn / Facebook » buttons** at the end of the FR article (template: `seo-geo-etre-cite-par-les-ia.html`), then redeploy. The EN article only gets buttons if EN posts exist.
 5. **Wire Ansley**: publication URLs in `llms-full.txt` (« Journal » block), 3-layer whitelist (`chat.php` + `js/app.js`, lowercase prefixes), the slug→URLs pair in `chat.php`'s `$journalSocials` map (deterministic append) and cases in both test suites.
 

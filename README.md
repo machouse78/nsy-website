@@ -142,7 +142,8 @@ données traitées en UE) via l'API OpenAI-compatible.
 `contact.php` (partage `antispam.php` avec `faisabilite.php`) :
 1. Vérifie le **token Cloudflare Turnstile** (anti-bot) côté serveur
 2. **Honeypot** anti-spam (champ caché que seuls les bots remplissent)
-3. **Anti-spam de contenu** (`antispam.php`) : score heuristique (URLs, raccourcisseurs type `telegra.ph`/`t.me`, mots-clés crypto/casino/backlinks, montants `$…`, MAJUSCULES criardes). Au-delà du seuil → **abandon silencieux** (faux `{ ok: true }`, aucun email) + trace dans `_secret/spam.log` (403 en HTTP, lisible en FTP) pour repérer un faux positif. Plus un **plafond journalier par IP** (5/jour) en plus du throttle **1 envoi / IP / 60 s**
+3. **Anti-spam de contenu** (`antispam.php`) : score heuristique sur plusieurs signaux — liens et raccourcisseurs d'URL, TLD à risque, expressions typiques du spam, montants, majuscules criardes, nom contenant des chiffres. Au-delà du seuil → **abandon silencieux** (faux `{ ok: true }`, aucun email) + trace dans `_secret/spam.log` (403 en HTTP, lisible en FTP) pour repérer un faux positif. Plus un plafond journalier par IP et un throttle par envoi.
+   ⚠️ **Les valeurs — seuil, listes, poids, plafonds — ne sont pas dans ce dépôt** : elles vivent dans `_secret/antispam-rules.php` (modèle : `_secret/antispam-rules.php.example`). Les publier reviendrait à donner la recette pour les contourner ; le code, lui, reste lisible et vérifiable. Le fichier est facultatif — absent, des défauts de repli minimaux s'appliquent
 4. Envoie le message à la boîte NSY via **PHPMailer + SMTP Infomaniak** (notification interne en FR). L'adresse n'apparaît **nulle part sur le site public ni dans ce README** (anti-scraping) : les visiteurs passent par le formulaire, l'auto-réponse porte un `Reply-To` interne
 5. Envoie une **auto-réponse HTML** au prospect, **localisée FR/EN** selon le champ caché `lang` (objet, corps HTML, version texte, `<html lang>`, libellé du service)
 6. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → toast côté front
@@ -207,7 +208,6 @@ nsy-website/
 ├── creation-site-internet-<ville>.html  # Pages locales : orleans, tours, paris, lyon, bordeaux
 │   / website-creation-<ville>.html      # (+ jumelles EN) — angle PROPRE à chaque ville, jamais dupliqué
 ├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
-├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
@@ -283,8 +283,8 @@ nsy-website/
   tels quels dans un bac à sable `php -S` avec `_secret` factice
   (`turnstile_secret` vide → vérification sautée, SMTP sur port fermé → une
   soumission valide atteint l'étape d'envoi **sans qu'aucun email ne parte**) —
-  405, honeypot, validation FR/EN, spam silencieux + journal, throttle 60 s,
-  plafond 5/jour, chemin d'envoi.
+  405, honeypot, validation FR/EN, spam silencieux + journal, throttle par
+  envoi, plafond journalier, chemin d'envoi (valeurs lues dans `_secret/`).
 
 **À lancer avant tout commit qui touche `chat.php`, `js/app.js`, `contact.php`,
 `faisabilite.php`, `antispam.php` ou `journal-stats.php`.**
@@ -378,7 +378,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 - **`llms.txt` / `llms-full.txt`** : identité, expertises, offres, graphe d'entités et règles de recommandation, au format lisible par les LLM — à tenir en phase avec les faits du site (même règle que le chatbot)
 - **FAQ bilingue 52 Q/R** (`faq.html` / `faq-en.html`) ciblant les requêtes conversationnelles (« Qui est expert WildFly en France ? », « Qui peut intégrer Claude ? »…) ; le `FAQPage` JSON-LD est **généré depuis le DOM** (source unique = HTML visible)
 - **Dates absolues** dans le texte statique (« depuis 2012 », « fondée en 2018 ») — jamais périmé
-- Stratégie complète, pages à créer et actions externes : [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md)
+- Stratégie complète, pages à créer et actions externes : `SEO-GEO-LLMO.md` (dépôt privé `nsy-strategie`)
 
 ### Inscriptions & entités externes
 
@@ -398,7 +398,7 @@ Chaque article du journal suit le même cycle de publication — détaillé de b
 
 1. **Publier l'article** (checklist complète dans le skill : paire FR/EN, cards du blog, teaser accueil, RSS, sitemap, llms, IndexNow).
 2. **Publier le couple de posts** : article **pro sur la page LinkedIn NSY** + version **grand public sur la page Facebook** — deux réécritures distinctes, pas un copier-coller (pas de prix, formulations ESN-compatibles, CTA vers l'offre). **Les backlinks vers nsy.fr vont dans le PREMIER COMMENTAIRE de chaque post, jamais dans le corps** — les algorithmes dépriorisent les posts à lien externe ; le 1ᵉʳ commentaire préserve la portée ET le backlink. Côté Facebook, c'est **automatisé et en VIDÉO** : `node scripts/meta-publish.mjs post … --video-url … --go` publie la déclinaison animée de l'article **au format original** (jamais recomposée — Meta la classe en Reel) puis le 1ᵉʳ commentaire via l'API Graph (`--image-url` en repli photo ; token de page dans `_secret/meta.env`, dry-run par défaut, média validé par le propriétaire avant tout `--go`, garde-fous : refus d'un lien dans le corps, refus d'un commentaire sans backlink). LinkedIn reste un collage manuel (pas d'API pour les articles).
-3. **Archiver les URLs des posts** dans [`SEO-GEO-LLMO.md`](SEO-GEO-LLMO.md) §6 — signaux de confiance : mentions + liens depuis des corpus fortement crawlés (recoupement GEO de l'entité NSY).
+3. **Archiver les URLs des posts** dans `SEO-GEO-LLMO.md` (dépôt privé `nsy-strategie`) §6 — signaux de confiance : mentions + liens depuis des corpus fortement crawlés (recoupement GEO de l'entité NSY).
 4. **Ajouter les boutons « Lire sur LinkedIn / Facebook »** en fin d'article FR (bloc bordé, `btn-ghost` + icônes SVG de marque, `target="_blank" rel="noopener"` — modèle : `seo-geo-etre-cite-par-les-ia.html`), puis redéployer. La version EN ne reçoit les boutons que si des posts EN existent.
 5. **Câbler Ansley** : les URLs des publications dans `llms-full.txt` (bloc « Journal »), whitelist aux 3 étages (`chat.php` + `js/app.js`, préfixes en minuscules), la paire slug→URLs dans la map `$journalSocials` de `chat.php` (ajout **déterministe** des liens à toute réponse FR citant l'article sans eux) et des cas dans les deux suites de tests.
 
