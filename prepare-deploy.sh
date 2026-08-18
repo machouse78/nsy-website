@@ -90,7 +90,7 @@ cp site-ia-en-un-week-end.html deploy/
 cp ai-website-in-a-weekend.html deploy/
 cp stats-collector.php deploy/
 mkdir -p deploy/stats
-cp stats/.htaccess stats/index.html stats/data.php deploy/stats/
+cp stats/.htaccess stats/index.html stats/data.php stats/html2canvas.min.js deploy/stats/
 [ -f stats/partage.html ] && cp stats/partage.html deploy/stats/   # page « Partager » (kits par groupe)
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
