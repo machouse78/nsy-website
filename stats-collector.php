@@ -95,16 +95,29 @@ $stats = [
                        // groupe ou post vient un clic (Facebook ne transmet que l'origine)
     'fbclid' => 0,     // clic Facebook confirmé même sans referer (app mobile)
     'llms_hits' => 0, 'chat_calls' => 0,
+    // Agent conversationnel : le détail, pas juste un compteur d'appels.
+    'chat' => ['messages' => 0, 'health' => 0, 'ratelimit' => 0, 'erreurs' => 0,
+               'visiteurs' => [], 'pages' => []],
+    // Périmètres : un même domaine peut héberger plusieurs applications
+    // (PRV : vitrine + forum phpBB + boutique WooCommerce). Compté pour TOUTES
+    // les lignes, robots compris — savoir ce que les IA lisent vraiment.
+    'peri' => [],
     // Profils (agrégats depuis le UA) + provenance détaillée + parcours par session.
     'devices' => ['mobile' => 0, 'desktop' => 0, 'tablette' => 0],
     'os' => [], 'browsers' => [], 'ref_hosts' => [],
     'visites' => [], // hash éphémère => visite EN COURS ['first','last','pages'[]] — JETÉ après agrégation
     'sessions' => [], // visites closes (coupure d'inactivité) — même sort
 ];
+// Périmètres : nsy.fr n'héberge qu'une application — tout est « site ».
+$PERI_DEFAUT = 'site';
+$PERIMETRES = [];
+$JOURNAL_URL = static fn(string $slug): string => 'https://www.nsy.fr/' . $slug;
 $logDir = (getenv('HOME') ?: dirname(__DIR__)) . '/ik-logs';
 $files = array_merge(glob("$logDir/access.log") ?: [], glob("$logDir/access.log-*") ?: []);
 // Infomaniak préfixe chaque ligne par le vhost (« nsy.fr IP - - [... ») — préfixe optionnel.
-$re = '#^(?:[a-z0-9.-]+ )?(\S+) \S+ \S+ \[([^\]]+)\] "(\S+) (\S+)[^"]*" (\d{3}) \S+ "([^"]*)" "([^"]*)"#';
+// La TAILLE de réponse est capturée : elle sert à reconnaître les sondes de
+// disponibilité du chatbot dans l'historique d'avant le marqueur explicite.
+$re = '#^(?:[a-z0-9.-]+ )?(\S+) \S+ \S+ \[([^\]]+)\] "(\S+) (\S+)[^"]*" (\d{3}) (\S+) "([^"]*)" "([^"]*)"#';
 $parsedFiles = 0;
 
 foreach ($files as $f) {
@@ -117,8 +130,24 @@ foreach ($files as $f) {
     while (($line = $read($h)) !== false) {
         if (!str_contains($line, $targetLog)) continue;
         if (!preg_match($re, $line, $m)) continue;
-        [, $ip, , $method, $path, $status, $ref, $ua] = $m;
+        [, $ip, , $method, $path, $status, $size, $ref, $ua] = $m;
         $stats['hits']++;
+        $clean = strtok($path, '?') ?: $path;
+        // Périmètre + définition de « page vue » PROPRE À CHAQUE APPLICATION :
+        // une page de forum est un .php, une fiche boutique une URL jolie.
+        $peri = $PERI_DEFAUT;
+        $isPage = $clean === '/' || str_ends_with($clean, '.html');
+        foreach ($PERIMETRES as $nom => $rg) {
+            if (!str_starts_with($clean, $rg['prefixe'])) continue;
+            $peri = $nom;
+            $isPage = (bool) preg_match($rg['page'], $clean)
+                && !($rg['exclure'] !== '' && preg_match($rg['exclure'], $clean));
+            break;
+        }
+        if (!isset($stats['peri'][$peri])) {
+            $stats['peri'][$peri] = ['hits' => 0, 'ai_hits' => 0, 'pages_vues' => 0, 'visiteurs' => [], 'top' => []];
+        }
+        $stats['peri'][$peri]['hits']++;
         $sKey = in_array($status, ['200', '301', '404'], true) ? $status : 'other';
         $stats['status'][$sKey]++;
 
@@ -127,23 +156,52 @@ foreach ($files as $f) {
             if (preg_match($rx, $ua)) {
                 $stats['ai'][$name] = ($stats['ai'][$name] ?? 0) + 1;
                 $stats['ai_hits']++;
+                $stats['peri'][$peri]['ai_hits']++;
                 $isAI = true;
                 break;
             }
         }
         if (preg_match($SCAN_RE, $ua)) $stats['scan_hits']++;
         if (str_starts_with($path, '/llms')) $stats['llms_hits']++;
-        if (str_starts_with($path, '/chat.php') && $method === 'POST') $stats['chat_calls']++;
+        // Agent conversationnel. ⚠️ Le voyant de disponibilité tape le MÊME
+        // endpoint : sans marqueur (`?h=1` en POST, `?ping=1` en GET) ses
+        // sondes seraient comptées comme des conversations.
+        if (str_starts_with($clean, '/chat.php')) {
+            $q0 = (string) parse_url($path, PHP_URL_QUERY);
+            // Marqueur explicite (widgets à jour) OU réponse minuscule : le
+            // voyant renvoie ~60 octets là où une vraie réponse en fait des
+            // centaines — c'est ce qui rend l'historique antérieur exploitable.
+            $sonde = str_contains($q0, 'h=1') || str_contains($q0, 'ping=1')
+                || (ctype_digit($size) && (int) $size < 150);
+            if ($sonde) {
+                $stats['chat']['health']++;
+            } elseif ($method === 'POST') {
+                if ($status === '429')            $stats['chat']['ratelimit']++;
+                elseif ((int) $status >= 500)     $stats['chat']['erreurs']++;
+                else {
+                    $stats['chat']['messages']++;
+                    $stats['chat_calls']++;
+                    $stats['chat']['visiteurs'][substr(md5($ip . '|' . $ua), 0, 12)] = 1;
+                    $rp = (string) parse_url($ref, PHP_URL_PATH);
+                    if ($rp !== '') $stats['chat']['pages'][$rp] = ($stats['chat']['pages'][$rp] ?? 0) + 1;
+                }
+            }
+        }
         if ($isAI) continue;
         if (preg_match($SE_RE, $ua)) { $stats['se_hits']++; continue; }
         if ($ua === '' || $ua === '-' || preg_match($BOT_RE, $ua)) { $stats['bot_hits']++; continue; }
 
-        // humain (approximation) : page HTML servie
-        $clean = strtok($path, '?') ?: $path;
-        $isPage = $clean === '/' || str_ends_with($clean, '.html');
+        // humain (approximation) : page servie ($clean / $isPage : voir périmètres)
         if ($isPage && in_array($status, ['200', '304'], true) && $method === 'GET') {
-            $stats['pageviews']++;
             $vh = substr(md5($ip . '|' . $ua), 0, 12); // ≠ $h (handle de fichier de la boucle !)
+            $stats['peri'][$peri]['pages_vues']++;
+            $stats['peri'][$peri]['visiteurs'][$vh] = 1;
+            $stats['peri'][$peri]['top'][$clean] = ($stats['peri'][$peri]['top'][$clean] ?? 0) + 1;
+            // Les compteurs GLOBAUX restent ceux du périmètre principal : sinon le
+            // forum (10× la vitrine) écraserait toutes les courbes et couperait la
+            // comparaison avec l'historique. Les autres périmètres se lisent au filtre.
+            if ($peri !== $PERI_DEFAUT) continue;
+            $stats['pageviews']++;
             $stats['uniques'][$vh] = 1;
             $stats['pages'][$clean] = ($stats['pages'][$clean] ?? 0) + 1;
 
@@ -288,6 +346,20 @@ $ia_parcours = [
     'duree_moy_s' => $iaS['durees'] ? (int) round(array_sum($iaS['durees']) / count($iaS['durees'])) : 0,
 ];
 
+// Périmètres : on ne garde que des agrégats (les tables de hash sont jetées).
+$perimetres = [];
+foreach ($stats['peri'] as $nom => $p) {
+    arsort($p['top']);
+    $perimetres[$nom] = [
+        'hits'       => $p['hits'],
+        'ai_hits'    => $p['ai_hits'],
+        'pages_vues' => $p['pages_vues'],
+        'visiteurs'  => count($p['visiteurs']),
+        'top_pages'  => array_slice($p['top'], 0, 12, true),
+    ];
+}
+arsort($stats['chat']['pages']);
+
 $day = [
     'visiteurs'   => count($stats['uniques']),
     'pages_vues'  => $stats['pageviews'],
@@ -311,6 +383,15 @@ $day = [
     'os'          => array_slice($stats['os'], 0, 6, true),
     'browsers'    => array_slice($stats['browsers'], 0, 8, true),
     'parcours'    => $parcours,
+    'chat'        => [
+        'messages'      => $stats['chat']['messages'],
+        'conversations' => count($stats['chat']['visiteurs']),
+        'health'        => $stats['chat']['health'],
+        'ratelimit'     => $stats['chat']['ratelimit'],
+        'erreurs'       => $stats['chat']['erreurs'],
+        'pages'         => array_slice($stats['chat']['pages'], 0, 10, true),
+    ],
+    'perimetres'  => $perimetres,
     'status'      => $stats['status'],
     'log_files'   => $parsedFiles,
 ];
@@ -354,10 +435,20 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
 }
 
 // ── 3. Compteurs du journal ──────────────────────────────────────────────────
+// ⚠️ Les deux sites ne stockent PAS la même chose : nsy.fr écrit
+// {"<slug>.html": {views, likes}} et sert l'article à la racine ; PRV écrit
+// {"<slug>": {v, l}} et sert /journal/<slug>.html. On normalise ICI (vues,
+// likes, url) pour que le dashboard, identique sur les deux sites, n'ait rien
+// à deviner. Vécu : compteurs PRV affichés à zéro faute de cette tolérance.
 $journal = [];
 $js = @json_decode((string) @file_get_contents(__DIR__ . '/_secret/journal-stats.json'), true);
 foreach (is_array($js) ? $js : [] as $slug => $v) {
-    if (is_array($v)) $journal[$slug] = ['vues' => $v['views'] ?? 0, 'likes' => $v['likes'] ?? 0];
+    if (!is_array($v)) continue;
+    $journal[$slug] = [
+        'vues'  => (int) ($v['views'] ?? $v['v'] ?? 0),
+        'likes' => (int) ($v['likes'] ?? $v['l'] ?? 0),
+        'url'   => $JOURNAL_URL($slug),
+    ];
 }
 
 // ── Historisation (idempotente, avec verrou) ─────────────────────────────────

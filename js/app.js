@@ -325,7 +325,9 @@
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 8000);
-      const res = await fetch('chat.php', {
+      // `?h=1` : marqueur pour les logs — sans lui, la sonde de disponibilité
+      // est indistinguable d'un vrai message et gonfle le KPI « conversations ».
+      const res = await fetch('chat.php?h=1', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ health: true }), signal: ctrl.signal,
       });

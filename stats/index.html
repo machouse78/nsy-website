@@ -114,6 +114,7 @@
     <select id="f-page"><option value="">Page : toutes</option></select>
     <select id="f-referral"><option value="">Provenance : toutes</option></select>
     <select id="f-ia"><option value="">Assistant IA : tous</option></select>
+    <select id="f-peri" hidden><option value="">Périmètre : tout</option></select>
     <button id="f-reset" title="Retirer tous les filtres">Réinitialiser</button>
     <span id="pills"></span>
   </div>
@@ -144,6 +145,7 @@
       <option value="ref">Referrals par source</option>
       <option value="refia">Assistants IA (provenance)</option>
       <option value="dev">Appareils</option>
+      <option value="peri" hidden>Périmètres du site</option>
     </select>
   </div>
   <div class="chart"><div class="legend" id="legend"></div><svg id="c-split"></svg></div>
@@ -168,6 +170,18 @@
       <table id="t-iacomp"><thead><tr><th></th><th class="num">Venus d'une IA</th><th class="num">Tout le site</th></tr></thead><tbody></tbody></table>
       <h3>Pages d'entrée depuis une IA</h3>
       <table id="t-iaentry"><tbody></tbody></table>
+    </div>
+  </div>
+
+  <h2>Agent conversationnel</h2>
+  <div class="grid" id="chat-cards"></div>
+  <div class="cols">
+    <div>
+      <h3>Pages d'où l'assistant est sollicité</h3>
+      <table id="t-chatpages"><tbody></tbody></table>
+    </div>
+    <div>
+      <div class="note" id="chat-note"></div>
     </div>
   </div>
 
@@ -241,19 +255,42 @@
 
   const globRe = (pat) => new RegExp('^' + pat.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*') + '$', 'i');
   const AI_NAMES = [...new Set(allDays.flatMap((d) => Object.keys(D[d].ai || {})))];
+  // Périmètres : un domaine peut porter plusieurs applications (vitrine, forum,
+  // boutique). Quand il n'y en a qu'un, le filtre reste caché.
+  const PERIS = [...new Set(allDays.flatMap((d) => Object.keys(D[d].perimetres || {})))];
+  // Sans filtre : les chiffres du périmètre PRINCIPAL (continuité de l'historique).
+  // « tout » cumule les périmètres — un visiteur présent sur deux d'entre eux y
+  // compte deux fois, c'est une somme d'applications, pas un dédoublonnage.
+  const periAgg = (v, p) => {
+    const M = v.perimetres || {};
+    if (p !== 'tout') return M[p] ?? null;
+    const out = { hits: 0, ai_hits: 0, pages_vues: 0, visiteurs: 0, top_pages: {} };
+    for (const o of Object.values(M)) {
+      out.hits += o.hits ?? 0; out.ai_hits += o.ai_hits ?? 0;
+      out.pages_vues += o.pages_vues ?? 0; out.visiteurs += o.visiteurs ?? 0;
+      for (const [k, n] of Object.entries(o.top_pages || {})) out.top_pages[k] = (out.top_pages[k] || 0) + n;
+    }
+    return out;
+  };
+  const vPeri = (v) => { const p = fOf('peri'); return p ? periAgg(v, p) : null; };
+  const vVis = (v) => { const P = vPeri(v); return P ? (P.visiteurs ?? 0) : (v.visiteurs ?? 0); };
 
   // valeurs journalières « conscientes des filtres »
   const vAI = (v) => {
     const b = fOf('bot');
-    if (!b) return v.ai_hits ?? 0;
+    const P = vPeri(v);
+    // Un filtre de périmètre l'emporte : « ce que les robots lisent DANS le forum ».
+    if (!b) return P ? (P.ai_hits ?? 0) : (v.ai_hits ?? 0);
     const nm = AI_NAMES.find((n) => n.toLowerCase().includes(b.toLowerCase())) ?? b;
     return v.ai?.[nm] ?? 0;
   };
+  const vTopPages = (v) => { const P = vPeri(v); return (P ? P.top_pages : v.top_pages) || {}; };
   const vPages = (v) => {
     const p = fOf('page');
-    if (!p) return v.pages_vues ?? 0;
+    const P = vPeri(v);
+    if (!p) return P ? (P.pages_vues ?? 0) : (v.pages_vues ?? 0);
     const re = globRe(p);
-    return Object.entries(v.top_pages || {}).reduce((a, [k, n]) => a + (re.test(k) ? n : 0), 0);
+    return Object.entries(vTopPages(v)).reduce((a, [k, n]) => a + (re.test(k) ? n : 0), 0);
   };
   const vRef = (v, src) => v.referrals?.[src] ?? 0;
   // Provenance IA : total, ou l'assistant ciblé si un filtre ia: est actif.
@@ -265,12 +302,13 @@
   };
 
   const METRICS = [
-    ['visiteurs', 'Visiteurs humains', (v) => v.visiteurs ?? 0],
+    ['visiteurs', 'Visiteurs humains', vVis],
     ['pages_vues', 'Pages vues', vPages],
     ['ai_hits', 'Lectures IA', vAI],
     ['se_hits', 'Moteurs de recherche', (v) => v.se_hits ?? 0],
     ['llms', 'Lectures llms.txt', (v) => v.llms_hits ?? 0],
-    ['ansley', 'Conversations Ansley', (v) => v.chat_calls ?? 0],
+    ['ansley', 'Conversations Ansley', (v) => v.chat?.conversations ?? v.chat_calls ?? 0],
+    ['chat_msg', 'Messages à l\'assistant', (v) => v.chat?.messages ?? v.chat_calls ?? 0],
     ['s404', 'Erreurs 404', (v) => v.status?.['404'] ?? 0],
     ['scans', 'Hits scanners', (v) => v.scan_hits ?? 0],
     ['bots', 'Bots génériques', (v) => v.bot_hits ?? 0],
@@ -408,7 +446,7 @@
   const bkSum = (bk, fn) => bk.keys.map((k) => bk.map.get(k).reduce((a, d) => a + fn(D[d]), 0));
 
   // ── filtres : listes déroulantes (valeurs réelles de l'historique) ──
-  const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia' };
+  const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia', peri: 'f-peri' };
   function fillSelects() {
     const totals = (get) => {
       const o = {};
@@ -425,6 +463,14 @@
     opt($('f-page'), totals((v) => v.top_pages).slice(0, 30), 'Page : toutes');
     opt($('f-referral'), totals((v) => v.referrals), 'Provenance : toutes');
     opt($('f-ia'), totals((v) => v.ref_ia), 'Assistant IA : tous');
+    if (PERIS.length > 1) {
+      $('f-peri').hidden = false;
+      $('split').querySelector('option[value="peri"]').hidden = false;
+      const perTot = totals((v) => Object.fromEntries(
+        Object.entries(v.perimetres || {}).map(([k, o]) => [k, o.pages_vues ?? 0])));
+      opt($('f-peri'), [...perTot, ['tout', perTot.reduce((a, [, n]) => a + n, 0)]],
+        `Périmètre : ${PERIS[0]} (défaut)`);
+    }
 
   }
   function syncSelects() {
@@ -452,7 +498,7 @@
     if (e.key !== 'Enter') return;
     const toks = $('kql').value.trim().split(/\s+/).filter(Boolean);
     for (const t of toks) {
-      const m = t.match(/^(bot|page|referral|ia):(.+)$/i);
+      const m = t.match(/^(bot|page|referral|ia|peri):(.+)$/i);
       if (m) addFilter(m[1].toLowerCase(), m[2]);
     }
     $('kql').value = '';
@@ -467,6 +513,7 @@
       if (f.type === 'page' && vPages(v) <= 0) return false;
       if (f.type === 'referral' && vRef(v, f.value) <= 0) return false;
       if (f.type === 'ia' && vRefIa(v) <= 0) return false;
+      if (f.type === 'peri' && !((periAgg(v, f.value)?.hits ?? 0) > 0)) return false;
     }
     return true;
   }
@@ -508,10 +555,10 @@
 
     const pageF = fOf('page'), botF = fOf('bot');
     const cards = [
-      ['Visiteurs · période', fmt(sumKey(sel, (v) => v.visiteurs ?? 0)), cmp ? delta(sumKey(sel, (v) => v.visiteurs ?? 0), sumKey(cmp, (v) => v.visiteurs ?? 0)) : ''],
+      ['Visiteurs · période', fmt(sumKey(sel, vVis)), cmp ? delta(sumKey(sel, vVis), sumKey(cmp, vVis)) : ''],
       [pageF ? `Pages vues · ${pageF}` : 'Pages vues · période', fmt(sumKey(sel, vPages)), cmp ? delta(sumKey(sel, vPages), sumKey(cmp, vPages)) : ''],
       [botF ? `Lectures IA · ${botF}` : 'Lectures IA · période', fmt(sumKey(sel, vAI)), cmp ? delta(sumKey(sel, vAI), sumKey(cmp, vAI)) : ''],
-      ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, (v) => v.visiteurs ?? 0) / sel.length)), ''],
+      ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, vVis) / sel.length)), ''],
       ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
       ['Conversations Ansley', fmt(sumKey(sel, (v) => v.chat_calls ?? 0)), ''],
       ['llms.txt lus', fmt(sumKey(sel, (v) => v.llms_hits ?? 0)), ''],
@@ -528,14 +575,14 @@
     // ── Résumé en clair (se recalcule avec la période ET les filtres) ──
     {
       const n = (v) => fmt(Math.round(v));
-      const vis = sumKey(sel, (v) => v.visiteurs ?? 0);
+      const vis = sumKey(sel, vVis);
       const pv = sumKey(sel, vPages);
       const ia = sumKey(sel, vAI);
       const parJour = Math.round(vis / sel.length);
-      const visPrev = cmp ? sumKey(cmp, (v) => v.visiteurs ?? 0) : null;
+      const visPrev = cmp ? sumKey(cmp, vVis) : null;
       const evol = visPrev ? Math.round((vis - visPrev) / Math.max(visPrev, 1) * 100) : null;
       const iaTop = aggMap(sel, (v) => v.ai).slice(0, 3);
-      const pagesTop = aggMap(sel, (v) => v.top_pages).slice(0, 2);
+      const pagesTop = aggMap(sel, vTopPages).slice(0, 2);
       const iaRef = aggMap(sel, (v) => v.ref_ia);
       const fb = sumKey(sel, (v) => vRef(v, 'facebook')), li = sumKey(sel, (v) => vRef(v, 'linkedin'));
       const goo = sumKey(sel, (v) => vRef(v, 'google'));
@@ -600,7 +647,7 @@
 
     const bk = buckets(sel);
     $('h-vis').textContent = `Visiteurs — par ${bk.mode}`;
-    drawChart('c-vis', bk, [{ label: 'Visiteurs', color: '#00E5FF', pts: bkSum(bk, (v) => v.visiteurs ?? 0) }]);
+    drawChart('c-vis', bk, [{ label: 'Visiteurs', color: '#00E5FF', pts: bkSum(bk, vVis) }]);
 
     const mDef = METRICS.find(([id]) => id === $('metric').value) ?? METRICS[2];
     $('h-metric').textContent = `${mDef[1]} — par ${bk.mode}`;
@@ -611,6 +658,9 @@
     if (splitMode === 'ia') {
       const top = aggMap(sel, (v) => v.ai).slice(0, 5);
       series = top.map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ai?.[nm] ?? 0), filt: ['bot', nm] }));
+    } else if (splitMode === 'peri') {
+      series = PERIS.map((nm, i) => ({ label: nm, color: COLORS[i % COLORS.length],
+        pts: bkSum(bk, (v) => v.perimetres?.[nm]?.pages_vues ?? 0), filt: ['peri', nm] }));
     } else if (splitMode === 'refia') {
       series = aggMap(sel, (v) => v.ref_ia).slice(0, 6).map(([nm], i) =>
         ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ref_ia?.[nm] ?? 0), filt: ['ia', nm] }));
@@ -636,7 +686,7 @@
 
     // Top pages (filtrées si page:) — ⊕ = filtre
     const re = pageF ? globRe(pageF) : null;
-    const pages = aggMap(sel, (v) => v.top_pages).filter(([p]) => !re || re.test(p)).slice(0, 12);
+    const pages = aggMap(sel, vTopPages).filter(([p]) => !re || re.test(p)).slice(0, 12);
     document.querySelector('#t-pages tbody').innerHTML = pages
       .map(([p, v]) => `<tr><td><span class="flt" data-p="${p}" title="Filtrer sur cette page">⊕</span><a href="https://www.nsy.fr${p}" target="_blank" rel="noopener">${p}</a></td><td class="num">${fmt(v)}</td></tr>`).join('')
       || '<tr><td colspan="2" class="mono">—</td></tr>';
@@ -669,7 +719,7 @@
         return `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a>${resh}</td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`;
       }).join('') || '<tr><td colspan="4" class="mono">pas de données Facebook</td></tr>';
     document.querySelector('#t-journal tbody').innerHTML = Object.entries(lastSel.journal || {})
-      .map(([s, v]) => `<tr><td><a href="https://www.nsy.fr/${s}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
+      .map(([s, v]) => `<tr><td><a href="${v.url || ('https://www.nsy.fr/' + s)}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
       || '<tr><td colspan="3" class="mono">—</td></tr>';
 
     // Profils (familles agrégées — aucune donnée individuelle)
@@ -695,6 +745,32 @@
       ? bars([['1 page', pvMap['1'] ?? 0], ['2-3 pages', pvMap['2_3'] ?? 0], ['4 pages et +', pvMap['4p'] ?? 0]], '#A78BFA')
       : '<span class="mono">—</span>')
       + (dm ? `<div class="note">Durée moyenne d'une visite multi-pages : ≈ ${Math.floor(dm / 60)} min ${String(dm % 60).padStart(2, '0')} s (sessions intra-journée)</div>` : '');
+
+    // ── Agent conversationnel : au-delà du simple compteur d'appels ────────
+    {
+      const C = (k) => sumKey(sel, (v) => v.chat?.[k] ?? 0);
+      const msg = C('messages') || sumKey(sel, (v) => v.chat_calls ?? 0);
+      const conv = C('conversations');
+      const vis = sumKey(sel, vVis);
+      const ech = C('ratelimit') + C('erreurs');
+      const pc = (a, b) => b ? (a / b * 100).toFixed(1).replace('.', ',') : '—';
+      $('chat-cards').innerHTML = [
+        ['Conversations', fmt(conv), cmp ? delta(conv, sumKey(cmp, (v) => v.chat?.conversations ?? 0)) : ''],
+        ['Messages envoyés', fmt(msg), `<span class="flat">${conv ? nb1(msg / conv) : '—'} par conversation</span>`],
+        ['Visiteurs qui engagent', conv && vis ? pc(conv, vis) + '<small> %</small>' : '—', `<span class="flat">sur ${fmt(vis)} visiteurs</span>`],
+        ['Sondes de disponibilité', fmt(C('health')), '<span class="flat">voyant du widget (hors conversations)</span>'],
+        ['Refus de quota', fmt(C('ratelimit')), C('ratelimit') ? '<span class="down">visiteurs bloqués</span>' : '<span class="flat">aucun</span>'],
+        ['Échecs amont', fmt(C('erreurs')), ech ? '<span class="down">réponses manquées</span>' : '<span class="flat">aucun</span>'],
+      ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+      const cp = aggMap(sel, (v) => v.chat?.pages).slice(0, 8);
+      document.querySelector('#t-chatpages tbody').innerHTML = cp.length
+        ? cp.map(([pg, k]) => `<tr><td>${pg}</td><td class="num">${fmt(k)}</td></tr>`).join('')
+        : '<tr><td colspan="2" class="mono">aucun message sur la période</td></tr>';
+      $('chat-note').innerHTML = 'Une <b>conversation</b> = un visiteur distinct ayant envoyé au moins un message dans la journée ; ' +
+        'les <b>sondes de disponibilité</b> (voyant vert du widget) sont comptées à part — sans ce tri, elles gonflaient le chiffre. ' +
+        'Les <b>refus de quota</b> sont le garde-fou anti-abus : s\'ils montent, c\'est un visiteur bavard ou un abus, pas une panne.';
+    }
 
     // ── Provenance IA : la section GEO (être LU par les robots ne sert que si
     //    des humains ARRIVENT ensuite depuis la réponse de l'assistant) ──────
