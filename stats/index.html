@@ -316,6 +316,8 @@
     ['ref_facebook', 'Visites depuis Facebook', (v) => vRef(v, 'facebook')],
     ['fb_vues', 'Vues de la Page Facebook', (v) => v.fb?.vues ?? 0],
     ['fb_eng', 'Engagements sur la Page Facebook', (v) => v.fb?.engagements ?? 0],
+    ['ig_views', 'Vues Instagram', (v) => v.fb?.ig?.views ?? 0],
+    ['ig_reach', 'Comptes atteints sur Instagram', (v) => v.fb?.ig?.reach ?? 0],
     ['ref_linkedin', 'Visites depuis LinkedIn', (v) => vRef(v, 'linkedin')],
     ['ref_google', 'Visites depuis Google', (v) => vRef(v, 'google')],
     ['mobile', 'Pages vues mobile', (v) => v.devices?.mobile ?? 0],
@@ -575,6 +577,16 @@
       ['Hits de scanners identifiés', fmt(sumKey(sel, (v) => v.scan_hits ?? 0)), ''],
       ['Moteurs (SE)', fmt(sumKey(sel, (v) => v.se_hits ?? 0)), ''],
     ];
+    const igVues = sumKey(sel, (v) => v.fb?.ig?.views ?? 0);
+    const igPortee = sumKey(sel, (v) => v.fb?.ig?.reach ?? 0);
+    const igAb = [...sel].reverse().map((d) => D[d].fb?.ig_abonnes).find((v) => v != null);
+    if (igAb != null || igVues) {
+      cards.push(['Vues Instagram', fmt(igVues),
+        cmp ? delta(igVues, sumKey(cmp, (v) => v.fb?.ig?.views ?? 0)) : '']);
+      cards.push(['Comptes atteints · Instagram', fmt(igPortee),
+        `<span class="flat">${fmt(sumKey(sel, (v) => v.fb?.ig?.total_interactions ?? 0))} interaction(s)</span>`]);
+      cards.push(['Abonnés Instagram', fmt(igAb), '']);
+    }
     $('cards').innerHTML = cards.map(([t, v, d]) =>
       `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
@@ -644,6 +656,13 @@
         const fbVues = sumKey(sel, (v) => v.fb?.vues ?? 0);
         const fbEng = sumKey(sel, (v) => v.fb?.engagements ?? 0);
         const fbNew = sumKey(sel, (v) => v.fb?.nouveaux_abonnes ?? 0);
+        const igV = sumKey(sel, (v) => v.fb?.ig?.views ?? 0);
+        const igR = sumKey(sel, (v) => v.fb?.ig?.reach ?? 0);
+        const igI = sumKey(sel, (v) => v.fb?.ig?.total_interactions ?? 0);
+        if (igV || igR) {
+          par.push(`Sur Instagram : <b>${n(igV)} vue${igV > 1 ? 's' : ''}</b> pour ${n(igR)} compte${igR > 1 ? 's' : ''} atteint${igR > 1 ? 's' : ''}` +
+            (igI ? ` et ${n(igI)} interaction${igI > 1 ? 's' : ''}` : '') + '.');
+        }
         if (fbVues || fbEng) {
           par.push(`Côté Page Facebook : <b>${n(fbVues)} consultation${fbVues > 1 ? 's' : ''}</b> de la Page` +
             (fbEng ? `, ${n(fbEng)} interaction${fbEng > 1 ? 's' : ''} avec les publications` : '') +
