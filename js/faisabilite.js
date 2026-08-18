@@ -59,6 +59,31 @@
 
   const activeSection = () => sections.find((s) => +s.dataset.step === current);
 
+  // ───── Création ou refonte : le questionnaire s'adapte au choix ─────
+  // Les blocs porteurs de data-if="refonte" (ou "creation") ne s'affichent que
+  // dans le mode correspondant. Un bloc masqué ne bloque pas la validation et
+  // n'entre pas dans le récapitulatif : sans ça, un visiteur qui change d'avis
+  // enverrait les réponses de l'autre parcours.
+  const hiddenNode = (el) => !!el.closest('[data-if][hidden]');
+  const modeInputs = [...form.querySelectorAll('input[name="projet_type"]')];
+  const mode = () => (modeInputs.find((i) => i.checked) || {}).dataset?.mode || '';
+
+  function applyMode() {
+    const m = mode();
+    form.querySelectorAll('[data-if]').forEach((el) => { el.hidden = el.dataset.if !== m; });
+    form.querySelectorAll('[data-title]').forEach((el) => {
+      const t = el.dataset['title' + (m === 'refonte' ? 'Refonte' : 'Creation')];
+      if (t) el.textContent = t;
+    });
+    // Le champ « site actuel » de l'étape 1 alimente l'URL demandée en refonte :
+    // on ne fait pas retaper la même adresse deux fois.
+    const src = form.querySelector('input[name="site_actuel"]');
+    const dst = form.querySelector('input[name="url_actuel"]');
+    if (m === 'refonte' && src && dst && !dst.value.trim()) dst.value = src.value.trim();
+  }
+  modeInputs.forEach((i) => i.addEventListener('change', applyMode));
+  applyMode();
+
   function update() {
     sections.forEach((s) => s.classList.toggle('active', +s.dataset.step === current));
     // Stepper labels above the bar: mark past steps "done", the current "active".
@@ -79,9 +104,11 @@
     let ok = true, firstBad = null;
     sec.querySelectorAll('[required]').forEach((el) => {
       el.classList.remove('qz-invalid');
+      if (hiddenNode(el)) return;
       if (!String(el.value || '').trim()) { el.classList.add('qz-invalid'); ok = false; firstBad = firstBad || el; }
     });
     sec.querySelectorAll('.qz-check-group[data-required], .qz-radio-group[data-required]').forEach((g) => {
+      if (hiddenNode(g)) return;
       if (!g.querySelector('input:checked')) { ok = false; firstBad = firstBad || g; }
     });
     if (!ok) { showToast(T.fill); if (firstBad) firstBad.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
@@ -125,6 +152,7 @@
       const items = [];
       let sub = null;
       [...sec.children].forEach((node) => {
+        if (node.hasAttribute('data-if') && node.hidden) return;
         if (node.classList.contains('qz-sublabel')) { sub = clean(node.textContent); return; }
         if (node.classList.contains('qz-field')) {
           const value = fieldValue(node);

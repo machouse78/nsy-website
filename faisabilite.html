@@ -117,6 +117,16 @@
         <section class="qz-section active" data-step="1">
           <div class="qz-section-title"><span class="qz-num">01</span> Présentation de la structure</div>
 
+          <div class="qz-sublabel">Votre projet</div>
+          <div class="qz-field">
+            <label class="qz-label">S'agit-il d'une création ou d'une refonte ? <span class="qz-req">*</span></label>
+            <p class="qz-hint">La suite du questionnaire s'adapte à votre réponse.</p>
+            <div class="qz-radio-group" data-required>
+              <label><input type="radio" name="projet_type" value="Création d'un nouveau site" data-mode="creation" /> Création d'un nouveau site</label>
+              <label><input type="radio" name="projet_type" value="Refonte d'un site existant" data-mode="refonte" /> Refonte d'un site existant</label>
+            </div>
+          </div>
+
           <div class="qz-sublabel">Coordonnées de la structure</div>
           <div class="qz-field">
             <label class="qz-label">Nom de la structure <span class="qz-req">*</span></label>
@@ -230,21 +240,14 @@
 
         <!-- ÉTAPE 3 -->
         <section class="qz-section" data-step="3">
-          <div class="qz-section-title"><span class="qz-num">03</span> Site existant &amp; contenu</div>
+          <div class="qz-section-title"><span class="qz-num">03</span> <span data-title data-title-creation="Contenu du futur site" data-title-refonte="Site existant &amp; contenu">Site existant &amp; contenu</span></div>
 
-          <div class="qz-sublabel">Site existant</div>
-          <div class="qz-field">
-            <label class="qz-label">Avez-vous déjà un site en ligne ? <span class="qz-req">*</span></label>
-            <div class="qz-radio-group" data-required>
-              <label><input type="radio" name="site_existant" value="oui" /> Oui</label>
-              <label><input type="radio" name="site_existant" value="non" /> Non</label>
-            </div>
-          </div>
-          <div class="qz-field">
-            <label class="qz-label">Si oui, URL du site actuel</label>
+          <div class="qz-sublabel" data-if="refonte">Site existant</div>
+          <div class="qz-field" data-if="refonte">
+            <label class="qz-label">URL du site actuel</label>
             <input type="text" name="url_actuel" placeholder="https://" />
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="refonte">
             <label class="qz-label">Que souhaitez-vous faire de votre site actuel ?</label>
             <div class="qz-radio-group">
               <label><input type="radio" name="migration" value="Le remplacer complètement" /> Le remplacer complètement</label>
@@ -253,12 +256,12 @@
               <label><input type="radio" name="migration" value="Non concerné" /> Non concerné</label>
             </div>
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="refonte">
             <label class="qz-label">Y a-t-il des contenus à récupérer ?</label>
             <p class="qz-hint">Textes, images, fiches produits, articles…</p>
             <textarea name="contenus_a_recuperer"></textarea>
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="refonte">
             <label class="qz-label">Avez-vous des données à migrer ?</label>
             <p class="qz-hint">Base emails, comptes membres…</p>
             <div class="qz-radio-group">
@@ -267,7 +270,7 @@
               <label><input type="radio" name="donnees_migration" value="Je ne sais pas — le site est géré par un tiers" /> Je ne sais pas — le site est géré par un tiers</label>
             </div>
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="refonte">
             <label class="qz-label">Le référencement actuel est-il à préserver ?</label>
             <div class="qz-radio-group">
               <label><input type="radio" name="seo_preservation" value="Oui" /> Oui</label>
@@ -275,7 +278,7 @@
               <label><input type="radio" name="seo_preservation" value="Je ne sais pas" /> Je ne sais pas</label>
             </div>
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="refonte">
             <label class="qz-label">Avez-vous accès aux identifiants du site actuel ?</label>
             <p class="qz-hint">Hébergeur, CMS, FTP…</p>
             <div class="qz-radio-group">

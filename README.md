@@ -206,6 +206,10 @@ nsy-website/
 ├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
 ├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
 ├── reseaux/                             # Non déployé : groupes.md (registre des groupes à partager)
+│                                        # ⚠️ fiches-annuaires.md porte la MATRICE DE SYNCHRONISATION :
+│                                        # une donnée d'identité (nom, commune, téléphone, horaires, URL,
+│                                        # description) vit sur le site ET sur les fiches — toute
+│                                        # modification se répercute sur toute sa ligne
 │                                        # et fiches-annuaires.md (NAP + textes exacts pour Google Business
 │                                        # Profile, Bing Places, PagesJaunes, Wikidata… — visibilité locale IA)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
