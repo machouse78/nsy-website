@@ -44,7 +44,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 
 Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
 
-Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (3 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end » — vignettes animées), **2 pages villes** (consultant Paris · création de site Orléans), **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html`, pages légales — **50 pages** au total.
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (3 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end » — vignettes animées), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (parcours **création ou refonte**), pages légales — **60 pages** au total.
 
 ## Bilingue (FR / EN)
 
@@ -74,7 +74,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 50 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 60 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -119,7 +119,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 ### Assistant IA « Ansley » — LLM gratuit + RAG, repli local
 
-L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 50 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
+L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 60 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
 
 **Étage 1 — IA générative (`chat.php`)** : le widget interroge un proxy PHP qui
 appelle un LLM **Mistral** (palier gratuit « Experiment », société française,
@@ -233,7 +233,7 @@ nsy-website/
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
 │   └── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 50 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 60 pages (npm run partials)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
 │   ├── partage-page.py                  # ⭐ Génère /stats/partage.html — tous les articles × registre de groupes
@@ -368,8 +368,8 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 50 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 50 pages
+- **Sitemap** : 60 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 60 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Conformité des données structurées** (3 alertes Search Console résolues en août 2026) : tout champ **requis** d'un type à résultat enrichi contient le **nœud typé inliné** (avec le même `@id`) — `ProfilePage.mainEntity`, mais aussi `author` et `publisher` des articles, les dates (`dateModified`, `datePublished`) sont en **ISO 8601 complet avec fuseau**, et chaque `<video>` porte un `poster=` avec son bloc `video:video` sous **chaque** page qui l'affiche. Détail des causes, correctifs et méthode d'audit : skill `seo-geo-llmo` §5
