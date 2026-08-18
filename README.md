@@ -208,13 +208,6 @@ nsy-website/
 │   / website-creation-<ville>.html      # (+ jumelles EN) — angle PROPRE à chaque ville, jamais dupliqué
 ├── llms.txt / llms-full.txt             # Contexte structuré pour les IA (spec llmstxt.org)
 ├── SEO-GEO-LLMO.md                      # Stratégie SEO/GEO interne (non déployé)
-├── reseaux/                             # Non déployé : groupes.md (registre des groupes à partager)
-│                                        # ⚠️ fiches-annuaires.md porte la MATRICE DE SYNCHRONISATION :
-│                                        # une donnée d'identité (nom, commune, téléphone, horaires, URL,
-│                                        # description) vit sur le site ET sur les fiches — toute
-│                                        # modification se répercute sur toute sa ligne
-│                                        # et fiches-annuaires.md (NAP + textes exacts pour Google Business
-│                                        # Profile, Bing Places, PagesJaunes, Wikidata… — visibilité locale IA)
 ├── contact.php                          # Backend formulaire contact (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
@@ -262,7 +255,6 @@ nsy-website/
 │   ├── prv-concept.jpg                  # Vignette Réalisations (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Modèle 3D wireframe arêtes vives (575 Ko)
 ├── package.json                         # Build tooling 3D uniquement (devDependencies)
-├── skills/                              # Skills Claude Code (doc, NON déployés) — voir § dédié
 │   ├── skill-nsy-website/               #   conventions & faits du projet
 │   ├── frontend-responsive-perf/        #   techniques responsive/perf réutilisables
 │   ├── seo-geo-llmo/                    #   playbook SEO + GEO/LLMO réutilisable
@@ -402,7 +394,7 @@ La page LinkedIn entreprise est référencée dans les `sameAs` du JSON-LD et da
 
 ### Distribution sociale des articles du journal
 
-Chaque article du journal suit le même cycle de publication — détaillé de bout en bout dans le skill dédié [`skills/journal-nsy/SKILL.md`](skills/journal-nsy/SKILL.md) :
+Chaque article du journal suit le même cycle de publication — détaillé de bout en bout dans le skill dédié le dépôt privé `nsy-strategie` :
 
 1. **Publier l'article** (checklist complète dans le skill : paire FR/EN, cards du blog, teaser accueil, RSS, sitemap, llms, IndexNow).
 2. **Publier le couple de posts** : article **pro sur la page LinkedIn NSY** + version **grand public sur la page Facebook** — deux réécritures distinctes, pas un copier-coller (pas de prix, formulations ESN-compatibles, CTA vers l'offre). **Les backlinks vers nsy.fr vont dans le PREMIER COMMENTAIRE de chaque post, jamais dans le corps** — les algorithmes dépriorisent les posts à lien externe ; le 1ᵉʳ commentaire préserve la portée ET le backlink. Côté Facebook, c'est **automatisé et en VIDÉO** : `node scripts/meta-publish.mjs post … --video-url … --go` publie la déclinaison animée de l'article **au format original** (jamais recomposée — Meta la classe en Reel) puis le 1ᵉʳ commentaire via l'API Graph (`--image-url` en repli photo ; token de page dans `_secret/meta.env`, dry-run par défaut, média validé par le propriétaire avant tout `--go`, garde-fous : refus d'un lien dans le corps, refus d'un commentaire sans backlink). LinkedIn reste un collage manuel (pas d'API pour les articles).
@@ -426,21 +418,20 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 **Validation après upload** : [opengraph.xyz](https://www.opengraph.xyz) · [Facebook Debugger](https://developers.facebook.com/tools/debug) · envoi WhatsApp/Slack à soi-même.
 
-## Skills Claude Code (`skills/`)
+## Stratégie & skills — dépôt privé
 
-Le dépôt versionne neuf [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills) — de la **documentation passive** chargée par Claude quand elle est pertinente (ils n'exécutent rien et ne modifient pas le site par eux-mêmes). Ils ne sont **pas déployés** (hors `deploy/`).
+Depuis le 18/08/2026, tout ce qui relève de la **méthode** vit dans un dépôt
+privé séparé, `nsy-strategie` : les [skills Claude Code](https://docs.claude.com/en/docs/claude-code/skills)
+(conventions du projet, chatbot, journal, SEO/GEO, KPI, anti-spam, responsive),
+le dossier `reseaux/` (bloc canonique des fiches d'établissement, registre des
+groupes de diffusion) et la stratégie de visibilité `SEO-GEO-LLMO.md`.
 
-- **`skill-nsy-website`** — le « quoi » spécifique au projet : faits (fondée 2018, tarification en fonction du besoin…), conventions bilingues, terminologie (Conception 3D / Maillage), contraintes du chatbot, pipeline 3D, workflow de déploiement. Évite de re-préciser ces règles à chaque session.
-- **`journal-nsy`** — le cycle de vie complet d'un article du journal (source unique de vérité) : checklist de publication sur nsy.fr, livrables sociaux Facebook/LinkedIn avec la règle des **backlinks en premier commentaire**, backlinks retour sur l'article, câblage Ansley (`$journalSocials`) et l'automatisation (Facebook **automatisé** via `scripts/meta-publish.mjs` + API Graph, LinkedIn manuel — pas d'API pour les articles).
-- **`chatbot-core`** — socle réutilisable du chatbot à mascotte animée (architecture du widget `.cbot-*`, pipeline mascotte, perf/iOS, charte par design tokens, garde-fous zéro-invention) ; partagé avec prv-concept.com.
-- **`chatbot-nsy`** — les spécificités Ansley (persona IA affichée, charte cyan, carte des fichiers, spec du FAB) — hérite de `chatbot-core`.
-- **`frontend-responsive-perf`** — le « comment » technique réutilisable, framework-agnostique : responsive mobile/tablette/desktop/paysage, alignement des nav/widgets, optimisations CPU/GPU (pause hors-écran des vidéos/animations/3D, recompression média), chatbot léger sans LLM, et la méthodo de vérification en Chrome headless.
-- **`seo-geo-llmo`** — le playbook SEO + GEO/LLMO réutilisable (nsy.fr, prv-concept.com, sites clients) : allowlist des crawlers IA, llms.txt, JSON-LD `@graph`, FAQ conversationnelle, inscriptions externes (Bing WT, propriété de domaine GSC, Google Business, backlinks) avec les pièges vécus et les méthodes de vérification.
-- **`site-kpi`** — le pipeline KPI quotidien réutilisable (collecteur logs + API Graph, historique illimité, dashboard privé façon ELK) — implémenté sur nsy.fr, déclinable sur prv-concept.com et les sites clients.
-- **`antispam`** — défense anti-spam réutilisable pour formulaires web : défense en profondeur (honeypot, Turnstile, scoring de contenu, rate-limit + plafond journalier, abandon silencieux + log d'audit) avec un module PHP `antispam.php` prêt à coller. Extrait du `antispam.php` de nsy.fr, réutilisable sur prv-concept.com et sites clients.
-- **`frontend-design`** et **`video-to-website`** — les deux skills créatifs utilisés pour concevoir le site (design distinctif, site scroll-animé depuis une vidéo). Historiquement dans `.claude/skills/` (skills de projet) ; déplacés dans `skills/` + symlink pour être disponibles dans toutes les sessions.
+**Le code du site, lui, reste public** — et c'est délibéré : montrer le code de
+son propre site est une preuve que peu de prestataires peuvent aligner. Ce qui
+en sort, c'est la méthode, pas le résultat.
 
-**Activation** : Claude Code lit les skills depuis `~/.claude/skills/`. Copier ou lier les dossiers (`cp -R skills/* ~/.claude/skills/` ou `ln -s`). Détails dans [`skills/README.md`](skills/README.md).
+Les fichiers correspondants sont refusés par le `.gitignore` de ce dépôt pour
+éviter qu'ils y reviennent par mégarde.
 
 ## Crédits
 

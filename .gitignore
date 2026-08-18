@@ -124,3 +124,9 @@ _secret/kpi-history.json
 # Acces au dashboard /stats/ (htpasswd — owner)
 _secret/.htpasswd
 deploy/_secret/.htpasswd
+
+# ── Stratégie & playbooks : dépôt PRIVÉ nsy-strategie (18/08/2026) ──
+# Le code du site reste public ; la méthode en sort. Ne pas réintroduire ici.
+skills/
+reseaux/
+SEO-GEO-LLMO.md

@@ -213,13 +213,6 @@ nsy-website/
 │   / website-creation-<city>.html       # (+ EN twins) — each with its OWN angle, never duplicated
 ├── llms.txt / llms-full.txt             # Structured context for AI (llmstxt.org spec)
 ├── SEO-GEO-LLMO.md                      # Internal SEO/GEO strategy (not deployed)
-├── reseaux/                             # Not deployed: groupes.md (group registry for sharing) and
-│                                        # ⚠️ fiches-annuaires.md holds the SYNC MATRIX: one identity
-│                                        # fact (name, town, phone, hours, URL, description) lives on the
-│                                        # site AND on every listing — a change must propagate across
-│                                        # its whole row
-│                                        # fiches-annuaires.md (canonical NAP + exact copy for Google
-│                                        # Business Profile, Bing Places, directories — local AI visibility)
 ├── contact.php                          # Contact form backend (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
 ├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
@@ -260,7 +253,6 @@ nsy-website/
 │   ├── prv-concept.jpg                  # Work thumbnail (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Sharp-edge wireframe 3D model (575 KB)
 ├── package.json                         # 3D build tooling only (devDependencies)
-├── skills/                              # Claude Code skills (docs, NOT deployed) — see dedicated §
 │   ├── skill-nsy-website/               #   project conventions & facts
 │   ├── frontend-responsive-perf/        #   reusable responsive/perf techniques
 │   ├── seo-geo-llmo/                    #   reusable SEO + GEO/LLMO playbook
@@ -383,7 +375,7 @@ The LinkedIn company page is referenced in the JSON-LD `sameAs` and in `llms.txt
 
 ### Social distribution of journal articles
 
-Every journal article follows the same publication cycle — covered end to end in the dedicated skill [`skills/journal-nsy/SKILL.md`](skills/journal-nsy/SKILL.md):
+Every journal article follows the same publication cycle — covered end to end in the dedicated skill le dépôt privé `nsy-strategie`:
 
 1. **Publish the article** (full checklist in the skill: FR/EN pair, blog cards, home teaser, RSS, sitemap, llms, IndexNow).
 2. **Publish the two posts**: a **professional article on the NSY LinkedIn page** + a **general-public Facebook** version — two distinct rewrites (no prices, ESN-friendly wording, CTA to the offer). **Backlinks to nsy.fr go in the FIRST COMMENT of each post, never in the body** — the algorithms deprioritise posts with external links; the first comment preserves both reach and backlink. The Facebook side is **automated and VIDEO-first**: `node scripts/meta-publish.mjs post … --video-url … --go` publishes the article's animated video **in its original format** (never recomposed — Meta classifies it as a Reel) then the first comment via the Graph API (`--image-url` as a photo fallback; page token in `_secret/meta.env`, dry-run by default, media approved by the owner before any `--go`, guard rails: refuses a link in the body, refuses a comment without the backlink). LinkedIn stays a manual paste (no API for articles).
@@ -405,19 +397,20 @@ ffmpeg -i public/nsy-logo-ai.png \
 
 **Post-upload validation** : [opengraph.xyz](https://www.opengraph.xyz) · [Facebook Debugger](https://developers.facebook.com/tools/debug) · send yourself a WhatsApp/Slack message.
 
-## Claude Code skills (`skills/`)
+## Strategy & skills — private repository
 
-The repo versions several [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills) — **passive documentation** loaded by Claude when relevant (they execute nothing and don't change the site by themselves). They are **not deployed** (excluded from `deploy/`).
+Since 18/08/2026, everything **methodological** lives in a separate private
+repository, `nsy-strategie`: the [Claude Code skills](https://docs.claude.com/en/docs/claude-code/skills)
+(project conventions, chatbot, journal, SEO/GEO, KPI, anti-spam, responsive),
+the `reseaux/` folder (canonical listing block, distribution-group registry) and
+the `SEO-GEO-LLMO.md` visibility strategy.
 
-- **`skill-nsy-website`** — the project-specific "what": facts (founded 2018, pricing based on the need…), bilingual conventions, terminology (3D Design / Wireframe), chatbot constraints, 3D pipeline, deployment workflow. Saves re-stating these rules every session.
-- **`journal-nsy`** — the full lifecycle of a journal article (single source of truth): the nsy.fr publication checklist, the Facebook/LinkedIn social deliverables with the **first-comment backlink rule**, return backlinks on the article, the Ansley wiring (`$journalSocials`) and the automation (Facebook **automated** via `scripts/meta-publish.mjs` + Graph API, LinkedIn manual — no API for articles).
-- **`frontend-responsive-perf`** — the reusable, framework-agnostic technical "how": mobile/tablet/desktop/landscape responsiveness, nav/widget alignment, CPU/GPU optimisations (off-screen pausing of videos/animations/3D, media recompression), lightweight LLM-free chatbot, and the headless-Chrome verification method.
-- **`seo-geo-llmo`** — the reusable SEO + GEO/LLMO playbook (nsy.fr, prv-concept.com, client sites): AI-crawler allowlist, llms.txt, JSON-LD `@graph`, conversational FAQ, external registrations (Bing WT, GSC domain property, Google Business, backlinks) with the pitfalls lived through and the verification methods.
-- **`site-kpi`** — the reusable daily KPI pipeline (log collector + Graph API, unlimited history, private ELK-like dashboard) — implemented on nsy.fr, portable to prv-concept.com and client sites.
-- **`antispam`** — reusable anti-spam defense for web forms: defense in depth (honeypot, Turnstile, content scoring, rate-limit + daily cap, silent-drop + audit log) with a drop-in PHP `antispam.php` module. Extracted from nsy.fr's `antispam.php`, reusable on prv-concept.com and client sites.
-- **`frontend-design`** and **`video-to-website`** — the two creative skills used to design the site (distinctive design, scroll-animated site from a video). Historically in `.claude/skills/` (project skills); moved into `skills/` + symlink so they're available across all sessions.
+**The site's code stays public** — deliberately: showing the source of your own
+website is proof few providers can match. What leaves the public repo is the
+method, not the result.
 
-**Activation** : Claude Code reads skills from `~/.claude/skills/`. Copy or link the folders (`cp -R skills/* ~/.claude/skills/` or `ln -s`). Details in [`skills/README.md`](skills/README.md).
+The corresponding paths are refused by this repository's `.gitignore` so they
+cannot creep back in.
 
 ## Credits
 
