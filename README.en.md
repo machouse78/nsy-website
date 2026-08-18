@@ -210,6 +210,9 @@ nsy-website/
 │                                        #   creation-site-ia, glossaire-ia-web
 ├── llms.txt / llms-full.txt             # Structured context for AI (llmstxt.org spec)
 ├── SEO-GEO-LLMO.md                      # Internal SEO/GEO strategy (not deployed)
+├── reseaux/                             # Not deployed: groupes.md (group registry for sharing) and
+│                                        # fiches-annuaires.md (canonical NAP + exact copy for Google
+│                                        # Business Profile, Bing Places, directories — local AI visibility)
 ├── contact.php                          # Contact form backend (PHPMailer + Turnstile)
 ├── faisabilite.php                      # Questionnaire backend (same pipeline as contact.php)
 ├── chat.php                             # Assistant AI proxy (Mistral LLM + RAG on llms-full.txt)
