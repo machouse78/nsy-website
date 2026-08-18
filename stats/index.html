@@ -314,6 +314,8 @@
     ['bots', 'Bots génériques', (v) => v.bot_hits ?? 0],
     ['ref_ia', 'Visites depuis les IA (ChatGPT, Claude…)', (v) => vRefIa(v)],
     ['ref_facebook', 'Visites depuis Facebook', (v) => vRef(v, 'facebook')],
+    ['fb_vues', 'Vues de la Page Facebook', (v) => v.fb?.vues ?? 0],
+    ['fb_eng', 'Engagements sur la Page Facebook', (v) => v.fb?.engagements ?? 0],
     ['ref_linkedin', 'Visites depuis LinkedIn', (v) => vRef(v, 'linkedin')],
     ['ref_google', 'Visites depuis Google', (v) => vRef(v, 'google')],
     ['mobile', 'Pages vues mobile', (v) => v.devices?.mobile ?? 0],
@@ -560,6 +562,10 @@
       [botF ? `Lectures IA · ${botF}` : 'Lectures IA · période', fmt(sumKey(sel, vAI)), cmp ? delta(sumKey(sel, vAI), sumKey(cmp, vAI)) : ''],
       ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, vVis) / sel.length)), ''],
       ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
+      ['Vues de la Page Facebook', fmt(sumKey(sel, (v) => v.fb?.vues ?? 0)),
+        cmp ? delta(sumKey(sel, (v) => v.fb?.vues ?? 0), sumKey(cmp, (v) => v.fb?.vues ?? 0)) : ''],
+      ['Engagements sur la Page', fmt(sumKey(sel, (v) => v.fb?.engagements ?? 0)),
+        `<span class="flat">${fmt(sumKey(sel, (v) => v.fb?.reactions ?? 0))} réaction(s)</span>`],
       ['Conversations Ansley', fmt(sumKey(sel, (v) => v.chat_calls ?? 0)), ''],
       ['llms.txt lus', fmt(sumKey(sel, (v) => v.llms_hits ?? 0)), ''],
       [fOf('ia') ? `Visites depuis ${fOf('ia')}` : 'Visites venues des IA', fmt(sumKey(sel, vRefIa)), ''],
@@ -633,6 +639,18 @@
         (pagesTop.length ? `La page la plus lue est <b>${pagesTop[0][0]}</b> (${n(pagesTop[0][1])} vues)${pagesTop[1] ? `, devant ${pagesTop[1][0]}` : ''}. ` : '') +
         (chat ? `L'assistant Ansley a tenu ${n(chat)} conversation${chat > 1 ? 's' : ''}. ` : '') +
         (camp.length ? `Campagne la plus efficace : <b>${camp[0][0]}</b> (${n(camp[0][1])} visites).` : ''));
+
+      {
+        const fbVues = sumKey(sel, (v) => v.fb?.vues ?? 0);
+        const fbEng = sumKey(sel, (v) => v.fb?.engagements ?? 0);
+        const fbNew = sumKey(sel, (v) => v.fb?.nouveaux_abonnes ?? 0);
+        if (fbVues || fbEng) {
+          par.push(`Côté Page Facebook : <b>${n(fbVues)} consultation${fbVues > 1 ? 's' : ''}</b> de la Page` +
+            (fbEng ? `, ${n(fbEng)} interaction${fbEng > 1 ? 's' : ''} avec les publications` : '') +
+            (fbNew ? ` et ${n(fbNew)} nouvel${fbNew > 1 ? 'x' : ''} abonné${fbNew > 1 ? 's' : ''}` : '') +
+            `. Ces chiffres viennent de Meta, découpés sur le fuseau de la Page : ils ne se recoupent pas au visiteur près avec les visites du site.`);
+        }
+      }
 
       const alertes = [];
       if (e404 || scans) alertes.push(`${n(e404)} erreur${e404 > 1 ? 's' : ''} 404 et ${n(scans)} requête${scans > 1 ? 's' : ''} de scanners de vulnérabilités — du bruit sans effet sur un site statique`);

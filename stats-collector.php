@@ -406,11 +406,46 @@ function graphGet(string $path, string $token, array $params = []): array {
     $j = is_string($raw) ? json_decode($raw, true) : null;
     return is_array($j) && !isset($j['error']) ? $j : [];
 }
-$fb = ['abonnes' => null, 'posts' => []];
+$fb = ['abonnes' => null, 'posts' => [], 'vues' => null, 'engagements' => null,
+       'nouveaux_abonnes' => null, 'vues_video' => null, 'reactions' => null, 'actions' => null];
 $tok = (string) $cfg['fb_page_token'];
 if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
     $page = graphGet((string) $cfg['fb_page_id'], $tok, ['fields' => 'fan_count,followers_count']);
     $fb['abonnes'] = $page['followers_count'] ?? $page['fan_count'] ?? null;
+
+    // ── Statistiques de la Page (API Insights) ───────────────────────────────
+    // Ce que Meta expose ENCORE en v21 : page_impressions, page_fans et
+    // page_engaged_users sont refusées (« must be a valid insights metric »).
+    // ⚠️ Deux conventions à connaître avant d'interpréter ces chiffres :
+    //  1. une valeur porte l'horodatage de FIN de sa journée — la journée du 15
+    //     est celle dont end_time vaut le 16 ;
+    //  2. la journée est découpée sur le FUSEAU DE LA PAGE (07:00 UTC observé,
+    //     pas minuit à Paris) : ces chiffres sont décalés de quelques heures et
+    //     ne se comparent donc pas au visiteur près avec les logs du site.
+    $METRIQUES = [
+        'page_views_total'                  => 'vues',
+        'page_post_engagements'             => 'engagements',
+        'page_daily_follows_unique'         => 'nouveaux_abonnes',
+        'page_video_views'                  => 'vues_video',
+        'page_total_actions'                => 'actions',
+        'page_actions_post_reactions_total' => 'reactions',
+    ];
+    $ins = graphGet($cfg['fb_page_id'] . '/insights', $tok, [
+        'metric' => implode(',', array_keys($METRIQUES)),
+        'period' => 'day',
+        'since'  => $target,
+        'until'  => date('Y-m-d', strtotime($target . ' +2 days')),
+    ]);
+    $finJour = date('Y-m-d', strtotime($target . ' +1 day'));
+    foreach ($ins['data'] ?? [] as $m) {
+        $cle = $METRIQUES[$m['name']] ?? null;
+        if ($cle === null) continue;
+        foreach ($m['values'] ?? [] as $v) {
+            if (substr((string) ($v['end_time'] ?? ''), 0, 10) !== $finJour) continue;
+            $val = $v['value'] ?? 0;
+            $fb[$cle] = (int) (is_array($val) ? array_sum($val) : $val);
+        }
+    }
     $posts = graphGet($cfg['fb_page_id'] . '/posts', $tok,
         ['fields' => 'id,created_time,permalink_url,likes.summary(true),comments.summary(true),shares', 'limit' => '5']);
     foreach ($posts['data'] ?? [] as $p) {
