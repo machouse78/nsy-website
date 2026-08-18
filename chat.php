@@ -178,7 +178,11 @@ function rateLimited(string $file, int $perMinute, int $perDay): bool
 
 $ip = (string)($_SERVER['REMOTE_ADDR'] ?? '0.0.0.0');
 $ipFile = $rlDir . '/ip-' . hash('sha256', 'nsy-cbot|' . $ip) . '.json';
-if (rateLimited($ipFile, 8, 60) || rateLimited($rlDir . '/global.json', 30, 1500)) {
+// Quotas RÉGLABLES hors du code public (_secret/ai.php) : les publier revient
+// à donner la limite exacte à ne pas dépasser pour siphonner le quota gratuit.
+$q = is_array($ai['quotas'] ?? null) ? $ai['quotas'] : [];
+if (rateLimited($ipFile, (int) ($q['ip_minute'] ?? 8), (int) ($q['ip_jour'] ?? 60))
+    || rateLimited($rlDir . '/global.json', (int) ($q['global_minute'] ?? 30), (int) ($q['global_jour'] ?? 1500))) {
     respond(['ok' => false, 'code' => 'ratelimit'], 429);
 }
 

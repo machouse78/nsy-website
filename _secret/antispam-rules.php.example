@@ -1,0 +1,16 @@
+<?php
+/**
+ * NSY — réglages du filtre anti-spam — MODÈLE. Copier en antispam-rules.php et ajuster.
+ * Le code d'antispam.php est public ; ces valeurs ne le sont pas.
+ * Toute clé absente retombe sur la valeur par défaut du code.
+ */
+return [
+    'seuil' => 5,   // plus bas = plus strict
+    'hotes' => ['bit.ly', 'tinyurl', '…'],   // raccourcisseurs à pénaliser
+    'tld' => 'ru|top|xyz|club|online|site|live|loan|work|buzz|icu|cn|tk',
+    'mots'  => ['crypto', 'casino', '…'],     // expressions absentes d'une vraie demande
+    'poids' => [
+        'url1' => 3, 'url2' => 4, 'lien' => 4, 'hote' => 5, 'tld' => 2, 'mot' => 3,
+        'montant' => 2, 'domaine' => 2, 'nom_chiffre' => 2, 'majuscules' => 2,
+    ],
+];

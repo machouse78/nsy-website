@@ -26,4 +26,13 @@ return [
     // capacity exceeded ») : si le modèle principal est saturé, chat.php
     // bascule automatiquement sur ces frères (surchargable ici).
     // 'fallback_models' => ['ministral-8b-latest', 'open-mistral-nemo'],
+    // Quotas du rate-limiting (facultatif — valeurs par défaut du code sinon).
+    // Ils ne vivent PAS dans le dépôt public : les publier, c'est publier la
+    // limite exacte à ne pas dépasser pour épuiser le quota gratuit du modèle.
+    'quotas' => [
+        'ip_minute'     => 8,
+        'ip_jour'       => 60,
+        'global_minute' => 30,
+        'global_jour'   => 1500,
+    ],
 ];
