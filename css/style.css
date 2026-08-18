@@ -2686,6 +2686,15 @@ footer.foot {
   color: var(--accent);
 }
 .realisation-specs dd { margin: 0; color: var(--fg-3); font-size: 13px; line-height: 1.55; }
+/* Pastille de type de projet : site neuf ou reprise d'un site existant.
+   Elle répond à la question que se pose tout prospect en regardant une
+   réalisation — « et si mon site existe déjà ? ». */
+.realisation-type {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 50px; padding: 4px 10px; white-space: nowrap;
+}
+.realisation-type.neuf { color: var(--accent); border: 1px solid rgba(0, 229, 255, .45); }
+.realisation-type.reprise { color: var(--warm); border: 1px solid rgba(240, 138, 44, .5); }
 .realisation-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .realisation-tags span {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
