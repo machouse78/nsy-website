@@ -85,6 +85,16 @@
   #tip .src { color: var(--warm); font-size: 11.5px; margin-top: 4px; }
   .chart svg { cursor: crosshair; }
   #err { color: #F87171; margin: 18px 0; display: none; }
+  .secnav { position: sticky; top: 0; z-index: 20; display: flex; gap: 6px; flex-wrap: wrap;
+    background: rgba(10, 15, 28, .92); backdrop-filter: blur(8px); border: 1px solid var(--line);
+    border-radius: 12px; padding: 8px 10px; margin: 0 0 16px; }
+  .secnav a { font: 600 12.5px Manrope, sans-serif; color: var(--fg1); border: 1px solid transparent;
+    border-radius: 8px; padding: 5px 11px; }
+  .secnav a:hover { border-color: var(--accent); color: var(--fg0); }
+  .sec-h { display: flex; align-items: baseline; gap: 12px; margin: 46px 0 4px; padding-top: 16px;
+    border-top: 1px solid var(--line); }
+  .sec-h h2 { margin: 0; font-size: 19px; }
+  .sec-h span { font-size: 12.5px; color: var(--fg2); }
 </style>
 </head>
 <body>
@@ -124,8 +134,18 @@
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
 
+  <nav class="secnav">
+    <a href="#r-site">Site</a>
+    <a href="#r-ia">Provenance IA</a>
+    <a href="#r-agent">Agent conversationnel</a>
+    <a href="#r-reseaux">Réseaux sociaux</a>
+    <a href="#r-contenu">Contenu</a>
+    <a href="#r-parcours">Parcours</a>
+  </nav>
+
   <div class="resume" id="resume"></div>
 
+  <div class="sec-h" id="r-site"><h2>Fréquentation du site</h2><span>visiteurs, pages, robots</span></div>
   <div class="grid" id="cards"></div>
   <div class="note" id="range-note"></div>
 
@@ -150,7 +170,7 @@
   </div>
   <div class="chart"><div class="legend" id="legend"></div><svg id="c-split"></svg></div>
 
-  <h2>Provenance IA — les visites venues d'une réponse d'assistant</h2>
+  <div class="sec-h" id="r-ia"><h2>Provenance IA</h2><span>les visites venues d'une réponse d'assistant</span></div>
   <div class="grid" id="ia-cards"></div>
   <div class="note" id="ia-note"></div>
 
@@ -173,8 +193,10 @@
     </div>
   </div>
 
-  <h2>Agent conversationnel</h2>
+  <div class="sec-h" id="r-agent"><h2>Agent conversationnel</h2><span>conversations réelles, hors sondes de disponibilité</span></div>
   <div class="grid" id="chat-cards"></div>
+  <div class="chart-head"><h2 id="h-chat">Conversations et messages</h2></div>
+  <div class="chart"><div class="legend" id="chat-legend"></div><svg id="c-chat"></svg></div>
   <div class="cols">
     <div>
       <h3>Pages d'où l'assistant est sollicité</h3>
@@ -185,6 +207,30 @@
     </div>
   </div>
 
+  <div class="sec-h" id="r-reseaux"><h2>Réseaux sociaux</h2><span>lecture des pages et des publications</span></div>
+  <div class="grid" id="soc-cards"></div>
+  <div class="chart-head"><h2 id="h-soc">Lecture des pages — Facebook et Instagram</h2></div>
+  <div class="chart"><div class="legend" id="soc-legend"></div><svg id="c-soc"></svg></div>
+
+  <div class="chart-head">
+    <h2 id="h-posts">Lecture par publication</h2>
+    <select id="posts-net"><option value="fb">Facebook</option><option value="ig">Instagram</option></select>
+  </div>
+  <div class="chart"><div class="legend" id="posts-legend"></div><svg id="c-posts"></svg></div>
+  <div class="note" id="posts-note"></div>
+
+  <div class="cols">
+    <div>
+      <h3>Facebook — publications</h3>
+      <table id="t-fbposts"><thead><tr><th>Publication</th><th class="num">Vues</th><th class="num">Clics</th><th class="num">👍</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div>
+      <h3 id="h-igposts">Instagram — publications</h3>
+      <table id="t-igposts"><thead><tr><th>Publication</th><th class="num">Vues</th><th class="num">Portée</th><th class="num">Inter.</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <div class="sec-h" id="r-contenu"><h2>Contenu et provenance</h2><span>pages lues, campagnes, référents, profils</span></div>
   <div class="cols">
     <div>
       <h2>Robots IA — période <span class="mono">(clic = filtre)</span></h2>
@@ -208,7 +254,7 @@
     </div>
   </div>
 
-  <h2>Parcours sur le site — période</h2>
+  <div class="sec-h" id="r-parcours"><h2>Parcours sur le site</h2><span>entrées, sorties, enchaînements</span></div>
   <div class="cols">
     <div>
       <h3>Pages d'entrée</h3>
@@ -800,6 +846,16 @@
         ['Échecs amont', fmt(C('erreurs')), ech ? '<span class="down">réponses manquées</span>' : '<span class="flat">aucun</span>'],
       ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
+      // Graphe : conversations (visiteurs distincts) vs messages envoyés.
+      const chatSeries = [
+        { label: 'Conversations', color: COLORS[0], pts: bkSum(bk, (v) => v.chat?.conversations ?? 0) },
+        { label: 'Messages', color: COLORS[1], pts: bkSum(bk, (v) => v.chat?.messages ?? v.chat_calls ?? 0) },
+      ];
+      $('h-chat').textContent = `Conversations et messages — par ${bk.mode}`;
+      $('chat-legend').innerHTML = chatSeries.map((x) =>
+        `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+      drawChart('c-chat', bk, chatSeries);
+
       const cp = aggMap(sel, (v) => v.chat?.pages).slice(0, 8);
       document.querySelector('#t-chatpages tbody').innerHTML = cp.length
         ? cp.map(([pg, k]) => `<tr><td>${pg}</td><td class="num">${fmt(k)}</td></tr>`).join('')
@@ -807,6 +863,64 @@
       $('chat-note').innerHTML = 'Une <b>conversation</b> = un visiteur distinct ayant envoyé au moins un message dans la journée ; ' +
         'les <b>sondes de disponibilité</b> (voyant vert du widget) sont comptées à part — sans ce tri, elles gonflaient le chiffre. ' +
         'Les <b>refus de quota</b> sont le garde-fou anti-abus : s\'ils montent, c\'est un visiteur bavard ou un abus, pas une panne.';
+    }
+
+    // ── Réseaux sociaux : la lecture des pages ET de chaque publication ────
+    {
+      const S = (fn) => sumKey(sel, fn);
+      const fbV = S((v) => v.fb?.vues ?? 0), fbVid = S((v) => v.fb?.vues_video ?? 0);
+      const igV = S((v) => v.fb?.ig?.views ?? 0), igR = S((v) => v.fb?.ig?.reach ?? 0);
+      const aIg = igV || igR;
+      $('soc-cards').innerHTML = [
+        ['Vues de la Page Facebook', fmt(fbV), cmp ? delta(fbV, sumKey(cmp, (v) => v.fb?.vues ?? 0)) : ''],
+        ['Vues des vidéos Facebook', fmt(fbVid), '<span class="flat">lecture des reels</span>'],
+        ...(aIg ? [['Vues Instagram', fmt(igV), cmp ? delta(igV, sumKey(cmp, (v) => v.fb?.ig?.views ?? 0)) : ''],
+                   ['Comptes atteints · Instagram', fmt(igR), '']] : []),
+      ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+      const socSeries = [
+        { label: 'Vues de la Page Facebook', color: COLORS[0], pts: bkSum(bk, (v) => v.fb?.vues ?? 0) },
+        { label: 'Vues vidéo Facebook', color: COLORS[1], pts: bkSum(bk, (v) => v.fb?.vues_video ?? 0) },
+        ...(aIg ? [{ label: 'Vues Instagram', color: COLORS[2], pts: bkSum(bk, (v) => v.fb?.ig?.views ?? 0) },
+                   { label: 'Portée Instagram', color: COLORS[3], pts: bkSum(bk, (v) => v.fb?.ig?.reach ?? 0) }] : []),
+      ];
+      $('h-soc').textContent = `Lecture des pages — par ${bk.mode}`;
+      $('soc-legend').innerHTML = socSeries.map((x) =>
+        `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+      drawChart('c-soc', bk, socSeries);
+
+      // Lecture PAR PUBLICATION. Les valeurs de Meta sont CUMULÉES depuis la
+      // parution : la courbe monte en marches à chaque collecte, elle ne
+      // devient parlante qu'à partir du premier jour collecté.
+      const net = $('posts-net').value;
+      const champ = net === 'fb' ? 'posts' : 'ig_posts';
+      const lect = net === 'fb' ? ((x) => x.vues_video || x.clics || 0) : ((x) => x.vues || 0);
+      const derniers = D[sel.at(-1)]?.fb?.[champ] || [];
+      const tops = [...derniers].sort((a, b) => lect(b) - lect(a)).slice(0, 5);
+      const serie = tops.map((post, i) => ({
+        label: `${post.date} · ${(post.titre || '').slice(0, 26) || 'publication'}`,
+        color: COLORS[i % COLORS.length],
+        pts: bkSum(bk, (v) => {
+          const l = (v.fb?.[champ] || []).find((x) => x.id === post.id);
+          return l ? lect(l) : 0;
+        }),
+      }));
+      $('h-posts').textContent = `Lecture par publication — ${net === 'fb' ? 'Facebook' : 'Instagram'}`;
+      $('posts-legend').innerHTML = serie.map((x) =>
+        `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('') || '<span class="mono">aucune publication</span>';
+      drawChart('c-posts', bk, serie.length ? serie : [{ label: '—', color: COLORS[0], pts: bk.keys.map(() => 0) }]);
+      $('posts-note').textContent = net === 'fb'
+        ? "Vues des vidéos, à défaut clics — Meta a retiré les impressions au niveau d'une publication. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte."
+        : 'Vues cumulées depuis la parution : la courbe monte par paliers à chaque collecte.';
+
+      const tbl = (rows) => rows.length ? rows : null;
+      document.querySelector('#t-fbposts tbody').innerHTML = (derniers.length && net === 'fb' ? derniers : (D[sel.at(-1)]?.fb?.posts || []))
+        .map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues_video || 0)}</td><td class="num">${fmt(x.clics || 0)}</td><td class="num">${fmt(x.likes || 0)}</td></tr>`).join('')
+        || '<tr><td colspan="4" class="mono">pas de publication</td></tr>';
+      const igp = D[sel.at(-1)]?.fb?.ig_posts || [];
+      document.querySelector('#t-igposts tbody').innerHTML = igp.length
+        ? igp.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues || 0)}</td><td class="num">${fmt(x.portee || 0)}</td><td class="num">${fmt(x.interactions || 0)}</td></tr>`).join('')
+        : '<tr><td colspan="4" class="mono">aucun compte Instagram relié</td></tr>';
     }
 
     // ── Provenance IA : la section GEO (être LU par les robots ne sert que si
@@ -915,6 +1029,7 @@
   });
   $('metric').addEventListener('change', render);
   $('split').addEventListener('change', render);
+  $('posts-net').addEventListener('change', render);
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   fillSelects();

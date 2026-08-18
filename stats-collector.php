@@ -447,7 +447,7 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
         }
     }
     $posts = graphGet($cfg['fb_page_id'] . '/posts', $tok,
-        ['fields' => 'id,created_time,permalink_url,likes.summary(true),comments.summary(true),shares', 'limit' => '5']);
+        ['fields' => 'id,created_time,permalink_url,message,likes.summary(true),comments.summary(true),shares', 'limit' => '10']);
     foreach ($posts['data'] ?? [] as $p) {
         // Repartages VISIBLES du post (publics uniquement — Meta masque par design
         // les partages privés et ceux des groupes fermés ; « shares » reste le total).
@@ -458,13 +458,38 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
                 $reshares[] = ['nom' => $r['from']['name'] ?? '(profil privé)', 'url' => $r['permalink_url'] ?? ''];
             }
         }
+        // Lecture de CETTE publication. ⚠️ Meta a retiré post_impressions et
+        // post_engaged_users en v21 : la « lecture » d'un post se lit désormais
+        // par ses vues vidéo (le format est justement la vidéo) et ses clics.
+        // Ces valeurs sont CUMULÉES depuis la publication, pas journalières :
+        // la courbe se construit par les collectes successives, un rattrapage
+        // écrirait la valeur d'aujourd'hui sur une date passée.
+        $pi = [];
+        if (!empty($p['id'])) {
+            $r = graphGet($p['id'] . '/insights', $tok,
+                ['metric' => 'post_clicks,post_video_views,post_reactions_by_type_total']);
+            // ⚠️ Meta renvoie parfois DEUX entrées portant le même nom de
+            // métrique — vécu : post_video_views à 92 puis à 0 dans la même
+            // réponse. Garder la plus grande, sinon la seconde écrase la vraie.
+            foreach ($r['data'] ?? [] as $m) {
+                $v = $m['values'][0]['value'] ?? 0;
+                $v = (int) (is_array($v) ? array_sum($v) : $v);
+                $pi[$m['name']] = max($pi[$m['name']] ?? 0, $v);
+            }
+        }
+        $txt = trim(preg_replace('/\s+/u', ' ', (string) ($p['message'] ?? '')));
         $fb['posts'][] = [
-            'date'     => substr((string) ($p['created_time'] ?? ''), 0, 10),
-            'url'      => $p['permalink_url'] ?? '',
-            'likes'    => $p['likes']['summary']['total_count'] ?? 0,
-            'comments' => $p['comments']['summary']['total_count'] ?? 0,
-            'shares'   => $p['shares']['count'] ?? 0,
-            'reshares' => $reshares,
+            'id'         => $p['id'] ?? '',
+            'date'       => substr((string) ($p['created_time'] ?? ''), 0, 10),
+            'url'        => $p['permalink_url'] ?? '',
+            'titre'      => $txt === '' ? '' : mb_substr($txt, 0, 70),
+            'likes'      => $p['likes']['summary']['total_count'] ?? 0,
+            'comments'   => $p['comments']['summary']['total_count'] ?? 0,
+            'shares'     => $p['shares']['count'] ?? 0,
+            'vues_video' => $pi['post_video_views'] ?? 0,
+            'clics'      => $pi['post_clicks'] ?? 0,
+            'reactions'  => $pi['post_reactions_by_type_total'] ?? 0,
+            'reshares'   => $reshares,
         ];
     }
 }
