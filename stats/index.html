@@ -142,10 +142,34 @@
     <select id="split">
       <option value="ia">Robots IA (top 5)</option>
       <option value="ref">Referrals par source</option>
+      <option value="refia">Assistants IA (provenance)</option>
       <option value="dev">Appareils</option>
     </select>
   </div>
   <div class="chart"><div class="legend" id="legend"></div><svg id="c-split"></svg></div>
+
+  <h2>Provenance IA — les visites venues d'une réponse d'assistant</h2>
+  <div class="grid" id="ia-cards"></div>
+  <div class="note" id="ia-note"></div>
+
+  <div class="chart-head"><h2 id="h-ia">Visites depuis les IA — par assistant</h2></div>
+  <div class="chart"><div class="legend" id="ia-legend"></div><svg id="c-ia"></svg></div>
+
+  <div class="chart-head"><h2 id="h-funnel">Lecture par les robots → visite humaine</h2></div>
+  <div class="chart"><div class="legend" id="funnel-legend"></div><svg id="c-funnel"></svg></div>
+
+  <div class="cols">
+    <div>
+      <h3>Pages citées par les IA <span class="mono">(⊕ = filtre)</span></h3>
+      <table id="t-iapages"><thead><tr><th>Page d'atterrissage</th><th>Assistants</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div>
+      <h3>Ce que font ces visiteurs ensuite</h3>
+      <table id="t-iacomp"><thead><tr><th></th><th class="num">Venus d'une IA</th><th class="num">Tout le site</th></tr></thead><tbody></tbody></table>
+      <h3>Pages d'entrée depuis une IA</h3>
+      <table id="t-iaentry"><tbody></tbody></table>
+    </div>
+  </div>
 
   <div class="cols">
     <div>
@@ -198,6 +222,8 @@
 
   const $ = (id) => document.getElementById(id);
   const fmt = (n) => (n ?? 0).toLocaleString('fr-FR');
+  const nb1 = (x) => x == null || !isFinite(x) ? '—' : x.toFixed(1).replace('.', ',');
+  const mmss = (x) => x == null || !isFinite(x) ? '—' : `${Math.floor(x / 60)} min ${String(Math.round(x % 60)).padStart(2, '0')} s`;
   const D = hist.days;
   const first = allDays[0], lastDay = allDays.at(-1);
   $('from').min = first; $('from').max = lastDay; $('to').min = first; $('to').max = lastDay;
@@ -261,7 +287,9 @@
   // ── graphes ──
   const COLORS = ['#00E5FF', '#F08A2C', '#4ADE80', '#A78BFA', '#FBBF24', '#F87171'];
   function niceMax(v) {
-    if (v <= 5) return 5;
+    // Petites valeurs (le cas des visites venues d'une IA) : échelle ENTIÈRE
+    // divisible par 4, sinon les graduations tombent sur 1,25 · 2,5 · 3,75.
+    if (v <= 20) return Math.max(4, Math.ceil(v / 4) * 4);
     const p = Math.pow(10, Math.floor(Math.log10(v)));
     for (const m of [1, 2, 2.5, 5, 10]) if (v <= m * p) return m * p;
     return 10 * p;
@@ -292,12 +320,18 @@
   function drawChart(svgId, bk, series) {
     const svg = $(svgId);
     const n = bk.keys.length;
-    const allVals = series.flatMap((s) => s.pts);
-    const max = niceMax(Math.max(...allVals, 1));
-    const W = 1000, H = 250, PL = 62, PR = 16, PT = 14, PB = 34;
+    // Une série peut demander un axe DROIT (ordre de grandeur différent : des
+    // centaines de lectures robots face à quelques visites humaines).
+    const rSer = series.filter((s) => s.axis === 'right');
+    const hasR = rSer.length > 0;
+    const scaleOf = (list) => niceMax(Math.max(...list.flatMap((s) => s.pts), 1));
+    const maxL = scaleOf(series.filter((s) => s.axis !== 'right'));
+    const maxR = hasR ? scaleOf(rSer) : maxL;
+    const W = 1000, H = 250, PL = 62, PR = hasR ? 58 : 16, PT = 14, PB = 34;
     const x = (i) => PL + i * (W - PL - PR) / Math.max(n - 1, 1);
-    const y = (v) => H - PB - v * (H - PT - PB) / max;
-    const yTicks = [0, .25, .5, .75, 1].map((f) => Math.round(max * f));
+    const y = (v, axis) => H - PB - v * (H - PT - PB) / (axis === 'right' ? maxR : maxL);
+    const FR = [0, .25, .5, .75, 1];
+    const yPos = (f) => H - PB - f * (H - PT - PB);
     // Étiquettes X : pas régulier, PUIS filtrage anti-chevauchement en partant de
     // la fin (la dernière date est toujours gardée) — sinon « 15/08 » et « 16/08 »
     // se superposent quand le dernier point tombe juste après un tick.
@@ -317,19 +351,20 @@
       ${series.length === 1 ? `<defs><linearGradient id="g-${svgId}" x1="0" y1="0" x2="0" y2="1">
         <stop offset="0" stop-color="${series[0].color}" stop-opacity=".28"/><stop offset="1" stop-color="${series[0].color}" stop-opacity="0"/>
       </linearGradient></defs>` : ''}
-      ${yTicks.map((v) => `<line x1="${PL}" y1="${y(v).toFixed(1)}" x2="${W - PR}" y2="${y(v).toFixed(1)}" stroke="#1C2740" stroke-width="1"${v ? ' stroke-dasharray="3 5"' : ''}/>
-        <text x="${PL - 8}" y="${(y(v) + 4).toFixed(1)}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="end">${fmt(v)}</text>`).join('')}
+      ${FR.map((f) => `<line x1="${PL}" y1="${yPos(f).toFixed(1)}" x2="${W - PR}" y2="${yPos(f).toFixed(1)}" stroke="#1C2740" stroke-width="1"${f ? ' stroke-dasharray="3 5"' : ''}/>
+        <text x="${PL - 8}" y="${(yPos(f) + 4).toFixed(1)}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="end">${fmt(Math.round(maxL * f))}</text>` +
+        (hasR ? `<text x="${W - PR + 8}" y="${(yPos(f) + 4).toFixed(1)}" fill="${rSer[0].color}" font-size="11" font-family="JetBrains Mono" text-anchor="start">${fmt(Math.round(maxR * f))}</text>` : '')).join('')}
       ${xIdx.map((i) => {
         const anchor = i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle';
         return `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="${anchor}">${xLabel(bk.keys[i], bk.mode)}</text>`;
       }).join('')}
       <line id="cross-${svgId}" x1="0" y1="${PT}" x2="0" y2="${H - PB}" stroke="#8993AF" stroke-width="1" stroke-dasharray="3 4" opacity="0"/>
       ${series.map((s) => {
-        const path = s.pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+        const path = s.pts.map((v, i) => `${i ? 'L' : 'M'}${x(i).toFixed(1)},${y(v, s.axis).toFixed(1)}`).join(' ');
         const area = series.length === 1
           ? `<path d="${path} L${x(n - 1).toFixed(1)},${H - PB} L${x(0).toFixed(1)},${H - PB} Z" fill="url(#g-${svgId})"/>` : '';
         return `${area}<path d="${path}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>
-          ${s.pts.map((v, i) => `<circle class="pt" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="${n > 120 ? 1.5 : 2.8}" fill="${s.color}"/>`).join('')}`;
+          ${s.pts.map((v, i) => `<circle class="pt" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(v, s.axis).toFixed(1)}" r="${n > 120 ? 1.5 : 2.8}" fill="${s.color}"/>`).join('')}`;
       }).join('')}
       ${bk.keys.map((_, i) => {
         const w = (W - PL - PR) / Math.max(n - 1, 1);
@@ -525,6 +560,24 @@
             : `Aucune visite n'est encore arrivée depuis une réponse d'IA sur cette période.`));
       }
 
+      // Ce que les assistants citent réellement (pages d'atterrissage) + qualité du trafic.
+      const iaPagesTop = (() => {
+        const t = {};
+        for (const d of sel) for (const pages of Object.values(D[d].ia_pages || {}))
+          for (const [pg, k] of Object.entries(pages)) t[pg] = (t[pg] || 0) + k;
+        return Object.entries(t).sort((x, y) => y[1] - x[1]);
+      })();
+      if (iaPagesTop.length) {
+        const iaVis = sumKey(sel, (v) => v.ia_parcours?.visites ?? 0);
+        const iaPg = sumKey(sel, (v) => v.ia_parcours?.pages ?? 0);
+        const stVis = sumKey(sel, (v) => v.parcours?.visites ?? 0);
+        const stPg = sumKey(sel, (v) => v.parcours?.pages ?? 0);
+        const rIa = iaVis ? iaPg / iaVis : null, rSt = stVis ? stPg / stVis : null;
+        par.push(`Les assistants renvoient surtout vers <b>${iaPagesTop[0][0]}</b> (${n(iaPagesTop[0][1])} arrivée${iaPagesTop[0][1] > 1 ? 's' : ''})` +
+          (iaPagesTop[1] ? `, puis ${iaPagesTop[1][0]} (${n(iaPagesTop[1][1])})` : '') + '. ' +
+          (rIa && rSt ? `Ces visiteurs lisent <b>${nb1(rIa)} pages par visite</b>, contre ${nb1(rSt)} pour l'ensemble du site.` : ''));
+      }
+
       const prov = [];
       if (goo) prov.push(`${n(goo)} depuis Google`);
       if (fb) prov.push(`${n(fb)} depuis Facebook`);
@@ -558,6 +611,9 @@
     if (splitMode === 'ia') {
       const top = aggMap(sel, (v) => v.ai).slice(0, 5);
       series = top.map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ai?.[nm] ?? 0), filt: ['bot', nm] }));
+    } else if (splitMode === 'refia') {
+      series = aggMap(sel, (v) => v.ref_ia).slice(0, 6).map(([nm], i) =>
+        ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ref_ia?.[nm] ?? 0), filt: ['ia', nm] }));
     } else if (splitMode === 'ref') {
       series = ['ia', 'facebook', 'linkedin', 'google', 'bing', 'autres'].map((src, i) =>
         ({ label: src, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => vRef(v, src)), filt: ['referral', src] }));
@@ -639,6 +695,100 @@
       ? bars([['1 page', pvMap['1'] ?? 0], ['2-3 pages', pvMap['2_3'] ?? 0], ['4 pages et +', pvMap['4p'] ?? 0]], '#A78BFA')
       : '<span class="mono">—</span>')
       + (dm ? `<div class="note">Durée moyenne d'une visite multi-pages : ≈ ${Math.floor(dm / 60)} min ${String(dm % 60).padStart(2, '0')} s (sessions intra-journée)</div>` : '');
+
+    // ── Provenance IA : la section GEO (être LU par les robots ne sert que si
+    //    des humains ARRIVENT ensuite depuis la réponse de l'assistant) ──────
+    {
+      const iaF = fOf('ia');
+      const P = (fn) => sumKey(sel, fn);
+      const iaTot = P(vRefIa);
+      const iaPrev = cmp ? sumKey(cmp, vRefIa) : null;
+      const refTot = ['ia', 'facebook', 'linkedin', 'google', 'bing', 'autres']
+        .reduce((acc, src) => acc + P((v) => vRef(v, src)), 0);
+      const crawls = P(vAI);
+      const iaRows2 = aggMap(sel, (v) => v.ref_ia).filter(([nm]) => !iaF || nm.toLowerCase().includes(iaF.toLowerCase()));
+      const iaVis = P((v) => v.ia_parcours?.visites ?? 0);
+      const iaPg = P((v) => v.ia_parcours?.pages ?? 0);
+      const iaSolo = P((v) => v.ia_parcours?.une_page ?? 0);
+      const iaDn = P((v) => v.ia_parcours?.duree_n ?? 0);
+      const iaDt = P((v) => v.ia_parcours?.duree_tot_s ?? 0);
+      const stVis = P((v) => v.parcours?.visites ?? 0);
+      const stPg = P((v) => v.parcours?.pages ?? 0);
+      const stSolo = P((v) => v.parcours?.pages_visite?.['1'] ?? 0);
+      const stDn = P((v) => v.parcours?.duree_n ?? 0);
+      const stDt = P((v) => v.parcours?.duree_tot_s ?? 0);
+      const div = (a, b) => b ? a / b : null;
+      const pc = (a, b) => b ? Math.round(a / b * 100) + ' %' : '—';
+
+      $('ia-cards').innerHTML = [
+        [iaF ? `Visites depuis ${iaF}` : 'Visites depuis une IA', fmt(iaTot), iaPrev != null ? delta(iaTot, iaPrev) : ''],
+        ['Part des clics entrants', refTot ? Math.round(iaTot / refTot * 100) + '<small> %</small>' : '—', `<span class="flat">sur ${fmt(refTot)} clics identifiés</span>`],
+        ['Assistant n°1', iaRows2.length ? iaRows2[0][0] : '—', iaRows2.length ? `<span class="flat">${fmt(iaRows2[0][1])} visite${iaRows2[0][1] > 1 ? 's' : ''}</span>` : ''],
+        ['Visites / 1 000 lectures robots', crawls ? nb1(iaTot / crawls * 1000) : '—', `<span class="flat">${fmt(crawls)} lectures de robots</span>`],
+        ['Pages par visite (venus d\'une IA)', iaVis ? nb1(div(iaPg, iaVis)) : '—', stVis ? `<span class="flat">site : ${nb1(div(stPg, stVis))}</span>` : ''],
+        ['Durée moyenne (venus d\'une IA)', iaDn ? mmss(div(iaDt, iaDn)) : '—', stDn ? `<span class="flat">site : ${mmss(div(stDt, stDn))}</span>` : ''],
+      ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+      const firstDetail = allDays.find((d) => D[d].ia_parcours);
+      $('ia-note').textContent = firstDetail
+        ? `Visites par assistant : tout l'historique. Pages citées et parcours détaillés : depuis le ${dFmt(firstDetail)} (profondeur des logs bruts conservés par l'hébergeur).`
+        : 'Pages citées et parcours détaillés : disponibles à partir de la prochaine collecte.';
+
+      // Graphe 1 — une courbe par assistant (légende cliquable = filtre ia:)
+      const iaSeries = iaRows2.length
+        ? iaRows2.slice(0, 5).map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ref_ia?.[nm] ?? 0), filt: ['ia', nm] }))
+        : [{ label: 'Visites depuis une IA', color: COLORS[0], pts: bkSum(bk, vRefIa) }];
+      $('h-ia').textContent = `Visites depuis les IA — par ${bk.mode}`;
+      $('ia-legend').innerHTML = iaSeries.map((s) =>
+        `<span data-f='${s.filt ? JSON.stringify(s.filt) : ''}'><i style="background:${s.color}"></i>${s.label}</span>`).join('');
+      $('ia-legend').querySelectorAll('span[data-f]').forEach((el) => el.addEventListener('click', () => {
+        if (el.dataset.f) { const [t, v] = JSON.parse(el.dataset.f); addFilter(t, v); }
+      }));
+      drawChart('c-ia', bk, iaSeries);
+
+      // Graphe 2 — l'entonnoir GEO : lectures robots (axe gauche) vs visites (axe droit)
+      const funnel = [
+        { label: 'Lectures des robots IA', color: COLORS[0], pts: bkSum(bk, vAI) },
+        { label: 'Visites humaines venues d\'une IA (axe droit)', color: COLORS[1], axis: 'right', pts: bkSum(bk, vRefIa) },
+      ];
+      $('h-funnel').textContent = `Lecture par les robots → visite humaine — par ${bk.mode}`;
+      $('funnel-legend').innerHTML = funnel.map((s) => `<span><i style="background:${s.color}"></i>${s.label}</span>`).join('');
+      drawChart('c-funnel', bk, funnel);
+
+      // Pages CITÉES par les assistants (page d'atterrissage du clic)
+      const iaPages = (() => {
+        const tot = {}, par = {};
+        for (const d of sel) for (const [asst, pages] of Object.entries(D[d].ia_pages || {})) {
+          if (iaF && !asst.toLowerCase().includes(iaF.toLowerCase())) continue;
+          for (const [pg, k] of Object.entries(pages)) {
+            tot[pg] = (tot[pg] || 0) + k;
+            (par[pg] = par[pg] || {})[asst] = (par[pg][asst] || 0) + k;
+          }
+        }
+        return Object.entries(tot).sort((x, y) => y[1] - x[1]).slice(0, 12)
+          .map(([pg, k]) => [pg, k, Object.entries(par[pg]).sort((x, y) => y[1] - x[1])]);
+      })();
+      document.querySelector('#t-iapages tbody').innerHTML = iaPages.length
+        ? iaPages.map(([pg, k, by]) =>
+            `<tr><td><span class="flt" data-p="${pg}" title="Filtrer sur cette page">⊕</span><a href="https://www.nsy.fr${pg}" target="_blank" rel="noopener">${pg}</a></td>` +
+            `<td>${by.map(([asst, m]) => `${asst} ${fmt(m)}`).join(' · ')}</td><td class="num">${fmt(k)}</td></tr>`).join('')
+        : '<tr><td colspan="3" class="mono">aucune page citée sur la période retenue</td></tr>';
+      document.querySelectorAll('#t-iapages .flt').forEach((el) => el.addEventListener('click', () => addFilter('page', el.dataset.p)));
+
+      // Comportement comparé : la sous-population « venue d'une IA » vs tout le site
+      document.querySelector('#t-iacomp tbody').innerHTML = iaVis || stVis
+        ? [['Visites', fmt(iaVis), fmt(stVis)],
+           ['Pages par visite', iaVis ? nb1(div(iaPg, iaVis)) : '—', stVis ? nb1(div(stPg, stVis)) : '—'],
+           ['Visites d\'une seule page', iaVis ? pc(iaSolo, iaVis) : '—', stVis ? pc(stSolo, stVis) : '—'],
+           ['Durée moyenne (multi-pages)', iaDn ? mmss(div(iaDt, iaDn)) : '—', stDn ? mmss(div(stDt, stDn)) : '—'],
+          ].map(([l, x1, x2]) => `<tr><td>${l}</td><td class="num">${x1}</td><td class="num">${x2}</td></tr>`).join('')
+        : '<tr><td colspan="3" class="mono">aucune session encore identifiée comme venue d\'une IA</td></tr>';
+
+      const iaEntry = aggMap(sel, (v) => v.ia_parcours?.entrees).slice(0, 6);
+      document.querySelector('#t-iaentry tbody').innerHTML = iaEntry.length
+        ? iaEntry.map(([pg, k]) => `<tr><td>${pg}</td><td class="num">${fmt(k)}</td></tr>`).join('')
+        : '<tr><td colspan="2" class="mono">—</td></tr>';
+    }
 
     document.querySelectorAll('#timebar button[data-r]').forEach((btn) =>
       btn.classList.toggle('on', btn.dataset.r === range.quick));

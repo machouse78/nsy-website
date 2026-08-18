@@ -86,7 +86,10 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   le KPI GEO), abonnés/engagement/repartages publics Facebook, provenance
   (referrals + référents détaillés), **profils** (appareils/OS/navigateurs) et
   **parcours** (entrées, sorties, enchaînements, profondeur, durée), compteurs
-  du journal — navigation temporelle **façon ELK** (périodes rapides/absolues,
+  du journal, **section Provenance IA dédiée** (visites venues d'une réponse
+  d'assistant, courbe par assistant, entonnoir « lectures des robots → visites
+  humaines » à double axe, pages réellement citées par les IA, et comportement
+  de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
   buckets jour/semaine/mois, comparaison N-1) + **filtres** (pills cliquables,
   barre de requête `bot:` `page:` `referral:` `ia:`, métrique au choix, séries
   superposées). Collecté chaque matin à J-1 par `stats-collector.php` (tâche

@@ -86,7 +86,10 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
   KPI), Facebook followers/engagement/public reshares, provenance (referrals +
   detailed referrer hosts), **visitor profiles** (devices/OS/browsers) and
   **journeys** (entry/exit pages, transitions, depth, duration), journal
-  counters — **ELK-like** time navigation (quick/absolute ranges,
+  counters, a **dedicated AI-provenance section** (visits arriving from an
+  assistant's answer, one curve per assistant, a dual-axis "bot readings →
+  human visits" funnel, the pages the assistants actually cite, and how those
+  visitors behave compared with the site average) — **ELK-like** time navigation (quick/absolute ranges,
   day/week/month buckets, prior-period comparison) + **filters** (clickable
   pills, query bar `bot:` `page:` `referral:` `ia:`, metric selector,
   split series). Collected daily at D-1 by `stats-collector.php` (Infomaniak

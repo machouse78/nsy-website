@@ -60,6 +60,27 @@ $AI = [
     'PetalBot'       => '/PetalBot/i',
     'YouBot'         => '/YouBot/i',
 ];
+// Assistants IA côté PROVENANCE (un humain a cliqué depuis une réponse).
+// ⚠️ Ils se testent AVANT les moteurs : gemini.google.com contient « google »,
+// copilot.microsoft.com renvoie vers Bing… Les jetons courts servent aussi à
+// lire les utm_source (ChatGPT ajoute lui-même ?utm_source=chatgpt.com).
+$IA_REF = [
+    'ChatGPT'    => ['chatgpt', 'chat.openai.com', 'openai.com'],
+    'Claude'     => ['claude.ai', 'anthropic'],
+    'Perplexity' => ['perplexity'],
+    'Gemini'     => ['gemini.google.com', 'bard.google.com', 'aistudio.google.com', 'gemini.com'],
+    'Copilot'    => ['copilot.microsoft.com', 'bing.com/chat', 'copilot'],
+    'Mistral'    => ['chat.mistral.ai', 'mistral.ai'],
+    'Grok'       => ['grok.com', 'x.ai'],
+    'DeepSeek'   => ['chat.deepseek.com', 'deepseek'],
+    'Poe'        => ['poe.com'],
+    'You.com'    => ['you.com'],
+    'Phind'      => ['phind.com'],
+];
+$iaOf = static function (string $s) use ($IA_REF): ?string {
+    foreach ($IA_REF as $nom => $jetons) foreach ($jetons as $j) if (str_contains($s, $j)) return $nom;
+    return null;
+};
 $SE_RE   = '/Googlebot|bingbot|msnbot|YandexBot|Baiduspider|DuckDuckBot|Qwantbot|Applebot(?!.*Extended)/i';
 $BOT_RE  = '/bot|crawl|spider|slurp|scanner|scan|python|curl|wget|go-http|aiohttp|httpx|libwww|okhttp|java\/|guzzle|facebookexternalhit|monitor|checker|probe|wp2shell|xploit|jetpack|feed|semrush|mj12|ahrefs|censys|netcraft|builtwith|barkrowler|dataprovider|client/i';
 $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/i';
@@ -69,6 +90,7 @@ $stats = [
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
     'pages' => [], 'referrals' => ['ia' => 0, 'facebook' => 0, 'linkedin' => 0, 'google' => 0, 'bing' => 0, 'autres' => 0],
     'ref_ia' => [], // détail par assistant (ChatGPT, Claude, Perplexity…) — provenance GEO
+    'ia_pages' => [], // assistant => page d'atterrissage => n (LA page que l'IA a citée)
     'campagnes' => [], // UTM : source/medium/campagne — le SEUL moyen de savoir de quel
                        // groupe ou post vient un clic (Facebook ne transmet que l'origine)
     'fbclid' => 0,     // clic Facebook confirmé même sans referer (app mobile)
@@ -76,7 +98,8 @@ $stats = [
     // Profils (agrégats depuis le UA) + provenance détaillée + parcours par session.
     'devices' => ['mobile' => 0, 'desktop' => 0, 'tablette' => 0],
     'os' => [], 'browsers' => [], 'ref_hosts' => [],
-    'visites' => [], // hash éphémère => ['first','last','pages'[]] — JETÉ après agrégation
+    'visites' => [], // hash éphémère => visite EN COURS ['first','last','pages'[]] — JETÉ après agrégation
+    'sessions' => [], // visites closes (coupure d'inactivité) — même sort
 ];
 $logDir = (getenv('HOME') ?: dirname(__DIR__)) . '/ik-logs';
 $files = array_merge(glob("$logDir/access.log") ?: [], glob("$logDir/access.log-*") ?: []);
@@ -127,10 +150,12 @@ foreach ($files as $f) {
             // Campagnes UTM + fbclid (query de l'URL demandée)
             $qs = parse_url($path, PHP_URL_QUERY);
             $fbclid = false;
+            $utmIa = null;
             if ($qs) {
                 parse_str($qs, $q);
                 $fbclid = isset($q['fbclid']);
                 if (!empty($q['utm_source'])) {
+                    $utmIa = $iaOf(strtolower((string) $q['utm_source']));
                     $clean3 = static fn($x) => mb_substr(preg_replace('/[^\w\-. ]/u', '', (string) $x), 0, 40) ?: '-';
                     $camp = $clean3($q['utm_source']) . ' / ' . $clean3($q['utm_medium'] ?? '-') . ' / ' . $clean3($q['utm_campaign'] ?? '-');
                     $stats['campagnes'][$camp] = ($stats['campagnes'][$camp] ?? 0) + 1;
@@ -159,47 +184,43 @@ foreach ($files as $f) {
                 : (preg_match('/Instagram/i', $ua) ? 'App Instagram' : 'autre'))))))));
             $stats['browsers'][$br] = ($stats['browsers'][$br] ?? 0) + 1;
 
-            // Parcours : horodatage + séquence de pages par session (hash éphémère)
+            // Parcours : horodatage + séquence de pages par visite (hash éphémère).
+            // 30 min d'inactivité = NOUVELLE visite — sinon un retour le soir sur
+            // la même machine donnerait une « visite » de plusieurs heures.
             $dt = DateTime::createFromFormat('d/M/Y:H:i:s O', $m[2]);
             $ts = $dt ? $dt->getTimestamp() : 0;
-            if (!isset($stats['visites'][$vh])) $stats['visites'][$vh] = ['first' => $ts, 'last' => $ts, 'pages' => []];
+            if (!isset($stats['visites'][$vh])) {
+                $stats['visites'][$vh] = ['first' => $ts, 'last' => $ts, 'pages' => []];
+            } elseif ($ts - $stats['visites'][$vh]['last'] > 1800) {
+                $stats['sessions'][] = $stats['visites'][$vh];
+                $stats['visites'][$vh] = ['first' => $ts, 'last' => $ts, 'pages' => []];
+            }
             $stats['visites'][$vh]['last'] = max($stats['visites'][$vh]['last'], $ts);
-            $stats['visites'][$vh]['first'] = min($stats['visites'][$vh]['first'], $ts) ?: $ts;
             $prev = end($stats['visites'][$vh]['pages']);
             if ($prev !== $clean) $stats['visites'][$vh]['pages'][] = $clean;
             $rh = strtolower((string) parse_url($ref, PHP_URL_HOST));
-            if ($rh === '' && $fbclid) { $stats['referrals']['facebook']++; } // app FB : referer vide, fbclid présent
-            elseif ($rh !== '' && !str_contains($rh, 'nsy.fr') && !str_contains($rh, 'new-software-yard')) {
-                $stats['ref_hosts'][$rh] = ($stats['ref_hosts'][$rh] ?? 0) + 1;
-                // ⚠️ Les assistants IA se testent AVANT les moteurs : gemini.google.com
-                // contient « google », copilot.microsoft.com renvoie vers Bing, etc.
-                $ia = null;
-                foreach ([
-                    'ChatGPT'     => ['chatgpt.com', 'chat.openai.com', 'openai.com'],
-                    'Claude'      => ['claude.ai', 'anthropic.com'],
-                    'Perplexity'  => ['perplexity.ai'],
-                    'Gemini'      => ['gemini.google.com', 'bard.google.com', 'aistudio.google.com'],
-                    'Copilot'     => ['copilot.microsoft.com', 'bing.com/chat'],
-                    'Mistral'     => ['chat.mistral.ai', 'mistral.ai'],
-                    'Grok'        => ['grok.com', 'x.ai'],
-                    'DeepSeek'    => ['chat.deepseek.com', 'deepseek.com'],
-                    'Poe'         => ['poe.com'],
-                    'You.com'     => ['you.com'],
-                    'Phind'       => ['phind.com'],
-                ] as $nom => $hosts) {
-                    foreach ($hosts as $needle) {
-                        if (str_contains($rh, $needle)) { $ia = $nom; break 2; }
-                    }
-                }
-                if ($ia !== null) {
-                    $stats['referrals']['ia']++;
-                    $stats['ref_ia'][$ia] = ($stats['ref_ia'][$ia] ?? 0) + 1;
-                }
-                elseif (str_contains($rh, 'facebook') || str_contains($rh, 'fb.'))    $stats['referrals']['facebook']++;
-                elseif (str_contains($rh, 'linkedin') || $rh === 'lnkd.in')          $stats['referrals']['linkedin']++;
-                elseif (str_contains($rh, 'google'))                                 $stats['referrals']['google']++;
-                elseif (str_contains($rh, 'bing'))                                   $stats['referrals']['bing']++;
-                else                                                                 $stats['referrals']['autres']++;
+            $externe = $rh !== '' && !str_contains($rh, 'nsy.fr') && !str_contains($rh, 'new-software-yard');
+            if ($externe) $stats['ref_hosts'][$rh] = ($stats['ref_hosts'][$rh] ?? 0) + 1;
+            // Provenance IA par le referer, à défaut par l'utm_source : ChatGPT
+            // estampille ses liens (?utm_source=chatgpt.com), ce qui rattrape les
+            // clics où le navigateur ne transmet aucun referer.
+            $ia = $externe ? $iaOf($rh) : null;
+            if ($ia === null) $ia = $utmIa;
+            if ($ia !== null) {
+                $stats['referrals']['ia']++;
+                $stats['ref_ia'][$ia] = ($stats['ref_ia'][$ia] ?? 0) + 1;
+                // Page d'atterrissage = la page CITÉE dans la réponse de l'assistant.
+                $stats['ia_pages'][$ia][$clean] = ($stats['ia_pages'][$ia][$clean] ?? 0) + 1;
+                // Marquage de la visite : son parcours sera comparé à la moyenne du site.
+                if (empty($stats['visites'][$vh]['ia'])) $stats['visites'][$vh]['ia'] = $ia;
+            }
+            elseif ($rh === '' && $fbclid)                                       $stats['referrals']['facebook']++; // app FB : referer vide
+            elseif ($externe) {
+                if (str_contains($rh, 'facebook') || str_contains($rh, 'fb.'))   $stats['referrals']['facebook']++;
+                elseif (str_contains($rh, 'linkedin') || $rh === 'lnkd.in')      $stats['referrals']['linkedin']++;
+                elseif (str_contains($rh, 'google'))                             $stats['referrals']['google']++;
+                elseif (str_contains($rh, 'bing'))                               $stats['referrals']['bing']++;
+                else                                                             $stats['referrals']['autres']++;
             }
         }
     }
@@ -215,27 +236,56 @@ arsort($stats['campagnes']);
 
 // Parcours agrégés — puis la table des sessions est jetée.
 $entrees = []; $sorties = []; $transitions = []; $pv = ['1' => 0, '2_3' => 0, '4p' => 0];
-$durees = [];
-foreach ($stats['visites'] as $v) {
+$durees = []; $sessions = 0; $pagesTot = 0;
+// Sous-population « arrivée depuis une réponse d'IA » : mêmes agrégats, pour comparer.
+$iaS = ['visites' => 0, 'pages' => 0, 'une_page' => 0, 'durees' => [], 'par_ia' => [], 'entrees' => []];
+foreach (array_merge($stats['sessions'], array_values($stats['visites'])) as $v) {
     $p = $v['pages'];
     if (!$p) continue;
     $entrees[$p[0]] = ($entrees[$p[0]] ?? 0) + 1;
     $sorties[end($p)] = ($sorties[end($p)] ?? 0) + 1;
     $n = count($p);
+    $sessions++; $pagesTot += $n;
     $pv[$n === 1 ? '1' : ($n <= 3 ? '2_3' : '4p')]++;
     for ($i = 1; $i < $n; $i++) {
         $t = $p[$i - 1] . ' → ' . $p[$i];
         $transitions[$t] = ($transitions[$t] ?? 0) + 1;
     }
-    if ($n > 1 && $v['last'] > $v['first']) $durees[] = $v['last'] - $v['first'];
+    $duree = ($n > 1 && $v['last'] > $v['first']) ? $v['last'] - $v['first'] : null;
+    if ($duree !== null) $durees[] = $duree;
+    if (!empty($v['ia'])) {
+        $iaS['visites']++;
+        $iaS['pages'] += $n;
+        if ($n === 1) $iaS['une_page']++;
+        if ($duree !== null) $iaS['durees'][] = $duree;
+        $iaS['par_ia'][$v['ia']] = ($iaS['par_ia'][$v['ia']] ?? 0) + 1;
+        $iaS['entrees'][$p[0]] = ($iaS['entrees'][$p[0]] ?? 0) + 1;
+    }
 }
 arsort($entrees); arsort($sorties); arsort($transitions);
+arsort($iaS['par_ia']); arsort($iaS['entrees']);
 $parcours = [
     'entrees'      => array_slice($entrees, 0, 10, true),
     'sorties'      => array_slice($sorties, 0, 10, true),
     'transitions'  => array_slice($transitions, 0, 10, true),
     'pages_visite' => $pv,
+    'visites'      => $sessions,
+    'pages'        => $pagesTot,
     'duree_moy_s'  => $durees ? (int) round(array_sum($durees) / count($durees)) : 0,
+    'duree_n'      => count($durees),
+    'duree_tot_s'  => array_sum($durees),
+];
+// Parcours des visiteurs VENUS D'UNE IA — le « et après ? » du KPI GEO : la même
+// grille que le site entier, pour dire si ce trafic vaut mieux (ou moins) que la moyenne.
+$ia_parcours = [
+    'visites'     => $iaS['visites'],
+    'pages'       => $iaS['pages'],
+    'une_page'    => $iaS['une_page'],
+    'par_ia'      => $iaS['par_ia'],
+    'entrees'     => array_slice($iaS['entrees'], 0, 10, true),
+    'duree_n'     => count($iaS['durees']),
+    'duree_tot_s' => array_sum($iaS['durees']),
+    'duree_moy_s' => $iaS['durees'] ? (int) round(array_sum($iaS['durees']) / count($iaS['durees'])) : 0,
 ];
 
 $day = [
@@ -253,6 +303,8 @@ $day = [
     'referrals'   => $stats['referrals'],
     'ref_hosts'   => array_slice($stats['ref_hosts'], 0, 10, true),
     'ref_ia'      => $stats['ref_ia'],
+    'ia_pages'    => $stats['ia_pages'],
+    'ia_parcours' => $ia_parcours,
     'campagnes'   => array_slice($stats['campagnes'], 0, 15, true),
     'fbclid'      => $stats['fbclid'],
     'devices'     => $stats['devices'],
@@ -314,6 +366,18 @@ $fh = fopen($histFile, 'c+');
 flock($fh, LOCK_EX);
 $hist = json_decode((string) stream_get_contents($fh), true);
 if (!is_array($hist)) $hist = ['site' => 'nsy.fr', 'days' => []];
+// Garde-fou de rattrapage : une date SANS AUCUNE ligne de log ne s'écrit jamais.
+// Passé la rétention de l'hébergeur (~1 mois), relancer une date ancienne ne
+// trouve plus rien — sans ce test, un jour riche retomberait à zéro et un jour
+// hors rétention entrerait vide dans l'historique.
+if (($day['hits'] ?? 0) === 0) {
+    flock($fh, LOCK_UN);
+    fclose($fh);
+    echo json_encode(['ok' => true, 'date' => $target, 'conserve' => true,
+        'motif' => 'aucune ligne de log pour cette date (rétention hébergeur) — historique inchangé'],
+        JSON_UNESCAPED_UNICODE);
+    exit;
+}
 $hist['days'][$target] = $day + ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
 ksort($hist['days']);
 // Historique ILLIMITÉ (owner, 17/08/2026) : aucune purge — l'archive court depuis la V1 du site.
