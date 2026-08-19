@@ -107,6 +107,11 @@
     .sec-h { break-before: auto; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
+  .catnav { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+  .catnav button { background: var(--bg2); border: 1px solid var(--line); border-radius: 99px;
+    color: var(--fg1); font: 600 13px Manrope, sans-serif; padding: 8px 16px; cursor: pointer; }
+  .catnav button:hover { border-color: var(--accent); color: var(--fg0); }
+  .catnav button.on { background: rgba(0, 229, 255, .12); border-color: var(--accent); color: var(--accent); }
   .secnav { position: sticky; top: 0; z-index: 20; display: flex; gap: 6px; flex-wrap: wrap;
     background: rgba(10, 15, 28, .92); backdrop-filter: blur(8px); border: 1px solid var(--line);
     border-radius: 12px; padding: 8px 10px; margin: 0 0 16px; }
@@ -136,6 +141,8 @@
       </div>
     </div>
   </div>
+
+  <nav class="catnav" id="catnav"></nav>
 
   <div class="bar" id="timebar">
     <span class="mono">Période</span>
@@ -272,6 +279,15 @@
     </div>
   </div>
 
+  <div class="sec-h" id="r-github" hidden><h2>Dépôt GitHub</h2><span>consultations et clones du code public</span></div>
+  <div class="grid" id="gh-cards" hidden></div>
+  <div class="chart-head" id="gh-head" hidden><h2 id="h-gh">Consultations et clones</h2></div>
+  <div class="chart" id="gh-chart" hidden><div class="legend" id="gh-legend"></div><svg id="c-gh"></svg></div>
+  <div class="cols" id="gh-cols" hidden>
+    <div><h3>Pages les plus vues</h3><table id="t-ghpages"><tbody></tbody></table></div>
+    <div><h3>Sites référents</h3><table id="t-ghrefs"><tbody></tbody></table></div>
+  </div>
+
   <div class="sec-h" id="r-contenu"><h2>Contenu et provenance</h2><span>pages lues, campagnes, référents, profils</span></div>
   <div class="cols">
     <div>
@@ -330,6 +346,66 @@
   const D = hist.days;
   const first = allDays[0], lastDay = allDays.at(-1);
   $('from').min = first; $('from').max = lastDay; $('to').min = first; $('to').max = lastDay;
+
+  // ── Catégories : une vue = un périmètre du site OU un réseau ──────────────
+  // Elles ne s'affichent que si la donnée existe : inutile de proposer
+  // « Boutique » à un site qui n'en a pas, ou « Instagram » sans compte relié.
+  let cat = 'tout';
+  const aDonnee = (fn) => allDays.some((d) => fn(D[d]));
+  const CATS = () => {
+    const l = [['tout', 'Tout']];
+    const peris = [...new Set(allDays.flatMap((d) => Object.keys(D[d].perimetres || {})))];
+    const NOMS = { vitrine: 'Site', site: 'Site', forum: 'Forum', boutique: 'Boutique' };
+    if (peris.length > 1) peris.forEach((p) => l.push(['peri:' + p, NOMS[p] || p.charAt(0).toUpperCase() + p.slice(1)]));
+    else l.push(['site', 'Site']);
+    if (aDonnee((v) => (v.fb?.vues ?? 0) || (v.fb?.abonnes ?? 0))) l.push(['facebook', 'Facebook']);
+    if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
+    if (aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0))) l.push(['github', 'GitHub']);
+    if (aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null)) l.push(['youtube', 'YouTube']);
+    return l;
+  };
+
+  // Quelles rubriques appartiennent à quelle catégorie.
+  const RUBRIQUES = {
+    site: ['r-site', 'r-ia', 'r-agent', 'r-contenu', 'r-parcours'],
+    reseaux: ['r-reseaux'],
+    github: ['r-github'],
+  };
+  function appliqueCategorie() {
+    const estReseau = ['facebook', 'instagram', 'github', 'youtube'].includes(cat);
+    const montre = (ids, oui) => ids.forEach((id) => {
+      const t = $(id);
+      if (!t) return;
+      let n = t.closest('.sec-h') || t;
+      // la rubrique = son titre + tout ce qui suit jusqu'au titre suivant
+      for (let e = n; e; e = e.nextElementSibling) {
+        if (e !== n && e.classList.contains('sec-h')) break;
+        e.hidden = !oui;
+      }
+    });
+    montre(RUBRIQUES.site, cat === 'tout' || !estReseau);
+    montre(RUBRIQUES.reseaux, cat === 'tout' || cat === 'facebook' || cat === 'instagram');
+    montre(RUBRIQUES.github, cat === 'tout' || cat === 'github');
+    // Un réseau choisi pilote aussi les sélecteurs des graphes sociaux.
+    if (cat === 'facebook' || cat === 'instagram') {
+      const r = cat === 'facebook' ? 'fb' : 'ig';
+      if ($('soc-net')) $('soc-net').value = r;
+      if ($('posts-net')) $('posts-net').value = r;
+    }
+    // Le résumé, les cartes et la barre de temps restent visibles partout.
+  }
+  function renderCatnav() {
+    $('catnav').innerHTML = CATS().map(([k, lib]) =>
+      `<button data-cat="${k}" class="${cat === k ? 'on' : ''}">${lib}</button>`).join('');
+    $('catnav').querySelectorAll('button').forEach((b) => b.addEventListener('click', () => {
+      cat = b.dataset.cat;
+      // Le filtre de périmètre ne survit PAS à un changement de catégorie :
+      // rester sur « forum » en consultant Facebook fausserait les cartes du haut.
+      filters = filters.filter((f) => f.type !== 'peri');
+      if (cat.startsWith('peri:')) filters.push({ type: 'peri', value: cat.slice(5) });
+      render();
+    }));
+  }
 
   // ── état : période + filtres (façon ELK) ──
   let range = { from: null, to: null, quick: '30' };
@@ -997,6 +1073,33 @@
         : '<tr><td colspan="4" class="mono">aucun compte Instagram relié</td></tr>';
     }
 
+    // ── Dépôt GitHub : le code public a son propre public ────────────────
+    {
+      const gvues = sumKey(sel, (v) => v.github?.vues ?? 0);
+      const gclones = sumKey(sel, (v) => v.github?.clones ?? 0);
+      const dispo = gvues || gclones || allDays.some((d) => D[d].github);
+      ['r-github', 'gh-cards', 'gh-head', 'gh-chart', 'gh-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const dernier = [...sel].reverse().map((d) => D[d].github).find((g) => g && (g.pages || []).length) || {};
+        $('gh-cards').innerHTML = [
+          ['Consultations du dépôt', fmt(gvues), `<span class="flat">${fmt(sumKey(sel, (v) => v.github?.visiteurs ?? 0))} visiteur(s) unique(s)</span>`],
+          ['Clones', fmt(gclones), `<span class="flat">${fmt(sumKey(sel, (v) => v.github?.cloneurs ?? 0))} cloneur(s) unique(s)</span>`],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+        const gs = [
+          { label: 'Consultations', color: COLORS[0], pts: bkSum(bk, (v) => v.github?.vues ?? 0) },
+          { label: 'Clones (axe droit)', color: COLORS[1], axis: 'right', pts: bkSum(bk, (v) => v.github?.clones ?? 0) },
+        ];
+        $('h-gh').textContent = `Consultations et clones — par ${bk.mode}`;
+        $('gh-legend').innerHTML = gs.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        drawChart('c-gh', bk, gs);
+        const ligne = (l) => l.length
+          ? l.map((x) => `<tr><td>${x.nom}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.uniques)}</td></tr>`).join('')
+          : '<tr><td colspan="3" class="mono">—</td></tr>';
+        document.querySelector('#t-ghpages tbody').innerHTML = ligne(dernier.pages || []);
+        document.querySelector('#t-ghrefs tbody').innerHTML = ligne(dernier.referents || []);
+      }
+    }
+
     // ── Provenance IA : la section GEO (être LU par les robots ne sert que si
     //    des humains ARRIVENT ensuite depuis la réponse de l'assistant) ──────
     {
@@ -1090,6 +1193,9 @@
         ? iaEntry.map(([pg, k]) => `<tr><td>${pg}</td><td class="num">${fmt(k)}</td></tr>`).join('')
         : '<tr><td colspan="2" class="mono">—</td></tr>';
     }
+
+    renderCatnav();
+    appliqueCategorie();
 
     document.querySelectorAll('#timebar button[data-r]').forEach((btn) =>
       btn.classList.toggle('on', btn.dataset.r === range.quick));

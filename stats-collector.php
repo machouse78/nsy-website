@@ -511,6 +511,61 @@ foreach (is_array($js) ? $js : [] as $slug => $v) {
     ];
 }
 
+
+// ── 3 bis. Trafic du dépôt GitHub (dépôt PUBLIC uniquement) ──────────────────
+// GitHub ne conserve que 14 JOURS de statistiques de fréquentation : les
+// historiser ici est le seul moyen d'avoir de la profondeur. L'API renvoie
+// justement ces 14 jours détaillés, donc un rattrapage fonctionne sur cette
+// fenêtre — au-delà, la donnée est définitivement perdue côté GitHub.
+// Jeton : fine-grained, un seul dépôt, « Administration: Read-only » (vérifié).
+$github = null;
+$ghTok = (string) ($cfg['github_token'] ?? '');
+$ghRepo = (string) ($cfg['github_repo'] ?? '');
+if ($ghTok !== '' && !str_starts_with($ghTok, 'CHANGE_ME') && $ghRepo !== '') {
+    $ghGet = static function (string $chemin) use ($ghRepo, $ghTok) {
+        $ch = curl_init("https://api.github.com/repos/$ghRepo/$chemin");
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_HTTPHEADER => ["Authorization: Bearer $ghTok", 'Accept: application/vnd.github+json',
+                                   'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: nsy-kpi'],
+        ]);
+        $raw = curl_exec($ch);
+        $j = is_string($raw) ? json_decode($raw, true) : null;
+        return is_array($j) ? $j : [];
+    };
+    $jourDe = static function (array $rep, string $cle, string $date): ?array {
+        foreach ($rep[$cle] ?? [] as $e) {
+            if (substr((string) ($e['timestamp'] ?? ''), 0, 10) === $date) return $e;
+        }
+        return null;
+    };
+    $vues = $ghGet('traffic/views');
+    $clones = $ghGet('traffic/clones');
+    $ev = $jourDe($vues, 'views', $target);
+    $ec = $jourDe($clones, 'clones', $target);
+    if ($ev !== null || $ec !== null) {
+        // Pages et référents sont des CUMULS sur 14 jours, pas des valeurs du
+        // jour : on les garde comme instantané, le dashboard n'affiche que le
+        // plus récent (même convention que les publications Facebook).
+        $top = static function (array $l, string $cle, int $n = 5): array {
+            $o = [];
+            foreach (array_slice($l, 0, $n) as $e) {
+                $o[] = ['nom' => (string) ($e[$cle] ?? ''), 'vues' => (int) ($e['count'] ?? 0),
+                        'uniques' => (int) ($e['uniques'] ?? 0)];
+            }
+            return $o;
+        };
+        $github = [
+            'vues'       => (int) ($ev['count'] ?? 0),
+            'visiteurs'  => (int) ($ev['uniques'] ?? 0),
+            'clones'     => (int) ($ec['count'] ?? 0),
+            'cloneurs'   => (int) ($ec['uniques'] ?? 0),
+            'pages'      => $top($ghGet('traffic/popular/paths'), 'path'),
+            'referents'  => $top($ghGet('traffic/popular/referrers'), 'referrer'),
+        ];
+    }
+}
+
 // ── Historisation (idempotente, avec verrou) ─────────────────────────────────
 $histFile = __DIR__ . '/_secret/kpi-history.json';
 $fh = fopen($histFile, 'c+');
@@ -529,7 +584,9 @@ if (($day['hits'] ?? 0) === 0) {
         JSON_UNESCAPED_UNICODE);
     exit;
 }
-$hist['days'][$target] = $day + ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
+$extra = ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
+if ($github !== null) $extra['github'] = $github;
+$hist['days'][$target] = $day + $extra;
 ksort($hist['days']);
 // Historique ILLIMITÉ (owner, 17/08/2026) : aucune purge — l'archive court depuis la V1 du site.
 ftruncate($fh, 0);
