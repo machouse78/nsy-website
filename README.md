@@ -92,7 +92,11 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
   buckets jour/semaine/mois, comparaison N-1) + **filtres** (pills cliquables,
   barre de requête `bot:` `page:` `referral:` `ia:`, métrique au choix, séries
-  superposées). Collecté chaque matin à J-1 par `stats-collector.php` (tâche
+  superposées), **rubriques Dépôt GitHub** (consultations, clones, pages et
+  référents du code public) et **Chaîne YouTube** (vues, abonnés, vidéos —
+  l'API ne publiant que des cumuls, les gains sont calculés d'une collecte à
+  l'autre), toutes deux **facultatives** : sans clé, la rubrique et son onglet
+  disparaissent. Collecté chaque matin à J-1 par `stats-collector.php` (tâche
   planifiée Infomaniak) depuis les access logs et l'API Graph, historique JSON
   **illimité, alimenté UNIQUEMENT par les logs** (jamais d'export AWStats :
   bots inclus, échelle faussée), **aucune donnée personnelle**
@@ -212,7 +216,7 @@ nsy-website/
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
 ├── antispam.php                         # Filtre anti-spam partagé (contact + faisabilité)
-├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + compteurs) → _secret/kpi-history.json
+├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + trafic GitHub + chaîne YouTube + compteurs) → _secret/kpi-history.json
 ├── stats/                               # Dashboard KPI privé (Basic Auth) — cartes, courbes SVG, tables (index.html + data.php)
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)

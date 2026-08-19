@@ -15,6 +15,8 @@
  *   2. API Graph Facebook — abonnés de la Page + engagement des derniers posts
  *      (jeton de PAGE dans _secret/kpi.php, jamais affiché).
  *   3. Compteurs du journal (_secret/journal-stats.json).
+ *   4. Trafic du dépôt GitHub public et chaîne YouTube (clés dans _secret/kpi.php,
+ *      les deux facultatives : absentes, la rubrique disparaît du dashboard).
  *
  * Sortie : _secret/kpi-history.json (une entrée par jour, idempotent).
  * Le dashboard /stats/ (Basic Auth) lit cet historique via stats/data.php.
@@ -519,6 +521,7 @@ foreach (is_array($js) ? $js : [] as $slug => $v) {
 // fenêtre — au-delà, la donnée est définitivement perdue côté GitHub.
 // Jeton : fine-grained, un seul dépôt, « Administration: Read-only » (vérifié).
 $github = null;
+$ghSerie = [];   // les 14 jours renvoyés par l'API, pour combler les trous
 $ghTok = (string) ($cfg['github_token'] ?? '');
 $ghRepo = (string) ($cfg['github_repo'] ?? '');
 if ($ghTok !== '' && !str_starts_with($ghTok, 'CHANGE_ME') && $ghRepo !== '') {
@@ -541,6 +544,17 @@ if ($ghTok !== '' && !str_starts_with($ghTok, 'CHANGE_ME') && $ghRepo !== '') {
     };
     $vues = $ghGet('traffic/views');
     $clones = $ghGet('traffic/clones');
+    // GitHub publie une journée avec un peu de retard : la collecte de J-1 la
+    // trouve parfois absente, et passé 14 jours elle est perdue pour toujours.
+    // On mémorise donc TOUTE la fenêtre pour reboucher l'historique plus bas.
+    foreach ([['views', 'vues', 'visiteurs'], ['clones', 'clones', 'cloneurs']] as [$cle, $nb, $uniq]) {
+        foreach (($cle === 'views' ? $vues : $clones)[$cle] ?? [] as $e) {
+            $j = substr((string) ($e['timestamp'] ?? ''), 0, 10);
+            if ($j === '') continue;
+            $ghSerie[$j][$nb] = (int) ($e['count'] ?? 0);
+            $ghSerie[$j][$uniq] = (int) ($e['uniques'] ?? 0);
+        }
+    }
     $ev = $jourDe($vues, 'views', $target);
     $ec = $jourDe($clones, 'clones', $target);
     if ($ev !== null || $ec !== null) {
@@ -566,6 +580,81 @@ if ($ghTok !== '' && !str_starts_with($ghTok, 'CHANGE_ME') && $ghRepo !== '') {
     }
 }
 
+// ── 3 ter. Chaîne YouTube (API Data v3, données PUBLIQUES) ───────────────────
+// ⚠️ Nature de la donnée : l'API Data ne renvoie que des CUMULS depuis la
+// création (abonnés, vues de la chaîne, vues de chaque vidéo) — jamais une
+// valeur journalière. La courbe quotidienne se reconstitue donc côté dashboard
+// par différence entre deux collectes. Conséquence directe : un RATTRAPAGE est
+// interdit ici, il écrirait le cumul d'aujourd'hui sur une date passée et
+// écraserait toutes les variations. D'où le garde-fou ci-dessous.
+// Le vrai journalier existe (API YouTube Analytics) mais impose un parcours
+// OAuth avec jeton à rafraîchir : disproportionné pour ces quelques chiffres.
+// Coût : 3 unités par collecte sur un quota gratuit de 10 000 par jour.
+$youtube = null;
+$ytKey = (string) ($cfg['youtube_key'] ?? '');
+$ytRecent = $target >= date('Y-m-d', strtotime('-2 days'));
+if ($ytKey !== '' && !str_starts_with($ytKey, 'CHANGE_ME') && $ytRecent) {
+    $ytGet = static function (string $ressource, array $params) use ($ytKey) {
+        $params['key'] = $ytKey;
+        $ch = curl_init('https://www.googleapis.com/youtube/v3/' . $ressource . '?' . http_build_query($params));
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5]);
+        $raw = curl_exec($ch);
+        $j = is_string($raw) ? json_decode($raw, true) : null;
+        return is_array($j) && !isset($j['error']) ? $j : [];
+    };
+    // L'identifiant de chaîne est résolu depuis le handle (@nom) et RECOPIÉ dans
+    // la config une fois connu — sinon on paierait la résolution à chaque fois.
+    $ytId = (string) ($cfg['youtube_channel'] ?? '');
+    $ytHandle = ltrim((string) ($cfg['youtube_handle'] ?? ''), '@');
+    if ($ytId === '' && $ytHandle !== '') {
+        $r = $ytGet('channels', ['part' => 'id', 'forHandle' => '@' . $ytHandle]);
+        $ytId = (string) ($r['items'][0]['id'] ?? '');
+    }
+    if ($ytId !== '') {
+        $ch = $ytGet('channels', ['part' => 'snippet,statistics,contentDetails', 'id' => $ytId]);
+        $it = $ch['items'][0] ?? null;
+        if ($it !== null) {
+            $st = $it['statistics'] ?? [];
+            $youtube = [
+                'id'       => $ytId,
+                'nom'      => (string) ($it['snippet']['title'] ?? ''),
+                'url'      => 'https://www.youtube.com/' . ($ytHandle !== '' ? '@' . $ytHandle : 'channel/' . $ytId),
+                // hiddenSubscriberCount : le compte d'abonnés peut être masqué par
+                // le propriétaire — on distingue alors « masqué » (null) de « zéro ».
+                'abonnes'  => empty($st['hiddenSubscriberCount']) && isset($st['subscriberCount'])
+                    ? (int) $st['subscriberCount'] : null,
+                'vues'     => (int) ($st['viewCount'] ?? 0),
+                'videos'   => (int) ($st['videoCount'] ?? 0),
+                'derniers' => [],
+            ];
+            $up = (string) ($it['contentDetails']['relatedPlaylists']['uploads'] ?? '');
+            if ($up !== '') {
+                $pl = $ytGet('playlistItems', ['part' => 'contentDetails', 'playlistId' => $up, 'maxResults' => '10']);
+                $ids = [];
+                foreach ($pl['items'] ?? [] as $p) {
+                    $v = (string) ($p['contentDetails']['videoId'] ?? '');
+                    if ($v !== '') $ids[] = $v;
+                }
+                if ($ids) {
+                    $vd = $ytGet('videos', ['part' => 'snippet,statistics', 'id' => implode(',', $ids)]);
+                    foreach ($vd['items'] ?? [] as $v) {
+                        $vs = $v['statistics'] ?? [];
+                        $youtube['derniers'][] = [
+                            'id'            => (string) ($v['id'] ?? ''),
+                            'date'          => substr((string) ($v['snippet']['publishedAt'] ?? ''), 0, 10),
+                            'titre'         => mb_substr(trim((string) ($v['snippet']['title'] ?? '')), 0, 70),
+                            'url'           => 'https://www.youtube.com/watch?v=' . ($v['id'] ?? ''),
+                            'vues'          => (int) ($vs['viewCount'] ?? 0),
+                            'likes'         => (int) ($vs['likeCount'] ?? 0),
+                            'commentaires'  => (int) ($vs['commentCount'] ?? 0),
+                        ];
+                    }
+                }
+            }
+        }
+    }
+}
+
 // ── Historisation (idempotente, avec verrou) ─────────────────────────────────
 $histFile = __DIR__ . '/_secret/kpi-history.json';
 $fh = fopen($histFile, 'c+');
@@ -585,8 +674,21 @@ if (($day['hits'] ?? 0) === 0) {
     exit;
 }
 $extra = ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
-if ($github !== null) $extra['github'] = $github;
+// L'écriture REMPLACE l'entrée du jour : sans ce report, relancer une date déjà
+// collectée effacerait les blocs qui n'ont pas pu être recollectés (GitHub hors
+// de sa fenêtre de 14 jours, YouTube volontairement muet en rattrapage).
+foreach (['github' => $github, 'youtube' => $youtube] as $cle => $frais) {
+    $v = $frais ?? ($hist['days'][$target][$cle] ?? null);
+    if ($v !== null) $extra[$cle] = $v;
+}
 $hist['days'][$target] = $day + $extra;
+// Rebouchage GitHub : on ne remplit que les journées DÉJÀ présentes (jamais on
+// n'invente un jour) et seulement si leur bloc manque — un bloc existant porte
+// en plus les pages et référents, qu'on n'écraserait pas par des compteurs nus.
+foreach ($ghSerie as $j => $c) {
+    if (!isset($hist['days'][$j]) || isset($hist['days'][$j]['github'])) continue;
+    $hist['days'][$j]['github'] = $c + ['vues' => 0, 'visiteurs' => 0, 'clones' => 0, 'cloneurs' => 0];
+}
 ksort($hist['days']);
 // Historique ILLIMITÉ (owner, 17/08/2026) : aucune purge — l'archive court depuis la V1 du site.
 ftruncate($fh, 0);

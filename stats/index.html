@@ -177,6 +177,8 @@
     <a href="#r-ia">Provenance IA</a>
     <a href="#r-agent">Agent conversationnel</a>
     <a href="#r-reseaux">Réseaux sociaux</a>
+    <a href="#r-github" id="nav-github" hidden>Dépôt GitHub</a>
+    <a href="#r-youtube" id="nav-youtube" hidden>Chaîne YouTube</a>
     <a href="#r-contenu">Contenu</a>
     <a href="#r-parcours">Parcours</a>
   </nav>
@@ -288,6 +290,19 @@
     <div><h3>Sites référents</h3><table id="t-ghrefs"><tbody></tbody></table></div>
   </div>
 
+  <div class="sec-h" id="r-youtube" hidden><h2>Chaîne YouTube</h2><span>audience de la chaîne et des vidéos</span></div>
+  <div class="grid" id="yt-cards" hidden></div>
+  <div class="chart-head" id="yt-head" hidden><h2 id="h-yt">Vues et abonnés gagnés</h2></div>
+  <div class="chart" id="yt-chart" hidden><div class="legend" id="yt-legend"></div><svg id="c-yt"></svg></div>
+  <div class="note" id="yt-note" hidden></div>
+  <div class="cols" id="yt-cols" hidden>
+    <div>
+      <h3>Vidéos de la chaîne</h3>
+      <table id="t-ytvideos"><thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div></div>
+  </div>
+
   <div class="sec-h" id="r-contenu"><h2>Contenu et provenance</h2><span>pages lues, campagnes, référents, profils</span></div>
   <div class="cols">
     <div>
@@ -370,6 +385,7 @@
     site: ['r-site', 'r-ia', 'r-agent', 'r-contenu', 'r-parcours'],
     reseaux: ['r-reseaux'],
     github: ['r-github'],
+    youtube: ['r-youtube'],
   };
   function appliqueCategorie() {
     const estReseau = ['facebook', 'instagram', 'github', 'youtube'].includes(cat);
@@ -386,6 +402,7 @@
     montre(RUBRIQUES.site, cat === 'tout' || !estReseau);
     montre(RUBRIQUES.reseaux, cat === 'tout' || cat === 'facebook' || cat === 'instagram');
     montre(RUBRIQUES.github, cat === 'tout' || cat === 'github');
+    montre(RUBRIQUES.youtube, cat === 'tout' || cat === 'youtube');
     // Un réseau choisi pilote aussi les sélecteurs des graphes sociaux.
     if (cat === 'facebook' || cat === 'instagram') {
       const r = cat === 'facebook' ? 'fb' : 'ig';
@@ -1078,7 +1095,7 @@
       const gvues = sumKey(sel, (v) => v.github?.vues ?? 0);
       const gclones = sumKey(sel, (v) => v.github?.clones ?? 0);
       const dispo = gvues || gclones || allDays.some((d) => D[d].github);
-      ['r-github', 'gh-cards', 'gh-head', 'gh-chart', 'gh-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-github', 'gh-cards', 'gh-head', 'gh-chart', 'gh-cols', 'nav-github'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const dernier = [...sel].reverse().map((d) => D[d].github).find((g) => g && (g.pages || []).length) || {};
         $('gh-cards').innerHTML = [
@@ -1097,6 +1114,62 @@
           : '<tr><td colspan="3" class="mono">—</td></tr>';
         document.querySelector('#t-ghpages tbody').innerHTML = ligne(dernier.pages || []);
         document.querySelector('#t-ghrefs tbody').innerHTML = ligne(dernier.referents || []);
+      }
+    }
+
+    // ── Chaîne YouTube ───────────────────────────────────────────────────
+    // ⚠️ L'API YouTube ne renvoie QUE des cumuls depuis la création de la
+    // chaîne. Le journalier n'existe pas : on le reconstitue par différence
+    // entre deux collectes successives. Conséquences assumées :
+    //  · le premier jour d'historique vaut 0 (aucun point de comparaison) ;
+    //  · un jour sans collecte reporte son gain sur la collecte suivante.
+    {
+      const jrs = allDays.filter((d) => D[d].youtube);
+      const dispo = jrs.length > 0;
+      ['r-youtube', 'yt-cards', 'yt-head', 'yt-chart', 'yt-note', 'yt-cols', 'nav-youtube'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const gains = {};
+        let pv = null, pa = null;
+        for (const d of jrs) {
+          const y = D[d].youtube;
+          gains[d] = {
+            // Un cumul ne peut pas décroître : une baisse signalerait une anomalie
+            // d'API, on la neutralise plutôt que d'afficher un gain négatif.
+            vues: pv == null ? 0 : Math.max(0, (y.vues ?? 0) - pv),
+            // Les abonnés, eux, peuvent bel et bien baisser : on garde le signe.
+            abonnes: (pa == null || y.abonnes == null) ? 0 : y.abonnes - pa,
+          };
+          if (y.vues != null) pv = y.vues;
+          if (y.abonnes != null) pa = y.abonnes;
+        }
+        const somme = (jours, cle) => jours.reduce((a, d) => a + (gains[d]?.[cle] ?? 0), 0);
+        const etat = [...sel].reverse().map((d) => D[d].youtube).find(Boolean)
+          || D[jrs.at(-1)].youtube;
+        const gVues = somme(sel, 'vues'), gAb = somme(sel, 'abonnes');
+        // Tant qu'il n'y a qu'un relevé, une « variation » de 0 serait trompeuse :
+        // il n'y a pas de gain nul, il n'y a pas encore de terme de comparaison.
+        const amorce = jrs.length < 2;
+        const signe = (n) => amorce ? 'premier relevé' : ((n > 0 ? '+' : '') + fmt(n) + ' sur la période');
+
+        $('yt-cards').innerHTML = [
+          ['Vues de la chaîne', fmt(etat.vues), `<span class="flat">${signe(gVues)}</span>`],
+          ['Abonnés', etat.abonnes == null ? '—' : fmt(etat.abonnes),
+            etat.abonnes == null ? '<span class="flat">compteur masqué</span>' : `<span class="flat">${signe(gAb)}</span>`],
+          ['Vidéos publiées', fmt(etat.videos), `<span class="flat"><a href="${etat.url}" target="_blank" rel="noopener">${etat.nom || 'la chaîne'}</a></span>`],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+        const ys = [
+          { label: 'Vues gagnées', color: COLORS[0], pts: bk.keys.map((k) => somme(bk.map.get(k), 'vues')) },
+          { label: 'Abonnés gagnés (axe droit)', color: COLORS[1], axis: 'right', pts: bk.keys.map((k) => somme(bk.map.get(k), 'abonnes')) },
+        ];
+        $('h-yt').textContent = `Vues et abonnés gagnés — par ${bk.mode}`;
+        $('yt-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        drawChart('c-yt', bk, ys);
+        $('yt-note').textContent = `YouTube ne publie que des totaux cumulés : ces gains sont calculés d'une collecte à l'autre, depuis le ${dFmt(jrs[0])}. Les vues des vidéos ci-dessous sont, elles, des cumuls depuis leur mise en ligne.`;
+
+        document.querySelector('#t-ytvideos tbody').innerHTML = (etat.derniers || []).length
+          ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 45)}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
+          : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
       }
     }
 

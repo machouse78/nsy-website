@@ -130,3 +130,21 @@ deploy/_secret/.htpasswd
 skills/
 reseaux/
 SEO-GEO-LLMO.md
+
+# ── Filet de sécurité _secret/ (19/08/2026) ──────────────────────────────────
+# Les règles ci-dessus nomment les secrets UN PAR UN : chaque nouveau fichier
+# déposé dans _secret/ échappait donc au filtre jusqu'à ce qu'on y pense (vécu :
+# _secret/antispam-rules.php, sorti du dépôt public puis resté suivable).
+# On inverse la logique : tout est privé SAUF les modèles et le .htaccess.
+_secret/*
+!_secret/.htaccess
+!_secret/*.example
+deploy/_secret/*
+!deploy/_secret/.htaccess
+!deploy/_secret/*.example
+
+# Espace de travail local de Claude Code : worktrees (des copies COMPLÈTES du
+# dépôt) et launch.json pointant vers un répertoire temporaire de la machine.
+# Rien de tout cela n'a de sens pour un autre poste — et un « git add . »
+# distrait y embarquerait le dépôt entier.
+.claude/
