@@ -222,6 +222,8 @@
   <div class="sec-h" id="r-ia"><h2>Provenance IA</h2><span>les visites venues d'une réponse d'assistant</span></div>
   <div class="grid" id="ia-cards"></div>
   <div class="note" id="ia-note"></div>
+  <h3>Robots IA venus lire le site <span class="mono">(clic = filtre)</span></h3>
+  <div id="ai-pills"></div>
 
   <div class="chart-head"><h2 id="h-ia">Visites depuis les IA — par assistant</h2></div>
   <div class="chart"><div class="legend" id="ia-legend"></div><svg id="c-ia"></svg></div>
@@ -231,6 +233,8 @@
 
   <div class="cols">
     <div>
+      <h3>Provenance — assistants IA <span class="mono">(clic = filtre)</span></h3>
+      <table id="t-refia"><thead><tr><th>Assistant</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
       <h3>Pages citées par les IA <span class="mono">(⊕ = filtre)</span></h3>
       <table id="t-iapages"><thead><tr><th>Page d'atterrissage</th><th>Assistants</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
     </div>
@@ -274,7 +278,7 @@
   <div class="cols">
     <div>
       <h3>Facebook — publications</h3>
-      <table id="t-fbposts"><thead><tr><th>Publication</th><th class="num">Vues</th><th class="num">Clics</th><th class="num">👍</th></tr></thead><tbody></tbody></table>
+      <table id="t-fbposts"><thead><tr><th>Publication</th><th class="num">Vues</th><th class="num">Clics</th><th class="num">👍</th><th class="num">💬</th><th class="num">↗</th></tr></thead><tbody></tbody></table>
     </div>
     <div>
       <h3 id="h-igposts">Instagram — publications</h3>
@@ -317,6 +321,7 @@
   <div class="grid" id="fo-cards" hidden></div>
   <div class="chart-head" id="fo-head" hidden><h2 id="h-fo">Activité du forum</h2></div>
   <div class="chart" id="fo-chart" hidden><div class="legend" id="fo-legend"></div><svg id="c-fo"></svg></div>
+  <div class="note" id="fo-note" hidden></div>
   <div class="cols" id="fo-cols" hidden>
     <div><h3>Forums les plus actifs</h3><table id="t-foforums"><tbody></tbody></table></div>
     <div>
@@ -329,6 +334,7 @@
   <div class="grid" id="bo-cards" hidden></div>
   <div class="chart-head" id="bo-head" hidden><h2 id="h-bo">Commandes et chiffre d'affaires</h2></div>
   <div class="chart" id="bo-chart" hidden><div class="legend" id="bo-legend"></div><svg id="c-bo"></svg></div>
+  <div class="note" id="bo-note" hidden></div>
   <div class="cols" id="bo-cols" hidden>
     <div>
       <h3>Meilleures ventes <span class="mono">(30 jours)</span></h3>
@@ -340,20 +346,14 @@
   <div class="sec-h" id="r-contenu"><h2>Contenu et provenance</h2><span>pages lues, campagnes, référents, profils</span></div>
   <div class="cols">
     <div>
-      <h2>Robots IA — période <span class="mono">(clic = filtre)</span></h2>
-      <div id="ai-pills"></div>
       <h2>Top pages — période <span class="mono">(⊕ = filtre)</span></h2>
       <table id="t-pages"><thead><tr><th>Page</th><th class="num">Vues</th></tr></thead><tbody></tbody></table>
-      <h2>Provenance — assistants IA <span class="mono">(clic = filtre)</span></h2>
-      <table id="t-refia"><thead><tr><th>Assistant</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
       <h2>Campagnes UTM <span class="mono">(source / support / campagne)</span></h2>
       <table id="t-camp"><thead><tr><th>Campagne</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
       <h2>Provenance — référents externes</h2>
       <table id="t-refh"><thead><tr><th>Site d'origine</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
     </div>
     <div>
-      <h2>Facebook — derniers posts</h2>
-      <table id="t-fb"><thead><tr><th>Post</th><th class="num">👍</th><th class="num">💬</th><th class="num">↗</th></tr></thead><tbody></tbody></table>
       <h2>Articles du journal (cumul site)</h2>
       <table id="t-journal"><thead><tr><th>Article</th><th class="num">Vues</th><th class="num">❤</th></tr></thead><tbody></tbody></table>
       <h2>Profils des visiteurs</h2>
@@ -400,6 +400,10 @@
   // Elles ne s'affichent que si la donnée existe : inutile de proposer
   // « Boutique » à un site qui n'en a pas, ou « Instagram » sans compte relié.
   let cat = 'tout';
+  // Périmètre applicatif (forum, boutique) : tout ce qui n'est pas ventilé
+  // par périmètre doit disparaître — sinon on lit des chiffres du site
+  // en croyant lire ceux de l'application (owner, 18/08/2026).
+  const periApp = () => cat.startsWith('peri:') && !['vitrine', 'site', 'tout'].includes(cat.slice(5));
   const aDonnee = (fn) => allDays.some((d) => fn(D[d]));
   const CATS = () => {
     const l = [['tout', 'Tout']];
@@ -799,36 +803,48 @@
     const lastFb = [...sel].reverse().map((d) => D[d].fb?.abonnes).find((v) => v != null);
 
     const pageF = fOf('page'), botF = fOf('bot');
+    // Chaque carte porte sa FAMILLE : `peri` = ventilé par périmètre (donc juste
+    // sous « Forum » ou « Boutique »), `site` = global au domaine, `fb`/`ig` =
+    // réseaux. Sans ce tri, choisir « Boutique » affichait les abonnés Facebook
+    // et les erreurs 404 du domaine au-dessus des chiffres de la boutique
+    // (owner, 18/08/2026 : « on a toujours toutes les données du site »).
     const cards = [
-      ['Visiteurs · période', fmt(sumKey(sel, vVis)), cmp ? delta(sumKey(sel, vVis), sumKey(cmp, vVis)) : ''],
-      [pageF ? `Pages vues · ${pageF}` : 'Pages vues · période', fmt(sumKey(sel, vPages)), cmp ? delta(sumKey(sel, vPages), sumKey(cmp, vPages)) : ''],
-      [botF ? `Lectures IA · ${botF}` : 'Lectures IA · période', fmt(sumKey(sel, vAI)), cmp ? delta(sumKey(sel, vAI), sumKey(cmp, vAI)) : ''],
-      ['Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, vVis) / sel.length)), ''],
-      ['Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
-      ['Vues de la Page Facebook', fmt(sumKey(sel, (v) => v.fb?.vues ?? 0)),
+      ['peri', 'Visiteurs · période', fmt(sumKey(sel, vVis)), cmp ? delta(sumKey(sel, vVis), sumKey(cmp, vVis)) : ''],
+      ['peri', pageF ? `Pages vues · ${pageF}` : 'Pages vues · période', fmt(sumKey(sel, vPages)), cmp ? delta(sumKey(sel, vPages), sumKey(cmp, vPages)) : ''],
+      ['peri', botF ? `Lectures IA · ${botF}` : 'Lectures IA · période', fmt(sumKey(sel, vAI)), cmp ? delta(sumKey(sel, vAI), sumKey(cmp, vAI)) : ''],
+      ['peri', 'Visiteurs / jour (moy.)', fmt(Math.round(sumKey(sel, vVis) / sel.length)), ''],
+      ['fb', 'Abonnés Facebook', fmt(lastFb), delta(lastFb, firstFb)],
+      ['fb', 'Vues de la Page Facebook', fmt(sumKey(sel, (v) => v.fb?.vues ?? 0)),
         cmp ? delta(sumKey(sel, (v) => v.fb?.vues ?? 0), sumKey(cmp, (v) => v.fb?.vues ?? 0)) : ''],
-      ['Engagements sur la Page', fmt(sumKey(sel, (v) => v.fb?.engagements ?? 0)),
+      ['fb', 'Engagements sur la Page', fmt(sumKey(sel, (v) => v.fb?.engagements ?? 0)),
         `<span class="flat">${fmt(sumKey(sel, (v) => v.fb?.reactions ?? 0))} réaction(s)</span>`],
-      ['Conversations Ansley', fmt(sumKey(sel, (v) => v.chat_calls ?? 0)), ''],
-      ['llms.txt lus', fmt(sumKey(sel, (v) => v.llms_hits ?? 0)), ''],
-      [fOf('ia') ? `Visites depuis ${fOf('ia')}` : 'Visites venues des IA', fmt(sumKey(sel, vRefIa)), ''],
-      ['Visites venues de Facebook', fmt(sumKey(sel, (v) => vRef(v, 'facebook'))), ''],
-      ['Visites venues de LinkedIn', fmt(sumKey(sel, (v) => vRef(v, 'linkedin'))), ''],
-      ['Erreurs 404 (bruit scanners)', fmt(sumKey(sel, (v) => v.status?.['404'] ?? 0)), ''],
-      ['Hits de scanners identifiés', fmt(sumKey(sel, (v) => v.scan_hits ?? 0)), ''],
-      ['Moteurs (SE)', fmt(sumKey(sel, (v) => v.se_hits ?? 0)), ''],
+      ['site', 'Conversations Ansley', fmt(sumKey(sel, (v) => v.chat_calls ?? 0)), ''],
+      ['site', 'llms.txt lus', fmt(sumKey(sel, (v) => v.llms_hits ?? 0)), ''],
+      ['site', fOf('ia') ? `Visites depuis ${fOf('ia')}` : 'Visites venues des IA', fmt(sumKey(sel, vRefIa)), ''],
+      ['site', 'Visites venues de Facebook', fmt(sumKey(sel, (v) => vRef(v, 'facebook'))), ''],
+      ['site', 'Visites venues de LinkedIn', fmt(sumKey(sel, (v) => vRef(v, 'linkedin'))), ''],
+      ['site', 'Erreurs 404 (bruit scanners)', fmt(sumKey(sel, (v) => v.status?.['404'] ?? 0)), ''],
+      ['site', 'Hits de scanners identifiés', fmt(sumKey(sel, (v) => v.scan_hits ?? 0)), ''],
+      ['site', 'Moteurs (SE)', fmt(sumKey(sel, (v) => v.se_hits ?? 0)), ''],
     ];
     const igVues = sumKey(sel, (v) => v.fb?.ig?.views ?? 0);
     const igPortee = sumKey(sel, (v) => v.fb?.ig?.reach ?? 0);
     const igAb = [...sel].reverse().map((d) => D[d].fb?.ig_abonnes).find((v) => v != null);
     if (igAb != null || igVues) {
-      cards.push(['Vues Instagram', fmt(igVues),
+      cards.push(['ig', 'Vues Instagram', fmt(igVues),
         cmp ? delta(igVues, sumKey(cmp, (v) => v.fb?.ig?.views ?? 0)) : '']);
-      cards.push(['Comptes atteints · Instagram', fmt(igPortee),
+      cards.push(['ig', 'Comptes atteints · Instagram', fmt(igPortee),
         `<span class="flat">${fmt(sumKey(sel, (v) => v.fb?.ig?.total_interactions ?? 0))} interaction(s)</span>`]);
-      cards.push(['Abonnés Instagram', fmt(igAb), '']);
+      cards.push(['ig', 'Abonnés Instagram', fmt(igAb), '']);
     }
-    $('cards').innerHTML = cards.map(([t, v, d]) =>
+    const gardeCarte = (fam) => {
+      if (cat === 'tout') return true;
+      if (cat === 'facebook') return fam === 'fb' || fam === 'peri';
+      if (cat === 'instagram') return fam === 'ig' || fam === 'peri';
+      if (periApp()) return fam === 'peri';   // forum / boutique : rien d'autre n'est ventilé
+      return fam === 'peri' || fam === 'site';
+    };
+    $('cards').innerHTML = cards.filter(([fam]) => gardeCarte(fam)).map(([, t, v, d]) =>
       `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
     // ── Résumé en clair (se recalcule avec la période ET les filtres) ──
@@ -904,7 +920,7 @@
           par.push(`Sur Instagram : <b>${n(igV)} vue${igV > 1 ? 's' : ''}</b> pour ${n(igR)} compte${igR > 1 ? 's' : ''} atteint${igR > 1 ? 's' : ''}` +
             (igI ? ` et ${n(igI)} interaction${igI > 1 ? 's' : ''}` : '') + '.');
         }
-        if (fbVues || fbEng) {
+        if ((cat === 'tout' || cat === 'facebook') && (fbVues || fbEng)) {
           par.push(`Côté Page Facebook : <b>${n(fbVues)} consultation${fbVues > 1 ? 's' : ''}</b> de la Page` +
             (fbEng ? `, ${n(fbEng)} interaction${fbEng > 1 ? 's' : ''} avec les publications` : '') +
             (fbNew ? ` et ${n(fbNew)} nouvel${fbNew > 1 ? 'x' : ''} abonné${fbNew > 1 ? 's' : ''}` : '') +
@@ -988,14 +1004,7 @@
       .map(([h, v]) => `<tr><td>${h}</td><td class="num">${fmt(v)}</td></tr>`).join('')
       || '<tr><td colspan="2" class="mono">— (référents détaillés collectés à partir des jours en source « logs » v3)</td></tr>';
 
-    // FB + journal
-    document.querySelector('#t-fb tbody').innerHTML = (lastSel.fb?.posts || [])
-      .map((p) => {
-        const resh = (p.reshares || []).length
-          ? `<div class="resh">↗ visibles : ${p.reshares.map((r) => r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.nom}</a>` : r.nom).join(' · ')}</div>`
-          : (p.shares ? '<div class="resh">↗ repartages privés/groupes (non exposés par Meta)</div>' : '');
-        return `<tr><td><a href="${p.url}" target="_blank" rel="noopener">${p.date}</a>${resh}</td><td class="num">${fmt(p.likes)}</td><td class="num">${fmt(p.comments)}</td><td class="num">${fmt(p.shares)}</td></tr>`;
-      }).join('') || '<tr><td colspan="4" class="mono">pas de données Facebook</td></tr>';
+    // Journal (les publications Facebook ont rejoint la rubrique Réseaux sociaux)
     document.querySelector('#t-journal tbody').innerHTML = Object.entries(lastSel.journal || {})
       .map(([s, v]) => `<tr><td><a href="${v.url || ('https://www.nsy.fr/' + s)}" target="_blank" rel="noopener">${s.replace('.html', '')}</a></td><td class="num">${fmt(v.vues)}</td><td class="num">${fmt(v.likes)}</td></tr>`).join('')
       || '<tr><td colspan="3" class="mono">—</td></tr>';
@@ -1130,8 +1139,16 @@
         '. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte.';
 
       document.querySelector('#t-fbposts tbody').innerHTML = (dernier.posts || [])
-        .map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues_video || 0)}</td><td class="num">${fmt(x.clics || 0)}</td><td class="num">${fmt(x.likes || 0)}</td></tr>`).join('')
-        || '<tr><td colspan="4" class="mono">pas de publication</td></tr>';
+        .map((x) => {
+          // Repartages : Meta n'expose que ceux qui sont publics. On distingue
+          // « aucun » de « il y en a, mais invisibles » — sinon un post partagé
+          // en groupe privé passerait pour un post que personne n'a relayé.
+          const resh = (x.reshares || []).length
+            ? `<div class="resh">↗ visibles : ${x.reshares.map((r) => r.url ? `<a href="${r.url}" target="_blank" rel="noopener">${r.nom}</a>` : r.nom).join(' · ')}</div>`
+            : (x.shares ? '<div class="resh">↗ repartages privés/groupes (non exposés par Meta)</div>' : '');
+          return `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}${resh}</td><td class="num">${fmt(x.vues_video || 0)}</td><td class="num">${fmt(x.clics || 0)}</td><td class="num">${fmt(x.likes || 0)}</td><td class="num">${fmt(x.comments || 0)}</td><td class="num">${fmt(x.shares || 0)}</td></tr>`;
+        }).join('')
+        || '<tr><td colspan="6" class="mono">pas de publication</td></tr>';
       const igp = dernier.ig_posts || [];
       document.querySelector('#t-igposts tbody').innerHTML = igp.length
         ? igp.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues || 0)}</td><td class="num">${fmt(x.portee || 0)}</td><td class="num">${fmt(x.interactions || 0)}</td></tr>`).join('')
@@ -1271,7 +1288,7 @@
     {
       const jrs = allDays.filter((d) => D[d].forum);
       const dispo = jrs.length > 0;
-      ['r-forum', 'fo-cards', 'fo-head', 'fo-chart', 'fo-cols', 'nav-forum'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-forum', 'fo-cards', 'fo-head', 'fo-chart', 'fo-note', 'fo-cols', 'nav-forum'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const som = (cle) => sel.reduce((a, d) => a + (D[d].forum?.[cle] ?? 0), 0);
         const etat = [...sel].reverse().map((d) => D[d].forum).find(Boolean) || D[jrs.at(-1)].forum;
@@ -1292,6 +1309,10 @@
         $('h-fo').textContent = `Activité du forum — par ${bk.mode}`;
         $('fo-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
         drawChart('c-fo', bk, ys);
+        const couverts = sel.filter((d) => D[d].forum).length;
+        $('fo-note').textContent = couverts < sel.length
+          ? `Ces données sont relevées en base depuis le ${dFmt(jrs[0])} : sur les ${sel.length} jours affichés, ${couverts} en portent. Les jours antérieurs ne sont pas vides — ils n'étaient pas encore mesurés.`
+          : `Relevé en base chaque jour. Les totaux (membres, messages) sont des cumuls depuis l'origine du forum.`;
 
         // Forums les plus actifs : cumulés sur la période, pas seulement le dernier jour.
         const parForum = new Map();
@@ -1316,7 +1337,7 @@
     {
       const jrs = allDays.filter((d) => D[d].boutique);
       const dispo = jrs.length > 0;
-      ['r-boutique', 'bo-cards', 'bo-head', 'bo-chart', 'bo-cols', 'nav-boutique'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-boutique', 'bo-cards', 'bo-head', 'bo-chart', 'bo-note', 'bo-cols', 'nav-boutique'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const som = (cle) => sel.reduce((a, d) => a + (D[d].boutique?.[cle] ?? 0), 0);
         const etat = [...sel].reverse().map((d) => D[d].boutique).find(Boolean) || D[jrs.at(-1)].boutique;
@@ -1337,6 +1358,10 @@
         $('h-bo').textContent = `Commandes et chiffre d'affaires — par ${bk.mode}`;
         $('bo-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
         drawChart('c-bo', bk, ys);
+        const couvertsB = sel.filter((d) => D[d].boutique).length;
+        $('bo-note').textContent = couvertsB < sel.length
+          ? `Ces données sont relevées en base depuis le ${dFmt(jrs[0])} : sur les ${sel.length} jours affichés, ${couvertsB} en portent. Une commande absente avant cette date n'est pas une absence de vente, mais une absence de mesure.`
+          : `Chiffre d'affaires hors commandes annulées, remboursées ou échouées. Les meilleures ventes portent sur 30 jours glissants.`;
 
         document.querySelector('#t-boventes tbody').innerHTML = (etat.top_produits || []).length
           ? etat.top_produits.map((x) => `<tr><td>${x.titre || '—'}</td><td class="num">${fmt(x.quantite)}</td><td class="num">${eur(x.ca)}</td></tr>`).join('')
@@ -1441,6 +1466,17 @@
       document.querySelector('#t-iaentry tbody').innerHTML = iaEntry.length
         ? iaEntry.map(([pg, k]) => `<tr><td>${pg}</td><td class="num">${fmt(k)}</td></tr>`).join('')
         : '<tr><td colspan="2" class="mono">—</td></tr>';
+    }
+
+    // Le titre nomme le périmètre : « Fréquentation du site » au-dessus des
+    // chiffres de la boutique se lisait comme une donnée non filtrée.
+    {
+      const p = cat.startsWith('peri:') ? cat.slice(5) : null;
+      const NOMS = { vitrine: 'Site', site: 'Site', forum: 'Forum', boutique: 'Boutique', tout: 'tous périmètres' };
+      const h = document.querySelector('#r-site h2');
+      const sp = document.querySelector('#r-site span');
+      if (h) h.textContent = (p && !['vitrine', 'site'].includes(p)) ? `Fréquentation — ${NOMS[p] || p}` : 'Fréquentation du site';
+      if (sp) sp.textContent = periApp() ? `visiteurs, pages et robots du périmètre ${NOMS[p] || p}` : 'visiteurs, pages, robots';
     }
 
     renderCatnav();
