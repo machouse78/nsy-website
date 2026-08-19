@@ -186,6 +186,8 @@
     <a href="#r-avis" id="nav-avis" hidden>Avis clients</a>
     <a href="#r-github" id="nav-github" hidden>Dépôt GitHub</a>
     <a href="#r-youtube" id="nav-youtube" hidden>Chaîne YouTube</a>
+    <a href="#r-forum" id="nav-forum" hidden>Forum</a>
+    <a href="#r-boutique" id="nav-boutique" hidden>Boutique</a>
     <a href="#r-contenu">Contenu</a>
     <a href="#r-parcours">Parcours</a>
   </nav>
@@ -311,6 +313,30 @@
     <div></div>
   </div>
 
+  <div class="sec-h" id="r-forum" hidden><h2>Forum</h2><span>vie de la communauté : messages, sujets, membres</span></div>
+  <div class="grid" id="fo-cards" hidden></div>
+  <div class="chart-head" id="fo-head" hidden><h2 id="h-fo">Activité du forum</h2></div>
+  <div class="chart" id="fo-chart" hidden><div class="legend" id="fo-legend"></div><svg id="c-fo"></svg></div>
+  <div class="cols" id="fo-cols" hidden>
+    <div><h3>Forums les plus actifs</h3><table id="t-foforums"><tbody></tbody></table></div>
+    <div>
+      <h3>Derniers sujets</h3>
+      <table id="t-fosujets"><thead><tr><th>Sujet</th><th class="num">Rép.</th><th class="num">Vues</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+  <div class="sec-h" id="r-boutique" hidden><h2>Boutique</h2><span>commandes, chiffre d'affaires, stock</span></div>
+  <div class="grid" id="bo-cards" hidden></div>
+  <div class="chart-head" id="bo-head" hidden><h2 id="h-bo">Commandes et chiffre d'affaires</h2></div>
+  <div class="chart" id="bo-chart" hidden><div class="legend" id="bo-legend"></div><svg id="c-bo"></svg></div>
+  <div class="cols" id="bo-cols" hidden>
+    <div>
+      <h3>Meilleures ventes <span class="mono">(30 jours)</span></h3>
+      <table id="t-boventes"><thead><tr><th>Produit</th><th class="num">Qté</th><th class="num">CA</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div><h3>Stock à surveiller</h3><table id="t-bostock"><tbody></tbody></table></div>
+  </div>
+
   <div class="sec-h" id="r-contenu"><h2>Contenu et provenance</h2><span>pages lues, campagnes, référents, profils</span></div>
   <div class="cols">
     <div>
@@ -390,15 +416,38 @@
   };
 
   // Quelles rubriques appartiennent à quelle catégorie.
+  // ⚠️ Le bloc « site » est coupé en DEUX : ce que le filtre de périmètre
+  // filtre réellement (fréquentation) et ce qu'il ne ventile pas (provenance,
+  // agent, contenu, parcours). Sans cette distinction, choisir « Boutique »
+  // affichait quand même Facebook, les articles du Journal et les parcours —
+  // en laissant croire à un filtrage qui n'existait pas (owner, 18/08/2026).
   const RUBRIQUES = {
-    site: ['r-site', 'r-ia', 'r-agent', 'r-contenu', 'r-parcours'],
+    siteScope: ['r-site'],
+    siteGlobal: ['r-ia', 'r-agent', 'r-contenu', 'r-parcours'],
     reseaux: ['r-reseaux'],
     avis: ['r-avis'],
     github: ['r-github'],
     youtube: ['r-youtube'],
+    forum: ['r-forum'],
+    boutique: ['r-boutique'],
+  };
+  // Une rubrique ne s'affiche jamais sans donnée, même en vue « Tout » :
+  // une section vide se lit comme une panne.
+  const RUB_DISPO = {
+    avis: () => aDonnee((v) => v.avis),
+    github: () => aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0)),
+    youtube: () => aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null),
+    forum: () => aDonnee((v) => v.forum),
+    boutique: () => aDonnee((v) => v.boutique),
   };
   function appliqueCategorie() {
     const estReseau = ['facebook', 'instagram', 'avis', 'github', 'youtube'].includes(cat);
+    const peri = cat.startsWith('peri:') ? cat.slice(5) : null;
+    const tout = cat === 'tout';
+    // Périmètre « principal » (ou aucun) : le récit complet du site garde son
+    // sens. Périmètre applicatif (forum, boutique) : on ne montre que ce qui
+    // est réellement ventilé, plus la rubrique propre à l'application.
+    const periGlobal = peri === null || ['vitrine', 'site', 'tout'].includes(peri);
     const montre = (ids, oui) => ids.forEach((id) => {
       const t = $(id);
       if (!t) return;
@@ -409,11 +458,14 @@
         e.hidden = !oui;
       }
     });
-    montre(RUBRIQUES.site, cat === 'tout' || !estReseau);
-    montre(RUBRIQUES.reseaux, cat === 'tout' || cat === 'facebook' || cat === 'instagram');
-    montre(RUBRIQUES.avis, cat === 'tout' || cat === 'avis');
-    montre(RUBRIQUES.github, cat === 'tout' || cat === 'github');
-    montre(RUBRIQUES.youtube, cat === 'tout' || cat === 'youtube');
+    montre(RUBRIQUES.siteScope, tout || !estReseau);
+    montre(RUBRIQUES.siteGlobal, tout || (!estReseau && periGlobal));
+    montre(RUBRIQUES.reseaux, tout || cat === 'facebook' || cat === 'instagram');
+    montre(RUBRIQUES.avis, (tout || cat === 'avis') && RUB_DISPO.avis());
+    montre(RUBRIQUES.github, (tout || cat === 'github') && RUB_DISPO.github());
+    montre(RUBRIQUES.youtube, (tout || cat === 'youtube') && RUB_DISPO.youtube());
+    montre(RUBRIQUES.forum, (tout || peri === 'forum') && RUB_DISPO.forum());
+    montre(RUBRIQUES.boutique, (tout || peri === 'boutique') && RUB_DISPO.boutique());
     // Le réseau des graphes sociaux se déduit de `cat` au moment du rendu
     // (voir `reseau` plus bas) : plus de sélecteur à tenir synchronisé.
     // Le résumé, les cartes et la barre de temps restent visibles partout.
@@ -1209,6 +1261,91 @@
         document.querySelector('#t-ytvideos tbody').innerHTML = (etat.derniers || []).length
           ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 45)}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
           : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
+      }
+    }
+
+    // ── Forum (phpBB) ────────────────────────────────────────────────────
+    // Ici, contrairement aux logs, ce sont de VRAIS journaliers : chaque jour
+    // porte les messages, sujets et inscriptions de la journée. Seuls les
+    // totaux (membres, file de modération) sont des états à la date.
+    {
+      const jrs = allDays.filter((d) => D[d].forum);
+      const dispo = jrs.length > 0;
+      ['r-forum', 'fo-cards', 'fo-head', 'fo-chart', 'fo-cols', 'nav-forum'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const som = (cle) => sel.reduce((a, d) => a + (D[d].forum?.[cle] ?? 0), 0);
+        const etat = [...sel].reverse().map((d) => D[d].forum).find(Boolean) || D[jrs.at(-1)].forum;
+        const attente = (etat.en_attente ?? 0) + (etat.comptes_a_valider ?? 0);
+        $('fo-cards').innerHTML = [
+          ['Messages postés', fmt(som('messages')), `<span class="flat">${fmt(etat.messages_total)} depuis l'origine</span>`],
+          ['Sujets ouverts', fmt(som('sujets')), `<span class="flat">${fmt(etat.sujets_total)} au total</span>`],
+          ['Nouveaux inscrits', fmt(som('inscrits')), `<span class="flat">${fmt(etat.membres)} membres</span>`],
+          ['En attente de modération', fmt(attente),
+            `<span class="flat">${fmt(etat.en_attente ?? 0)} message(s), ${fmt(etat.comptes_a_valider ?? 0)} compte(s)</span>`],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+        const ys = [
+          { label: 'Messages', color: COLORS[0], pts: bkSum(bk, (v) => v.forum?.messages ?? 0) },
+          { label: 'Sujets', color: COLORS[1], pts: bkSum(bk, (v) => v.forum?.sujets ?? 0) },
+          { label: 'Inscrits', color: COLORS[2], pts: bkSum(bk, (v) => v.forum?.inscrits ?? 0) },
+        ];
+        $('h-fo').textContent = `Activité du forum — par ${bk.mode}`;
+        $('fo-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        drawChart('c-fo', bk, ys);
+
+        // Forums les plus actifs : cumulés sur la période, pas seulement le dernier jour.
+        const parForum = new Map();
+        for (const d of sel) for (const f of (D[d].forum?.top_forums || [])) {
+          parForum.set(f.nom, (parForum.get(f.nom) || 0) + (f.messages || 0));
+        }
+        const classement = [...parForum.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8);
+        document.querySelector('#t-foforums tbody').innerHTML = classement.length
+          ? classement.map(([nom, n]) => `<tr><td>${nom}</td><td class="num">${fmt(n)}</td></tr>`).join('')
+          : '<tr><td colspan="2" class="mono">aucun message sur la période</td></tr>';
+
+        document.querySelector('#t-fosujets tbody').innerHTML = (etat.derniers_sujets || []).length
+          ? etat.derniers_sujets.map((x) =>
+              `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.titre}</a>${x.forum ? ` <span class="mono">${x.forum}</span>` : ''}</td><td class="num">${fmt(x.reponses)}</td><td class="num">${fmt(x.vues)}</td></tr>`).join('')
+          : '<tr><td colspan="3" class="mono">—</td></tr>';
+      }
+    }
+
+    // ── Boutique (WooCommerce) ───────────────────────────────────────────
+    // Commandes et chiffre d'affaires viennent des tables d'analytics de
+    // WooCommerce : vrais journaliers. Le CA exclut annulé, remboursé et échoué.
+    {
+      const jrs = allDays.filter((d) => D[d].boutique);
+      const dispo = jrs.length > 0;
+      ['r-boutique', 'bo-cards', 'bo-head', 'bo-chart', 'bo-cols', 'nav-boutique'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const som = (cle) => sel.reduce((a, d) => a + (D[d].boutique?.[cle] ?? 0), 0);
+        const etat = [...sel].reverse().map((d) => D[d].boutique).find(Boolean) || D[jrs.at(-1)].boutique;
+        const cmd = som('commandes'), ca = som('ca');
+        const eur = (x) => (x ?? 0).toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' €';
+        const rupture = (etat.stock_bas || []).filter((x) => x.etat === 'outofstock').length;
+        $('bo-cards').innerHTML = [
+          ['Commandes', fmt(cmd), `<span class="flat">${fmt(som('articles'))} article(s) vendu(s)</span>`],
+          ['Chiffre d\'affaires', eur(ca), '<span class="flat">hors annulées et remboursées</span>'],
+          ['Panier moyen', cmd > 0 ? eur(ca / cmd) : '—', `<span class="flat">sur ${fmt(cmd)} commande(s)</span>`],
+          ['Produits en rupture', fmt(rupture), `<span class="flat">catalogue de ${fmt(etat.produits ?? 0)} produits</span>`],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+        const ys = [
+          { label: 'Commandes', color: COLORS[0], pts: bkSum(bk, (v) => v.boutique?.commandes ?? 0) },
+          { label: 'Chiffre d\'affaires € (axe droit)', color: COLORS[1], axis: 'right', pts: bkSum(bk, (v) => v.boutique?.ca ?? 0) },
+        ];
+        $('h-bo').textContent = `Commandes et chiffre d'affaires — par ${bk.mode}`;
+        $('bo-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        drawChart('c-bo', bk, ys);
+
+        document.querySelector('#t-boventes tbody').innerHTML = (etat.top_produits || []).length
+          ? etat.top_produits.map((x) => `<tr><td>${x.titre || '—'}</td><td class="num">${fmt(x.quantite)}</td><td class="num">${eur(x.ca)}</td></tr>`).join('')
+          : '<tr><td colspan="3" class="mono">aucune vente sur les 30 derniers jours</td></tr>';
+
+        document.querySelector('#t-bostock tbody').innerHTML = (etat.stock_bas || []).length
+          ? etat.stock_bas.map((x) => `<tr><td>${x.titre || '—'}</td><td class="num">${
+              x.etat === 'outofstock' ? 'rupture' : (x.stock == null ? '—' : fmt(x.stock) + ' en stock')}</td></tr>`).join('')
+          : '<tr><td colspan="2" class="mono">rien à signaler</td></tr>';
       }
     }
 
