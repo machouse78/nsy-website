@@ -92,7 +92,10 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
   buckets jour/semaine/mois, comparaison N-1) + **filtres** (pills cliquables,
   barre de requête `bot:` `page:` `referral:` `ia:`, métrique au choix, séries
-  superposées), **rubriques Dépôt GitHub** (consultations, clones, pages et
+  superposées), **rubrique Avis clients** (une ligne par source — Facebook
+  collecté automatiquement, Google et PagesJaunes déclarés et relevés à la
+  main faute d'API ouverte, avec les liens de sollicitation ; aucune donnée
+  nominative : ni auteur ni texte, seulement des comptes), **rubriques Dépôt GitHub** (consultations, clones, pages et
   référents du code public) et **Chaîne YouTube** (vues, abonnés, vidéos —
   l'API ne publiant que des cumuls, les gains sont calculés d'une collecte à
   l'autre), toutes deux **facultatives** : sans clé, la rubrique et son onglet

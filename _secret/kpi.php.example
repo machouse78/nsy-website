@@ -1,9 +1,38 @@
 <?php
 // Config du collecteur KPI (stats-collector.php) — JAMAIS commité.
-// cron_key : protège l'endpoint de collecte (tâche planifiée Infomaniak).
-// fb_* : jeton de PAGE Facebook (copié de _secret/meta.env local).
+// Copier en _secret/kpi.php et renseigner. Toutes les clés sauf cron_key sont
+// FACULTATIVES : absente, la rubrique correspondante disparaît du dashboard.
 return [
+    // Protège l'endpoint de collecte (tâche planifiée Infomaniak).
     'cron_key'      => 'CHANGE_ME_CLE_CRON_ALEATOIRE',
+
+    // Jeton de PAGE Facebook (copié de _secret/meta.env local).
     'fb_page_id'    => 'CHANGE_ME_ID_PAGE_FACEBOOK',
     'fb_page_token' => 'CHANGE_ME_JETON_DE_PAGE',
+
+    // Trafic du dépôt PUBLIC. Jeton fine-grained, un seul dépôt,
+    // « Administration: Read-only ». GitHub ne conserve que 14 jours.
+    'github_repo'   => 'CHANGE_ME_owner/depot',
+    'github_token'  => 'CHANGE_ME_JETON_FINE_GRAINED',
+
+    // Chaîne YouTube — clé d'API créée dans GOOGLE CLOUD CONSOLE (et non dans
+    // les réglages YouTube, qui n'en délivrent aucune) : YouTube Data API v3,
+    // type « Données publiques », clé restreinte à cette seule API.
+    // youtube_channel se remplit une fois l'identifiant UC… résolu du handle.
+    'youtube_key'     => 'CHANGE_ME_CLE_API_GOOGLE',
+    'youtube_handle'  => '@CHANGE_ME',
+    'youtube_channel' => '',
+
+    // Avis clients. Seul Facebook se collecte sans frais ni démarche (le jeton
+    // de Page ci-dessus suffit). Les autres sources sont simplement DÉCLARÉES :
+    // le dashboard les liste avec leur lien et les marque « non collecté »,
+    // plutôt que d'afficher un zéro qui se lirait comme « aucun avis ».
+    //   · profil  : la fiche publique, pour aller vérifier d'un clic
+    //   · deposer : le lien à envoyer au client pour qu'il dépose son avis
+    //               (Google : tableau de bord → « Demander des avis »)
+    'avis_sources' => [
+        'Google'      => ['profil' => '', 'deposer' => ''],
+        'Facebook'    => ['profil' => '', 'deposer' => ''],
+        'PagesJaunes' => ['profil' => '', 'deposer' => ''],
+    ],
 ];

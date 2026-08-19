@@ -496,6 +496,40 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
     }
 }
 
+// ── 2 bis. Avis clients, par source ──────────────────────────────────────────
+// Une seule source est collectable sans frais ni démarche : les recommandations
+// de la Page Facebook (le jeton de Page suffit). Les autres sont DÉCLARÉES dans
+// _secret/kpi.php et affichées comme non collectées — mieux vaut une ligne
+// honnête « pas d'API » qu'un zéro qu'on lirait comme « aucun avis ».
+//   · Google : l'API Business Profile impose une demande d'accès à valider par
+//     Google puis un parcours OAuth ; l'API Places, elle, exige la facturation.
+//   · PagesJaunes et Bing Places n'exposent rien de public.
+// ⚠️ AUCUNE donnée nominative : on ne demande ni l'auteur ni le texte, seulement
+// created_time et recommendation_type. L'historique reste agrégé, comme le reste.
+$avis = [];
+foreach ((array) ($cfg['avis_sources'] ?? []) as $nom => $s) {
+    $avis[$nom] = [
+        'note'      => null,   // null = non collecté (≠ 0, qui serait une note)
+        'nombre'    => null,
+        'positifs'  => null,
+        'profil'    => (string) ($s['profil'] ?? ''),
+        'deposer'   => (string) ($s['deposer'] ?? ''),
+    ];
+}
+if (isset($tok) && $tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
+    $note = $page['overall_star_rating'] ?? null;
+    $fbAvis = ['note' => $note > 0 ? (float) $note : null, 'nombre' => 0, 'positifs' => 0,
+               'profil' => (string) ($cfg['avis_sources']['Facebook']['profil'] ?? ''),
+               'deposer' => (string) ($cfg['avis_sources']['Facebook']['deposer'] ?? '')];
+    $r = graphGet($cfg['fb_page_id'] . '/ratings', $tok,
+        ['fields' => 'created_time,recommendation_type', 'limit' => '100']);
+    foreach ($r['data'] ?? [] as $a) {
+        $fbAvis['nombre']++;
+        if (($a['recommendation_type'] ?? '') === 'positive') $fbAvis['positifs']++;
+    }
+    $avis['Facebook'] = $fbAvis;
+}
+
 // ── 3. Compteurs du journal ──────────────────────────────────────────────────
 // ⚠️ Les deux sites ne stockent PAS la même chose : nsy.fr écrit
 // {"<slug>.html": {views, likes}} et sert l'article à la racine ; PRV écrit
@@ -674,6 +708,7 @@ if (($day['hits'] ?? 0) === 0) {
     exit;
 }
 $extra = ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
+if ($avis) $extra['avis'] = $avis;
 // L'écriture REMPLACE l'entrée du jour : sans ce report, relancer une date déjà
 // collectée effacerait les blocs qui n'ont pas pu être recollectés (GitHub hors
 // de sa fenêtre de 14 jours, YouTube volontairement muet en rattrapage).

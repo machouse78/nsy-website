@@ -13,6 +13,12 @@
   :root { --bg: #0A0F1C; --bg2: #0F1626; --line: #1C2740; --accent: #00E5FF; --warm: #F08A2C;
     --fg0: #F2F6FF; --fg1: #B8C2DC; --fg2: #8993AF; }
   * { box-sizing: border-box; margin: 0; }
+  /* ⚠️ Indispensable : le `display: none` de l'attribut `hidden` vient de la
+     feuille du navigateur, donc la MOINDRE règle de mise en page (.sec-h en
+     flex, .grid en grid…) le supplante. Sans ce rappel, tout le masquage du
+     dashboard — menu par catégorie, rubriques sans données — n'agissait que
+     sur la propriété DOM, l'écran continuant d'afficher les sections. */
+  [hidden] { display: none !important; }
   body { background: var(--bg); color: var(--fg1); font-family: Manrope, sans-serif; padding: 28px 20px 60px; }
   .wrap { max-width: 1080px; margin: 0 auto; }
   h1 { font-family: "Space Grotesk", sans-serif; color: var(--fg0); font-size: 26px; }
@@ -177,6 +183,7 @@
     <a href="#r-ia">Provenance IA</a>
     <a href="#r-agent">Agent conversationnel</a>
     <a href="#r-reseaux">Réseaux sociaux</a>
+    <a href="#r-avis" id="nav-avis" hidden>Avis clients</a>
     <a href="#r-github" id="nav-github" hidden>Dépôt GitHub</a>
     <a href="#r-youtube" id="nav-youtube" hidden>Chaîne YouTube</a>
     <a href="#r-contenu">Contenu</a>
@@ -281,6 +288,15 @@
     </div>
   </div>
 
+  <div class="sec-h" id="r-avis" hidden><h2>Avis clients</h2><span>par source, et où les solliciter</span></div>
+  <div class="grid" id="av-cards" hidden></div>
+  <div class="cols" id="av-cols" hidden>
+    <div>
+      <table id="t-avis"><thead><tr><th>Source</th><th class="num">Note</th><th class="num">Avis</th><th>Suivi</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div><div class="note" id="av-note"></div></div>
+  </div>
+
   <div class="sec-h" id="r-github" hidden><h2>Dépôt GitHub</h2><span>consultations et clones du code public</span></div>
   <div class="grid" id="gh-cards" hidden></div>
   <div class="chart-head" id="gh-head" hidden><h2 id="h-gh">Consultations et clones</h2></div>
@@ -375,6 +391,7 @@
     else l.push(['site', 'Site']);
     if (aDonnee((v) => (v.fb?.vues ?? 0) || (v.fb?.abonnes ?? 0))) l.push(['facebook', 'Facebook']);
     if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
+    if (aDonnee((v) => v.avis)) l.push(['avis', 'Avis clients']);
     if (aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0))) l.push(['github', 'GitHub']);
     if (aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null)) l.push(['youtube', 'YouTube']);
     return l;
@@ -384,11 +401,12 @@
   const RUBRIQUES = {
     site: ['r-site', 'r-ia', 'r-agent', 'r-contenu', 'r-parcours'],
     reseaux: ['r-reseaux'],
+    avis: ['r-avis'],
     github: ['r-github'],
     youtube: ['r-youtube'],
   };
   function appliqueCategorie() {
-    const estReseau = ['facebook', 'instagram', 'github', 'youtube'].includes(cat);
+    const estReseau = ['facebook', 'instagram', 'avis', 'github', 'youtube'].includes(cat);
     const montre = (ids, oui) => ids.forEach((id) => {
       const t = $(id);
       if (!t) return;
@@ -401,6 +419,7 @@
     });
     montre(RUBRIQUES.site, cat === 'tout' || !estReseau);
     montre(RUBRIQUES.reseaux, cat === 'tout' || cat === 'facebook' || cat === 'instagram');
+    montre(RUBRIQUES.avis, cat === 'tout' || cat === 'avis');
     montre(RUBRIQUES.github, cat === 'tout' || cat === 'github');
     montre(RUBRIQUES.youtube, cat === 'tout' || cat === 'youtube');
     // Un réseau choisi pilote aussi les sélecteurs des graphes sociaux.
@@ -1088,6 +1107,49 @@
       document.querySelector('#t-igposts tbody').innerHTML = igp.length
         ? igp.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues || 0)}</td><td class="num">${fmt(x.portee || 0)}</td><td class="num">${fmt(x.interactions || 0)}</td></tr>`).join('')
         : '<tr><td colspan="4" class="mono">aucun compte Instagram relié</td></tr>';
+    }
+
+    // ── Avis clients : une ligne par source, collectée ou non ────────────
+    // Toutes les plateformes n'ouvrent pas leurs avis : Google demande soit une
+    // validation d'accès à son API Business Profile, soit une facturation
+    // activée via l'API Places ; PagesJaunes et Bing n'exposent rien. Ces
+    // sources sont donc AFFICHÉES mais marquées non collectées — un « 0 » se
+    // lirait comme « aucun avis », ce qui est un contresens quand la vérité est
+    // « on ne sait pas ». Les avis sont un cumul : on lit le dernier état connu.
+    {
+      const etat = [...sel].reverse().map((d) => D[d].avis).find(Boolean)
+        || allDays.map((d) => D[d].avis).filter(Boolean).at(-1);
+      const dispo = !!etat;
+      ['r-avis', 'av-cards', 'av-cols', 'nav-avis'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const src = Object.entries(etat);
+        const mesurees = src.filter(([, v]) => v.nombre != null);
+        const total = mesurees.reduce((a, [, v]) => a + v.nombre, 0);
+        const notees = src.filter(([, v]) => v.note != null);
+        const moy = notees.length ? notees.reduce((a, [, v]) => a + v.note, 0) / notees.length : null;
+
+        $('av-cards').innerHTML = [
+          ['Avis recueillis', fmt(total), `<span class="flat">sur ${mesurees.length} source${mesurees.length > 1 ? 's' : ''} mesurable${mesurees.length > 1 ? 's' : ''}</span>`],
+          ['Note moyenne', moy == null ? '—' : nb1(moy), `<span class="flat">${notees.length ? notees.length + ' source(s) notée(s)' : 'aucune note publiée'}</span>`],
+          ['Sources suivies', fmt(src.length), `<span class="flat">${src.length - mesurees.length} hors collecte automatique</span>`],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+        const lien = (url, txt) => url ? `<a href="${url}" target="_blank" rel="noopener">${txt}</a>` : txt;
+        document.querySelector('#t-avis tbody').innerHTML = src.map(([nom, v]) => {
+          const suivi = v.nombre == null
+            ? '<span class="mono">manuel — pas d\'API ouverte</span>'
+            : (v.positifs != null && v.nombre > 0
+              ? `<span class="mono">${v.positifs} recommandation(s) positive(s)</span>`
+              : '<span class="mono">collecté chaque jour</span>');
+          const dep = v.deposer ? ` · ${lien(v.deposer, 'solliciter')}` : '';
+          return `<tr><td>${lien(v.profil, nom)}${dep}</td><td class="num">${v.note == null ? '—' : nb1(v.note)}</td><td class="num">${v.nombre == null ? '—' : fmt(v.nombre)}</td><td>${suivi}</td></tr>`;
+        }).join('') || '<tr><td colspan="4" class="mono">aucune source déclarée</td></tr>';
+
+        const sansLien = src.filter(([, v]) => !v.deposer).map(([n]) => n);
+        $('av-note').innerHTML = 'Les avis Google sont ceux qui pèsent : ce sont eux que reprennent les cartes affichées par les assistants IA. '
+          + 'Facebook se collecte automatiquement ; les autres sources se relèvent à la main faute d\'API ouverte.'
+          + (sansLien.length ? `<br><br>⚠️ Aucun lien de sollicitation enregistré pour : <strong>${sansLien.join(', ')}</strong>. Sans lui, il n'y a rien à envoyer au client — le récupérer sur le tableau de bord de la plateforme, puis le déclarer dans <span class="mono">_secret/kpi.php</span>.` : '');
+      }
     }
 
     // ── Dépôt GitHub : le code public a son propre public ────────────────
