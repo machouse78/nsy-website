@@ -256,23 +256,15 @@
 
   <div class="sec-h" id="r-reseaux"><h2>Réseaux sociaux</h2><span>lecture des pages et des publications</span></div>
   <div class="grid" id="soc-cards"></div>
+  <!-- Le réseau affiché découle de l'onglet du haut : ces graphes n'ont plus
+       de sélecteur propre, qui ferait doublon avec le menu par catégorie. -->
   <div class="chart-head">
     <h2 id="h-soc">Lecture des pages</h2>
-    <select id="soc-net">
-      <option value="tout">Facebook + Instagram</option>
-      <option value="fb">Facebook</option>
-      <option value="ig" hidden>Instagram</option>
-    </select>
   </div>
   <div class="chart"><div class="legend" id="soc-legend"></div><svg id="c-soc"></svg></div>
 
   <div class="chart-head">
     <h2 id="h-posts">Lecture par publication</h2>
-    <select id="posts-net">
-      <option value="tout">Facebook + Instagram</option>
-      <option value="fb">Facebook</option>
-      <option value="ig" hidden>Instagram</option>
-    </select>
   </div>
   <div class="chart"><div class="legend" id="posts-legend"></div><svg id="c-posts"></svg></div>
   <div class="note" id="posts-note"></div>
@@ -422,12 +414,8 @@
     montre(RUBRIQUES.avis, cat === 'tout' || cat === 'avis');
     montre(RUBRIQUES.github, cat === 'tout' || cat === 'github');
     montre(RUBRIQUES.youtube, cat === 'tout' || cat === 'youtube');
-    // Un réseau choisi pilote aussi les sélecteurs des graphes sociaux.
-    if (cat === 'facebook' || cat === 'instagram') {
-      const r = cat === 'facebook' ? 'fb' : 'ig';
-      if ($('soc-net')) $('soc-net').value = r;
-      if ($('posts-net')) $('posts-net').value = r;
-    }
+    // Le réseau des graphes sociaux se déduit de `cat` au moment du rendu
+    // (voir `reseau` plus bas) : plus de sélecteur à tenir synchronisé.
     // Le résumé, les cartes et la barre de temps restent visibles partout.
   }
   function renderCatnav() {
@@ -1033,17 +1021,10 @@
                    ['Comptes atteints · Instagram', fmt(igR), '']] : []),
       ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
-      // Filtre de réseau, comme sur le graphe par publication. L'option
-      // Instagram reste masquée tant qu'aucun compte n'est relié au site.
-      const socSel = $('soc-net');
-      // Sans compte Instagram, il n'y a rien à choisir : le sélecteur disparaît
-      // plutôt que d'afficher un intitulé « Facebook + Instagram » mensonger.
-      // (L'option est masquée dans le HTML : il faut la RÉAFFICHER quand un
-      // compte existe — l'oublier laisse un choix invisible mais actif.)
-      socSel.querySelector('option[value="ig"]').hidden = !aIg;
-      socSel.hidden = !aIg;
-      if (!aIg) socSel.value = 'fb';
-      const reseau = socSel.value;
+      // Le réseau vient de l'onglet du haut (owner, 19/08/2026) : les deux
+      // listes déroulantes qui vivaient ici faisaient doublon avec lui. Sans
+      // compte Instagram relié, il n'y a de toute façon que Facebook à montrer.
+      const reseau = cat === 'facebook' ? 'fb' : (cat === 'instagram' && aIg) ? 'ig' : (aIg ? 'tout' : 'fb');
       const socFb = [
         { label: 'Vues de la Page Facebook', color: COLORS[0], pts: bkSum(bk, (v) => v.fb?.vues ?? 0) },
         { label: 'Vues vidéo Facebook', color: COLORS[1], pts: bkSum(bk, (v) => v.fb?.vues_video ?? 0) },
@@ -1067,11 +1048,7 @@
       // Lecture PAR PUBLICATION. Les valeurs de Meta sont CUMULÉES depuis la
       // parution : la courbe monte en marches à chaque collecte, elle ne
       // devient parlante qu'à partir du premier jour collecté.
-      const postsSel = $('posts-net');
-      postsSel.querySelector('option[value="ig"]').hidden = !aIg;
-      postsSel.hidden = !aIg;                 // rien à choisir sans Instagram
-      if (!aIg) postsSel.value = 'fb';
-      const net = postsSel.value;
+      const net = reseau;                     // même onglet, même périmètre
       // Chaque réseau a sa mesure de « lecture » : les vues vidéo (à défaut les
       // clics) côté Facebook, les vues côté Instagram. En vue combinée, les
       // publications des deux réseaux concourent et portent leur préfixe.
@@ -1344,8 +1321,6 @@
   });
   $('metric').addEventListener('change', render);
   $('split').addEventListener('change', render);
-  $('posts-net').addEventListener('change', render);
-  $('soc-net').addEventListener('change', render);
 
   // ───── Export de la page (PDF via l'impression, PNG via html2canvas) ─────
   // Le nom du fichier porte le site et la période affichée : un export retrouvé
