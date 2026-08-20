@@ -412,7 +412,11 @@ $fb = ['abonnes' => null, 'posts' => [], 'vues' => null, 'engagements' => null,
        'nouveaux_abonnes' => null, 'vues_video' => null, 'reactions' => null, 'actions' => null];
 $tok = (string) $cfg['fb_page_token'];
 if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
-    $page = graphGet((string) $cfg['fb_page_id'], $tok, ['fields' => 'fan_count,followers_count']);
+    // ⚠️ overall_star_rating et rating_count doivent être DEMANDÉS ici : sans
+    // eux, la rubrique Avis lisait un champ absent et affichait « — » alors que
+    // la Page était bien notée (vécu 20/08/2026).
+    $page = graphGet((string) $cfg['fb_page_id'], $tok,
+        ['fields' => 'fan_count,followers_count,overall_star_rating,rating_count']);
     $fb['abonnes'] = $page['followers_count'] ?? $page['fan_count'] ?? null;
 
     // ── Statistiques de la Page (API Insights) ───────────────────────────────
