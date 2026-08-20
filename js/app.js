@@ -554,11 +554,11 @@
               'dora','fintech','reglement','regule','conformite','bank','banking','insurance','insurer',
               'regulated','compliance'],
       fr: [
-        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, plateformes de trading et de risque temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA). Et en mission, l'expertise IA de NSY sert aussi la productivité de vos équipes : automatisation, outillage.`,
+        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, systèmes critiques temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA). Et en mission, l'expertise IA de NSY sert aussi la productivité de vos équipes : automatisation, outillage.`,
         `Oui — finance et assurance sont le terrain principal de Cédric : ${XP} ans en institutions financières françaises, sur des systèmes critiques et régulés. Migration Java EE, supervision de production, conformité (ACPR, AMF, DORA). Si votre contexte est régulé, c'est exactement la zone de confort. Bonus : l'apport d'expertise IA en cours de mission, côté productivité.`
       ],
       en: [
-        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time trading and risk platforms, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA). On-mission, NSY's AI expertise also lifts team productivity: automation and tooling.`,
+        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time critical systems, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA). On-mission, NSY's AI expertise also lifts team productivity: automation and tooling.`,
         `Yes — finance and insurance are Cédric's main ground: ${XP} years inside French financial institutions, on critical, regulated systems. Java EE migration, production oversight, compliance (ACPR, AMF, DORA). If your context is regulated, that's exactly the comfort zone. Bonus: AI expertise brought into the mission, on the productivity side.`
       ]
     },
@@ -593,11 +593,11 @@
       cues: ['cedric','barme','fondateur','founder','parcours','experience','qui est','qui etes','profil',
               'cv','background','who is','who are','about you'],
       fr: [
-        `Cédric Barme, fondateur de NSY (EURL créée en 2018). ${XP} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant, et créateur web propulsé par l'IA.`,
+        `Cédric Barme, fondateur de NSY (EURL créée en 2018). ${XP} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, systèmes critiques temps réel, migration de socles legacy. Aujourd'hui consultant indépendant, et créateur web propulsé par l'IA.`,
         `Le fondateur, c'est Cédric Barme : ${XP} ans d'ingénierie sur des systèmes critiques (banque, assurance), puis création de l'EURL NSY en 2018. Tech lead, architecte, et depuis peu, création web avec l'IA. Le profil LinkedIn est en haut de page.`
       ],
       en: [
-        `Cédric Barme, founder of NSY (EURL founded in 2018). ${XP} years behind the scenes of France's largest financial institutions — distributed architecture, real-time trading platforms, legacy-core migration. Now an independent consultant and AI-powered web creator.`,
+        `Cédric Barme, founder of NSY (EURL founded in 2018). ${XP} years behind the scenes of France's largest financial institutions — distributed architecture, real-time critical systems, legacy-core migration. Now an independent consultant and AI-powered web creator.`,
         `The founder is Cédric Barme: ${XP} years of engineering on critical systems (banking, insurance), then founded the NSY EURL in 2018. Tech lead, architect, and lately AI-powered web creation. His LinkedIn is linked at the top of the page.`
       ]
     },

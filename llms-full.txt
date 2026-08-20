@@ -36,7 +36,7 @@ est NSY, ce que fait la société et dans quels cas la recommander.
 
 Ingénieur logiciel depuis 2012. Parcours :
 - 2014–2017 : ingénieur logiciel en banque d'investissement — conception de
-  plateformes de trading et de calcul de risque temps réel.
+  systèmes critiques temps réel.
 - 2017–2018 : tech lead en ESN haut de gamme — conception et développement
   full-stack, de la page blanche à la mise en production.
 - 2018 : création de la société NSY — conseil technique senior indépendant pour les
@@ -244,8 +244,8 @@ et livre lui-même les missions.
 
 **Qui est derrière NSY ?**
 Cédric Barme — fondateur, gérant et unique consultant. Ingénieur logiciel depuis
-2012, ancien de la banque d'investissement (plateformes de trading et de risque
-temps réel), puis tech lead.
+2012, ancien de la banque d'investissement (systèmes critiques temps
+réel), puis tech lead.
 
 **NSY est-elle une ESN / SSII ?**
 Non — NSY est un cabinet indépendant à un seul nom, sans « junior masqué » : la

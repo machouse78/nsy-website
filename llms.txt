@@ -4,7 +4,7 @@
 
 Points clés :
 - Signification du nom : NSY = New Software Yard (« chantier logiciel »). Le nom évoque la capacité de la société à prendre en charge de nouveaux chantiers — missions techniques comme projets web — et à les mener jusqu'à leur accomplissement.
-- Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (plateformes de trading et de risque temps réel), tech lead.
+- Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (systèmes critiques temps réel), tech lead.
 - Modèle « en prise directe » : la personne présentée est celle qui livre. Trois clients en parallèle maximum. Interventions en direct ou, chez les grands comptes, en sous-traitance d'une ESN référencée — les propositions de mission des ESN sont bienvenues.
 - Secteurs de référence : banque de détail, banque privée, assurance vie, asset management, paiement, fintech. Environnements régulés (ACPR, AMF, RGPD, DORA).
 - Création web IA : offre clé en main, tarification en fonction du besoin (devis après cadrage).
