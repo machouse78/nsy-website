@@ -54,6 +54,9 @@ cp antispam.php          deploy/   # filtre anti-spam partage (contact + faisabi
 cp journal-stats.php     deploy/   # compteurs vues / j'aime du journal
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
+# favicon.ico : emplacement historique interrogé par Google en secours du
+# <link rel="icon">. Sans cette ligne il n'est jamais déployé (vécu 20/08/2026).
+cp favicon.ico           deploy/
 cp llms.txt              deploy/
 cp llms-full.txt         deploy/
 cp feed.xml              deploy/   # flux RSS du journal (FR)
