@@ -1086,6 +1086,18 @@
 
       const alertes = [];
       if (e404 || scans) alertes.push(`${n(e404)} erreur${e404 > 1 ? 's' : ''} 404 et ${n(scans)} requête${scans > 1 ? 's' : ''} de scanners de vulnérabilités — du bruit sans effet sur un site statique`);
+      // Favicons : contrôle quotidien du collecteur. Un défaut ici ne casse
+      // rien et ne se voit qu'en cherchant le site dans Google — d'où l'alerte.
+      {
+        const f = [...sel].reverse().map((d) => D[d].favicons).find(Boolean);
+        if (f && !f.ok) {
+          const quoi = [];
+          if (f.ico !== 200) quoi.push(`/favicon.ico répond ${f.ico}`);
+          if (!f.conforme) quoi.push('aucune icône carrée d\'au moins 48 px déclarée');
+          if ((f.casses || []).length) quoi.push(`${f.casses.length} fichier(s) d'icône inaccessible(s)`);
+          alertes.push(`<strong>favicon à corriger</strong> — ${quoi.join(', ')} : Google affichera un globe générique à la place du logo`);
+        }
+      }
       if (alertes.length) par.push(`<span class="alerte">À noter :</span> ${alertes.join(' ; ')}.`);
 
       $('resume').innerHTML = par.map((p) => `<p>${p}</p>`).join('');

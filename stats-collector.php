@@ -689,6 +689,74 @@ if ($ytKey !== '' && !str_starts_with($ytKey, 'CHANGE_ME') && $ytRecent) {
     }
 }
 
+// ── 3 quinquies. Favicons — contrôle QUOTIDIEN (skill `favicons`) ────────────
+// Pourquoi ici : un favicon manquant ne casse rien, ne lève aucune erreur, et
+// se découvre des semaines plus tard sous forme d'un globe générique dans
+// Google. Il faut donc un contrôle régulier, et la seule tâche qui tourne tous
+// les jours sur chaque site est ce collecteur.
+// ⚠️ PORTÉE : on contrôle la page d'accueil et l'ACCESSIBILITÉ des fichiers —
+// c'est là que se produisent les vraies pannes (fichier non déployé, supprimé,
+// bloqué). Le balayage de TOUTES les pages reste le travail de
+// `scripts/verifier-favicons.py`, trop coûteux pour une tâche quotidienne.
+$favicons = null;
+$hote = (string) ($_SERVER['HTTP_HOST'] ?? '');
+if ($hote !== '') {
+    $base = 'https://' . $hote . '/';
+    $tete = static function (string $url) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_NOBODY => true, CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => 10, CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_FOLLOWLOCATION => true]);
+        curl_exec($ch);
+        $c = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        $t = (string) curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
+        curl_close($ch);
+        return [$c, $t];
+    };
+    // ⚠️ curl et non file_get_contents : allow_url_fopen est désactivé sur
+    // l'hébergement, et l'échec est SILENCIEUX — on obtenait « 0 icône
+    // déclarée » sur une page qui en déclare quatre (vécu 20/08/2026).
+    $ch = curl_init($base);
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15,
+        CURLOPT_CONNECTTIMEOUT => 5, CURLOPT_FOLLOWLOCATION => true,
+        // '' = accepte et DÉCOMPRESSE tous les encodages : sans ça on récupère
+        // des octets gzip que la recherche d'icônes ne peut pas lire.
+        CURLOPT_ENCODING => '', CURLOPT_USERAGENT => 'nsy-kpi/1.0']);
+    $html = curl_exec($ch);
+    curl_close($ch);
+    $icones = [];
+    $conforme = false;
+    if (is_string($html)) {
+        preg_match_all('/<link\b[^>]*\brel=["\'][^"\']*\bicon\b[^"\']*["\'][^>]*>/i', $html, $m);
+        foreach ($m[0] as $balise) {
+            if (!preg_match('/href=["\']([^"\']+)["\']/i', $balise, $h)) continue;
+            $url = (string) $h[1];
+            if (!preg_match('#^https?://#i', $url)) {
+                $url = $base . ltrim($url, '/');
+            }
+            preg_match('/sizes=["\']([^"\']+)["\']/i', $balise, $sz);
+            $taille = strtolower($sz[1] ?? '');
+            // Google : carré multiple de 48 px. `any` (le .ico) compte aussi.
+            if ($taille === 'any' || (preg_match('/^(\d+)x\1$/', $taille, $d)
+                && (int) $d[1] >= 48 && (int) $d[1] % 48 === 0)) {
+                $conforme = true;
+            }
+            [$code, $type] = $tete($url);
+            $icones[] = ['url' => $url, 'taille' => $taille, 'code' => $code,
+                         'image' => str_starts_with($type, 'image/')];
+        }
+    }
+    [$codeIco] = $tete($base . 'favicon.ico');
+    $casses = array_values(array_filter($icones, static fn($i) => $i['code'] !== 200 || !$i['image']));
+    $favicons = [
+        'ico'       => $codeIco,
+        'source_octets' => strlen((string) $html),   // 0 = la page n'a pas pu être lue
+        'declarees' => count($icones),
+        'conforme'  => $conforme,          // au moins un carré ≥ 48 px multiple de 48
+        'casses'    => $casses,
+        'ok'        => $codeIco === 200 && $conforme && !$casses && $icones !== [],
+    ];
+}
+
 // ── 3 quater. Calendrier des événements ──────────────────────────────────────
 // À quoi ça sert : un pic de visites ou de lectures de robots ne veut rien dire
 // tant qu'on ignore ce qui s'est passé ce jour-là. Ce calendrier est ce qui
@@ -786,6 +854,7 @@ if (($day['hits'] ?? 0) === 0) {
 }
 $extra = ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
 if ($avis) $extra['avis'] = $avis;
+if ($favicons !== null) $extra['favicons'] = $favicons;
 // L'écriture REMPLACE l'entrée du jour : sans ce report, relancer une date déjà
 // collectée effacerait les blocs qui n'ont pas pu être recollectés (GitHub hors
 // de sa fenêtre de 14 jours, YouTube volontairement muet en rattrapage).
