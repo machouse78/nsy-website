@@ -218,9 +218,9 @@
 
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/le-cerf-thym.jpg</video:thumbnail_loc>
-      <video:title>Aperçu du site Le Cerf Thym — réalisation NSY</video:title>
-      <video:description>Aperçu animé du site www.lecerfthym.fr conçu par NSY : visite de la page d'accueil du restaurant de Sully-sur-Loire (4 langues, avis clients, cartes interactives).</video:description>
-      <video:content_loc>https://www.nsy.fr/public/le-cerf-thym.mp4</video:content_loc>
+      <video:title>Parcours du site Le Cerf Thym — réalisation NSY</video:title>
+      <video:description>Parcours du site www.lecerfthym.fr conçu par NSY : accueil, carte, boissons et accès du restaurant de Sully-sur-Loire, en quatre langues.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/YC5AG0zX70g</video:player_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
 
@@ -232,9 +232,9 @@
 
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/prv-concept.jpg</video:thumbnail_loc>
-      <video:title>Aperçu du site PRV Concept — réalisation NSY</video:title>
-      <video:description>Aperçu animé du site prv-concept.com conçu par NSY : intro du hero, moteur V6 PRV et assistant conversationnel de l'association.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/prv-concept.mp4</video:content_loc>
+      <video:title>Parcours du site PRV Concept — réalisation NSY</video:title>
+      <video:description>Parcours du site www.prv-concept.com conçu par NSY : accueil, moteurs PRV, protos et bibliothèque d'atelier, avec l'assistant conversationnel de l'association.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>
@@ -251,15 +251,15 @@
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/le-cerf-thym.jpg</video:thumbnail_loc>
       <video:title>Le Cerf Thym website preview — an NSY build</video:title>
-      <video:description>Aperçu animé du site www.lecerfthym.fr conçu par NSY : visite de la page d'accueil du restaurant de Sully-sur-Loire (4 langues, avis clients, cartes interactives).</video:description>
-      <video:content_loc>https://www.nsy.fr/public/le-cerf-thym.mp4</video:content_loc>
+      <video:description>Parcours du site www.lecerfthym.fr conçu par NSY : accueil, carte, boissons et accès du restaurant de Sully-sur-Loire, en quatre langues.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/YC5AG0zX70g</video:player_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/prv-concept.jpg</video:thumbnail_loc>
       <video:title>PRV Concept website preview — an NSY build</video:title>
-      <video:description>Aperçu animé du site prv-concept.com conçu par NSY : intro du hero, moteur V6 PRV et assistant conversationnel de l'association.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/prv-concept.mp4</video:content_loc>
+      <video:description>Parcours du site www.prv-concept.com conçu par NSY : accueil, moteurs PRV, protos et bibliothèque d'atelier, avec l'assistant conversationnel de l'association.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>

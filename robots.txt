@@ -49,8 +49,6 @@ Disallow: /public/*.mp4
 Allow: /public/nsy-hero.mp4
 Allow: /public/finance-assurance.mp4
 Allow: /public/web-ia.mp4
-Allow: /public/prv-concept.mp4
-Allow: /public/le-cerf-thym.mp4
 Allow: /public/seo-geo-thumb.mp4
 Allow: /public/chatbot-forum-thumb.mp4
 Allow: /public/weekend-site-thumb.mp4
