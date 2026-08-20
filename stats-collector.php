@@ -689,6 +689,83 @@ if ($ytKey !== '' && !str_starts_with($ytKey, 'CHANGE_ME') && $ytRecent) {
     }
 }
 
+// ── 3 quater. Calendrier des événements ──────────────────────────────────────
+// À quoi ça sert : un pic de visites ou de lectures de robots ne veut rien dire
+// tant qu'on ignore ce qui s'est passé ce jour-là. Ce calendrier est ce qui
+// permet à l'analyse de dire « pic du 17 : article publié la veille » au lieu
+// d'une corrélation inventée. TOUT y est automatique — aucune saisie manuelle :
+//   · articles       → le flux RSS du site (source de vérité des publications)
+//   · publications   → dates déjà rapportées par Meta (Facebook, Instagram)
+//   · vidéos         → dates de mise en ligne YouTube
+//   · actions techniques → messages de commit du dépôt public (c'est là que
+//     vivent les actions GEO/SEO : llms.txt, JSON-LD, pages villes…)
+// Stocké à PLAT (hist.evenements[date]), hors des journées : un événement n'est
+// pas une mesure, et il doit survivre à la recollecte d'une journée.
+$evts = [];   // rempli plus bas, une fois l'historique ouvert
+$ajouteEvt = static function (array &$e, string $date, string $type, string $lib, string $url = ''): void {
+    $lib = trim(preg_replace('/\s+/u', ' ', $lib));
+    if (!preg_match('/^\d{4}-\d{2}-\d{2}$/', $date) || $lib === '') return;
+    foreach ($e[$date] ?? [] as $x) {
+        if ($x['t'] === $type && $x['l'] === $lib) return;     // déjà connu
+    }
+    $n = ['t' => $type, 'l' => mb_substr($lib, 0, 90)];
+    if ($url !== '') $n['u'] = $url;
+    $e[$date][] = $n;
+};
+
+$collecteEvts = static function (array &$e) use ($ajouteEvt, $fb, $youtube, $ghTok, $ghRepo, $target): void {
+    // 1. Articles — le flux RSS porte la date de publication qui fait foi.
+    $rss = @file_get_contents(__DIR__ . '/feed.xml');
+    if (is_string($rss) && $rss !== '') {
+        $xml = @simplexml_load_string($rss);
+        foreach ($xml->channel->item ?? [] as $it) {
+            $d = strtotime((string) $it->pubDate);
+            if ($d) $ajouteEvt($e, date('Y-m-d', $d), 'article', (string) $it->title, (string) $it->link);
+        }
+    }
+    // 2. Publications sociales — Meta ne renvoie que les 10 dernières, mais la
+    //    collecte tourne chaque jour : l'accumulation fait le reste.
+    foreach ($fb['posts'] ?? [] as $p) {
+        $ajouteEvt($e, (string) ($p['date'] ?? ''), 'facebook', ($p['titre'] ?? '') ?: 'publication', (string) ($p['url'] ?? ''));
+    }
+    foreach ($fb['ig_posts'] ?? [] as $p) {
+        $ajouteEvt($e, (string) ($p['date'] ?? ''), 'instagram', ($p['titre'] ?? '') ?: 'publication', (string) ($p['url'] ?? ''));
+    }
+    // 3. Vidéos YouTube.
+    foreach ($youtube['derniers'] ?? [] as $v) {
+        $ajouteEvt($e, (string) ($v['date'] ?? ''), 'video', (string) ($v['titre'] ?? ''), (string) ($v['url'] ?? ''));
+    }
+    // 4. Actions techniques — les commits. On remonte 30 JOURS à chaque passage
+    //    (un seul appel, l'ajout est dédoublonné) : ça garnit l'historique déjà
+    //    collecté au lieu de n'être utile qu'à partir de demain, et ça rattrape
+    //    une collecte manquée. On écarte ce qui ne peut PAS influencer
+    //    l'audience — outillage, docs, refactoring, et le dashboard lui-même :
+    //    sans ce tri, le calendrier noie le vrai signal sous le bruit interne.
+    if ($ghTok === '' || $ghRepo === '') return;
+    $depuis = date('Y-m-d', strtotime($target . ' -30 days'));
+    $ch = curl_init("https://api.github.com/repos/$ghRepo/commits?"
+        . http_build_query(['since' => $depuis . 'T00:00:00Z', 'until' => $target . 'T23:59:59Z', 'per_page' => '100']));
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_HTTPHEADER => ["Authorization: Bearer $ghTok", 'Accept: application/vnd.github+json',
+                               'X-GitHub-Api-Version: 2022-11-28', 'User-Agent: nsy-kpi'],
+    ]);
+    $raw = curl_exec($ch);
+    $liste = is_string($raw) ? json_decode($raw, true) : null;
+    if (!is_array($liste)) return;
+    $parJour = [];        // plafond PAR JOUR, sinon une journée bavarde mange tout
+    foreach ($liste as $c) {
+        $msg = strtok((string) ($c['commit']['message'] ?? ''), "\n");
+        if ($msg === false || $msg === '') continue;
+        if (preg_match('/^(chore|docs|refactor|test|style|build|ci)[(:]/i', $msg)) continue;
+        if (preg_match('/^\w+\((kpi|stats)\)/i', $msg)) continue;   // outillage interne
+        $d = substr((string) ($c['commit']['author']['date'] ?? ''), 0, 10);
+        if (($parJour[$d] ?? 0) >= 4) continue;
+        $ajouteEvt($e, $d, 'technique', $msg);
+        $parJour[$d] = ($parJour[$d] ?? 0) + 1;
+    }
+};
+
 // ── Historisation (idempotente, avec verrou) ─────────────────────────────────
 $histFile = __DIR__ . '/_secret/kpi-history.json';
 $fh = fopen($histFile, 'c+');
@@ -725,6 +802,12 @@ foreach ($ghSerie as $j => $c) {
     $hist['days'][$j]['github'] = $c + ['vues' => 0, 'visiteurs' => 0, 'clones' => 0, 'cloneurs' => 0];
 }
 ksort($hist['days']);
+// Calendrier : on repart de l'existant et on complète — les publications
+// sorties de la fenêtre de 10 posts renvoyée par Meta restent ainsi acquises.
+$evts = is_array($hist['evenements'] ?? null) ? $hist['evenements'] : [];
+$collecteEvts($evts);
+ksort($evts);
+$hist['evenements'] = $evts;
 // Historique ILLIMITÉ (owner, 17/08/2026) : aucune purge — l'archive court depuis la V1 du site.
 ftruncate($fh, 0);
 rewind($fh);

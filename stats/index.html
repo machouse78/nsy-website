@@ -80,6 +80,31 @@
   .resume b { color: var(--fg0); } .resume .alerte { color: var(--warm); }
   .resh { font-size: 11.5px; margin-top: 3px; color: var(--fg2); line-height: 1.5; }
   .resh a { color: var(--warm); }
+  /* Agent d'analyse — dialogue ancré sur la période affichée. */
+  .agent { background: var(--bg2); border: 1px solid var(--line); border-radius: 12px;
+    padding: 14px 16px; margin-bottom: 14px; }
+  .agent-h { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .agent-h h2 { margin: 0; font: 700 14px Manrope, sans-serif; color: var(--fg0); }
+  .agent-h span { font: 500 11.5px/1.5 Manrope, sans-serif; color: var(--fg2); }
+  .agent-fil { display: flex; flex-direction: column; gap: 10px; max-height: 340px; overflow-y: auto; }
+  .agent-fil:not(:empty) { margin-bottom: 12px; }
+  .agent-msg { font-size: 14px; line-height: 1.6; border-radius: 10px; padding: 9px 12px; max-width: 88%; }
+  .agent-msg.moi { align-self: flex-end; background: rgba(0, 229, 255, .10); color: var(--fg0);
+    border: 1px solid var(--line); }
+  .agent-msg.lui { align-self: flex-start; background: var(--bg); border: 1px solid var(--line); color: var(--fg1); }
+  .agent-msg.err { color: var(--warm); }
+  .agent-saisie { display: flex; gap: 8px; }
+  .agent-saisie input { flex: 1; background: var(--bg); border: 1px solid var(--line); border-radius: 99px;
+    color: var(--fg0); font: 500 13.5px Manrope, sans-serif; padding: 10px 16px; }
+  .agent-saisie input:focus { outline: none; border-color: var(--accent); }
+  .agent-saisie button { background: rgba(0, 229, 255, .12); border: 1px solid var(--accent);
+    border-radius: 99px; color: var(--accent); font: 600 13px Manrope, sans-serif;
+    padding: 10px 18px; cursor: pointer; }
+  .agent-saisie button:disabled { opacity: .5; cursor: default; }
+  .agent-idees { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 9px; }
+  .agent-idees button { background: none; border: 1px solid var(--line); border-radius: 99px;
+    color: var(--fg2); font: 500 11.5px Manrope, sans-serif; padding: 5px 11px; cursor: pointer; }
+  .agent-idees button:hover { border-color: var(--accent); color: var(--fg1); }
   #tip { position: fixed; z-index: 50; pointer-events: none; display: none; background: var(--bg2);
     border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 10px;
     padding: 9px 12px; font-size: 12.5px; line-height: 1.6; box-shadow: 0 8px 28px rgba(0,0,0,.5); min-width: 150px; }
@@ -108,7 +133,7 @@
      (sinon les courbes claires disparaissent) et on évite de couper un graphe. */
   @media print {
     body { padding: 0; }
-    .bar, .secnav, .export, #tip { display: none !important; }
+    .bar, .secnav, .export, #tip, .agent-saisie, .agent-idees { display: none !important; }
     .chart, .card, table, .resume { break-inside: avoid; page-break-inside: avoid; }
     .sec-h { break-before: auto; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -193,6 +218,23 @@
   </nav>
 
   <div class="resume" id="resume"></div>
+
+  <!-- Agent d'analyse : il reçoit les faits DÉJÀ calculés pour la période
+       affichée (totaux, pics détectés, calendrier des événements) et se
+       contente de les mettre en mots. Il ne calcule rien, donc il ne peut
+       pas inventer de corrélation. -->
+  <div class="agent" id="agent" hidden>
+    <div class="agent-h">
+      <h2>Analyse</h2>
+      <span id="agent-etat">posez une question sur la période affichée</span>
+    </div>
+    <div class="agent-fil" id="agent-fil"></div>
+    <form class="agent-saisie" id="agent-form" autocomplete="off">
+      <input id="agent-q" type="text" maxlength="500" placeholder="ex. d'où vient le pic du 17 août ?">
+      <button type="submit" id="agent-go">Demander</button>
+    </form>
+    <div class="agent-idees" id="agent-idees"></div>
+  </div>
 
   <div class="sec-h" id="r-site"><h2>Fréquentation du site</h2><span>visiteurs, pages, robots</span></div>
   <div class="grid" id="cards"></div>
@@ -781,6 +823,120 @@
   };
   const dFmt = (iso) => new Date(iso + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
 
+  // ── Agent d'analyse ──────────────────────────────────────────────────────
+  // Le calendrier des événements est produit par le collecteur (articles du
+  // flux RSS, publications sociales, vidéos, actions techniques issues des
+  // messages de commit). Sans lui, aucune attribution de pic n'est possible :
+  // un modèle à qui l'on ne donne que des courbes invente toujours une cause.
+  const EVTS = hist.evenements || {};
+  const LIB_EVT = { article: 'article publié', facebook: 'publication Facebook',
+    instagram: 'publication Instagram', video: 'vidéo YouTube',
+    technique: 'action technique sur le site' };
+  let dossier = null;
+  const filAgent = [];
+
+  const mediane = (t) => {
+    if (!t.length) return 0;
+    const s = [...t].sort((x, y) => x - y), m = s.length >> 1;
+    return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2;
+  };
+
+  // Les événements des N jours qui PRÉCÈDENT, jour même inclus : un article
+  // publié en fin de journée se lit surtout le lendemain.
+  const evtsAvant = (date, n) => {
+    const out = [];
+    for (let i = 0; i <= n; i++) {
+      const j = shiftISO(date, -i);
+      for (const e of EVTS[j] || []) out.push({ date: j, type: LIB_EVT[e.t] || e.t, libelle: e.l });
+    }
+    return out;
+  };
+
+  // Un pic = une journée nettement au-dessus de la MÉDIANE de la période — pas
+  // de la moyenne : un seul jour exceptionnel la tire vers le haut et masque
+  // ensuite tous les autres. Le plancher `+5` évite de crier au pic sur un site
+  // à trois visites, où passer de 1 à 3 double le chiffre sans rien signifier.
+  const detectePics = (jours, nom, lecture) => {
+    const vals = jours.map((d) => lecture(D[d]));
+    const med = mediane(vals.filter((v) => v > 0));
+    if (!med) return [];
+    return jours.map((d, i) => ({ date: d, valeur: vals[i] }))
+      .filter((p) => p.valeur >= Math.max(med * 2, med + 5))
+      .sort((x, y) => y.valeur - x.valeur).slice(0, 4)
+      .map((p) => ({
+        date: p.date, metrique: nom, valeur: p.valeur,
+        mediane_periode: Math.round(med), facteur: +(p.valeur / med).toFixed(1),
+        evenements_proches: evtsAvant(p.date, 3),
+      }));
+  };
+
+  function construitDossier(sel, cmp, a, b) {
+    const S = (fn) => sumKey(sel, fn);
+    const debutCal = shiftISO(a, -5);   // un événement d'avant la période peut expliquer son début
+    const cal = [];
+    for (const [j, liste] of Object.entries(EVTS)) {
+      if (j < debutCal || j > b) continue;
+      for (const e of liste) cal.push({ date: j, type: LIB_EVT[e.t] || e.t, libelle: e.l });
+    }
+    return {
+      periode: { du: a, au: b, jours: sel.length, categorie: cat,
+        filtres_actifs: filters.map((f) => `${f.type}:${f.value}`) },
+      totaux: {
+        visiteurs_humains: S(vVis), pages_vues: S(vPages),
+        lectures_par_robots_ia: S(vAI), visites_venues_d_une_reponse_ia: S(vRefIa),
+        conversations_agent: S((v) => v.chat?.conversations ?? 0),
+        erreurs_404: S((v) => v.status?.['404'] ?? 0),
+      },
+      periode_precedente: cmp ? {
+        visiteurs_humains: sumKey(cmp, vVis), pages_vues: sumKey(cmp, vPages),
+        lectures_par_robots_ia: sumKey(cmp, vAI),
+      } : null,
+      top_pages: aggMap(sel, vTopPages).slice(0, 6).map(([n, v]) => ({ page: n, vues: v })),
+      robots_ia: aggMap(sel, (v) => v.ai).slice(0, 6).map(([n, v]) => ({ robot: n, lectures: v })),
+      assistants_apporteurs: aggMap(sel, (v) => v.ref_ia).slice(0, 5).map(([n, v]) => ({ assistant: n, visites: v })),
+      pics: [...detectePics(sel, 'visiteurs humains', vVis),
+             ...detectePics(sel, 'lectures par robots IA', vAI)],
+      calendrier: cal.sort((x, y) => x.date.localeCompare(y.date)).slice(-40),
+    };
+  }
+
+  function bulle(classe, texte) {
+    const d = document.createElement('div');
+    d.className = 'agent-msg ' + classe;
+    d.textContent = texte;
+    $('agent-fil').appendChild(d);
+    $('agent-fil').scrollTop = $('agent-fil').scrollHeight;
+    return d;
+  }
+
+  async function demande(q) {
+    if (!q.trim() || !dossier) return;
+    $('agent-q').value = '';
+    bulle('moi', q);
+    const attente = bulle('lui', '…');
+    $('agent-go').disabled = true;
+    $('agent-etat').textContent = 'analyse en cours';
+    try {
+      const r = await fetch('chat.php', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question: q, dossier, historique: filAgent.slice(-6) }),
+      });
+      const j = await r.json().catch(() => ({}));
+      if (j.ok && j.reply) {
+        attente.textContent = j.reply;
+        filAgent.push({ role: 'user', content: q }, { role: 'assistant', content: j.reply });
+      } else {
+        attente.textContent = j.error || 'Analyse indisponible.';
+        attente.classList.add('err');
+      }
+    } catch {
+      attente.textContent = 'Erreur réseau.';
+      attente.classList.add('err');
+    }
+    $('agent-go').disabled = false;
+    $('agent-etat').textContent = 'les réponses portent sur la période affichée';
+  }
+
   function render() {
     renderPills();
     const [wa, wb] = currentWindow();
@@ -934,6 +1090,11 @@
 
       $('resume').innerHTML = par.map((p) => `<p>${p}</p>`).join('');
     }
+
+    // ── Dossier de faits pour l'agent ────────────────────────────────────
+    // Tout est calculé ICI, jamais par le modèle : il ne reçoit que des
+    // constats établis, ce qui lui retire la possibilité d'inventer un lien.
+    dossier = construitDossier(sel, cmp, a, b);
 
     $('range-note').textContent = `${dFmt(a)} → ${dFmt(b)} · ${sel.length} jours de données` +
       (recale ? ` · période recalée sur les jours porteurs des filtres (demandé : ${dFmt(wa)} → ${dFmt(wb)})` : '') +
@@ -1548,6 +1709,31 @@
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   fillSelects();
   render();
+
+  // ── Mise en service de l'agent ───────────────────────────────────────────
+  // Le panneau reste masqué si l'endpoint n'est pas déployé ou si aucune clé
+  // de modèle n'est configurée : mieux vaut pas de champ qu'un champ qui échoue.
+  (async () => {
+    try {
+      const r = await fetch('chat.php', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),                 // requête volontairement vide
+      });
+      // 400 = l'endpoint répond et réclame une vraie question : il est en place.
+      // 503 = pas de clé configurée. 404 = pas déployé. Dans ces deux cas, rien.
+      if (r.status !== 400) return;
+    } catch { return; }
+    $('agent').hidden = false;
+    $('agent-form').addEventListener('submit', (e) => { e.preventDefault(); demande($('agent-q').value); });
+    // Suggestions calculées : on propose d'abord les pics réellement détectés,
+    // c'est la question que le owner allait poser de toute façon.
+    const idees = (dossier?.pics || []).slice(0, 2)
+      .map((p) => `D'où vient le pic de ${p.metrique} du ${dFmt(p.date)} ?`);
+    idees.push('Que retenir de cette période ?', 'Qu\'est-ce qui a le mieux marché ?');
+    $('agent-idees').innerHTML = idees.map((t) => `<button type="button">${t}</button>`).join('');
+    $('agent-idees').querySelectorAll('button').forEach((b) =>
+      b.addEventListener('click', () => demande(b.textContent)));
+  })();
 })();
 </script>
 </body>

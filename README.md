@@ -92,7 +92,15 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
   buckets jour/semaine/mois, comparaison N-1) + **filtres** (pills cliquables,
   barre de requête `bot:` `page:` `referral:` `ia:`, métrique au choix, séries
-  superposées), **rubrique Avis clients** (une ligne par source — Facebook
+  superposées), **agent d'analyse conversationnel** (`stats/chat.php`, derrière
+  le même Basic Auth) : on lui pose une question sur la période affichée et il
+  répond en s'appuyant sur un dossier de faits **calculé par le dashboard** —
+  totaux, pics détectés par écart à la médiane, et calendrier automatique des
+  événements (articles du flux RSS, publications Facebook/Instagram, vidéos,
+  actions techniques lues dans les messages de commit). Le modèle ne calcule
+  rien : il ne peut donc pas inventer de corrélation, et signale une proximité
+  de dates comme une coïncidence, jamais comme une cause. Le panneau disparaît
+  si aucune clé de modèle n'est configurée, **rubrique Avis clients** (une ligne par source — Facebook
   collecté automatiquement, Google et PagesJaunes déclarés et relevés à la
   main faute d'API ouverte, avec les liens de sollicitation ; aucune donnée
   nominative : ni auteur ni texte, seulement des comptes), **rubriques Dépôt GitHub** (consultations, clones, pages et
