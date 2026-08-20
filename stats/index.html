@@ -1355,8 +1355,12 @@
 
         const lien = (url, txt) => url ? `<a href="${url}" target="_blank" rel="noopener">${txt}</a>` : txt;
         document.querySelector('#t-avis tbody').innerHTML = src.map(([nom, v]) => {
-          const suivi = v.nombre == null
-            ? '<span class="mono">manuel — pas d\'API ouverte</span>'
+          // On ne fait jamais passer une saisie manuelle pour une collecte :
+          // `auto` dit d'où vient le chiffre, et le libellé le répète.
+          const suivi = v.auto === false
+            ? (v.nombre == null
+              ? '<span class="mono">manuel — pas d\'API ouverte</span>'
+              : '<span class="mono">saisi à la main — pas d\'API ouverte</span>')
             : (v.positifs != null && v.nombre > 0
               ? `<span class="mono">${v.positifs} recommandation(s) positive(s)</span>`
               : '<span class="mono">collecté chaque jour</span>');

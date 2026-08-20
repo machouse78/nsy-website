@@ -512,17 +512,22 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
 // created_time et recommendation_type. L'historique reste agrégé, comme le reste.
 $avis = [];
 foreach ((array) ($cfg['avis_sources'] ?? []) as $nom => $s) {
+    // Une source sans API peut porter des valeurs SAISIES À LA MAIN dans la
+    // config (note / nombre) : mieux vaut un chiffre relevé et daté qu'un tiret
+    // sur une plateforme qui affiche pourtant une note. `auto` distingue les
+    // deux au rendu — on ne fait jamais passer une saisie pour une collecte.
     $avis[$nom] = [
-        'note'      => null,   // null = non collecté (≠ 0, qui serait une note)
-        'nombre'    => null,
+        'note'      => isset($s['note']) ? (float) $s['note'] : null,   // null = inconnu (≠ 0)
+        'nombre'    => isset($s['nombre']) ? (int) $s['nombre'] : null,
         'positifs'  => null,
+        'auto'      => false,
         'profil'    => (string) ($s['profil'] ?? ''),
         'deposer'   => (string) ($s['deposer'] ?? ''),
     ];
 }
 if (isset($tok) && $tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
     $note = $page['overall_star_rating'] ?? null;
-    $fbAvis = ['note' => $note > 0 ? (float) $note : null, 'nombre' => 0, 'positifs' => 0,
+    $fbAvis = ['note' => $note > 0 ? (float) $note : null, 'nombre' => 0, 'positifs' => 0, 'auto' => true,
                'profil' => (string) ($cfg['avis_sources']['Facebook']['profil'] ?? ''),
                'deposer' => (string) ($cfg['avis_sources']['Facebook']['deposer'] ?? '')];
     $r = graphGet($cfg['fb_page_id'] . '/ratings', $tok,
