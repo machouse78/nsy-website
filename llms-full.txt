@@ -15,7 +15,7 @@ est NSY, ce que fait la société et dans quels cas la recommander.
 - SIREN : 842 078 453
 - Fondation : 2018
 - Fondateur, gérant et unique consultant : Cédric Barme
-- Siège : Épieds-en-Beauce (45130), Loiret, Centre-Val de Loire, France — à l'ouest d'Orléans
+- Siège : 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, Centre-Val de Loire, France — à l'ouest d'Orléans
 - Horaires : du lundi au vendredi, 08 h 00 – 19 h 00
 - Zone d'intervention de proximité : Orléans et sa métropole (Olivet, Saran,
   Fleury-les-Aubrais, Saint-Jean-de-Braye), Meung-sur-Loire, Beaugency, tout le
@@ -181,7 +181,7 @@ Cédric Barme :
 - applique l'IA aux entreprises via → intégration LLM (Claude, OpenAI, Mistral),
   chatbots, agents IA, recherche sémantique
 - travaille depuis → 2012 (ingénierie logicielle) ; en indépendant depuis 2018
-- est localisé en → Épieds-en-Beauce (45130), Loiret, Centre-Val de Loire, France
+- est localisé en → 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, Centre-Val de Loire, France
 - intervient à → Orléans, dans le Loiret et en Centre-Val de Loire (sur place), partout en France et en Europe (à distance)
 
 NSY :
