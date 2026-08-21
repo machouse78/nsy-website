@@ -149,6 +149,9 @@
   .secnav a { font: 600 12.5px Manrope, sans-serif; color: var(--fg1); border: 1px solid transparent;
     border-radius: 8px; padding: 5px 11px; }
   .secnav a:hover { border-color: var(--accent); color: var(--fg0); }
+  /* La barre de rubriques est collante en haut : sans cette marge, le titre
+     visé par une ancre se retrouve caché dessous à l'arrivée. */
+  .sec-h { scroll-margin-top: 72px; }
   .sec-h { display: flex; align-items: baseline; gap: 12px; margin: 46px 0 4px; padding-top: 16px;
     border-top: 1px solid var(--line); }
   .sec-h h2 { margin: 0; font-size: 19px; }
@@ -1721,6 +1724,33 @@
       }
     }));
   }
+
+  // ── Menu collant : un lien vers une rubrique MASQUÉE ne faisait rien ──────
+  // Le navigateur ne peut pas défiler vers un élément en display:none. Or le
+  // filtre de catégorie du haut en masque : cliquer « Dépôt GitHub » alors que
+  // « Avis clients » est actif ne produisait aucun effet, sans le moindre
+  // signal. On rebascule sur « Tout » pour rendre la cible visible, puis on y va.
+  document.querySelectorAll('.secnav a[href^="#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      const cible = document.getElementById(a.getAttribute('href').slice(1));
+      if (!cible || cible.offsetParent !== null) return;   // déjà visible : lien normal
+      e.preventDefault();
+      cat = 'tout';
+      filters = filters.filter((f) => f.type !== 'peri');
+      render();
+      // Défilement SYNCHRONE juste après le rendu : lire getBoundingClientRect
+      // force le recalcul de la mise en page, la position est donc déjà juste.
+      // ⚠️ Ne pas passer par requestAnimationFrame : il n'est pas appelé quand
+      // l'onglet est masqué (document.hidden), et le clic resterait sans effet.
+      const c = document.getElementById(a.getAttribute('href').slice(1));
+      if (c) {
+        const barre = document.querySelector('.secnav');
+        const marge = (barre ? barre.getBoundingClientRect().height : 0) + 16;
+        window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - marge,
+                          behavior: 'smooth' });
+      }
+    });
+  });
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   fillSelects();
