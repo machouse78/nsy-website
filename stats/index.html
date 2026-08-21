@@ -133,25 +133,22 @@
      (sinon les courbes claires disparaissent) et on évite de couper un graphe. */
   @media print {
     body { padding: 0; }
-    .bar, .secnav, .export, #tip, .agent-saisie, .agent-idees { display: none !important; }
+    .bar, .catnav, .export, #tip, .agent-saisie, .agent-idees { display: none !important; }
     .chart, .card, table, .resume { break-inside: avoid; page-break-inside: avoid; }
     .sec-h { break-before: auto; }
     * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   }
-  .catnav { display: flex; gap: 8px; flex-wrap: wrap; margin: 0 0 12px; }
+  /* UN SEUL menu (owner, 21/08/2026). Il était doublé : des onglets de
+     catégorie en tête + une barre d'ancres collante, aux libellés différents
+     et au comportement différent. Deux menus finissent toujours par diverger —
+     celui-ci est donc l'unique, et il devient collant en défilant. */
+  .catnav { position: sticky; top: 0; z-index: 20; display: flex; gap: 8px; flex-wrap: wrap;
+    background: rgba(10, 15, 28, .92); backdrop-filter: blur(8px);
+    border: 1px solid var(--line); border-radius: 12px; padding: 8px 10px; margin: 0 0 16px; }
   .catnav button { background: var(--bg2); border: 1px solid var(--line); border-radius: 99px;
     color: var(--fg1); font: 600 13px Manrope, sans-serif; padding: 8px 16px; cursor: pointer; }
   .catnav button:hover { border-color: var(--accent); color: var(--fg0); }
   .catnav button.on { background: rgba(0, 229, 255, .12); border-color: var(--accent); color: var(--accent); }
-  .secnav { position: sticky; top: 0; z-index: 20; display: flex; gap: 6px; flex-wrap: wrap;
-    background: rgba(10, 15, 28, .92); backdrop-filter: blur(8px); border: 1px solid var(--line);
-    border-radius: 12px; padding: 8px 10px; margin: 0 0 16px; }
-  .secnav a { font: 600 12.5px Manrope, sans-serif; color: var(--fg1); border: 1px solid transparent;
-    border-radius: 8px; padding: 5px 11px; }
-  .secnav a:hover { border-color: var(--accent); color: var(--fg0); }
-  /* La barre de rubriques est collante en haut : sans cette marge, le titre
-     visé par une ancre se retrouve caché dessous à l'arrivée. */
-  .sec-h { scroll-margin-top: 72px; }
   .sec-h { display: flex; align-items: baseline; gap: 12px; margin: 46px 0 4px; padding-top: 16px;
     border-top: 1px solid var(--line); }
   .sec-h h2 { margin: 0; font-size: 19px; }
@@ -205,20 +202,6 @@
     <input type="text" id="kql" placeholder="ex. page:/expertise-* · bot:claude · ia:perplexity — Entrée pour appliquer" />
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
-
-  <nav class="secnav">
-    <a href="#r-site">Site</a>
-    <a href="#r-ia">Provenance IA</a>
-    <a href="#r-agent">Agent conversationnel</a>
-    <a href="#r-reseaux">Réseaux sociaux</a>
-    <a href="#r-avis" id="nav-avis" hidden>Avis clients</a>
-    <a href="#r-github" id="nav-github" hidden>Dépôt GitHub</a>
-    <a href="#r-youtube" id="nav-youtube" hidden>Chaîne YouTube</a>
-    <a href="#r-forum" id="nav-forum" hidden>Forum</a>
-    <a href="#r-boutique" id="nav-boutique" hidden>Boutique</a>
-    <a href="#r-contenu">Contenu</a>
-    <a href="#r-parcours">Parcours</a>
-  </nav>
 
   <div class="resume" id="resume"></div>
 
@@ -456,6 +439,13 @@
     const NOMS = { vitrine: 'Site', site: 'Site', forum: 'Forum', boutique: 'Boutique' };
     if (peris.length > 1) peris.forEach((p) => l.push(['peri:' + p, NOMS[p] || p.charAt(0).toUpperCase() + p.slice(1)]));
     else l.push(['site', 'Site']);
+    // Les sous-rubriques du site sont des CATÉGORIES, pas des ancres : elles
+    // filtrent la page comme les autres. C'est ce qui permet de n'avoir qu'un
+    // seul menu (owner, 21/08/2026).
+    l.push(['ia', 'Provenance IA']);
+    if (RUB_DISPO.agent()) l.push(['agent', 'Agent conversationnel']);
+    l.push(['contenu', 'Contenu']);
+    l.push(['parcours', 'Parcours']);
     if (aDonnee((v) => (v.fb?.vues ?? 0) || (v.fb?.abonnes ?? 0))) l.push(['facebook', 'Facebook']);
     if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
     if (aDonnee((v) => v.avis)) l.push(['avis', 'Avis clients']);
@@ -472,7 +462,10 @@
   // en laissant croire à un filtrage qui n'existait pas (owner, 18/08/2026).
   const RUBRIQUES = {
     siteScope: ['r-site'],
-    siteGlobal: ['r-ia', 'r-agent', 'r-contenu', 'r-parcours'],
+    ia: ['r-ia'],
+    agent: ['r-agent'],
+    contenu: ['r-contenu'],
+    parcours: ['r-parcours'],
     reseaux: ['r-reseaux'],
     avis: ['r-avis'],
     github: ['r-github'],
@@ -483,6 +476,7 @@
   // Une rubrique ne s'affiche jamais sans donnée, même en vue « Tout » :
   // une section vide se lit comme une panne.
   const RUB_DISPO = {
+    agent: () => aDonnee((v) => (v.chat?.conversations ?? 0) || (v.chat?.messages ?? 0)),
     avis: () => aDonnee((v) => v.avis),
     github: () => aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0)),
     youtube: () => aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null),
@@ -490,7 +484,6 @@
     boutique: () => aDonnee((v) => v.boutique),
   };
   function appliqueCategorie() {
-    const estReseau = ['facebook', 'instagram', 'avis', 'github', 'youtube'].includes(cat);
     const peri = cat.startsWith('peri:') ? cat.slice(5) : null;
     const tout = cat === 'tout';
     // Périmètre « principal » (ou aucun) : le récit complet du site garde son
@@ -507,8 +500,16 @@
         e.hidden = !oui;
       }
     });
-    montre(RUBRIQUES.siteScope, tout || !estReseau);
-    montre(RUBRIQUES.siteGlobal, tout || (!estReseau && periGlobal));
+    // « Site » et les périmètres montrent le récit complet ; une sous-rubrique
+    // choisie ne montre QU'ELLE — c'est la règle owner : ne rien afficher qui
+    // ne soit en lien avec l'entrée sélectionnée.
+    const recitComplet = tout || cat === 'site' || peri !== null;
+    const globalOk = tout || cat === 'site' || (peri !== null && periGlobal);
+    montre(RUBRIQUES.siteScope, recitComplet);
+    montre(RUBRIQUES.ia, globalOk || cat === 'ia');
+    montre(RUBRIQUES.agent, (globalOk || cat === 'agent') && RUB_DISPO.agent());
+    montre(RUBRIQUES.contenu, globalOk || cat === 'contenu');
+    montre(RUBRIQUES.parcours, globalOk || cat === 'parcours');
     montre(RUBRIQUES.reseaux, tout || cat === 'facebook' || cat === 'instagram');
     montre(RUBRIQUES.avis, (tout || cat === 'avis') && RUB_DISPO.avis());
     montre(RUBRIQUES.github, (tout || cat === 'github') && RUB_DISPO.github());
@@ -1342,7 +1343,7 @@
       const etat = [...sel].reverse().map((d) => D[d].avis).find(Boolean)
         || allDays.map((d) => D[d].avis).filter(Boolean).at(-1);
       const dispo = !!etat;
-      ['r-avis', 'av-cards', 'av-cols', 'nav-avis'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-avis', 'av-cards', 'av-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const src = Object.entries(etat);
         const mesurees = src.filter(([, v]) => v.nombre != null);
@@ -1383,7 +1384,7 @@
       const gvues = sumKey(sel, (v) => v.github?.vues ?? 0);
       const gclones = sumKey(sel, (v) => v.github?.clones ?? 0);
       const dispo = gvues || gclones || allDays.some((d) => D[d].github);
-      ['r-github', 'gh-cards', 'gh-head', 'gh-chart', 'gh-cols', 'nav-github'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-github', 'gh-cards', 'gh-head', 'gh-chart', 'gh-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const dernier = [...sel].reverse().map((d) => D[d].github).find((g) => g && (g.pages || []).length) || {};
         $('gh-cards').innerHTML = [
@@ -1414,7 +1415,7 @@
     {
       const jrs = allDays.filter((d) => D[d].youtube);
       const dispo = jrs.length > 0;
-      ['r-youtube', 'yt-cards', 'yt-head', 'yt-chart', 'yt-note', 'yt-cols', 'nav-youtube'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-youtube', 'yt-cards', 'yt-head', 'yt-chart', 'yt-note', 'yt-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const gains = {};
         let pv = null, pa = null;
@@ -1468,7 +1469,7 @@
     {
       const jrs = allDays.filter((d) => D[d].forum);
       const dispo = jrs.length > 0;
-      ['r-forum', 'fo-cards', 'fo-head', 'fo-chart', 'fo-note', 'fo-cols', 'nav-forum'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-forum', 'fo-cards', 'fo-head', 'fo-chart', 'fo-note', 'fo-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const som = (cle) => sel.reduce((a, d) => a + (D[d].forum?.[cle] ?? 0), 0);
         const etat = [...sel].reverse().map((d) => D[d].forum).find(Boolean) || D[jrs.at(-1)].forum;
@@ -1517,7 +1518,7 @@
     {
       const jrs = allDays.filter((d) => D[d].boutique);
       const dispo = jrs.length > 0;
-      ['r-boutique', 'bo-cards', 'bo-head', 'bo-chart', 'bo-note', 'bo-cols', 'nav-boutique'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-boutique', 'bo-cards', 'bo-head', 'bo-chart', 'bo-note', 'bo-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const som = (cle) => sel.reduce((a, d) => a + (D[d].boutique?.[cle] ?? 0), 0);
         const etat = [...sel].reverse().map((d) => D[d].boutique).find(Boolean) || D[jrs.at(-1)].boutique;
@@ -1724,33 +1725,6 @@
       }
     }));
   }
-
-  // ── Menu collant : un lien vers une rubrique MASQUÉE ne faisait rien ──────
-  // Le navigateur ne peut pas défiler vers un élément en display:none. Or le
-  // filtre de catégorie du haut en masque : cliquer « Dépôt GitHub » alors que
-  // « Avis clients » est actif ne produisait aucun effet, sans le moindre
-  // signal. On rebascule sur « Tout » pour rendre la cible visible, puis on y va.
-  document.querySelectorAll('.secnav a[href^="#"]').forEach((a) => {
-    a.addEventListener('click', (e) => {
-      const cible = document.getElementById(a.getAttribute('href').slice(1));
-      if (!cible || cible.offsetParent !== null) return;   // déjà visible : lien normal
-      e.preventDefault();
-      cat = 'tout';
-      filters = filters.filter((f) => f.type !== 'peri');
-      render();
-      // Défilement SYNCHRONE juste après le rendu : lire getBoundingClientRect
-      // force le recalcul de la mise en page, la position est donc déjà juste.
-      // ⚠️ Ne pas passer par requestAnimationFrame : il n'est pas appelé quand
-      // l'onglet est masqué (document.hidden), et le clic resterait sans effet.
-      const c = document.getElementById(a.getAttribute('href').slice(1));
-      if (c) {
-        const barre = document.querySelector('.secnav');
-        const marge = (barre ? barre.getBoundingClientRect().height : 0) + 16;
-        window.scrollTo({ top: c.getBoundingClientRect().top + window.scrollY - marge,
-                          behavior: 'smooth' });
-      }
-    });
-  });
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
   fillSelects();
