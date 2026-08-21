@@ -97,6 +97,7 @@ cp stats/.htaccess stats/index.html stats/data.php stats/html2canvas.min.js depl
 [ -f stats/partage.html ] && cp stats/partage.html deploy/stats/   # page « Partager » (kits par groupe)
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
+cp creation-site-internet-loiret.html  deploy/
 cp creation-site-internet-orleans.html deploy/
 cp creation-site-internet-tours.html deploy/
 cp creation-site-internet-paris.html deploy/
@@ -104,6 +105,7 @@ cp creation-site-internet-lyon.html deploy/
 cp creation-site-internet-bordeaux.html deploy/
 cp refonte-site-internet.html deploy/
 cp pourquoi-nsy.html                deploy/
+cp website-creation-loiret.html     deploy/
 cp website-creation-orleans.html    deploy/
 cp website-creation-tours.html    deploy/
 cp website-creation-paris.html    deploy/

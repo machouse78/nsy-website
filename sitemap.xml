@@ -676,6 +676,15 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/consultant-technique-paris.html" />
   </url>
   <url>
+    <loc>https://www.nsy.fr/creation-site-internet-loiret.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+  </url>
+  <url>
     <loc>https://www.nsy.fr/creation-site-internet-orleans.html</loc>
     <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
@@ -683,6 +692,15 @@
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-orleans.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-loiret.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
   </url>
   <url>
     <loc>https://www.nsy.fr/website-creation-orleans.html</loc>

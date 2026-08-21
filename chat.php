@@ -223,6 +223,7 @@ PAGES (FR → EN) :
 - article chatbot & forum (cas PRV Concept) : chatbot-ia-forum-base-de-connaissances.html → ai-chatbot-forum-knowledge-base.html
 - article « un site avec l'IA en un week-end » (10/90) : site-ia-en-un-week-end.html → ai-website-in-a-weekend.html
 - consultant technique Paris : consultant-technique-paris.html → technical-consultant-paris.html
+- création de site Loiret (département) : creation-site-internet-loiret.html → website-creation-loiret.html
 - création de site Orléans : creation-site-internet-orleans.html → website-creation-orleans.html
 - pourquoi NSY (philosophie, interlocuteur unique, partenariats ESN) : pourquoi-nsy.html → why-nsy.html
 - mentions légales : mentions-legales.html → legal-notice.html
@@ -356,6 +357,7 @@ function nsy_sanitize_reply(string $reply): string
         'chatbot-ia-forum-base-de-connaissances.html' => 'ai-chatbot-forum-knowledge-base.html',
         'site-ia-en-un-week-end.html' => 'ai-website-in-a-weekend.html',
         'consultant-technique-paris.html'     => 'technical-consultant-paris.html',
+        'creation-site-internet-loiret.html' => 'website-creation-loiret.html',
         'creation-site-internet-orleans.html' => 'website-creation-orleans.html',
         'pourquoi-nsy.html'                   => 'why-nsy.html',
     ];

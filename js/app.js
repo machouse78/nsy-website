@@ -1090,6 +1090,7 @@
     'seo-geo-etre-cite-par-les-ia.html': 'seo-geo-getting-cited-by-ai.html',
     'chatbot-ia-forum-base-de-connaissances.html': 'ai-chatbot-forum-knowledge-base.html',
     'consultant-technique-paris.html': 'technical-consultant-paris.html',
+    'creation-site-internet-loiret.html': 'website-creation-loiret.html',
     'creation-site-internet-orleans.html': 'website-creation-orleans.html',
     'pourquoi-nsy.html': 'why-nsy.html',
     'services.html': 'services-en.html',
