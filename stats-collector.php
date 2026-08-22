@@ -47,10 +47,16 @@ $targetLog = date('d/M/Y', strtotime($target)); // format des logs : 16/Aug/2026
 // ── 1. Access logs ───────────────────────────────────────────────────────────
 // Robots IA (GEO) — l'ordre = priorité du match.
 $AI = [
+    // ⚠️ L'ORDRE FAIT LA CLASSIFICATION : le premier motif qui correspond gagne
+    // (break). Les agents « -User » DOIVENT précéder leur crawler homonyme,
+    // sinon /Perplexity/i avale Perplexity-User et l'on reperd la distinction.
     'ChatGPT-User'   => '/ChatGPT-User/i',
+    'Claude-User'    => '/Claude-User/i',
+    'Perplexity-User' => '/Perplexity-User/i',
     'OAI-SearchBot'  => '/OAI-SearchBot/i',
+    'Claude-Search'  => '/Claude-SearchBot/i',
     'GPTBot'         => '/GPTBot/i',
-    'Claude'         => '/ClaudeBot|Claude-User|Claude-SearchBot|anthropic-ai/i',
+    'Claude'         => '/ClaudeBot|anthropic-ai/i',
     'Perplexity'     => '/Perplexity/i',
     'Mistral'        => '/MistralAI/i',
     'Gemini-Vertex'  => '/Google-CloudVertexBot/i',
@@ -61,6 +67,23 @@ $AI = [
     'Applebot'       => '/Applebot/i',
     'PetalBot'       => '/PetalBot/i',
     'YouBot'         => '/YouBot/i',
+];
+// ── Familles d'agents : TOUTES les lectures d'IA ne se valent pas ────────────
+// « conversation » = récupération DÉCLENCHÉE EN DIRECT par la question d'un
+//   humain. Un hit ChatGPT-User signifie : à cet instant, quelqu'un a posé une
+//   question et l'assistant est allé lire CETTE page pour lui répondre. C'est
+//   le signal le plus proche d'une mention — horodaté, et avec la page lue.
+// « recherche »    = alimentation de l'index de recherche de l'assistant.
+// « indexation »   = crawl d'entraînement ou de corpus, sans rapport avec une
+//   conversation en cours. C'est le gros du volume, et le moins intéressant.
+// Tout agent absent de cette table est compté en « indexation ».
+$IA_FAMILLE = [
+    'ChatGPT-User'    => 'conversation',
+    'Claude-User'     => 'conversation',
+    'Perplexity-User' => 'conversation',
+    'OAI-SearchBot'   => 'recherche',
+    'Claude-Search'   => 'recherche',
+    'Gemini-Vertex'   => 'recherche',
 ];
 // Assistants IA côté PROVENANCE (un humain a cliqué depuis une réponse).
 // ⚠️ Ils se testent AVANT les moteurs : gemini.google.com contient « google »,
@@ -90,6 +113,8 @@ $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/
 $stats = [
     'pageviews' => 0, 'uniques' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
+    'ia_familles' => ['conversation' => 0, 'recherche' => 0, 'indexation' => 0],
+    'ia_conv_pages' => [], // page lue lors d'une récupération DÉCLENCHÉE par une question
     'pages' => [], 'referrals' => ['ia' => 0, 'facebook' => 0, 'linkedin' => 0, 'google' => 0, 'bing' => 0, 'autres' => 0],
     'ref_ia' => [], // détail par assistant (ChatGPT, Claude, Perplexity…) — provenance GEO
     'ia_pages' => [], // assistant => page d'atterrissage => n (LA page que l'IA a citée)
@@ -159,6 +184,11 @@ foreach ($files as $f) {
                 $stats['ai'][$name] = ($stats['ai'][$name] ?? 0) + 1;
                 $stats['ai_hits']++;
                 $stats['peri'][$peri]['ai_hits']++;
+                $fam = $IA_FAMILLE[$name] ?? 'indexation';
+                $stats['ia_familles'][$fam] = ($stats['ia_familles'][$fam] ?? 0) + 1;
+                if ($fam === 'conversation') {
+                    $stats['ia_conv_pages'][$clean] = ($stats['ia_conv_pages'][$clean] ?? 0) + 1;
+                }
                 $isAI = true;
                 break;
             }
@@ -378,6 +408,8 @@ $day = [
     'ref_hosts'   => array_slice($stats['ref_hosts'], 0, 10, true),
     'ref_ia'      => $stats['ref_ia'],
     'ia_pages'    => $stats['ia_pages'],
+    'ia_familles' => $stats['ia_familles'],
+    'ia_conv_pages' => array_slice($stats['ia_conv_pages'], 0, 15, true),
     'ia_parcours' => $ia_parcours,
     'campagnes'   => array_slice($stats['campagnes'], 0, 15, true),
     'fbclid'      => $stats['fbclid'],

@@ -250,6 +250,12 @@
   <div class="sec-h" id="r-ia"><h2>Provenance IA</h2><span>les visites venues d'une réponse d'assistant</span></div>
   <div class="grid" id="ia-cards"></div>
   <div class="note" id="ia-note"></div>
+  <h3>Lectures par une IA — trois natures très différentes</h3>
+  <div class="grid" id="iafam-cards"></div>
+  <div class="note" id="iafam-note"></div>
+  <h3>Pages lues pendant une conversation <span class="mono">(ce que l'assistant est venu chercher pour répondre à quelqu'un)</span></h3>
+  <table id="t-iaconv"><thead><tr><th>Page</th><th class="num">Lectures</th></tr></thead><tbody></tbody></table>
+
   <h3>Robots IA venus lire le site <span class="mono">(clic = filtre)</span></h3>
   <div id="ai-pills"></div>
 
@@ -1587,6 +1593,45 @@
         ['Pages par visite (venus d\'une IA)', iaVis ? nb1(div(iaPg, iaVis)) : '—', stVis ? `<span class="flat">site : ${nb1(div(stPg, stVis))}</span>` : ''],
         ['Durée moyenne (venus d\'une IA)', iaDn ? mmss(div(iaDt, iaDn)) : '—', stDn ? `<span class="flat">site : ${mmss(div(stDt, stDn))}</span>` : ''],
       ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+      // ── Familles d'agents ────────────────────────────────────────────────
+      // « conversation » est le signal le plus proche d'une MENTION : la
+      // lecture a ete declenchee en direct par la question d'un humain, avec
+      // l'horodatage et la page lue. « indexation » est du crawl de corpus —
+      // gros volume, faible interet. Ne pas confondre les deux.
+      const fam = (l, k) => sumKey(l, (v) => v.ia_familles?.[k] ?? 0);
+      const conv = fam(sel, 'conversation');
+      const convPrev = cmp ? fam(cmp, 'conversation') : null;
+      const rech = fam(sel, 'recherche');
+      const idxa = fam(sel, 'indexation');
+      const jconv = sel.filter((d) => (D[d]?.ia_familles?.conversation ?? 0) > 0).length;
+      const convAg = aggMap(sel, (v) => {
+        const o = {};
+        for (const [n, h] of Object.entries(v.ai || {})) if (/-User$/.test(n)) o[n] = h;
+        return o;
+      });
+      $('iafam-cards').innerHTML = [
+        ['Lectures declenchees par une conversation', fmt(conv),
+         convPrev != null ? delta(conv, convPrev) : '<span class="flat">un humain a pose une question</span>'],
+        ['Moyenne par jour actif', jconv ? nb1(conv / jconv) : '—',
+         `<span class="flat">${jconv} jour${jconv > 1 ? 's' : ''} avec au moins une lecture</span>`],
+        ['Assistant qui vient le plus', convAg.length ? convAg[0][0].replace('-User', '') : '—',
+         convAg.length ? `<span class="flat">${fmt(convAg[0][1])} lecture${convAg[0][1] > 1 ? 's' : ''}</span>` : ''],
+        ['Alimentation de leur moteur de recherche', fmt(rech), '<span class="flat">indexation pour la recherche</span>'],
+        ['Crawl de corpus', fmt(idxa), '<span class="flat">sans rapport avec une conversation</span>'],
+        ['Part reellement conversationnelle', (conv + rech + idxa) ? Math.round(conv / (conv + rech + idxa) * 100) + '<small> %</small>' : '—',
+         `<span class="flat">sur ${fmt(conv + rech + idxa)} lectures d'IA</span>`],
+      ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+      const firstFam = allDays.find((d) => D[d].ia_familles);
+      $('iafam-note').textContent = firstFam
+        ? `Un agent « -User » (ChatGPT-User, Claude-User, Perplexity-User) lit une page parce qu'un humain vient de poser une question : c'est le signal le plus proche d'une mention. Il ne capte PAS les reponses donnees de memoire, sans lecture — celles-la ne laissent aucune trace. Distinction disponible depuis le ${dFmt(firstFam)}.`
+        : 'Distinction par famille : disponible a partir de la prochaine collecte.';
+
+      const convPages = aggMap(sel, (v) => v.ia_conv_pages).slice(0, 12);
+      document.querySelector('#t-iaconv tbody').innerHTML = convPages.length
+        ? convPages.map(([pg, n]) => `<tr><td><a href="https://www.nsy.fr${pg}" target="_blank" rel="noopener">${pg}</a></td><td class="num">${fmt(n)}</td></tr>`).join('')
+        : '<tr><td colspan="2" class="mono">aucune lecture declenchee par une conversation sur la periode</td></tr>';
 
       const firstDetail = allDays.find((d) => D[d].ia_parcours);
       $('ia-note').textContent = firstDetail
