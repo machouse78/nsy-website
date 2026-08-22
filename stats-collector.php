@@ -154,6 +154,26 @@ $PERIMETRES = [];
 $JOURNAL_URL = static fn(string $slug): string => 'https://www.nsy.fr/' . $slug;
 $logDir = (getenv('HOME') ?: dirname(__DIR__)) . '/ik-logs';
 $files = array_merge(glob("$logDir/access.log") ?: [], glob("$logDir/access.log-*") ?: []);
+// ── Archive quotidienne des logs bruts (owner, 22/08/2026) ───────────────────
+// L'hébergeur ne conserve que ~38 jours de logs : chaque collecte range donc la
+// tranche du jour cible dans _secret/log-archive/<date>.log.gz — HORS web et
+// HORS git (les adresses IP sont des données personnelles). Toute question
+// future (« et si on ventilait par X ? ») redevient alors rejouable sans limite
+// d'historique. Rétention : 400 jours (~13 mois — comparaison année sur année),
+// purge automatique au-delà.
+$archDir  = __DIR__ . '/_secret/log-archive';
+$archFile = "$archDir/$target.log.gz";
+$archTmp  = null; $archH = null; $archLignes = 0;
+if ($target < date('Y-m-d', strtotime('-30 days')) && is_file($archFile)) {
+    // Date trop ancienne pour les logs de l'hébergeur : on relit NOTRE archive.
+    // Entre 30 et 38 jours les deux sources existent encore ; l'archive, écrite
+    // le jour même, est identique — la préférer évite tout double comptage.
+    $files = [$archFile];
+} elseif (!is_file($archFile)) { // idempotente : une archive n'est JAMAIS réécrite
+    if (!is_dir($archDir)) @mkdir($archDir, 0700, true);
+    $archTmp = "$archDir/.$target.tmp.gz";
+    $archH = @gzopen($archTmp, 'wb6');
+}
 // Infomaniak préfixe chaque ligne par le vhost (« nsy.fr IP - - [... ») — préfixe optionnel.
 // La TAILLE de réponse est capturée : elle sert à reconnaître les sondes de
 // disponibilité du chatbot dans l'historique d'avant le marqueur explicite.
@@ -162,13 +182,17 @@ $parsedFiles = 0;
 
 foreach ($files as $f) {
     // ne lire que les fichiers susceptibles de contenir la date cible (mtime ± 3 j)
-    if (abs(filemtime($f) - strtotime($target)) > 3 * 86400 + 86399) continue;
+    // (l'archive est exemptée du filtre mtime : elle est écrite bien après la date)
+    if ($f !== $archFile && abs(filemtime($f) - strtotime($target)) > 3 * 86400 + 86399) continue;
     $h = str_ends_with($f, '.gz') ? gzopen($f, 'rb') : fopen($f, 'rb');
     if (!$h) continue;
     $parsedFiles++;
     $read = str_ends_with($f, '.gz') ? 'gzgets' : 'fgets';
     while (($line = $read($h)) !== false) {
         if (!str_contains($line, $targetLog)) continue;
+        // Ligne BRUTE archivée avant tout filtre : l'archive doit être la tranche
+        // complète, y compris ce que le parseur d'aujourd'hui ne sait pas lire.
+        if ($archH) { gzwrite($archH, $line); $archLignes++; }
         if (!preg_match($re, $line, $m)) continue;
         [, $ip, , $method, $path, $status, $size, $ref, $ua] = $m;
         $stats['hits']++;
@@ -341,6 +365,16 @@ foreach ($files as $f) {
         }
     }
     is_resource($h) ? (str_ends_with($f, '.gz') ? gzclose($h) : fclose($h)) : null;
+}
+if ($archH) {
+    gzclose($archH);
+    // On ne fige que des journées COMPLÈTES : un passage sur le jour courant
+    // (logs encore en cours d'écriture) ne doit pas archiver une demi-journée.
+    if ($archLignes > 0 && $target <= date('Y-m-d', strtotime('yesterday'))) rename($archTmp, $archFile);
+    else @unlink($archTmp);
+    foreach (glob("$archDir/*.log.gz") ?: [] as $af) {
+        if (basename($af, '.log.gz') < date('Y-m-d', strtotime('-400 days'))) @unlink($af);
+    }
 }
 arsort($stats['pages']);
 arsort($stats['ai']);
