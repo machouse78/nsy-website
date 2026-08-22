@@ -247,6 +247,27 @@
   </div>
   <div class="chart"><div class="legend" id="legend"></div><svg id="c-split"></svg></div>
 
+  <div class="sec-h" id="r-google"><h2>Provenance Google</h2><span>référencement naturel : ce que Google explore, et ce qu'il rapporte</span></div>
+  <div class="grid" id="goo-cards"></div>
+  <div class="note" id="goo-note"></div>
+
+  <div class="chart-head"><h2 id="h-goo">Visites venues de Google</h2></div>
+  <div class="chart"><div class="legend" id="goo-legend"></div><svg id="c-goo"></svg></div>
+
+  <div class="chart-head"><h2 id="h-goobot">Passages des robots de moteurs — par moteur</h2></div>
+  <div class="chart"><div class="legend" id="goobot-legend"></div><svg id="c-goobot"></svg></div>
+
+  <div class="cols">
+    <div>
+      <h3>Pages qui se positionnent <span class="mono">(atterrissage depuis Google)</span></h3>
+      <table id="t-goopages"><thead><tr><th>Page</th><th class="num">Visites</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div>
+      <h3>Pages les plus explorées <span class="mono">(par les robots de moteurs)</span></h3>
+      <table id="t-sepages"><thead><tr><th>Page</th><th class="num">Passages</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
   <div class="sec-h" id="r-ia"><h2>Provenance IA</h2><span>les visites venues d'une réponse d'assistant</span></div>
   <div class="grid" id="ia-cards"></div>
   <div class="note" id="ia-note"></div>
@@ -259,8 +280,17 @@
   <h3>Robots IA venus lire le site <span class="mono">(clic = filtre)</span></h3>
   <div id="ai-pills"></div>
 
-  <div class="chart-head"><h2 id="h-ia">Visites depuis les IA — par assistant</h2></div>
+  <div class="chart-head"><h2 id="h-ia">1 · Visites IA — un humain a cliqué depuis une réponse</h2></div>
+  <div class="note">Le seul signal certain : quelqu'un a lu une réponse d'assistant et est venu sur le site.</div>
   <div class="chart"><div class="legend" id="ia-legend"></div><svg id="c-ia"></svg></div>
+
+  <div class="chart-head"><h2 id="h-ialu">2 · Lectures IA — un assistant a lu une page pour répondre</h2></div>
+  <div class="note">Récupération déclenchée EN DIRECT par la question d'un humain (agents « -User »). Le signal le plus proche d'une mention : on ne sait pas ce qui a été dit, mais on sait quand l'assistant est venu chercher, et sur quelle page.</div>
+  <div class="chart"><div class="legend" id="ialu-legend"></div><svg id="c-ialu"></svg></div>
+
+  <div class="chart-head"><h2 id="h-iaidx">3 · Indexation IA — crawl de corpus</h2></div>
+  <div class="note">Robots qui constituent un index ou un corpus d'entraînement, sans rapport avec une conversation en cours. Gros volume, faible valeur : à ne jamais confondre avec les deux graphes précédents.</div>
+  <div class="chart"><div class="legend" id="iaidx-legend"></div><svg id="c-iaidx"></svg></div>
 
   <div class="chart-head"><h2 id="h-funnel">Lecture par les robots → visite humaine</h2></div>
   <div class="chart"><div class="legend" id="funnel-legend"></div><svg id="c-funnel"></svg></div>
@@ -448,6 +478,7 @@
     // Les sous-rubriques du site sont des CATÉGORIES, pas des ancres : elles
     // filtrent la page comme les autres. C'est ce qui permet de n'avoir qu'un
     // seul menu (owner, 21/08/2026).
+    l.push(['google', 'Provenance Google']);
     l.push(['ia', 'Provenance IA']);
     if (RUB_DISPO.agent()) l.push(['agent', 'Agent conversationnel']);
     l.push(['contenu', 'Contenu']);
@@ -468,6 +499,7 @@
   // en laissant croire à un filtrage qui n'existait pas (owner, 18/08/2026).
   const RUBRIQUES = {
     siteScope: ['r-site'],
+    google: ['r-google'],
     ia: ['r-ia'],
     agent: ['r-agent'],
     contenu: ['r-contenu'],
@@ -512,6 +544,7 @@
     const recitComplet = tout || cat === 'site' || peri !== null;
     const globalOk = tout || cat === 'site' || (peri !== null && periGlobal);
     montre(RUBRIQUES.siteScope, recitComplet);
+    montre(RUBRIQUES.google, globalOk || cat === 'google');
     montre(RUBRIQUES.ia, globalOk || cat === 'ia');
     montre(RUBRIQUES.agent, (globalOk || cat === 'agent') && RUB_DISPO.agent());
     montre(RUBRIQUES.contenu, globalOk || cat === 'contenu');
@@ -1594,6 +1627,53 @@
         ['Durée moyenne (venus d\'une IA)', iaDn ? mmss(div(iaDt, iaDn)) : '—', stDn ? `<span class="flat">site : ${mmss(div(stDt, stDn))}</span>` : ''],
       ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
+      // ── Provenance Google ────────────────────────────────────────────────
+      // Deux choses distinctes qu'on confond souvent : ce que Google EXPLORE
+      // (passages de Googlebot) et ce que Google RAPPORTE (visites humaines).
+      // Un site très exploré et sans visite est un site indexé mais mal classé.
+      const gVis = sumKey(sel, (v) => vRef(v, 'google'));
+      const gPrev = cmp ? sumKey(cmp, (v) => vRef(v, 'google')) : null;
+      const gBot = sumKey(sel, (v) => v.moteurs?.Googlebot ?? 0);
+      const seTot = sumKey(sel, (v) => v.se_hits ?? 0);
+      const gPages = aggMap(sel, (v) => v.google_pages);
+      const sePages = aggMap(sel, (v) => v.se_pages);
+      const extTot = ['ia', 'facebook', 'linkedin', 'google', 'bing', 'autres']
+        .reduce((a, src) => a + sumKey(sel, (v) => vRef(v, src)), 0);
+      $('goo-cards').innerHTML = [
+        ['Visites venues de Google', fmt(gVis), gPrev != null ? delta(gVis, gPrev) : ''],
+        ['Part des clics entrants', extTot ? Math.round(gVis / extTot * 100) + '<small> %</small>' : '—',
+         `<span class="flat">sur ${fmt(extTot)} clics identifiés</span>`],
+        ['Passages de Googlebot', fmt(gBot), `<span class="flat">${fmt(seTot)} passages de moteurs au total</span>`],
+        ['Visites / 1 000 passages', gBot ? nb1(gVis / gBot * 1000) : '—',
+         '<span class="flat">exploré ≠ bien classé</span>'],
+        ['Pages explorées', fmt(sePages.length), '<span class="flat">pages distinctes vues par les robots</span>'],
+        ['Page la mieux positionnée', gPages.length ? gPages[0][0] : '—',
+         gPages.length ? `<span class="flat">${fmt(gPages[0][1])} visite${gPages[0][1] > 1 ? 's' : ''}</span>` : ''],
+      ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+      $('goo-note').textContent = "Google ne transmet plus la requête tapée par l'internaute : ces chiffres disent quelles PAGES se positionnent, jamais sur quels MOTS. Pour les mots-clés et la position moyenne, seule la Search Console fait foi — elle n'est pas versée ici.";
+
+      $('h-goo').textContent = `Visites venues de Google — par ${bk.mode}`;
+      const gSeries = [{ label: 'Google', color: COLORS[0], pts: bkSum(bk, (v) => vRef(v, 'google')), filt: ['ref', 'google'] },
+                       { label: 'Bing', color: COLORS[1], pts: bkSum(bk, (v) => vRef(v, 'bing')) }];
+      $('goo-legend').innerHTML = gSeries.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+      drawChart('c-goo', bk, gSeries);
+
+      const motNoms = aggMap(sel, (v) => v.moteurs).slice(0, 5);
+      const mSeries = motNoms.length
+        ? motNoms.map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.moteurs?.[nm] ?? 0) }))
+        : [{ label: 'Tous moteurs', color: COLORS[0], pts: bkSum(bk, (v) => v.se_hits ?? 0) }];
+      $('h-goobot').textContent = `Passages des robots de moteurs — par ${bk.mode}`;
+      $('goobot-legend').innerHTML = mSeries.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+      drawChart('c-goobot', bk, mSeries);
+
+      const tbl = (sel2, rows, vide) => {
+        document.querySelector(sel2).innerHTML = rows.length
+          ? rows.slice(0, 12).map(([pg, n]) => `<tr><td><a href="https://www.nsy.fr${pg}" target="_blank" rel="noopener">${pg}</a></td><td class="num">${fmt(n)}</td></tr>`).join('')
+          : `<tr><td colspan="2" class="mono">${vide}</td></tr>`;
+      };
+      tbl('#t-goopages tbody', gPages, 'aucune visite venue de Google sur la période');
+      tbl('#t-sepages tbody', sePages, 'aucun passage de robot enregistré sur la période');
+
       // ── Familles d'agents ────────────────────────────────────────────────
       // « conversation » est le signal le plus proche d'une MENTION : la
       // lecture a ete declenchee en direct par la question d'un humain, avec
@@ -1649,6 +1729,30 @@
         if (el.dataset.f) { const [t, v] = JSON.parse(el.dataset.f); addFilter(t, v); }
       }));
       drawChart('c-ia', bk, iaSeries);
+
+      // Graphes 2 et 3 — même distinction que les cartes ci-dessus : lecture
+      // DÉCLENCHÉE par une question (agents « -User ») contre crawl de corpus.
+      const traceIA = (svgId, legId, titreId, titre, garde) => {
+        const noms = aggMap(sel, (v) => {
+          const o = {};
+          for (const [n, h] of Object.entries(v.ai || {})) if (garde(n)) o[n] = h;
+          return o;
+        }).slice(0, 5);
+        const series = noms.length
+          ? noms.map(([nm], i) => ({ label: nm, color: COLORS[i % COLORS.length], pts: bkSum(bk, (v) => v.ai?.[nm] ?? 0), filt: ['bot', nm] }))
+          : [{ label: 'aucune', color: COLORS[0], pts: bkSum(bk, () => 0) }];
+        $(titreId).textContent = `${titre} — par ${bk.mode}`;
+        $(legId).innerHTML = series.map((x) =>
+          `<span data-f='${x.filt ? JSON.stringify(x.filt) : ''}'><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        $(legId).querySelectorAll('span[data-f]').forEach((el) => el.addEventListener('click', () => {
+          if (el.dataset.f) { const [t, v] = JSON.parse(el.dataset.f); addFilter(t, v); }
+        }));
+        drawChart(svgId, bk, series);
+      };
+      const EST_CONV = (n) => /-User$/.test(n);
+      const EST_RECH = (n) => n === 'OAI-SearchBot' || n === 'Claude-Search' || n === 'Gemini-Vertex';
+      traceIA('c-ialu', 'ialu-legend', 'h-ialu', '2 · Lectures IA — un assistant a lu une page pour repondre', EST_CONV);
+      traceIA('c-iaidx', 'iaidx-legend', 'h-iaidx', '3 · Indexation IA — crawl de corpus', (n) => !EST_CONV(n) && !EST_RECH(n));
 
       // Graphe 2 — l'entonnoir GEO : lectures robots (axe gauche) vs visites (axe droit)
       const funnel = [

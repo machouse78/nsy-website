@@ -107,6 +107,16 @@ $iaOf = static function (string $s) use ($IA_REF): ?string {
     return null;
 };
 $SE_RE   = '/Googlebot|bingbot|msnbot|YandexBot|Baiduspider|DuckDuckBot|Qwantbot|Applebot(?!.*Extended)/i';
+// Détail par moteur — même ordre de priorité que $SE_RE.
+$SE_NOMS = [
+    'Googlebot'    => '/Googlebot/i',
+    'Bingbot'      => '/bingbot|msnbot/i',
+    'DuckDuckBot'  => '/DuckDuckBot/i',
+    'Qwantbot'     => '/Qwantbot/i',
+    'YandexBot'    => '/YandexBot/i',
+    'Baiduspider'  => '/Baiduspider/i',
+    'Applebot'     => '/Applebot/i',
+];
 $BOT_RE  = '/bot|crawl|spider|slurp|scanner|scan|python|curl|wget|go-http|aiohttp|httpx|libwww|okhttp|java\/|guzzle|facebookexternalhit|monitor|checker|probe|wp2shell|xploit|jetpack|feed|semrush|mj12|ahrefs|censys|netcraft|builtwith|barkrowler|dataprovider|client/i';
 $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/i';
 
@@ -118,6 +128,9 @@ $stats = [
     'pages' => [], 'referrals' => ['ia' => 0, 'facebook' => 0, 'linkedin' => 0, 'google' => 0, 'bing' => 0, 'autres' => 0],
     'ref_ia' => [], // détail par assistant (ChatGPT, Claude, Perplexity…) — provenance GEO
     'ia_pages' => [], // assistant => page d'atterrissage => n (LA page que l'IA a citée)
+    'moteurs' => [],      // moteur de recherche => passages de son robot
+    'se_pages' => [],     // page => passages de robots de moteurs (ce qu'ils explorent)
+    'google_pages' => [], // page d'atterrissage des visites venues de Google (ce qui se positionne)
     'campagnes' => [], // UTM : source/medium/campagne — le SEUL moyen de savoir de quel
                        // groupe ou post vient un clic (Facebook ne transmet que l'origine)
     'fbclid' => 0,     // clic Facebook confirmé même sans referer (app mobile)
@@ -220,7 +233,16 @@ foreach ($files as $f) {
             }
         }
         if ($isAI) continue;
-        if (preg_match($SE_RE, $ua)) { $stats['se_hits']++; continue; }
+        if (preg_match($SE_RE, $ua)) {
+            $stats['se_hits']++;
+            // Détail par moteur : « 682 passages de moteurs » ne dit pas si c'est
+            // Google ou Yandex. Le total reste se_hits, l'historique n'est pas coupé.
+            foreach ($SE_NOMS as $nom => $rx) {
+                if (preg_match($rx, $ua)) { $stats['moteurs'][$nom] = ($stats['moteurs'][$nom] ?? 0) + 1; break; }
+            }
+            $stats['se_pages'][$clean] = ($stats['se_pages'][$clean] ?? 0) + 1;
+            continue;
+        }
         if ($ua === '' || $ua === '-' || preg_match($BOT_RE, $ua)) { $stats['bot_hits']++; continue; }
 
         // humain (approximation) : page servie ($clean / $isPage : voir périmètres)
@@ -308,7 +330,11 @@ foreach ($files as $f) {
             elseif ($externe) {
                 if (str_contains($rh, 'facebook') || str_contains($rh, 'fb.'))   $stats['referrals']['facebook']++;
                 elseif (str_contains($rh, 'linkedin') || $rh === 'lnkd.in')      $stats['referrals']['linkedin']++;
-                elseif (str_contains($rh, 'google'))                             $stats['referrals']['google']++;
+                elseif (str_contains($rh, 'google')) {
+                    $stats['referrals']['google']++;
+                    // Page d'atterrissage = la page qui s'est POSITIONNÉE dans Google.
+                    $stats['google_pages'][$clean] = ($stats['google_pages'][$clean] ?? 0) + 1;
+                }
                 elseif (str_contains($rh, 'bing'))                               $stats['referrals']['bing']++;
                 else                                                             $stats['referrals']['autres']++;
             }
@@ -399,6 +425,9 @@ $day = [
     'ai'          => $stats['ai'],
     'ai_hits'     => $stats['ai_hits'],
     'se_hits'     => $stats['se_hits'],
+    'moteurs'     => $stats['moteurs'],
+    'se_pages'    => array_slice($stats['se_pages'], 0, 15, true),
+    'google_pages' => array_slice($stats['google_pages'], 0, 15, true),
     'bot_hits'    => $stats['bot_hits'],
     'scan_hits'   => $stats['scan_hits'],
     'llms_hits'   => $stats['llms_hits'],
