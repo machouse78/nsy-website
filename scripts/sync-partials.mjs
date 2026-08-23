@@ -65,6 +65,7 @@ const pages = [
   ['superviser-production-teraoctets-megaoctet.html', 'fr', 'index.html', 'blog'],
   ['site-ia-en-un-week-end.html', 'fr', 'index.html', 'blog'],
   ['consultant-technique-paris.html',     'fr', 'index.html', 'services'],
+  ['404.html',                            'fr', 'index.html', ''],
   ['creation-site-internet-loiret.html',  'fr', 'index.html', 'services'],
   ['creation-site-internet-orleans.html', 'fr', 'index.html', 'services'],
   ['creation-site-internet-tours.html', 'fr', 'index.html', 'services'],

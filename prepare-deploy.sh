@@ -99,6 +99,7 @@ cp stats/.htaccess stats/index.html stats/data.php stats/html2canvas.min.js depl
 [ -f stats/partage.html ] && cp stats/partage.html deploy/stats/   # page « Partager » (kits par groupe)
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
+cp 404.html                            deploy/   # page d'erreur dédiée (ErrorDocument 404)
 cp creation-site-internet-loiret.html  deploy/
 cp creation-site-internet-orleans.html deploy/
 cp creation-site-internet-tours.html deploy/
