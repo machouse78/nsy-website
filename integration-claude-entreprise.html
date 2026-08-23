@@ -41,10 +41,60 @@
   "@context": "https://schema.org",
   "@graph": [
     {
+      "@type": [
+        "Organization",
+        "ProfessionalService",
+        "LocalBusiness"
+      ],
+      "@id": "https://www.nsy.fr/#org",
+      "name": "NSY",
+      "legalName": "NSY",
+      "url": "https://www.nsy.fr/",
+      "logo": "https://www.nsy.fr/public/nsy-logo.png",
+      "telephone": "+33672947106",
+      "foundingDate": "2018-09-04",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "SIREN",
+        "value": "842078453"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "8 Hameau de Poiseaux",
+        "addressLocality": "Épieds-en-Beauce",
+        "postalCode": "45130",
+        "addressRegion": "Centre-Val de Loire",
+        "addressCountry": "FR"
+      },
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141122218",
+        "https://www.linkedin.com/company/nsy-new-software-yard",
+        "https://www.linkedin.com/in/c%C3%A9dric-barme/",
+        "https://github.com/machouse78/nsy-website",
+        "https://youtube.com/@new-software-yard",
+        "https://www.societe.com/societe/nsy-842078453.html",
+        "https://www.pappers.fr/entreprise/nsy-842078453",
+        "https://www.pagesjaunes.fr/pros/58566786",
+        "https://www.facebook.com/nsy.france/",
+        "https://www.google.com/search?kgmid=/g/11nq_gplxx",
+        "https://www.sortlist.fr/agency/nsy"
+      ]
+    },
+    {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
-        { "@type": "ListItem", "position": 2, "name": "Intégration Claude", "item": "https://www.nsy.fr/integration-claude-entreprise.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://www.nsy.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Intégration Claude",
+          "item": "https://www.nsy.fr/integration-claude-entreprise.html"
+        }
       ]
     },
     {
@@ -52,9 +102,17 @@
       "serviceType": "Intégration de Claude (Anthropic) en entreprise",
       "name": "Intégration des modèles Claude dans les applications métier",
       "description": "Assistants documentaires, agents outillés, RAG : intégration des modèles Claude d'Anthropic avec maîtrise des coûts, des quotas et de la confidentialité des données.",
-      "provider": { "@id": "https://www.nsy.fr/#org" },
-      "areaServed": { "@type": "Country", "name": "France" },
-      "audience": { "@type": "BusinessAudience", "name": "PME, ETI, grands comptes" }
+      "provider": {
+        "@id": "https://www.nsy.fr/#org"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "France"
+      },
+      "audience": {
+        "@type": "BusinessAudience",
+        "name": "PME, ETI, grands comptes"
+      }
     }
   ]
 }

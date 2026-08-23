@@ -14,6 +14,7 @@ echo "   Source : $ROOT"
 # (source unique ; voir scripts/sync-partials.mjs). Idempotent.
 if command -v node >/dev/null 2>&1; then
   node scripts/sync-partials.mjs >/dev/null && echo "🧩 Nav/footer synchronisés depuis partials/"
+  node scripts/jsonld-entities.mjs >/dev/null && echo "🧬 Entités JSON-LD (Organization/Person/FAQPage) à jour"
 else
   echo "  ⚠️  node introuvable — nav/footer NON resynchronisés."
   echo "      Après édition de partials/, lance : node scripts/sync-partials.mjs"

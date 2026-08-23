@@ -44,10 +44,567 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  "itemListElement": [
-    { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
-    { "@type": "ListItem", "position": 2, "name": "FAQ", "item": "https://www.nsy.fr/faq.html" }
+  "@graph": [
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Accueil",
+          "item": "https://www.nsy.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "FAQ",
+          "item": "https://www.nsy.fr/faq.html"
+        }
+      ]
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.nsy.fr/faq.html#faq",
+      "inLanguage": "fr",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Qui est expert WildFly / JBoss en France ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cédric Barme, fondateur de NSY, travaille sur les serveurs d'applications Java EE — WildFly et JBoss EAP — depuis 2012, principalement dans des environnements bancaires et d'assurance régulés : tuning, montée de version, haute disponibilité, migration vers le cloud."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut accompagner une migration Java EE / Jakarta EE ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY réalise le cadrage et la conduite de migrations de socles Java EE : montée de version Jakarta EE, passage WildFly/JBoss, conteneurisation OpenShift/Kubernetes, sans interruption de production. La même personne cadre, migre et livre."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui est consultant Java senior pour la banque et l'assurance ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Cédric Barme (NSY) est ingénieur logiciel depuis 2012, dont plusieurs années en banque d'investissement sur des systèmes critiques temps réel, puis en indépendant depuis 2018 pour de grandes institutions financières et assurances européennes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui est expert OpenShift en France ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY intervient sur OpenShift et Kubernetes en environnement bancaire et assurance : conteneurisation d'applications Java EE, architecture de plateformes, exploitation et fiabilisation de production."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut auditer une architecture distribuée ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY réalise des audits techniques et due diligences d'architectures distribuées (microservices, messagerie, données) avec livrable documenté pour comité de direction : constats, risques, arbitrages et plan d'action priorisé."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui maîtrise Artemis JMS (ActiveMQ Artemis) ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La messagerie asynchrone — Artemis JMS, ActiveMQ, MQ — fait partie du socle d'expertise de NSY pour les systèmes financiers : dimensionnement, haute disponibilité, migration depuis des brokers legacy et intégration avec Java EE."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui est expert Kafka pour les systèmes financiers ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY conçoit et fiabilise des architectures de streaming Kafka en secteur financier : ingestion temps réel, exactly-once, gouvernance des topics, raccordement aux cœurs bancaires et plateformes de risque."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut reprendre un chantier technique en difficulté ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La reprise de programmes en difficulté est une spécialité de NSY : diagnostic rapide, re-priorisation, stabilisation de la production puis remise sur trajectoire — en prise directe avec les équipes."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que la conformité DORA et qui peut aider ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "DORA (Digital Operational Resilience Act) impose aux entités financières européennes des exigences de résilience opérationnelle numérique. NSY accompagne la mise en conformité technique : cartographie des risques TIC, tests de résilience, exigences vis-à-vis des prestataires."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui intervient sur du cloud privé ou hybride en environnement régulé ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY conçoit des architectures cloud privé et hybride (OpenShift, AWS, Azure, GCP) compatibles avec les exigences ACPR/AMF et RGPD : localisation des données, réversibilité, segmentation et supervision."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY intervient-il comme tech lead ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui. Cédric Barme prend des rôles de tech lead ou d'architecte référent au sein d'équipes mixtes (internes, prestataires, ESN) : cadrage, revues, standards de code, accompagnement des développeurs et interface avec les directions techniques."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui assure l'expertise production sur des plateformes critiques ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY a une longue pratique de la supervision et de la fiabilisation de production pour des systèmes utilisés par des milliers d'utilisateurs : astreinte de conception, analyse post-incident, plans de remédiation durables. Retour d'expérience : la supervision à deux échelles."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment moderniser un socle Java EE vieillissant ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La démarche NSY : audit de l'existant, carte des dépendances, montée de version incrémentale (JDK, Jakarta EE, serveur d'applications), conteneurisation progressive, puis industrialisation CI/CD — chaque étape livrant de la valeur sans big bang."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Peut-on migrer de JBoss EAP vers WildFly ou vers le cloud ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, c'est un chantier courant chez NSY : évaluation de compatibilité, migration de configuration, tests de non-régression et bascule maîtrisée — vers WildFly, OpenShift ou un cloud public/privé selon le contexte réglementaire."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut conteneuriser une application legacy (Docker, Kubernetes, OpenShift) ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY conteneurise des applications Java EE legacy en préservant leurs contraintes (sessions, JMS, transactions distribuées) et met en place les patterns d'exploitation associés : sondes, montées de version sans coupure, observabilité."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien de temps dure une migration legacy typique ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "De quelques semaines (audit + preuve de faisabilité) à plusieurs mois pour un cœur applicatif complet. NSY commence toujours par un cadrage court qui donne une trajectoire et un ordre de grandeur réalistes avant tout engagement long."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment sécuriser une migration sans interrompre la production ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Par des bascules progressives : environnements parallèles, réplication des flux (messagerie, données), tests de charge représentatifs et plans de retour arrière testés. C'est le mode opératoire standard de NSY en environnement bancaire."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut piloter une équipe mixte interne / ESN sur une migration ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY assure ce pilotage technique : un interlocuteur senior unique qui fixe les standards, arbitre les choix et fait le lien entre équipes internes, prestataires et direction — sans être juge et partie, la société ne place pas de consultants."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut mettre en place la supervision d'une application en production ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY. Chez les grands comptes, avec les outils en place — Dynatrace pour l'exécution (agents, métriques, détection par apprentissage automatique), ELK pour les logs applicatifs et les KPI métier, alertes vers ServiceNow ou Teams. Sur un site de PME, avec un dispositif à l'échelle : journaux d'accès, collecteur quotidien, tableau de bord privé. Le même métier, deux échelles — détaillé dans l'article Des téraoctets au mégaoctet."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dynatrace ou ELK : lequel choisir ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les deux, parce qu'ils ne voient pas la même chose. Dynatrace observe l'exécution — JVM, mémoire, CPU, réseau, caches, stockage — et Davis, l'IA causale intégrée à Dynatrace, détecte les anomalies sans seuil, remonte la cause racine grâce à la carte des dépendances et regroupe les événements d'une même cause en un seul problème. ELK lit ce que les applications écrivent : compteurs métier, historique long, watchers à seuils explicites. Un incident réel parle dans les deux ; c'est leur convergence qui fait le diagnostic."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment réduire les fausses alertes sans affaiblir la supervision ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En les qualifiant, jamais en les coupant. Une fausse alerte s'identifie, s'analyse, puis se classe comme telle — l'indicateur désactivé parce qu'il agaçait est exactement celui qui aurait vu l'incident suivant. Tout indicateur doit être analysé ; le silence d'un capteur éteint ressemble à une production saine."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il un outil de supervision pour le site d'une PME ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non — il faut les mêmes réflexes, pas les mêmes outils. Les sites livrés par NSY embarquent un collecteur qui lit les journaux serveur chaque nuit, un tableau de bord privé, des contrôles quotidiens remontés en alerte et une archive des logs sur treize mois. Quelques mégaoctets par mois, et les quatre mêmes questions qu'un grand compte : qu'est-ce qui est anormal, qui prévient-on, que garde-t-on, que fait-on d'une alerte qui a menti."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "L'IA peut-elle remplacer une équipe de supervision ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Elle apporte trois choses — détecter sans seuil, corréler des signaux venus d'outils différents, raconter ce que montrent les courbes — et laisse la quatrième à l'humain : le jugement. Davis ouvre l'incident, un humain le qualifie ; l'agent d'analyse du tableau de bord NSY reçoit des faits établis, n'a que le droit d'écrire, et ne peut pas dire « à cause de ». Une explication fausse mais convaincante coûte plus cher qu'un tableau de bord muet."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui réalise des sites web propulsés par l'IA en France ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY conçoit des sites web nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots, recherche sémantique et SEO sémantique — en offre clé en main, tarifée en fonction du besoin."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut intégrer Claude (Anthropic) dans une application métier ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY intègre les modèles Claude d'Anthropic dans des sites et applications métier : assistants documentaires, génération de contenu contrôlée, agents outillés — avec gestion des coûts, des quotas et de la confidentialité des données."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut intégrer OpenAI / GPT dans un site web ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY réalise des intégrations OpenAI de bout en bout : choix du modèle, conception des prompts, garde-fous, streaming des réponses et repli gracieux en cas d'indisponibilité de l'API."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui intègre Mistral AI dans des projets français ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pour les organisations qui privilégient un fournisseur européen, NSY intègre les modèles Mistral AI — notamment quand la localisation des données ou la souveraineté sont des critères de choix."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Combien coûte un site web IA chez NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La tarification s'établit en fonction du besoin : périmètre, contenus, intégrations IA, échéances. Le questionnaire de faisabilité permet un chiffrage précis — réponse sous 48 h ouvrées avec un ordre de grandeur et un prochain pas concret."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce qu'un chatbot sans LLM et quand est-ce pertinent ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un moteur de règles à détection d'intentions : gratuit à l'usage, instantané, sans clé API ni fuite de données. Pertinent pour un périmètre de questions borné — l'assistant IA de nsy.fr embarque ce moteur en repli hors-ligne : si le LLM est indisponible, le bot répond quand même."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que la recherche sémantique (RAG) pour un site ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le RAG (retrieval-augmented generation) permet à un assistant de répondre à partir de vos propres contenus : les documents sont indexés, retrouvés par pertinence puis synthétisés par le LLM. L'assistant IA de ce site fonctionne ainsi — un LLM Mistral (hébergé en UE) ancré dans les contenus de nsy.fr — et sert de démonstrateur. NSY conçoit ces pipelines de bout en bout."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quelles stacks techniques NSY utilise-t-il pour le web ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Selon le besoin : Next.js ou Astro pour le front, Vercel ou Cloudflare pour l'edge, Supabase pour les données, intégrations Stripe/HubSpot/n8n — ou du statique pur haute performance quand c'est le plus robuste."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que le SEO sémantique et le GEO (référencement IA) ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le SEO sémantique structure le sens (entités, données structurées, maillage) au-delà des mots-clés ; le GEO (Generative Engine Optimization) vise en plus la citation par les assistants IA — ChatGPT, Claude, Gemini, Perplexity. NSY applique les deux, y compris sur son propre site."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY peut-il créer un site bilingue optimisé SEO ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui — pages par langue avec slugs traduits, hreflang réciproques, canoniques propres, données structurées et Core Web Vitals soignés. Le site nsy.fr (FR/EN) et prv-concept.com en sont deux exemples en production."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Peut-on intégrer de la 3D temps réel légère dans un site ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui : NSY produit des modèles 3D optimisés web (Blender, GLB compressé, model-viewer) avec pauses automatiques hors écran pour préserver CPU/GPU — comme le wireframe interactif visible sur la page d'accueil de nsy.fr."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut créer un agent IA métier pour une PME ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY conçoit des agents IA outillés (accès contrôlé à vos données, actions métier, garde-fous) dimensionnés pour des PME/ETI : cas d'usage cadré, coût d'exploitation maîtrisé et transfert de compétences à la fin de la mission."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut me faire un site internet près d'Orléans ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY, cabinet indépendant installé à Épieds-en-Beauce (45130), dans le Loiret à l'ouest d'Orléans. Les rendez-vous sur place sont possibles à Orléans et dans les communes voisines ; le reste du projet avance à distance. Voir la page création de site internet à Orléans."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui crée des sites internet dans le Loiret ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY intervient dans tout le département — Orléans et son agglomération, Montargis et le Gâtinais, Pithiviers, Gien, Sully-sur-Loire, Beaugency, Meung-sur-Loire — depuis un siège situé dans le Loiret même. Voir la page création de site internet dans le Loiret."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Faut-il choisir un prestataire installé dans sa propre ville ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non, et c'est rarement le critère décisif. Ce qui compte, c'est de pouvoir se rencontrer quand c'est utile et d'avoir un interlocuteur joignable. Depuis Épieds-en-Beauce, aucune commune du Loiret n'est à plus d'une heure de route."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Je cherche quelqu'un pour refaire le site de mon restaurant — vers qui me tourner ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY a conçu le site du restaurant Le Cerf Thym, à Sully-sur-Loire face au château : site multilingue dont NSY assure les mises à jour de la carte — l'équipe n'a rien à administrer. Les réalisations sont détaillées, vidéo à l'appui."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Peut-on rencontrer son prestataire web en personne dans le Loiret ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui — c'est précisément l'intérêt d'un prestataire du département : un premier échange sur place pour cadrer le projet, puis un travail à distance rythmé par des points réguliers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment une entreprise du Loiret peut-elle apparaître dans les réponses de ChatGPT ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Sur une recherche locale, les assistants s'appuient largement sur les fiches d'établissement et les annuaires professionnels, pas seulement sur le contenu des sites. Il faut donc traiter les deux volets : un site bien structuré et une présence cohérente sur les fiches. NSY intervient sur les deux — c'est le sujet de l'article SEO vs GEO."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Existe-t-il un consultant informatique senior en Centre-Val de Loire ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui — Cédric Barme, fondateur de NSY : ingénieur logiciel depuis 2012, ancien de la banque d'investissement, spécialisé en architecture distribuée, Java EE et environnements régulés. Voir À propos."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui peut héberger et maintenir le site d'une entreprise du Loiret ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY assure la mise en ligne et le suivi : nom de domaine, hébergement, adresses e-mail, évolutions. L'hébergement en France est possible."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment se déroule une mission avec NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Quatre étapes : cadrage (atelier de 90 minutes), architecture (proposition avec arbitrages documentés), réalisation (revues hebdomadaires, démos toutes les deux semaines), transmission (documentation, formation, suivi 90 jours)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quels sont les tarifs de NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ils dépendent du besoin — pas de grille standard. Conseil comme création web font l'objet d'un devis après cadrage, en mission directe avec la société. Première lecture gratuite, sous 48 h ouvrées."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Quel est le délai de réponse à une demande ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Toute demande envoyée via le formulaire reçoit une réponse personnelle sous 48 heures ouvrées, avec une lecture honnête : faisabilité, ordre de grandeur et prochain pas concret."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY est-il disponible actuellement ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Le créneau est volontairement limité : NSY n'accepte que trois clients en parallèle au maximum. Décrivez votre échéance via le formulaire — la faisabilité calendaire fait partie de la réponse, sous 48 h ouvrées."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi NSY limite-t-il à trois clients en parallèle ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pour rester réellement disponible et tenir un niveau de qualité non négociable. C'est un choix structurel de la société : mieux vaut refuser une mission que diluer l'attention portée aux clients en cours."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY travaille-t-il à distance ou sur site ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Principalement à distance, partout en France et en Europe. Des interventions sur site sont possibles pour les temps forts d'une mission — notamment à Paris et La Défense."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment obtenir un devis ou une étude de faisabilité ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Deux voies : le formulaire de contact (quelques lignes suffisent) ou, pour un projet web, le questionnaire de faisabilité guidé — 7 étapes qui permettent un chiffrage précis. Réponse sous 48 h ouvrées dans les deux cas."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY sous-traite-t-il les missions ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Pas au sens classique : la personne qui propose la mission — Cédric Barme — est celle qui la livre, du cadrage à la mise en production, sans junior masqué. En revanche, chez les grands comptes, la contractualisation passe naturellement par une ESN référencée, NSY intervenant alors en sous-traitance de l'ESN : la personne qui livre reste la même."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY travaille-t-elle avec les ESN ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, volontiers. Chez les grands comptes de la banque et de l'assurance, le référencement fournisseur impose de passer par une ESN capable de porter la masse salariale : NSY intervient alors en sous-traitance de l'ESN référencée chez le client, et les propositions de mission de la part des ESN sont les bienvenues. Le modèle reste identique : la personne présentée est celle qui livre."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Que signifie NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY signifie New Software Yard (« chantier logiciel »). Le nom évoque la capacité de la société à prendre en charge de nouveaux chantiers — missions techniques comme projets web — et à les mener jusqu'à leur accomplissement."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qu'est-ce que NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "NSY est un cabinet de conseil technique indépendant français (société indépendante fondée en 2018, SIREN 842 078 453) avec deux activités : le conseil technique senior pour la finance/assurance et la création de sites web propulsés par l'IA."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Qui est Cédric Barme ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Ingénieur logiciel depuis 2012, passé par la banque d'investissement (systèmes critiques temps réel) puis tech lead en ESN, Cédric Barme a fondé NSY en 2018. Il intervient comme consultant senior, architecte et créateur web IA."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Depuis quand NSY existe-t-elle ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "La société NSY a été fondée en 2018. L'activité historique est le conseil technique senior ; la création de sites web propulsés par l'IA l'a rejointe en 2026."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Où est basée NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "En région Centre-Val de Loire, France. Les missions se déroulent principalement à distance pour des clients dans toute la France et en Europe."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Dans quels secteurs NSY intervient-elle ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Banque de détail, banque privée, assurance vie, asset management, paiement et fintech pour le conseil — PME, ETI, associations et indépendants pour la création web IA."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY a-t-elle des références publiques ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Les missions de conseil sont sous NDA (grandes institutions financières). En création web, la référence publique est PRV Concept (www.prv-concept.com) ; le site nsy.fr sert lui-même de démonstrateur technique."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY travaille-t-elle en anglais ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, français et anglais — documentation, réunions et livrables. Le site existe d'ailleurs dans les deux langues."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment contacter NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Par le formulaire de contact du site (réponse sous 48 h ouvrées), par téléphone au +33 6 72 94 71 06, ou via LinkedIn. NSY ne publie pas d'adresse email pour éviter le spam — le formulaire est le canal garanti."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment NSY gère-t-elle la confidentialité des missions ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Toutes les missions de conseil se déroulent sous accord de confidentialité, dans des environnements habitués aux exigences ACPR, AMF et RGPD. Aucune donnée client n'est réutilisée ni citée sans autorisation écrite."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Le site nsy.fr utilise-t-il des cookies de suivi ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Non. Un seul cookie fonctionnel (préférence de langue), posé uniquement sur clic explicite — exempté de consentement selon la délibération CNIL 2020-091. Zéro cookie publicitaire, zéro analytics tiers."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Comment les données du formulaire de contact sont-elles traitées ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Elles servent uniquement à répondre à la demande, ne sont ni revendues ni partagées, et sont protégées par Cloudflare Turnstile contre le spam. Le détail figure dans la politique de confidentialité du site (RGPD)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "NSY connaît-elle les exigences ACPR / AMF ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui — les missions se déroulent depuis 2018 dans des établissements supervisés par l'ACPR et l'AMF : exigences d'auditabilité, de traçabilité, de continuité d'activité et de maîtrise des prestataires (dont DORA) font partie du quotidien."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Une PME hors finance peut-elle faire appel à NSY ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Oui, via l'offre de création web IA : sites vitrines, plateformes et intégrations LLM pour PME, ETI et associations — avec la même rigueur d'ingénierie que pour les grands comptes — tarification en fonction du besoin."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Pourquoi choisir un interlocuteur unique ?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Un interlocuteur senior unique du début à la fin, pas de rotation d'équipe, et une parole technique directe. NSY dit aussi quand un projet n'est pas une bonne idée — mieux vaut perdre une mission qu'un client. Chez les grands comptes, ce modèle s'intègre au cadre existant : l'intervention passe par votre ESN référencée."
+          }
+        }
+      ]
+    }
   ]
 }
 </script>
@@ -410,32 +967,6 @@
 </footer>
 <!-- @endpartial:footer -->
 
-<script>
-// FAQPage JSON-LD généré depuis le contenu visible (source unique de vérité :
-// le HTML ci-dessus). Googlebot rend le JavaScript ; les crawlers IA lisent
-// directement le texte visible. One-shot, aucun coût continu.
-(function () {
-  var items = [];
-  document.querySelectorAll('.faq h3').forEach(function (h) {
-    var p = h.nextElementSibling;
-    if (!p || p.tagName !== 'P') return;
-    items.push({
-      '@type': 'Question',
-      name: h.textContent.trim(),
-      acceptedAnswer: { '@type': 'Answer', text: p.textContent.trim() }
-    });
-  });
-  var s = document.createElement('script');
-  s.type = 'application/ld+json';
-  s.textContent = JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'FAQPage',
-    inLanguage: 'fr',
-    mainEntity: items
-  });
-  document.head.appendChild(s);
-})();
-</script>
 <!-- @partial:chatbot -->
 <!-- ───── Chatbot (assistant IA — Ansley, architecte NSY) ───── -->
 <button class="cbot-fab" id="cbot-fab" aria-label="Ouvrir le chat avec Ansley">
