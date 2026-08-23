@@ -65,8 +65,10 @@ quand un projet n'est pas la bonne idée), trois clients en parallèle maximum.
 - Tech lead / pilotage d'équipes mixtes (internes, prestataires, ESN)
 - Expertise production : supervision, fiabilisation, reprise de chantiers en difficulté
 - Supervision et observabilité : Dynatrace (agents sur toute la chaîne d'exécution,
-  moteur Davis — détection d'anomalies par apprentissage automatique, incidents
-  créés dans ServiceNow), ELK / Elastic (logs applicatifs, KPI métier, historique
+  Davis — l'IA CAUSALE intégrée à Dynatrace, pas un modèle génératif : seuils
+  auto-adaptatifs, analyse de cause racine sur la carte des dépendances
+  Smartscape, regroupement des événements d'une même cause en un seul
+  « problème », incidents créés dans ServiceNow), ELK / Elastic (logs applicatifs, KPI métier, historique
   long, watchers à seuils de tolérance → alertes Teams), qualification des fausses
   alertes ; tableaux de bord KPI livrés avec chaque site (collecteur quotidien,
   contrôles remontés en alerte, archive des logs 13 mois, agent d'analyse)
