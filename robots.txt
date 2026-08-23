@@ -1,16 +1,18 @@
 # NSY — robots.txt
 # https://www.nsy.fr/
 # Fichiers de contexte pour les IA : /llms.txt et /llms-full.txt
+#
+# ⚠️ Structure : TOUTES les règles d'un groupe suivent directement sa ligne
+# User-agent — sans ligne vide ni ligne Sitemap entre deux. Sinon elles sont
+# orphelines et ignorées par les parseurs (vécu 24/08/2026 : deux tiers de ce
+# fichier ne s'appliquaient pas). Googlebot et Bingbot n'ont plus de groupe
+# dédié : ils suivent le groupe * — CSS et JS y restent explorables, Googlebot
+# rend la page pour l'évaluer.
 
 User-agent: *
-Allow: /
-
-# Sitemap principal
-Sitemap: https://www.nsy.fr/sitemap.xml
-
-# Bloquer les répertoires techniques et fichiers locaux
-Disallow: /css/
-Disallow: /js/
+# (pas de « Allow: / » : redondant, et ambigu pour les parseurs « première règle
+#  gagnante » — l'absence de règle vaut autorisation chez tout le monde)
+# Fichiers techniques et locaux — jamais à indexer
 Disallow: /.htaccess
 Disallow: /deploy/
 Disallow: /.claude/
@@ -18,8 +20,7 @@ Disallow: /.git/
 Disallow: /prepare-deploy.sh
 Disallow: /DEPLOIEMENT-INFOMANIAK.md
 Disallow: /README.md
-
-# Autoriser explicitement les assets visuels du site
+# Assets visuels explicitement autorisés (images d'articles, logos, OG)
 Allow: /public/nsy-logo.png
 Allow: /public/nsy-og.jpg
 Allow: /public/photo-profil.jpg
@@ -45,9 +46,8 @@ Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
 Allow: /public/cropped-NSY-logo-270x270.png
-
-# Bloquer les vidéos lourdes du crawl général,
-# mais les autoriser dans le video sitemap (référencées explicitement).
+# Vidéos : bloquées du crawl général, SAUF celles du sitemap vidéo
+# (la règle la plus longue l'emporte : un Allow précis bat le Disallow générique)
 Disallow: /public/*.mp4
 Allow: /public/nsy-hero.mp4
 Allow: /public/finance-assurance.mp4
@@ -56,22 +56,9 @@ Allow: /public/seo-geo-thumb.mp4
 Allow: /public/chatbot-forum-thumb.mp4
 Allow: /public/weekend-site-thumb.mp4
 Allow: /public/supervision-thumb.mp4
-
-# Modèles 3D — pas crawlables par défaut, ils ne servent pas le SEO texte
+# Modèles 3D — ils ne servent pas le SEO texte
 Disallow: /public/*.glb
 Disallow: /public/*.gltf
-
-# Crawl-delay raisonnable
-Crawl-delay: 1
-
-# Googlebot — pas de delay
-User-agent: Googlebot
-Allow: /
-Crawl-delay: 0
-
-# Bingbot (alimente aussi ChatGPT Search / Copilot)
-User-agent: Bingbot
-Allow: /
 Crawl-delay: 1
 
 # ═══════════════════════════════════════════════════════════════════
@@ -127,3 +114,5 @@ Allow: /
 # Mistral AI (Le Chat)
 User-agent: MistralAI-User
 Allow: /
+
+Sitemap: https://www.nsy.fr/sitemap.xml
