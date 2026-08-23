@@ -59,7 +59,6 @@ Allow: /public/supervision-thumb.mp4
 # Modèles 3D — ils ne servent pas le SEO texte
 Disallow: /public/*.glb
 Disallow: /public/*.gltf
-Crawl-delay: 1
 
 # ═══════════════════════════════════════════════════════════════════
 # Crawlers IA / moteurs génératifs — exploration explicitement AUTORISÉE.
