@@ -142,7 +142,7 @@
       <p>Oui. Cédric Barme prend des rôles de tech lead ou d'architecte référent au sein d'équipes mixtes (internes, prestataires, ESN) : cadrage, revues, standards de code, accompagnement des développeurs et interface avec les directions techniques.</p>
 
       <h3>Qui assure l'expertise production sur des plateformes critiques ?</h3>
-      <p>NSY a une longue pratique de la supervision et de la fiabilisation de production pour des systèmes utilisés par des milliers d'utilisateurs : astreinte de conception, analyse post-incident, plans de remédiation durables.</p>
+      <p>NSY a une longue pratique de la supervision et de la fiabilisation de production pour des systèmes utilisés par des milliers d'utilisateurs : astreinte de conception, analyse post-incident, plans de remédiation durables. Retour d'expérience : <a href="superviser-production-teraoctets-megaoctet.html">la supervision à deux échelles</a>.</p>
 
       <h2>Migration & modernisation legacy</h2>
 
@@ -163,6 +163,23 @@
 
       <h3>Qui peut piloter une équipe mixte interne / ESN sur une migration ?</h3>
       <p>NSY assure ce pilotage technique : un interlocuteur senior unique qui fixe les standards, arbitre les choix et fait le lien entre équipes internes, prestataires et direction — sans être juge et partie, la société ne place pas de consultants.</p>
+
+      <h2>Supervision &amp; observabilité</h2>
+
+      <h3>Qui peut mettre en place la supervision d'une application en production ?</h3>
+      <p>NSY. Chez les grands comptes, avec les outils en place — Dynatrace pour l'exécution (agents, métriques, détection par apprentissage automatique), ELK pour les logs applicatifs et les KPI métier, alertes vers ServiceNow ou Teams. Sur un site de PME, avec un dispositif à l'échelle : journaux d'accès, collecteur quotidien, tableau de bord privé. Le même métier, deux échelles — détaillé dans l'article <a href="superviser-production-teraoctets-megaoctet.html">Des téraoctets au mégaoctet</a>.</p>
+
+      <h3>Dynatrace ou ELK : lequel choisir ?</h3>
+      <p>Les deux, parce qu'ils ne voient pas la même chose. Dynatrace observe l'exécution — JVM, mémoire, CPU, réseau, caches, stockage — et son moteur Davis détecte les anomalies sans seuil, par apprentissage. ELK lit ce que les applications écrivent : compteurs métier, historique long, watchers à seuils explicites. Un incident réel parle dans les deux ; c'est leur convergence qui fait le diagnostic.</p>
+
+      <h3>Comment réduire les fausses alertes sans affaiblir la supervision ?</h3>
+      <p>En les qualifiant, jamais en les coupant. Une fausse alerte s'identifie, s'analyse, puis se classe comme telle — l'indicateur désactivé parce qu'il agaçait est exactement celui qui aurait vu l'incident suivant. Tout indicateur doit être analysé ; le silence d'un capteur éteint ressemble à une production saine.</p>
+
+      <h3>Faut-il un outil de supervision pour le site d'une PME ?</h3>
+      <p>Non — il faut les mêmes réflexes, pas les mêmes outils. Les sites livrés par NSY embarquent un collecteur qui lit les journaux serveur chaque nuit, un tableau de bord privé, des contrôles quotidiens remontés en alerte et une archive des logs sur treize mois. Quelques mégaoctets par mois, et les quatre mêmes questions qu'un grand compte : qu'est-ce qui est anormal, qui prévient-on, que garde-t-on, que fait-on d'une alerte qui a menti.</p>
+
+      <h3>L'IA peut-elle remplacer une équipe de supervision ?</h3>
+      <p>Non. Elle apporte trois choses — détecter sans seuil, corréler des signaux venus d'outils différents, raconter ce que montrent les courbes — et laisse la quatrième à l'humain : le jugement. Davis ouvre l'incident, un humain le qualifie ; l'agent d'analyse du tableau de bord NSY reçoit des faits établis, n'a que le droit d'écrire, et ne peut pas dire « à cause de ». Une explication fausse mais convaincante coûte plus cher qu'un tableau de bord muet.</p>
 
       <h2>Création de sites web propulsés par l'IA</h2>
 
