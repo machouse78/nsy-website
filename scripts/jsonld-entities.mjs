@@ -135,6 +135,18 @@ for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html') && f !== 
       const compact = Object.keys(graph[i]).every((k) => k in canon);
       if (compact && JSON.stringify(graph[i]) !== JSON.stringify(canon)) { graph[i] = canon; touched = true; }
     }
+    // FAQ visible sur une page ordinaire (pages villes, refonte…) : le FAQPage
+    // du @graph est RÉGÉNÉRÉ depuis les <h3>/<p> qui suivent le titre de
+    // section — le balisage ne peut plus diverger du texte (vécu 24/08/2026 :
+    // quatre pages villes portaient la FAQ d'Orléans en doublon).
+    const faqH2 = html.match(/<h2>(Questions fréquentes|Frequently asked[^<]*)<\/h2>/);
+    if (!FAQ_PAGES[file] && faqH2 && graph.some((n) => n['@type'] === 'FAQPage')) {
+      const zone = html.slice(faqH2.index, html.indexOf('</article>', faqH2.index));
+      const items = [...zone.matchAll(/<h3>([\s\S]*?)<\/h3>\s*<p>([\s\S]*?)<\/p>/g)].map((m) => ({
+        '@type': 'Question', name: text(m[1]), acceptedAnswer: { '@type': 'Answer', text: text(m[2]) } }));
+      const i = graph.findIndex((n) => n['@type'] === 'FAQPage');
+      if (items.length && JSON.stringify(graph[i].mainEntity) !== JSON.stringify(items)) { graph[i] = { ...graph[i], mainEntity: items }; touched = true; }
+    }
     if (FAQ_PAGES[file]) {
       const node = faqNode(html, FAQ_PAGES[file], url);
       const i = graph.findIndex((n) => n['@type'] === 'FAQPage');

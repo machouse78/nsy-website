@@ -53,24 +53,65 @@
       "@id": "https://www.nsy.fr/website-creation-loiret.html#service",
       "name": "Website design in the Loiret",
       "description": "AI-powered websites (bespoke design, grounded conversational assistant, SEO and GEO) for businesses, tradespeople and associations across the Loiret — provider based in Épieds-en-Beauce.",
-      "provider": { "@id": "https://www.nsy.fr/#org" },
+      "provider": {
+        "@id": "https://www.nsy.fr/#org"
+      },
       "areaServed": [
-        { "@type": "AdministrativeArea", "name": "Loiret" },
-        { "@type": "City", "name": "Orléans" },
-        { "@type": "City", "name": "Montargis" },
-        { "@type": "City", "name": "Pithiviers" },
-        { "@type": "City", "name": "Gien" },
-        { "@type": "City", "name": "Sully-sur-Loire" },
-        { "@type": "City", "name": "Beaugency" },
-        { "@type": "City", "name": "Meung-sur-Loire" },
-        { "@type": "City", "name": "Épieds-en-Beauce" },
-        { "@type": "AdministrativeArea", "name": "Centre-Val de Loire" },
-        { "@type": "Country", "name": "France" }
+        {
+          "@type": "AdministrativeArea",
+          "name": "Loiret"
+        },
+        {
+          "@type": "City",
+          "name": "Orléans"
+        },
+        {
+          "@type": "City",
+          "name": "Montargis"
+        },
+        {
+          "@type": "City",
+          "name": "Pithiviers"
+        },
+        {
+          "@type": "City",
+          "name": "Gien"
+        },
+        {
+          "@type": "City",
+          "name": "Sully-sur-Loire"
+        },
+        {
+          "@type": "City",
+          "name": "Beaugency"
+        },
+        {
+          "@type": "City",
+          "name": "Meung-sur-Loire"
+        },
+        {
+          "@type": "City",
+          "name": "Épieds-en-Beauce"
+        },
+        {
+          "@type": "AdministrativeArea",
+          "name": "Centre-Val de Loire"
+        },
+        {
+          "@type": "Country",
+          "name": "France"
+        }
       ],
-      "availableChannel": { "@type": "ServiceChannel", "name": "On site or remote" }
+      "availableChannel": {
+        "@type": "ServiceChannel",
+        "name": "On site or remote"
+      }
     },
     {
-      "@type": ["ProfessionalService", "LocalBusiness"],
+      "@type": [
+        "ProfessionalService",
+        "LocalBusiness"
+      ],
       "@id": "https://www.nsy.fr/#org",
       "name": "NSY",
       "url": "https://www.nsy.fr/",
@@ -80,19 +121,34 @@
       "priceRange": "On quotation",
       "address": {
         "@type": "PostalAddress",
-        "streetAddress": "8 Hameau de Poiseaux", "addressLocality": "Épieds-en-Beauce",
+        "streetAddress": "8 Hameau de Poiseaux",
+        "addressLocality": "Épieds-en-Beauce",
         "postalCode": "45130",
         "addressRegion": "Centre-Val de Loire",
         "addressCountry": "FR"
       },
-      "geo": { "@type": "GeoCoordinates", "latitude": 47.9508, "longitude": 1.6186 },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 47.9508,
+        "longitude": 1.6186
+      },
       "openingHoursSpecification": {
         "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+        "dayOfWeek": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday"
+        ],
         "opens": "08:00",
         "closes": "19:00"
       },
-      "identifier": { "@type": "PropertyValue", "propertyID": "SIREN", "value": "842078453" }
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "SIREN",
+        "value": "842078453"
+      }
     },
     {
       "@type": "FAQPage",
@@ -100,30 +156,52 @@
         {
           "@type": "Question",
           "name": "Do you work across the whole Loiret?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. NSY is based at Épieds-en-Beauce, between Orléans and Châteaudun, and works across the whole département: the Orléans area, Montargis and the Gâtinais, Pithiviers to the north, Gien and Sully-sur-Loire along the Loire, Beaugency and Meung-sur-Loire to the west. On-site meetings are possible; the rest of the project runs remotely." }
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — from Beaugency to Montargis and from Pithiviers to Gien. With the office at Épieds-en-Beauce, no town in the département is more than an hour’s drive away."
+          }
         },
         {
           "@type": "Question",
           "name": "Do you have local references?",
-          "acceptedAnswer": { "@type": "Answer", "text": "Yes. The website of Le Cerf Thym, a restaurant in Sully-sur-Loire facing the château, was designed and shipped by NSY: a multilingual site whose menu updates are handled by NSY season after season. Other work is detailed on the Work page." }
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes, the restaurant Le Cerf Thym in Sully-sur-Loire. And this very site, designed and built in-house, serves as a running demonstration."
+          }
         },
         {
           "@type": "Question",
           "name": "How much does a website cost?",
-          "acceptedAnswer": { "@type": "Answer", "text": "It depends on the number of pages, the features, the AI integration and the deadline. Pricing follows a short scoping conversation — the online feasibility questionnaire is enough to get a ballpark figure, with an answer within two working days." }
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "It depends on the number of pages, the features, the AI integration and the deadline. Pricing follows the scoping conversation — the feasibility questionnaire is enough to get a ballpark figure, with an answer within two working days."
+          }
         },
         {
           "@type": "Question",
-          "name": "How do you get listed when a customer asks an AI for a local provider?",
-          "acceptedAnswer": { "@type": "Answer", "text": "On a local query, assistants lean heavily on business listings and professional directories rather than on website content: they display a list of rated businesses. A well-built website is necessary but not sufficient — a complete business listing, customer reviews and strictly consistent contact details across platforms matter just as much. NSY handles both sides." }
+          "name": "Rebuild or redesign an existing site?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Both are common. A redesign keeps what works — content, earned search visibility, page addresses — and replaces the rest. It is often faster and less risky than starting over."
+          }
         }
       ]
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
-        { "@type": "ListItem", "position": 2, "name": "Website creation Loiret", "item": "https://www.nsy.fr/website-creation-loiret.html" }
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.nsy.fr/index-en.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Website creation Loiret",
+          "item": "https://www.nsy.fr/website-creation-loiret.html"
+        }
       ]
     }
   ]
