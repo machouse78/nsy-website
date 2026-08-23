@@ -197,7 +197,11 @@ Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire c
 - **Animations JS** (parallaxe hero, compteurs, jauge de lecture) : boucles `requestAnimationFrame` qui **s'arrêtent d'elles-mêmes au repos** (lerp convergé, compteur fini) — aucune boucle infinie ; tout est coupé par `prefers-reduced-motion`.
 - **Cache** : `.htaccess` pose `Cache-Control: max-age` (1 mois médias) — évite le **re-téléchargement** (mais pas le re-décodage, d'où la mise en pause ci-dessus).
 
-Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'environ **94 → 12 M pixels/s** (≈ −87 %), et les sections hors écran ne repeignent plus rien.
+- **`autoplay` uniquement sur le héros et l'avatar du chat** (visibles au chargement). Toute autre vidéo est en `preload="none"` **sans** `autoplay` : c'est l'`IntersectionObserver` qui appelle `play()` à l'entrée dans la vue. Vécu (audit 23/08/2026) : `autoplay` annule `preload="none"` — dix vidéos, 13 Mo, partaient à 0,6 s.
+- **Posters** : toujours le WebP quand il existe (jamais le PNG de 1 Mo). **Poster du héros = une vraie `<img>`** (WebP responsive 640/960, préchargée `fetchpriority="high"`) posée SOUS la vidéo et effacée au `playing` — Chrome n'affiche pas le poster d'une vidéo en `autoplay`, le LCP attendait sinon la première image du mp4.
+- **Polices Google non bloquantes** (`media="print" onload="this.media='all'"` + `<noscript>`) ; **`model-viewer` chargé uniquement sur les pages qui ont une balise `<model-viewer>`** (Conception 3D, Services).
+
+Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'environ **94 → 12 M pixels/s** (≈ −87 %), et les sections hors écran ne repeignent plus rien. Audit du 23/08/2026 (Lighthouse mobile) : poids de l'accueil **16,2 → 1,9 Mo**, FCP 4,3 → 3,1 s ; le LCP simulé (~5,5 s) reste gouverné par le chemin critique HTML → CSS → image et la variance de l'hébergement mutualisé.
 
 ## Structure du repo
 
@@ -242,6 +246,7 @@ nsy-website/
 │   └── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
 │   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 60 pages (npm run partials)
+│   ├── jsonld-entities.mjs   # entités JSON-LD partagées + FAQPage depuis le HTML (build)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
 │   ├── partage-page.py                  # ⭐ Génère /stats/partage.html — tous les articles × registre de groupes
@@ -325,7 +330,7 @@ open http://localhost:8080
 ./prepare-deploy.sh
 ```
 
-Le script reconstruit `deploy/` à zéro, copie **uniquement les assets utilisés** (pages FR+EN, `contact.php`, `vendor/`, `_secret/`, CSS/JS, médias, `renault-wireframe.glb`), vérifie la présence des fichiers requis et les références dans `index.html`, affiche les tailles, et sort en code 1 si quelque chose manque (utilisable en CI). Bundle final ≈ **12 Mo**.
+Le script synchronise d'abord nav/footer (`scripts/sync-partials.mjs`) puis les **entités JSON-LD** (`scripts/jsonld-entities.mjs`, voir SEO), puis reconstruit `deploy/` à zéro, copie **uniquement les assets utilisés** (dont `404.html`, page d'erreur dédiée servie par `ErrorDocument`) (pages FR+EN, `contact.php`, `vendor/`, `_secret/`, CSS/JS, médias, `renault-wireframe.glb`), vérifie la présence des fichiers requis et les références dans `index.html`, affiche les tailles, et sort en code 1 si quelque chose manque (utilisable en CI). Bundle final ≈ **12 Mo**.
 
 ## Déployer sur Infomaniak
 
@@ -380,7 +385,10 @@ tant qu'on ne la lance pas.
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Conformité des données structurées** (3 alertes Search Console résolues en août 2026) : tout champ **requis** d'un type à résultat enrichi contient le **nœud typé inliné** (avec le même `@id`) — `ProfilePage.mainEntity`, mais aussi `author` et `publisher` des articles, les dates (`dateModified`, `datePublished`) sont en **ISO 8601 complet avec fuseau**, et chaque `<video>` porte un `poster=` avec son bloc `video:video` sous **chaque** page qui l'affiche. Détail des causes, correctifs et méthode d'audit : skill `seo-geo-llmo` §5
-- **Robots.txt** : Allow explicite des médias utilisés, Disallow des `.glb`/`.gltf`
+- **Robots.txt** : un seul groupe `User-agent: *` qui porte TOUTES les règles (⚠️ une ligne vide ou `Sitemap:` entre `User-agent` et ses règles les rend orphelines — vécu), CSS et JS explorables (Googlebot rend la page), fichiers techniques bloqués, vidéos bloquées sauf celles du sitemap vidéo, `Sitemap:` en fin de fichier ; groupes dédiés pour les crawlers d'IA. Pas de groupe `Googlebot` dédié : il remplacerait le groupe `*` au lieu de le compléter
+- **Entités JSON-LD partagées** : `scripts/jsonld-entities.mjs` (lancé par `prepare-deploy.sh`, idempotent, `--check`) lit les nœuds `Organization` / `Person` complets de `index.html` et injecte leur version compacte dans toute page qui les référence (`@id`) sans les définir — Google ne suit pas un `@id` d'une page à l'autre. Il dote aussi les pages nues d'un `WebPage` + `BreadcrumbList`, et **génère le `FAQPage` au build depuis le HTML visible** (pages FAQ et toute page à section « Questions fréquentes ») : le balisage ne peut pas diverger du texte
+- **404 dédiée** (`404.html`, `noindex`) et **variantes « dossier » en 301** (`/contact/` → `contact.html`) ; anciennes URL WordPress en 301/410 ; la redirection automatique par langue sur `/` **exclut les robots** (hreflang fait le travail)
+- **Drapeaux de langue = liens réels** vers la page alternative (écrits par `sync-partials` depuis le hreflang), le JS garde la main au clic
 - **Flux RSS du journal** : `feed.xml` (FR) / `feed-en.xml` (EN) — à mettre à jour à chaque article
 - **IndexNow** : clé à la racine + `node scripts/indexnow-ping.mjs` après chaque déploiement (indexation quasi immédiate côté Bing → ChatGPT Search/Copilot)
 - **Images lourdes en WebP** (−90 % : `finance-assurance.webp`, `web-ia.webp`) — les `.png` restent pour les thumbnails du video sitemap
@@ -391,7 +399,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 
 - **18 crawlers IA explicitement autorisés** dans `robots.txt` (GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, Google-Extended, PerplexityBot, CCBot, Amazonbot, meta-externalagent, MistralAI-User…)
 - **`llms.txt` / `llms-full.txt`** : identité, expertises, offres, graphe d'entités et règles de recommandation, au format lisible par les LLM — à tenir en phase avec les faits du site (même règle que le chatbot)
-- **FAQ bilingue 52 Q/R** (`faq.html` / `faq-en.html`) ciblant les requêtes conversationnelles (« Qui est expert WildFly en France ? », « Qui peut intégrer Claude ? »…) ; le `FAQPage` JSON-LD est **généré depuis le DOM** (source unique = HTML visible)
+- **FAQ bilingue 67 / 64 Q/R** (`faq.html` / `faq-en.html`) ciblant les requêtes conversationnelles (« Qui est expert WildFly en France ? », « Qui peut intégrer Claude ? »…) ; le `FAQPage` JSON-LD est **généré depuis le DOM** (source unique = HTML visible)
 - **Dates absolues** dans le texte statique (« depuis 2012 », « fondée en 2018 ») — jamais périmé
 - Stratégie complète, pages à créer et actions externes : `SEO-GEO-LLMO.md` (dépôt privé `nsy-strategie`)
 
