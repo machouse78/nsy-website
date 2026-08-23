@@ -38,7 +38,7 @@ const homeGraph = JSON.parse([...home.matchAll(RX)][0][1])['@graph'];
 const full = (suffix) => homeGraph.find((n) => (n['@id'] || '').endsWith(suffix));
 const pick = (n, keys) => Object.fromEntries(keys.filter((k) => k in n).map((k) => [k, n[k]]));
 const ORG = pick(full('#org'), ['@type', '@id', 'name', 'legalName', 'url', 'logo', 'telephone', 'email',
-  'foundingDate', 'identifier', 'address', 'sameAs']);
+  'foundingDate', 'identifier', 'address', 'priceRange', 'sameAs']);
 const PERSON = pick(full('#person'), ['@type', '@id', 'name', 'jobTitle', 'worksFor', 'image', 'sameAs']);
 PERSON.url = SITE + 'a-propos.html';
 
@@ -124,6 +124,16 @@ for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html') && f !== 
     if (wanted.has(ORG['@id']) && !defines(graph, ORG['@id'])) { graph.unshift(ORG); touched = true; }
     if (wanted.has(PERSON['@id']) && !defines(graph, PERSON['@id'])) {
       graph.splice(defines(graph, ORG['@id']) ? 1 : 0, 0, PERSON); touched = true;
+    }
+    // Les nœuds COMPACTS déjà injectés suivent la source : un nœud dont toutes
+    // les clés appartiennent au jeu compact est régénéré s'il diffère. Un nœud
+    // ÉCRIT À LA MAIN (page ville : geo, horaires…) a des clés hors du jeu et
+    // n'est jamais touché.
+    for (const canon of [ORG, PERSON]) {
+      const i = graph.findIndex((n) => n['@id'] === canon['@id']);
+      if (i < 0) continue;
+      const compact = Object.keys(graph[i]).every((k) => k in canon);
+      if (compact && JSON.stringify(graph[i]) !== JSON.stringify(canon)) { graph[i] = canon; touched = true; }
     }
     if (FAQ_PAGES[file]) {
       const node = faqNode(html, FAQ_PAGES[file], url);
