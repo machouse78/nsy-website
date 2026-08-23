@@ -1153,14 +1153,18 @@
       setVideoProgress(end / glyphVideo.duration);
     });
 
-    glyphVideo.addEventListener('canplaythrough', hideLoader, { once: true });
+    // L'anneau disparaît dès la PREMIÈRE IMAGE décodée (loadeddata), pas au
+    // canplaythrough : sur 4G lente, attendre que les 613 Ko soient bufferisés
+    // masquait le poster pendant des secondes — et le LCP (audit P5, 24/08/2026 :
+    // « délai de rendu » 0,6 à 1,1 s sur un fichier chargé en 64 ms).
+    glyphVideo.addEventListener('loadeddata', hideLoader, { once: true });
     glyphVideo.addEventListener('error', () => {
       glyphLoader.classList.add('error');
       if (glyphPct) glyphPct.textContent = 'ERR';
     });
 
     // Edge case: video already cached / fully buffered before listeners attach
-    if (glyphVideo.readyState >= 4) hideLoader();
+    if (glyphVideo.readyState >= 2) hideLoader();
 
     // ───── Fondu de boucle : fade-in / fade-out vers transparent ─────
     // La vidéo reste opaque ; on anime son opacité selon currentTime pour qu'au
@@ -1170,12 +1174,16 @@
     // hors-écran, donc l'animation s'arrête d'elle-même (philosophie perf).
     const FADE = 0.6; // secondes de fondu à chaque extrémité
     let fadeRAF = null;
+    let firstLoop = true; // pas de fondu d'ENTRÉE au tout premier départ : le
+                          // poster est déjà peint, l'image doit rester visible (LCP)
+    glyphVideo.addEventListener('seeked', () => { firstLoop = false; });
+    glyphVideo.addEventListener('timeupdate', () => { if (glyphVideo.currentTime > FADE) firstLoop = false; });
     const fadeTick = () => {
       const d = glyphVideo.duration;
       if (d && isFinite(d)) {
         const t = glyphVideo.currentTime;
         let op = 1;
-        if (t < FADE) op = t / FADE;
+        if (t < FADE && !firstLoop) op = t / FADE;
         else if (t > d - FADE) op = Math.max(0, (d - t) / FADE);
         glyphVideo.style.opacity = op.toFixed(3);
       }
