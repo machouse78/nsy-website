@@ -112,6 +112,15 @@ ErrorDocument 404 /404.html
     RewriteRule ^mentions-legales-en\.html$ /legal-notice.html   [L,R=301]
     RewriteRule ^confidentialite-en\.html$  /privacy.html        [L,R=301]
 
+    # ───── Anciennes URL du site WordPress (avant mai 2026), encore connues de Google ─────
+    # Source : Search Console, 24/08/2026 — « Explorée, non indexée » et « Introuvable ».
+    RewriteRule ^competences/?$              /services.html      [L,R=301]
+    RewriteRule ^clients/?$                  /realisations.html  [L,R=301]
+    RewriteRule ^eportfolio/?$               /realisations.html  [L,R=301]
+    RewriteRule ^cv/CV_BARME_Cedric\.pdf$    /a-propos.html      [L,R=301]
+    # Article d'exemple de WordPress, sans équivalent : 410 Gone, Google le retire plus vite qu'un 404.
+    RewriteRule ^hello-world/?$              - [G]
+
     # ───── Auto-détection langue (Accept-Language) ─────
     # Sur racine ou /index.html : si pas de cookie nsy_lang ET navigateur en anglais,
     # rediriger vers /index-en.html. Le cookie est posé par le switch de drapeau JS,
