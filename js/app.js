@@ -370,6 +370,8 @@
       'https://www.facebook.com/share/p/1ey4fxbyda',
       'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25c3%25a2ce-%25c3%25a0-lia-verdict-chiffr%25c3%25a9-hqq8e',
       'https://www.facebook.com/reel/2812928635744339',
+      'https://www.linkedin.com/pulse/des-t%25c3%25a9raoctets-au-m%25c3%25a9gaoctet-la-supervision-est-une-duyee',
+      'https://www.facebook.com/reel/1080327827884467',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc

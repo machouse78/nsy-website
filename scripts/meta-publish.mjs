@@ -221,6 +221,17 @@ async function post(env, args) {
     const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/videos`, { file_url: videoUrl, description: body });
     postId = created.id;
     console.log(`✓ Post VIDÉO publié (${postId})`);
+    // ⚠️ L'envoi par file_url est ASYNCHRONE : tant que la vidéo n'est pas
+    // « ready », l'objet répond « does not exist » et le commentaire échoue
+    // (vécu 23/08/2026 : post publié, commentaire perdu). On attend donc la fin
+    // du traitement — en général moins d'une minute — avant de commenter.
+    for (let i = 0; i < 30; i++) {
+      const st = await graph(env, 'GET', postId, { fields: 'status' }).catch(() => null);
+      const ph = st?.status?.video_status;
+      if (ph === 'ready') break;
+      if (ph === 'error') throw new Error('traitement vidéo en erreur côté Facebook');
+      await new Promise((r) => setTimeout(r, 5000));
+    }
   } else if (imageUrl) {
     const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/photos`, { url: imageUrl, message: body });
     postId = created.post_id || created.id;

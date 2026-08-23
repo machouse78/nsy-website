@@ -34,6 +34,8 @@ $officials = [
     'https://www.facebook.com/share/p/1Ey4FXBYDA',
     'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e',
     'https://www.facebook.com/reel/2812928635744339',
+    'https://www.linkedin.com/pulse/des-t%25C3%25A9raoctets-au-m%25C3%25A9gaoctet-la-supervision-est-une-duyee',
+    'https://www.facebook.com/reel/1080327827884467',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));

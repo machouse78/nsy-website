@@ -393,6 +393,8 @@ function nsy_sanitize_reply(string $reply): string
         'https://www.facebook.com/share/p/1ey4fxbyda',
         'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25c3%25a2ce-%25c3%25a0-lia-verdict-chiffr%25c3%25a9-hqq8e',
         'https://www.facebook.com/reel/2812928635744339',
+        'https://www.linkedin.com/pulse/des-t%25c3%25a9raoctets-au-m%25c3%25a9gaoctet-la-supervision-est-une-duyee',
+        'https://www.facebook.com/reel/1080327827884467',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -437,6 +439,10 @@ function nsy_sanitize_reply(string $reply): string
         'site-ia-en-un-week-end.html' => [
             'linkedin' => 'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e',
             'facebook' => 'https://www.facebook.com/reel/2812928635744339',
+        ],
+        'superviser-production-teraoctets-megaoctet.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/des-t%25C3%25A9raoctets-au-m%25C3%25A9gaoctet-la-supervision-est-une-duyee',
+            'facebook' => 'https://www.facebook.com/reel/1080327827884467',
         ],
     ];
     if (!replyIsEnglish($reply)) {
