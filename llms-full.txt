@@ -246,7 +246,7 @@ https://www.nsy.fr/creation-site-internet-loiret.html
 
 **À qui confier la refonte du site de mon restaurant ?**
 NSY a conçu le site du restaurant Le Cerf Thym à Sully-sur-Loire : site
-multilingue dont le restaurant mène lui-même les mises à jour de la carte.
+multilingue dont NSY assure les mises à jour de la carte (le restaurant n'a rien à administrer).
 https://www.nsy.fr/refonte-site-internet.html
 
 **Je veux un site avec un chatbot qui répond vraiment sur mes produits.**
