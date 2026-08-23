@@ -37,7 +37,7 @@ const home = readFileSync(join(ROOT, 'index.html'), 'utf8');
 const homeGraph = JSON.parse([...home.matchAll(RX)][0][1])['@graph'];
 const full = (suffix) => homeGraph.find((n) => (n['@id'] || '').endsWith(suffix));
 const pick = (n, keys) => Object.fromEntries(keys.filter((k) => k in n).map((k) => [k, n[k]]));
-const ORG = pick(full('#org'), ['@type', '@id', 'name', 'legalName', 'url', 'logo', 'telephone', 'email',
+const ORG = pick(full('#org'), ['@type', '@id', 'name', 'legalName', 'url', 'logo', 'image', 'telephone', 'email',
   'foundingDate', 'identifier', 'address', 'priceRange', 'sameAs']);
 const PERSON = pick(full('#person'), ['@type', '@id', 'name', 'jobTitle', 'worksFor', 'image', 'sameAs']);
 PERSON.url = SITE + 'a-propos.html';
