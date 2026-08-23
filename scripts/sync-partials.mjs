@@ -121,6 +121,19 @@ for (const [file, lang, P, active = 'top'] of pages) {
   const before = read(file);
   let html = before;
   let nav = partials[lang].nav.replaceAll('{{P}}', P);
+  // Drapeau de l'AUTRE langue : lien RÉEL vers la page alternative, lu dans le
+  // hreflang de la page elle-même (source unique, vérifiée réciproque), au lieu
+  // de "#". Le JS garde la main au clic (cookie nsy_lang + navigation) ; sans
+  // JS — ou au clic droit « ouvrir dans un nouvel onglet » — le lien fonctionne.
+  // Audit SEO 24/08/2026, priorité 3 : le basculement n'est plus « uniquement JS ».
+  const other = lang === 'fr' ? 'en' : 'fr';
+  // Page sans hreflang (404) : on renvoie vers l'accueil de l'autre langue.
+  const alt = (before.match(new RegExp(`<link rel="alternate" hreflang="${other}" href="([^"]+)"`)) || [])[1]
+    || (other === 'en' ? 'https://www.nsy.fr/index-en.html' : 'https://www.nsy.fr/');
+  if (alt) {
+    const target = alt.replace('https://www.nsy.fr/', '') || 'index.html';
+    nav = nav.replace(`href="#" class="lang-flag" data-lang="${other}"`, `href="${target}" class="lang-flag" data-lang="${other}"`);
+  }
   // Highlight the right top-nav link for this page: clear every active, then
   // set it on the link whose data-target matches `active`.
   nav = nav.replace(/class="nav-link active"/g, 'class="nav-link"')
