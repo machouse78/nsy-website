@@ -211,7 +211,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link rel="preload" as="image" href="public/nsy-hero-poster.jpg" fetchpriority="high" />
+<link rel="preload" as="image" imagesrcset="public/nsy-hero-poster-640.webp 640w, public/nsy-hero-poster-960.webp 960w" imagesizes="(max-width: 980px) 92vw, 497px" fetchpriority="high" />
 <!-- Polices : feuille NON bloquante (media=print → all au chargement). Le texte
      s'affiche dès style.css avec la police de repli ; display=swap fait le reste. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" media="print" onload="this.media='all'" />
@@ -312,7 +312,7 @@
           <div class="glyph-disc"></div>
           <!-- Poster peint comme une IMAGE : Chrome n'affiche pas le poster d'une vidéo
                en autoplay, le LCP attendait la première image décodée du mp4. -->
-          <img class="glyph-poster" src="public/nsy-hero-poster.jpg" alt="" width="320" height="320" fetchpriority="high" decoding="async" />
+          <img class="glyph-poster" src="public/nsy-hero-poster-960.webp" srcset="public/nsy-hero-poster-640.webp 640w, public/nsy-hero-poster-960.webp 960w" sizes="(max-width: 980px) 92vw, 497px" alt="" width="960" height="960" fetchpriority="high" decoding="async" />
           <video
             class="glyph-video"
             id="glyph-video"

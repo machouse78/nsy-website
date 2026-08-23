@@ -23,6 +23,8 @@ Disallow: /README.md
 # Assets visuels explicitement autorisés (images d'articles, logos, OG)
 Allow: /public/nsy-logo.png
 Allow: /public/nsy-og.jpg
+Allow: /public/nsy-hero-poster-640.webp
+Allow: /public/nsy-hero-poster-960.webp
 Allow: /public/photo-profil.jpg
 Allow: /public/finance-assurance.png
 Allow: /public/finance-assurance.webp
