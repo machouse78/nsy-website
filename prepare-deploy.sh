@@ -89,6 +89,8 @@ cp seo-geo-etre-cite-par-les-ia.html deploy/
 cp chatbot-ia-forum-base-de-connaissances.html deploy/
 cp seo-geo-getting-cited-by-ai.html deploy/
 cp ai-chatbot-forum-knowledge-base.html deploy/
+cp superviser-production-teraoctets-megaoctet.html deploy/
+cp production-monitoring-terabytes-megabyte.html deploy/
 cp site-ia-en-un-week-end.html deploy/
 cp ai-website-in-a-weekend.html deploy/
 cp stats-collector.php deploy/
@@ -189,6 +191,11 @@ cp public/weekend-site-thumb.mp4        deploy/public/   # vignette ANIMEE artic
 cp public/weekend-site-article.jpg      deploy/public/   # infographie FR article site IA week-end (+ OG)
 cp public/weekend-site-article-en.jpg   deploy/public/   # infographie EN article site IA week-end (+ OG)
 cp public/weekend-site-video.mp4        deploy/public/   # video pleine res article week-end (publication Facebook)
+cp public/supervision-thumb.jpg         deploy/public/   # poster vignette article supervision
+cp public/supervision-thumb.mp4         deploy/public/   # vignette ANIMEE article supervision
+cp public/supervision-article.jpg       deploy/public/   # infographie FR article supervision (+ OG)
+cp public/supervision-article-en.jpg    deploy/public/   # infographie EN article supervision (+ OG)
+cp public/supervision-video.mp4         deploy/public/   # video pleine res article supervision (publication Facebook)
 cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

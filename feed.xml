@@ -7,6 +7,13 @@
   <language>fr</language>
   <atom:link href="https://www.nsy.fr/feed.xml" rel="self" type="application/rss+xml" />
   <item>
+    <title>Des téraoctets au mégaoctet : superviser, une discipline avant d'être un budget</title>
+    <link>https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</guid>
+    <pubDate>Sun, 23 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Supervision et observabilité à deux échelles : Dynatrace et ELK chez un grand compte de l'assurance, le tableau de bord d'un site de PME. Téraoctets contre mégaoctets par mois, les quatre mêmes questions, la règle d'or sur les fausses alertes — et ce que l'IA apporte vraiment.</description>
+  </item>
+  <item>
     <title>Créer son site avec l'IA en un week-end : on a pris la promesse au mot</title>
     <link>https://www.nsy.fr/site-ia-en-un-week-end.html</link>
     <guid isPermaLink="true">https://www.nsy.fr/site-ia-en-un-week-end.html</guid>

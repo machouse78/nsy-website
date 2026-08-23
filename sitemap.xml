@@ -540,6 +540,13 @@
       <video:content_loc>https://www.nsy.fr/public/weekend-site-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/supervision-thumb.jpg</video:thumbnail_loc>
+      <video:title>Des téraoctets au mégaoctet — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : un tableau de bord de supervision dont les courbes et les voyants s'animent — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/supervision-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
@@ -570,6 +577,10 @@
       <image:loc>https://www.nsy.fr/public/weekend-site-thumb.jpg</image:loc>
       <image:title>Building your website with AI in a weekend — illustration</image:title>
     </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/supervision-thumb.jpg</image:loc>
+      <image:title>From terabytes to megabytes — illustration</image:title>
+    </image:image>
   </url>
   <url>
     <loc>https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</loc>
@@ -597,6 +608,32 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/chatbot-forum-article-en.jpg</image:loc>
       <image:title>Infographic — an AI chatbot wired into the phpBB forum</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/supervision-article.jpg</image:loc>
+      <image:title>Infographie — Des téraoctets au mégaoctet : la supervision à deux échelles</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/supervision-article-en.jpg</image:loc>
+      <image:title>Infographic — From terabytes to megabytes: monitoring at two scales</image:title>
     </image:image>
   </url>
   <url>

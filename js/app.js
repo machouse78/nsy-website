@@ -1071,6 +1071,7 @@
   // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
   // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
   const SLUG_FR_TO_EN = {
+    'superviser-production-teraoctets-megaoctet.html': 'production-monitoring-terabytes-megabyte.html',
     'site-ia-en-un-week-end.html': 'ai-website-in-a-weekend.html',
     'index.html': 'index-en.html',
     'mentions-legales.html': 'legal-notice.html',
@@ -1308,7 +1309,8 @@
         || v.id === 'ansley-video' || v.id === 'ansley-fab-video'
         || v.id === 'seo-geo-video'
         || v.id === 'chatbot-forum-video'
-        || v.id === 'weekend-site-video') return; // boomerang déjà sans couture
+        || v.id === 'weekend-site-video'
+        || v.id === 'supervision-video') return; // boomerang déjà sans couture
     setupLoopFade(v);
   });
 

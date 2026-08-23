@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>From terabytes to megabytes: monitoring is a discipline before it is a budget | NSY</title>
+<meta name="description" content="Monitoring and observability at two scales: Dynatrace and ELK at a large insurance company (terabytes of logs a month, Davis opening ServiceNow incidents) and the dashboard of a small-business website (megabytes a month). The same four questions, the same golden rule — and what AI really brings." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+<meta property="og:title" content="From terabytes to megabytes: monitoring is a discipline before it is a budget" />
+<meta property="og:description" content="Terabytes a month at a large account, megabytes a month on a small-business site: a factor of a million, the same four questions. Dynatrace, ELK, Davis, watchers — and what AI brings, or not." />
+<meta property="og:image" content="https://www.nsy.fr/public/supervision-article-en.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="642" />
+<meta property="og:image:alt" content="Infographic — From terabytes to megabytes: large account (Dynatrace, Davis, ELK) and small-business site (cron, daily checks, archive), the same four questions at both scales" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="From terabytes to megabytes | NSY" />
+<meta name="twitter:description" content="Terabytes a month at a large account, megabytes a month on a small-business site: a factor of a million, the same four questions. Dynatrace, ELK, Davis, watchers — and what AI brings, or not." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/supervision-article-en.jpg" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="alternate" type="application/rss+xml" title="NSY — Insights" href="https://www.nsy.fr/feed-en.xml" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
+  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
+  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/production-monitoring-terabytes-megabyte.html#article",
+      "headline": "From terabytes to megabytes: monitoring is a discipline before it is a budget",
+      "description": "Monitoring and observability at two scales: Dynatrace and ELK at a large insurance company (terabytes of logs a month, Davis opening ServiceNow incidents) and the dashboard of a small-business website (megabytes a month). The same four questions, the same golden rule — and what AI really brings.",
+      "inLanguage": "en",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/about.html"},
+      "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
+      "datePublished": "2026-08-23T12:00:00+02:00",
+      "dateModified": "2026-08-23T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/supervision-article-en.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/production-monitoring-terabytes-megabyte.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog-en.html#blog" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
+        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.nsy.fr/blog-en.html" },
+        { "@type": "ListItem", "position": 3, "name": "From terabytes to megabytes", "item": "https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index-en.html#top" aria-label="NSY — Home">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text"><small>Consulting · AI · Web</small></div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link active" data-target="blog" href="blog-en.html">Insights</a>
+      <a class="nav-link" data-target="services" href="services-en.html">Services</a>
+      <a class="nav-link" data-target="realisations" href="portfolio.html">Work</a>
+      <a class="nav-link" data-target="about" href="about.html">About</a>
+      <a class="nav-link" data-target="contact" href="contact-en.html">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Insights</span>
+      <span class="line"></span>
+      <span class="mono"><a href="blog-en.html" style="color: inherit;">← All articles</a></span>
+    </div>
+    <article class="legal-page article">
+      <div class="article-meta">23 August 2026 · Cédric Barme · Reading ≈ 9 min</div>
+      <div class="article-stats" data-journal-stats data-slug="superviser-production-teraoctets-megaoctet.html" hidden>
+        <span class="js-views" aria-live="polite"></span>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
+      </div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">From terabytes to megabytes:<br />monitoring is a discipline before it is a budget</h1>
+      <p class="lede" style="font-size: 17px;">At a large insurance company, production pours out terabytes of logs every month, watched by two specialised tools and an AI that opens incidents on its own. On a small-business website, a script reads server logs that are counted in megabytes a month. From the terabyte to the megabyte there are six orders of magnitude: a factor of a million. And yet the very same questions get asked in both. I work in both. A story from each side of the mirror.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/supervision-article-en.jpg" alt="Infographic — From terabytes to megabytes: large account (Dynatrace, Davis, ELK) and small-business site (cron, daily checks, archive), the same four questions at both scales" loading="lazy" width="1140" height="642" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+      <h2>The four questions</h2>
+      <p>Monitoring, observability, supervision: whatever the word, the job comes down to four questions.</p>
+      <p>What is <strong>abnormal</strong> — and how do we know before the user does? <strong>Who gets told</strong>, and through which channel? <strong>What do we keep</strong>, and for how long? And what do we do with an <strong>alert that lied</strong>?</p>
+      <p>None of these questions depends on the size of the system or on the budget. Only the answers change scale.</p>
+      <h2>The large account: two tools, two ways of seeing</h2>
+      <p>On assignment at a large insurance company — critical systems where response times are counted in milliseconds — monitoring rests on two complementary pillars. Two tools, and above all two ways of seeing that do not look at the same thing.</p>
+      <p><strong>Dynatrace watches execution.</strong> Its agents instrument the whole production chain: the JVM and its memory, CPU, network throughput and retransmitted packets, distributed caches, object-storage errors. It is a remarkably powerful tool for anyone who actually works its metrics — the full stack, continuously, without asking anything of the applications themselves.</p>
+      <p>But its real strength lies elsewhere: <strong>Davis</strong>, its analysis engine, detects anomalies and <strong>creates incidents directly in ServiceNow</strong>. Nobody looked at a chart: the incident exists, qualified and tracked, before the first user has picked up the phone. That is exactly what proactive monitoring means — the alert comes before the complaint.</p>
+      <p><strong>ELK reads what the applications say.</strong> Application logs carry what no infrastructure agent can guess: the business counters, the ones KPIs are built from. ELK also brings depth of history — precious for investigating lower-priority incidents, the ones analysed cold. And it alerts too: <strong>watchers</strong> keep an eye on service response times and on HTTP error codes that carry an exception, and push their alerts into a Teams channel, right where the team is.</p>
+      <p><strong>Two ways of deciding that a number is abnormal.</strong> On the Dynatrace side, no threshold is typed in by hand: Davis relies on <strong>machine learning</strong> — it learns the usual behaviour of each component and flags the deviation, including where nobody had thought to set an alert. On the ELK side, watchers rely on explicit <strong>tolerance thresholds</strong> — so many 500 errors over the window, such a response time not to exceed — because learning-based anomaly detection there belongs to a higher licence tier. The two approaches complement each other more than they compete: learning sees what nobody planned to watch; the threshold guarantees that what was decided gets watched, and that the rule is readable by everyone.</p>
+      <p><strong>A typical incident tells the story of that complementarity.</strong> One morning the volume of HTTP 500s shoots up: the ELK watcher fires, the alert lands in Teams. In parallel, Dynatrace reports errors on S3 storage. Two tools, two angles on the same event — one sees the <strong>symptom</strong> on the business side, the other points at the <strong>infrastructure</strong> at fault. It is the convergence of the two that makes the diagnosis; either alone would have told half the story.</p>
+      <p>All of it sits inside a ritual: every morning, while the information system ramps up, we look at error rates and response times. Not because an alert went off — because that is the hour when things reveal themselves.</p>
+      <h2>The rule worth its weight in gold</h2>
+      <p>With terabytes of logs a month, false alerts exist, inevitably. The natural temptation is to switch off whatever cries wolf.</p>
+      <p>Discipline says the opposite: <strong>a false alert is identified, analysed, then classified as such. It is not switched off.</strong> Every indicator must be analysed — the one disabled on a Tuesday because it was annoying is exactly the one that would have seen Thursday's incident. The silence of a sensor that has been turned off looks uncannily like a healthy production system.</p>
+      <h2>The small business: the same reflexes, in a few megabytes</h2>
+      <p>On the websites NSY designs and runs, there is no Dynatrace and no ELK cluster — and no reason there should be. There are server access logs, a collector that reads them every night, and a private dashboard. Megabytes of logs a month, where the large account counts in terabytes: a factor of a million between the two units.</p>
+      <p>And yet the four questions are the same — with the same answers, in miniature.</p>
+      <p><strong>What is abnormal?</strong> Not just "how many visitors". The collector distinguishes, for instance, three kinds of reads made by artificial intelligences: the one triggered by a human's question — ChatGPT comes to read a page to answer someone, at that precise moment —, the one that feeds a search index, and plain training crawl. Over two weeks: more than two thousand robot reads, of which <strong>only 8%</strong> come from a real conversation. Without that distinction, the overall figure reassures and says nothing — the equivalent, at this scale, of a dashboard that mixed up business transactions with monitoring probes.</p>
+      <p><strong>Who gets told?</strong> Daily checks — down to the reachability of favicons, whose silent disappearance replaces your logo with a grey globe in Google — surface their anomalies straight into the dashboard summary, where the eye passes every day. An alert that lives in a log file nobody opens is not an alert.</p>
+      <p><strong>What do we keep?</strong> The shared host keeps only five weeks of raw logs. Every new question asked of the past — "what if we sliced it differently?" — ran into that wall. So the collector now archives every closed day, off the web and out of the code repository, with thirteen months of retention: enough to compare one summer with the next, for a few megabytes a year once compressed.</p>
+      <p><strong>And the alert that lied?</strong> The lesson arrived this very week, in its artisan version. A measurement script was querying an answer engine; the engine, saturated, refused to reply — and the script filed those refusals as "negative result". A measurement that cannot tell "measured and negative" from "not measured at all" lies with the confidence of an exact figure. That is precisely the large account's rule: every indicator is analysed, none is presumed.</p>
+      <h2>The correspondences, line by line</h2>
+      <table>
+        <tr><th></th><th>Large account</th><th>Small-business site</th></tr>
+        <tr><td>Collection</td><td>Dynatrace agents + ELK ingestion</td><td>a cron job over access logs</td></tr>
+        <tr><td>Volume</td><td>terabytes / month</td><td>megabytes / month</td></tr>
+        <tr><td>Proactive alerting</td><td>Davis opens the ServiceNow incident</td><td>daily checks → dashboard alert</td></tr>
+        <tr><td>Detection</td><td>machine learning (Davis) · tolerance thresholds (watchers)</td><td>comparison with the previous period, human reading</td></tr>
+        <tr><td>Threshold alerting</td><td>ELK watchers → Teams channel</td><td>(an acknowledged next step)</td></tr>
+        <tr><td>Business KPIs</td><td>counters extracted from application logs</td><td>AI reads by kind, Google provenance, customer reviews</td></tr>
+        <tr><td>History</td><td>ELK, cold analysis</td><td>in-house archive, 13 months</td></tr>
+        <tr><td>Golden rule</td><td>a false alert is qualified, not switched off</td><td>a refused measurement is not a zero</td></tr>
+      </table>
+      <h2>What AI brings — and what it does not replace</h2>
+      <p>The question always comes up, and it deserves an answer without manufactured enthusiasm. AI brings three things to monitoring, and leaves a fourth to humans.</p>
+      <p><strong>Detecting without thresholds.</strong> This is already in production, and has been for a long time: Davis is machine learning. A threshold only sees what it was told to see; a model that has learned a component's usual behaviour sees the unexpected — the slow drift, the Sunday-morning anomaly, the service that only slows down under one precise combination of loads. Where the threshold requires the failure to have been foreseen, learning accepts that it was not.</p>
+      <p><strong>Correlating.</strong> A real incident always speaks through several tools at once — 500s in the logs, storage errors in the metrics, a response time drifting. Bringing those signals together into a single story is the heart of diagnosis, and it is a matching job the machine does faster and more completely than a tired eye at three in the morning. The probable root cause, proposed before anyone went looking for it.</p>
+      <p><strong>Telling the story.</strong> This is the most recent contribution, and the one NSY has implemented at its own scale. The websites' dashboard embeds an analysis agent that explains, in plain language, what the curves show: this visitor peak follows an article's publication by two days; that surge of reads by AI robots coincides with a dated search-visibility action. But its design imposes a strict rule: <strong>the model computes nothing and sees no raw data.</strong> It receives a dossier of already established facts — the peaks, the dated events, the comparisons — and is only allowed to write. It is even forbidden to say "because of": it says "coincides with", "follows by two days". Correlation, never causation. An agent that invents a plausible explanation for a false alert is worse than a silent dashboard: a wrong but convincing explanation creates a <strong>tunnel effect</strong> — a whole team rushes down the wrong path, and hours of analysis are lost at the precise moment they matter most. That is not a hypothesis: it has happened.</p>
+      <p><strong>What it does not replace: judgement.</strong> Davis opens the incident, but a human qualifies it — or files it as a false alert. The agent tells the story, but a human decides whether the story holds. Every indicator must be analysed, said the golden rule; AI speeds up the analysis, it does not excuse anyone from doing it. And it is precisely because it speaks with such confidence that it is denied the right to assert.</p>
+      <p>One lead, to finish, at small-business scale: thirteen months of archived logs is exactly what it takes to learn a season. The natural next step is not to buy a tool; it is to let the agent propose its own thresholds from that history — and to keep a hand on what is done with them.</p>
+      <h2>We do not monitor because we are big</h2>
+      <p>We monitor because we are <strong>in production</strong>. It is the status that creates the duty, not the size: from the moment a system serves real users, someone has to know whether it is well — before they do.</p>
+      <p>The rest is a matter of scale, and scale, as we have seen, can be adjusted: two specialised tools and an AI that opens tickets on one side; a script of a few hundred lines and a sober dashboard on the other. Between the two, six orders of magnitude in volume — and not the slightest difference in principle.</p>
+      <p style="margin-top: 30px; color: var(--fg-2); font-size: 14px;"><em>NSY practises both scales: monitoring critical systems on consulting assignments, and the measured operation of the websites it designs. The dashboards described here ship with every delivered site.</em></p>
+      <p style="margin-top: 30px;">A system in production and nobody to know it is well before your users do? <a href="contact-en.html">Let&rsquo;s talk</a> — and see what a <a href="ai-website-creation.html">site delivered by NSY</a> measures.</p>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">INDEPENDENT COMPANY · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index-en.html#top">Home</a>
+        <a href="services-en.html">Services</a>
+        <a href="portfolio.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="why-nsy.html">Why NSY?</a>
+        <a href="3d-design.html">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
+        <a href="blog-en.html">Insights</a>
+        <a href="contact-en.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertise</h5>
+        <a href="java-ee-migration.html">Java EE migration</a>
+        <a href="wildfly-jboss-expert.html">WildFly · JBoss EAP</a>
+        <a href="openshift-kubernetes-expert.html">OpenShift · Kubernetes</a>
+        <a href="kafka-messaging-expert.html">Kafka · Messaging</a>
+        <a href="dora-compliance.html">DORA compliance</a>
+        <a href="claude-integration.html">Claude integration</a>
+        <a href="ai-website-creation.html">AI website creation</a>
+        <a href="website-redesign.html">Website redesign</a>
+        <a href="ai-web-glossary.html">AI & web glossary</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="feasibility.html">Feasibility request</a>
+      </div>
+      <div class="foot-col">
+        <h5>Where I work</h5>
+        <a href="website-creation-loiret.html">Website · Loiret</a>
+        <a href="website-creation-orleans.html">Website · Orléans</a>
+        <a href="website-creation-tours.html">Website · Tours</a>
+        <a href="website-creation-paris.html">Website · Paris</a>
+        <a href="website-creation-lyon.html">Website · Lyon</a>
+        <a href="website-creation-bordeaux.html">Website · Bordeaux</a>
+        <a href="technical-consultant-paris.html">Technical consultant · Paris</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
+      <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<!-- @partial:chatbot -->
+<!-- ───── Chatbot (AI assistant — Ansley, NSY architect) ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Open chat with Ansley">
+  <video class="cbot-fab-face" id="ansley-fab-video" autoplay loop muted playsinline preload="auto" poster="public/ansley-fab.png" aria-hidden="true">
+    <source src="public/ansley-fab.mp4" type="video/mp4" />
+    <img src="public/ansley-fab.png" alt="Ansley" />
+  </video>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+</button>
+
+<div class="cbot-greeter" id="cbot-greeter" role="dialog" aria-label="Message from Ansley">
+  <button class="cbot-greeter-close" id="cbot-greeter-close" aria-label="Dismiss message">&times;</button>
+  <p>Hi! I'm <b>Ansley</b>, NSY's AI architect. A question about our services, AI, a web project?</p>
+</div>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Ansley — NSY AI assistant">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <video id="ansley-video" class="cbot-avatar-vid" loop muted playsinline preload="none" poster="public/ansley.png" aria-label="Ansley, NSY AI architect">
+        <source src="public/ansley.mp4" type="video/mp4" />
+        <img src="public/ansley.png" alt="Ansley" class="cbot-avatar-img" />
+      </video>
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Ansley <span class="cbot-ai-badge" id="cbot-ai-badge" title="Ansley, NSY's AI architect — generative assistant grounded in the site's data (RAG), model hosted in the European Union.">AI</span></div>
+      <div class="cbot-status" id="cbot-status"><span class="cbot-online"></span>Online · Generative AI</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/ansley.png" alt="Ansley" /></div>
+      <div class="cbot-bubble">Hello 👋 I'm <b>Ansley</b>, NSY's AI architect: I know the whole site and answer in your language. Services, expertise, methods, availability — ask away.</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">What services do you offer?</button>
+    <button class="cbot-chip">How much does an AI website cost?</button>
+    <button class="cbot-chip">Do you work with banks?</button>
+    <button class="cbot-chip">How does this assistant work?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Ask your question…" maxlength="800" />
+    <button class="cbot-send" id="cbot-send" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span id="cbot-note">AI-generated answers (Mistral, EU) · no sensitive data</span>
+    <button id="cbot-escalate">Talk to Cédric →</button>
+  </div>
+</div>
+<!-- @endpartial:chatbot -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

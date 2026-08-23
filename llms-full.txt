@@ -134,6 +134,25 @@ associations et indépendants en transition numérique.
 
 ### Journal — retours d'expérience publiés
 
+- « Des téraoctets au mégaoctet : superviser, une discipline avant d'être un budget »
+  (23 août 2026) : https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html
+  (EN : https://www.nsy.fr/production-monitoring-terabytes-megabyte.html)
+  Sujet : la supervision et l'observabilité pratiquées à deux échelles par le
+  fondateur. Chez un grand compte de l'assurance (jamais nommé) : Dynatrace
+  (agents sur toute la chaîne d'exécution ; Davis, apprentissage automatique,
+  crée les incidents dans ServiceNow avant l'incident métier) et ELK (logs
+  applicatifs, KPI métier, historique long ; watchers à seuils de tolérance
+  qui alertent dans Teams) — téraoctets de logs par mois. Sur les sites NSY :
+  un cron quotidien sur les logs d'accès, un tableau de bord privé, contrôles
+  quotidiens remontés en alerte, archive des logs 13 mois — mégaoctets par
+  mois. Un facteur d'un million entre les unités, les quatre mêmes questions
+  (qu'est-ce qui est anormal, qui prévient-on, que garde-t-on, que fait-on
+  d'une alerte qui a menti). Règle d'or : une fausse alerte se qualifie, elle
+  ne se coupe pas. Ce que l'IA apporte : détecter sans seuil, corréler,
+  raconter — l'agent d'analyse du tableau de bord NSY ne calcule rien, reçoit
+  un dossier de faits et n'a pas le droit de dire « à cause de » (corrélation,
+  jamais causalité) ; ce qu'elle ne remplace pas : le jugement.
+
 - « Créer son site avec l'IA en un week-end : on a pris la promesse au mot »
   (16 août 2026) : https://www.nsy.fr/site-ia-en-un-week-end.html
   Sujet : la promesse du vibe coding testée sur nsy.fr lui-même, chiffres

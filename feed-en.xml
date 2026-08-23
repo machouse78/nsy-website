@@ -7,6 +7,13 @@
   <language>en</language>
   <atom:link href="https://www.nsy.fr/feed-en.xml" rel="self" type="application/rss+xml" />
   <item>
+    <title>From terabytes to megabytes: monitoring is a discipline before it is a budget</title>
+    <link>https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</guid>
+    <pubDate>Sun, 23 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Monitoring and observability at two scales: Dynatrace and ELK at a large insurance company, the dashboard of a small-business website. Terabytes versus megabytes a month, the same four questions, the golden rule on false alerts — and what AI really brings.</description>
+  </item>
+  <item>
     <title>Building your website with AI in a weekend: we took the promise at its word</title>
     <link>https://www.nsy.fr/ai-website-in-a-weekend.html</link>
     <guid isPermaLink="true">https://www.nsy.fr/ai-website-in-a-weekend.html</guid>
