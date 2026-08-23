@@ -305,6 +305,9 @@
         <div class="glyph-rings"></div>
         <div class="glyph-core">
           <div class="glyph-disc"></div>
+          <!-- Poster peint comme une IMAGE : Chrome n'affiche pas le poster d'une vidéo
+               en autoplay, le LCP attendait la première image décodée du mp4. -->
+          <img class="glyph-poster" src="public/nsy-hero-poster.jpg" alt="" width="320" height="320" fetchpriority="high" decoding="async" />
           <video
             class="glyph-video"
             id="glyph-video"

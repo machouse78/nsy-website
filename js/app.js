@@ -1158,6 +1158,12 @@
     // masquait le poster pendant des secondes — et le LCP (audit P5, 24/08/2026 :
     // « délai de rendu » 0,6 à 1,1 s sur un fichier chargé en 64 ms).
     glyphVideo.addEventListener('loadeddata', hideLoader, { once: true });
+    // Le poster-image s'efface dès que la vidéo joue : les fondus de boucle
+    // continuent de dissoudre vers le disque bleu, comme avant.
+    glyphVideo.addEventListener('playing', () => {
+      const po = document.querySelector('.glyph-poster');
+      if (po) po.style.opacity = '0';
+    }, { once: true });
     glyphVideo.addEventListener('error', () => {
       glyphLoader.classList.add('error');
       if (glyphPct) glyphPct.textContent = 'ERR';
