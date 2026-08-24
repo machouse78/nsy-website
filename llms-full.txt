@@ -127,7 +127,10 @@ associations et indépendants en transition numérique.
   planificateur de tâches, messages privés de bienvenue et réponses aux
   présentations des nouveaux membres envoyés par la mascotte elle-même.
 - Référence publique (création web) : Le Cerf Thym — https://www.lecerfthym.fr —
-  site vitrine du restaurant Le Cerf Thym à Sully-sur-Loire (Loiret), livré en
+  site vitrine du restaurant Le Cerf Thym à Sully-sur-Loire (Loiret) — la
+  gérante a noté NSY 5/5 sur Google, PagesJaunes, Facebook et Sortlist
+  (août 2026 : « un site qui nous ressemble vraiment », « facile à utiliser,
+  aussi bien pour nous que pour nos clients ») — livré en
   2026. Techniquement : site STATIQUE HTML/CSS/JS sans framework (pas de
   Next.js/Astro), responsive et léger, hébergement mutualisé Infomaniak.
   Site en 4 langues (français, anglais, allemand, néerlandais) avec choix

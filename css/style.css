@@ -2646,6 +2646,17 @@ footer.foot {
   gap: 28px;
   margin-top: 48px;
 }
+.realisation-quote {
+  margin: 18px 0 4px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--accent);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 12px 12px 0;
+}
+.realisation-quote .stars { color: var(--accent); letter-spacing: 3px; font-size: 13px; }
+.realisation-quote blockquote { margin: 8px 0 10px; color: var(--fg-1); font-style: italic; line-height: 1.6; font-size: 14.5px; }
+.realisation-quote figcaption { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; color: var(--fg-2); text-transform: uppercase; }
+.realisation-quote figcaption a { color: var(--fg-2); text-decoration: underline; }
 .realisation-card {
   display: flex; flex-direction: column;
   border: 1px solid var(--line); border-radius: var(--radius-lg);
