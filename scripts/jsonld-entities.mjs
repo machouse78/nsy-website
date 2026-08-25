@@ -54,9 +54,9 @@ const BARE = {
   'privacy.html':          { fr: false, crumb: 'Privacy policy' },
 };
 const REALISATIONS = [
-  { name: 'NSY', url: 'https://www.nsy.fr/' },
-  { name: 'PRV Concept', url: 'https://www.prv-concept.com/' },
   { name: 'Le Cerf Thym', url: 'https://www.lecerfthym.fr/' },
+  { name: 'PRV Concept', url: 'https://www.prv-concept.com/' },
+  { name: 'NSY', url: 'https://www.nsy.fr/' },
 ];
 const FAQ_PAGES = { 'faq.html': 'fr', 'faq-en.html': 'en' };
 

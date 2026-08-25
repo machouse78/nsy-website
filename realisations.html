@@ -125,8 +125,8 @@
         {
           "@type": "ListItem",
           "position": 1,
-          "name": "NSY",
-          "url": "https://www.nsy.fr/"
+          "name": "Le Cerf Thym",
+          "url": "https://www.lecerfthym.fr/"
         },
         {
           "@type": "ListItem",
@@ -137,8 +137,8 @@
         {
           "@type": "ListItem",
           "position": 3,
-          "name": "Le Cerf Thym",
-          "url": "https://www.lecerfthym.fr/"
+          "name": "NSY",
+          "url": "https://www.nsy.fr/"
         }
       ]
     }
@@ -196,15 +196,15 @@
 
     <h1 style="font-size: clamp(36px, 5vw, 56px); margin: 16px 0 18px;">Des sites conçus, livrés<br /><span class="hero-cyan">et exploités en production.</span></h1>
     <p class="lede" style="font-size: 17px; color: var(--fg-1); max-width: 680px; margin-bottom: 8px;">
-      Trois sites, trois rôles : la démonstration — le nôtre, code public —, le laboratoire — l'association où tout s'éprouve en réel —, et le client. Chacun est en production, mesuré, et dit exactement ce qu'il est.
+      Trois sites, trois rôles : le client — avec son avis —, le laboratoire — l'association où tout s'éprouve en réel —, et la démonstration — le nôtre, code public. Chacun est en production, mesuré, et dit exactement ce qu'il est.
     </p>
 
     <div class="realisations-grid">
       <div class="realisation-card">
         <div class="realisation-shot">
           <iframe class="realisation-embed"
-            src="https://www.youtube-nocookie.com/embed/-Cp5Rja7vNQ?rel=0&amp;playsinline=1&amp;iv_load_policy=3&amp;modestbranding=1"
-            title="Parcours du site NSY — la démonstration"
+            src="https://www.youtube-nocookie.com/embed/YC5AG0zX70g?rel=0&amp;playsinline=1&amp;iv_load_policy=3&amp;modestbranding=1"
+            title="Parcours du site Le Cerf Thym — réalisation NSY"
             loading="lazy"
             referrerpolicy="strict-origin-when-cross-origin"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -212,39 +212,36 @@
         </div>
         <div class="realisation-body">
           <div class="realisation-head">
-            <h3>NSY</h3>
-            <span class="realisation-type neuf">Notre propre site</span>
-            <span class="realisation-role">La démonstration</span>
-            <span class="realisation-url">www.nsy.fr</span>
+            <h3>Le Cerf Thym</h3>
+            <span class="realisation-type neuf">Nouveau site</span>
+            <span class="realisation-role">Le client</span>
+            <span class="realisation-url">www.lecerfthym.fr</span>
           </div>
           <p class="realisation-desc">
-            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> être sa propre vitrine. Un prestataire qui vend des sites propulsés par l&rsquo;IA doit pouvoir dire : <em>visitez le mien</em>. Le site que vous lisez est conçu, exploité et mesuré avec exactement les méthodes proposées aux clients — et <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener">son code est public</a>, chose rare chez un prestataire.
+            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> offrir au restaurant Le Cerf Thym, au pied du château de Sully-sur-Loire, une vitrine à l'image de sa table — la carte et l'ardoise du jour, la réservation, et une clientèle européenne accueillie dans sa langue.
           </p>
           <dl class="realisation-specs">
             <div>
               <dt>Périmètre</dt>
-              <dd>64 pages intégralement bilingues FR/EN ; journal de 4 articles aux chiffres mesurés ; FAQ de 67 questions ; pages locales (Loiret, Orléans, grandes villes) ; maquette 3D temps réel.</dd>
+              <dd>6 pages (accueil, carte, boissons, environnement, accès, mentions) en 4 langues — français, anglais, allemand, néerlandais — avec choix de langue persistant ; les avis clients Google mis en avant en continu ; galeries photos et vidéos ; carte interactive du territoire (Paris → Orléans → Sully) ; plan d'accès interactif avec itinéraires Google Maps et Waze.</dd>
             </div>
             <div>
               <dt>Technique</dt>
-              <dd>Statique HTML/CSS/JS sans framework ; entités JSON-LD et FAQ générées au build depuis le contenu visible ; suite de tests (assistant, anti-spam, formulaires) avant chaque mise en ligne ; 1,9 Mo au chargement, vidéos différées à l&rsquo;entrée dans la vue.</dd>
+              <dd>Site statique HTML/CSS/JS sans framework, responsive et léger ; système de traduction maison ; visionneuse plein écran pour la carte imprimée ; HTTPS, compression, cache et en-têtes de sécurité ; hébergement mutualisé.</dd>
             </div>
             <div>
-              <dt>Assistant IA</dt>
-              <dd>Ansley, architecte IA : réponses ancrées dans les contenus du site (RAG, modèle hébergé en UE), repli local résilient, liens sortants en liste blanche — jamais d&rsquo;invention.</dd>
-            </div>
-            <div>
-              <dt>Mesure</dt>
-              <dd>Tableau de bord maison : lectures des IA par nature (conversation, recherche, indexation), provenance Google, avis clients, archive des journaux sur 13 mois — la méthode est détaillée dans l&rsquo;article <a href="superviser-production-teraoctets-megaoctet.html">Des téraoctets au mégaoctet</a>.</dd>
+              <dt>SEO</dt>
+              <dd>Données structurées Restaurant (adresse, horaires, géolocalisation), Open Graph sur toutes les pages — le référencement local d'un commerce de proximité, fait proprement.</dd>
             </div>
           </dl>
           <figure class="realisation-quote">
-            <blockquote style="font-style: normal; margin-top: 0;">Combien coûte un site comme celui-ci, en vrai ? Les chiffres de sa construction sont publics : V1 en 4 soirées, puis ≈ 140 heures de pilotage mesurées action par action — la règle des 10/90, racontée dans <a href="site-ia-en-un-week-end.html">« Créer son site avec l&rsquo;IA en un week-end »</a>.</blockquote>
-            <figcaption>Une réalisation dont le journal de bord est publié</figcaption>
+            <div class="stars" aria-label="5 étoiles sur 5">★★★★★</div>
+            <blockquote>« Une équipe à l&rsquo;écoute, disponible et professionnelle, qui a su comprendre notre univers et nos attentes pour créer un site qui nous ressemble vraiment. […] Le résultat est à la fois esthétique, clair, convivial et facile à utiliser, aussi bien pour nous que pour nos clients. »</blockquote>
+            <figcaption>Sophie Turpin, gérante du Cerf Thym — 5/5 sur <a href="https://share.google/SnDb10neLJkYGeVOE" target="_blank" rel="noopener">Google</a>, <a href="https://www.pagesjaunes.fr/pros/58566786" target="_blank" rel="noopener">PagesJaunes</a>, Facebook et Sortlist · août 2026</figcaption>
           </figure>
-          <a class="realisation-visit is-inline" href="https://www.nsy.fr" rel="noopener">Visiter le site <span class="arrow">→</span></a>
+          <a class="realisation-visit is-inline" href="https://www.lecerfthym.fr" target="_blank" rel="noopener">Visiter le site <span class="arrow">→</span></a>
           <div class="realisation-tags">
-            <span>Bilingue</span><span>3D temps réel</span><span>Assistant IA</span><span>SEO · GEO</span><span>Code public</span><span>KPI mesurés</span>
+            <span>Site vitrine</span><span>4 langues</span><span>Restaurant</span><span>Avis clients</span><span>Cartes interactives</span><span>SEO local</span>
           </div>
         </div>
       </div>
@@ -307,8 +304,8 @@
       <div class="realisation-card">
         <div class="realisation-shot">
           <iframe class="realisation-embed"
-            src="https://www.youtube-nocookie.com/embed/YC5AG0zX70g?rel=0&amp;playsinline=1&amp;iv_load_policy=3&amp;modestbranding=1"
-            title="Parcours du site Le Cerf Thym — réalisation NSY"
+            src="https://www.youtube-nocookie.com/embed/-Cp5Rja7vNQ?rel=0&amp;playsinline=1&amp;iv_load_policy=3&amp;modestbranding=1"
+            title="Parcours du site NSY — la démonstration"
             loading="lazy"
             referrerpolicy="strict-origin-when-cross-origin"
             allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -316,36 +313,39 @@
         </div>
         <div class="realisation-body">
           <div class="realisation-head">
-            <h3>Le Cerf Thym</h3>
-            <span class="realisation-type neuf">Nouveau site</span>
-            <span class="realisation-role">Le client</span>
-            <span class="realisation-url">www.lecerfthym.fr</span>
+            <h3>NSY</h3>
+            <span class="realisation-type neuf">Notre propre site</span>
+            <span class="realisation-role">La démonstration</span>
+            <span class="realisation-url">www.nsy.fr</span>
           </div>
           <p class="realisation-desc">
-            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> offrir au restaurant Le Cerf Thym, au pied du château de Sully-sur-Loire, une vitrine à l'image de sa table — la carte et l'ardoise du jour, la réservation, et une clientèle européenne accueillie dans sa langue.
+            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> être sa propre vitrine. Un prestataire qui vend des sites propulsés par l&rsquo;IA doit pouvoir dire : <em>visitez le mien</em>. Le site que vous lisez est conçu, exploité et mesuré avec exactement les méthodes proposées aux clients — et <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener">son code est public</a>, chose rare chez un prestataire.
           </p>
           <dl class="realisation-specs">
             <div>
               <dt>Périmètre</dt>
-              <dd>6 pages (accueil, carte, boissons, environnement, accès, mentions) en 4 langues — français, anglais, allemand, néerlandais — avec choix de langue persistant ; les avis clients Google mis en avant en continu ; galeries photos et vidéos ; carte interactive du territoire (Paris → Orléans → Sully) ; plan d'accès interactif avec itinéraires Google Maps et Waze.</dd>
+              <dd>64 pages intégralement bilingues FR/EN ; journal de 4 articles aux chiffres mesurés ; FAQ de 67 questions ; pages locales (Loiret, Orléans, grandes villes) ; maquette 3D temps réel.</dd>
             </div>
             <div>
               <dt>Technique</dt>
-              <dd>Site statique HTML/CSS/JS sans framework, responsive et léger ; système de traduction maison ; visionneuse plein écran pour la carte imprimée ; HTTPS, compression, cache et en-têtes de sécurité ; hébergement mutualisé.</dd>
+              <dd>Statique HTML/CSS/JS sans framework ; entités JSON-LD et FAQ générées au build depuis le contenu visible ; suite de tests (assistant, anti-spam, formulaires) avant chaque mise en ligne ; 1,9 Mo au chargement, vidéos différées à l&rsquo;entrée dans la vue.</dd>
             </div>
             <div>
-              <dt>SEO</dt>
-              <dd>Données structurées Restaurant (adresse, horaires, géolocalisation), Open Graph sur toutes les pages — le référencement local d'un commerce de proximité, fait proprement.</dd>
+              <dt>Assistant IA</dt>
+              <dd>Ansley, architecte IA : réponses ancrées dans les contenus du site (RAG, modèle hébergé en UE), repli local résilient, liens sortants en liste blanche — jamais d&rsquo;invention.</dd>
+            </div>
+            <div>
+              <dt>Mesure</dt>
+              <dd>Tableau de bord maison : lectures des IA par nature (conversation, recherche, indexation), provenance Google, avis clients, archive des journaux sur 13 mois — la méthode est détaillée dans l&rsquo;article <a href="superviser-production-teraoctets-megaoctet.html">Des téraoctets au mégaoctet</a>.</dd>
             </div>
           </dl>
           <figure class="realisation-quote">
-            <div class="stars" aria-label="5 étoiles sur 5">★★★★★</div>
-            <blockquote>« Une équipe à l&rsquo;écoute, disponible et professionnelle, qui a su comprendre notre univers et nos attentes pour créer un site qui nous ressemble vraiment. […] Le résultat est à la fois esthétique, clair, convivial et facile à utiliser, aussi bien pour nous que pour nos clients. »</blockquote>
-            <figcaption>Sophie Turpin, gérante du Cerf Thym — 5/5 sur <a href="https://share.google/SnDb10neLJkYGeVOE" target="_blank" rel="noopener">Google</a>, <a href="https://www.pagesjaunes.fr/pros/58566786" target="_blank" rel="noopener">PagesJaunes</a>, Facebook et Sortlist · août 2026</figcaption>
+            <blockquote style="font-style: normal; margin-top: 0;">Combien coûte un site comme celui-ci, en vrai ? Les chiffres de sa construction sont publics : V1 en 4 soirées, puis ≈ 140 heures de pilotage mesurées action par action — la règle des 10/90, racontée dans <a href="site-ia-en-un-week-end.html">« Créer son site avec l&rsquo;IA en un week-end »</a>.</blockquote>
+            <figcaption>Une réalisation dont le journal de bord est publié</figcaption>
           </figure>
-          <a class="realisation-visit is-inline" href="https://www.lecerfthym.fr" target="_blank" rel="noopener">Visiter le site <span class="arrow">→</span></a>
+          <a class="realisation-visit is-inline" href="https://www.nsy.fr" rel="noopener">Visiter le site <span class="arrow">→</span></a>
           <div class="realisation-tags">
-            <span>Site vitrine</span><span>4 langues</span><span>Restaurant</span><span>Avis clients</span><span>Cartes interactives</span><span>SEO local</span>
+            <span>Bilingue</span><span>3D temps réel</span><span>Assistant IA</span><span>SEO · GEO</span><span>Code public</span><span>KPI mesurés</span>
           </div>
         </div>
       </div>
