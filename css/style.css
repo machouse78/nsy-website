@@ -2656,6 +2656,22 @@ footer.foot {
   border-radius: 999px;
   padding: 3px 10px;
 }
+.tarifs-bloc {
+  margin-top: 46px;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  padding: 26px 28px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.tarifs-bloc h2 { font-size: 22px; margin: 0 0 6px; }
+.tarifs-bloc .note { color: var(--fg-2); font-size: 14px; margin-bottom: 18px; }
+.tarifs-bloc dl { display: grid; gap: 12px; margin: 0; }
+.tarifs-bloc dl > div { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  border-bottom: 1px dashed var(--line); padding-bottom: 12px; }
+.tarifs-bloc dt { color: var(--fg-1); }
+.tarifs-bloc dd { margin: 0; font-family: var(--font-mono); color: var(--accent); white-space: nowrap; }
+.tarifs-bloc .apres { margin-top: 16px; font-size: 14px; color: var(--fg-2); }
+.tarifs-bloc .apres a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
 .realisation-quote {
   margin: 18px 0 4px;
   padding: 14px 16px;

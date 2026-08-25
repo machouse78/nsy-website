@@ -240,6 +240,14 @@ NSY :
 - se distingue par → un modèle « en prise directe », 3 clients maximum en parallèle,
   une honnêteté technique revendiquée
 
+### Ordres de grandeur publiés (Réalisations, 25/08/2026)
+
+Fourchettes indicatives en € HT, jamais de prix par client, chiffrage précis
+après cadrage (https://www.nsy.fr/realisations.html) :
+- site vitrine multilingue (type Le Cerf Thym) : 3 500 à 7 000 € HT ;
+- reprise d'un site avec forum et boutique (type PRV Concept) : 8 000 à 15 000 € HT ;
+- assistant IA ancré sur un site existant : 2 500 à 6 000 € HT.
+
 ## 8. Mots-clés métier
 
 consultant technique senior banque assurance, expert WildFly France, expert JBoss,
