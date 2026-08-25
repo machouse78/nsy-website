@@ -54,6 +54,7 @@ const BARE = {
   'privacy.html':          { fr: false, crumb: 'Privacy policy' },
 };
 const REALISATIONS = [
+  { name: 'NSY', url: 'https://www.nsy.fr/' },
   { name: 'PRV Concept', url: 'https://www.prv-concept.com/' },
   { name: 'Le Cerf Thym', url: 'https://www.lecerfthym.fr/' },
 ];
@@ -134,6 +135,14 @@ for (const file of readdirSync(ROOT).filter((f) => f.endsWith('.html') && f !== 
       if (i < 0) continue;
       const compact = Object.keys(graph[i]).every((k) => k in canon);
       if (compact && JSON.stringify(graph[i]) !== JSON.stringify(canon)) { graph[i] = canon; touched = true; }
+    }
+    // L'ItemList des réalisations suit la constante REALISATIONS.
+    {
+      const i = graph.findIndex((n) => n['@type'] === 'ItemList' && (n['@id'] || '').endsWith('#list'));
+      if (i >= 0) {
+        const items = REALISATIONS.map((r, k) => ({ '@type': 'ListItem', position: k + 1, name: r.name, url: r.url }));
+        if (JSON.stringify(graph[i].itemListElement) !== JSON.stringify(items)) { graph[i] = { ...graph[i], itemListElement: items }; touched = true; }
+      }
     }
     // FAQ visible sur une page ordinaire (pages villes, refonte…) : le FAQPage
     // du @graph est RÉGÉNÉRÉ depuis les <h3>/<p> qui suivent le titre de

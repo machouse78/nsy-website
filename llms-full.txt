@@ -113,6 +113,14 @@ associations et indépendants en transition numérique.
   masse en assurance · analyse et gestion des performances applicatives sur de
   forts volumes d'appels et maintien de la production en condition
   opérationnelle (banque/assurance).
+- La rubrique Réalisations présente TROIS sites, chacun avec son rôle affiché :
+  NSY (la démonstration — notre propre site, code public sur GitHub, chiffres
+  de construction publiés), PRV Concept (le laboratoire) et Le Cerf Thym (le
+  client). Transparence assumée : PRV Concept est l'association que préside le
+  fondateur de NSY — les méthodes y sont éprouvées en conditions réelles avant
+  d'être proposées aux clients, et ce projet ne porte AUCUN avis client (on ne
+  se note pas soi-même ; aucun avis sur NSY ne peut émaner de PRV Concept ou de
+  son bureau, sur aucune plateforme).
 - Référence publique (création web) : PRV Concept — https://www.prv-concept.com —
   site vitrine de l'association de référence du moteur V6 PRV (Peugeot · Renault ·
   Volvo). Techniquement : site STATIQUE HTML/CSS/JS sans framework, responsive

@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Réalisations — sites clients livrés par NSY</title>
+<title>Réalisations — les sites conçus et exploités par NSY</title>
 <meta name="description" content="Les réalisations de NSY : sites web clients conçus sur-mesure et déjà en ligne — Le Cerf Thym (restaurant, 4 langues) et PRV Concept (association du V6 PRV)." />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://www.nsy.fr/realisations.html" />
@@ -125,12 +125,18 @@
         {
           "@type": "ListItem",
           "position": 1,
+          "name": "NSY",
+          "url": "https://www.nsy.fr/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
           "name": "PRV Concept",
           "url": "https://www.prv-concept.com/"
         },
         {
           "@type": "ListItem",
-          "position": 2,
+          "position": 3,
           "name": "Le Cerf Thym",
           "url": "https://www.lecerfthym.fr/"
         }
@@ -188,12 +194,60 @@
       <span class="mono">Sites livrés, en ligne</span>
     </div>
 
-    <h1 style="font-size: clamp(36px, 5vw, 56px); margin: 16px 0 18px;">Des projets clients<br /><span class="hero-cyan">livrés et en production.</span></h1>
+    <h1 style="font-size: clamp(36px, 5vw, 56px); margin: 16px 0 18px;">Des sites conçus, livrés<br /><span class="hero-cyan">et exploités en production.</span></h1>
     <p class="lede" style="font-size: 17px; color: var(--fg-1); max-width: 680px; margin-bottom: 8px;">
-      Au-delà du conseil, NSY conçoit et livre des sites web complets, sur-mesure. Voici les réalisations déjà en ligne — d'autres suivront.
+      Trois sites, trois rôles : la démonstration — le nôtre, code public —, le laboratoire — l'association où tout s'éprouve en réel —, et le client. Chacun est en production, mesuré, et dit exactement ce qu'il est.
     </p>
 
     <div class="realisations-grid">
+      <div class="realisation-card">
+        <div class="realisation-shot">
+          <iframe class="realisation-embed"
+            src="https://www.youtube-nocookie.com/embed/-Cp5Rja7vNQ?rel=0&amp;playsinline=1&amp;iv_load_policy=3&amp;modestbranding=1"
+            title="Parcours du site NSY — la démonstration"
+            loading="lazy"
+            referrerpolicy="strict-origin-when-cross-origin"
+            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowfullscreen></iframe>
+        </div>
+        <div class="realisation-body">
+          <div class="realisation-head">
+            <h3>NSY</h3>
+            <span class="realisation-type neuf">Notre propre site</span>
+            <span class="realisation-role">La démonstration</span>
+            <span class="realisation-url">www.nsy.fr</span>
+          </div>
+          <p class="realisation-desc">
+            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> être sa propre vitrine. Un prestataire qui vend des sites propulsés par l&rsquo;IA doit pouvoir dire : <em>visitez le mien</em>. Le site que vous lisez est conçu, exploité et mesuré avec exactement les méthodes proposées aux clients — et <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener">son code est public</a>, chose rare chez un prestataire.
+          </p>
+          <dl class="realisation-specs">
+            <div>
+              <dt>Périmètre</dt>
+              <dd>64 pages intégralement bilingues FR/EN ; journal de 4 articles aux chiffres mesurés ; FAQ de 67 questions ; pages locales (Loiret, Orléans, grandes villes) ; maquette 3D temps réel.</dd>
+            </div>
+            <div>
+              <dt>Technique</dt>
+              <dd>Statique HTML/CSS/JS sans framework ; entités JSON-LD et FAQ générées au build depuis le contenu visible ; suite de tests (assistant, anti-spam, formulaires) avant chaque mise en ligne ; 1,9 Mo au chargement, vidéos différées à l&rsquo;entrée dans la vue.</dd>
+            </div>
+            <div>
+              <dt>Assistant IA</dt>
+              <dd>Ansley, architecte IA : réponses ancrées dans les contenus du site (RAG, modèle hébergé en UE), repli local résilient, liens sortants en liste blanche — jamais d&rsquo;invention.</dd>
+            </div>
+            <div>
+              <dt>Mesure</dt>
+              <dd>Tableau de bord maison : lectures des IA par nature (conversation, recherche, indexation), provenance Google, avis clients, archive des journaux sur 13 mois — la méthode est détaillée dans l&rsquo;article <a href="superviser-production-teraoctets-megaoctet.html">Des téraoctets au mégaoctet</a>.</dd>
+            </div>
+          </dl>
+          <figure class="realisation-quote">
+            <blockquote style="font-style: normal; margin-top: 0;">Combien coûte un site comme celui-ci, en vrai ? Les chiffres de sa construction sont publics : V1 en 4 soirées, puis ≈ 140 heures de pilotage mesurées action par action — la règle des 10/90, racontée dans <a href="site-ia-en-un-week-end.html">« Créer son site avec l&rsquo;IA en un week-end »</a>.</blockquote>
+            <figcaption>Une réalisation dont le journal de bord est publié</figcaption>
+          </figure>
+          <a class="realisation-visit is-inline" href="https://www.nsy.fr" rel="noopener">Visiter le site <span class="arrow">→</span></a>
+          <div class="realisation-tags">
+            <span>Bilingue</span><span>3D temps réel</span><span>Assistant IA</span><span>SEO · GEO</span><span>Code public</span><span>KPI mesurés</span>
+          </div>
+        </div>
+      </div>
       <div class="realisation-card">
         <div class="realisation-shot">
           <iframe class="realisation-embed"
@@ -208,6 +262,7 @@
           <div class="realisation-head">
             <h3>PRV Concept</h3>
             <span class="realisation-type reprise">Reprise d'un site existant</span>
+            <span class="realisation-role">Le laboratoire</span>
             <span class="realisation-url">www.prv-concept.com</span>
           </div>
           <p class="realisation-desc">
@@ -239,6 +294,10 @@
               <dd>Un tableau de bord privé, alimenté chaque jour par les journaux du serveur : fréquentation ventilée entre vitrine, forum et boutique, lectures des robots d'IA, visites réellement venues d'une réponse d'assistant, activité du chatbot, et lecture des publications Facebook et Instagram — jusqu'au détail de chaque publication.</dd>
             </div>
           </dl>
+          <figure class="realisation-quote">
+            <blockquote style="font-style: normal; margin-top: 0;">PRV Concept est l&rsquo;association que préside le fondateur de NSY. Ce projet est notre laboratoire — chatbot ancré, bilinguisme généré, publication automatisée y ont été éprouvés en conditions réelles avant d&rsquo;être proposés aux clients. C&rsquo;est aussi pourquoi il ne porte pas d&rsquo;avis client : on ne se note pas soi-même.</blockquote>
+            <figcaption>Transparence</figcaption>
+          </figure>
           <a class="realisation-visit is-inline" href="https://www.prv-concept.com" target="_blank" rel="noopener">Visiter le site <span class="arrow">→</span></a>
           <div class="realisation-tags">
             <span>Refonte</span><span>Site vitrine</span><span>Bilingue FR/EN</span><span>Chatbot IA</span><span>Forum</span><span>Boutique</span><span>Bibliothèque PDF</span><span>Journal &amp; RSS</span><span>SEO · GEO</span><span>Tableau de bord KPI</span>
@@ -259,6 +318,7 @@
           <div class="realisation-head">
             <h3>Le Cerf Thym</h3>
             <span class="realisation-type neuf">Nouveau site</span>
+            <span class="realisation-role">Le client</span>
             <span class="realisation-url">www.lecerfthym.fr</span>
           </div>
           <p class="realisation-desc">
