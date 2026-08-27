@@ -200,7 +200,6 @@ cp public/supervision-thumb.mp4         deploy/public/   # vignette ANIMEE artic
 cp public/supervision-article.jpg       deploy/public/   # infographie FR article supervision (+ OG)
 cp public/supervision-article-en.jpg    deploy/public/   # infographie EN article supervision (+ OG)
 cp public/supervision-video.mp4         deploy/public/   # video pleine res article supervision (publication Facebook)
-cp public/nsy-about.mp4                 deploy/public/   # portrait anime (page A propos)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)
 cp public/ansley-fab.mp4                deploy/public/   # mascotte FAB (Ansley buste + logo, boomerang)
@@ -275,7 +274,6 @@ required=(
   "deploy/public/nsy-logo.png"
   "deploy/public/nsy-og.jpg"
   "deploy/public/photo-profil.jpg"
-  "deploy/public/nsy-about.mp4"
   "deploy/public/ansley.mp4"
   "deploy/public/ansley.png"
   "deploy/public/ansley-fab.mp4"

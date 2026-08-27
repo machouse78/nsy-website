@@ -1318,10 +1318,10 @@
   // Hero sphere video reads better with the raw loop — only fade
   // the service card videos.
   document.querySelectorAll('video[loop]').forEach((v) => {
-    // glyph-video (hero), about-video (portrait), ansley-video (avatar) et
-    // ansley-fab-video (mascotte du FAB) ont déjà une boucle sans couture
-    // (crossfade encodé / boomerang) — pas de fondu JS.
-    if (v.id === 'glyph-video' || v.id === 'about-video'
+    // glyph-video (hero), ansley-video (avatar) et ansley-fab-video (mascotte
+    // du FAB) ont déjà une boucle sans couture (crossfade encodé / boomerang)
+    // — pas de fondu JS.
+    if (v.id === 'glyph-video'
         || v.id === 'ansley-video' || v.id === 'ansley-fab-video'
         || v.id === 'seo-geo-video'
         || v.id === 'chatbot-forum-video'
