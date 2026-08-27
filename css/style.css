@@ -162,6 +162,26 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
   background: rgba(8, 12, 22, 0.6);
   border-bottom: 1px solid var(--line);
 }
+/* ⚠️ Overlays épinglés en couche GPU permanente — ne pas retirer.
+   Symptôme (vécu 25-26/08/2026 sur /realisations.html, mesuré sur vidéo :
+   4 décrochages en 20 s) : sur UNE image isolée, la nav, la bulle d'accueil et
+   la vignette d'Ansley apparaissaient ensemble délavées, fond perdu, texte
+   encore lisible — le « clignotement » signalé par le owner.
+   Cause : Chrome promeut un élément en couche GPU notamment par test de
+   RECOUVREMENT. Les lecteurs YouTube sont des iframes cross-origin, donc des
+   surfaces déjà composées ; au défilement elles glissent sous les overlays, le
+   recouvrement commence et cesse sans cesse, Chrome re-décide, crée et détruit
+   les couches — et présente parfois leur état initial.
+   En les épinglant, la couche existe du début à la fin, quel que soit le
+   recouvrement. Coût : quatre couches sur de petits éléments.
+   NE PAS confondre avec un containment sur .realisation-shot : promouvoir ce
+   qui est DESSOUS a été essayé et ne change rien — c'est l'overlay qui valse.
+   Si ces règles sautent, le clignotement revient. */
+.nav,
+.cbot-greeter,
+.cbot-fab,
+.cbot { will-change: transform; }
+
 .nav-inner {
   max-width: var(--maxw);
   margin: 0 auto;
