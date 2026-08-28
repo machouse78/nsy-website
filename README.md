@@ -250,6 +250,9 @@ nsy-website/
 │   ├── jsonld-entities.mjs   # entités JSON-LD partagées + FAQPage depuis le HTML (build)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
+│   ├── search-console.py                # ⭐ Audit Search Console PAR API (compte de service) :
+│   │                                    #   sites · sitemaps · inspecte N URLs (verdict, état,
+│   │                                    #   canonique déclarée vs retenue par Google)
 │   ├── partage-page.py                  # ⭐ Génère /stats/partage.html — tous les articles × registre de groupes
 │   ├── utm.mjs                          # Liens tracés (UTM) à l'unité — savoir quel post/groupe amène du trafic
 │   ├── meta-publish.mjs                 # Publication auto du journal sur la page Facebook — VIDÉO/réel au format original (+ 1ᵉʳ commentaire backlinks)
