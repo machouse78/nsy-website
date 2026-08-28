@@ -162,6 +162,26 @@ p { margin: 0; text-wrap: pretty; color: var(--fg-1); }
   background: rgba(8, 12, 22, 0.6);
   border-bottom: 1px solid var(--line);
 }
+/* ⚠️ Overlays épinglés en couche GPU permanente — ne pas retirer.
+   Symptôme (vécu 25-26/08/2026 sur /realisations.html, mesuré sur vidéo :
+   4 décrochages en 20 s) : sur UNE image isolée, la nav, la bulle d'accueil et
+   la vignette d'Ansley apparaissaient ensemble délavées, fond perdu, texte
+   encore lisible — le « clignotement » signalé par le owner.
+   Cause : Chrome promeut un élément en couche GPU notamment par test de
+   RECOUVREMENT. Les lecteurs YouTube sont des iframes cross-origin, donc des
+   surfaces déjà composées ; au défilement elles glissent sous les overlays, le
+   recouvrement commence et cesse sans cesse, Chrome re-décide, crée et détruit
+   les couches — et présente parfois leur état initial.
+   En les épinglant, la couche existe du début à la fin, quel que soit le
+   recouvrement. Coût : quatre couches sur de petits éléments.
+   NE PAS confondre avec un containment sur .realisation-shot : promouvoir ce
+   qui est DESSOUS a été essayé et ne change rien — c'est l'overlay qui valse.
+   Si ces règles sautent, le clignotement revient. */
+.nav,
+.cbot-greeter,
+.cbot-fab,
+.cbot { will-change: transform; }
+
 .nav-inner {
   max-width: var(--maxw);
   margin: 0 auto;
@@ -612,6 +632,17 @@ section.block:first-of-type { border-top: 0; }
   box-shadow:
     inset 0 0 60px rgba(0,229,255,0.25),
     0 0 80px -20px rgba(0,229,255,0.45);
+}
+.glyph-poster {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  z-index: 0;
+  pointer-events: none;
+  transition: opacity .4s ease;
 }
 .glyph-video {
   position: absolute;
@@ -2051,10 +2082,11 @@ footer.foot {
   position: fixed;
   bottom: 24px;
   right: 24px;
-  /* Fermé : grande vignette de la mascotte Ansley (buste + logo NSY lisible). */
-  width: 192px;
-  height: 192px;
-  border-radius: 999px;
+  /* Fermé : vignette portrait de la mascotte Ansley (buste + logo NSY),
+     calée sur les dimensions du FAB de PRV Concept (132×168). */
+  width: 132px;
+  height: 168px;
+  border-radius: 22px;
   background: var(--accent);
   color: #021018;
   display: grid;
@@ -2068,25 +2100,26 @@ footer.foot {
   transition: width .25s ease, height .25s ease, transform .2s ease, box-shadow .2s, background .2s;
 }
 /* Halo « présence » : ping cyan pulsé autour du FAB fermé (comme PRV Concept). */
+/* Halo de présence : un fin anneau qui se propage, EXACTEMENT aussi discret que
+   le pulse de l'avatar de l'en-tête (mêmes keyframes cbot-pulse, 1px, opacité 0.4). */
 .cbot-fab::after {
   content: "";
   position: absolute;
-  inset: 0;
-  border-radius: 999px;
+  inset: -4px;
+  border-radius: 26px;
+  border: 1px solid var(--accent);
+  opacity: 0.4;
   pointer-events: none;
-  animation: cbot-fab-halo 2.6s ease-out infinite;
+  animation: cbot-pulse 2.5s ease-out infinite;
 }
-.cbot-fab.open::after { animation: none; }
-@keyframes cbot-fab-halo {
-  0%   { box-shadow: 0 0 0 0 rgba(0,229,255,0.55); }
-  70%  { box-shadow: 0 0 0 26px rgba(0,229,255,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,229,255,0); }
-}
+/* Ouvert (petit bouton X) : pas d'anneau. */
+.cbot-fab.open::after { animation: none; opacity: 0; }
 .cbot-fab:hover { transform: translateY(-3px); }
 /* Ouvert : redevient un petit bouton de fermeture (ne recouvre pas le panneau). */
 .cbot-fab.open {
-  width: 56px;
-  height: 56px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
   background: var(--bg-3);
   color: var(--fg-0);
   box-shadow: 0 0 0 1px var(--line-strong), 0 8px 20px rgba(0,0,0,0.4);
@@ -2101,7 +2134,7 @@ footer.foot {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 999px;
+  border-radius: 22px;
   display: block;
 }
 .cbot-fab.open .cbot-fab-face { display: none; }
@@ -2110,7 +2143,7 @@ footer.foot {
 .cbot-greeter {
   position: fixed;
   right: 24px;
-  bottom: 232px; /* au-dessus du FAB (bottom 24 + hauteur 192 + marge) */
+  bottom: 208px; /* au-dessus du FAB (bottom 24 + hauteur 168 + marge) */
   width: min(272px, calc(100vw - 48px));
   background: var(--accent);
   color: #04141b;
@@ -2198,7 +2231,9 @@ footer.foot {
   pointer-events: none;
   transform: translateY(12px) scale(0.98);
   transform-origin: bottom right;
-  transition: opacity .2s ease, transform .25s cubic-bezier(.2,.7,.2,1);
+  transition: opacity .2s ease, transform .25s cubic-bezier(.2,.7,.2,1),
+              width .24s cubic-bezier(.2,.7,.2,1), height .24s cubic-bezier(.2,.7,.2,1),
+              right .24s cubic-bezier(.2,.7,.2,1), bottom .24s cubic-bezier(.2,.7,.2,1);
   overflow: hidden;
 }
 .cbot.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
@@ -2294,6 +2329,31 @@ footer.foot {
   background: #f5a623;
   box-shadow: 0 0 6px #f5a623;
 }
+/* Agrandir / réduire le panneau d'Ansley (owner, 28/08/2026), comme sur
+   prv-concept.com. Largeur et hauteur EXPLICITES, pas `inset` : on ne
+   transitionne pas vers `auto`, et sans transition l'agrandissement serait un
+   saut brutal. Le plein écran garde une marge — le panneau reste une fenêtre
+   posée sur le site, pas une page. */
+.cbot.cbot-plein {
+  right: 16px; bottom: 16px;
+  width: calc(100vw - 32px); height: calc(100vh - 32px);
+  max-width: none; max-height: none;
+  border-radius: 14px;
+  transform-origin: center;
+}
+.cbot-zoom {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  color: var(--fg-2);
+  background: none; border: none; cursor: pointer; padding: 0;
+  display: grid; place-items: center;
+  transition: background .15s, color .15s;
+}
+.cbot-zoom:hover { background: rgba(255,255,255,0.06); color: var(--fg-0); }
+.cbot-zoom svg { display: block; }
+.cbot-zoom .cbot-zoom-out, .cbot.cbot-plein .cbot-zoom .cbot-zoom-in { display: none; }
+.cbot.cbot-plein .cbot-zoom .cbot-zoom-out { display: block; }
+
 .cbot-close {
   width: 30px; height: 30px;
   border-radius: 8px;
@@ -2457,10 +2517,13 @@ footer.foot {
 
 @media (max-width: 480px) {
   .cbot { right: 12px; left: 12px; width: auto; bottom: 90px; }
-  /* Mascotte plafonnée sur petit écran (192px serait trop imposant). */
-  .cbot-fab { right: 16px; bottom: 16px; width: 132px; height: 132px; }
-  .cbot-fab.open { width: 52px; height: 52px; }
-  .cbot-greeter { right: 16px; bottom: 160px; } /* au-dessus du FAB mobile (16 + 132 + marge) */
+  /* Le panneau occupe déjà l'écran : le bouton d'agrandissement n'y ferait
+     rien, on le retire plutôt que d'offrir une commande inerte. */
+  .cbot-zoom { display: none; }
+  /* Mascotte : portrait un peu réduit sur petit écran. */
+  .cbot-fab { right: 16px; bottom: 16px; width: 116px; height: 148px; }
+  .cbot-fab.open { width: 54px; height: 54px; }
+  .cbot-greeter { right: 16px; bottom: 176px; } /* au-dessus du FAB mobile (16 + 148 + marge) */
 }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -2633,6 +2696,52 @@ footer.foot {
   gap: 28px;
   margin-top: 48px;
 }
+.realisation-role {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--fg-2);
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 3px 10px;
+}
+.tarifs-bloc {
+  margin-top: 46px;
+  border: 1px solid var(--line-strong);
+  border-radius: 16px;
+  padding: 26px 28px;
+  background: rgba(255, 255, 255, 0.02);
+}
+.tarifs-bloc h2 { font-size: 22px; margin: 0 0 6px; }
+.tarifs-bloc .note { color: var(--fg-2); font-size: 14px; margin-bottom: 18px; }
+.tarifs-bloc dl { display: grid; gap: 12px; margin: 0; }
+.tarifs-bloc dl > div { display: flex; justify-content: space-between; gap: 18px; flex-wrap: wrap;
+  border-bottom: 1px dashed var(--line); padding-bottom: 12px; }
+.tarifs-bloc dt { color: var(--fg-1); }
+.tarifs-bloc dd { margin: 0; font-family: var(--font-mono); color: var(--accent); white-space: nowrap; }
+.tarifs-bloc .apres { margin-top: 16px; font-size: 14px; color: var(--fg-2); }
+/* ⚠️ Piège récurrent : le site n'a PAS de style de lien global dans le corps de
+   texte. Un <a> posé dans un bloc non listé ici hérite du gris du paragraphe,
+   sans soulignement — il est présent dans le HTML mais invisible à l'écran
+   (vécu 25/08/2026 : le lien du questionnaire de faisabilité, puis les deux
+   liens vers les articles du journal dans les cartes Réalisations). Ajouter le
+   sélecteur ici EN MÊME TEMPS qu'on ajoute un lien dans un nouveau bloc. */
+.tarifs-bloc .apres a,
+.realisation-desc a,
+.realisation-specs dd a,
+.realisation-quote blockquote a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+.realisation-quote {
+  margin: 18px 0 4px;
+  padding: 14px 16px;
+  border-left: 2px solid var(--accent);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 0 12px 12px 0;
+}
+.realisation-quote .stars { color: var(--accent); letter-spacing: 3px; font-size: 13px; }
+.realisation-quote blockquote { margin: 8px 0 10px; color: var(--fg-1); font-style: italic; line-height: 1.6; font-size: 14.5px; }
+.realisation-quote figcaption { font-family: var(--font-mono); font-size: 11px; letter-spacing: .05em; color: var(--fg-2); text-transform: uppercase; }
+.realisation-quote figcaption a { color: var(--fg-2); text-decoration: underline; }
 .realisation-card {
   display: flex; flex-direction: column;
   border: 1px solid var(--line); border-radius: var(--radius-lg);
@@ -2649,11 +2758,13 @@ footer.foot {
   position: relative; aspect-ratio: 16 / 10; overflow: hidden;
   border-bottom: 1px solid var(--line); background: var(--bg-3);
 }
-.realisation-shot img {
+.realisation-shot img,
+.realisation-shot video {
   width: 100%; height: 100%; object-fit: cover; object-position: top center;
   display: block; transition: transform .45s ease;
 }
-.realisation-card:hover .realisation-shot img { transform: scale(1.035); }
+.realisation-card:hover .realisation-shot img,
+.realisation-card:hover .realisation-shot video { transform: scale(1.035); }
 .realisation-visit {
   position: absolute; left: 16px; bottom: 16px;
   display: inline-flex; align-items: center; gap: 6px;
@@ -2666,6 +2777,14 @@ footer.foot {
 .realisation-card:hover .realisation-visit { border-color: var(--accent); color: var(--accent); }
 .realisation-visit .arrow { transition: transform .25s; }
 .realisation-card:hover .realisation-visit .arrow { transform: translateX(3px); }
+/* Aperçu YouTube : la carte n'est plus un lien englobant (un <iframe> dans un
+   <a> est invalide et capterait les clics du lecteur). L'appel à l'action
+   redevient donc un vrai lien, posé sous les caractéristiques. */
+.realisation-shot iframe { width: 100%; height: 100%; border: 0; display: block; }
+.realisation-visit.is-inline { position: static; margin-top: 18px; text-decoration: none; }
+.realisation-visit.is-inline:hover,
+.realisation-visit.is-inline:focus-visible { border-color: var(--accent); color: var(--accent); outline: none; }
+.realisation-visit.is-inline:hover .arrow { transform: translateX(3px); }
 .realisation-body { padding: 22px 24px 26px; }
 .realisation-head {
   display: flex; align-items: baseline; justify-content: space-between;
@@ -2682,6 +2801,15 @@ footer.foot {
   color: var(--accent);
 }
 .realisation-specs dd { margin: 0; color: var(--fg-3); font-size: 13px; line-height: 1.55; }
+/* Pastille de type de projet : site neuf ou reprise d'un site existant.
+   Elle répond à la question que se pose tout prospect en regardant une
+   réalisation — « et si mon site existe déjà ? ». */
+.realisation-type {
+  font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  border-radius: 50px; padding: 4px 10px; white-space: nowrap;
+}
+.realisation-type.neuf { color: var(--accent); border: 1px solid rgba(0, 229, 255, .45); }
+.realisation-type.reprise { color: var(--warm); border: 1px solid rgba(240, 138, 44, .5); }
 .realisation-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .realisation-tags span {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
@@ -2761,10 +2889,30 @@ footer.foot {
    ponctuelles (paint transitoire, pas de coût continu).
    ═══════════════════════════════════════════════════════════════════ */
 
-/* Barre de progression de lecture (élément injecté par JS sur chaque page).
-   Insérée DANS la nav sticky → elle reste ancrée sous le menu au scroll,
-   comme la jauge de lecture de PRV Concept. Fallback fixed si nav absente. */
-.scroll-progress {
+/* ── Cartes d'articles du journal (composant global : accueil + pages blog).
+   Les pages blog embarquent les mêmes règles en <style> local (valeurs
+   identiques) — garder les deux en phase. ── */
+.blog-list { display: grid; gap: 18px; margin-top: 34px; }
+.blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
+  padding: 24px 26px; background: rgba(255,255,255,0.02);
+  transition: border-color .2s, transform .2s; }
+.blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+  color: var(--fg-2); text-transform: uppercase; }
+.blog-card h2, .blog-card h3 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
+.blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
+.blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
+/* Variante avec vignette : image à gauche, texte à droite (empilés sur mobile). */
+.blog-card.has-thumb { display: grid; grid-template-columns: 280px 1fr; gap: 24px; align-items: center; }
+.blog-card .thumb { border-radius: 10px; overflow: hidden; border: 1px solid var(--line); }
+.blog-card .thumb img, .blog-card .thumb video { width: 100%; height: 100%; object-fit: cover; display: block; }
+@media (max-width: 680px) { .blog-card.has-thumb { grid-template-columns: 1fr; gap: 16px; } }
+
+/* Barre de CHARGEMENT de page (élément injecté par JS sur chaque page).
+   Fine ligne d'accent tout en haut du viewport : elle se remplit pendant le
+   chargement (trickle → 100 % au window.load) puis s'efface. Ce n'est plus une
+   jauge de scroll. */
+.load-bar {
   position: fixed;
   top: 0;
   left: 0;
@@ -2774,14 +2922,14 @@ footer.foot {
   box-shadow: 0 0 8px var(--accent-glow);
   transform: scaleX(0);
   transform-origin: left;
-  z-index: 60; /* au-dessus de la nav (50) */
+  z-index: 70; /* au-dessus de la nav (50) */
   pointer-events: none;
+  transition: transform .3s cubic-bezier(.2, .7, .2, 1), opacity .4s ease .1s;
+  will-change: transform, opacity;
 }
-.nav .scroll-progress {
-  position: absolute;
-  top: auto;
-  bottom: -1px; /* recouvre le border-bottom de la nav */
-  z-index: 1;
+/* Page prête : on efface la barre (elle est retirée du DOM après la transition). */
+.load-bar.is-done {
+  opacity: 0;
 }
 
 /* Compteurs animés : chiffres tabulaires = zéro décalage pendant le comptage */
@@ -2914,3 +3062,15 @@ footer.foot {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Journal : compteurs de vues / j'aime (journal-stats.php + js/app.js) ── */
+.article-stats { display: flex; align-items: center; gap: 16px; margin: -8px 0 26px;
+  font-family: var(--font-mono); font-size: 12px; letter-spacing: .04em; color: var(--fg-2); }
+.article-stats .js-like { display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line-strong); border-radius: 999px; padding: 6px 14px;
+  background: none; color: var(--fg-1); cursor: pointer; font: inherit;
+  transition: border-color .2s, color .2s, transform .15s; }
+.article-stats .js-like:hover { border-color: var(--accent); color: var(--accent); }
+.article-stats .js-like:active { transform: scale(0.96); }
+.article-stats .js-like.liked { border-color: var(--accent); color: var(--accent); }
+.article-stats .js-like.liked svg { fill: currentColor; }

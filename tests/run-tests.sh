@@ -14,4 +14,6 @@ echo "── Anti-spam (antispam.php, code réel) ──"
 docker run --rm -v "$PWD:/app" php:8.3-cli-alpine php /app/tests/antispam.test.php
 echo "── Formulaires HTTP (contact.php + faisabilite.php, code réel en bac à sable) ──"
 docker run --rm -v "$PWD:/app" php:8.3-cli-alpine php /app/tests/forms-http.test.php
+echo "── Ansley : agrandir / réduire le panneau (navigateur réel) ──"
+node tests/ansley-plein-ecran.test.mjs
 echo "✅ SUITE COMPLÈTE OK"

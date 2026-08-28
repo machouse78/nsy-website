@@ -2231,7 +2231,9 @@ footer.foot {
   pointer-events: none;
   transform: translateY(12px) scale(0.98);
   transform-origin: bottom right;
-  transition: opacity .2s ease, transform .25s cubic-bezier(.2,.7,.2,1);
+  transition: opacity .2s ease, transform .25s cubic-bezier(.2,.7,.2,1),
+              width .24s cubic-bezier(.2,.7,.2,1), height .24s cubic-bezier(.2,.7,.2,1),
+              right .24s cubic-bezier(.2,.7,.2,1), bottom .24s cubic-bezier(.2,.7,.2,1);
   overflow: hidden;
 }
 .cbot.open { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
@@ -2327,6 +2329,31 @@ footer.foot {
   background: #f5a623;
   box-shadow: 0 0 6px #f5a623;
 }
+/* Agrandir / réduire le panneau d'Ansley (owner, 28/08/2026), comme sur
+   prv-concept.com. Largeur et hauteur EXPLICITES, pas `inset` : on ne
+   transitionne pas vers `auto`, et sans transition l'agrandissement serait un
+   saut brutal. Le plein écran garde une marge — le panneau reste une fenêtre
+   posée sur le site, pas une page. */
+.cbot.cbot-plein {
+  right: 16px; bottom: 16px;
+  width: calc(100vw - 32px); height: calc(100vh - 32px);
+  max-width: none; max-height: none;
+  border-radius: 14px;
+  transform-origin: center;
+}
+.cbot-zoom {
+  width: 30px; height: 30px;
+  border-radius: 8px;
+  color: var(--fg-2);
+  background: none; border: none; cursor: pointer; padding: 0;
+  display: grid; place-items: center;
+  transition: background .15s, color .15s;
+}
+.cbot-zoom:hover { background: rgba(255,255,255,0.06); color: var(--fg-0); }
+.cbot-zoom svg { display: block; }
+.cbot-zoom .cbot-zoom-out, .cbot.cbot-plein .cbot-zoom .cbot-zoom-in { display: none; }
+.cbot.cbot-plein .cbot-zoom .cbot-zoom-out { display: block; }
+
 .cbot-close {
   width: 30px; height: 30px;
   border-radius: 8px;
@@ -2490,6 +2517,9 @@ footer.foot {
 
 @media (max-width: 480px) {
   .cbot { right: 12px; left: 12px; width: auto; bottom: 90px; }
+  /* Le panneau occupe déjà l'écran : le bouton d'agrandissement n'y ferait
+     rien, on le retire plutôt que d'offrir une commande inerte. */
+  .cbot-zoom { display: none; }
   /* Mascotte : portrait un peu réduit sur petit écran. */
   .cbot-fab { right: 16px; bottom: 16px; width: 116px; height: 148px; }
   .cbot-fab.open { width: 54px; height: 54px; }

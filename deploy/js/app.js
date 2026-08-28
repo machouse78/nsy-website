@@ -183,6 +183,43 @@
       fab.classList.remove('open');
       pauseAnsley();
     });
+
+    /* Agrandir / réduire le panneau (owner, 28/08/2026), comme sur PRV Concept.
+       Le bouton est INJECTÉ ici, pas écrit dans le HTML : le balisage du chatbot
+       est recopié dans 65 pages, et il faudrait le tenir à jour dans chacune —
+       français et anglais — au moindre ajustement. Une page créée demain
+       l'aura sans qu'on y pense.
+
+       Le choix est MÉMORISÉ : quelqu'un qui lit une réponse longue veut la
+       place, et il ne va pas la redemander à chaque question. */
+    if (closeBtn && !document.getElementById('cbot-zoom')) {
+      const ZOOM_KEY = 'nsy-cbot-plein';
+      const zoom = document.createElement('button');
+      zoom.id = 'cbot-zoom';
+      zoom.className = 'cbot-zoom';
+      zoom.type = 'button';
+      zoom.innerHTML =
+        '<svg class="cbot-zoom-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+        + ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>'
+        + '<svg class="cbot-zoom-out" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+        + ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h5V4M20 9h-5V4M20 15h-5v5M4 15h5v5"/></svg>';
+      const setZoom = (plein) => {
+        panel.classList.toggle('cbot-plein', plein);
+        zoom.setAttribute('aria-pressed', plein ? 'true' : 'false');
+        zoom.setAttribute('aria-label', plein
+          ? (pageLang === 'en' ? 'Back to normal size' : 'Revenir à la taille normale')
+          : (pageLang === 'en' ? 'Expand to full screen' : 'Agrandir en plein écran'));
+        try { localStorage.setItem(ZOOM_KEY, plein ? '1' : '0'); } catch (e) { /* navigation privée */ }
+      };
+      let dejaPlein = false;
+      try { dejaPlein = localStorage.getItem(ZOOM_KEY) === '1'; } catch (e) { /* idem */ }
+      setZoom(dejaPlein);
+      zoom.addEventListener('click', () => {
+        setZoom(!panel.classList.contains('cbot-plein'));
+        input?.focus({ preventScroll: true });
+      });
+      closeBtn.parentNode.insertBefore(zoom, closeBtn);
+    }
     escalate?.addEventListener('click', () => {
       panel.classList.remove('open');
       fab.classList.remove('open');
@@ -325,7 +362,9 @@
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 8000);
-      const res = await fetch('chat.php', {
+      // `?h=1` : marqueur pour les logs — sans lui, la sonde de disponibilité
+      // est indistinguable d'un vrai message et gonfle le KPI « conversations ».
+      const res = await fetch('chat.php?h=1', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ health: true }), signal: ctrl.signal,
       });
@@ -350,10 +389,44 @@
   function mdToHtml(text) {
     const esc = String(text)
       .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    // Liens externes OFFICIELS autorisés (même whitelist que chat.php, owner
+    // juillet 2026) : réalisations clientes + profils publics. Ouverts dans un
+    // nouvel onglet. Tout autre lien externe reste du texte inerte.
+    const EXT_OK = [
+      'https://www.prv-concept.com', 'https://prv-concept.com',
+      'https://www.lecerfthym.fr', 'https://lecerfthym.fr',
+      'https://www.linkedin.com/company/nsy-new-software-yard',
+      'https://www.linkedin.com/in/c%c3%a9dric-barme',
+      'https://www.linkedin.com/in/cédric-barme',
+      'https://github.com/machouse78',
+      'https://youtube.com/@new-software-yard',
+      'https://www.youtube.com/@new-software-yard',
+      'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%c3%a9-sur-google-0znee',
+      'https://www.facebook.com/share/17vylqjake',
+      'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25c3%25a0-condition-1icee',
+      'https://www.facebook.com/share/p/1ey4fxbyda',
+      'https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25c3%25a2ce-%25c3%25a0-lia-verdict-chiffr%25c3%25a9-hqq8e',
+      'https://www.facebook.com/reel/2812928635744339',
+      'https://www.linkedin.com/pulse/des-t%25c3%25a9raoctets-au-m%25c3%25a9gaoctet-la-supervision-est-une-duyee',
+      'https://www.facebook.com/reel/1080327827884467',
+    ];
+    const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
       .replace(/\*\*([^*]+)\*\*/g, '<b>$1</b>')
-      .replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, label, url) =>
-        /^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(url) ? `<a href="${url}">${label}</a>` : label)
+      // Une seule passe lien Markdown OU URL nue : un href déjà posé ne peut
+      // pas être re-capturé par la branche « URL nue ».
+      .replace(/\[([^\]]+)\]\(([^)\s]+)\)|(https?:\/\/[^\s<)\]]+)/g, (m, label, url, bare) => {
+        if (label) {
+          if (/^[a-z0-9-]+\.html(#[\w-]*)?$/i.test(url)) return `<a href="${url}">${label}</a>`;
+          if (extOk(url)) return `<a href="${url}" target="_blank" rel="noopener">${label}</a>`;
+          return label;
+        }
+        const clean = bare.replace(/[.,;:!?]+$/, '');
+        const tail = bare.slice(clean.length);
+        return extOk(clean)
+          ? `<a href="${clean}" target="_blank" rel="noopener">${clean.replace(/^https?:\/\//, '')}</a>${tail}`
+          : m;
+      })
       .replace(/^\s*[-*•]\s+/gm, '• ')
       .replace(/\n/g, '<br>');
   }
@@ -500,16 +573,18 @@
     },
     {
       id: 'web_ai',
-      cues: ['site','site web','web','website','application','appli','app','saas','plateforme','platform',
+      cues: ['site','site web','web','website','refonte','refondre','redesign','refaire','moderniser','application','appli','app','saas','plateforme','platform',
               'ia','intelligence artificielle','llm','claude','openai','mistral','gpt','chatbot','agent',
               'rag','recherche semantique','semantic','ai','automatis','automation'],
       fr: [
         `La création web NSY, c'est des sites et plateformes nouvelle génération avec l'IA au cœur : intégration de LLM (Claude, OpenAI, Mistral), chatbots métier, recherche sémantique, génération de contenu, agents. Le tout pensé pour la performance et le SEO — tarification en fonction du besoin.`,
-        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Offre clé en main, chiffrée selon le périmètre.`
+        `Côté web : sites vitrines et plateformes SaaS, avec intégration de modèles IA (assistant, recherche sémantique, RAG, automatisations). Ce site lui-même — multilingue, chatbot, 3D temps réel — sert de démonstrateur. Offre clé en main, chiffrée selon le périmètre.`,
+        `Deux parcours : la création d'un site neuf, ou la refonte d'un site existant — préserver le référencement acquis, reprendre les contenus et les données, planifier les redirections. Le questionnaire de faisabilité distingue les deux dès sa première question.`
       ],
       en: [
         `NSY web creation means next-generation sites and platforms with AI at the core: LLM integration (Claude, OpenAI, Mistral), business chatbots, semantic search, content generation, agents — all built for performance and SEO — pricing based on your need.`,
-        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. A turnkey offering, quoted on scope.`
+        `On the web side: brochure sites and SaaS platforms with AI model integration (assistant, semantic search, RAG, automations). This very site — multilingual, chatbot, real-time 3D — is the showcase. A turnkey offering, quoted on scope.`,
+        `Two paths: a brand-new site, or a redesign of an existing one — preserving earned rankings, carrying over content and data, planning redirects. The feasibility questionnaire separates the two from its first question.`
       ]
     },
     {
@@ -518,11 +593,11 @@
               'dora','fintech','reglement','regule','conformite','bank','banking','insurance','insurer',
               'regulated','compliance'],
       fr: [
-        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, plateformes de trading et de risque temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA). Et en mission, l'expertise IA de NSY sert aussi la productivité de vos équipes : automatisation, outillage.`,
+        `C'est le cœur du métier. ${XP} ans sur des chantiers critiques en banque de détail, banque privée, assurance vie et asset management — architecture distribuée, systèmes critiques temps réel, migration de socles legacy. Habitué des environnements régulés (ACPR, AMF, RGPD, DORA). Et en mission, l'expertise IA de NSY sert aussi la productivité de vos équipes : automatisation, outillage.`,
         `Oui — finance et assurance sont le terrain principal de Cédric : ${XP} ans en institutions financières françaises, sur des systèmes critiques et régulés. Migration Java EE, supervision de production, conformité (ACPR, AMF, DORA). Si votre contexte est régulé, c'est exactement la zone de confort. Bonus : l'apport d'expertise IA en cours de mission, côté productivité.`
       ],
       en: [
-        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time trading and risk platforms, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA). On-mission, NSY's AI expertise also lifts team productivity: automation and tooling.`,
+        `That's the core specialty. ${XP} years on critical builds in retail banking, private banking, life insurance and asset management — distributed architecture, real-time critical systems, legacy-core migration. Fluent in regulated environments (ACPR, AMF, GDPR, DORA). On-mission, NSY's AI expertise also lifts team productivity: automation and tooling.`,
         `Yes — finance and insurance are Cédric's main ground: ${XP} years inside French financial institutions, on critical, regulated systems. Java EE migration, production oversight, compliance (ACPR, AMF, DORA). If your context is regulated, that's exactly the comfort zone. Bonus: AI expertise brought into the mission, on the productivity side.`
       ]
     },
@@ -557,11 +632,11 @@
       cues: ['cedric','barme','fondateur','founder','parcours','experience','qui est','qui etes','profil',
               'cv','background','who is','who are','about you'],
       fr: [
-        `Cédric Barme, fondateur de NSY (EURL créée en 2018). ${XP} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, plateformes de trading temps réel, migration de socles legacy. Aujourd'hui consultant indépendant, et créateur web propulsé par l'IA.`,
+        `Cédric Barme, fondateur de NSY (EURL créée en 2018). ${XP} ans dans les coulisses techniques des plus grandes institutions financières françaises — architecture distribuée, systèmes critiques temps réel, migration de socles legacy. Aujourd'hui consultant indépendant, et créateur web propulsé par l'IA.`,
         `Le fondateur, c'est Cédric Barme : ${XP} ans d'ingénierie sur des systèmes critiques (banque, assurance), puis création de l'EURL NSY en 2018. Tech lead, architecte, et depuis peu, création web avec l'IA. Le profil LinkedIn est en haut de page.`
       ],
       en: [
-        `Cédric Barme, founder of NSY (EURL founded in 2018). ${XP} years behind the scenes of France's largest financial institutions — distributed architecture, real-time trading platforms, legacy-core migration. Now an independent consultant and AI-powered web creator.`,
+        `Cédric Barme, founder of NSY (EURL founded in 2018). ${XP} years behind the scenes of France's largest financial institutions — distributed architecture, real-time critical systems, legacy-core migration. Now an independent consultant and AI-powered web creator.`,
         `The founder is Cédric Barme: ${XP} years of engineering on critical systems (banking, insurance), then founded the NSY EURL in 2018. Tech lead, architect, and lately AI-powered web creation. His LinkedIn is linked at the top of the page.`
       ]
     },
@@ -1035,6 +1110,8 @@
   // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
   // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
   const SLUG_FR_TO_EN = {
+    'superviser-production-teraoctets-megaoctet.html': 'production-monitoring-terabytes-megabyte.html',
+    'site-ia-en-un-week-end.html': 'ai-website-in-a-weekend.html',
     'index.html': 'index-en.html',
     'mentions-legales.html': 'legal-notice.html',
     'confidentialite.html': 'privacy.html',
@@ -1049,6 +1126,13 @@
     'integration-claude-entreprise.html': 'claude-integration.html',
     'creation-site-ia.html': 'ai-website-creation.html',
     'glossaire-ia-web.html': 'ai-web-glossary.html',
+    'blog.html': 'blog-en.html',
+    'seo-geo-etre-cite-par-les-ia.html': 'seo-geo-getting-cited-by-ai.html',
+    'chatbot-ia-forum-base-de-connaissances.html': 'ai-chatbot-forum-knowledge-base.html',
+    'consultant-technique-paris.html': 'technical-consultant-paris.html',
+    'creation-site-internet-loiret.html': 'website-creation-loiret.html',
+    'creation-site-internet-orleans.html': 'website-creation-orleans.html',
+    'pourquoi-nsy.html': 'why-nsy.html',
     'services.html': 'services-en.html',
     'a-propos.html': 'about.html',
     'contact.html': 'contact-en.html',
@@ -1106,14 +1190,24 @@
       setVideoProgress(end / glyphVideo.duration);
     });
 
-    glyphVideo.addEventListener('canplaythrough', hideLoader, { once: true });
+    // L'anneau disparaît dès la PREMIÈRE IMAGE décodée (loadeddata), pas au
+    // canplaythrough : sur 4G lente, attendre que les 613 Ko soient bufferisés
+    // masquait le poster pendant des secondes — et le LCP (audit P5, 24/08/2026 :
+    // « délai de rendu » 0,6 à 1,1 s sur un fichier chargé en 64 ms).
+    glyphVideo.addEventListener('loadeddata', hideLoader, { once: true });
+    // Le poster-image s'efface dès que la vidéo joue : les fondus de boucle
+    // continuent de dissoudre vers le disque bleu, comme avant.
+    glyphVideo.addEventListener('playing', () => {
+      const po = document.querySelector('.glyph-poster');
+      if (po) po.style.opacity = '0';
+    }, { once: true });
     glyphVideo.addEventListener('error', () => {
       glyphLoader.classList.add('error');
       if (glyphPct) glyphPct.textContent = 'ERR';
     });
 
     // Edge case: video already cached / fully buffered before listeners attach
-    if (glyphVideo.readyState >= 4) hideLoader();
+    if (glyphVideo.readyState >= 2) hideLoader();
 
     // ───── Fondu de boucle : fade-in / fade-out vers transparent ─────
     // La vidéo reste opaque ; on anime son opacité selon currentTime pour qu'au
@@ -1123,12 +1217,16 @@
     // hors-écran, donc l'animation s'arrête d'elle-même (philosophie perf).
     const FADE = 0.6; // secondes de fondu à chaque extrémité
     let fadeRAF = null;
+    let firstLoop = true; // pas de fondu d'ENTRÉE au tout premier départ : le
+                          // poster est déjà peint, l'image doit rester visible (LCP)
+    glyphVideo.addEventListener('seeked', () => { firstLoop = false; });
+    glyphVideo.addEventListener('timeupdate', () => { if (glyphVideo.currentTime > FADE) firstLoop = false; });
     const fadeTick = () => {
       const d = glyphVideo.duration;
       if (d && isFinite(d)) {
         const t = glyphVideo.currentTime;
         let op = 1;
-        if (t < FADE) op = t / FADE;
+        if (t < FADE && !firstLoop) op = t / FADE;
         else if (t > d - FADE) op = Math.max(0, (d - t) / FADE);
         glyphVideo.style.opacity = op.toFixed(3);
       }
@@ -1257,11 +1355,15 @@
   // Hero sphere video reads better with the raw loop — only fade
   // the service card videos.
   document.querySelectorAll('video[loop]').forEach((v) => {
-    // glyph-video (hero), about-video (portrait), ansley-video (avatar) et
-    // ansley-fab-video (mascotte du FAB) ont déjà une boucle sans couture
-    // (crossfade encodé / boomerang) — pas de fondu JS.
-    if (v.id === 'glyph-video' || v.id === 'about-video'
-        || v.id === 'ansley-video' || v.id === 'ansley-fab-video') return;
+    // glyph-video (hero), ansley-video (avatar) et ansley-fab-video (mascotte
+    // du FAB) ont déjà une boucle sans couture (crossfade encodé / boomerang)
+    // — pas de fondu JS.
+    if (v.id === 'glyph-video'
+        || v.id === 'ansley-video' || v.id === 'ansley-fab-video'
+        || v.id === 'seo-geo-video'
+        || v.id === 'chatbot-forum-video'
+        || v.id === 'weekend-site-video'
+        || v.id === 'supervision-video') return; // boomerang déjà sans couture
     setupLoopFade(v);
   });
 
@@ -1412,29 +1514,39 @@
   const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const hoverCapable = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
 
-  // ───── Barre de progression de lecture (toutes pages) ─────
-  // Feedback lié au geste de l'utilisateur → autorisée même en reduced-motion.
-  // transform: scaleX (composité), mise à jour au plus 1×/frame via rAF-guard.
+  // ───── Barre de CHARGEMENT de page (toutes pages) ─────
+  // Fine ligne d'accent en haut du viewport : elle se remplit pendant le
+  // chargement puis disparaît une fois la page prête. (Remplace l'ancienne
+  // jauge de scroll.) transform: scaleX (composité) → aucun reflow.
   {
     const bar = document.createElement('div');
-    bar.className = 'scroll-progress';
+    bar.className = 'load-bar';
     bar.setAttribute('aria-hidden', 'true');
-    // Dans la nav sticky (ancrée sous le menu, façon PRV Concept) ;
-    // fallback en haut du viewport si une page n'avait pas de nav.
-    (document.querySelector('.nav') || document.body).appendChild(bar);
-    let ticking = false;
-    const update = () => {
-      const doc = document.documentElement;
-      const max = doc.scrollHeight - doc.clientHeight;
-      bar.style.transform = `scaleX(${max > 0 ? Math.min(1, doc.scrollTop / max).toFixed(4) : 0})`;
-      ticking = false;
+    document.body.appendChild(bar);
+    let p = 0;
+    const set = (v) => { p = Math.min(1, v); bar.style.transform = `scaleX(${p.toFixed(4)})`; };
+    // Départ visible dès l'exécution du script (defer → HTML déjà parsé).
+    requestAnimationFrame(() => set(0.1));
+
+    let trickle = null;
+    const stopTrickle = () => { if (trickle) { clearInterval(trickle); trickle = null; } };
+    const finish = () => {
+      stopTrickle();
+      set(1);
+      bar.classList.add('is-done');           // fondu (opacity → 0)
+      setTimeout(() => bar.remove(), 700);     // retrait du DOM après la transition
     };
-    const onScroll = () => {
-      if (!ticking) { ticking = true; requestAnimationFrame(update); }
-    };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onScroll, { passive: true });
-    update();
+
+    if (document.readyState === 'complete') {
+      // Page déjà chargée (cache, exécution tardive) : petit flash puis disparition.
+      finish();
+    } else {
+      // Trickle : on avance vers ~90 % en ralentissant à l'approche.
+      trickle = setInterval(() => { if (p < 0.9) set(p + (0.9 - p) * 0.14 + 0.004); }, 240);
+      // DOM prêt → on assure un minimum visible ; chargement complet → 100 % + fondu.
+      document.addEventListener('DOMContentLoaded', () => set(Math.max(p, 0.5)), { once: true });
+      window.addEventListener('load', finish, { once: true });
+    }
   }
 
   // ───── Compteurs animés (hero-meta + signaux About) ─────
@@ -1519,4 +1631,54 @@
       }).observe(heroSection);
     }
   }
+})();
+
+/* ───── Journal : compteurs de vues / « j'aime » (journal-stats.php) ─────
+   Clé = slug FR (data-slug, partagé par la paire FR/EN). La vue n'est comptée
+   qu'une fois par session (sessionStorage) ; l'état « aimé » vit en
+   localStorage. Tout échec réseau laisse simplement la barre masquée. */
+(function () {
+  var el = document.querySelector('[data-journal-stats]');
+  if (!el || !window.fetch) return;
+  var slug = el.getAttribute('data-slug');
+  var en = (document.documentElement.lang || 'fr') === 'en';
+  var viewsEl = el.querySelector('.js-views');
+  var likeBtn = el.querySelector('.js-like');
+  var likeLabel = el.querySelector('.js-like-label');
+  var likedKey = 'nsy_liked_' + slug, viewedKey = 'nsy_viewed_' + slug;
+  var liked = false;
+  try { liked = localStorage.getItem(likedKey) === '1'; } catch (e) {}
+
+  function fmt(n) { return Number(n || 0).toLocaleString(en ? 'en-GB' : 'fr-FR'); }
+  function render(d) {
+    viewsEl.textContent = fmt(d.views) + (en ? (d.views > 1 ? ' views' : ' view') : (d.views > 1 ? ' vues' : ' vue'));
+    likeLabel.textContent = (en ? 'Like' : 'J\u2019aime') + ' (' + fmt(d.likes) + ')';
+    likeBtn.classList.toggle('liked', liked);
+    likeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
+    el.hidden = false;
+  }
+  function call(action) {
+    return fetch('journal-stats.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ slug: slug, action: action })
+    }).then(function (r) { return r.json(); });
+  }
+
+  var first = 'get';
+  try {
+    if (!sessionStorage.getItem(viewedKey)) { first = 'view'; sessionStorage.setItem(viewedKey, '1'); }
+  } catch (e) {}
+  call(first).then(function (d) { if (d && d.ok) render(d); }).catch(function () {});
+
+  var busy = false;
+  likeBtn.addEventListener('click', function () {
+    if (busy) return;
+    busy = true;
+    var action = liked ? 'unlike' : 'like';
+    liked = !liked;
+    try { localStorage.setItem(likedKey, liked ? '1' : '0'); } catch (e) {}
+    call(action).then(function (d) { if (d && d.ok) render(d); })
+      .catch(function () {}).finally(function () { busy = false; });
+  });
 })();

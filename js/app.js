@@ -183,6 +183,43 @@
       fab.classList.remove('open');
       pauseAnsley();
     });
+
+    /* Agrandir / réduire le panneau (owner, 28/08/2026), comme sur PRV Concept.
+       Le bouton est INJECTÉ ici, pas écrit dans le HTML : le balisage du chatbot
+       est recopié dans 65 pages, et il faudrait le tenir à jour dans chacune —
+       français et anglais — au moindre ajustement. Une page créée demain
+       l'aura sans qu'on y pense.
+
+       Le choix est MÉMORISÉ : quelqu'un qui lit une réponse longue veut la
+       place, et il ne va pas la redemander à chaque question. */
+    if (closeBtn && !document.getElementById('cbot-zoom')) {
+      const ZOOM_KEY = 'nsy-cbot-plein';
+      const zoom = document.createElement('button');
+      zoom.id = 'cbot-zoom';
+      zoom.className = 'cbot-zoom';
+      zoom.type = 'button';
+      zoom.innerHTML =
+        '<svg class="cbot-zoom-in" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+        + ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4H4v5M15 4h5v5M15 20h5v-5M9 20H4v-5"/></svg>'
+        + '<svg class="cbot-zoom-out" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"'
+        + ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9h5V4M20 9h-5V4M20 15h-5v5M4 15h5v5"/></svg>';
+      const setZoom = (plein) => {
+        panel.classList.toggle('cbot-plein', plein);
+        zoom.setAttribute('aria-pressed', plein ? 'true' : 'false');
+        zoom.setAttribute('aria-label', plein
+          ? (pageLang === 'en' ? 'Back to normal size' : 'Revenir à la taille normale')
+          : (pageLang === 'en' ? 'Expand to full screen' : 'Agrandir en plein écran'));
+        try { localStorage.setItem(ZOOM_KEY, plein ? '1' : '0'); } catch (e) { /* navigation privée */ }
+      };
+      let dejaPlein = false;
+      try { dejaPlein = localStorage.getItem(ZOOM_KEY) === '1'; } catch (e) { /* idem */ }
+      setZoom(dejaPlein);
+      zoom.addEventListener('click', () => {
+        setZoom(!panel.classList.contains('cbot-plein'));
+        input?.focus({ preventScroll: true });
+      });
+      closeBtn.parentNode.insertBefore(zoom, closeBtn);
+    }
     escalate?.addEventListener('click', () => {
       panel.classList.remove('open');
       fab.classList.remove('open');
