@@ -36,7 +36,7 @@
 | **Home** | `index.html` ↔ `index-en.html` | Landing: hero + marquee + **journal news** (→ Insights, animated thumbnail) + preview of the 2 offerings (→ Services) + profile teaser (→ About) + CTA banner (→ Contact) |
 | **Insights** | `blog.html` ↔ `blog-en.html` (FR: « Journal ») | Field notes (bilingual articles, RSS feeds `feed.xml`/`feed-en.xml`); 5-latest-articles teaser on the home page (newest first); « Read on LinkedIn / Facebook » buttons at the end of articles |
 | **Services** | `services.html` ↔ `services-en.html` | 2 detailed cards (consulting / AI web) + method (4 steps) + values + 3D preview (→ 3D Design) |
-| **Work** | `realisations.html` ↔ `portfolio.html` | Client cards with **animated previews** (`record-realisation.mjs`), in chronological order: PRV Concept then Le Cerf Thym |
+| **Work** | `realisations.html` ↔ `portfolio.html` | **Three sites, three roles** — Le Cerf Thym (the client, with its sourced 5/5 review), PRV Concept (the laboratory, with a transparency note: NSY's founder chairs the association) and NSY itself (the demonstration, public code). Embedded walkthrough videos (YouTube), then a **“Ballpark figures”** block: indicative ranges excl. VAT **per project type**, never per client |
 | **About** | `a-propos.html` ↔ `about.html` | Cédric Barme's profile, signals, background, **"Why NSY exists" story**, principles |
 | **Why NSY?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | The philosophy: single point of contact, direct-accountability model, ESN partnerships (large accounts), 3 clients max — FAQPage JSON-LD, linked from the footer and About |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Form (PHP) + direct channels + feasibility request |
@@ -44,7 +44,7 @@
 
 The contact form is still served by `contact.php` (unchanged). The top nav has **6 links** (Home, Insights, Services, Work, About, Contact); 3D Design and the FAQ are reachable from the footer.
 
-Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (3: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend » — animated thumbnails), **5 city pages** as FR/EN pairs (Orléans · Tours · Paris · Lyon · Bordeaux) + **Paris technical consultant**, **redesign offering** `refonte-site-internet.html` / `website-redesign.html`, **feasibility questionnaire** `faisabilite.html` / `feasibility.html` (**new build or redesign** paths), legal pages — **60 pages** in total.
+Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (4: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend », « From terabytes to a megabyte » — animated thumbnails), **5 city pages** as FR/EN pairs (Orléans · Tours · Paris · Lyon · Bordeaux) + **Paris technical consultant**, **redesign offering** `refonte-site-internet.html` / `website-redesign.html`, **feasibility questionnaire** `faisabilite.html` / `feasibility.html` (**new build or redesign** paths), legal pages — **64 pages** in total.
 
 ## Bilingual (FR / EN)
 
@@ -74,7 +74,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 - **Language switch** : 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. Explicit slug mapping in `js/app.js`.
 - **Auto-detection** : on `/` (no cookie), `.htaccess` reads `Accept-Language` and 302-redirects to `/index-en.html` if the browser is in English. The user's choice (cookie) then takes precedence.
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 60 pages, self-referencing canonicals.
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 64 pages, self-referencing canonicals.
 - **`nsy_lang` cookie** : the only functional cookie, set on explicit action (flag click) — consent-exempt (CNIL deliberation 2020-091). Documented on the legal pages.
 
 > ⚠️ **A language change applies to the WHOLE site, at every layer** — not just the visible text. Remember: the visible HTML (FR + EN), the **JS-injected UI strings** (form button states and toasts in `js/app.js`, driven by `pageLang`), the **server responses + the email** (`contact.php`, driven by the hidden `lang` field), the **hidden `lang` field on every form**, the meta/OG/JSON-LD, the legal pages, the sitemap and the chatbot. The contact form is bilingual end to end (front + server errors + auto-reply email).
@@ -119,7 +119,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 ### AI assistant — free LLM + RAG, local fallback
 
-The assistant has an identity: **Ansley, NSY's AI architect** — an animated mascot (portrait FAB with halo + greeter bubble, animated avatar in the panel header, AI-generated boomerang loops). Glassmorphic panel, present on **all 60 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
+The assistant has an identity: **Ansley, NSY's AI architect** — an animated mascot (portrait FAB with halo + greeter bubble, animated avatar in the panel header, AI-generated boomerang loops). Glassmorphic panel, present on **all 64 pages** (partial `partials/chatbot.{fr,en}.html`). A two-tier architecture, **100% free**:
 
 **Tier 1 — generative AI (`chat.php`)**: the widget queries a PHP proxy that
 calls a **Mistral** LLM (free "Experiment" tier, French company, data processed
@@ -176,7 +176,8 @@ A "cyber" site with videos, real-time 3D and animations can heat up the CPU/GPU 
 
 - **Videos** : a `<video loop>` re-decodes every frame continuously (there is no "decoded frame cache"). An `IntersectionObserver` (`js/app.js`) **pauses each looping video when it leaves the screen** and resumes it on return; a `visibilitychange` listener **pauses everything when the tab is hidden**. On load, only visible videos decode.
 - **Hero video** (`nsy-hero.mp4`) : AI-generated (Higgsfield, image-to-video from the NSY logo), square **960×960**, **no audio track**, recompressed to **0.60 MB**. **Fade-to-transparent loop**: the element opacity is animated from `currentTime` (`js/app.js`) — fade-in at the start, fade-out at the end — so at the seam the video dissolves into the blue disc behind (no alpha-channel video). Paused off-screen like the other videos.
-- **Animated portrait (About)** (`nsy-about.mp4`) : Cédric's portrait brought to life — moving holographic tech background, subject held still — AI-generated (Higgsfield, Kling image-to-video from the photo, first 4K-upscaled then padded to 16:9). **960×720 (4:3), silent, ~0.32 MB**, **seamless loop** (end→start crossfade baked into the file). The profile card uses a `<video id="about-video">` (poster = `photo-profil.jpg`) instead of an `<img>`; excluded from the JS loop-fade (already seamless) but subject to the off-screen pause.
+- **Portrait (About)**: a **still image** (`photo-profil.jpg`, 4K-upscaled then brought back down to 1600×1200 — it doubles as the JSON-LD image). An AI-generated animated background replaced it for a month in the summer of 2026; it was **removed** — a looping video behind a portrait costs continuous decoding for a debatable gain, and the result did not convince. The profile card is a plain `<img>`.
+- **Overlays pinned to their own GPU layer**: `.nav`, the greeter bubble, the FAB and the chat panel carry `will-change: transform`. On pages that embed a YouTube player (Work, 3D Design), the iframe is a surface composited by **another process**; as it slid under those overlays while scrolling, Chrome kept re-deciding layer promotion and let **one frame in thirty** through with no painted background — the bar and the assistant appeared to blink together. Diagnosed frame by frame from a video of the screen (automated screenshots do not reproduce the artefact).
 - **CSS animations** : the `.anim-paused` class, placed on a section via `IntersectionObserver` when it leaves the viewport, freezes all its animations (`animation-play-state: paused`, pseudo-elements included); removed when the section comes back.
 - **3D model** : `<model-viewer>` already pauses WebGL rendering off-screen; we additionally stop `auto-rotate` when the 3D Design section isn't visible. The ×2 supersampling (sharpness) only applies to DPR 1 screens, so it costs nothing on mobile/Retina.
 - **JS animations** (hero parallax, counters, reading gauge) : `requestAnimationFrame` loops that **stop by themselves at rest** (converged lerp, finished counter) — no infinite loops; all cut by `prefers-reduced-motion`.
@@ -227,7 +228,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Top menu ({{P}} token = anchor base path)
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
-│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 60 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 64 pages (npm run partials)
 │   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
 │   ├── indexnow-ping.mjs                # IndexNow ping after deploys
 │   ├── partage-page.py                  # ⭐ Builds /stats/partage.html — every article × group registry
@@ -248,7 +249,6 @@ nsy-website/
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
 │   ├── nsy-hero.mp4                     # Hero video (NSY monogram, large circle)
-│   ├── nsy-about.mp4                    # Animated About portrait (tech bg, seamless loop)
 │   ├── nsy-og.jpg                       # Open Graph banner 1200×630
 │   ├── prv-concept.jpg                  # Work thumbnail (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Sharp-edge wireframe 3D model (575 KB)
@@ -342,8 +342,8 @@ until you run it.
 
 ## SEO, GEO & social sharing
 
-- **Sitemap** : 60 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 60 pages
+- **Sitemap** : 64 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 64 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
 - **Structured-data compliance** (3 Search Console alerts resolved in Aug 2026): every **required** field of a rich-result type carries the **inlined typed node** (same `@id`) — `ProfilePage.mainEntity`, but also `author` and `publisher` on articles, dates (`dateModified`, `datePublished`) are **full ISO 8601 with timezone**, and every `<video>` has a `poster=` plus its `video:video` block under **every** page that displays it. Causes, fixes and audit method: `seo-geo-llmo` skill §5

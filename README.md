@@ -36,7 +36,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 | **Accueil** | `index.html` ↔ `index-en.html` | Landing : hero + marquee + **news du journal** (→ Journal, avec vignette animée) + aperçu des 2 offres (→ Services) + teaser profil (→ À propos) + références + bandeau CTA (→ Contact) |
 | **Services** | `services.html` ↔ `services-en.html` | 2 cartes détaillées (conseil / web IA) + méthode (4 étapes) + valeurs + aperçu 3D (→ Conception 3D) |
 | **Journal** | `blog.html` ↔ `blog-en.html` (EN : « Insights ») | Retours d'expérience (articles bilingues, flux RSS `feed.xml`/`feed-en.xml`) ; teaser des 5 derniers articles sur l'accueil (le plus récent en premier) ; boutons « Lire sur LinkedIn / Facebook » en fin d'article vers les posts publiés |
-| **Réalisations** | `realisations.html` ↔ `portfolio.html` | Fiches clients avec **aperçus animés** (`record-realisation.mjs`), en ordre chronologique : PRV Concept puis Le Cerf Thym |
+| **Réalisations** | `realisations.html` ↔ `portfolio.html` | **Trois sites, trois rôles** — Le Cerf Thym (le client, avec son avis 5/5 sourcé), PRV Concept (le laboratoire, avec un bloc de transparence : le fondateur de NSY préside l'association) et NSY lui-même (la démonstration, code public). Vidéos de parcours intégrées (YouTube), puis un bloc **« Ordres de grandeur »** : des fourchettes indicatives en € HT **par type de projet**, jamais par client |
 | **À propos** | `a-propos.html` ↔ `about.html` | Profil Cédric Barme (bouton « Me suivre sur LinkedIn »), signaux, parcours, **récit « Pourquoi NSY existe »**, principes |
 | **Pourquoi NSY ?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | La philosophie : interlocuteur unique, modèle « en prise directe », partenariat ESN (grands comptes), 3 clients max — FAQPage JSON-LD, liée depuis le footer et À propos |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
@@ -44,7 +44,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 
 Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
 
-Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (3 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end » — vignettes animées), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (parcours **création ou refonte**), pages légales — **60 pages** au total.
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (4 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end », « Des téraoctets au mégaoctet » — vignettes animées), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (parcours **création ou refonte**), pages légales — **64 pages** au total.
 
 ## Bilingue (FR / EN)
 
@@ -74,7 +74,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 60 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 64 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -134,7 +134,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 ### Assistant IA « Ansley » — LLM gratuit + RAG, repli local
 
-L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 60 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
+L'assistant a une identité : **Ansley, l'architecte IA de NSY** — mascotte animée (FAB portrait 132×168 avec halo + bulle d'accueil, avatar animé dans l'en-tête du panneau, boucles boomerang générées par IA). Panneau glassmorphic, présent sur **les 64 pages** (partial `partials/chatbot.{fr,en}.html`). Architecture à deux étages, **100 % gratuite** :
 
 **Étage 1 — IA générative (`chat.php`)** : le widget interroge un proxy PHP qui
 appelle un LLM **Mistral** (palier gratuit « Experiment », société française,
@@ -191,7 +191,8 @@ Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire c
 
 - **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
 - **Vidéo hero** (`nsy-hero.mp4`) : générée via IA (Higgsfield, image→vidéo à partir du logo NSY), carrée **960×960**, **sans piste audio**, recompressée à **0,60 Mo**. **Boucle en fondu vers transparent** : l'opacité est animée selon `currentTime` (`js/app.js`) — fade-in au début, fade-out en fin — donc au raccord la vidéo se dissout vers le disque bleu derrière (pas de vidéo à canal alpha). Mise en pause hors-écran comme les autres vidéos.
-- **Portrait animé (À propos)** (`nsy-about.mp4`) : le portrait de Cédric animé — fond tech holographique en mouvement, sujet immobile — généré par IA (Higgsfield, image→vidéo Kling depuis la photo, préalablement upscalée en 4K puis paddée en 16:9). **960×720 (4:3), muet, ~0,32 Mo**, **boucle sans couture** (crossfade fin→début encodé dans le fichier). La carte profil utilise un `<video id="about-video">` (poster = `photo-profil.jpg`) au lieu d'un `<img>` ; exclu du fondu JS de boucle (déjà seamless) mais soumis à la pause hors-écran.
+- **Portrait (À propos)** : une **image fixe** (`photo-profil.jpg`, upscalée en 4K puis redescendue à 1600×1200 — elle sert aussi d'image au JSON-LD). Un fond animé généré par IA l'a remplacée un mois durant l'été 2026 ; il a été **retiré** — une vidéo en boucle derrière un portrait coûte du décodage permanent pour un gain discutable, et le rendu ne convainquait pas. La carte profil est donc un simple `<img>`.
+- **Overlays épinglés en couche GPU** : `.nav`, la bulle d'accueil, le FAB et le panneau du chat portent `will-change: transform`. Sur les pages qui intègrent un lecteur YouTube (Réalisations, Conception 3D), l'iframe est une surface composée par un **autre processus** ; quand elle glissait sous ces overlays au défilement, Chrome recalculait sans cesse la promotion des couches et laissait passer **une image sur trente sans fond peint** — la barre et l'assistant semblaient clignoter ensemble. Diagnostic établi image par image sur une vidéo de l'écran (les captures automatisées, elles, ne reproduisent pas l'artefact).
 - **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
 - **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible. Le supersampling ×2 (netteté) ne s'applique qu'aux écrans DPR 1 et ne coûte donc rien sur mobile/Retina.
 - **Animations JS** (parallaxe hero, compteurs, jauge de lecture) : boucles `requestAnimationFrame` qui **s'arrêtent d'elles-mêmes au repos** (lerp convergé, compteur fini) — aucune boucle infinie ; tout est coupé par `prefers-reduced-motion`.
@@ -245,7 +246,7 @@ nsy-website/
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
 │   └── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 60 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 64 pages (npm run partials)
 │   ├── jsonld-entities.mjs   # entités JSON-LD partagées + FAQPage depuis le HTML (build)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
@@ -270,7 +271,6 @@ nsy-website/
 │   ├── finance-assurance.{png,mp4}      # Service 01
 │   ├── web-ia.{png,mp4}                 # Service 02
 │   ├── nsy-hero.mp4                     # Vidéo hero (monogramme NSY, grand cercle)
-│   ├── nsy-about.mp4                    # Portrait animé À propos (fond tech, boucle seamless)
 │   ├── nsy-og.jpg                       # Bannière Open Graph 1200×630
 │   ├── prv-concept.jpg                  # Vignette Réalisations (npm run capture:realisations)
 │   └── renault-wireframe.glb            # Modèle 3D wireframe arêtes vives (575 Ko)
@@ -380,8 +380,8 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 60 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 60 pages
+- **Sitemap** : 64 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 64 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Conformité des données structurées** (3 alertes Search Console résolues en août 2026) : tout champ **requis** d'un type à résultat enrichi contient le **nœud typé inliné** (avec le même `@id`) — `ProfilePage.mainEntity`, mais aussi `author` et `publisher` des articles, les dates (`dateModified`, `datePublished`) sont en **ISO 8601 complet avec fuseau**, et chaque `<video>` porte un `poster=` avec son bloc `video:video` sous **chaque** page qui l'affiche. Détail des causes, correctifs et méthode d'audit : skill `seo-geo-llmo` §5
