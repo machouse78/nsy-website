@@ -257,6 +257,8 @@
 
   <table id="t-gscsynth"><thead><tr><th id="th-gscsynth">Search Console</th><th class="num">Valeur</th></tr></thead><tbody></tbody></table>
 
+  <table id="t-gscpays"><thead><tr><th>Pays <span class="mono">— recherches Google, 28 jours</span></th><th class="num">Clics</th><th class="num">Impressions</th><th class="num">Position</th></tr></thead><tbody></tbody></table>
+
   <div class="chart-head"><h2 id="h-gscsm">URLs soumises par sitemap</h2></div>
   <div class="chart"><div class="legend" id="gscsm-legend"></div><svg id="c-gscsm"></svg></div>
   <table id="t-gscsm"><thead><tr><th>Sitemap</th><th class="num">Soumises</th><th class="num">Erreurs</th><th class="num">Avert.</th><th>Dernier téléchargement</th></tr></thead><tbody></tbody></table>
@@ -1739,6 +1741,21 @@
           ].map(([k, v]) => `<tr><td>${k}</td><td class="num">${v}</td></tr>`).join('');
         }
 
+        /* Pays — côté Search Console UNIQUEMENT, et c'est un choix.
+           Le relevé équivalent tiré des LOGS est collecté mais PAS affiché :
+           il donnait 60 % de Suisse pour un site dont Google dit que 82 % des
+           clics viennent de France. L'algorithme a pourtant été vérifié (six
+           IP témoins, six bons pays, IPv6 comprise), le champ lu est le bon
+           (format de ligne contrôlé), et les 416 adresses se répartissent sur
+           178 réseaux /16 — ce n'est donc pas un parc de proxys. La
+           contradiction n'est pas expliquée : on ne publie pas un chiffre
+           qu'on ne comprend pas. */
+        const pays = G.pays || [];
+        document.querySelector('#t-gscpays tbody').innerHTML = pays.length
+          ? pays.slice(0, 12).map((x) => `<tr><td>${x.code}</td><td class="num">${fmt(x.clics)}</td>`
+              + `<td class="num">${fmt(x.impressions)}</td><td class="num">${nb1(x.position)}</td></tr>`).join('')
+          : '<tr><td colspan="4" class="mono">aucun pays relevé sur la période</td></tr>';
+
         // Un état se lit à la DERNIÈRE valeur de la période, pas en cumul.
         const bkLast = (fn) => bk.keys.map((k) => {
           const jours = bk.map.get(k).filter((d) => D[d]?.gsc);
@@ -1757,6 +1774,7 @@
         $('gsc-note').textContent = "Search Console non relevée sur cette période — la clé du compte de service manque, ou la collecte n'a pas encore tourné depuis son ajout.";
         document.querySelector('#t-gscsm tbody').innerHTML = '<tr><td colspan="5" class="mono">—</td></tr>';
         document.querySelector('#t-gscsynth tbody').innerHTML = '<tr><td colspan="2" class="mono">—</td></tr>';
+        document.querySelector('#t-gscpays tbody').innerHTML = '<tr><td colspan="4" class="mono">—</td></tr>';
       }
 
       const tbl = (sel2, rows, vide) => {

@@ -121,7 +121,7 @@ $BOT_RE  = '/bot|crawl|spider|slurp|scanner|scan|python|curl|wget|go-http|aiohtt
 $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/i';
 
 $stats = [
-    'pageviews' => 0, 'uniques' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
+    'pageviews' => 0, 'uniques' => [], 'ips' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
     'ia_familles' => ['conversation' => 0, 'recherche' => 0, 'indexation' => 0],
     'ia_conv_pages' => [], // page lue lors d'une récupération DÉCLENCHÉE par une question
@@ -272,6 +272,9 @@ foreach ($files as $f) {
         // humain (approximation) : page servie ($clean / $isPage : voir périmètres)
         if ($isPage && in_array($status, ['200', '304'], true) && $method === 'GET') {
             $vh = substr(md5($ip . '|' . $ua), 0, 12); // ≠ $h (handle de fichier de la boucle !)
+            /* IP retenue le temps du calcul du PAYS, puis oubliee : elle ne sort
+               jamais de ce script et n'entre pas dans l'historique. */
+            if ($peri === $PERI_DEFAUT && count($stats['ips']) < 60000) { $stats['ips'][$ip] = true; }
             $stats['peri'][$peri]['pages_vues']++;
             $stats['peri'][$peri]['visiteurs'][$vh] = 1;
             $stats['peri'][$peri]['top'][$clean] = ($stats['peri'][$peri]['top'][$clean] ?? 0) + 1;
@@ -451,6 +454,93 @@ foreach ($stats['peri'] as $nom => $p) {
     ];
 }
 arsort($stats['chat']['pages']);
+
+// ── 1 ter. Pays des visiteurs — résolu SUR LE SERVEUR, sans rien envoyer ─────
+// Demande de l'owner (29/08/2026) : « d'où viennent les visiteurs ». La Search
+// Console ne répond que pour ceux venus d'une recherche Google — 335 clics sur
+// 433 visiteurs par jour. Les logs, eux, voient tout le monde. On résout donc
+// ici, à partir de la base DB-IP Country Lite (CC BY 4.0), que le SERVEUR
+// télécharge et relit lui-même : aucune IP n'est envoyée à un tiers, et rien
+// ne dépend d'un traitement sur le poste de quelqu'un.
+//
+// Choix de méthode : PAS d'index binaire. Le construire demanderait de traiter
+// 400 000 plages dans une fenêtre HTTP de 60 s — fragile. On fait l'inverse :
+// on rassemble les IP DISTINCTES du jour (quelques centaines), on les trie, et
+// on balaie la base UNE fois en avançant en parallèle. Un seul passage, mémoire
+// constante, et rien à maintenir entre deux collectes.
+//
+// ⚠️ Les IP ne sortent pas de ce script : elles servent au calcul, puis
+// $stats['ips'] est vidé. Seul un compteur par pays entre dans l'historique.
+$pays = null;
+$geoDir = __DIR__ . '/_secret/geoip';
+$geoCsv = "$geoDir/dbip-country-lite.csv.gz";
+if ($stats['ips']) {
+    if (!is_dir($geoDir)) @mkdir($geoDir, 0700, true);
+    // Rafraîchissement mensuel : DB-IP publie un fichier par mois, sans clé.
+    $ageOk = is_file($geoCsv) && (time() - (int) @filemtime($geoCsv)) < 32 * 86400;
+    if (!$ageOk) {
+        foreach ([date('Y-m'), date('Y-m', strtotime('-1 month'))] as $mois) {
+            $url = "https://download.db-ip.com/free/dbip-country-lite-$mois.csv.gz";
+            $tmp = "$geoDir/.tmp.gz";
+            $fp = @fopen($tmp, 'wb');
+            if (!$fp) { break; }
+            $ch = curl_init($url);
+            curl_setopt_array($ch, [CURLOPT_FILE => $fp, CURLOPT_FOLLOWLOCATION => true,
+                                    CURLOPT_TIMEOUT => 120, CURLOPT_FAILONERROR => true]);
+            $ok = curl_exec($ch);
+            $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch); fclose($fp);
+            if ($ok && $code === 200 && filesize($tmp) > 1000000) { @rename($tmp, $geoCsv); break; }
+            @unlink($tmp);
+        }
+    }
+
+    if (is_file($geoCsv) && ($gz = @gzopen($geoCsv, 'rb'))) {
+        // IPv4 d'un côté, IPv6 de l'autre — deux espaces d'adresses, deux tris.
+        $v4 = []; $v6 = [];
+        foreach (array_keys($stats['ips']) as $ipx) {
+            $b = @inet_pton($ipx);
+            if ($b === false) { continue; }
+            if (strlen($b) === 4) { $v4[$ipx] = $b; } else { $v6[$ipx] = $b; }
+        }
+        asort($v4, SORT_STRING); asort($v6, SORT_STRING);   // ordre binaire = ordre numérique
+        $l4 = array_values($v4); $k4 = array_keys($v4); $i4 = 0; $n4 = count($l4);
+        $l6 = array_values($v6); $k6 = array_keys($v6); $i6 = 0; $n6 = count($l6);
+        $compte = [];
+        while (($ligne = gzgets($gz)) !== false) {
+            if ($i4 >= $n4 && $i6 >= $n6) { break; }        // toutes les IP placées
+            $c = explode(',', rtrim($ligne, "\r\n"));
+            if (count($c) < 3) { continue; }
+            $deb = @inet_pton($c[0]); $fin = @inet_pton($c[1]);
+            if ($deb === false || $fin === false) { continue; }
+            if (strlen($deb) === 4) {
+                while ($i4 < $n4 && $l4[$i4] < $deb) { $i4++; }          // IP avant la plage : sans pays
+                while ($i4 < $n4 && $l4[$i4] <= $fin) { $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $i4++; }
+            } else {
+                while ($i6 < $n6 && $l6[$i6] < $deb) { $i6++; }
+                while ($i6 < $n6 && $l6[$i6] <= $fin) { $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $i6++; }
+            }
+        }
+        gzclose($gz);
+        arsort($compte);
+        /* Combien de RESEAUX distincts derriere le pays dominant ? 248 adresses
+           reparties sur deux /16 sont un parc de proxys ; reparties sur 200,
+           ce sont des visiteurs. La question se tranche sans exposer une seule
+           adresse. */
+        $dom = array_key_first($compte);
+        $reseaux = [];
+        foreach (array_keys($stats['ips']) as $ipx) {
+            $b = @inet_pton($ipx);
+            if ($b === false || strlen($b) !== 4) { continue; }
+            $reseaux[substr($ipx, 0, strrpos($ipx, '.') === false ? 0 : strpos($ipx, '.', strpos($ipx, '.') + 1))] = true;
+        }
+        $pays = ['source' => 'logs', 'base' => date('Y-m', (int) @filemtime($geoCsv)),
+                 'resolus' => array_sum($compte), 'total' => count($stats['ips']),
+                 'reseaux_16' => count($reseaux), 'dominant' => $dom,
+                 'compte' => $compte];
+    }
+}
+$stats['ips'] = [];   // les IP ne vont pas plus loin
 
 $day = [
     'visiteurs'   => count($stats['uniques']),
@@ -1075,6 +1165,17 @@ if (is_readable($gscCle)) {
                                      'ctr' => round((float) $d['ctr'], 5), 'position' => round((float) $d['position'], 2)];
             }
 
+            /* Pays, côté Search Console : une autre question que celle des logs
+               — « dans quels pays Google me montre-t-il », et non « d'où
+               viennent mes visiteurs ». Les deux se complètent, aucune ne
+               remplace l'autre. */
+            $pc = $gscAppel($u, $jeton, $req(date('Y-m-d', strtotime('-28 days')), date('Y-m-d'), ['country']));
+            $gsc['pays'] = [];
+            foreach (($pc['rows'] ?? []) as $x) {
+                $gsc['pays'][] = ['code' => strtoupper((string) $x['keys'][0]),
+                                  'clics' => (int) $x['clicks'], 'impressions' => (int) $x['impressions'],
+                                  'position' => round((float) $x['position'], 2)];
+            }
         }
     }
 }
@@ -1098,6 +1199,7 @@ if (($day['hits'] ?? 0) === 0) {
     exit;
 }
 $extra = ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
+if ($pays !== null) $extra['pays'] = $pays;
 if ($avis) $extra['avis'] = $avis;
 if ($favicons !== null) $extra['favicons'] = $favicons;
 // L'écriture REMPLACE l'entrée du jour : sans ce report, relancer une date déjà
