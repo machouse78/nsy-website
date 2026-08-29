@@ -513,7 +513,12 @@ if ($stats['ips']) {
             if ($i4 >= $n4 && $i6 >= $n6) { break; }        // toutes les IP placées
             /* Colonnes DB-IP City : debut, fin, continent, PAYS, region,
                ville, latitude, longitude. */
-            $c = str_getcsv(rtrim($ligne, "\r\n"));
+            /* $escape EXPLICITE — vécu le 29/08/2026 : sans lui, PHP 8.4 émet
+               un « Deprecated » PAR LIGNE LUE, soit ~8 millions d'avertissements
+               par collecte dans le journal d'erreurs. Infomaniak a bloqué LES
+               DEUX SITES pour « nombre trop important d'erreurs ». La valeur
+               '\\' reproduit le comportement historique à l'identique. */
+            $c = str_getcsv(rtrim($ligne, "\r\n"), ',', '"', '\\');
             if (count($c) < 8) { continue; }
             $deb = @inet_pton($c[0]); $fin = @inet_pton($c[1]);
             if ($deb === false || $fin === false) { continue; }
@@ -625,7 +630,7 @@ if ($stats['ips']) {
             $i4 = 0; $i6 = 0; $asNoms = []; $asParIp = [];
             while (($ligne = gzgets($gz)) !== false) {
                 if ($i4 >= $n4 && $i6 >= $n6) { break; }
-                $c = str_getcsv(rtrim($ligne, "\r\n"));
+                $c = str_getcsv(rtrim($ligne, "\r\n"), ',', '"', '\\');
                 if (count($c) < 4) { continue; }
                 $deb = @inet_pton($c[0]); $fin = @inet_pton($c[1]);
                 if ($deb === false || $fin === false) { continue; }
