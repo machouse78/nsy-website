@@ -249,7 +249,7 @@
   </div>
   <div class="chart"><div class="legend" id="legend"></div><svg id="c-split"></svg></div>
 
-  <div class="sec-h" id="r-google"><h2>Provenance Google</h2><span>référencement naturel : ce que Google explore, et ce qu'il rapporte</span></div>
+  <div class="sec-h" id="r-google"><h2>Moteurs de recherche</h2><span>référencement naturel : ce que les moteurs explorent, et ce qu'ils rapportent</span></div>
   <div class="grid" id="goo-cards"></div>
   <div class="note" id="goo-note"></div>
 
@@ -269,7 +269,7 @@
   <div class="chart"><div class="legend" id="gscsm-legend"></div><svg id="c-gscsm"></svg></div>
   <table id="t-gscsm"><thead><tr><th>Sitemap</th><th class="num">Soumises</th><th class="num">Erreurs</th><th class="num">Avert.</th><th>Dernier téléchargement</th></tr></thead><tbody></tbody></table>
 
-  <div class="chart-head"><h2 id="h-goo">Visites venues de Google</h2></div>
+  <div class="chart-head"><h2 id="h-goo">Visites venues des moteurs</h2></div>
   <div class="chart"><div class="legend" id="goo-legend"></div><svg id="c-goo"></svg></div>
 
   <div class="chart-head"><h2 id="h-goobot">Passages des robots de moteurs — par moteur</h2></div>
@@ -472,6 +472,37 @@
   const $ = (id) => document.getElementById(id);
   const showErr = (m) => { const e = $('err'); e.textContent = m; e.style.display = 'block'; setTimeout(() => { e.style.display = 'none'; }, 5000); };
   const fmt = (n) => (n ?? 0).toLocaleString('fr-FR');
+  /* Nom du pays en toutes lettres. Deux systemes de codes cohabitent : les
+     LOGS donnent de l'alpha-2 (CH), la Search Console de l'alpha-3 (CHE).
+     Intl.DisplayNames ne connait que l'alpha-2 — verifie, il rejette CHE —
+     d'ou cette table de passage. Elle couvre 160 pays ; un code absent
+     s'affiche tel quel plutot que de disparaitre. */
+  const ISO3 = {
+ AFG:'AF',ALB:'AL',DZA:'DZ',AND:'AD',AGO:'AO',ARG:'AR',ARM:'AM',AUS:'AU',AUT:'AT',AZE:'AZ',
+ BHR:'BH',BGD:'BD',BLR:'BY',BEL:'BE',BEN:'BJ',BOL:'BO',BIH:'BA',BWA:'BW',BRA:'BR',BGR:'BG',
+ BFA:'BF',KHM:'KH',CMR:'CM',CAN:'CA',CHL:'CL',CHN:'CN',COL:'CO',COD:'CD',COG:'CG',CRI:'CR',
+ CIV:'CI',HRV:'HR',CUB:'CU',CYP:'CY',CZE:'CZ',DNK:'DK',DOM:'DO',ECU:'EC',EGY:'EG',SLV:'SV',
+ EST:'EE',ETH:'ET',FIN:'FI',FRA:'FR',GAB:'GA',GEO:'GE',DEU:'DE',GHA:'GH',GRC:'GR',GTM:'GT',
+ GIN:'GN',HTI:'HT',HND:'HN',HKG:'HK',HUN:'HU',ISL:'IS',IND:'IN',IDN:'ID',IRN:'IR',IRQ:'IQ',
+ IRL:'IE',ISR:'IL',ITA:'IT',JAM:'JM',JPN:'JP',JOR:'JO',KAZ:'KZ',KEN:'KE',KWT:'KW',LVA:'LV',
+ LBN:'LB',LBY:'LY',LIE:'LI',LTU:'LT',LUX:'LU',MDG:'MG',MYS:'MY',MLI:'ML',MLT:'MT',MTQ:'MQ',
+ MUS:'MU',MEX:'MX',MDA:'MD',MCO:'MC',MNG:'MN',MNE:'ME',MAR:'MA',MOZ:'MZ',MMR:'MM',NLD:'NL',
+ NCL:'NC',NZL:'NZ',NER:'NE',NGA:'NG',NOR:'NO',OMN:'OM',PAK:'PK',PAN:'PA',PRY:'PY',PER:'PE',
+ PHL:'PH',POL:'PL',PRT:'PT',PRI:'PR',QAT:'QA',REU:'RE',ROU:'RO',RUS:'RU',RWA:'RW',SAU:'SA',
+ SEN:'SN',SRB:'RS',SGP:'SG',SVK:'SK',SVN:'SI',ZAF:'ZA',KOR:'KR',ESP:'ES',LKA:'LK',SWE:'SE',
+ CHE:'CH',SYR:'SY',TWN:'TW',TZA:'TZ',THA:'TH',TGO:'TG',TUN:'TN',TUR:'TR',UKR:'UA',ARE:'AE',
+ GBR:'GB',USA:'US',URY:'UY',UZB:'UZ',VEN:'VE',VNM:'VN',YEM:'YE',ZMB:'ZM',ZWE:'ZW',PSE:'PS',
+ GLP:'GP',GUF:'GF',PYF:'PF',SUR:'SR',BHS:'BS',BRB:'BB',TTO:'TT',NPL:'NP',LAO:'LA',BRN:'BN',
+ MKD:'MK',ALA:'AX',GRL:'GL',FRO:'FO',MDV:'MV',CPV:'CV',SYC:'SC',MWI:'MW',UGA:'UG',SDN:'SD'};
+  const _regions = (() => { try { return new Intl.DisplayNames(['fr'], { type: 'region' }); } catch (e) { return null; } })();
+  const nomPays = (code) => {
+    if (!code) return '—';
+    const c = String(code).toUpperCase();
+    const a2 = c.length === 3 ? (ISO3[c] || null) : c;
+    if (!a2 || !_regions) return c;
+    try { const n = _regions.of(a2); return n && n !== a2 ? n : c; } catch (e) { return c; }
+  };
+
   const nb1 = (x) => x == null || !isFinite(x) ? '—' : x.toFixed(1).replace('.', ',');
   const mmss = (x) => x == null || !isFinite(x) ? '—' : `${Math.floor(x / 60)} min ${String(Math.round(x % 60)).padStart(2, '0')} s`;
   const D = hist.days;
@@ -496,7 +527,7 @@
     // Les sous-rubriques du site sont des CATÉGORIES, pas des ancres : elles
     // filtrent la page comme les autres. C'est ce qui permet de n'avoir qu'un
     // seul menu (owner, 21/08/2026).
-    l.push(['google', 'Provenance Google']);
+    l.push(['google', 'Moteurs de recherche']);
     l.push(['ia', 'Provenance IA']);
     if (RUB_DISPO.agent()) l.push(['agent', 'Agent conversationnel']);
     l.push(['contenu', 'Contenu']);
@@ -1670,7 +1701,7 @@
       ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
       $('goo-note').textContent = "Google ne transmet plus la requête tapée par l'internaute : ces chiffres disent quelles PAGES se positionnent, jamais sur quels MOTS. La position moyenne et les impressions viennent, elles, de la Search Console — relevées chaque nuit, bloc ci-dessus.";
 
-      $('h-goo').textContent = `Visites venues de Google — par ${bk.mode}`;
+      $('h-goo').textContent = `Visites venues des moteurs — par ${bk.mode}`;
       const gSeries = [{ label: 'Google', color: COLORS[0], pts: bkSum(bk, (v) => vRef(v, 'google')), filt: ['ref', 'google'] },
                        { label: 'Bing', color: COLORS[1], pts: bkSum(bk, (v) => vRef(v, 'bing')) }];
       $('goo-legend').innerHTML = gSeries.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
@@ -1697,7 +1728,7 @@
           const c = P.compte || {}, c2 = P.compte_2p || {};
           const tot = Object.values(c).reduce((a, b) => a + b, 0) || 1;
           tb.innerHTML = Object.entries(c).slice(0, 15).map(([k, n]) =>
-            `<tr><td>${k}</td><td class="num">${fmt(n)}</td>`
+            `<tr><td>${nomPays(k)} <span class="mono">${k}</span></td><td class="num">${fmt(n)}</td>`
             + `<td class="num">${Math.round(n / tot * 100)} %</td>`
             + `<td class="num">${fmt(c2[k] || 0)}</td></tr>`).join('');
           $('payslogs-note').textContent = `Relevé du ${jP}, base DB-IP ${P.base}. `
@@ -1810,7 +1841,7 @@
            qu'on ne comprend pas. */
         const pays = G.pays || [];
         document.querySelector('#t-gscpays tbody').innerHTML = pays.length
-          ? pays.slice(0, 12).map((x) => `<tr><td>${x.code}</td><td class="num">${fmt(x.clics)}</td>`
+          ? pays.slice(0, 12).map((x) => `<tr><td>${nomPays(x.code)} <span class="mono">${x.code}</span></td><td class="num">${fmt(x.clics)}</td>`
               + `<td class="num">${fmt(x.impressions)}</td><td class="num">${nb1(x.position)}</td></tr>`).join('')
           : '<tr><td colspan="4" class="mono">aucun pays relevé sur la période</td></tr>';
 

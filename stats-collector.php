@@ -1166,7 +1166,14 @@ $collecteEvts = static function (array &$e) use ($ajouteEvt, $fb, $youtube, $ghT
 // qui ferait croire à une catastrophe inexistante.
 $gsc = null;
 $gscCle = __DIR__ . '/_secret/gsc-service-account.json';
-if (is_readable($gscCle)) {
+/* ⚠️ JAMAIS en rattrapage. Ce bloc est un ETAT D'AUJOURD'HUI — nombre d'URL
+   soumises, performances des 28 derniers jours. L'ecrire sur une date passee
+   inscrirait « 5 665 URLs soumises » au 21 juillet, ou il y en avait ZERO :
+   ce ne serait pas un rattrapage, ce serait une invention. Meme raison que
+   pour YouTube plus haut, et l'historisation reporte de toute facon le bloc
+   deja present sur la date. */
+$gscRecent = $target >= date('Y-m-d', strtotime('-2 days'));
+if ($gscRecent && is_readable($gscCle)) {
     $gscJeton = static function (string $chemin): ?string {
         $cle = json_decode((string) @file_get_contents($chemin), true);
         if (!is_array($cle) || empty($cle['client_email']) || empty($cle['private_key'])) { return null; }
