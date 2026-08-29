@@ -999,16 +999,43 @@ if (is_readable($gscCle)) {
 
     $jeton = $gscJeton($gscCle);
     if ($jeton !== null) {
-        // La propriété : celle déclarée en config, sinon la première visible.
+        // Toutes les propriétés VISIBLES par ce compte de service. S'il n'en voit
+        // qu'une, on est dans le cas courant ; s'il en voit plusieurs (le compte
+        // a été ajouté aux autres sites), on les relève TOUTES et le dashboard
+        // les met côte à côte — c'est la comparaison demandée par l'owner le
+        // 29/08/2026, et elle ne coûte qu'un appel de plus par propriété.
+        $liste = $gscAppel('https://www.googleapis.com/webmasters/v3/sites', $jeton);
+        $toutes = [];
+        foreach (($liste['siteEntry'] ?? []) as $e) {
+            if (!empty($e['siteUrl'])) { $toutes[] = (string) $e['siteUrl']; }
+        }
+        // La propriété PRINCIPALE : celle déclarée en config, sinon celle qui
+        // porte le domaine de ce site, sinon la première de DOMAINE, sinon la
+        // première tout court. Une propriété de domaine couvre http+https et
+        // les sous-domaines : à préférer quand elle existe.
+        /* ⚠️ L'ordre de préférence compte, et il n'est pas intuitif : une
+           propriété de PRÉFIXE portant un sous-chemin (…/boutique/) a le MÊME
+           hôte que la propriété de DOMAINE. Chercher d'abord par l'hôte a donc
+           élu la boutique et affiché ses 42 clics à la place des 335 du site
+           entier (vu à l'écran le 29/08/2026 avant correction).
+           On prend donc, dans l'ordre : la config, puis le DOMAINE qui
+           correspond, puis n'importe quel domaine, puis le préfixe le plus
+           court — le plus englobant. */
         $site = (string) ($cfg['gsc_site'] ?? '');
+        $moi = preg_replace('/^www\./', '', strtolower((string) ($_SERVER['HTTP_HOST'] ?? '')));
         if ($site === '') {
-            $l = $gscAppel('https://www.googleapis.com/webmasters/v3/sites', $jeton);
-            foreach (($l['siteEntry'] ?? []) as $e) {
-                // une propriété de DOMAINE couvre http+https et les sous-domaines :
-                // c'est elle qu'on veut si elle existe
-                if (str_starts_with((string) $e['siteUrl'], 'sc-domain:')) { $site = $e['siteUrl']; break; }
-                if ($site === '') { $site = (string) $e['siteUrl']; }
+            foreach ($toutes as $u_s) {
+                if (str_starts_with($u_s, 'sc-domain:')
+                    && $moi !== '' && strtolower(substr($u_s, 10)) === $moi) { $site = $u_s; break; }
             }
+        }
+        if ($site === '') {
+            foreach ($toutes as $u_s) { if (str_starts_with($u_s, 'sc-domain:')) { $site = $u_s; break; } }
+        }
+        if ($site === '' && $toutes) {
+            $courts = $toutes;
+            usort($courts, static fn($a, $b) => strlen($a) <=> strlen($b));
+            $site = $courts[0];
         }
         if ($site !== '') {
             $enc = rawurlencode($site);
@@ -1047,6 +1074,7 @@ if (is_readable($gscCle)) {
                                      'impressions' => (int) $d['impressions'],
                                      'ctr' => round((float) $d['ctr'], 5), 'position' => round((float) $d['position'], 2)];
             }
+
         }
     }
 }

@@ -255,6 +255,8 @@
   <div class="grid" id="gsc-cards"></div>
   <div class="note" id="gsc-note"></div>
 
+  <table id="t-gscsynth"><thead><tr><th id="th-gscsynth">Search Console</th><th class="num">Valeur</th></tr></thead><tbody></tbody></table>
+
   <div class="chart-head"><h2 id="h-gscsm">URLs soumises par sitemap</h2></div>
   <div class="chart"><div class="legend" id="gscsm-legend"></div><svg id="c-gscsm"></svg></div>
   <table id="t-gscsm"><thead><tr><th>Sitemap</th><th class="num">Soumises</th><th class="num">Erreurs</th><th class="num">Avert.</th><th>Dernier téléchargement</th></tr></thead><tbody></tbody></table>
@@ -1716,6 +1718,27 @@
               + `<td class="mono">${(x.telecharge || '').slice(0, 10) || '—'}</td></tr>`).join('')
           : '<tr><td colspan="5" class="mono">aucun sitemap déclaré</td></tr>';
 
+        /* Synthèse du site, en tableau : les mêmes chiffres que les cartes,
+           sous une forme qui se lit d'un coup et se copie dans un compte
+           rendu. Un tableau par site, sur son propre dashboard — pas de
+           comparaison entre propriétés, chacune a le sien. */
+        {
+          const smTot = (G.sitemaps || []).reduce((a, x) => a + (x.soumises || 0), 0);
+          const detail = (G.sitemaps || []).map((x) => fmt(x.soumises)).join(' + ');
+          const nomSite = (G.site || '').replace(/^sc-domain:/, '').replace(/^https?:\/\//, '').replace(/\/$/, '');
+          $('th-gscsynth').textContent = nomSite || 'Search Console';
+          document.querySelector('#t-gscsynth tbody').innerHTML = [
+            ['Clics — 28 jours', fmt(p28.clics)],
+            ['Impressions — 28 jours', fmt(p28.impressions)],
+            ['Taux de clic', p28.ctr != null ? (p28.ctr * 100).toFixed(2).replace('.', ',') + ' %' : '—'],
+            ['Position moyenne', p28.position != null ? nb1(p28.position) : '—'],
+            ['URLs soumises par les sitemaps',
+             (G.sitemaps || []).length > 1 ? `${fmt(smTot)} <span class="mono">(${detail})</span>` : fmt(smTot)],
+            ['Dernier jour complet', pj.date
+              ? `${pj.date} <span class="mono">(${fmt(pj.clics)} clic${pj.clics > 1 ? 's' : ''}, ${fmt(pj.impressions)} impressions)</span>` : '—'],
+          ].map(([k, v]) => `<tr><td>${k}</td><td class="num">${v}</td></tr>`).join('');
+        }
+
         // Un état se lit à la DERNIÈRE valeur de la période, pas en cumul.
         const bkLast = (fn) => bk.keys.map((k) => {
           const jours = bk.map.get(k).filter((d) => D[d]?.gsc);
@@ -1733,6 +1756,7 @@
         $('gsc-cards').innerHTML = '';
         $('gsc-note').textContent = "Search Console non relevée sur cette période — la clé du compte de service manque, ou la collecte n'a pas encore tourné depuis son ajout.";
         document.querySelector('#t-gscsm tbody').innerHTML = '<tr><td colspan="5" class="mono">—</td></tr>';
+        document.querySelector('#t-gscsynth tbody').innerHTML = '<tr><td colspan="2" class="mono">—</td></tr>';
       }
 
       const tbl = (sel2, rows, vide) => {
