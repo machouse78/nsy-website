@@ -475,24 +475,24 @@ arsort($stats['chat']['pages']);
 // $stats['ips'] est vidé. Seul un compteur par pays entre dans l'historique.
 $pays = null;
 $geoDir = __DIR__ . '/_secret/geoip';
-$geoCsv = "$geoDir/dbip-country-lite.csv.gz";
+$geoCsv = "$geoDir/dbip-city-lite.csv.gz";
 if ($stats['ips']) {
     if (!is_dir($geoDir)) @mkdir($geoDir, 0700, true);
     // Rafraîchissement mensuel : DB-IP publie un fichier par mois, sans clé.
     $ageOk = is_file($geoCsv) && (time() - (int) @filemtime($geoCsv)) < 32 * 86400;
     if (!$ageOk) {
         foreach ([date('Y-m'), date('Y-m', strtotime('-1 month'))] as $mois) {
-            $url = "https://download.db-ip.com/free/dbip-country-lite-$mois.csv.gz";
+            $url = "https://download.db-ip.com/free/dbip-city-lite-$mois.csv.gz";
             $tmp = "$geoDir/.tmp.gz";
             $fp = @fopen($tmp, 'wb');
             if (!$fp) { break; }
             $ch = curl_init($url);
             curl_setopt_array($ch, [CURLOPT_FILE => $fp, CURLOPT_FOLLOWLOCATION => true,
-                                    CURLOPT_TIMEOUT => 120, CURLOPT_FAILONERROR => true]);
+                                    CURLOPT_TIMEOUT => 600, CURLOPT_FAILONERROR => true]);
             $ok = curl_exec($ch);
             $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            curl_close($ch); fclose($fp);
-            if ($ok && $code === 200 && filesize($tmp) > 1000000) { @rename($tmp, $geoCsv); break; }
+            fclose($fp);
+            if ($ok && $code === 200 && filesize($tmp) > 10000000) { @rename($tmp, $geoCsv); break; }
             @unlink($tmp);
         }
     }
@@ -508,22 +508,27 @@ if ($stats['ips']) {
         asort($v4, SORT_STRING); asort($v6, SORT_STRING);   // ordre binaire = ordre numérique
         $l4 = array_values($v4); $k4 = array_keys($v4); $i4 = 0; $n4 = count($l4);
         $l6 = array_values($v6); $k6 = array_keys($v6); $i6 = 0; $n6 = count($l6);
-        $compte = []; $pays_par_ip = [];
+        $compte = []; $pays_par_ip = []; $lieu_par_ip = [];
         while (($ligne = gzgets($gz)) !== false) {
             if ($i4 >= $n4 && $i6 >= $n6) { break; }        // toutes les IP placées
-            $c = explode(',', rtrim($ligne, "\r\n"));
-            if (count($c) < 3) { continue; }
+            /* Colonnes DB-IP City : debut, fin, continent, PAYS, region,
+               ville, latitude, longitude. */
+            $c = str_getcsv(rtrim($ligne, "\r\n"));
+            if (count($c) < 8) { continue; }
             $deb = @inet_pton($c[0]); $fin = @inet_pton($c[1]);
             if ($deb === false || $fin === false) { continue; }
+            $cc = $c[3]; $lieu = [$c[3], $c[4], $c[5], (float) $c[6], (float) $c[7]];
             if (strlen($deb) === 4) {
                 while ($i4 < $n4 && $l4[$i4] < $deb) { $i4++; }          // IP avant la plage : sans pays
                 while ($i4 < $n4 && $l4[$i4] <= $fin) {
-                    $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $pays_par_ip[$k4[$i4]] = $c[2]; $i4++;
+                    $compte[$cc] = ($compte[$cc] ?? 0) + 1;
+                    $pays_par_ip[$k4[$i4]] = $cc; $lieu_par_ip[$k4[$i4]] = $lieu; $i4++;
                 }
             } else {
                 while ($i6 < $n6 && $l6[$i6] < $deb) { $i6++; }
                 while ($i6 < $n6 && $l6[$i6] <= $fin) {
-                    $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $pays_par_ip[$k6[$i6]] = $c[2]; $i6++;
+                    $compte[$cc] = ($compte[$cc] ?? 0) + 1;
+                    $pays_par_ip[$k6[$i6]] = $cc; $lieu_par_ip[$k6[$i6]] = $lieu; $i6++;
                 }
             }
         }
@@ -551,6 +556,27 @@ if ($stats['ips']) {
            pages : c'est la repartition de l'audience qui lit vraiment, par
            opposition a celle des passages. Les deux sont publiees cote a cote
            — l'ecart entre elles EST l'information. */
+        /* ── Agregation par LIEU ────────────────────────────────────────────
+           On ne conserve JAMAIS une coordonnee par adresse : on regroupe par
+           ville et on compte. « Lille : 3 » entre dans l'historique, l'adresse
+           qui a permis de le calculer n'y entre pas et n'existe plus a la fin
+           de ce script. C'est la difference entre une statistique et un
+           fichier de localisation. */
+        $lieux = [];
+        foreach ($stats['ips'] as $ipx => $nb) {
+            $L = $lieu_par_ip[$ipx] ?? null;
+            if ($L === null || ($L[3] == 0 && $L[4] == 0)) { continue; }   // 0,0 = inconnu
+            $cle = $L[0] . '|' . $L[1] . '|' . $L[2];
+            if (!isset($lieux[$cle])) {
+                $lieux[$cle] = ['cc' => $L[0], 'region' => $L[1], 'ville' => $L[2],
+                                'lat' => round($L[3], 3), 'lon' => round($L[4], 3),
+                                'n' => 0, 'n2p' => 0];
+            }
+            $lieux[$cle]['n']++;
+            if ($nb >= 2) { $lieux[$cle]['n2p']++; }
+        }
+        usort($lieux, static fn($a, $b) => $b['n'] <=> $a['n']);
+
         $compte2p = [];
         foreach ($stats['ips'] as $ipx => $nb) {
             if ($nb < 2) { continue; }
@@ -558,7 +584,7 @@ if ($stats['ips']) {
             if ($cc !== null) { $compte2p[$cc] = ($compte2p[$cc] ?? 0) + 1; }
         }
         arsort($compte2p);
-        $pays = ['source' => 'logs', 'compte_2p' => $compte2p,
+        $pays = ['source' => 'logs', 'compte_2p' => $compte2p, 'lieux' => array_slice($lieux, 0, 400),
                  'base' => date('Y-m', (int) @filemtime($geoCsv)),
                  'resolus' => array_sum($compte), 'total' => count($stats['ips']),
                  'reseaux_16' => count($reseaux), 'dominant' => $dom,

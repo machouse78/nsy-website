@@ -231,6 +231,7 @@
   <table id="t-payslogs"><thead><tr><th>Pays <span class="mono">— tous accès</span></th><th class="num">Adresses</th><th class="num">Part</th><th class="num">Dont ≥ 2 pages</th></tr></thead><tbody></tbody></table>
   <div class="note" id="payslogs-note"></div>
   <div class="chart"><svg id="c-carte-logs" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="note">Molette pour zoomer sous le curseur, glisser pour déplacer, double-clic pour revenir au monde entier. Zoom <span class="mono" id="c-carte-logs-zoom">×1</span> — les lieux proches sont regroupés tant qu'ils se chevauchent à l'écran ; zoomer les sépare. Un point est la position que la base attribue à la PLAGE d'adresses, en général le centre de la ville déclarée — jamais celle d'une personne.</div>
 
   <div class="chart-head">
     <h2 id="h-metric">Métrique</h2>
@@ -267,6 +268,7 @@
   <table id="t-gscpays"><thead><tr><th>Pays <span class="mono">— recherches Google, 28 jours</span></th><th class="num">Clics</th><th class="num">Impressions</th><th class="num">Position</th></tr></thead><tbody></tbody></table>
 
   <div class="chart"><svg id="c-carte-gsc" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg></div>
+  <div class="note">Impressions dans Google, par pays. Zoom <span class="mono" id="c-carte-gsc-zoom">×1</span> — la Search Console ne donne que le PAYS : le point est un centroïde, zoomer ne le précisera pas.</div>
 
   <div class="chart-head"><h2 id="h-gscsm">URLs soumises par sitemap</h2></div>
   <div class="chart"><div class="legend" id="gscsm-legend"></div><svg id="c-gscsm"></svg></div>
@@ -499,51 +501,126 @@
  GLP:'GP',GUF:'GF',PYF:'PF',SUR:'SR',BHS:'BS',BRB:'BB',TTO:'TT',NPL:'NP',LAO:'LA',BRN:'BN',
  MKD:'MK',ALA:'AX',GRL:'GL',FRO:'FO',MDV:'MV',CPV:'CV',SYC:'SC',MWI:'MW',UGA:'UG',SDN:'SD'};
   const _regions = (() => { try { return new Intl.DisplayNames(['fr'], { type: 'region' }); } catch (e) { return null; } })();
-  /* ── Carte du monde ────────────────────────────────────────────────────
-     Un disque par pays, place sur son CENTROIDE — le centre du plus grand
-     morceau du pays, calcule par tools/carte-monde.py depuis Natural Earth.
-     ⚠️ Ce n'est PAS la position du visiteur : la base DB-IP Country ne donne
-     que le pays. Un point sur la France dit « quelque part en France », rien
-     de plus, et la legende le rappelle.
-     Le rayon suit la RACINE du compte, pas le compte : l'oeil compare des
-     SURFACES, et une echelle lineaire ferait paraitre 248 visites cent fois
-     plus grosses que 25 au lieu de dix. */
-  function dessineCarte(svgId, valeurs, couleur, unite) {
+  /* ── Carte du monde, zoomable ──────────────────────────────────────────
+     Un disque par lieu, place par projection equirectangulaire (la meme que
+     tools/carte-monde.py : x = (lon+180)/360*1000).
+
+     Le REGROUPEMENT est fait en coordonnees d'ECRAN, pas de terrain : on pose
+     une grille de ~34 px et on fusionne ce qui tombe dans la meme case. Donc
+     plus on zoome, plus la grille represente une petite surface reelle, et
+     plus les lieux se separent — sans qu'on ait a regler quoi que ce soit par
+     niveau de zoom. Dezoomer regroupe, zoomer detaille.
+
+     Le rayon suit la RACINE du compte : l'oeil compare des surfaces.
+
+     ⚠️ Un point est la position que la base DB-IP attribue a la PLAGE
+     d'adresses, typiquement le centre de la ville declaree — pas celle d'une
+     personne. */
+  const CARTES = {};
+  function projLL(lat, lon) { return [(lon + 180) / 360 * 1000, (90 - lat) / 180 * 500]; }
+
+  /* La carte porte la peau du SITE, pas la sienne. Les tons étaient écrits en
+     dur — les bruns chauds de PRV Concept — et se sont retrouvés tels quels sur
+     le bleu nuit de NSY : deux dashboards aux identités échangées. On les lit
+     donc dans les variables du thème, une seule fois. */
+  let _tonsCarte = null;
+  function tonsCarte() {
+    if (_tonsCarte) return _tonsCarte;
+    const s = getComputedStyle(document.documentElement);
+    const j = (n, repli) => (s.getPropertyValue(n) || '').trim() || repli;
+    _tonsCarte = { mer: j('--bg', '#151310'), terre: j('--line', '#2A2622'),
+                   trait: j('--fg2', '#9A928A'), etiquette: j('--fg1', '#E8E2DA') };
+    return _tonsCarte;
+  }
+
+  function dessineCarte(svgId, points, couleur, unite) {
     const svg = $(svgId);
     if (!svg) return;
     if (typeof CARTE_MONDE === 'undefined') {
-      svg.innerHTML = '<text x="500" y="250" fill="#9A928A" font-size="18" text-anchor="middle" font-family="JetBrains Mono">fond de carte absent</text>';
+      svg.innerHTML = '<text x="500" y="250" fill="${tonsCarte().trait}" font-size="18" text-anchor="middle" font-family="JetBrains Mono">fond de carte absent</text>';
       return;
     }
-    const pts = [];
-    for (const [code, v] of Object.entries(valeurs || {})) {
-      if (!v) continue;
-      const c = String(code).toUpperCase();
-      const a2 = c.length === 3 ? (ISO3[c] || null) : c;
-      const xy = a2 && CENTROIDES[a2];
-      if (xy) pts.push({ a2, v, x: xy[0], y: xy[1] });
+    const st = CARTES[svgId] || (CARTES[svgId] = { k: 1, cx: 500, cy: 250 });
+    st.points = points; st.couleur = couleur; st.unite = unite;
+    if (!st.branche) { brancheCarte(svgId); st.branche = true; }
+    rendCarte(svgId);
+  }
+
+  function rendCarte(svgId) {
+    const svg = $(svgId), st = CARTES[svgId];
+    if (!svg || !st) return;
+    const k = st.k, L = 1000 / k, H = 500 / k;
+    // la vue reste dans la carte, quel que soit le glisser
+    st.cx = Math.min(1000 - L / 2, Math.max(L / 2, st.cx));
+    st.cy = Math.min(500 - H / 2, Math.max(H / 2, st.cy));
+    const x0 = st.cx - L / 2, y0 = st.cy - H / 2;
+    svg.setAttribute('viewBox', `${x0.toFixed(2)} ${y0.toFixed(2)} ${L.toFixed(2)} ${H.toFixed(2)}`);
+
+    // regroupement : une grille de ~34 px a l'ecran
+    const pas = 34 / (svg.clientWidth ? svg.clientWidth / L : 1);
+    const cases = new Map();
+    for (const p of st.points) {
+      if (!isFinite(p.x) || !isFinite(p.y) || !p.n) continue;
+      const cle = Math.round(p.x / pas) + ':' + Math.round(p.y / pas);
+      const c = cases.get(cle);
+      if (c) { c.n += p.n; c.x = (c.x * c.poids + p.x) / (c.poids + 1); c.y = (c.y * c.poids + p.y) / (c.poids + 1); c.poids++; c.noms.push(p.nom); }
+      else cases.set(cle, { n: p.n, x: p.x, y: p.y, poids: 1, noms: [p.nom] });
     }
-    pts.sort((a, b) => b.v - a.v);
-    const max = pts.length ? pts[0].v : 1;
-    const R = (v) => 3 + 22 * Math.sqrt(v / max);
+    const grappes = [...cases.values()].sort((a, b) => b.n - a.n);
+    const max = grappes.length ? grappes[0].n : 1;
+    const T = tonsCarte();
+    const R = (n) => (3 + 22 * Math.sqrt(n / max)) / k;   // taille constante a l'ecran
+
+    const etiq = [];
     svg.innerHTML =
-      `<rect x="0" y="0" width="1000" height="500" fill="#151310"/>`
-      + `<path d="${CARTE_MONDE}" fill="#2A2622" stroke="#3A342E" stroke-width="0.5"/>`
-      + pts.map((p) => `<circle cx="${p.x}" cy="${p.y}" r="${R(p.v).toFixed(1)}" fill="${couleur}" fill-opacity="0.45" stroke="${couleur}" stroke-width="1.2">`
-          + `<title>${nomPays(p.a2)} — ${fmt(p.v)} ${unite}</title></circle>`).join('')
-      + (() => {
-          /* Les libellés ne se marchent pas dessus : en Europe, « 248 » et
-             « 8 » se superposaient et devenaient illisibles. On n'étiquette
-             qu'un point s'il est assez loin de ceux déjà étiquetés — le survol
-             donne le détail pour tous les autres. */
-          const poses = [];
-          return pts.slice(0, 10).map((p) => {
-            const y = p.y - R(p.v) - 5;
-            if (poses.some((q) => Math.abs(q.x - p.x) < 46 && Math.abs(q.y - y) < 18)) return '';
-            poses.push({ x: p.x, y });
-            return `<text x="${p.x}" y="${y.toFixed(1)}" fill="#E8E2DA" font-size="13" text-anchor="middle" font-family="JetBrains Mono" paint-order="stroke" stroke="#151310" stroke-width="3">${fmt(p.v)}</text>`;
-          }).join('');
-        })();
+      `<rect x="0" y="0" width="1000" height="500" fill="${T.mer}"/>`
+      + `<path d="${CARTE_MONDE}" fill="${T.terre}" stroke="${T.trait}" stroke-opacity="0.22" stroke-width="${(0.5 / k).toFixed(2)}"/>`
+      + grappes.map((g) => {
+          const titre = g.poids === 1 ? g.noms[0]
+            : `${g.poids} lieux — ${g.noms.slice(0, 4).join(', ')}${g.poids > 4 ? '…' : ''}`;
+          return `<circle cx="${g.x.toFixed(1)}" cy="${g.y.toFixed(1)}" r="${R(g.n).toFixed(2)}" fill="${st.couleur}" fill-opacity="0.45" stroke="${st.couleur}" stroke-width="${(1.2 / k).toFixed(2)}">`
+               + `<title>${titre} — ${fmt(g.n)} ${st.unite}</title></circle>`;
+        }).join('')
+      + grappes.slice(0, 14).map((g) => {
+          const y = g.y - R(g.n) - 5 / k;
+          if (etiq.some((q) => Math.abs(q.x - g.x) < 46 / k && Math.abs(q.y - y) < 18 / k)) return '';
+          etiq.push({ x: g.x, y });
+          return `<text x="${g.x.toFixed(1)}" y="${y.toFixed(1)}" fill="${T.etiquette}" font-size="${(13 / k).toFixed(2)}" text-anchor="middle" font-family="JetBrains Mono" paint-order="stroke" stroke="#151310" stroke-width="${(3 / k).toFixed(2)}">${fmt(g.n)}</text>`;
+        }).join('');
+    const z = $(svgId + '-zoom');
+    if (z) z.textContent = `×${k.toFixed(1)}`;
+  }
+
+  function brancheCarte(svgId) {
+    const svg = $(svgId), st = CARTES[svgId];
+    svg.style.cursor = 'grab';
+    const pointVers = (ev) => {
+      const r = svg.getBoundingClientRect(), k = st.k;
+      return { x: st.cx - 500 / k + (ev.clientX - r.left) / r.width * (1000 / k),
+               y: st.cy - 250 / k + (ev.clientY - r.top) / r.height * (500 / k) };
+    };
+    svg.addEventListener('wheel', (ev) => {
+      ev.preventDefault();
+      const avant = pointVers(ev);
+      const k2 = Math.min(40, Math.max(1, st.k * (ev.deltaY < 0 ? 1.25 : 0.8)));
+      if (k2 === st.k) return;
+      st.k = k2;
+      const apres = pointVers(ev);
+      // on zoome SOUS LE CURSEUR : le point vise ne bouge pas
+      st.cx += avant.x - apres.x; st.cy += avant.y - apres.y;
+      rendCarte(svgId);
+    }, { passive: false });
+    let glisse = null;
+    svg.addEventListener('pointerdown', (ev) => { glisse = pointVers(ev); svg.setPointerCapture(ev.pointerId); svg.style.cursor = 'grabbing'; });
+    svg.addEventListener('pointermove', (ev) => {
+      if (!glisse) return;
+      const p = pointVers(ev);
+      st.cx += glisse.x - p.x; st.cy += glisse.y - p.y;
+      rendCarte(svgId);
+    });
+    const fin = (ev) => { glisse = null; svg.style.cursor = 'grab'; if (ev && ev.pointerId != null) { try { svg.releasePointerCapture(ev.pointerId); } catch (e) {} } };
+    svg.addEventListener('pointerup', fin); svg.addEventListener('pointercancel', fin);
+    svg.addEventListener('dblclick', () => { st.k = 1; st.cx = 500; st.cy = 250; rendCarte(svgId); });
   }
 
   const nomPays = (code) => {
@@ -1782,7 +1859,11 @@
             `<tr><td>${nomPays(k)} <span class="mono">${k}</span></td><td class="num">${fmt(n)}</td>`
             + `<td class="num">${Math.round(n / tot * 100)} %</td>`
             + `<td class="num">${fmt(c2[k] || 0)}</td></tr>`).join('');
-          dessineCarte('c-carte-logs', c, '#ED7D2B', 'adresses');
+          const lieux = (P.lieux || []).map((L) => {
+            const [x, y] = projLL(L.lat, L.lon);
+            return { x, y, n: L.n, nom: [L.ville, L.region, nomPays(L.cc)].filter(Boolean).join(', ') };
+          });
+          dessineCarte('c-carte-logs', lieux, '#00E5FF', 'adresses');
           $('payslogs-note').textContent = `Relevé du ${jP}, base DB-IP ${P.base}. `
             + `La colonne de droite ne compte que les adresses ayant ouvert au moins deux pages : `
             + `l'écart avec la première mesure la part de passages automatisés. Les adresses servent au calcul puis sont oubliées — seul le compteur par pays est conservé.`;
@@ -1892,7 +1973,11 @@
            contradiction n'est pas expliquée : on ne publie pas un chiffre
            qu'on ne comprend pas. */
         const pays = G.pays || [];
-        dessineCarte('c-carte-gsc', Object.fromEntries(pays.map((x) => [x.code, x.impressions])), '#4C9AFF', 'impressions');
+        dessineCarte('c-carte-gsc', pays.map((x) => {
+          const a2 = ISO3[String(x.code).toUpperCase()] || null;
+          const xy = a2 && CENTROIDES[a2];
+          return xy ? { x: xy[0], y: xy[1], n: x.impressions, nom: nomPays(x.code) } : null;
+        }).filter(Boolean), '#4C9AFF', 'impressions');
         document.querySelector('#t-gscpays tbody').innerHTML = pays.length
           ? pays.slice(0, 12).map((x) => `<tr><td>${nomPays(x.code)} <span class="mono">${x.code}</span></td><td class="num">${fmt(x.clics)}</td>`
               + `<td class="num">${fmt(x.impressions)}</td><td class="num">${nb1(x.position)}</td></tr>`).join('')
