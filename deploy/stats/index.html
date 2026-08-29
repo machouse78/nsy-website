@@ -251,6 +251,10 @@
   <div class="grid" id="goo-cards"></div>
   <div class="note" id="goo-note"></div>
 
+  <div class="chart-head"><h2>Audience réelle <span class="mono">— ce que mesure vraiment la courbe</span></h2></div>
+  <div class="grid" id="aud-cards"></div>
+  <div class="note" id="aud-note"></div>
+
   <div class="chart-head"><h2>Search Console <span class="mono">— ce que Google mesure lui-même</span></h2></div>
   <div class="grid" id="gsc-cards"></div>
   <div class="note" id="gsc-note"></div>
@@ -1677,6 +1681,33 @@
       $('h-goobot').textContent = `Passages des robots de moteurs — par ${bk.mode}`;
       $('goobot-legend').innerHTML = mSeries.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
       drawChart('c-goobot', bk, mSeries);
+
+      // ── Audience réelle ──────────────────────────────────────────────────
+      // Découvert le 29/08/2026 en cherchant les pays : 388 adresses sur 416
+      // ne lisaient qu'UNE page, depuis des accès résidentiels suisses
+      // (Sunrise, Swisscom) — la signature d'un réseau de proxys, pas d'un
+      // public. La courbe « visiteurs » n'est pas réécrite : elle reste
+      // comparable à elle-même. On pose à côté le nombre d'adresses ayant lu
+      // au moins DEUX pages, qui suppose un choix.
+      {
+        const jA = [...sel].reverse().find((d) => D[d]?.pays?.visiteurs_2p != null);
+        const A = jA ? D[jA].pays : null;
+        if (A) {
+          const v = A.vues_par_ip || {};
+          const part = A.total ? Math.round(A.visiteurs_2p / A.total * 100) : 0;
+          $('aud-cards').innerHTML = [
+            ['Adresses distinctes', fmt(A.total), '<span class="flat">ce que compte la courbe « visiteurs »</span>'],
+            ['Ont lu au moins 2 pages', fmt(A.visiteurs_2p), `<span class="flat">soit ${part} % — le reste n'a fait que passer</span>`],
+            ['Pages par adresse', nb1(v.moyenne), `<span class="flat">médiane ${fmt(v.mediane)}, maximum ${fmt(v.max)}</span>`],
+            ['Sur réseau d\'hébergeur', fmt(A.centres_donnees), '<span class="flat">reconnu au nom de l\'opérateur</span>'],
+          ].map(([t, x, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${x}</div><div class="d">${d}</div></div>`).join('');
+          const top = Object.entries(A.as_top || {}).slice(0, 3).map(([k, n]) => `${k} (${fmt(n)})`).join(', ');
+          $('aud-note').textContent = `Relevé du ${jA}. ${fmt(v.a_une_seule_page)} adresses sur ${fmt(A.total)} n'ont ouvert qu'une seule page : ce sont des passages, pas des lectures. Principaux opérateurs : ${top}. La courbe « visiteurs » ci-dessus n'a pas été corrigée — elle reste comparable à son propre historique.`;
+        } else {
+          $('aud-cards').innerHTML = '';
+          $('aud-note').textContent = "Pas encore de relevé : la ventilation par opérateur démarre à la première collecte qui suit sa mise en place.";
+        }
+      }
 
       // ── Search Console ───────────────────────────────────────────────────
       // Deux natures de données, à ne pas confondre :

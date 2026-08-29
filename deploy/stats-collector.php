@@ -274,7 +274,9 @@ foreach ($files as $f) {
             $vh = substr(md5($ip . '|' . $ua), 0, 12); // ≠ $h (handle de fichier de la boucle !)
             /* IP retenue le temps du calcul du PAYS, puis oubliee : elle ne sort
                jamais de ce script et n'entre pas dans l'historique. */
-            if ($peri === $PERI_DEFAUT && count($stats['ips']) < 60000) { $stats['ips'][$ip] = true; }
+            if ($peri === $PERI_DEFAUT && count($stats['ips']) < 60000) {
+                $stats['ips'][$ip] = ($stats['ips'][$ip] ?? 0) + 1;
+            }
             $stats['peri'][$peri]['pages_vues']++;
             $stats['peri'][$peri]['visiteurs'][$vh] = 1;
             $stats['peri'][$peri]['top'][$clean] = ($stats['peri'][$peri]['top'][$clean] ?? 0) + 1;
@@ -506,7 +508,7 @@ if ($stats['ips']) {
         asort($v4, SORT_STRING); asort($v6, SORT_STRING);   // ordre binaire = ordre numérique
         $l4 = array_values($v4); $k4 = array_keys($v4); $i4 = 0; $n4 = count($l4);
         $l6 = array_values($v6); $k6 = array_keys($v6); $i6 = 0; $n6 = count($l6);
-        $compte = [];
+        $compte = []; $pays_par_ip = [];
         while (($ligne = gzgets($gz)) !== false) {
             if ($i4 >= $n4 && $i6 >= $n6) { break; }        // toutes les IP placées
             $c = explode(',', rtrim($ligne, "\r\n"));
@@ -515,10 +517,14 @@ if ($stats['ips']) {
             if ($deb === false || $fin === false) { continue; }
             if (strlen($deb) === 4) {
                 while ($i4 < $n4 && $l4[$i4] < $deb) { $i4++; }          // IP avant la plage : sans pays
-                while ($i4 < $n4 && $l4[$i4] <= $fin) { $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $i4++; }
+                while ($i4 < $n4 && $l4[$i4] <= $fin) {
+                    $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $pays_par_ip[$k4[$i4]] = $c[2]; $i4++;
+                }
             } else {
                 while ($i6 < $n6 && $l6[$i6] < $deb) { $i6++; }
-                while ($i6 < $n6 && $l6[$i6] <= $fin) { $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $i6++; }
+                while ($i6 < $n6 && $l6[$i6] <= $fin) {
+                    $compte[$c[2]] = ($compte[$c[2]] ?? 0) + 1; $pays_par_ip[$k6[$i6]] = $c[2]; $i6++;
+                }
             }
         }
         gzclose($gz);
@@ -527,19 +533,117 @@ if ($stats['ips']) {
            reparties sur deux /16 sont un parc de proxys ; reparties sur 200,
            ce sont des visiteurs. La question se tranche sans exposer une seule
            adresse. */
+        /* ⚠️ Il faut compter les reseaux DU PAYS DOMINANT, pas de toutes les
+           adresses : mesurer l ensemble melangeait 248 suisses eventuellement
+           groupees avec 168 autres forcement dispersees, et laissait croire a
+           une diversite qui n existait pas. Erreur commise le 29/08/2026. */
         $dom = array_key_first($compte);
         $reseaux = [];
-        foreach (array_keys($stats['ips']) as $ipx) {
+        foreach ($pays_par_ip as $ipx => $cc) {
+            if ($cc !== $dom) { continue; }
             $b = @inet_pton($ipx);
             if ($b === false || strlen($b) !== 4) { continue; }
-            $reseaux[substr($ipx, 0, strrpos($ipx, '.') === false ? 0 : strpos($ipx, '.', strpos($ipx, '.') + 1))] = true;
+            $pt = strpos($ipx, '.', strpos($ipx, '.') + 1);
+            $reseaux[substr($ipx, 0, $pt === false ? strlen($ipx) : $pt)] = true;
         }
+        arsort($reseaux);
         $pays = ['source' => 'logs', 'base' => date('Y-m', (int) @filemtime($geoCsv)),
                  'resolus' => array_sum($compte), 'total' => count($stats['ips']),
                  'reseaux_16' => count($reseaux), 'dominant' => $dom,
+                 'top_reseaux' => array_slice(array_keys($reseaux), 0, 6),
                  'compte' => $compte];
     }
 }
+
+    /* ── Qui est derriere l'adresse ? ────────────────────────────────────────
+       Le releve par pays a revele que 60 % des « visiteurs » venaient de 57
+       reseaux suisses en 5.x — de l'espace RIPE d'hebergeurs et de VPN, pas
+       d'acces residentiels. Ce ne sont pas des visiteurs : ce sont des clients
+       automatises qui portent un user-agent de navigateur et passent au
+       travers du filtre anti-robots.
+       On ne REECRIT rien pour autant : la courbe historique reste ce qu'elle
+       est, comparable a elle-meme. On ajoute a cote un second compteur, « hors
+       centres de donnees », et on garde les noms d'operateurs pour pouvoir
+       verifier le classement au lieu de le croire. */
+    $asnCsv = "$geoDir/dbip-asn-lite.csv.gz";
+    if ($pays !== null) {
+        $ageAsn = is_file($asnCsv) && (time() - (int) @filemtime($asnCsv)) < 32 * 86400;
+        if (!$ageAsn) {
+            foreach ([date('Y-m'), date('Y-m', strtotime('-1 month'))] as $mois) {
+                $tmp = "$geoDir/.asn.tmp.gz";
+                $fp = @fopen($tmp, 'wb');
+                if (!$fp) { break; }
+                $ch = curl_init("https://download.db-ip.com/free/dbip-asn-lite-$mois.csv.gz");
+                curl_setopt_array($ch, [CURLOPT_FILE => $fp, CURLOPT_FOLLOWLOCATION => true,
+                                        CURLOPT_TIMEOUT => 180, CURLOPT_FAILONERROR => true]);
+                $ok = curl_exec($ch);
+                $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch); fclose($fp);
+                if ($ok && $code === 200 && filesize($tmp) > 1000000) { @rename($tmp, $asnCsv); break; }
+                @unlink($tmp);
+            }
+        }
+        if (is_file($asnCsv) && ($gz = @gzopen($asnCsv, 'rb'))) {
+            $i4 = 0; $i6 = 0; $asNoms = []; $asParIp = [];
+            while (($ligne = gzgets($gz)) !== false) {
+                if ($i4 >= $n4 && $i6 >= $n6) { break; }
+                $c = str_getcsv(rtrim($ligne, "\r\n"));
+                if (count($c) < 4) { continue; }
+                $deb = @inet_pton($c[0]); $fin = @inet_pton($c[1]);
+                if ($deb === false || $fin === false) { continue; }
+                if (strlen($deb) === 4) {
+                    while ($i4 < $n4 && $l4[$i4] < $deb) { $i4++; }
+                    while ($i4 < $n4 && $l4[$i4] <= $fin) { $asParIp[$k4[$i4]] = $c[3]; $i4++; }
+                } else {
+                    while ($i6 < $n6 && $l6[$i6] < $deb) { $i6++; }
+                    while ($i6 < $n6 && $l6[$i6] <= $fin) { $asParIp[$k6[$i6]] = $c[3]; $i6++; }
+                }
+            }
+            gzclose($gz);
+
+            /* Liste EXPLICITE, pour qu'on puisse la discuter au lieu de la subir.
+               Volontairement centree sur des marqueurs d'hebergement et de VPN,
+               jamais sur un nom de fournisseur d'acces : Orange, Free, SFR et
+               Bouygues ne doivent JAMAIS y tomber. */
+            $marqueurs = ['hosting', 'host', 'cloud', 'server', 'datacenter', 'data center',
+                          'vps', 'colocation', 'colo ', 'digitalocean', 'ovh', 'hetzner',
+                          'amazon', 'google llc', 'microsoft', 'oracle', 'linode', 'vultr',
+                          'contabo', 'leaseweb', 'm247', 'proxy', 'vpn', 'scaleway',
+                          'choopa', 'ip volume', 'packethub', 'stark industries', 'alibaba',
+                          'tencent', 'huawei', 'cloudflare', 'fastly', 'akamai', 'datacamp'];
+            $dc = 0; $horsDc = 0;
+            foreach (array_keys($stats['ips']) as $ipx) {
+                $nom = $asParIp[$ipx] ?? '';
+                $n_l = mb_strtolower($nom);
+                $est = false;
+                foreach ($marqueurs as $mk) { if ($nom !== '' && str_contains($n_l, $mk)) { $est = true; break; } }
+                if ($est) { $dc++; } else { $horsDc++; }
+                if ($nom !== '') { $asNoms[$nom] = ($asNoms[$nom] ?? 0) + 1; }
+            }
+            arsort($asNoms);
+            $pays['centres_donnees'] = $dc;
+            $pays['hors_centres'] = $horsDc;
+            $pays['as_top'] = array_slice($asNoms, 0, 12, true);
+            /* Combien de pages par adresse ? Un reseau de proxys residentiels
+               se reconnait a ceci : beaucoup d'adresses distinctes, une ou deux
+               pages chacune. Un vrai visiteur en lit plusieurs. */
+            $vues = array_values($stats['ips']);
+            sort($vues);
+            /* LE compteur qui veut dire quelque chose. 388 adresses sur 416 ne
+               lisent QU'UNE page : ce sont des passages, pas des lectures. Un
+               visiteur qui en ouvre deux a fait un choix. On ne réécrit pas la
+               courbe historique — elle reste comparable à elle-même — on pose
+               celle-ci à côté. */
+            $pays['visiteurs_2p'] = count(array_filter($stats['ips'], static fn($v) => $v >= 2));
+            $pays['vues_par_ip'] = [
+                'moyenne' => count($vues) ? round(array_sum($vues) / count($vues), 2) : 0,
+                'mediane' => count($vues) ? $vues[intdiv(count($vues), 2)] : 0,
+                'a_une_seule_page' => count(array_filter($vues, static fn($v) => $v === 1)),
+                'max' => $vues ? end($vues) : 0,
+            ];
+        }
+    }
+
 $stats['ips'] = [];   // les IP ne vont pas plus loin
 
 $day = [
