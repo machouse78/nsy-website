@@ -153,6 +153,11 @@
     border-top: 1px solid var(--line); }
   .sec-h h2 { margin: 0; font-size: 19px; }
   .sec-h span { font-size: 12.5px; color: var(--fg2); }
+  .carte-zoom-btns { position: absolute; right: 20px; bottom: 20px; display: flex; flex-direction: column; gap: 6px; }
+  .carte-zoom-btns button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--line);
+    background: var(--bg2); color: var(--fg1); font: 600 18px/1 'JetBrains Mono', monospace;
+    cursor: pointer; touch-action: manipulation; }
+  .carte-zoom-btns button:hover { border-color: var(--accent); color: var(--accent); }
 </style>
 </head>
 <body>
@@ -621,6 +626,25 @@
     const fin = (ev) => { glisse = null; svg.style.cursor = 'grab'; if (ev && ev.pointerId != null) { try { svg.releasePointerCapture(ev.pointerId); } catch (e) {} } };
     svg.addEventListener('pointerup', fin); svg.addEventListener('pointercancel', fin);
     svg.addEventListener('dblclick', () => { st.k = 1; st.cx = 500; st.cy = 250; rendCarte(svgId); });
+    /* Boutons +/− (owner, 29/08/2026) : la molette reste le geste naturel au
+       pointeur, mais il faut des commandes visibles — et au doigt, c'est le
+       seul zoom possible, le pincement n'étant pas capté. Zoom centré sur le
+       milieu de la vue, mêmes crans que la molette. */
+    const boite = svg.parentNode;               // .chart
+    boite.style.position = 'relative';
+    const zoomeCentre = (facteur) => {
+      st.k = Math.min(40, Math.max(1, st.k * facteur));
+      rendCarte(svgId);
+    };
+    const barre = document.createElement('div');
+    barre.className = 'carte-zoom-btns';
+    for (const [txt, f, aria] of [['+', 1.25, 'Zoomer'], ['−', 0.8, 'Dézoomer']]) {
+      const b = document.createElement('button');
+      b.type = 'button'; b.textContent = txt; b.setAttribute('aria-label', aria); b.title = aria;
+      b.addEventListener('click', () => zoomeCentre(f));
+      barre.appendChild(b);
+    }
+    boite.appendChild(barre);
   }
 
   const nomPays = (code) => {
