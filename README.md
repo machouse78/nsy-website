@@ -86,7 +86,11 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   le KPI GEO), abonnés/engagement/repartages publics Facebook, provenance
   (referrals + référents détaillés), **profils** (appareils/OS/navigateurs) et
   **parcours** (entrées, sorties, enchaînements, profondeur, durée), compteurs
-  du journal, **section Provenance IA dédiée** (visites venues d'une réponse
+  du journal, **Search Console** (clics, impressions, position, top
+  requêtes — compte de service, JWT signé en PHP pur), **pays et villes des
+  visiteurs** (DB-IP City Lite résolue sur le serveur, aucune IP conservée —
+  agrégats par lieu) avec **carte du monde interactive** (zoom molette,
+  glisser, regroupement à l'écran), **section Provenance IA dédiée** (visites venues d'une réponse
   d'assistant, courbe par assistant, entonnoir « lectures des robots → visites
   humaines » à double axe, pages réellement citées par les IA, et comportement
   de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
@@ -232,8 +236,9 @@ nsy-website/
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
 ├── antispam.php                         # Filtre anti-spam partagé (contact + faisabilité)
-├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + trafic GitHub + chaîne YouTube + compteurs) → _secret/kpi-history.json
+├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + trafic GitHub + chaîne YouTube + Search Console + pays/villes DB-IP + compteurs) → _secret/kpi-history.json
 ├── stats/                               # Dashboard KPI privé (Basic Auth) — cartes, courbes SVG, tables (index.html + data.php)
+├── scripts/rejoue-jours.py              # Rejoue des journées du collecteur (pause 120 s — jamais enchaîner : blocage Infomaniak vécu le 29/08/2026)
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
