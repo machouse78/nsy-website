@@ -547,7 +547,19 @@ if ($stats['ips']) {
             $reseaux[substr($ipx, 0, $pt === false ? strlen($ipx) : $pt)] = true;
         }
         arsort($reseaux);
-        $pays = ['source' => 'logs', 'base' => date('Y-m', (int) @filemtime($geoCsv)),
+        /* Le meme classement, restreint aux adresses ayant lu au moins DEUX
+           pages : c'est la repartition de l'audience qui lit vraiment, par
+           opposition a celle des passages. Les deux sont publiees cote a cote
+           — l'ecart entre elles EST l'information. */
+        $compte2p = [];
+        foreach ($stats['ips'] as $ipx => $nb) {
+            if ($nb < 2) { continue; }
+            $cc = $pays_par_ip[$ipx] ?? null;
+            if ($cc !== null) { $compte2p[$cc] = ($compte2p[$cc] ?? 0) + 1; }
+        }
+        arsort($compte2p);
+        $pays = ['source' => 'logs', 'compte_2p' => $compte2p,
+                 'base' => date('Y-m', (int) @filemtime($geoCsv)),
                  'resolus' => array_sum($compte), 'total' => count($stats['ips']),
                  'reseaux_16' => count($reseaux), 'dominant' => $dom,
                  'top_reseaux' => array_slice(array_keys($reseaux), 0, 6),

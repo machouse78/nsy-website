@@ -228,6 +228,8 @@
 
   <h2 id="h-vis">Visiteurs</h2>
   <div class="chart"><svg id="c-vis"></svg></div>
+  <table id="t-payslogs"><thead><tr><th>Pays <span class="mono">— tous accès</span></th><th class="num">Adresses</th><th class="num">Part</th><th class="num">Dont ≥ 2 pages</th></tr></thead><tbody></tbody></table>
+  <div class="note" id="payslogs-note"></div>
 
   <div class="chart-head">
     <h2 id="h-metric">Métrique</h2>
@@ -1681,6 +1683,31 @@
       $('h-goobot').textContent = `Passages des robots de moteurs — par ${bk.mode}`;
       $('goobot-legend').innerHTML = mSeries.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
       drawChart('c-goobot', bk, mSeries);
+
+      // ── Répartition par pays (logs) ──────────────────────────────────────
+      // Publiée avec SA contrepartie : le même classement restreint aux
+      // adresses ayant lu au moins deux pages. L'écart entre les deux colonnes
+      // est l'information — 176 adresses suisses d'un côté, presque aucune de
+      // l'autre, c'est un réseau de proxys qui se voit à l'œil nu.
+      {
+        const jP = [...sel].reverse().find((d) => D[d]?.pays?.compte);
+        const P = jP ? D[jP].pays : null;
+        const tb = document.querySelector('#t-payslogs tbody');
+        if (P) {
+          const c = P.compte || {}, c2 = P.compte_2p || {};
+          const tot = Object.values(c).reduce((a, b) => a + b, 0) || 1;
+          tb.innerHTML = Object.entries(c).slice(0, 15).map(([k, n]) =>
+            `<tr><td>${k}</td><td class="num">${fmt(n)}</td>`
+            + `<td class="num">${Math.round(n / tot * 100)} %</td>`
+            + `<td class="num">${fmt(c2[k] || 0)}</td></tr>`).join('');
+          $('payslogs-note').textContent = `Relevé du ${jP}, base DB-IP ${P.base}. `
+            + `La colonne de droite ne compte que les adresses ayant ouvert au moins deux pages : `
+            + `l'écart avec la première mesure la part de passages automatisés. Les adresses servent au calcul puis sont oubliées — seul le compteur par pays est conservé.`;
+        } else {
+          tb.innerHTML = '<tr><td colspan="4" class="mono">pas encore de relevé sur cette période</td></tr>';
+          $('payslogs-note').textContent = '';
+        }
+      }
 
       // ── Audience réelle ──────────────────────────────────────────────────
       // Découvert le 29/08/2026 en cherchant les pays : 388 adresses sur 416
