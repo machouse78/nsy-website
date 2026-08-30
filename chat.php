@@ -109,7 +109,6 @@ if (!empty($body['health'])) {
     ]);
     curl_exec($ch);
     $pstatus = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
     $avail = ($pstatus >= 200 && $pstatus < 300);
     writeHealth($healthFile, $avail, $model, $avail ? '' : ('probe' . $pstatus));
     respond(['ok' => true, 'available' => $avail, 'model' => $model]);
@@ -255,7 +254,6 @@ function callProvider(string $url, string $key, array $payload): array
     ]);
     $res = curl_exec($ch);
     $status = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
     return [$status, is_string($res) ? $res : ''];
 }
 

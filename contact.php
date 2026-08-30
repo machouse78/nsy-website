@@ -76,7 +76,6 @@ if (!empty($config['turnstile_secret']) && $config['turnstile_secret'] !== 'CHAN
     ]);
     $verifyRaw = curl_exec($ch);
     $verifyErr = curl_error($ch);
-    curl_close($ch);
 
     $verify = is_string($verifyRaw) ? json_decode($verifyRaw, true) : null;
     if (!is_array($verify) || empty($verify['success'])) {

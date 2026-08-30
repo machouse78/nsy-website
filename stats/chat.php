@@ -111,7 +111,6 @@ function appelle(string $url, string $key, array $payload): array
     ]);
     $res = curl_exec($ch);
     $code = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    curl_close($ch);
     return [$code, is_string($res) ? $res : ''];
 }
 

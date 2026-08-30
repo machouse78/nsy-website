@@ -25,6 +25,26 @@ declare(strict_types=1);
 date_default_timezone_set('Europe/Paris');
 ini_set('display_errors', '0'); // JSON propre — les erreurs vont au log PHP
 
+/* ── Garde-fou du 30/08/2026 (skill execution-scripts-serveur) ──────────────
+   Deux blocages Infomaniak en deux jours : des avertissements PHP émis PAR
+   LIGNE LUE ont fait déborder le journal d'erreurs de l'hébergement — les
+   sites sont restés hors ligne tout un week-end. Ce gestionnaire rend la
+   récidive impossible : les 5 premières erreurs vont au journal (diagnostic),
+   au-delà de 10 le traitement est ABANDONNÉ net. Mieux vaut une collecte
+   ratée qu'un hébergement bloqué. */
+$prvErreurs = 0;
+set_error_handler(static function ($no, $msg, $fichier, $ligne) use (&$prvErreurs) {
+    if (++$prvErreurs <= 5) {
+        error_log("stats-collector: [$no] $msg @ " . basename($fichier) . ":$ligne");
+    }
+    if ($prvErreurs > 10) {
+        http_response_code(500);
+        die(json_encode(['ok' => false,
+            'erreur' => "traitement STOPPE : $prvErreurs erreurs PHP - regle du 30/08/2026"]));
+    }
+    return true;    // comptée et maîtrisée : PHP ne la journalise pas une 2e fois
+});
+
 $cfg = require __DIR__ . '/_secret/kpi.php';
 if (!hash_equals((string) $cfg['cron_key'], (string) ($_GET['key'] ?? ''))) {
     http_response_code(404);
@@ -621,7 +641,7 @@ if ($stats['ips']) {
                                         CURLOPT_TIMEOUT => 180, CURLOPT_FAILONERROR => true]);
                 $ok = curl_exec($ch);
                 $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch); fclose($fp);
+                fclose($fp);
                 if ($ok && $code === 200 && filesize($tmp) > 1000000) { @rename($tmp, $asnCsv); break; }
                 @unlink($tmp);
             }
@@ -1050,7 +1070,6 @@ if ($hote !== '') {
         curl_exec($ch);
         $c = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
         $t = (string) curl_getinfo($ch, CURLINFO_CONTENT_TYPE);
-        curl_close($ch);
         return [$c, $t];
     };
     // ⚠️ curl et non file_get_contents : allow_url_fopen est désactivé sur
@@ -1063,7 +1082,6 @@ if ($hote !== '') {
         // des octets gzip que la recherche d'icônes ne peut pas lire.
         CURLOPT_ENCODING => '', CURLOPT_USERAGENT => 'nsy-kpi/1.0']);
     $html = curl_exec($ch);
-    curl_close($ch);
     $icones = [];
     $conforme = false;
     if (is_string($html)) {
@@ -1226,7 +1244,6 @@ if ($gscRecent && is_readable($gscCle)) {
                 'grant_type' => 'urn:ietf:params:oauth:grant-type:jwt-bearer',
                 'assertion' => $assertion])]);
         $rep = json_decode((string) curl_exec($ch), true);
-        curl_close($ch);
         return $rep['access_token'] ?? null;
     };
     $gscAppel = static function (string $url, string $jeton, ?array $corps = null): ?array {
@@ -1237,7 +1254,6 @@ if ($gscRecent && is_readable($gscCle)) {
         curl_setopt_array($ch, $opt);
         $d = json_decode((string) curl_exec($ch), true);
         $code = (int) curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
         return $code === 200 && is_array($d) ? $d : null;
     };
 
