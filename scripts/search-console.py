@@ -42,7 +42,12 @@ except ImportError as e:                                    # pragma: no cover
 
 RACINE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CLES_DEFAUT = os.path.join(RACINE, "_secret", "gsc-service-account.json")
-PORTEE = "https://www.googleapis.com/auth/webmasters.readonly"
+# Lecture seule par défaut (moindre privilège : l'usage quotidien ne fait que
+# lire). Les actions d'écriture — re-soumettre un sitemap après un incident,
+# comme au déblocage du 30/08/2026 — passent par GSC_ECRITURE=1.
+PORTEE = ("https://www.googleapis.com/auth/webmasters"
+          if __import__("os").environ.get("GSC_ECRITURE") == "1"
+          else "https://www.googleapis.com/auth/webmasters.readonly")
 JETON_URL = "https://oauth2.googleapis.com/token"
 API_WM = "https://www.googleapis.com/webmasters/v3"
 API_SC = "https://searchconsole.googleapis.com/v1"
