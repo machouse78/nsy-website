@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>Le journal NSY</title>
+  <link>https://www.nsy.fr/blog.html</link>
+  <description>Retours d'expérience d'un praticien : IA appliquée au web, SEO/GEO, systèmes critiques. Par Cédric Barme (NSY).</description>
+  <language>fr</language>
+  <atom:link href="https://www.nsy.fr/feed.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>Des téraoctets au mégaoctet : superviser, une discipline avant d'être un budget</title>
+    <link>https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</guid>
+    <pubDate>Sun, 23 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Supervision et observabilité à deux échelles : Dynatrace et ELK chez un grand compte de l'assurance, le tableau de bord d'un site de PME. Téraoctets contre mégaoctets par mois, les quatre mêmes questions, la règle d'or sur les fausses alertes — et ce que l'IA apporte vraiment.</description>
+  </item>
+  <item>
+    <title>Créer son site avec l'IA en un week-end : on a pris la promesse au mot</title>
+    <link>https://www.nsy.fr/site-ia-en-un-week-end.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/site-ia-en-un-week-end.html</guid>
+    <pubDate>Sun, 16 Aug 2026 12:00:00 +0200</pubDate>
+    <description>La promesse du vibe coding testée sur un cas réel : nsy.fr. V1 en 4 soirées, puis près de 140 heures de pilotage mesurées action par action — la règle des 10/90, et pourquoi l'IA ne sert pas qu'à aller plus vite mais à aller plus loin.</description>
+  </item>
+  <item>
+    <title>Un chatbot IA branché sur un forum : le web 1.0 comme base de connaissances</title>
+    <link>https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</guid>
+    <pubDate>Sat, 08 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Des années de discussions de passionnés dorment dans les forums. Retour d'expérience sur prv-concept.com : un chatbot IA qui interroge directement la base du forum phpBB, avec les garde-fous anti-hallucination qui font la différence.</description>
+  </item>
+  <item>
+    <title>SEO vs GEO : être cité par ChatGPT, Claude et Perplexity</title>
+    <link>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</guid>
+    <pubDate>Wed, 29 Jul 2026 12:00:00 +0200</pubDate>
+    <description>Être bien classé sur Google ne suffit plus : les assistants IA choisissent leurs sources autrement. SEO vs GEO expliqué par un praticien, avec le cas concret de nsy.fr — allowlist des crawlers IA, llms.txt, graphe d'entités, FAQ.</description>
+  </item>
+</channel>
+</rss>

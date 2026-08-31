@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base | NSY</title>
+<meta name="description" content="Years of enthusiast discussions sleep inside forums. Field report from prv-concept.com: an AI chatbot that queries the phpBB database directly, with the anti-hallucination guardrails that make the difference." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+<meta property="og:title" content="Wiring an AI chatbot into a forum: web 1.0 as a knowledge base" />
+<meta property="og:description" content="How the prv-concept.com chatbot answers from a phpBB forum — architecture, performance, anti-hallucination training and server-side guardrails." />
+<meta property="og:image" content="https://www.nsy.fr/public/chatbot-forum-article-en.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="760" />
+<meta property="og:image:alt" content="An AI chatbot wired into a phpBB forum — infographic" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Wiring an AI chatbot into a forum | NSY" />
+<meta name="twitter:description" content="Web 1.0 as an AI knowledge base: the PRV Concept case, guardrails included." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/chatbot-forum-article-en.jpg" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="alternate" type="application/rss+xml" title="NSY — Insights" href="https://www.nsy.fr/feed-en.xml" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html#article",
+      "headline": "Wiring an AI chatbot into a forum: web 1.0 as a knowledge base",
+      "description": "Field report from prv-concept.com: an AI chatbot that queries the phpBB database directly, with the anti-hallucination guardrails that make the difference.",
+      "inLanguage": "en",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/about.html"},
+      "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
+      "datePublished": "2026-08-08T12:00:00+02:00",
+      "dateModified": "2026-08-08T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/chatbot-forum-article-en.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog-en.html#blog" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
+        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.nsy.fr/blog-en.html" },
+        { "@type": "ListItem", "position": 3, "name": "AI chatbot and forum", "item": "https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index-en.html#top" aria-label="NSY — Home">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text"><small>Consulting · AI · Web</small></div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link active" data-target="blog" href="blog-en.html">Insights</a>
+      <a class="nav-link" data-target="services" href="services-en.html">Services</a>
+      <a class="nav-link" data-target="realisations" href="portfolio.html">Work</a>
+      <a class="nav-link" data-target="about" href="about.html">About</a>
+      <a class="nav-link" data-target="contact" href="contact-en.html">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="chatbot-ia-forum-base-de-connaissances.html" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Insights</span>
+      <span class="line"></span>
+      <span class="mono"><a href="blog-en.html" style="color: inherit;">← All articles</a></span>
+    </div>
+    <article class="legal-page article">
+      <div class="article-meta">8 August 2026 · Cédric Barme · Reading ≈ 7 min</div>
+      <div class="article-stats" data-journal-stats data-slug="chatbot-ia-forum-base-de-connaissances.html" hidden>
+        <span class="js-views" aria-live="polite"></span>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
+      </div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Wiring an AI chatbot into a forum:<br />web 1.0 as a knowledge base</h1>
+      <p class="lede" style="font-size: 17px;">Years of solved breakdowns, documented restorations and specialist answers — forums are gold mines of knowledge. But that knowledge sleeps in a format AI assistants ignore. A concrete field report: since summer 2026, the chatbot on <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — « Père Hervé », the workshop-foreman mascot of the association dedicated to the PRV V6 engine — answers visitors using the community&rsquo;s phpBB forum. Here is how, and above all with which guardrails.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/chatbot-forum-article-en.jpg" alt="Infographic — an AI chatbot wired into the phpBB forum: the database queried live, with anti-hallucination guardrails" loading="lazy" width="1140" height="760" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+
+
+      <h2>The web 1.0 paradox</h2>
+      <p>An enthusiast forum is the closest thing there is to a living knowledge base: questions are asked in users&rsquo; real words, answers come from people who have actually taken the engine apart, and every solved case stays archived. It is precisely what no language model can reproduce: those discussions are not in its training corpora, or only as fragments. Asked cold about a subject as niche as the PRV V6, an LLM does what it always does when it does not know: it improvises with confidence. Purists will object that a forum — content created by its members — technically belongs to the early participatory web, "2.0" before the term existed; "web 1.0" is used here as the shorthand everyone understands for that earlier web, server-rendered and proud of its pagination.</p>
+      <p>The classic reflex would be to modernise the forum or rewrite its content. Bad idea: the community lives there happily, and the value lies precisely in its history. The right question is: <strong>how do you make this untouched legacy the source of truth of a modern AI?</strong></p>
+
+      <h2>The architecture: a model that "knows" nothing — by design</h2>
+      <p>Père Hervé runs on <strong>RAG</strong> (retrieval-augmented generation): the language model has no knowledge of the site of its own. For every question, the server assembles a folder of facts, and the model is instructed to answer <em>only</em> from that folder. Three sources feed it:</p>
+      <ul>
+        <li><strong>A written foundation</strong> — the association&rsquo;s identity, the engine&rsquo;s history, the vehicle files: stable facts, maintained like editorial content;</li>
+        <li><strong>The forum, live</strong> — the community&rsquo;s topics and activity at the moment the question is asked;</li>
+        <li><strong>The shop, live</strong> — the products actually available, through the store&rsquo;s API.</li>
+      </ul>
+
+      <h3>Why query the forum&rsquo;s database directly</h3>
+      <p>The chatbot does not "read" the forum&rsquo;s pages: it queries <strong>its database directly</strong>, with targeted requests on phpBB&rsquo;s tables. That choice is first a matter of <strong>performance</strong>: no HTTP round-trips, no HTML to parse — a few indexed queries running in milliseconds on the same hosting, where crawling pages would have added seconds to every answer. It then guarantees <strong>freshness</strong>: a topic posted a minute ago is already queryable, with no reindexing and no cache to invalidate. And it gives <strong>fine-grained control</strong>: you choose exactly which columns are exposed — titles, public forums, dates — and nothing else ever reaches the model.</p>
+
+      <h2>Teaching the AI not to invent</h2>
+      <p>Wiring the sources is not enough: the model must be taught to stick to the facts. Four rules, each born from an observed drift that was then corrected:</p>
+      <ol>
+        <li><strong>Zero implicit knowledge.</strong> If the folder of facts does not contain the answer, the chatbot says so and points to the forum or the association — it never fills in with its "general culture", the primary reservoir of hallucinations.</li>
+        <li><strong>Quote topic titles word for word.</strong> A paraphrased title is an invented topic: the visitor will never find it. Titles surfaced from the database are rendered verbatim, with their link.</li>
+        <li><strong>Assume nothing about members.</strong> On the forum of an association devoted to a V6 engine, not every member&rsquo;s car has that engine — there is a turbo-diesel Renault 25 over there. The chatbot has learned not to "fix" reality to make it more consistent.</li>
+        <li><strong>Low temperature, short answers.</strong> The less the model is allowed to "create", the less it drifts; and a concise answer can be checked at a glance.</li>
+      </ol>
+
+      <h2>The guardrails: server-side, not just in the prompt</h2>
+      <p>The most important lesson of these weeks of tuning: <strong>instructions given to the model are not guarantees</strong>. An economical model paraphrases, forgets, gets carried along by how a question is phrased. Every critical rule therefore exists twice: as a prompt instruction, and as a deterministic server-side mechanism that applies no matter what.</p>
+      <ul>
+        <li><strong>Sensitive-content filtering.</strong> Every living forum holds exchanges that do not belong in the mouth of the site&rsquo;s official assistant: some topics are excluded from answers server-side, silently — not merely "forbidden" to the model.</li>
+        <li><strong>Members&rsquo; privacy.</strong> The chatbot only shares what the site makes public about people: committee roles, nothing more.</li>
+        <li><strong>No external links, ever.</strong> The chatbot never points outside the site — URLs are checked and rewritten after generation if needed.</li>
+        <li><strong>A resilient fallback.</strong> If the model is unavailable, the real data — forum topics, shop products — keeps being served as-is, and the interface says so honestly.</li>
+        <li><strong>Regression tests against the real chatbot.</strong> Every rule has its automated test, run against the production chatbot: assertions check what it must say, and above all what it must never say. No deployment without a green suite.</li>
+      </ul>
+
+      <h2>When the chatbot becomes a forum member</h2>
+      <p>The last step is the most unexpected: Père Hervé is not just an answer desk — he takes part. Forum registration validation is automated by a scheduled script, and it is the « Père Hervé » account that sends the welcome private messages and replies to new members&rsquo; introduction posts. One identity on both sides: ask the chatbot how registration works and it answers "I will send you a welcome message" — in the first person, because it is true.</p>
+
+      <h2>What this project demonstrates</h2>
+      <p>What holds for a phpBB forum holds for any documentary heritage: internal wikis, historical FAQs, ticket archives, business records. Three transferable lessons:</p>
+      <ul>
+        <li><strong>Legacy content is an AI asset.</strong> No rebuild, no migration: RAG plugs into what is there, and querying the data directly makes it a fast, always-fresh source.</li>
+        <li><strong>No retraining.</strong> The knowledge stays in your data, under your control — the model learns nothing, it consults. The day a fact changes, the answer changes.</li>
+        <li><strong>Trust comes from the guardrails.</strong> What separates a gadget from a tool the association publicly stands behind is not the model&rsquo;s capabilities: it is the taught rules, the server-side protections and the tests that lock them in.</li>
+      </ul>
+
+      <p style="margin-top: 30px;">The result can be tested live on <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — and the full project file is on our <a href="portfolio.html">Work</a> page. Documentary heritage to put to work, a chatbot to ground in your data? That is the heart of our <a href="ai-website-creation.html">AI-powered website creation</a> offering — <a href="contact-en.html">let&rsquo;s talk</a>, answer within 48 business hours.</p>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">INDEPENDENT COMPANY · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index-en.html#top">Home</a>
+        <a href="services-en.html">Services</a>
+        <a href="portfolio.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="why-nsy.html">Why NSY?</a>
+        <a href="3d-design.html">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
+        <a href="blog-en.html">Insights</a>
+        <a href="contact-en.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertise</h5>
+        <a href="java-ee-migration.html">Java EE migration</a>
+        <a href="wildfly-jboss-expert.html">WildFly · JBoss EAP</a>
+        <a href="openshift-kubernetes-expert.html">OpenShift · Kubernetes</a>
+        <a href="kafka-messaging-expert.html">Kafka · Messaging</a>
+        <a href="dora-compliance.html">DORA compliance</a>
+        <a href="claude-integration.html">Claude integration</a>
+        <a href="ai-website-creation.html">AI website creation</a>
+        <a href="website-redesign.html">Website redesign</a>
+        <a href="ai-web-glossary.html">AI & web glossary</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="feasibility.html">Feasibility request</a>
+      </div>
+      <div class="foot-col">
+        <h5>Where I work</h5>
+        <a href="website-creation-loiret.html">Website · Loiret</a>
+        <a href="website-creation-orleans.html">Website · Orléans</a>
+        <a href="website-creation-tours.html">Website · Tours</a>
+        <a href="website-creation-paris.html">Website · Paris</a>
+        <a href="website-creation-lyon.html">Website · Lyon</a>
+        <a href="website-creation-bordeaux.html">Website · Bordeaux</a>
+        <a href="technical-consultant-paris.html">Technical consultant · Paris</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
+      <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<!-- @partial:chatbot -->
+<!-- ───── Chatbot (AI assistant — Ansley, NSY architect) ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Open chat with Ansley">
+  <video class="cbot-fab-face" id="ansley-fab-video" autoplay loop muted playsinline preload="auto" poster="public/ansley-fab.png" aria-hidden="true">
+    <source src="public/ansley-fab.mp4" type="video/mp4" />
+    <img src="public/ansley-fab.png" alt="Ansley" />
+  </video>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+</button>
+
+<div class="cbot-greeter" id="cbot-greeter" role="dialog" aria-label="Message from Ansley">
+  <button class="cbot-greeter-close" id="cbot-greeter-close" aria-label="Dismiss message">&times;</button>
+  <p>Hi! I'm <b>Ansley</b>, NSY's AI architect. A question about our services, AI, a web project?</p>
+</div>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Ansley — NSY AI assistant">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <video id="ansley-video" class="cbot-avatar-vid" loop muted playsinline preload="none" poster="public/ansley.png" aria-label="Ansley, NSY AI architect">
+        <source src="public/ansley.mp4" type="video/mp4" />
+        <img src="public/ansley.png" alt="Ansley" class="cbot-avatar-img" />
+      </video>
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Ansley <span class="cbot-ai-badge" id="cbot-ai-badge" title="Ansley, NSY's AI architect — generative assistant grounded in the site's data (RAG), model hosted in the European Union.">AI</span></div>
+      <div class="cbot-status" id="cbot-status"><span class="cbot-online"></span>Online · Generative AI</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/ansley.png" alt="Ansley" /></div>
+      <div class="cbot-bubble">Hello 👋 I'm <b>Ansley</b>, NSY's AI architect: I know the whole site and answer in your language. Services, expertise, methods, availability — ask away.</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">What services do you offer?</button>
+    <button class="cbot-chip">How much does an AI website cost?</button>
+    <button class="cbot-chip">Do you work with banks?</button>
+    <button class="cbot-chip">How does this assistant work?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Ask your question…" maxlength="800" />
+    <button class="cbot-send" id="cbot-send" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span id="cbot-note">AI-generated answers (Mistral, EU) · no sensitive data</span>
+    <button id="cbot-escalate">Talk to Cédric →</button>
+  </div>
+</div>
+<!-- @endpartial:chatbot -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

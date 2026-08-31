@@ -1,0 +1,6 @@
+# Dashboard KPI — accès owner uniquement (Basic Auth).
+# Le htpasswd vit hors web-root logique (_secret/, déjà en Deny all pour HTTP).
+AuthType Basic
+AuthName "NSY — Statistiques"
+AuthUserFile /home/clients/5cfb1b1643bdd3c59140a2b35711d468/web/_secret/.htpasswd
+Require valid-user

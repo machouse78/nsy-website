@@ -5,7 +5,7 @@
 DirectoryIndex index.html
 
 # Pages d'erreur personnalisées
-ErrorDocument 404 /index.html
+ErrorDocument 404 /404.html
 
 # ───── Sécurité : headers HTTP ─────
 # (uniquement si mod_headers est chargé, sinon ignoré silencieusement)
@@ -60,6 +60,11 @@ ErrorDocument 404 /index.html
     AddType font/woff2 .woff2
     AddType font/woff .woff
     AddType application/javascript .js
+    # UTF-8 explicite pour les fichiers texte servis bruts (llms.txt,
+    # llms-full.txt, robots.txt…). Sans ça, le serveur envoie « text/plain »
+    # sans charset et, avec X-Content-Type-Options: nosniff, le navigateur
+    # décode l'UTF-8 en Latin-1 → accents cassés (« indÃ©pendant »).
+    AddCharset utf-8 .txt
 </IfModule>
 
 # (Le cache des vidéos est désormais géré dans le bloc « Cache navigateur »
@@ -86,6 +91,14 @@ ErrorDocument 404 /index.html
     RewriteCond %{HTTP_HOST} !^www\.nsy\.fr$ [NC]
     RewriteRule ^ https://www.nsy.fr%{REQUEST_URI} [L,R=301]
 
+    # ───── Variantes « dossier » d'une page existante → la page (301) ─────
+    # /contact/ ou /contact → /contact.html. Rattrape les liens mal formés au
+    # lieu de les laisser en 404 (audit 23/08/2026 : /contact/ était en 404 avec
+    # la home en corps). Ne touche pas /stats/ (vrai dossier, pas de stats.html).
+    RewriteCond %{REQUEST_URI} ^/([a-z0-9-]+)/?$
+    RewriteCond %{DOCUMENT_ROOT}/%1.html -f
+    RewriteRule ^([a-z0-9-]+)/?$ /$1.html [L,R=301]
+
     # ───── Redirections 301 anciennes URLs → nouvelles ─────
     # Ces 301 préservent le SEO et évitent les 404 depuis les backlinks /
     # Search Console.
@@ -99,12 +112,26 @@ ErrorDocument 404 /index.html
     RewriteRule ^mentions-legales-en\.html$ /legal-notice.html   [L,R=301]
     RewriteRule ^confidentialite-en\.html$  /privacy.html        [L,R=301]
 
+    # ───── Anciennes URL du site WordPress (avant mai 2026), encore connues de Google ─────
+    # Source : Search Console, 24/08/2026 — « Explorée, non indexée » et « Introuvable ».
+    RewriteRule ^competences/?$              /services.html      [L,R=301]
+    RewriteRule ^clients/?$                  /realisations.html  [L,R=301]
+    RewriteRule ^eportfolio/?$               /realisations.html  [L,R=301]
+    RewriteRule ^cv/CV_BARME_Cedric\.pdf$    /a-propos.html      [L,R=301]
+    # Article d'exemple de WordPress, sans équivalent : 410 Gone, Google le retire plus vite qu'un 404.
+    RewriteRule ^hello-world/?$              - [G]
+
     # ───── Auto-détection langue (Accept-Language) ─────
     # Sur racine ou /index.html : si pas de cookie nsy_lang ET navigateur en anglais,
     # rediriger vers /index-en.html. Le cookie est posé par le switch de drapeau JS,
     # donc dès qu'un utilisateur a choisi une langue, on respecte son choix.
     RewriteCond %{HTTP_COOKIE} !nsy_lang= [NC]
     RewriteCond %{HTTP:Accept-Language} ^en [NC]
+    # JAMAIS pour un robot : la page canonique ne doit pas répondre par une
+    # redirection à Google (explorations localisées avec Accept-Language: en),
+    # à Bing ni aux crawlers d'IA — tous anglophones par défaut. Google
+    # déconseille la redirection automatique par langue ; hreflang fait le travail.
+    RewriteCond %{HTTP_USER_AGENT} !(bot|crawl|spider|slurp|GPTBot|ClaudeBot|Claude-User|Perplexity|Applebot|Amazonbot|Bytespider|facebookexternalhit|LinkedInBot|WhatsApp) [NC]
     RewriteCond %{REQUEST_URI} ^/(index\.html)?$
     RewriteRule ^ /index-en.html [L,R=302]
 

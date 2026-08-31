@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -48,7 +48,7 @@
 
     <!-- Vidéo hero -->
     <video:video>
-      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
+      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-hero-poster.jpg</video:thumbnail_loc>
       <video:title>NSY — double compétence conseil technique &amp; IA</video:title>
       <video:description>Animation du logo NSY au cœur d'un orbe énergétique : conseil technique finance/assurance et création web propulsée par l'IA.</video:description>
       <video:content_loc>https://www.nsy.fr/public/nsy-hero.mp4</video:content_loc>
@@ -77,19 +77,40 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/index-en.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/" />
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
+      <video:title>NSY — dual expertise: technical consulting &amp; AI</video:title>
+      <video:description>The NSY logo animated inside an energy orb: finance/insurance technical consulting and AI-powered web creation.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/nsy-hero.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/finance-assurance.png</video:thumbnail_loc>
+      <video:title>Finance and insurance technical consulting — NSY</video:title>
+      <video:description>Visual presentation of the senior technical consulting service for finance and insurance</video:description>
+      <video:content_loc>https://www.nsy.fr/public/finance-assurance.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/web-ia.png</video:thumbnail_loc>
+      <video:title>AI-powered web creation — NSY</video:title>
+      <video:description>Visual presentation of the AI-powered website creation service</video:description>
+      <video:content_loc>https://www.nsy.fr/public/web-ia.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <!-- Pages du menu (structure multi-pages, juillet 2026) -->
   <url>
     <loc>https://www.nsy.fr/services.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
@@ -98,7 +119,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/services-en.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
@@ -107,7 +128,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/a-propos.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/a-propos.html" />
@@ -116,7 +137,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/about.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-03</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/a-propos.html" />
@@ -124,8 +145,26 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/a-propos.html" />
   </url>
   <url>
+    <loc>https://www.nsy.fr/pourquoi-nsy.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/pourquoi-nsy.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/why-nsy.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/pourquoi-nsy.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/why-nsy.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/pourquoi-nsy.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/why-nsy.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/pourquoi-nsy.html" />
+  </url>
+  <url>
     <loc>https://www.nsy.fr/contact.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/contact.html" />
@@ -134,7 +173,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/contact-en.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/contact.html" />
@@ -143,7 +182,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/conception-3d.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conception-3d.html" />
@@ -152,7 +191,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/3d-design.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conception-3d.html" />
@@ -163,7 +202,7 @@
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/realisations.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-08-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -172,27 +211,63 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/realisations.html" />
 
     <image:image>
+      <image:loc>https://www.nsy.fr/public/le-cerf-thym.jpg</image:loc>
+      <image:title>Le Cerf Thym — site réalisé par NSY</image:title>
+      <image:caption>Réalisation NSY : site vitrine en 4 langues du restaurant Le Cerf Thym à Sully-sur-Loire</image:caption>
+    </image:image>
+
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/le-cerf-thym.jpg</video:thumbnail_loc>
+      <video:title>Parcours du site Le Cerf Thym — réalisation NSY</video:title>
+      <video:description>Parcours du site www.lecerfthym.fr conçu par NSY : accueil, carte, boissons et accès du restaurant de Sully-sur-Loire, en quatre langues.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/YC5AG0zX70g</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+
+    <image:image>
       <image:loc>https://www.nsy.fr/public/prv-concept.jpg</image:loc>
       <image:title>PRV Concept — site réalisé par NSY</image:title>
       <image:caption>Réalisation NSY : site vitrine de l'association PRV Concept, dédiée au V6 PRV (Peugeot · Renault · Volvo)</image:caption>
     </image:image>
+
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/prv-concept.jpg</video:thumbnail_loc>
+      <video:title>Parcours du site PRV Concept — réalisation NSY</video:title>
+      <video:description>Parcours du site www.prv-concept.com conçu par NSY : accueil, moteurs PRV, protos et bibliothèque d'atelier, avec l'assistant conversationnel de l'association.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-07-17</lastmod>
+    <lastmod>2026-08-07</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/realisations.html" />
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/portfolio.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/realisations.html" />
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/le-cerf-thym.jpg</video:thumbnail_loc>
+      <video:title>Le Cerf Thym website preview — an NSY build</video:title>
+      <video:description>Parcours du site www.lecerfthym.fr conçu par NSY : accueil, carte, boissons et accès du restaurant de Sully-sur-Loire, en quatre langues.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/YC5AG0zX70g</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/prv-concept.jpg</video:thumbnail_loc>
+      <video:title>PRV Concept website preview — an NSY build</video:title>
+      <video:description>Parcours du site www.prv-concept.com conçu par NSY : accueil, moteurs PRV, protos et bibliothèque d'atelier, avec l'assistant conversationnel de l'association.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <!-- Pages légales FR -->
   <url>
     <loc>https://www.nsy.fr/mentions-legales.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
 
@@ -203,7 +278,7 @@
 
   <url>
     <loc>https://www.nsy.fr/confidentialite.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
 
@@ -215,7 +290,7 @@
   <!-- Pages légales EN -->
   <url>
     <loc>https://www.nsy.fr/legal-notice.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
 
@@ -226,7 +301,7 @@
 
   <url>
     <loc>https://www.nsy.fr/privacy.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
 
@@ -238,7 +313,7 @@
   <!-- FAQ — 50+ questions/réponses expertise & offres (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faq.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -249,7 +324,7 @@
 
   <url>
     <loc>https://www.nsy.fr/faq-en.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -261,7 +336,7 @@
   <!-- Pages piliers — expertises & offres (FR / EN), vague 2 GEO -->
   <url>
     <loc>https://www.nsy.fr/expertise-migration-java-ee.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
@@ -270,7 +345,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/java-ee-migration.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-migration-java-ee.html" />
@@ -279,7 +354,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/expertise-wildfly-jboss.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
@@ -288,7 +363,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/wildfly-jboss-expert.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-wildfly-jboss.html" />
@@ -297,7 +372,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/expertise-openshift-kubernetes.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-openshift-kubernetes.html" />
@@ -306,7 +381,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/openshift-kubernetes-expert.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-openshift-kubernetes.html" />
@@ -315,7 +390,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/expertise-kafka-messagerie.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
@@ -324,7 +399,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/kafka-messaging-expert.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/expertise-kafka-messagerie.html" />
@@ -333,7 +408,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/conformite-dora.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conformite-dora.html" />
@@ -342,7 +417,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/dora-compliance.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conformite-dora.html" />
@@ -351,7 +426,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/integration-claude-entreprise.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/integration-claude-entreprise.html" />
@@ -360,7 +435,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/claude-integration.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/integration-claude-entreprise.html" />
@@ -369,7 +444,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/creation-site-ia.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-ia.html" />
@@ -378,7 +453,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-website-creation.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-ia.html" />
@@ -387,7 +462,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/glossaire-ia-web.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -396,7 +471,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-web-glossary.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -407,7 +482,7 @@
   <!-- Questionnaire de faisabilité projet (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faisabilite.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -418,7 +493,7 @@
 
   <url>
     <loc>https://www.nsy.fr/feasibility.html</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -427,4 +502,340 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/faisabilite.html" />
   </url>
 
+
+  <!-- Journal + pages géo (ajout 2026-07-29) -->
+  <url>
+    <loc>https://www.nsy.fr/blog.html</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</image:loc>
+      <image:title>SEO vs GEO — illustration du journal NSY</image:title>
+      <image:caption>Infographie de l'article : être cité par ChatGPT, Claude et Perplexity</image:caption>
+    </image:image>
+  
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</video:thumbnail_loc>
+      <video:title>SEO vs GEO — illustration animée</video:title>
+      <video:description>Deux robots face à face : le SEO (recherche Google) contre le GEO (assistants IA génératifs) — la vignette animée du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</video:thumbnail_loc>
+      <video:title>Un chatbot IA branché sur un forum — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : un chatbot IA connecté au forum phpBB de PRV Concept.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/chatbot-forum-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/weekend-site-thumb.jpg</video:thumbnail_loc>
+      <video:title>Créer son site avec l'IA en un week-end — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : une IA holographique assemble un site web sous les yeux d'un dirigeant — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/weekend-site-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/supervision-thumb.jpg</video:thumbnail_loc>
+      <video:title>Des téraoctets au mégaoctet — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : un tableau de bord de supervision dont les courbes et les voyants s'animent — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/supervision-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/blog-en.html</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</image:loc>
+      <image:title>SEO vs GEO — NSY journal illustration</image:title>
+      <image:caption>Article infographic: getting cited by ChatGPT, Claude and Perplexity</image:caption>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/seo-geo-thumb.jpg</video:thumbnail_loc>
+      <video:title>SEO vs GEO — animated illustration</video:title>
+      <video:description>Deux robots face à face : le SEO (recherche Google) contre le GEO (assistants IA génératifs) — la vignette animée du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</image:loc>
+      <image:title>An AI chatbot wired into a forum — illustration</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/weekend-site-thumb.jpg</image:loc>
+      <image:title>Building your website with AI in a weekend — illustration</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/supervision-thumb.jpg</image:loc>
+      <image:title>From terabytes to megabytes — illustration</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/chatbot-forum-article.jpg</image:loc>
+      <image:title>Infographie — un chatbot IA branché sur le forum phpBB</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</loc>
+    <lastmod>2026-08-08</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/chatbot-forum-article-en.jpg</image:loc>
+      <image:title>Infographic — an AI chatbot wired into the phpBB forum</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/supervision-article.jpg</image:loc>
+      <image:title>Infographie — Des téraoctets au mégaoctet : la supervision à deux échelles</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/production-monitoring-terabytes-megabyte.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/supervision-article-en.jpg</image:loc>
+      <image:title>Infographic — From terabytes to megabytes: monitoring at two scales</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/site-ia-en-un-week-end.html</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-in-a-weekend.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/weekend-site-article.jpg</image:loc>
+      <image:title>Infographie — l'IA crée votre site web en un week-end, la promesse testée sur nsy.fr</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/ai-website-in-a-weekend.html</loc>
+    <lastmod>2026-08-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-in-a-weekend.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/weekend-site-article-en.jpg</image:loc>
+      <image:title>Infographic — AI builds your website in a weekend, the promise tested on nsy.fr</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/seo-geo-article.jpg</image:loc>
+      <image:title>SEO vs GEO — infographie de l'article</image:title>
+      <image:caption>Classement Google contre citations IA : l'infographie de l'article du journal NSY</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/seo-geo-getting-cited-by-ai.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html" />
+  
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/seo-geo-article-en.jpg</image:loc>
+      <image:title>SEO vs GEO — article infographic</image:title>
+      <image:caption>Google rankings versus AI citations: the NSY journal article infographic</image:caption>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/consultant-technique-paris.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/consultant-technique-paris.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/technical-consultant-paris.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/consultant-technique-paris.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/technical-consultant-paris.html</loc>
+    <lastmod>2026-08-01</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/consultant-technique-paris.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/technical-consultant-paris.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/consultant-technique-paris.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-loiret.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-orleans.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-loiret.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-loiret.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-loiret.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-orleans.html</loc>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-orleans.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-orleans.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/refonte-site-internet.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/refonte-site-internet.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-redesign.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/refonte-site-internet.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-redesign.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/refonte-site-internet.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-redesign.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/refonte-site-internet.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-paris.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-paris.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-paris.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-paris.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-paris.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-paris.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-paris.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-paris.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-lyon.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-lyon.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-lyon.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-lyon.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-lyon.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-lyon.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-lyon.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-lyon.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-bordeaux.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-bordeaux.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-bordeaux.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-bordeaux.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-bordeaux.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-bordeaux.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-bordeaux.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-bordeaux.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/creation-site-internet-tours.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-tours.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-tours.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-tours.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/website-creation-tours.html</loc>
+    <lastmod>2026-08-18</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-tours.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/website-creation-tours.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-internet-tours.html" />
+  </url>
 </urlset>

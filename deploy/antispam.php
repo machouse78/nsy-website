@@ -15,8 +15,38 @@
 
 declare(strict_types=1);
 
+/**
+ * Réglages du filtre — SÉPARÉS DU CODE (18/08/2026).
+ *
+ * Le dépôt du site est public : publier les seuils, les listes de mots et les
+ * plafonds revient à donner la recette pour les contourner. Ils vivent donc
+ * dans `_secret/antispam-rules.php` (gitignoré, non déployé par FTP), sur le
+ * même principe que les clés d'API. Le code, lui, reste lisible et vérifiable.
+ *
+ * Le fichier est FACULTATIF : absent, les valeurs par défaut ci-dessous
+ * s'appliquent — le site ne tombe pas, et un clone du dépôt fonctionne.
+ */
+function nsy_spam_rules(): array
+{
+    static $r = null;
+    if ($r !== null) return $r;
+    $defaut = [
+        'seuil'      => 5,
+        'hotes'      => ['bit.ly', 'tinyurl', 'goo.gl', 't.me', 'wa.me'],
+        'tld'        => 'ru|top|xyz|club|online|site|live|loan|work|buzz|icu|cn|tk',
+        'mots'       => ['crypto', 'casino', 'viagra', 'backlink', 'make money', 'cliquez ici'],
+        'poids'      => ['url1' => 3, 'url2' => 4, 'lien' => 4, 'hote' => 5, 'tld' => 2,
+                         'mot' => 3, 'montant' => 2, 'domaine' => 2, 'nom_chiffre' => 2, 'majuscules' => 2],
+    ];
+    $f = __DIR__ . '/_secret/antispam-rules.php';
+    $perso = is_readable($f) ? require $f : [];
+    $r = is_array($perso) ? $perso + $defaut : $defaut;
+    $r['poids'] = ($perso['poids'] ?? []) + $defaut['poids'];
+    return $r;
+}
+
 if (!defined('NSY_SPAM_THRESHOLD')) {
-    define('NSY_SPAM_THRESHOLD', 5);
+    define('NSY_SPAM_THRESHOLD', (int) nsy_spam_rules()['seuil']);
 }
 
 /** Score de spam d'une soumission (0 = sain ; >= NSY_SPAM_THRESHOLD = spam). */
@@ -24,54 +54,55 @@ function nsy_spam_score(string $message, string $email = '', string $name = '', 
 {
     $text = $name . "\n" . $company . "\n" . $email . "\n" . $message;
     $blob = mb_strtolower($text);
+    $regles = nsy_spam_rules();
+    $p = $regles['poids'];
     $score = 0;
 
     // 1) URLs dans le texte — rares dans une vraie demande B2B, systématiques en spam.
     $urls = preg_match_all('#https?://#i', $blob);
-    if ($urls >= 1) $score += 3;
-    if ($urls >= 2) $score += 4;
+    if ($urls >= 1) $score += $p['url1'];
+    if ($urls >= 2) $score += $p['url2'];
     // Liens Markdown / BBCode / HTML injectés.
     if (preg_match('#\[/?url|</?a\b|href\s*=|\[link#i', $text)) {
-        $score += 4;
+        $score += $p['lien'];
     }
 
     // 2) Raccourcisseurs d'URL / domaines à très forte odeur de spam.
-    $badHosts = [
-        'telegra.ph', 't.me', 'bit.ly', 'tinyurl', 'cutt.ly', 'is.gd', 'goo.gl',
-        'wa.me', 'api.whatsapp', 'rebrand.ly', 'shorturl', 'ow.ly', 'tiny.cc',
-    ];
-    foreach ($badHosts as $h) {
-        if (str_contains($blob, $h)) {
-            $score += 5;
+    foreach ((array) $regles['hotes'] as $h) {
+        if ($h !== '' && str_contains($blob, $h)) {
+            $score += $p['hote'];
         }
     }
     // TLD fréquemment utilisés par le spam.
-    if (preg_match('#\.(ru|top|xyz|club|online|site|live|loan|work|buzz|icu|cn|tk)\b#i', $blob)) {
-        $score += 2;
+    if ($regles['tld'] !== '' && preg_match('#\.(' . $regles['tld'] . ')\b#i', $blob)) {
+        $score += $p['tld'];
     }
 
     // 3) Mots-clés spam — quasi absents d'une vraie demande de conseil FR/EN.
-    $kw = [
-        'crypto', 'bitcoin', 'cryptocurrenc', 'ethereum', 'forex', 'casino', 'betting',
-        'viagra', 'cialis', 'porn', 'escort', 'seo service', 'seo services', 'backlink',
-        'rank your', 'guest post', 'payday', 'earn $', 'earn €', 'make money', 'per day',
-        'passive income', 'work from home', 'investment opportunity', 'binary option',
-        'get rich', 'free money', 'click here', 'limited offer', 'act now', 'weight loss',
-        'gambling', 'jackpot', 'win big', 'webcam', 'adult content', 'nude',
-    ];
-    foreach ($kw as $k) {
-        if (str_contains($blob, $k)) {
-            $score += 3;
+    foreach ((array) $regles['mots'] as $k) {
+        if ($k !== '' && str_contains($blob, $k)) {
+            $score += $p['mot'];
         }
     }
 
-    // 4) Montants « $1,500 », « €500/day »…
-    if (preg_match('#[$€£]\s?\d[\d.,]{2,}#u', $text)) {
-        $score += 2;
+    // 4) Montants « $1,500 », « €500/day »… et « 950K€ », « 1 500 € »
+    // (chiffre avant OU après le symbole — le spam FR écrit le montant d'abord).
+    if (preg_match('#[$€£]\s?\d[\d.,]{2,}#u', $text)
+        || preg_match('#\d[\d\s.,]*\s?[km]?\s?[$€£]#iu', $text)) {
+        $score += $p['montant'];
+    }
+    // 4 bis) Domaine/chemin SANS schéma (« exemple.io/8qtcnn ») — le lookbehind
+    // évite de recompter l'intérieur d'une URL https:// déjà scorée en (1).
+    if (preg_match('#(?<![\w./-])[a-z0-9-]{2,}\.[a-z]{2,6}/[a-z0-9]#i', $message)) {
+        $score += $p['domaine'];
+    }
+    // 4 ter) Nom contenant des chiffres (« Roman9f ») — rare chez un humain.
+    if ($name !== '' && preg_match('/\d/', $name)) {
+        $score += $p['nom_chiffre'];
     }
     // 5) Longue séquence EN MAJUSCULES (typique des pubs criardes).
     if (preg_match('#[A-Z][A-Z0-9 ]{18,}#', $text)) {
-        $score += 2;
+        $score += $p['majuscules'];
     }
 
     return $score;

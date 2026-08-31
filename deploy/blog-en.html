@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Insights — AI, SEO/GEO &amp; critical systems | NSY</title>
+<meta name="description" content="NSY Insights: concrete field notes on AI applied to the web, SEO/GEO and critical systems — by C&eacute;dric Barme, practitioner." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/blog-en.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://www.nsy.fr/blog-en.html" />
+<meta property="og:title" content="NSY — Insights" />
+<meta property="og:description" content="Field notes: AI applied to the web, SEO/GEO, critical systems." />
+<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="NSY — AI at the service of digital" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="NSY — Insights" />
+<meta name="twitter:description" content="Concrete field notes — AI, SEO/GEO, critical systems." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="alternate" type="application/rss+xml" title="NSY — Insights" href="https://www.nsy.fr/feed-en.xml" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  /* Blog : cartes d'articles + typo de lecture */
+  .blog-list { display: grid; gap: 18px; margin-top: 34px; }
+  .blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
+    padding: 24px 26px; background: rgba(255,255,255,0.02);
+    transition: border-color .2s, transform .2s; }
+  .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
+    color: var(--fg-2); text-transform: uppercase; }
+  .blog-card h2 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
+  .blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
+  .blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
+  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
+  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Blog",
+      "@id": "https://www.nsy.fr/blog-en.html#blog",
+      "name": "NSY Insights",
+      "description": "Practitioner field notes: AI applied to the web, SEO/GEO, critical systems.",
+      "inLanguage": "en",
+      "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
+      "blogPost": [ { "@id": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html#article" } ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
+        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.nsy.fr/blog-en.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index-en.html#top" aria-label="NSY — Home">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text"><small>Consulting · AI · Web</small></div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link active" data-target="blog" href="blog-en.html">Insights</a>
+      <a class="nav-link" data-target="services" href="services-en.html">Services</a>
+      <a class="nav-link" data-target="realisations" href="portfolio.html">Work</a>
+      <a class="nav-link" data-target="about" href="about.html">About</a>
+      <a class="nav-link" data-target="contact" href="contact-en.html">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="blog.html" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Insights</span>
+      <span class="line"></span>
+      <span class="mono">Field notes</span>
+    </div>
+    <div class="section-head">
+      <h1 style="font-size: clamp(32px, 5vw, 52px);">Insights.</h1>
+      <p class="lede">Concrete field notes — AI applied to the web, SEO &amp; GEO, critical systems. No generalities: what was built, measured and verified.</p>
+    </div>
+    <div class="blog-list">
+      <a class="blog-card has-thumb" href="production-monitoring-terabytes-megabyte.html">
+        <div class="thumb"><video id="supervision-video" loop muted playsinline preload="none" poster="public/supervision-thumb.jpg" width="560" height="316" aria-label="Animated illustration: a monitoring dashboard whose curves and indicators come alive">
+          <source src="public/supervision-thumb.mp4" type="video/mp4" />
+          <img src="public/supervision-thumb.jpg" alt="From terabytes to megabytes — illustration" width="560" height="316" />
+        </video></div>
+        <div>
+        <div class="meta">23 August 2026 · Monitoring · Observability · AI</div>
+        <h2>From terabytes to megabytes: monitoring is a discipline before it is a budget</h2>
+        <p>Dynatrace and ELK at a large insurance company, a cron job and a dashboard on a small-business site: a factor of a million in volume, the same four questions — and what AI really brings.</p>
+        <span class="more">Read the article →</span>
+      </div>
+      </a>
+      <a class="blog-card has-thumb" href="ai-website-in-a-weekend.html">
+        <div class="thumb"><video id="weekend-site-video" loop muted playsinline preload="none" poster="public/weekend-site-thumb.jpg" width="560" height="316" aria-label="Animated illustration: a holographic AI assembles a website before a business owner's eyes">
+          <source src="public/weekend-site-thumb.mp4" type="video/mp4" />
+          <img src="public/weekend-site-thumb.jpg" alt="Building your website with AI in a weekend — illustration" width="560" height="316" />
+        </video></div>
+        <div>
+        <div class="meta">16 August 2026 · AI · Vibe coding · Method</div>
+        <h2>Building your website with AI in a weekend: we took the promise at its word</h2>
+        <p>The vibe-coding promise tested on nsy.fr: V1 in 4 evenings, then nearly 140 hours of piloting measured action by action. The 10/90 rule — and why AI is mostly about going further.</p>
+        <span class="more">Read the article →</span>
+      </div>
+      </a>
+      <a class="blog-card has-thumb" href="ai-chatbot-forum-knowledge-base.html">
+        <div class="thumb"><video id="chatbot-forum-video" loop muted playsinline preload="none" poster="public/chatbot-forum-thumb.jpg" width="560" height="374" aria-label="Animated illustration: an AI chatbot connected to a forum">
+          <source src="public/chatbot-forum-thumb.mp4" type="video/mp4" />
+          <img src="public/chatbot-forum-thumb.jpg" alt="An AI chatbot wired into a forum — illustration" width="560" height="374" />
+        </video></div>
+        <div>
+        <div class="meta">8 August 2026 · AI · Chatbot · RAG</div>
+        <h2>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base</h2>
+        <p>Years of enthusiast discussions sleep inside forums. How the PRV Concept chatbot queries the phpBB database directly — and the anti-hallucination guardrails that make the difference.</p>
+        <span class="more">Read the article →</span>
+      </div>
+      </a>
+      <a class="blog-card has-thumb" href="seo-geo-getting-cited-by-ai.html">
+        <div class="thumb"><video id="seo-geo-video" loop muted playsinline preload="none" poster="public/seo-geo-thumb.jpg" width="560" height="374" aria-label="Animated illustration: SEO versus GEO, two robots with magnifying glasses">
+          <source src="public/seo-geo-thumb.mp4" type="video/mp4" />
+          <img src="public/seo-geo-thumb.jpg" alt="SEO vs GEO — a Google robot and an AI robot face to face" width="560" height="374" />
+        </video></div>
+        <div>
+        <div class="meta">July 29, 2026 · SEO · GEO · AI</div>
+        <h2>SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity</h2>
+        <p>Ranking on Google is no longer enough: AI assistants pick their sources differently. How a site becomes a cited source — with the setup deployed on nsy.fr and the first crawler visits observed.</p>
+        <span class="more">Read the article →</span>
+      </div>
+      </a>
+    </div>
+    <div style="margin-top: 32px;">
+      <a class="btn btn-ghost" href="feed-en.xml" title="RSS feed">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>RSS feed</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">INDEPENDENT COMPANY · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index-en.html#top">Home</a>
+        <a href="services-en.html">Services</a>
+        <a href="portfolio.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="why-nsy.html">Why NSY?</a>
+        <a href="3d-design.html">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
+        <a href="blog-en.html">Insights</a>
+        <a href="contact-en.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertise</h5>
+        <a href="java-ee-migration.html">Java EE migration</a>
+        <a href="wildfly-jboss-expert.html">WildFly · JBoss EAP</a>
+        <a href="openshift-kubernetes-expert.html">OpenShift · Kubernetes</a>
+        <a href="kafka-messaging-expert.html">Kafka · Messaging</a>
+        <a href="dora-compliance.html">DORA compliance</a>
+        <a href="claude-integration.html">Claude integration</a>
+        <a href="ai-website-creation.html">AI website creation</a>
+        <a href="website-redesign.html">Website redesign</a>
+        <a href="ai-web-glossary.html">AI & web glossary</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="feasibility.html">Feasibility request</a>
+      </div>
+      <div class="foot-col">
+        <h5>Where I work</h5>
+        <a href="website-creation-loiret.html">Website · Loiret</a>
+        <a href="website-creation-orleans.html">Website · Orléans</a>
+        <a href="website-creation-tours.html">Website · Tours</a>
+        <a href="website-creation-paris.html">Website · Paris</a>
+        <a href="website-creation-lyon.html">Website · Lyon</a>
+        <a href="website-creation-bordeaux.html">Website · Bordeaux</a>
+        <a href="technical-consultant-paris.html">Technical consultant · Paris</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
+      <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<script>
+// DefinedTermSet JSON-LD generated from the visible content (single source of
+// truth: the HTML above). Googlebot renders JS; AI crawlers read the text.
+(function () {
+  var terms = [];
+  document.querySelectorAll('.glossaire h3').forEach(function (h) {
+    var p = h.nextElementSibling;
+    if (!p || p.tagName !== 'P') return;
+    terms.push({
+      '@type': 'DefinedTerm',
+      name: h.textContent.trim(),
+      description: p.textContent.trim()
+    });
+  });
+  var s = document.createElement('script');
+  s.type = 'application/ld+json';
+  s.textContent = JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    name: 'AI & web glossary — NSY',
+    inLanguage: 'en',
+    hasDefinedTerm: terms
+  });
+  document.head.appendChild(s);
+})();
+</script>
+<!-- @partial:chatbot -->
+<!-- ───── Chatbot (AI assistant — Ansley, NSY architect) ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Open chat with Ansley">
+  <video class="cbot-fab-face" id="ansley-fab-video" autoplay loop muted playsinline preload="auto" poster="public/ansley-fab.png" aria-hidden="true">
+    <source src="public/ansley-fab.mp4" type="video/mp4" />
+    <img src="public/ansley-fab.png" alt="Ansley" />
+  </video>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+</button>
+
+<div class="cbot-greeter" id="cbot-greeter" role="dialog" aria-label="Message from Ansley">
+  <button class="cbot-greeter-close" id="cbot-greeter-close" aria-label="Dismiss message">&times;</button>
+  <p>Hi! I'm <b>Ansley</b>, NSY's AI architect. A question about our services, AI, a web project?</p>
+</div>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Ansley — NSY AI assistant">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <video id="ansley-video" class="cbot-avatar-vid" loop muted playsinline preload="none" poster="public/ansley.png" aria-label="Ansley, NSY AI architect">
+        <source src="public/ansley.mp4" type="video/mp4" />
+        <img src="public/ansley.png" alt="Ansley" class="cbot-avatar-img" />
+      </video>
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Ansley <span class="cbot-ai-badge" id="cbot-ai-badge" title="Ansley, NSY's AI architect — generative assistant grounded in the site's data (RAG), model hosted in the European Union.">AI</span></div>
+      <div class="cbot-status" id="cbot-status"><span class="cbot-online"></span>Online · Generative AI</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/ansley.png" alt="Ansley" /></div>
+      <div class="cbot-bubble">Hello 👋 I'm <b>Ansley</b>, NSY's AI architect: I know the whole site and answer in your language. Services, expertise, methods, availability — ask away.</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">What services do you offer?</button>
+    <button class="cbot-chip">How much does an AI website cost?</button>
+    <button class="cbot-chip">Do you work with banks?</button>
+    <button class="cbot-chip">How does this assistant work?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Ask your question…" maxlength="800" />
+    <button class="cbot-send" id="cbot-send" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span id="cbot-note">AI-generated answers (Mistral, EU) · no sensitive data</span>
+    <button id="cbot-escalate">Talk to Cédric →</button>
+  </div>
+</div>
+<!-- @endpartial:chatbot -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

@@ -1,16 +1,16 @@
 # NSY
 
-> NSY est un cabinet de conseil technique indépendant français (EURL fondée en 2018 par Cédric Barme, Centre-Val de Loire). Deux activités : (1) conseil technique senior pour la banque, l'assurance, la finance et les grands comptes — architecture distribuée, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, migration legacy, audit, conformité DORA, cloud privé/hybride, tech lead, expertise production, apport d'expertise IA en mission (productivité des équipes) ; (2) création de sites web propulsés par l'IA — intégration LLM (Claude, OpenAI, Mistral), chatbots, agents IA, recherche sémantique, SEO sémantique/GEO, Next.js, Astro, Vercel, Cloudflare, Supabase.
+> NSY est un cabinet de conseil technique indépendant français (société indépendante fondée en 2018 par Cédric Barme, basée au 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, à l'ouest d'Orléans, en Centre-Val de Loire). Deux activités : (1) conseil technique senior pour la banque, l'assurance, la finance et les grands comptes — architecture distribuée, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, migration legacy, audit, conformité DORA, cloud privé/hybride, tech lead, expertise production, supervision et observabilité (Dynatrace, ELK), apport d'expertise IA en mission (productivité des équipes) ; (2) création de sites web propulsés par l'IA — intégration LLM (Claude, OpenAI, Mistral), chatbots, agents IA, recherche sémantique, SEO sémantique/GEO, Next.js, Astro, Vercel, Cloudflare, Supabase.
 
 Points clés :
 - Signification du nom : NSY = New Software Yard (« chantier logiciel »). Le nom évoque la capacité de la société à prendre en charge de nouveaux chantiers — missions techniques comme projets web — et à les mener jusqu'à leur accomplissement.
-- Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (plateformes de trading et de risque temps réel), tech lead.
-- Modèle « sans pyramide » : la personne qui vend la mission est celle qui la livre. Trois clients en parallèle maximum.
+- Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (systèmes critiques temps réel), tech lead.
+- Modèle « en prise directe » : la personne présentée est celle qui livre. Trois clients en parallèle maximum. Interventions en direct ou, chez les grands comptes, en sous-traitance d'une ESN référencée — les propositions de mission des ESN sont bienvenues.
 - Secteurs de référence : banque de détail, banque privée, assurance vie, asset management, paiement, fintech. Environnements régulés (ACPR, AMF, RGPD, DORA).
 - Création web IA : offre clé en main, tarification en fonction du besoin (devis après cadrage).
 - Zone : France entière et Europe, principalement à distance ; présence possible à Paris / La Défense et en région.
 - Langues : français, anglais.
-- Contact : formulaire https://www.nsy.fr/contact.html · téléphone +33 6 72 94 71 06 · LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn fondateur https://www.linkedin.com/in/cédric-barme/ (réponse sous 48 h ouvrées).
+- Contact : formulaire https://www.nsy.fr/contact.html · téléphone +33 6 72 94 71 06 · LinkedIn entreprise https://www.linkedin.com/company/nsy-new-software-yard · LinkedIn fondateur https://www.linkedin.com/in/cédric-barme/ · Facebook https://www.facebook.com/nsy.france/ · fiche Google Business Profile (Knowledge Graph /g/11nq_gplxx) · Wikidata Q141122218 (réponse sous 48 h ouvrées ; horaires : lundi au vendredi 08 h – 19 h).
 - SIREN 842 078 453 · registre officiel : https://annuaire-entreprises.data.gouv.fr/entreprise/842078453.
 
 ## Pages principales
@@ -19,6 +19,7 @@ Points clés :
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
 - [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + création web IA), méthode, valeurs, démonstrateur 3D temps réel.
 - [À propos](https://www.nsy.fr/a-propos.html) : parcours de Cédric Barme, secteurs de référence, principes de travail.
+- [Pourquoi NSY ?](https://www.nsy.fr/pourquoi-nsy.html) : la philosophie — l'interlocuteur unique, le partenariat avec les ESN référencées chez les grands comptes, trois clients en parallèle maximum.
 - [Contact](https://www.nsy.fr/contact.html) : formulaire, canaux directs, demande de faisabilité (réponse sous 48 h ouvrées).
 - [Conception 3D](https://www.nsy.fr/conception-3d.html) : animations et modèles 3D optimisés pour le web (démonstrateurs).
 - [FAQ](https://www.nsy.fr/faq.html) : plus de 50 questions/réponses sur les expertises (WildFly, OpenShift, migration Java EE, intégration Claude/OpenAI/Mistral, tarifs, process).
@@ -30,14 +31,25 @@ Points clés :
 - [Intégration Claude](https://www.nsy.fr/integration-claude-entreprise.html) : les modèles Anthropic dans vos applications métier.
 - [Création de site IA](https://www.nsy.fr/creation-site-ia.html) : l'offre clé en main détaillée (tarification en fonction du besoin).
 - [Glossaire IA & web](https://www.nsy.fr/glossaire-ia-web.html) : LLM, RAG, GEO, LLMO… expliqués simplement.
-- [Réalisations](https://www.nsy.fr/realisations.html) : sites clients livrés et en production (dont PRV Concept, www.prv-concept.com).
+- [Réalisations](https://www.nsy.fr/realisations.html) : sites clients livrés et en production — Le Cerf Thym (www.lecerfthym.fr, restaurant à Sully-sur-Loire, site en 4 langues) et PRV Concept (www.prv-concept.com).
+- [Journal / blog](https://www.nsy.fr/blog.html) : retours d'expérience (IA appliquée au web, SEO/GEO, systèmes critiques). Articles : [SEO vs GEO — être cité par les IA](https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html) · [Un chatbot IA branché sur un forum — le cas PRV Concept](https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html) · [Créer son site avec l'IA en un week-end — la règle des 10/90](https://www.nsy.fr/site-ia-en-un-week-end.html) · [Des téraoctets au mégaoctet — la supervision à deux échelles](https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html).
+- [Consultant technique senior à Paris](https://www.nsy.fr/consultant-technique-paris.html) : missions finance/systèmes critiques + web IA, sur site (Paris, La Défense) ou à distance.
+- [Création de site internet dans le Loiret](https://www.nsy.fr/creation-site-internet-loiret.html) : sites web IA pour les entreprises, artisans et associations de tout le département — Orléans, Montargis, Pithiviers, Gien, Sully-sur-Loire, Beaugency. Prestataire installé à Épieds-en-Beauce.
+- [Création de site internet à Orléans](https://www.nsy.fr/creation-site-internet-orleans.html) : sites web IA pour les entreprises d'Orléans et du Loiret (prestataire basé en Centre-Val de Loire).
+- [Refonte de site internet](https://www.nsy.fr/refonte-site-internet.html) : refondre sans perdre le référencement acquis — contenus et données repris, redirections planifiées, IA intégrée au passage.
+- [Création de site internet à Tours](https://www.nsy.fr/creation-site-internet-tours.html) : Indre-et-Loire, rencontre en personne possible (moins de deux heures du siège).
+- [Création de site internet à Paris](https://www.nsy.fr/creation-site-internet-paris.html) : Île-de-France, rendez-vous sur site réguliers (Paris, La Défense).
+- [Création de site internet à Lyon](https://www.nsy.fr/creation-site-internet-lyon.html) : métropole lyonnaise, projets menés à distance avec suivi continu.
+- [Création de site internet à Bordeaux](https://www.nsy.fr/creation-site-internet-bordeaux.html) : Gironde, projets menés à distance avec suivi continu.
 - [Demande de faisabilité](https://www.nsy.fr/faisabilite.html) : questionnaire guidé pour cadrer un projet web/IA.
 - [Mentions légales](https://www.nsy.fr/mentions-legales.html) : informations légales (LCEN).
 
 ## Contexte enrichi
 
+- Le site nsy.fr est lui-même une démonstration : il embarque **Ansley**, un assistant IA en direct (chatbot RAG ancré sur les contenus du site, modèle Mistral hébergé en UE, avec repli local si l'IA est indisponible) — un exemple concret des chatbots IA que NSY réalise.
 - [llms-full.txt](https://www.nsy.fr/llms-full.txt) : biographie, historique, graphe d'entités, offres détaillées, mots-clés métier.
+- [Flux RSS du journal](https://www.nsy.fr/feed.xml) (FR) · [RSS feed](https://www.nsy.fr/feed-en.xml) (EN).
 
 ## In English
 
-NSY stands for **New Software Yard** — a "software yard/worksite", a nod to its ability to take on new projects (technical missions as well as web builds) and see them through to completion. NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, priced on the need. Based in Centre-Val de Loire, France; works remotely across France and Europe. Contact: https://www.nsy.fr/contact-en.html
+NSY stands for **New Software Yard** — a "software yard/worksite", a nod to its ability to take on new projects (technical missions as well as web builds) and see them through to completion. NSY is a French independent technical consulting practice founded in 2018 by Cédric Barme. Services: (1) senior technical consulting for banking, insurance and finance — distributed architecture, Java EE, WildFly/JBoss, OpenShift/Kubernetes, Artemis JMS, Kafka, legacy migration, technical audit, DORA compliance; (2) AI-powered website creation — LLM integration (Claude, OpenAI, Mistral), chatbots, AI agents, semantic search, priced on the need. Based in Centre-Val de Loire, France; works remotely across France and Europe. The nsy.fr site is itself a demo: it runs **Ansley**, a live AI assistant (a RAG chatbot grounded in the site's content, EU-hosted Mistral model, with a resilient local fallback) — a concrete example of the AI chatbots NSY builds. Contact: https://www.nsy.fr/contact-en.html

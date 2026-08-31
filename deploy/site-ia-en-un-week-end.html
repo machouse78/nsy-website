@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Créer son site avec l'IA en un week-end : on a pris la promesse au mot | NSY</title>
+<meta name="description" content="La promesse du vibe coding testée sur un cas réel : nsy.fr. V1 en 4 soirées, puis ≈ 140 heures de pilotage mesurées action par action — la règle des 10/90, et pourquoi l'IA ne sert pas qu'à aller plus vite mais à aller plus loin." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/ai-website-in-a-weekend.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.nsy.fr/site-ia-en-un-week-end.html" />
+<meta property="og:title" content="Créer son site avec l'IA en un week-end : on a pris la promesse au mot" />
+<meta property="og:description" content="V1 en 4 soirées, puis ≈ 140 heures de pilotage mesurées — la règle des 10/90, les heures machine qui travaillent pendant votre sommeil, et le vrai choix : plus vite, ou plus loin." />
+<meta property="og:image" content="https://www.nsy.fr/public/weekend-site-article.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="642" />
+<meta property="og:image:alt" content="L'IA crée votre site web en un week-end — la promesse testée sur nsy.fr, infographie" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Créer son site avec l'IA en un week-end | NSY" />
+<meta name="twitter:description" content="La promesse du vibe coding testée sur nsy.fr : V1 en 4 soirées, règle des 10/90, et le vrai choix — plus vite, ou plus loin." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/weekend-site-article.jpg" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="alternate" type="application/rss+xml" title="NSY — Journal" href="https://www.nsy.fr/feed.xml" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/site-ia-en-un-week-end.html#article",
+      "headline": "Créer son site avec l'IA en un week-end : on a pris la promesse au mot",
+      "description": "La promesse du vibe coding testée sur un cas réel : nsy.fr. V1 en 4 soirées, ≈ 140 heures de pilotage mesurées, la règle des 10/90 — et pourquoi l'IA sert surtout à aller plus loin.",
+      "inLanguage": "fr",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/a-propos.html"},
+      "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
+      "datePublished": "2026-08-16T12:00:00+02:00",
+      "dateModified": "2026-08-16T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/weekend-site-article.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/site-ia-en-un-week-end.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog.html#blog" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" },
+        { "@type": "ListItem", "position": 3, "name": "Un site avec l'IA en un week-end", "item": "https://www.nsy.fr/site-ia-en-un-week-end.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link active" data-target="blog" href="blog.html">Journal</a>
+      <a class="nav-link" data-target="services" href="services.html">Services</a>
+      <a class="nav-link" data-target="realisations" href="realisations.html">Réalisations</a>
+      <a class="nav-link" data-target="about" href="a-propos.html">À propos</a>
+      <a class="nav-link" data-target="contact" href="contact.html">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="ai-website-in-a-weekend.html" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Journal</span>
+      <span class="line"></span>
+      <span class="mono"><a href="blog.html" style="color: inherit;">← Tous les articles</a></span>
+    </div>
+    <article class="legal-page article">
+      <div class="article-meta">16 août 2026 · Cédric Barme · Lecture ≈ 7 min</div>
+      <div class="article-stats" data-journal-stats data-slug="site-ia-en-un-week-end.html" hidden>
+        <span class="js-views" aria-live="polite"></span>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
+      </div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Créer son site avec l&rsquo;IA en un week-end :<br />on a pris la promesse au mot</h1>
+      <p class="lede" style="font-size: 17px;"><em>« Votre site web en un week-end grâce à l&rsquo;IA. »</em> La promesse est partout — outils de « vibe coding », générateurs de sites, démos spectaculaires. Plutôt que de la commenter, nous l&rsquo;avons prise au mot, sur le cobaye dont nous connaissons chaque minute de l&rsquo;histoire : <strong>nsy.fr lui-même</strong>. Chaque action de construction y est horodatée — versions enregistrées, sessions de travail avec l&rsquo;IA — les chiffres de cet article sont donc <strong>mesurés</strong>, pas estimés de mémoire. Et une conviction en fil rouge : l&rsquo;IA ne sert pas seulement à aller plus vite — <strong>elle sert à aller plus loin</strong>.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/weekend-site-article.jpg" alt="Infographie — l'IA crée votre site web en un week-end : la promesse du vibe coding testée sur nsy.fr, V1 en 4 soirées, 10 % de l'effort, ≈ 140 heures de pilotage humain" loading="lazy" width="1140" height="642" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+
+
+      <h2>Verdict d&rsquo;abord : la promesse est vraie</h2>
+      <p><strong>La première version de nsy.fr a demandé quatre soirées</strong> — une dizaine d&rsquo;heures, l&rsquo;équivalent honnête d&rsquo;un week-end bien rempli. Elle était belle : page d&rsquo;accueil animée (un réseau de neurones en toile de fond, une vidéo en héro), design sombre soigné, sections offres, à-propos, contact. Montrée à un proche, elle faisait son effet. Il y a trois ans, ce résultat aurait demandé des semaines à une personne seule.</p>
+      <p>C&rsquo;est la partie de l&rsquo;histoire que racontent les démos. Elle est exacte. Voici la suite.</p>
+
+      <h2>Ce que la V1 était vraiment</h2>
+      <p>L&rsquo;inventaire de cette V1 tient en une ligne : <strong>une page, 22 fichiers, en français uniquement</strong>. Et surtout, une liste de ce qu&rsquo;elle n&rsquo;avait pas — invisible sur une capture d&rsquo;écran : un formulaire de contact qui n&rsquo;envoyait rien, aucune existence pour les moteurs de recherche ni pour les IA, aucune défense contre les robots spammeurs, pas de version anglaise, pas de mentions légales ni de politique de confidentialité.</p>
+      <p>Une V1 générée en un week-end, c&rsquo;est une vitrine posée dans le désert : jolie, mais sans rue devant, sans serrure, et sans personne pour savoir qu&rsquo;elle existe.</p>
+
+      <h2>Les étapes suivantes, chronomètre en main</h2>
+      <p>Entre cette V1 et le site que vous lisez : <strong>328 versions enregistrées, et près de 140 heures de pilotage actif</strong> — mesurées action par action dans le journal de bord, pauses et nuits exclues. S&rsquo;y ajoute un temps d&rsquo;une toute autre nature : <strong>celui où l&rsquo;IA exécutait seule</strong> — plus d&rsquo;une tâche lancée le soir était terminée au réveil. Ce temps machine a son propre coût, celui de l&rsquo;infrastructure d&rsquo;IA, mais il ne se paie pas en soirées. C&rsquo;est la vraie comptabilité d&rsquo;un chantier mené avec l&rsquo;IA : <strong>des heures de pilotage humain, démultipliées par des heures machine qui ne consomment pas votre temps.</strong></p>
+
+      <h3>≈ 8 h — un formulaire qui envoie vraiment</h3>
+      <p>Presque autant de temps que toute la V1, pour un seul bouton. Brancher un vrai serveur d&rsquo;envoi, valider les champs proprement dans les deux langues, gérer les états d&rsquo;attente et d&rsquo;erreur, envoyer un accusé de réception au visiteur. C&rsquo;est la première leçon du chantier : <strong>derrière chaque élément « évident » d&rsquo;un site, il y a une V1 qui fait semblant et une version qui fonctionne.</strong></p>
+
+      <h3>≈ 4 h — le site parle anglais, et la 3D arrive</h3>
+      <p>Le passage bilingue FR/EN (avec mémorisation du choix du visiteur) et l&rsquo;arrivée de la signature visuelle du site : une maquette filaire 3D interactive. Générée d&rsquo;abord à 12 Mo — injouable sur mobile — elle a été retravaillée jusqu&rsquo;à <strong>660 Ko</strong>, moins qu&rsquo;une photo. Quatre heures de pilotage seulement, parce que l&rsquo;IA a fait le gros du travail entre deux consignes. L&rsquo;IA produit vite ; faire <strong>léger</strong>, c&rsquo;est un autre métier.</p>
+
+      <h3>≈ 55 h — un studio 3D dans le chantier</h3>
+      <p>Le plus gros bloc de temps du projet n&rsquo;est pas du web : c&rsquo;est de la <strong>création 3D sous Blender</strong>. Au-delà de la maquette interactive, une <strong>animation complète</strong> a été produite — véhicules modélisés et animés jusqu&rsquo;au débattement des suspensions, éclairage, caméras multiples, rendu physique réaliste image par image, montage vidéo final. L&rsquo;IA a piloté Blender comme elle pilote le code : scripts de scène, diagnostics de rendu, allers-retours sur le détail (une arête lumineuse qui traînait sur la route a occupé une soirée entière). Le résultat alimente notre offre <a href="conception-3d.html">Conception 3D</a> — et illustre le vrai message de cette étape : <strong>avec l&rsquo;IA, un site peut embarquer des productions qui relevaient hier d&rsquo;un studio spécialisé.</strong></p>
+
+      <h3>≈ 20 h — le gros œuvre invisible</h3>
+      <p>La part la moins photogénique. Des allers-retours à faire ce qu&rsquo;aucune démo ne montre : la <strong>traque mobile</strong> (débordements d&rsquo;écran, menus qui cassent selon la langue, bascules portrait-paysage, particularités d&rsquo;Android) ; la <strong>performance et la sobriété</strong> (vidéos et animations mises en pause hors écran — votre batterie nous remercie) ; l&rsquo;<strong>hygiène du référencement</strong> (versions FR/EN correctement liées entre elles, redirections propres) ; un premier <strong>assistant conversationnel</strong> — à l&rsquo;époque un moteur à règles bilingue, sans IA générative ; et le <strong>questionnaire de faisabilité</strong> en 13 étapes qui qualifie les demandes entrantes. À la fin de cette phase, le site n&rsquo;avait presque pas changé d&rsquo;apparence. Il avait changé de nature.</p>
+
+      <h3>≈ 30 h — la couche professionnelle</h3>
+      <p>Le mois de la transformation : le site d&rsquo;une page devient un site d&rsquo;<strong>une cinquantaine de pages</strong> (offres détaillées, expertises, réalisations, FAQ de 52 questions-réponses). La couche <strong>GEO/LLMO</strong> s&rsquo;installe — <code>llms.txt</code>, données structurées, entité Wikidata, inscriptions moteurs — tout ce qui permet à ChatGPT, Claude ou Perplexity de nous lire et de nous <strong>citer</strong> correctement. L&rsquo;assistant à règles est remplacé par <strong>Ansley</strong>, un vrai modèle de langage ancré sur les faits du site, entouré de garde-fous : incapable d&rsquo;inventer un lien, un chiffre ou une promesse. Et parce qu&rsquo;un formulaire visible attire les robots, la <strong>défense anti-spam</strong> en profondeur se met en place. Le <strong>journal</strong> que vous lisez naît à la fin de cette phase, flux RSS compris.</p>
+
+      <h3>≈ 12 h — l&rsquo;usine à contenu et l&rsquo;endurance</h3>
+      <p>Les dernières semaines : le cycle de publication des articles (versions FR et EN, illustrations, distribution sociale — désormais <strong>automatisée</strong> vers nos réseaux), une <strong>suite de 30 tests automatisés</strong> qui rejoue les scénarios critiques avant chaque mise en ligne, des compteurs de lecture <strong>sans cookie</strong>, et les corrections remontées par les outils de Google — car un site indexé reçoit des alertes, et y répondre fait partie du travail.</p>
+      <p>Et tout récemment, la réalité a testé le chantier à notre place : un spam a traversé une des couches de défense. Analyse, durcissement, vérification en conditions réelles — le lendemain, le même message était bloqué. <strong>Un site vivant, c&rsquo;est ça : pas un objet fini, un système qui apprend.</strong></p>
+
+      <h2>La règle des 10/90</h2>
+      <p>De cette expérience, nous tirons une règle simple : <strong>la première version a coûté moins de 10 % de l&rsquo;effort total — et produit 100 % de l&rsquo;apparence</strong>. Les 90 % restants sont invisibles sur une démo : la sécurité, le référencement classique et génératif, le bilinguisme, la conformité, la performance, les tests, la maintenance — et parfois un studio 3D entier.</p>
+      <p>L&rsquo;IA n&rsquo;a pas réduit ces 90 % à zéro. Elle a fait mieux : <strong>elle les a rendus abordables</strong> — 140 heures de pilotage là où le même périmètre aurait demandé plusieurs fois plus il y a trois ans, une partie du travail tournant même pendant notre sommeil. Mais il a fallu savoir quoi construire, dans quel ordre, et reconnaître ce qui manquait — c&rsquo;est exactement là que le métier a déménagé.</p>
+
+      <h2>Aller plus vite — ou aller plus loin : le vrai choix</h2>
+      <p>« Un site plus vite et moins cher », c&rsquo;est la lecture la plus courante de l&rsquo;IA — et la plus pauvre. Elle n&rsquo;est pas fausse : si votre besoin est une <strong>V1 propre pour exister</strong> — tester un marché, poser une adresse, montrer patte blanche — l&rsquo;IA la rend plus abordable que jamais, et c&rsquo;est un choix parfaitement légitime. À une condition : y ajouter le socle non négociable (un formulaire qui envoie, une défense anti-robots, la conformité, le référencement de base). Une V1 assumée, ce n&rsquo;est pas une V1 nue.</p>
+      <p>Mais le choix le plus intéressant est l&rsquo;autre : <strong>garder le budget d&rsquo;un site classique, et laisser l&rsquo;IA en transformer le contenu</strong>. Les heures que l&rsquo;IA économise sur le travail standard ne disparaissent pas — elles se réinvestissent dans ce qui était hors de portée. Sur nsy.fr, tout ce qui fait la différence est né de ce réinvestissement : une <strong>animation 3D digne d&rsquo;un studio</strong> et la <strong>maquette interactive</strong> qui l&rsquo;accompagne, un <strong>assistant IA</strong> qui répond sur nos faits sans jamais rien inventer, la couche qui nous fait <strong>citer par ChatGPT ou Perplexity</strong>, le <strong>bilinguisme intégral</strong>, la <strong>distribution automatique</strong> des publications, une <strong>suite de tests</strong> qui veille avant chaque mise en ligne. Il y a trois ans, chacune de ces briques aurait été un projet à part entière, chiffré à part — et pour un site de cette taille, la plupart n&rsquo;auraient tout simplement <strong>jamais été envisagées</strong>.</p>
+      <p>C&rsquo;est ça, le déplacement réel : <strong>à budget égal, la question n&rsquo;est plus « en combien de temps aurons-nous le même site ? » mais « jusqu&rsquo;où pouvons-nous aller ? »</strong></p>
+
+      <h2>Ce que ça change si vous voulez un site</h2>
+      <p>Générer une V1 vous-même en un week-end ? Faites-le, sincèrement — c&rsquo;est un excellent moyen de préciser ce que vous voulez. Gardez seulement en tête que ce week-end vous donne la carrosserie ; le moteur, c&rsquo;est l&rsquo;autre chiffre du journal de bord : 90 %.</p>
+      <p>Et au moment de passer au site qui travaille, posez la vraie question — pas seulement <em>« en combien de temps, pour combien ? »</em>, mais <em>« <strong>qu&rsquo;est-ce que l&rsquo;IA nous permet d&rsquo;explorer</strong> que nous n&rsquo;aurions pas osé chiffrer avant ? »</em>. Une animation 3D de votre produit ? Un assistant qui répond la nuit sans dire de bêtises ? Être la réponse que donnent les IA quand on cherche votre métier dans votre région ? C&rsquo;est le même budget qu&rsquo;hier. Ce n&rsquo;est plus le même site.</p>
+
+      <p style="margin-top: 30px;">Vous avez une V1 qui dort, ou un projet qui démarre ? <a href="contact.html">Parlons-en</a> — ou testez votre idée en 5 minutes avec notre <a href="faisabilite.html">questionnaire de faisabilité</a>.</p>
+      <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-strong);">
+        <p class="mono" style="font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px;">Cet article vit aussi sur les réseaux — venez en discuter</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a class="btn btn-ghost" href="https://www.linkedin.com/pulse/un-site-web-en-week-end-gr%25C3%25A2ce-%25C3%25A0-lia-verdict-chiffr%25C3%25A9-hqq8e" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.59 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>Lire sur LinkedIn</a>
+          <a class="btn btn-ghost" href="https://www.facebook.com/reel/2812928635744339" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M22.68 0H1.32C.59 0 0 .59 0 1.32v21.36C0 23.41.59 24 1.32 24h11.5v-9.29H9.69v-3.62h3.13V8.41c0-3.1 1.89-4.79 4.66-4.79 1.32 0 2.46.1 2.79.14v3.24h-1.92c-1.5 0-1.79.71-1.79 1.76v2.31h3.58l-.47 3.62h-3.11V24h6.1c.73 0 1.32-.59 1.32-1.32V1.32C24 .59 23.41 0 22.68 0z"/></svg>Lire sur Facebook</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">SOCIÉTÉ INDÉPENDANTE · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index.html#top">Accueil</a>
+        <a href="services.html">Services</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="pourquoi-nsy.html">Pourquoi NSY ?</a>
+        <a href="conception-3d.html">Conception 3D</a>
+        <a href="faq.html">FAQ</a>
+        <a href="blog.html">Journal</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <a href="expertise-migration-java-ee.html">Migration Java EE</a>
+        <a href="expertise-wildfly-jboss.html">WildFly · JBoss EAP</a>
+        <a href="expertise-openshift-kubernetes.html">OpenShift · Kubernetes</a>
+        <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
+        <a href="conformite-dora.html">Conformité DORA</a>
+        <a href="integration-claude-entreprise.html">Intégration Claude</a>
+        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="refonte-site-internet.html">Refonte de site</a>
+        <a href="glossaire-ia-web.html">Glossaire IA & web</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="faisabilite.html">Demande de faisabilité</a>
+      </div>
+      <div class="foot-col">
+        <h5>Où j'interviens</h5>
+        <a href="creation-site-internet-loiret.html">Site internet · Loiret</a>
+        <a href="creation-site-internet-orleans.html">Site internet · Orléans</a>
+        <a href="creation-site-internet-tours.html">Site internet · Tours</a>
+        <a href="creation-site-internet-paris.html">Site internet · Paris</a>
+        <a href="creation-site-internet-lyon.html">Site internet · Lyon</a>
+        <a href="creation-site-internet-bordeaux.html">Site internet · Bordeaux</a>
+        <a href="consultant-technique-paris.html">Consultant technique · Paris</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
+      <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<!-- @partial:chatbot -->
+<!-- ───── Chatbot (assistant IA — Ansley, architecte NSY) ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Ouvrir le chat avec Ansley">
+  <video class="cbot-fab-face" id="ansley-fab-video" autoplay loop muted playsinline preload="auto" poster="public/ansley-fab.png" aria-hidden="true">
+    <source src="public/ansley-fab.mp4" type="video/mp4" />
+    <img src="public/ansley-fab.png" alt="Ansley" />
+  </video>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+</button>
+
+<div class="cbot-greeter" id="cbot-greeter" role="dialog" aria-label="Message d'Ansley">
+  <button class="cbot-greeter-close" id="cbot-greeter-close" aria-label="Masquer le message">&times;</button>
+  <p>Bonjour&nbsp;! Je suis <b>Ansley</b>, l'architecte IA de NSY. Une question sur nos services, l'IA, un projet web&nbsp;?</p>
+</div>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Ansley — assistant IA NSY">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <video id="ansley-video" class="cbot-avatar-vid" loop muted playsinline preload="none" poster="public/ansley.png" aria-label="Ansley, architecte IA de NSY">
+        <source src="public/ansley.mp4" type="video/mp4" />
+        <img src="public/ansley.png" alt="Ansley" class="cbot-avatar-img" />
+      </video>
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Ansley <span class="cbot-ai-badge" id="cbot-ai-badge" title="Ansley, architecte IA de NSY — assistant génératif ancré dans les données du site (RAG), modèle hébergé en Union européenne.">IA</span></div>
+      <div class="cbot-status" id="cbot-status"><span class="cbot-online"></span>En ligne · IA générative</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/ansley.png" alt="Ansley" /></div>
+      <div class="cbot-bubble">Bonjour 👋 Je suis <b>Ansley</b>, l'architecte IA de NSY : je connais tout le site et je réponds dans votre langue. Services, expertises, méthodes, disponibilité — posez votre question librement.</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">Quels sont vos services ?</button>
+    <button class="cbot-chip">Quel est le tarif d'un site IA ?</button>
+    <button class="cbot-chip">Travaillez-vous avec les banques ?</button>
+    <button class="cbot-chip">Comment fonctionne cet assistant ?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Posez votre question…" maxlength="800" />
+    <button class="cbot-send" id="cbot-send" aria-label="Envoyer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span id="cbot-note">Réponses générées par IA (Mistral, UE) · pas de données sensibles</span>
+    <button id="cbot-escalate">Parler à Cédric →</button>
+  </div>
+</div>
+<!-- @endpartial:chatbot -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

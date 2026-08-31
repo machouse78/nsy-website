@@ -27,8 +27,9 @@
 <meta name="twitter:description" content="LLM, RAG, embeddings, agents, GEO, LLMO… expliqués simplement." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 
-<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -64,6 +65,7 @@
     </a>
     <div class="nav-links">
       <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link" data-target="blog" href="blog.html">Journal</a>
       <a class="nav-link active" data-target="services" href="services.html">Services</a>
       <a class="nav-link" data-target="realisations" href="realisations.html">Réalisations</a>
       <a class="nav-link" data-target="about" href="a-propos.html">À propos</a>
@@ -82,7 +84,7 @@
     </div>
     <div class="nav-lang">
       <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
-      <a href="#" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+      <a href="ai-web-glossary.html" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
     </div>
     <span class="nav-break" aria-hidden="true"></span>
   </div>
@@ -142,7 +144,7 @@
       <p>Standard ouvert (initié par Anthropic) qui décrit comment un LLM se connecte à des outils et sources de données externes — l'équivalent d'un port universel entre modèles et systèmes d'entreprise.</p>
 
       <h3>Chatbot sans LLM</h3>
-      <p>Moteur de règles à détection d'intentions : gratuit à l'usage, instantané, sans clé API ni fuite de données. Pertinent quand le périmètre de questions est borné — le chatbot de ce site fonctionne ainsi.</p>
+      <p>Moteur de règles à détection d'intentions : gratuit à l'usage, instantané, sans clé API ni fuite de données. Pertinent quand le périmètre de questions est borné — l'assistant IA de ce site le garde en repli hors-ligne, pour quand le LLM (Mistral) est indisponible.</p>
 
       <h2>Web & référencement</h2>
 
@@ -176,6 +178,12 @@
       <h3>Edge / hébergement edge</h3>
       <p>Servir votre site depuis des serveurs répartis au plus près des visiteurs (Cloudflare, Vercel) : latence minimale partout, résilience accrue — pertinent dès que votre audience dépasse une région.</p>
 
+      <h3>Supervision (monitoring)</h3>
+      <p>Savoir qu'un système en production va bien — ou va mal — avant que ses utilisateurs ne s'en aperçoivent. Quatre questions, à toute échelle : qu'est-ce qui est anormal, qui prévient-on, que garde-t-on, que fait-on d'une alerte qui a menti. Une fausse alerte se qualifie, elle ne se coupe pas. Voir <a href="superviser-production-teraoctets-megaoctet.html">Des téraoctets au mégaoctet</a>.</p>
+
+      <h3>Observabilité</h3>
+      <p>La capacité à comprendre l'état interne d'un système à partir de ce qu'il émet : métriques, logs et traces. La supervision dit qu'il y a un problème ; l'observabilité permet de comprendre lequel. Outils typiques chez les grands comptes : Dynatrace (exécution ; Davis, son IA causale, détecte sans seuil et remonte la cause racine) et ELK (logs, KPI métier).</p>
+
     </article>
   </div>
 </section>
@@ -190,7 +198,7 @@
           <img src="public/nsy-logo.png" alt="NSY" />
           <div>
             <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
-            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+            <div class="mono" style="font-size: 10px;">SOCIÉTÉ INDÉPENDANTE · CENTRE-VAL DE LOIRE</div>
           </div>
         </div>
         <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
@@ -203,8 +211,10 @@
         <a href="services.html">Services</a>
         <a href="realisations.html">Réalisations</a>
         <a href="a-propos.html">À propos</a>
+        <a href="pourquoi-nsy.html">Pourquoi NSY ?</a>
         <a href="conception-3d.html">Conception 3D</a>
         <a href="faq.html">FAQ</a>
+        <a href="blog.html">Journal</a>
         <a href="contact.html">Contact</a>
       </div>
       <div class="foot-col">
@@ -216,16 +226,31 @@
         <a href="conformite-dora.html">Conformité DORA</a>
         <a href="integration-claude-entreprise.html">Intégration Claude</a>
         <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="refonte-site-internet.html">Refonte de site</a>
         <a href="glossaire-ia-web.html">Glossaire IA & web</a>
       </div>
       <div class="foot-col">
         <h5>Contact</h5>
         <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
         <a href="faisabilite.html">Demande de faisabilité</a>
+      </div>
+      <div class="foot-col">
+        <h5>Où j'interviens</h5>
+        <a href="creation-site-internet-loiret.html">Site internet · Loiret</a>
+        <a href="creation-site-internet-orleans.html">Site internet · Orléans</a>
+        <a href="creation-site-internet-tours.html">Site internet · Tours</a>
+        <a href="creation-site-internet-paris.html">Site internet · Paris</a>
+        <a href="creation-site-internet-lyon.html">Site internet · Lyon</a>
+        <a href="creation-site-internet-bordeaux.html">Site internet · Bordeaux</a>
+        <a href="consultant-technique-paris.html">Consultant technique · Paris</a>
         <div class="foot-social">
           <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
             LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
           </a>
           <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
@@ -239,7 +264,7 @@
       </div>
     </div>
     <div class="foot-bot">
-      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
       <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
     </div>
   </div>

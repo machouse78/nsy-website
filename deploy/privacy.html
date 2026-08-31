@@ -27,13 +27,96 @@
 <meta name="twitter:description" content="Data collected, purposes, legal basis, retention and GDPR rights." />
 <meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
 
-<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/style.css" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": [
+        "Organization",
+        "ProfessionalService",
+        "LocalBusiness"
+      ],
+      "@id": "https://www.nsy.fr/#org",
+      "name": "NSY",
+      "legalName": "NSY",
+      "url": "https://www.nsy.fr/",
+      "logo": "https://www.nsy.fr/public/nsy-logo.png",
+      "image": "https://www.nsy.fr/public/nsy-og.jpg",
+      "telephone": "+33672947106",
+      "foundingDate": "2018-09-04",
+      "identifier": {
+        "@type": "PropertyValue",
+        "propertyID": "SIREN",
+        "value": "842078453"
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "8 Hameau de Poiseaux",
+        "addressLocality": "Épieds-en-Beauce",
+        "postalCode": "45130",
+        "addressRegion": "Centre-Val de Loire",
+        "addressCountry": "FR"
+      },
+      "priceRange": "Sur devis",
+      "sameAs": [
+        "https://www.wikidata.org/wiki/Q141122218",
+        "https://www.linkedin.com/company/nsy-new-software-yard",
+        "https://www.linkedin.com/in/c%C3%A9dric-barme/",
+        "https://github.com/machouse78/nsy-website",
+        "https://youtube.com/@new-software-yard",
+        "https://www.societe.com/societe/nsy-842078453.html",
+        "https://www.pappers.fr/entreprise/nsy-842078453",
+        "https://www.pagesjaunes.fr/pros/58566786",
+        "https://www.facebook.com/nsy.france/",
+        "https://www.google.com/search?kgmid=/g/11nq_gplxx",
+        "https://www.sortlist.fr/agency/nsy"
+      ]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://www.nsy.fr/privacy.html#page",
+      "url": "https://www.nsy.fr/privacy.html",
+      "name": "Privacy policy",
+      "inLanguage": "en",
+      "isPartOf": {
+        "@type": "WebSite",
+        "@id": "https://www.nsy.fr/#website",
+        "url": "https://www.nsy.fr/",
+        "name": "NSY"
+      },
+      "about": {
+        "@id": "https://www.nsy.fr/#org"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://www.nsy.fr/index-en.html"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Privacy policy",
+          "item": "https://www.nsy.fr/privacy.html"
+        }
+      ]
+    }
+  ]
+}
+</script>
 </head>
 <body>
 
@@ -46,6 +129,7 @@
     </a>
     <div class="nav-links">
       <a class="nav-link active" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link" data-target="blog" href="blog-en.html">Insights</a>
       <a class="nav-link" data-target="services" href="services-en.html">Services</a>
       <a class="nav-link" data-target="realisations" href="portfolio.html">Work</a>
       <a class="nav-link" data-target="about" href="about.html">About</a>
@@ -63,7 +147,7 @@
       </a>
     </div>
     <div class="nav-lang">
-      <a href="#" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="confidentialite.html" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
       <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
     </div>
     <span class="nav-break" aria-hidden="true"></span>
@@ -89,16 +173,16 @@
 
       <h2>Data controller</h2>
       <dl class="legal-dl">
-        <dt>Company</dt><dd>NSY (EURL)</dd>
+        <dt>Company</dt><dd>NSY</dd>
         <dt>Legal representative</dt><dd>Cédric Barme</dd>
         <dt>SIREN</dt><dd>842 078 453</dd>
-        <dt>Address</dt><dd>Centre-Val de Loire, France</dd>
+        <dt>Address</dt><dd>8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, France</dd>
         <dt>Contact</dt><dd><a href="contact-en.html">Contact form</a></dd>
       </dl>
       <p>NSY is a single-member structure with no designated DPO (not required under article 37 of GDPR). Cédric Barme personally handles requests related to personal data.</p>
 
       <h2>Data collected</h2>
-      <p>The nsy.fr website only collects data that you submit <strong>voluntarily</strong> via the contact form:</p>
+      <p>The nsy.fr website only collects data that you submit <strong>voluntarily</strong> via the contact form or the feasibility questionnaire:</p>
       <ul>
         <li><strong>Full name</strong> (required)</li>
         <li><strong>Business email</strong> (required)</li>
@@ -107,8 +191,20 @@
         <li><strong>Service of interest</strong> (Technical consulting or Web creation · AI)</li>
         <li><strong>Project timeline</strong></li>
         <li><strong>Description of your need</strong> (free text)</li>
+        <li><strong>Feasibility questionnaire answers</strong> (project type, context, timeline — guided choices and free text)</li>
       </ul>
       <p>No other data is collected. The website uses <strong>no tracking cookies</strong>, no third-party analytics (no Google Analytics, Matomo, Plausible, etc.), and no advertising tracking pixels. See the <a href="#cookies">Cookies</a> section below for details on the single functional cookie used (language preference).</p>
+
+      <h2>Form protection (anti-bot and anti-spam)</h2>
+      <p>To protect the forms against spam robots, the site relies on two mechanisms:</p>
+      <ul>
+        <li><strong>Cloudflare Turnstile</strong> — an anti-bot check displayed on the forms. The widget analyses technical signals from your browser (including the IP address) to tell humans and robots apart; it is operated by Cloudflare, Inc. The content of your message is <strong>never</strong> sent to it — only the verdict reaches us.</li>
+        <li><strong>Server-side anti-spam screening</strong> — submissions are analysed automatically (content, and the IP address used in hashed form for daily caps). Submissions identified as spam are briefly logged in a technical file outside the web root, solely to monitor the mechanism.</li>
+      </ul>
+      <p>Legal basis: <strong>legitimate interest</strong> (article 6.1.f GDPR) in protecting the service against abuse.</p>
+
+      <h2>Journal reading counters</h2>
+      <p>Journal articles display view and like counters. These are <strong>anonymous per-article aggregates</strong>: no personal data is stored and no profile is built. Your "already read / already liked" state stays in your own browser (<code>sessionStorage</code> / <code>localStorage</code>); a technical cap per hashed IP address protects the mechanism against abuse.</p>
 
       <h2>Processing purposes</h2>
       <p>The data collected is used exclusively to:</p>
@@ -139,6 +235,7 @@
       <ul>
         <li><strong>Infomaniak Network SA</strong> (Switzerland, adequate country under GDPR) — host of the website and email provider</li>
         <li><strong>Mistral AI</strong> (France, European Union) — only if you use the conversational assistant: your messages are relayed to them for the time needed to generate the reply (see the "AI assistant" section below)</li>
+        <li><strong>Cloudflare, Inc.</strong> (United States — certified under the EU-US Data Privacy Framework) — only for the Turnstile anti-bot check on the forms: technical signals from your browser, never the content of your messages</li>
       </ul>
 
       <h2>AI assistant (chatbot)</h2>
@@ -169,7 +266,7 @@
       <p>NSY implements appropriate technical and organisational measures to ensure data security. However, as no system is infallible, NSY cannot guarantee absolute security.</p>
 
       <h2 id="cookies">Cookies</h2>
-      <p>The nsy.fr website uses <strong>no tracking, session, analytics or advertising cookies</strong>. No prior consent banner is therefore necessary.</p>
+      <p>The nsy.fr website sets <strong>no tracking, session, analytics or advertising cookies</strong>. No prior consent banner is therefore necessary for cookies set by nsy.fr — see, however, the <a href="#third-party-embeds">Embedded third-party content</a> section regarding the pages that display a YouTube video player.</p>
       <p>A <strong>single functional preference cookie</strong> is used:</p>
       <table class="legal-table" style="width:100%; border-collapse:collapse; margin: 16px 0; font-size: 14px;">
         <thead>
@@ -193,6 +290,11 @@
       <p>In accordance with French <a href="https://www.cnil.fr/en/cookies-and-other-tracking-devices" target="_blank" rel="noopener">CNIL deliberation no. 2020-091 of 17 September 2020</a>, cookies intended to remember a choice expressed by the user (language preference) <strong>are exempt from the obligation to obtain prior consent</strong>, provided they are set on an explicit user action — which is the case here (clicking a flag).</p>
       <p>You can delete this cookie at any time from your browser settings. The default language will then be re-detected from your browser's language preferences (<code>Accept-Language</code> header).</p>
 
+      <h2 id="third-party-embeds">Embedded third-party content (YouTube)</h2>
+      <p>Two pages on this site display video players hosted by YouTube: <a href="portfolio.html">Work</a>, which showcases the sites we have delivered, and <a href="3d-design.html">3D design</a>. Everywhere else, videos are hosted on our own servers and call no outside service.</p>
+      <p>These players use <strong>YouTube's privacy-enhanced mode</strong> (the <code>youtube-nocookie.com</code> domain): no advertising or personalisation cookie is set unless you start playback. That said — and this is true of any embedded content, whatever its source — <strong>merely displaying the page opens a connection to YouTube's servers</strong> (Google), which then receive your IP address, the address of the page you are viewing, and your browser's technical data. If you play a video, YouTube may additionally write information to your browser's local storage and associate that view with your Google account if you are signed in.</p>
+      <p>That processing is then governed by Google's privacy policy, over which NSY has no control: <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">policies.google.com/privacy</a>. If you would rather avoid it, simply do not start playback, or view these two pages with a third-party content blocker; the same videos remain available on our <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener">YouTube channel</a>, where going there is your own decision.</p>
+
       <h2>Updates</h2>
       <p>This policy may be updated at any time to reflect technical, legal or organisational changes. The date of the last update appears at the bottom of the page.</p>
 
@@ -211,7 +313,7 @@
           <img src="public/nsy-logo.png" alt="NSY" />
           <div>
             <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
-            <div class="mono" style="font-size: 10px;">EURL · CENTRE-VAL DE LOIRE</div>
+            <div class="mono" style="font-size: 10px;">INDEPENDENT COMPANY · CENTRE-VAL DE LOIRE</div>
           </div>
         </div>
         <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
@@ -224,8 +326,10 @@
         <a href="services-en.html">Services</a>
         <a href="portfolio.html">Work</a>
         <a href="about.html">About</a>
+        <a href="why-nsy.html">Why NSY?</a>
         <a href="3d-design.html">3D Design</a>
         <a href="faq-en.html">FAQ</a>
+        <a href="blog-en.html">Insights</a>
         <a href="contact-en.html">Contact</a>
       </div>
       <div class="foot-col">
@@ -237,16 +341,31 @@
         <a href="dora-compliance.html">DORA compliance</a>
         <a href="claude-integration.html">Claude integration</a>
         <a href="ai-website-creation.html">AI website creation</a>
+        <a href="website-redesign.html">Website redesign</a>
         <a href="ai-web-glossary.html">AI & web glossary</a>
       </div>
       <div class="foot-col">
         <h5>Contact</h5>
         <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
         <a href="feasibility.html">Feasibility request</a>
+      </div>
+      <div class="foot-col">
+        <h5>Where I work</h5>
+        <a href="website-creation-loiret.html">Website · Loiret</a>
+        <a href="website-creation-orleans.html">Website · Orléans</a>
+        <a href="website-creation-tours.html">Website · Tours</a>
+        <a href="website-creation-paris.html">Website · Paris</a>
+        <a href="website-creation-lyon.html">Website · Lyon</a>
+        <a href="website-creation-bordeaux.html">Website · Bordeaux</a>
+        <a href="technical-consultant-paris.html">Technical consultant · Paris</a>
         <div class="foot-social">
           <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
             LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
           </a>
           <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
@@ -260,7 +379,7 @@
       </div>
     </div>
     <div class="foot-bot">
-      <div>© <span data-current-year>2026</span> NSY · EURL · SIREN 842 078 453</div>
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
       <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
     </div>
   </div>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<channel>
+  <title>NSY — Insights</title>
+  <link>https://www.nsy.fr/blog-en.html</link>
+  <description>Practitioner field notes: AI applied to the web, SEO/GEO, critical systems. By Cédric Barme (NSY).</description>
+  <language>en</language>
+  <atom:link href="https://www.nsy.fr/feed-en.xml" rel="self" type="application/rss+xml" />
+  <item>
+    <title>From terabytes to megabytes: monitoring is a discipline before it is a budget</title>
+    <link>https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</guid>
+    <pubDate>Sun, 23 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Monitoring and observability at two scales: Dynatrace and ELK at a large insurance company, the dashboard of a small-business website. Terabytes versus megabytes a month, the same four questions, the golden rule on false alerts — and what AI really brings.</description>
+  </item>
+  <item>
+    <title>Building your website with AI in a weekend: we took the promise at its word</title>
+    <link>https://www.nsy.fr/ai-website-in-a-weekend.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/ai-website-in-a-weekend.html</guid>
+    <pubDate>Sun, 16 Aug 2026 12:00:00 +0200</pubDate>
+    <description>The vibe-coding promise tested on a real case: nsy.fr. V1 in 4 evenings, then nearly 140 hours of piloting measured action by action — the 10/90 rule, and why AI isn't just about going faster but going further.</description>
+  </item>
+  <item>
+    <title>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base</title>
+    <link>https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html</guid>
+    <pubDate>Sat, 08 Aug 2026 12:00:00 +0200</pubDate>
+    <description>Years of enthusiast discussions sleep inside forums. Field report from prv-concept.com: an AI chatbot that queries the phpBB database directly, with the anti-hallucination guardrails that make the difference.</description>
+  </item>
+  <item>
+    <title>SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity</title>
+    <link>https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/seo-geo-getting-cited-by-ai.html</guid>
+    <pubDate>Wed, 29 Jul 2026 12:00:00 +0200</pubDate>
+    <description>Ranking on Google is no longer enough: AI assistants pick their sources differently. SEO vs GEO explained by a practitioner, with the concrete nsy.fr case.</description>
+  </item>
+</channel>
+</rss>
