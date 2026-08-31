@@ -630,16 +630,34 @@
       st.cx += avant.x - apres.x; st.cy += avant.y - apres.y;
       rendCarte(svgId);
     }, { passive: false });
+    /* Glisser : ecouteurs poses sur WINDOW pendant le geste — la capture de
+       pointeur sur un element SVG est capricieuse (Safari), et innerHTML est
+       reconstruit a chaque rendu. touch-action:none permet le meme geste au
+       doigt sans faire defiler la page. */
+    svg.style.touchAction = 'none';
+    svg.style.userSelect = 'none';
+    svg.style.webkitUserSelect = 'none';
     let glisse = null;
-    svg.addEventListener('pointerdown', (ev) => { glisse = pointVers(ev); svg.setPointerCapture(ev.pointerId); svg.style.cursor = 'grabbing'; });
-    svg.addEventListener('pointermove', (ev) => {
+    const bouge = (ev) => {
       if (!glisse) return;
+      ev.preventDefault();
       const p = pointVers(ev);
       st.cx += glisse.x - p.x; st.cy += glisse.y - p.y;
       rendCarte(svgId);
+    };
+    const fin = () => {
+      glisse = null; svg.style.cursor = 'grab';
+      window.removeEventListener('pointermove', bouge);
+      window.removeEventListener('pointerup', fin);
+      window.removeEventListener('pointercancel', fin);
+    };
+    svg.addEventListener('pointerdown', (ev) => {
+      ev.preventDefault();
+      glisse = pointVers(ev); svg.style.cursor = 'grabbing';
+      window.addEventListener('pointermove', bouge);
+      window.addEventListener('pointerup', fin);
+      window.addEventListener('pointercancel', fin);
     });
-    const fin = (ev) => { glisse = null; svg.style.cursor = 'grab'; if (ev && ev.pointerId != null) { try { svg.releasePointerCapture(ev.pointerId); } catch (e) {} } };
-    svg.addEventListener('pointerup', fin); svg.addEventListener('pointercancel', fin);
     svg.addEventListener('dblclick', () => { st.k = 1; st.cx = 500; st.cy = 250; rendCarte(svgId); });
     /* Boutons +/− (owner, 29/08/2026) : la molette reste le geste naturel au
        pointeur, mais il faut des commandes visibles — et au doigt, c'est le
