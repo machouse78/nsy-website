@@ -387,6 +387,21 @@
     <div><div class="note" id="av-note"></div></div>
   </div>
 
+  <!-- Backlinks clients — propre à NSY : les sites livrés portent un lien
+       « réalisé par NSY ». Cette rubrique dit ce que ce lien rapporte vraiment.
+       Aucune collecte nouvelle : tout est déduit de `ref_hosts`, déjà relevé
+       par le collecteur, donc l'historique complet est exploitable. -->
+  <div class="sec-h" id="r-backlinks" hidden><h2>Backlinks clients</h2><span>ce que les sites livrés renvoient vers nsy.fr</span></div>
+  <div class="grid" id="bl-cards" hidden></div>
+  <div class="chart-head" id="bl-chead" hidden><h2 id="h-bl">Visites venues des sites clients</h2></div>
+  <div class="chart" id="bl-chart" hidden><div class="legend" id="bl-legend"></div><svg id="c-bl"></svg></div>
+  <div class="cols" id="bl-cols" hidden>
+    <div>
+      <table id="t-backlinks"><thead><tr><th>Site client</th><th class="num">Visites</th><th class="num">Part</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div><div class="note" id="bl-note"></div></div>
+  </div>
+
   <div class="sec-h" id="r-github" hidden><h2>Dépôt GitHub</h2><span>consultations et clones du code public</span></div>
   <div class="grid" id="gh-cards" hidden></div>
   <div class="chart-head" id="gh-head" hidden><h2 id="h-gh">Consultations et clones</h2></div>
@@ -687,6 +702,7 @@
     if (aDonnee((v) => (v.fb?.vues ?? 0) || (v.fb?.abonnes ?? 0))) l.push(['facebook', 'Facebook']);
     if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
     if (aDonnee((v) => v.avis)) l.push(['avis', 'Avis clients']);
+    if (RUB_DISPO.backlinks()) l.push(['backlinks', 'Backlinks clients']);
     if (aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0))) l.push(['github', 'GitHub']);
     if (aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null)) l.push(['youtube', 'YouTube']);
     return l;
@@ -698,6 +714,15 @@
   // agent, contenu, parcours). Sans cette distinction, choisir « Boutique »
   // affichait quand même Facebook, les articles du Journal et les parcours —
   // en laissant croire à un filtrage qui n'existait pas (owner, 18/08/2026).
+  // Sites livrés qui portent un lien de retour vers nsy.fr. Ajouter un client
+  // ici suffit : la rubrique « Backlinks clients » se met à jour seule, y
+  // compris sur l'historique déjà collecté (elle lit `ref_hosts`).
+  // `hote` est cherché en SOUS-CHAÎNE : couvre www. et les sous-domaines.
+  const CLIENTS = [
+    { nom: 'PRV Concept',  hote: 'prv-concept.com', url: 'https://www.prv-concept.com' },
+    { nom: 'Le Cerf Thym', hote: 'lecerfthym.fr',   url: 'https://www.lecerfthym.fr' },
+  ];
+
   const RUBRIQUES = {
     siteScope: ['r-site'],
     google: ['r-google'],
@@ -707,6 +732,7 @@
     parcours: ['r-parcours'],
     reseaux: ['r-reseaux'],
     avis: ['r-avis'],
+    backlinks: ['r-backlinks'],
     github: ['r-github'],
     youtube: ['r-youtube'],
     forum: ['r-forum'],
@@ -717,6 +743,7 @@
   const RUB_DISPO = {
     agent: () => aDonnee((v) => (v.chat?.conversations ?? 0) || (v.chat?.messages ?? 0)),
     avis: () => aDonnee((v) => v.avis),
+    backlinks: () => aDonnee((v) => CLIENTS.some((c) => Object.keys(v.ref_hosts || {}).some((h) => h.includes(c.hote)))),
     github: () => aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0)),
     youtube: () => aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null),
     forum: () => aDonnee((v) => v.forum),
@@ -752,6 +779,7 @@
     montre(RUBRIQUES.parcours, globalOk || cat === 'parcours');
     montre(RUBRIQUES.reseaux, tout || cat === 'facebook' || cat === 'instagram');
     montre(RUBRIQUES.avis, (tout || cat === 'avis') && RUB_DISPO.avis());
+    montre(RUBRIQUES.backlinks, (tout || cat === 'backlinks') && RUB_DISPO.backlinks());
     montre(RUBRIQUES.github, (tout || cat === 'github') && RUB_DISPO.github());
     montre(RUBRIQUES.youtube, (tout || cat === 'youtube') && RUB_DISPO.youtube());
     montre(RUBRIQUES.forum, (tout || peri === 'forum') && RUB_DISPO.forum());
@@ -1616,6 +1644,55 @@
         $('av-note').innerHTML = 'Les avis Google sont ceux qui pèsent : ce sont eux que reprennent les cartes affichées par les assistants IA. '
           + 'Facebook se collecte automatiquement ; les autres sources se relèvent à la main faute d\'API ouverte.'
           + (sansLien.length ? `<br><br>⚠️ Aucun lien de sollicitation enregistré pour : <strong>${sansLien.join(', ')}</strong>. Sans lui, il n'y a rien à envoyer au client — le récupérer sur le tableau de bord de la plateforme, puis le déclarer dans <span class="mono">_secret/kpi.php</span>.` : '');
+      }
+    }
+
+    // ── Backlinks clients : ce que les sites livrés rapportent ───────────
+    // Propre à NSY. Chaque site client porte un lien « réalisé par NSY » ;
+    // cette rubrique dit combien de visites il amène VRAIMENT, plutôt que de
+    // les laisser fondues dans « autres » de la provenance générale.
+    // Aucune collecte nouvelle : tout se déduit de `ref_hosts`, déjà relevé
+    // par le collecteur — l'historique entier est donc lisible d'emblée.
+    {
+      const visitesDe = (v, hote) => Object.entries(v.ref_hosts || {})
+        .filter(([h]) => h.includes(hote)).reduce((a, [, n]) => a + n, 0);
+      const totalClients = (v) => CLIENTS.reduce((a, c) => a + visitesDe(v, c.hote), 0);
+      const parClient = CLIENTS.map((c) => ({ ...c, n: sumKey(sel, (v) => visitesDe(v, c.hote)) }));
+      const total = parClient.reduce((a, c) => a + c.n, 0);
+      // Tous les clics entrants identifiés, pour situer la part des clients.
+      const extTot = sumKey(sel, (v) => Object.values(v.ref_hosts || {}).reduce((a, n) => a + n, 0));
+      const dispo = total > 0;
+      ['r-backlinks', 'bl-cards', 'bl-chead', 'bl-chart', 'bl-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const prec = cmp ? sumKey(cmp, totalClients) : null;
+        const meilleur = [...parClient].sort((a, b) => b.n - a.n)[0];
+        $('bl-cards').innerHTML = [
+          ['Visites venues des clients', fmt(total), prec != null ? delta(total, prec) : ''],
+          ['Part des clics entrants', extTot ? Math.round(total / extTot * 100) + '<small> %</small>' : '—',
+           `<span class="flat">sur ${fmt(extTot)} clics identifiés</span>`],
+          ['Sites qui renvoient', fmt(parClient.filter((c) => c.n > 0).length) + `<small> / ${CLIENTS.length}</small>`,
+           '<span class="flat">clients livrés portant le lien</span>'],
+          ['Meilleur apporteur', meilleur && meilleur.n ? meilleur.nom : '—',
+           meilleur && meilleur.n ? `<span class="flat">${fmt(meilleur.n)} visite${meilleur.n > 1 ? 's' : ''}</span>` : ''],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+        $('h-bl').textContent = `Visites venues des sites clients — par ${bk.mode}`;
+        const series = parClient.map((c, i) => ({ label: c.nom, color: COLORS[i % COLORS.length],
+                                                  pts: bkSum(bk, (v) => visitesDe(v, c.hote)) }));
+        $('bl-legend').innerHTML = series.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        drawChart('c-bl', bk, series);
+
+        $('t-backlinks').querySelector('tbody').innerHTML = [...parClient].sort((a, b) => b.n - a.n)
+          .map((c) => `<tr><td><a href="${c.url}" target="_blank" rel="noopener">${c.nom}</a> <span class="mono">${c.hote}</span></td>`
+            + `<td class="num">${fmt(c.n)}</td>`
+            + `<td class="num">${total ? Math.round(c.n / total * 100) + ' %' : '—'}</td></tr>`).join('');
+
+        const muets = parClient.filter((c) => !c.n).map((c) => c.nom);
+        $('bl-note').innerHTML = 'Un site livré qui renvoie vers nsy.fr est le seul lien entrant qu\'on maîtrise vraiment : '
+          + 'il vient d\'un domaine réel, thématiquement voisin, et il ne s\'achète pas. C\'est aussi la preuve la plus simple '
+          + 'qu\'une réalisation vit encore.'
+          + (muets.length ? `<br><br>⚠️ Aucune visite mesurée depuis : <strong>${muets.join(', ')}</strong>. Soit le lien a disparu de la page, `
+              + 'soit il est en <span class="mono">rel="nofollow"</span> et peu cliqué — à vérifier sur le site concerné.' : '');
       }
     }
 

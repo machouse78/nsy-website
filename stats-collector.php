@@ -179,8 +179,10 @@ $files = array_merge(glob("$logDir/access.log") ?: [], glob("$logDir/access.log-
 // tranche du jour cible dans _secret/log-archive/<date>.log.gz — HORS web et
 // HORS git (les adresses IP sont des données personnelles). Toute question
 // future (« et si on ventilait par X ? ») redevient alors rejouable sans limite
-// d'historique. Rétention : 400 jours (~13 mois — comparaison année sur année),
-// purge automatique au-delà.
+// d'historique. Rétention : AUCUNE LIMITE — on garde TOUT (règle owner,
+// 31/08/2026). Un journal compressé pèse quelques dizaines de Ko par jour ;
+// le coût de stockage est dérisoire face à la valeur d'un historique complet,
+// et une donnée purgée ne se rattrape jamais. NE PAS réintroduire de purge.
 $archDir  = __DIR__ . '/_secret/log-archive';
 $archFile = "$archDir/$target.log.gz";
 $archTmp  = null; $archH = null; $archLignes = 0;
@@ -397,9 +399,8 @@ if ($archH) {
     // (logs encore en cours d'écriture) ne doit pas archiver une demi-journée.
     if ($archLignes > 0 && $target <= date('Y-m-d', strtotime('yesterday'))) rename($archTmp, $archFile);
     else @unlink($archTmp);
-    foreach (glob("$archDir/*.log.gz") ?: [] as $af) {
-        if (basename($af, '.log.gz') < date('Y-m-d', strtotime('-400 days'))) @unlink($af);
-    }
+    // Aucune purge : l'archive est conservée intégralement (règle owner,
+    // 31/08/2026). Voir le commentaire de $archDir plus haut.
 }
 arsort($stats['pages']);
 arsort($stats['ai']);

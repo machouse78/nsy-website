@@ -133,7 +133,9 @@ associations et indépendants en transition numérique.
   optimisation GEO/LLMO. Sauvetage d'archives : plus de 3 000 images du forum,
   hébergées chez un tiers en fin de vie, ont été rapatriées sur le serveur de
   l'association et les messages repointés vers elles — vingt ans de tutoriels et
-  de restaurations documentées préservés. Tableau de bord privé alimenté par les
+  de restaurations documentées préservés. Mentions légales et politique de
+  confidentialité publiées en FR et EN. Journal de six articles de fond
+  bilingues, chacun avec son sujet de discussion sur le forum. Tableau de bord privé alimenté par les
   journaux du serveur : Search Console relevée chaque jour, origine géographique
   des visiteurs sur carte du monde (aucune adresse IP conservée). Assistant IA
   « Père Hervé » : chatbot à mascotte animée, ancré sur les données du site et
