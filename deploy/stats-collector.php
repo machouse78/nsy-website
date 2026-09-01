@@ -46,26 +46,11 @@ set_error_handler(static function ($no, $msg, $fichier, $ligne) use (&$prvErreur
 });
 
 $cfg = require __DIR__ . '/_secret/kpi.php';
-$cleRecue = (string) ($_GET['key'] ?? '');
-
-// Rotation du 01/09/2026 (la cle avait fuite en clair) : le temps que la tache
-// planifiee Infomaniak passe a la nouvelle URL, la cle PRECEDENTE reste
-// acceptee — sinon la collecte s'arreterait entre les deux. Chaque usage de
-// l'ancienne est journalise : quand le journal reste vide, on la retire de
-// _secret/kpi.php et on efface ce bloc.
-$cleOk = hash_equals((string) $cfg['cron_key'], $cleRecue);
-if (!$cleOk && !empty($cfg['cron_key_prec'])
-    && hash_equals((string) $cfg['cron_key_prec'], $cleRecue)) {
-    $cleOk = true;
-    @file_put_contents(__DIR__ . '/_secret/cron-rotation.log',
-        date('c') . " ANCIENNE cle utilisee depuis "
-        . ($_SERVER['REMOTE_ADDR'] ?? '?') . " — tache planifiee pas encore migree\n",
-        FILE_APPEND);
-}
-if (!$cleOk) {
+if (!hash_equals((string) $cfg['cron_key'], (string) ($_GET['key'] ?? ''))) {
     http_response_code(404);
     exit;
 }
+
 if (($_GET['run'] ?? '') !== '1') {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'run=1 attendu']);
