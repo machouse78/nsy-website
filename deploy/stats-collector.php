@@ -46,7 +46,23 @@ set_error_handler(static function ($no, $msg, $fichier, $ligne) use (&$prvErreur
 });
 
 $cfg = require __DIR__ . '/_secret/kpi.php';
-if (!hash_equals((string) $cfg['cron_key'], (string) ($_GET['key'] ?? ''))) {
+$cleRecue = (string) ($_GET['key'] ?? '');
+
+// Rotation du 01/09/2026 (la cle avait fuite en clair) : le temps que la tache
+// planifiee Infomaniak passe a la nouvelle URL, la cle PRECEDENTE reste
+// acceptee — sinon la collecte s'arreterait entre les deux. Chaque usage de
+// l'ancienne est journalise : quand le journal reste vide, on la retire de
+// _secret/kpi.php et on efface ce bloc.
+$cleOk = hash_equals((string) $cfg['cron_key'], $cleRecue);
+if (!$cleOk && !empty($cfg['cron_key_prec'])
+    && hash_equals((string) $cfg['cron_key_prec'], $cleRecue)) {
+    $cleOk = true;
+    @file_put_contents(__DIR__ . '/_secret/cron-rotation.log',
+        date('c') . " ANCIENNE cle utilisee depuis "
+        . ($_SERVER['REMOTE_ADDR'] ?? '?') . " — tache planifiee pas encore migree\n",
+        FILE_APPEND);
+}
+if (!$cleOk) {
     http_response_code(404);
     exit;
 }
@@ -179,8 +195,10 @@ $files = array_merge(glob("$logDir/access.log") ?: [], glob("$logDir/access.log-
 // tranche du jour cible dans _secret/log-archive/<date>.log.gz — HORS web et
 // HORS git (les adresses IP sont des données personnelles). Toute question
 // future (« et si on ventilait par X ? ») redevient alors rejouable sans limite
-// d'historique. Rétention : 400 jours (~13 mois — comparaison année sur année),
-// purge automatique au-delà.
+// d'historique. Rétention : AUCUNE LIMITE — on garde TOUT (règle owner,
+// 31/08/2026). Un journal compressé pèse quelques dizaines de Ko par jour ;
+// le coût de stockage est dérisoire face à la valeur d'un historique complet,
+// et une donnée purgée ne se rattrape jamais. NE PAS réintroduire de purge.
 $archDir  = __DIR__ . '/_secret/log-archive';
 $archFile = "$archDir/$target.log.gz";
 $archTmp  = null; $archH = null; $archLignes = 0;
@@ -397,9 +415,8 @@ if ($archH) {
     // (logs encore en cours d'écriture) ne doit pas archiver une demi-journée.
     if ($archLignes > 0 && $target <= date('Y-m-d', strtotime('yesterday'))) rename($archTmp, $archFile);
     else @unlink($archTmp);
-    foreach (glob("$archDir/*.log.gz") ?: [] as $af) {
-        if (basename($af, '.log.gz') < date('Y-m-d', strtotime('-400 days'))) @unlink($af);
-    }
+    // Aucune purge : l'archive est conservée intégralement (règle owner,
+    // 31/08/2026). Voir le commentaire de $archDir plus haut.
 }
 arsort($stats['pages']);
 arsort($stats['ai']);
