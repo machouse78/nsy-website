@@ -1752,8 +1752,9 @@
         ['erreur_envoi',     'Erreur d\'envoi',            'erreur'],
         ['erreur_config',    'Erreur de configuration',    'erreur'],
       ];
-      // Les formulaires présents dans les données de la période (un site n'a pas
-      // forcément les mêmes que nsy.fr : PRV Concept n'a que « contact »).
+      // Les formulaires présents dans les données de la période : chaque site a
+      // les siens (un site livré n'a souvent que « contact »). Ne jamais nommer
+      // un domaine ici : kpi-sync.py refuse toute référence au site de référence.
       const FORM_LIBS = { contact: 'Contact', faisa: 'Faisabilité' };
       const FORMS = [...new Set([...sel, ...(cmp || [])].flatMap((d) => Object.keys(D[d]?.formulaires || {})))].sort();
       const libForm = (f) => FORM_LIBS[f] || (f.charAt(0).toUpperCase() + f.slice(1));
