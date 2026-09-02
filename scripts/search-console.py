@@ -120,9 +120,11 @@ def _appel(methode: str, url: str, jeton: str, corps=None) -> dict:
             "accès à cette propriété. Ajoute son adresse dans Search Console → Paramètres →\n"
             "Utilisateurs et autorisations (Lecture seule), puis réessaie.\n\n" + detail[:400]
         )
-    if r.status_code != 200:
+    if r.status_code not in (200, 204):
         sys.exit(f"HTTP {r.status_code} sur {url}\n{r.text[:500]}")
-    return r.json()
+    # Les écritures (PUT sitemaps.submit) répondent 204 sans corps : ne pas
+    # tenter de parser du vide.
+    return r.json() if r.text.strip() else {}
 
 
 # ───── Propriétés ────────────────────────────────────────────────────────────
@@ -219,7 +221,7 @@ def bilan(resultats: list[dict]) -> None:
 
 def main() -> None:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    p.add_argument("commande", choices=["sites", "inspecte", "sitemaps"])
+    p.add_argument("commande", choices=["sites", "inspecte", "sitemaps", "soumets"])
     p.add_argument("urls", nargs="*", help="URLs à inspecter")
     p.add_argument("--fichier", help="fichier d'URLs, une par ligne (# = commentaire)")
     p.add_argument("--cles", default=CLES_DEFAUT)
@@ -258,6 +260,31 @@ def main() -> None:
             print(f"   · {s['path']}\n      soumises {n} · erreurs {s.get('errors', 0)} "
                   f"· avertissements {s.get('warnings', 0)} · dernier téléchargement "
                   f"{s.get('lastDownloaded', '—')}")
+        return
+
+    if a.commande == "soumets":
+        # (Re)soumettre un sitemap : Google le relit dans les heures qui suivent au
+        # lieu d'attendre son propre cycle. Cas d'usage vécu (02/09/2026) : le
+        # sitemap du forum corrigé le 29/08 (URL canoniques) alors que Google
+        # l'avait téléchargé le 28/08 — sans re-soumission, il gardait l'ancien.
+        # C'est une ÉCRITURE : elle exige GSC_ECRITURE=1 (portée webmasters).
+        if PORTEE.endswith("webmasters.readonly"):
+            sys.exit("Re-soumettre un sitemap est une écriture : relancer avec GSC_ECRITURE=1 "
+                     "(la portée par défaut est la lecture seule, à dessein).")
+        if not a.urls:
+            sys.exit("Indiquer l'URL complète du sitemap à soumettre.")
+        for feed in a.urls:
+            cible = a.site or site_pour(feed, sites)
+            if not cible:
+                sys.exit(f"Aucune propriété accessible ne couvre {feed} — préciser --site.")
+            base = f"{API_WM}/sites/{quote(cible, safe='')}/sitemaps/{quote(feed, safe='')}"
+            avant = _appel("GET", base, jeton)
+            _appel("PUT", base, jeton)          # 204 sans corps = accepté
+            apres = _appel("GET", base, jeton)
+            print(f"   · {feed}\n      propriété {cible}\n"
+                  f"      dernier téléchargement avant : {avant.get('lastDownloaded', '—')}\n"
+                  f"      soumission enregistrée      : {apres.get('lastSubmitted', '—')}\n"
+                  f"      (le téléchargement suit dans les heures ; relancer `sitemaps` pour le voir)")
         return
 
     urls = list(a.urls)
