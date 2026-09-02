@@ -410,7 +410,7 @@
   <div class="chart" id="fo-chart" hidden><div class="legend" id="fo-legend"></div><svg id="c-formu"></svg></div>
   <div class="cols" id="fo-cols" hidden>
     <div>
-      <table id="t-formulaires"><thead><tr><th>Issue</th><th class="num">Contact</th><th class="num">Faisabilité</th><th class="num">Total</th></tr></thead><tbody></tbody></table>
+      <table id="t-formulaires"><thead><tr><th>Issue</th><th class="num">Total</th></tr></thead><tbody></tbody></table>
     </div>
     <div><div class="note" id="fo-note"></div></div>
   </div>
@@ -1752,7 +1752,11 @@
         ['erreur_envoi',     'Erreur d\'envoi',            'erreur'],
         ['erreur_config',    'Erreur de configuration',    'erreur'],
       ];
-      const FORMS = ['contact', 'faisa'];
+      // Les formulaires présents dans les données de la période (un site n'a pas
+      // forcément les mêmes que nsy.fr : PRV Concept n'a que « contact »).
+      const FORM_LIBS = { contact: 'Contact', faisa: 'Faisabilité' };
+      const FORMS = [...new Set([...sel, ...(cmp || [])].flatMap((d) => Object.keys(D[d]?.formulaires || {})))].sort();
+      const libForm = (f) => FORM_LIBS[f] || (f.charAt(0).toUpperCase() + f.slice(1));
       const nb = (v, issue, form) => form ? (v.formulaires?.[form]?.[issue] ?? 0)
                                           : FORMS.reduce((a, f) => a + (v.formulaires?.[f]?.[issue] ?? 0), 0);
       const famille = (v, fam) => ISSUES.filter((i) => i[2] === fam).reduce((a, i) => a + nb(v, i[0]), 0);
@@ -1766,7 +1770,7 @@
         const precRecus = cmp ? sumKey(cmp, (v) => famille(v, 'recu')) : null;
         const contournes = sumKey(sel, (v) => nb(v, 'antibot_bypass'));
         $('fo-cards').innerHTML = [
-          ['Envois reçus', fmt(recus), precRecus != null ? delta(recus, precRecus) : '<span class="flat">contact + faisabilité</span>'],
+          ['Envois reçus', fmt(recus), precRecus != null ? delta(recus, precRecus) : `<span class="flat">${FORMS.map(libForm).join(' + ') || 'formulaires'}</span>`],
           ['Tentatives bloquées', fmt(bloques), '<span class="flat">robots, spam, champs invalides, cadence</span>'],
           ['Erreurs d\'envoi', fmt(erreurs), erreurs ? '<span class="down">à regarder : un humain n\'a pas pu écrire</span>' : '<span class="flat">aucune sur la période</span>'],
           ['Anti-bot Turnstile', dernierTs ? (dernierTs.ok ? 'actif' : 'contourné') : '—',
@@ -1782,11 +1786,14 @@
         $('fo-legend').innerHTML = series.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
         drawChart('c-formu', bk, series);
 
+        $('t-formulaires').querySelector('thead').innerHTML = '<tr><th>Issue</th>'
+          + FORMS.map((f) => `<th class="num">${libForm(f)}</th>`).join('') + '<th class="num">Total</th></tr>';
         $('t-formulaires').querySelector('tbody').innerHTML = ISSUES
-          .map(([k, lib]) => [lib, sumKey(sel, (v) => nb(v, k, 'contact')), sumKey(sel, (v) => nb(v, k, 'faisa'))])
-          .filter(([, c, f]) => c + f > 0)
-          .map(([lib, c, f]) => `<tr><td>${lib}</td><td class="num">${fmt(c)}</td><td class="num">${fmt(f)}</td><td class="num">${fmt(c + f)}</td></tr>`).join('')
-          || '<tr><td colspan="4" class="mono">aucune tentative sur la période</td></tr>';
+          .map(([k, lib]) => [lib, FORMS.map((f) => sumKey(sel, (v) => nb(v, k, f)))])
+          .filter(([, cols]) => cols.reduce((a, n) => a + n, 0) > 0)
+          .map(([lib, cols]) => `<tr><td>${lib}</td>` + cols.map((n) => `<td class="num">${fmt(n)}</td>`).join('')
+            + `<td class="num">${fmt(cols.reduce((a, n) => a + n, 0))}</td></tr>`).join('')
+          || `<tr><td colspan="${FORMS.length + 2}" class="mono">aucune tentative sur la période</td></tr>`;
 
         $('fo-note').innerHTML = 'Chaque tentative d\'envoi est journalisée côté serveur, <strong>sans donnée personnelle</strong> '
           + '(ni adresse IP, ni nom, ni e-mail) : seulement le formulaire, l\'heure et l\'issue. '
