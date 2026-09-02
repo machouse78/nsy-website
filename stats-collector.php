@@ -1371,6 +1371,26 @@ if (($day['hits'] ?? 0) === 0) {
     exit;
 }
 $extra = ['fb' => $fb, 'journal' => $journal, 'source' => 'logs', 'collecte' => date('c')];
+// ── Formulaires (owner, 02/09/2026) : envois et tentatives du jour, lus dans
+// _secret/formulaires.log (écrit par contact.php / faisabilite.php, sans donnée
+// personnelle), et SANTÉ de la clé Turnstile — le jour où Cloudflare l'a rejetée,
+// chaque humain recevait une 403 sans que personne ne le sache. Désormais le
+// collecteur le vérifie chaque nuit et alerte le propriétaire (1 e-mail / 24 h).
+require_once __DIR__ . '/formulaires.php';
+$formulaires = nsy_form_events_du_jour($target);
+if ($formulaires) $extra['formulaires'] = $formulaires;
+$cfgSite = @include __DIR__ . '/_secret/config.php';
+if (is_array($cfgSite) && !empty($cfgSite['turnstile_secret']) && !str_starts_with((string) $cfgSite['turnstile_secret'], 'CHANGE_ME')) {
+    $ts = nsy_turnstile_sante((string) $cfgSite['turnstile_secret']);
+    $extra['turnstile'] = ['ok' => $ts['ok'], 'raison' => $ts['raison']];
+    if (!$ts['ok']) {
+        nsy_alerte_owner($cfgSite, '[NSY] Clé Turnstile rejetée par Cloudflare — formulaires en mode dégradé',
+            "Contrôle quotidien du collecteur KPI : la clé secrète Turnstile n'est pas acceptée (" . $ts['raison'] . ").\n\n"
+            . "Les formulaires fonctionnent SANS ce contrôle (honeypot, cadence, plafond et score anti-spam restent actifs).\n"
+            . "À faire : Cloudflare > Turnstile > widget nsy.fr > régénérer la clé secrète, la reporter dans _secret/config.php, redéployer.\n"
+            . "Cette alerte est envoyée au plus une fois par 24 h tant que la clé reste rejetée.\n", 'turnstile-quotidien');
+    }
+}
 if ($pays !== null) $extra['pays'] = $pays;
 if ($avis) $extra['avis'] = $avis;
 if ($favicons !== null) $extra['favicons'] = $favicons;

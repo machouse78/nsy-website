@@ -96,7 +96,10 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
   buckets jour/semaine/mois, comparaison N-1) + **filtres** (pills cliquables,
   barre de requête `bot:` `page:` `referral:` `ia:`, métrique au choix, séries
-  superposées), **agent d'analyse conversationnel** (`stats/chat.php`, derrière
+  superposées), **rubrique Formulaires** (envois reçus, tentatives bloquées par
+  famille — robots, spam, champs invalides, cadence —, erreurs d'envoi, et
+  **état de l'anti-bot** vérifié chaque nuit ; source : journal serveur sans
+  donnée personnelle), **agent d'analyse conversationnel** (`stats/chat.php`, derrière
   le même Basic Auth) : on lui pose une question sur la période affichée et il
   répond en s'appuyant sur un dossier de faits **calculé par le dashboard** —
   totaux, pics détectés par écart à la médiane, et calendrier automatique des
@@ -158,14 +161,16 @@ données traitées en UE) via l'API OpenAI-compatible.
 
 ### Formulaire contact — backend PHP
 
-`contact.php` (partage `antispam.php` avec `faisabilite.php`) :
-1. Vérifie le **token Cloudflare Turnstile** (anti-bot) côté serveur
+`contact.php` (partage `antispam.php` et `formulaires.php` avec `faisabilite.php`) :
+1. Vérifie le **token Cloudflare Turnstile** (anti-bot) côté serveur — en **fail-open** depuis le 02/09/2026 (`formulaires.php`) : si Cloudflare rejette **notre** clé (`invalid-input-secret`), est injoignable ou répond n'importe quoi, le contrôle est **contourné** et l'envoi continue sous les autres remparts (le sujet de l'e-mail porte « ⚠ anti-bot non vérifié »). Seul un verdict qui incrimine le **jeton du visiteur** (invalide, expiré, déjà consommé) reste un refus 403. Vécu : la clé rejetée par Cloudflare rendait chaque humain muet avec une 403 pendant que le site paraissait sain
 2. **Honeypot** anti-spam (champ caché que seuls les bots remplissent)
 3. **Anti-spam de contenu** (`antispam.php`) : score heuristique sur plusieurs signaux — liens et raccourcisseurs d'URL, TLD à risque, expressions typiques du spam, montants, majuscules criardes, nom contenant des chiffres. Au-delà du seuil → **abandon silencieux** (faux `{ ok: true }`, aucun email) + trace dans `_secret/spam.log` (403 en HTTP, lisible en FTP) pour repérer un faux positif. Plus un plafond journalier par IP et un throttle par envoi.
    ⚠️ **Les valeurs — seuil, listes, poids, plafonds — ne sont pas dans ce dépôt** : elles vivent dans `_secret/antispam-rules.php` (modèle : `_secret/antispam-rules.php.example`). Les publier reviendrait à donner la recette pour les contourner ; le code, lui, reste lisible et vérifiable. Le fichier est facultatif — absent, des défauts de repli minimaux s'appliquent
 4. Envoie le message à la boîte NSY via **PHPMailer + SMTP Infomaniak** (notification interne en FR). L'adresse n'apparaît **nulle part sur le site public ni dans ce README** (anti-scraping) : les visiteurs passent par le formulaire, l'auto-réponse porte un `Reply-To` interne
 5. Envoie une **auto-réponse HTML** au prospect, **localisée FR/EN** selon le champ caché `lang` (objet, corps HTML, version texte, `<html lang>`, libellé du service)
-6. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → toast côté front
+6. Répond en JSON (`{ ok: true }` ou `{ ok: false, error }`) → message d'erreur **sous le bouton d'envoi**, qui reste affiché jusqu'au prochain essai (les pages formulaire n'ont pas d'élément toast : avant le 02/09/2026, aucune erreur ne s'affichait, le visiteur ne voyait qu'un bouton « Réessayer »)
+7. **Journalise chaque tentative** dans `_secret/formulaires.log` (une ligne JSON : formulaire, heure, issue — **sans IP, ni nom, ni e-mail**) : c'est la source de la rubrique **Formulaires** du dashboard KPI. Issues : envoyé, envoyé anti-bot contourné, honeypot, spam, anti-bot absent/refusé, champs invalides, cadence, plafond, erreur d'envoi, erreur de configuration
+8. **Alerte le propriétaire** par e-mail (`nsy_alerte_owner()`, au plus une par 24 h et par sujet) dès qu'un envoi passe en mode contourné ; le collecteur KPI re-vérifie la clé **chaque nuit** et alerte tant qu'elle reste rejetée ; `./deploy.sh` la pré-vérifie avant chaque envoi FTP
 
 **Bilingue de bout en bout** : tous les messages d'erreur JSON renvoyés au front (via un helper `$L(fr, en)`) **et** l'email d'auto-réponse suivent la langue du visiteur (champ caché `lang`). Côté navigateur, les états du bouton (`Envoi…/Sending…`, `Envoyé ✓/Sent ✓`, `Réessayer/Retry`) et les toasts sont pilotés par `pageLang` dans `js/app.js`.
 
@@ -306,6 +311,9 @@ nsy-website/
 - `mdToHtml` de `js/app.js` : liens cliquables whitelistés, échappement XSS ;
 - `antispam.php` : scoring de contenu (URLs, raccourcisseurs, mots-clés,
   majuscules, montants), seuil, plafond journalier par IP ;
+- `formulaires.php` : verdicts Turnstile (jeton valide / invalide / expiré, clé
+  rejetée, Cloudflare injoignable, réponse illisible → **bypass** jamais 403),
+  santé de la clé, agrégation du journal des tentatives par jour ;
 - **formulaires + compteurs du journal en intégration HTTP** : `contact.php`,
   `faisabilite.php` et `journal-stats.php` copiés
   tels quels dans un bac à sable `php -S` avec `_secret` factice
@@ -320,7 +328,8 @@ nsy-website/
 Et à la demande, après un déploiement : `./tests/forms-live.sh` — smoke test
 **production** des deux formulaires sans jamais pouvoir envoyer d'email (405,
 honeypot, et détection « Turnstile actif côté serveur » via des champs
-volontairement invalides).
+volontairement invalides — ou « ⚠ contourné » si Cloudflare rejette la clé :
+le formulaire répond, la clé est à régénérer dans Cloudflare > Turnstile).
 
 ## Tester en local
 
@@ -358,6 +367,11 @@ Le `.htaccess` configure :
 - **GZIP**, **cache** (1 mois médias, 1 semaine CSS/JS, 1h HTML), **security headers** (`X-Frame-Options`, `Strict-Transport-Security`…)
 
 ### Déploiement FTP (à la demande)
+
+Avant tout envoi, `./deploy.sh` **pré-vérifie la clé Turnstile** auprès de
+Cloudflare (jeton factice : la seule réponse saine est `invalid-input-response`).
+Clé rejetée → avertissement en clair et marche à suivre ; le déploiement
+continue, les formulaires fonctionnant en mode contourné.
 
 Le déploiement se fait **à la demande** avec **`./deploy.sh`** : le script
 reconstruit `deploy/` puis envoie son contenu en **FTPS** via
@@ -400,6 +414,13 @@ tant qu'on ne la lance pas.
 - **Flux RSS du journal** : `feed.xml` (FR) / `feed-en.xml` (EN) — à mettre à jour à chaque article
 - **IndexNow** : clé à la racine + `node scripts/indexnow-ping.mjs` après chaque déploiement (indexation quasi immédiate côté Bing → ChatGPT Search/Copilot)
 - **Images lourdes en WebP** (−90 % : `finance-assurance.webp`, `web-ia.webp`) — les `.png` restent pour les thumbnails du video sitemap
+
+**Search Console par API** (`scripts/search-console.py`, compte de service) :
+`sites`, `sitemaps` (état, erreurs, avertissements — le champ `indexed` est
+déprécié et vaut 0 pour tout le monde), `inspecte` (la vraie couverture, URL
+par URL) et `soumets` (re-soumission d'un sitemap ; écriture protégée par
+`GSC_ECRITURE=1`). Il n'existe **aucune API de demande d'indexation** : elle
+reste manuelle, dans l'interface, par le propriétaire de la propriété.
 
 ### GEO / LLMO (référencement dans les moteurs génératifs)
 

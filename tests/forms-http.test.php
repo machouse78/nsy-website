@@ -24,7 +24,7 @@ $SB  = sys_get_temp_dir() . '/nsy-forms-sb';
 exec('rm -rf ' . escapeshellarg($SB));
 @mkdir($SB . '/_secret', 0777, true);
 @mkdir($SB . '/vendor/PHPMailer/src', 0777, true);
-foreach (['contact.php', 'faisabilite.php', 'antispam.php', 'journal-stats.php'] as $f) copy("$APP/$f", "$SB/$f");
+foreach (['contact.php', 'faisabilite.php', 'antispam.php', 'formulaires.php', 'journal-stats.php'] as $f) copy("$APP/$f", "$SB/$f");
 file_put_contents("$SB/fake-article.html", '<html></html>');
 foreach (glob("$APP/vendor/PHPMailer/src/*.php") as $f) copy($f, "$SB/vendor/PHPMailer/src/" . basename($f));
 file_put_contents("$SB/_secret/config.php", <<<'CFG'

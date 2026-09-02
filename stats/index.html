@@ -403,6 +403,18 @@
     <div><div class="note" id="bl-note"></div></div>
   </div>
 
+  <!-- ═══ Formulaires — envois et tentatives (owner, 02/09/2026) ═══ -->
+  <div class="sec-h" id="r-formulaires" hidden><h2>Formulaires</h2><span>envois reçus, tentatives bloquées, état de l'anti-bot</span></div>
+  <div class="grid" id="fo-cards" hidden></div>
+  <div class="chart-head" id="fo-chead" hidden><h2 id="h-formu">Envois et tentatives</h2></div>
+  <div class="chart" id="fo-chart" hidden><div class="legend" id="fo-legend"></div><svg id="c-formu"></svg></div>
+  <div class="cols" id="fo-cols" hidden>
+    <div>
+      <table id="t-formulaires"><thead><tr><th>Issue</th><th class="num">Contact</th><th class="num">Faisabilité</th><th class="num">Total</th></tr></thead><tbody></tbody></table>
+    </div>
+    <div><div class="note" id="fo-note"></div></div>
+  </div>
+
   <div class="sec-h" id="r-github" hidden><h2>Dépôt GitHub</h2><span>consultations et clones du code public</span></div>
   <div class="grid" id="gh-cards" hidden></div>
   <div class="chart-head" id="gh-head" hidden><h2 id="h-gh">Consultations et clones</h2></div>
@@ -722,6 +734,7 @@
     if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
     if (aDonnee((v) => v.avis)) l.push(['avis', 'Avis clients']);
     if (RUB_DISPO.backlinks()) l.push(['backlinks', 'Backlinks clients']);
+    if (RUB_DISPO.formulaires()) l.push(['formulaires', 'Formulaires']);
     if (aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0))) l.push(['github', 'GitHub']);
     if (aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null)) l.push(['youtube', 'YouTube']);
     return l;
@@ -752,6 +765,7 @@
     reseaux: ['r-reseaux'],
     avis: ['r-avis'],
     backlinks: ['r-backlinks'],
+    formulaires: ['r-formulaires'],
     github: ['r-github'],
     youtube: ['r-youtube'],
     forum: ['r-forum'],
@@ -763,6 +777,7 @@
     agent: () => aDonnee((v) => (v.chat?.conversations ?? 0) || (v.chat?.messages ?? 0)),
     avis: () => aDonnee((v) => v.avis),
     backlinks: () => aDonnee((v) => CLIENTS.some((c) => Object.keys(v.ref_hosts || {}).some((h) => h.includes(c.hote)))),
+    formulaires: () => aDonnee((v) => v.formulaires || v.turnstile),
     github: () => aDonnee((v) => (v.github?.vues ?? 0) || (v.github?.clones ?? 0)),
     youtube: () => aDonnee((v) => (v.youtube?.vues ?? 0) || v.youtube?.abonnes != null),
     forum: () => aDonnee((v) => v.forum),
@@ -799,6 +814,7 @@
     montre(RUBRIQUES.reseaux, tout || cat === 'facebook' || cat === 'instagram');
     montre(RUBRIQUES.avis, (tout || cat === 'avis') && RUB_DISPO.avis());
     montre(RUBRIQUES.backlinks, (tout || cat === 'backlinks') && RUB_DISPO.backlinks());
+    montre(RUBRIQUES.formulaires, (tout || cat === 'formulaires') && RUB_DISPO.formulaires());
     montre(RUBRIQUES.github, (tout || cat === 'github') && RUB_DISPO.github());
     montre(RUBRIQUES.youtube, (tout || cat === 'youtube') && RUB_DISPO.youtube());
     montre(RUBRIQUES.forum, (tout || peri === 'forum') && RUB_DISPO.forum());
@@ -1712,6 +1728,71 @@
           + 'qu\'une réalisation vit encore.'
           + (muets.length ? `<br><br>⚠️ Aucune visite mesurée depuis : <strong>${muets.join(', ')}</strong>. Soit le lien a disparu de la page, `
               + 'soit il est en <span class="mono">rel="nofollow"</span> et peu cliqué — à vérifier sur le site concerné.' : '');
+      }
+    }
+
+    // ═══ Formulaires — envois et tentatives (owner, 02/09/2026) ═══
+    // Source : `formulaires` par jour (journal serveur sans donnée personnelle,
+    // écrit par contact.php / faisabilite.php) et `turnstile` (santé de la clé,
+    // vérifiée chaque nuit par le collecteur). Né d'une panne silencieuse : la
+    // clé Cloudflare rejetée, chaque humain recevait une 403 sans que personne
+    // ne le voie. Ici, un envoi reçu, une tentative bloquée et une erreur
+    // se lisent séparément — et l'état de l'anti-bot est affiché en clair.
+    {
+      const ISSUES = [
+        ['envoye',           'Envoyé',                     'recu'],
+        ['antibot_bypass',   'Envoyé, anti-bot contourné', 'recu'],
+        ['honeypot',         'Robot (honeypot)',           'bloque'],
+        ['spam',             'Spam (contenu)',             'bloque'],
+        ['antibot_manquant', 'Anti-bot absent',            'bloque'],
+        ['antibot_refuse',   'Anti-bot refusé',            'bloque'],
+        ['invalide',         'Champs invalides',           'bloque'],
+        ['throttle',         'Cadence (1 / min)',          'bloque'],
+        ['plafond',          'Plafond journalier',         'bloque'],
+        ['erreur_envoi',     'Erreur d\'envoi',            'erreur'],
+        ['erreur_config',    'Erreur de configuration',    'erreur'],
+      ];
+      const FORMS = ['contact', 'faisa'];
+      const nb = (v, issue, form) => form ? (v.formulaires?.[form]?.[issue] ?? 0)
+                                          : FORMS.reduce((a, f) => a + (v.formulaires?.[f]?.[issue] ?? 0), 0);
+      const famille = (v, fam) => ISSUES.filter((i) => i[2] === fam).reduce((a, i) => a + nb(v, i[0]), 0);
+      const recus = sumKey(sel, (v) => famille(v, 'recu'));
+      const bloques = sumKey(sel, (v) => famille(v, 'bloque'));
+      const erreurs = sumKey(sel, (v) => famille(v, 'erreur'));
+      const dernierTs = [...sel].reverse().map((d) => D[d]?.turnstile).find((t) => t);
+      const dispo = RUB_DISPO.formulaires() && (recus + bloques + erreurs > 0 || dernierTs);
+      ['r-formulaires', 'fo-cards', 'fo-chead', 'fo-chart', 'fo-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      if (dispo) {
+        const precRecus = cmp ? sumKey(cmp, (v) => famille(v, 'recu')) : null;
+        const contournes = sumKey(sel, (v) => nb(v, 'antibot_bypass'));
+        $('fo-cards').innerHTML = [
+          ['Envois reçus', fmt(recus), precRecus != null ? delta(recus, precRecus) : '<span class="flat">contact + faisabilité</span>'],
+          ['Tentatives bloquées', fmt(bloques), '<span class="flat">robots, spam, champs invalides, cadence</span>'],
+          ['Erreurs d\'envoi', fmt(erreurs), erreurs ? '<span class="down">à regarder : un humain n\'a pas pu écrire</span>' : '<span class="flat">aucune sur la période</span>'],
+          ['Anti-bot Turnstile', dernierTs ? (dernierTs.ok ? 'actif' : 'contourné') : '—',
+           dernierTs ? (dernierTs.ok ? '<span class="flat">clé acceptée par Cloudflare</span>' : `<span class="down">clé rejetée — ${contournes ? fmt(contournes) + ' envoi(s) passé(s) sans contrôle' : 'à régénérer'}</span>`) : '<span class="flat">non vérifié</span>'],
+        ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+
+        $('h-formu').textContent = `Envois et tentatives — par ${bk.mode}`;
+        const series = [
+          { label: 'Envois reçus', color: COLORS[0], pts: bkSum(bk, (v) => famille(v, 'recu')) },
+          { label: 'Tentatives bloquées', color: COLORS[1], pts: bkSum(bk, (v) => famille(v, 'bloque')) },
+          { label: 'Erreurs', color: COLORS[2], pts: bkSum(bk, (v) => famille(v, 'erreur')) },
+        ];
+        $('fo-legend').innerHTML = series.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+        drawChart('c-formu', bk, series);
+
+        $('t-formulaires').querySelector('tbody').innerHTML = ISSUES
+          .map(([k, lib]) => [lib, sumKey(sel, (v) => nb(v, k, 'contact')), sumKey(sel, (v) => nb(v, k, 'faisa'))])
+          .filter(([, c, f]) => c + f > 0)
+          .map(([lib, c, f]) => `<tr><td>${lib}</td><td class="num">${fmt(c)}</td><td class="num">${fmt(f)}</td><td class="num">${fmt(c + f)}</td></tr>`).join('')
+          || '<tr><td colspan="4" class="mono">aucune tentative sur la période</td></tr>';
+
+        $('fo-note').innerHTML = 'Chaque tentative d\'envoi est journalisée côté serveur, <strong>sans donnée personnelle</strong> '
+          + '(ni adresse IP, ni nom, ni e-mail) : seulement le formulaire, l\'heure et l\'issue. '
+          + 'Un « robot » ou un « spam » bloqué est une bonne nouvelle ; une « erreur d\'envoi » ou une clé anti-bot rejetée, non.'
+          + (dernierTs && !dernierTs.ok ? '<br><br>⚠️ <strong>Clé Turnstile rejetée par Cloudflare</strong> (' + dernierTs.raison + '). '
+              + 'Les envois passent sans ce contrôle, protégés par les autres filtres. À régénérer dans Cloudflare > Turnstile, puis reporter dans <span class="mono">_secret/config.php</span>.' : '');
       }
     }
 

@@ -52,6 +52,7 @@ cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp chat.php              deploy/
 cp antispam.php          deploy/   # filtre anti-spam partage (contact + faisabilite)
+cp formulaires.php       deploy/   # socle formulaires : verdict Turnstile (bypass si clé rejetée), journal, alertes
 cp journal-stats.php     deploy/   # compteurs vues / j'aime du journal
 cp sitemap.xml           deploy/
 cp robots.txt            deploy/
@@ -262,6 +263,7 @@ required=(
   "deploy/faisabilite.php"
   "deploy/chat.php"
   "deploy/antispam.php"
+  "deploy/formulaires.php"
   "deploy/sitemap.xml"
   "deploy/robots.txt"
   "deploy/llms.txt"

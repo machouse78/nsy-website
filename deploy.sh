@@ -33,6 +33,36 @@ fi
 FTP_DIR="${FTP_DIR:-}"
 base="${FTP_DIR#/}"; base="${base%/}"; [ -n "$base" ] && base="$base/"
 
+# ───── Pré-vérification Turnstile (02/09/2026) ─────
+# Cloudflare avait cessé d'accepter la clé secrète et chaque humain recevait une
+# 403 sur les formulaires. Depuis, formulaires.php contourne le contrôle quand la
+# clé est rejetée ; ici on le DIT à chaque déploiement, pour ne jamais l'oublier.
+if [ -f _secret/config.php ] && command -v python3 >/dev/null; then
+  ts_verdict="$(python3 - <<'PY'
+import re, urllib.request, urllib.parse, json
+c = open('_secret/config.php', encoding='utf-8').read()
+m = re.search(r"'turnstile_secret'\s*=>\s*'([^']*)'", c)
+sec = m.group(1) if m else ''
+if not sec or sec.startswith('CHANGE_ME'):
+    print('absente'); raise SystemExit
+try:
+    d = urllib.parse.urlencode({'secret': sec, 'response': 'sonde-deploy-nsy'}).encode()
+    r = urllib.request.urlopen(urllib.request.Request('https://challenges.cloudflare.com/turnstile/v0/siteverify', d), timeout=10)
+    codes = json.load(r).get('error-codes', [])
+except Exception as e:
+    try: codes = json.load(e).get('error-codes', [])
+    except Exception: codes = ['injoignable']
+print('saine' if codes == ['invalid-input-response'] else ','.join(map(str, codes)) or 'inconnu')
+PY
+)"
+  case "$ts_verdict" in
+    saine)   echo "🛡  Clé Turnstile : acceptée par Cloudflare." ;;
+    absente) echo "⚠️  Clé Turnstile absente de _secret/config.php local — vérification impossible ici." ;;
+    *)       echo "🚨 CLÉ TURNSTILE REJETÉE PAR CLOUDFLARE ($ts_verdict) : les formulaires fonctionnent en mode dégradé (anti-bot contourné)."
+             echo "   → Cloudflare > Turnstile > widget nsy.fr : régénérer la clé secrète, la reporter dans _secret/config.php, puis relancer ./deploy.sh" ;;
+  esac
+fi
+
 echo "🔄 Reconstruction de deploy/ ..."
 pdlog="$(mktemp)"
 if ! ./prepare-deploy.sh >"$pdlog" 2>&1; then
