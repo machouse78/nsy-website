@@ -19,6 +19,11 @@ return [
     // les réglages YouTube, qui n'en délivrent aucune) : YouTube Data API v3,
     // type « Données publiques », clé restreinte à cette seule API.
     // youtube_channel se remplit une fois l'identifiant UC… résolu du handle.
+    // Search Console : la cle du compte de service va dans
+    // _secret/gsc-service-account.json (jamais versionnee, jamais deployee).
+    // Laisser vide : le collecteur prend la propriete de DOMAINE si elle existe.
+    'gsc_site'        => '',   // ex. 'sc-domain:nsy.fr'
+
     'youtube_key'     => 'CHANGE_ME_CLE_API_GOOGLE',
     'youtube_handle'  => '@CHANGE_ME',
     'youtube_channel' => '',

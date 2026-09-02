@@ -81,6 +81,26 @@ ErrorDocument 404 /404.html
     </IfModule>
 </FilesMatch>
 
+# ───── Page de maintenance de l'hébergeur : jamais 200 ─────
+# Infomaniak génère `.infomaniak-maintenance.html` à la racine dès qu'on touche
+# à « Page et maintenance ». Elle est PUBLIQUE et répondait 200 même site
+# allumé : Google pouvait donc indexer « maintenance en cours » alors que tout
+# fonctionne (constaté le 30/08/2026). Le 503 règle le problème à lui seul —
+# c'est le code correct pour une indisponibilité, et les moteurs n'indexent
+# jamais une 503. La règle vaut aussi si l'hébergeur régénère la page.
+#
+# ⚠️ Tenté et ABANDONNÉ : ajouter X-Robots-Tag via SetEnvIf + Header. Les
+# en-têtes ne sont pas posés après un `R=503` (vérifié en production dans les
+# deux variantes, avec et sans le préfixe REDIRECT_). C'était de toute façon
+# redondant avec le 503 ; ne pas le réintroduire en croyant combler un trou.
+#
+# Ne PAS transformer ça en redirection : une 301/302 ferait disparaître le
+# signal d'indisponibilité, qui est justement ce qu'on veut transmettre.
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^\.infomaniak-maintenance\.html$ - [R=503,L]
+</IfModule>
+
 # ───── Forcer HTTPS + www (hôte canonique : https://www.nsy.fr) ─────
 <IfModule mod_rewrite.c>
     RewriteEngine On

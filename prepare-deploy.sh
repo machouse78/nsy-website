@@ -96,7 +96,11 @@ cp site-ia-en-un-week-end.html deploy/
 cp ai-website-in-a-weekend.html deploy/
 cp stats-collector.php deploy/
 mkdir -p deploy/stats
+# Tout ce que stats/index.html appelle doit figurer ici — la vérification en fin
+# de script (« références broken dans stats/index.html ») le rappelle à l'ordre.
 cp stats/.htaccess stats/index.html stats/data.php stats/html2canvas.min.js deploy/stats/
+cp stats/carte-monde.js deploy/stats/   # fond de carte du dashboard (généré par tools/carte-monde.py)
+cp stats/chat.php       deploy/stats/   # agent d'analyse PRIVÉ du dashboard (≠ /chat.php public)
 [ -f stats/partage.html ] && cp stats/partage.html deploy/stats/   # page « Partager » (kits par groupe)
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/
@@ -269,6 +273,12 @@ required=(
   "deploy/vendor/PHPMailer/src/PHPMailer.php"
   "deploy/vendor/PHPMailer/src/SMTP.php"
   "deploy/vendor/PHPMailer/src/Exception.php"
+  "deploy/stats/.htaccess"
+  "deploy/stats/index.html"
+  "deploy/stats/data.php"
+  "deploy/stats/chat.php"
+  "deploy/stats/carte-monde.js"
+  "deploy/stats/html2canvas.min.js"
   "deploy/_secret/.htaccess"
   "deploy/_secret/config.php"
   "deploy/public/nsy-logo.png"
@@ -311,6 +321,25 @@ while IFS= read -r ref; do
     broken=$((broken + 1))
   fi
 done < <(grep -oE '(src|href)="(css|js|public)/[^"]+"' deploy/index.html | sed -E 's/.*"([^"]+)".*/\1/' | sort -u)
+
+# ───── Vérification des références dans stats/index.html ─────
+# Vécu (02/09/2026) : stats/carte-monde.js et stats/chat.php étaient appelés par
+# le dashboard mais absents de la copie plus haut. Ils n'ont survécu en ligne que
+# parce que l'upload FTP n'efface jamais rien côté serveur — une restauration
+# complète, ou un déploiement vers un serveur neuf, les aurait perdus en silence.
+# Le contrôle ci-dessous relit la page livrée et exige chacun de ses appels
+# locaux : balises src=/href=, affectations .src = et appels fetch().
+echo ""
+echo "🔍 Recherche de références broken dans stats/index.html..."
+while IFS= read -r ref; do
+  [ -z "$ref" ] && continue
+  if [ ! -e "deploy/stats/$ref" ]; then
+    echo "  ⚠️  stats/index.html référence \"$ref\" qui n'existe pas dans deploy/stats/"
+    broken=$((broken + 1))
+  fi
+done < <(grep -oE "(src|href) *= *[\"'][^\"']+[\"']|fetch\([\"'][^\"']+[\"']" deploy/stats/index.html \
+         | grep -oE "[\"'][^\"']+[\"']" | tr -d "\"'" \
+         | grep -vE '^(https?:)?//|^#|^mailto:|^data:|\$\{' | sort -u)
 
 # ───── Rapport ─────
 echo ""
