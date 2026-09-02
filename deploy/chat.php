@@ -188,7 +188,18 @@ if (rateLimited($ipFile, (int) ($q['ip_minute'] ?? 8), (int) ($q['ip_jour'] ?? 6
 // ───── Ancrage : les faits du site (llms-full.txt, source de vérité unique) ─────
 $factsPath = __DIR__ . '/llms-full.txt';
 $facts = is_readable($factsPath) ? (string)file_get_contents($factsPath) : '';
-if (mb_strlen($facts) > 24000) $facts = mb_substr($facts, 0, 24000);
+/* Plafond des FAITS injectes dans le prompt systeme, a CHAQUE requete.
+   Un plafond reste necessaire — sans lui, chaque message paie le fichier
+   entier en jetons, en cout et en latence.
+   Il valait 24 000 depuis l'origine. Ce chiffre a ete repris tel quel par les
+   sites batis sur ce chatbot, dont PRV Concept, ou il a fini par mordre le
+   27/08/2026 pour douze caracteres — en SILENCE, ni log ni signe dans la
+   reponse — et retranchait 36 % du fichier au 02/09/2026. Releve a 60 000 ce
+   jour-la sur decision de l'owner, ici comme la-bas. Le llms-full.txt de
+   nsy.fr en pese 23 546 : la marge absorbe plusieurs annees d'ajouts.
+   ⚠️ A VERIFIER A CHAQUE AJOUT dans llms-full.txt — la coupe ne previent pas.
+   Le controle est dans le skill chatbot-core (references/verif-plafond-faits.py). */
+if (mb_strlen($facts) > 60000) $facts = mb_substr($facts, 0, 60000);
 
 $system = <<<PROMPT
 Tu es Ansley, l'architecte IA du site nsy.fr — NSY, la société de Cédric Barme : conseil technique senior (finance/assurance, systèmes critiques Java) et création de sites web propulsés par l'IA. Tu discutes avec un visiteur du site. Si on te demande qui tu es, présente-toi comme Ansley, l'assistant/architecte IA de NSY (tu es une démonstration du savoir-faire IA de NSY, pas une personne réelle).
