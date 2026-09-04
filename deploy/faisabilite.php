@@ -38,7 +38,10 @@ $lang = (($_POST['lang'] ?? 'fr') === 'en') ? 'en' : 'fr';
 $L = static fn(string $fr, string $en): string => $lang === 'en' ? $en : $fr;
 
 // ───── Honeypot anti-bot (silent success if filled) ─────
+require_once __DIR__ . '/formulaires.php';
+$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 if (!empty($_POST['website'] ?? '')) {
+    nsy_form_event('faisa', 'honeypot');
     echo json_encode(['ok' => true]);
     exit;
 }
@@ -47,6 +50,7 @@ if (!empty($_POST['website'] ?? '')) {
 $configPath = __DIR__ . '/_secret/config.php';
 if (!file_exists($configPath)) {
     error_log('NSY faisabilité: missing _secret/config.php');
+    nsy_form_event('faisa', 'erreur_config');
     http_response_code(500);
     echo json_encode(['ok' => false, 'error' => $L('Erreur de configuration serveur — veuillez réessayer.', 'Server configuration error — please try again.')]);
     exit;
@@ -55,34 +59,35 @@ $config = require $configPath;
 
 // ───── Cloudflare Turnstile anti-bot verification ─────
 $turnstileToken = trim((string)($_POST['cf-turnstile-response'] ?? ''));
+$antiBotBypass = '';
 if (!empty($config['turnstile_secret']) && $config['turnstile_secret'] !== 'CHANGE_ME_SET_THE_TURNSTILE_SECRET_KEY') {
-    if ($turnstileToken === '') {
+    // Verdict Cloudflare — voir formulaires.php : quand c'est NOTRE clé ou
+    // Cloudflare qui est en défaut, le contrôle est contourné (vécu 02/09/2026 :
+    // clé rejetée « invalid-input-secret », chaque humain recevait une 403).
+    $tv = nsy_turnstile_verdict((string) $config['turnstile_secret'], $turnstileToken, $ip);
+    if ($tv['verdict'] === 'manquant') {
+        nsy_form_event('faisa', 'antibot_manquant');
         http_response_code(400);
         echo json_encode(['ok' => false, 'error' => $L('Vérification anti-bot manquante. Rechargez la page et réessayez.', 'Anti-bot check missing. Reload the page and try again.')]);
         exit;
     }
-
-    $ch = curl_init('https://challenges.cloudflare.com/turnstile/v0/siteverify');
-    curl_setopt_array($ch, [
-        CURLOPT_POST           => true,
-        CURLOPT_POSTFIELDS     => http_build_query([
-            'secret'   => $config['turnstile_secret'],
-            'response' => $turnstileToken,
-            'remoteip' => $_SERVER['REMOTE_ADDR'] ?? '',
-        ]),
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 10,
-        CURLOPT_CONNECTTIMEOUT => 5,
-    ]);
-    $verifyRaw = curl_exec($ch);
-    $verifyErr = curl_error($ch);
-
-    $verify = is_string($verifyRaw) ? json_decode($verifyRaw, true) : null;
-    if (!is_array($verify) || empty($verify['success'])) {
-        error_log('NSY faisabilité: Turnstile verify failed — ' . ($verifyErr ?: json_encode($verify)));
+    if ($tv['verdict'] === 'bot') {
+        error_log('NSY faisabilité: Turnstile a refusé le jeton — ' . $tv['raison']);
+        nsy_form_event('faisa', 'antibot_refuse');
         http_response_code(403);
         echo json_encode(['ok' => false, 'error' => $L('Vérification anti-bot échouée. Rechargez la page et réessayez.', 'Anti-bot check failed. Reload the page and try again.')]);
         exit;
+    }
+    if ($tv['verdict'] === 'bypass') {
+        $antiBotBypass = $tv['raison'];
+        error_log('NSY faisabilité: Turnstile HORS SERVICE (' . $antiBotBypass . ') — contrôle contourné, autres filtres actifs');
+        nsy_alerte_owner($config, '[NSY] Anti-bot Turnstile hors service — formulaires en mode dégradé',
+            "Cloudflare Turnstile ne valide plus les envois du site : " . $antiBotBypass . "\n\n"
+            . "Les formulaires (contact, faisabilité) continuent de fonctionner SANS ce contrôle,\n"
+            . "protégés par le honeypot, la cadence, le plafond journalier et le score anti-spam.\n\n"
+            . "À faire : dans le tableau de bord Cloudflare > Turnstile, vérifier le widget du site\n"
+            . "et régénérer la clé secrète, puis la reporter dans _secret/config.php (turnstile_secret).\n"
+            . "Cette alerte est envoyée au plus une fois par 24 h.\n", 'turnstile');
     }
 }
 
@@ -105,15 +110,16 @@ if (mb_strlen($payloadRaw) > 60000) {
 }
 
 if (!empty($errors)) {
+    nsy_form_event('faisa', 'invalide');
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => implode(' · ', $errors)]);
     exit;
 }
 
 // ───── Rate limiting (1 send / IP / 60s via temp file) ─────
-$ip = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
 $rateFile = sys_get_temp_dir() . '/nsy_faisa_' . md5($ip);
 if (file_exists($rateFile) && (time() - filemtime($rateFile)) < 60) {
+    nsy_form_event('faisa', 'throttle');
     http_response_code(429);
     echo json_encode(['ok' => false, 'error' => $L('Trop de demandes — patientez 1 minute avant de réessayer.', 'Too many requests — please wait a minute before trying again.')]);
     exit;
@@ -124,6 +130,7 @@ if (file_exists($rateFile) && (time() - filemtime($rateFile)) < 60) {
 require_once __DIR__ . '/antispam.php';
 
 if (nsy_over_daily_cap('faisa', $ip, 5)) {
+    nsy_form_event('faisa', 'plafond');
     http_response_code(429);
     echo json_encode(['ok' => false, 'error' => $L('Trop de demandes aujourd\'hui — réessayez plus tard.', 'Too many requests today — please try later.')]);
     exit;
@@ -133,6 +140,7 @@ if (nsy_over_daily_cap('faisa', $ip, 5)) {
 // score l'ensemble. Abandon silencieux + log si spam (comme contact.php).
 $spamScore = nsy_spam_score($payloadRaw, $email, $name);
 if ($spamScore >= NSY_SPAM_THRESHOLD) {
+    nsy_form_event('faisa', 'spam');
     nsy_spam_log('faisa', ['name' => $name, 'email' => $email, 'message' => $payloadRaw], $spamScore, $ip);
     echo json_encode(['ok' => true]);
     exit;
@@ -213,7 +221,7 @@ try {
     $mail->addReplyTo($email, $name);
 
     $mail->isHTML(true);
-    $mail->Subject = $subject;
+    $mail->Subject = $subject . ($antiBotBypass !== '' ? ' ⚠ anti-bot non vérifié' : '');
     $mail->Body    = $bodyHtml;
     $mail->AltBody = $bodyText;
 
@@ -295,6 +303,7 @@ try {
     }
 
     if (ob_get_length()) ob_clean(); // drop any stray notice/deprecation before the JSON
+    nsy_form_event('faisa', $antiBotBypass !== '' ? 'antibot_bypass' : 'envoye', ['lang' => $lang]);
     echo json_encode(['ok' => true]);
 } catch (\PHPMailer\PHPMailer\Exception $e) {
     $detail = $mail->ErrorInfo ?: $e->getMessage();
@@ -302,6 +311,7 @@ try {
     error_log($errMsg);
     @file_put_contents(__DIR__ . '/_secret/contact-errors.log', $errMsg, FILE_APPEND);
     @file_put_contents(__DIR__ . '/contact-errors.log', $errMsg, FILE_APPEND);
+    nsy_form_event('faisa', 'erreur_envoi');
     http_response_code(500);
     if (ob_get_length()) ob_clean();
     echo json_encode([

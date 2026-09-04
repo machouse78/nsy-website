@@ -46,6 +46,18 @@
     if (l) l.textContent = txt;
   };
   const showToast = (msg, isError = true) => {
+    // Le message sous le bouton d'envoi d'abord, indépendant du toast, et une
+    // ERREUR y reste affichée jusqu'au prochain envoi (02/09/2026 : côté
+    // contact, la 403 anti-bot s'effaçait en 4 s sans que le visiteur la lise).
+    const btn = form.querySelector('button[type="submit"], [type="submit"]');
+    let inline = form.querySelector('.form-erreur');
+    if (!inline && btn) {
+      inline = document.createElement('p');
+      inline.className = 'form-erreur';
+      inline.setAttribute('role', 'alert');
+      btn.insertAdjacentElement('afterend', inline);
+    }
+    if (inline) { inline.textContent = isError ? '✕ ' + msg : ''; inline.hidden = !isError; }
     if (!toast) return;
     toast.textContent = '';
     const icon = document.createElement('span');
@@ -54,7 +66,8 @@
     toast.appendChild(icon);
     toast.appendChild(document.createTextNode(' ' + msg));
     toast.classList.remove('hidden');
-    setTimeout(() => toast.classList.add('hidden'), 4500);
+    toast.setAttribute('role', isError ? 'alert' : 'status');
+    if (!isError) setTimeout(() => toast.classList.add('hidden'), 4500);
   };
 
   const activeSection = () => sections.find((s) => +s.dataset.step === current);
@@ -176,6 +189,9 @@
     setSubmitLabel(T.sending);
 
     try {
+      const prev = form.querySelector('.form-erreur');
+      if (prev) { prev.textContent = ''; prev.hidden = true; }
+      if (toast) toast.classList.add('hidden');
       const res = await fetch(form.action || 'faisabilite.php', {
         method: 'POST', body: fd, headers: { Accept: 'application/json' },
       });

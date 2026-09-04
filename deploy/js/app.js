@@ -94,6 +94,19 @@
       if (label) label.textContent = text;
     };
     const showToast = (text, isError = false) => {
+      // Le message sous le bouton d'abord : il ne dépend d'AUCUN élément de la
+      // page. Vécu 02/09/2026 : contact.html n'a pas d'élément #toast, donc
+      // aucune erreur (dont la 403 anti-bot) n'a jamais été affichée — le
+      // visiteur ne voyait qu'un bouton « Réessayer » sans explication.
+      // Une ERREUR reste affichée jusqu'au prochain envoi.
+      let inline = form.querySelector('.form-erreur');
+      if (!inline && submitBtn) {
+        inline = document.createElement('p');
+        inline.className = 'form-erreur';
+        inline.setAttribute('role', 'alert');
+        submitBtn.insertAdjacentElement('afterend', inline);
+      }
+      if (inline) { inline.textContent = isError ? '✕ ' + text : ''; inline.hidden = !isError; }
       if (!toast) return;
       toast.textContent = '';
       const icon = document.createElement('span');
@@ -102,12 +115,16 @@
       toast.appendChild(icon);
       toast.appendChild(document.createTextNode(' ' + text));
       toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 4000);
+      toast.setAttribute('role', isError ? 'alert' : 'status');
+      if (!isError) setTimeout(() => toast.classList.add('hidden'), 4000);
     };
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       if (submitBtn) submitBtn.disabled = true;
+      if (toast) toast.classList.add('hidden');
+      const prevErr = form.querySelector('.form-erreur');
+      if (prevErr) { prevErr.textContent = ''; prevErr.hidden = true; }
       setLabel(F.sending);
 
       try {

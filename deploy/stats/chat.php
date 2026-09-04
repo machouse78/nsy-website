@@ -90,13 +90,27 @@ ATTRIBUTION DES PICS — le point le plus important :
   indexent, sensibles aux actions techniques de référencement) et les VISITES
   HUMAINES (sensibles aux publications et aux réseaux). Ne les confonds jamais.
 
-FORME : va droit au fait. Deux à cinq phrases pour une question simple. Pas de
+FORME : texte brut uniquement — AUCUN Markdown : pas d'astérisques, pas de
+titres, pas de tirets de liste. L'interface affiche ta réponse caractère pour
+caractère : « **visites** » s'afficherait avec ses étoiles. Va droit au fait.
+Deux à cinq phrases pour une question simple. Pas de
 liste à puces sauf si l'on te demande une énumération. Pas de formule de
 politesse d'ouverture ni de conclusion creuse.
 
 DOSSIER DE FAITS (JSON) :
 {$faits}
 PROMPT;
+
+/** Retire la syntaxe Markdown la plus courante sans toucher au texte lui-même. */
+function nettoie_markdown(string $t): string
+{
+    $t = preg_replace('/\*\*(.+?)\*\*/s', '$1', $t);      // **gras**
+    $t = preg_replace('/__(.+?)__/s', '$1', $t);              // __gras__
+    $t = preg_replace('/(?<![\w*])\*(?!\s)(.+?)(?<!\s)\*(?![\w*])/s', '$1', $t); // *italique*
+    $t = preg_replace('/^[ \t]*#{1,6}[ \t]+/m', '', $t);    // # titres
+    $t = preg_replace('/^[ \t]*[-*•][ \t]+/m', '', $t);      // - puces
+    return trim($t);
+}
 
 function appelle(string $url, string $key, array $payload): array
 {
@@ -148,5 +162,9 @@ if ($code < 200 || $code >= 300) {
 
 $j = json_decode($res, true);
 $reply = trim((string) ($j['choices'][0]['message']['content'] ?? ''));
+// Ceinture après les bretelles : l'interface pose la réponse en textContent, sans
+// rendu Markdown. Quoi que le modèle ait voulu souligner, on retire la syntaxe
+// (vécu 02/09/2026 : « **visites humaines** » affiché avec ses étoiles).
+$reply = nettoie_markdown($reply);
 if ($reply === '') repond(['ok' => false, 'error' => 'Réponse vide du modèle.'], 502);
 repond(['ok' => true, 'reply' => $reply]);

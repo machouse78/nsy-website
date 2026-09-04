@@ -1595,6 +1595,9 @@ section.block:first-of-type { border-top: 0; }
   .toast { left: 12px; right: 12px; max-width: none; }
 }
 .toast.hidden { display: none; }
+/* Erreur d'envoi sous le bouton — reste visible tant qu'un nouvel envoi n'a pas été tenté. */
+.form-erreur { margin: 12px 0 0; color: #ff6b6b; font-size: 0.95rem; line-height: 1.45; }
+.form-erreur[hidden] { display: none; }
 @keyframes toast-in {
   from { transform: translateY(8px); opacity: 0; }
 }
