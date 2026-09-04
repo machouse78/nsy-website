@@ -114,7 +114,12 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   référents du code public) et **Chaîne YouTube** (vues, abonnés, vidéos —
   l'API ne publiant que des cumuls, les gains sont calculés d'une collecte à
   l'autre), toutes deux **facultatives** : sans clé, la rubrique et son onglet
-  disparaissent. Collecté chaque matin à J-1 par `stats-collector.php` (tâche
+  disparaissent. **Stories** Facebook et Instagram (04/09/2026) : une story ne vit que
+  24 h dans l'API, le collecteur tient un carnet (`_secret/kpi-stories.json`, maximum
+  des mesures) alimenté la nuit ET par le mode `?key=…&stories=1` à programmer toutes
+  les 4 à 6 h ; tableau « Stories » sous les publications (Instagram : vues, portée,
+  réponses, interactions ; Facebook : comptée, mesures non exposées). Collecté chaque
+  matin à J-1 par `stats-collector.php` (tâche
   planifiée Infomaniak) depuis les access logs et l'API Graph, historique JSON
   **illimité, alimenté UNIQUEMENT par les logs** (jamais d'export AWStats :
   bots inclus, échelle faussée), **aucune donnée personnelle**
@@ -241,7 +246,7 @@ nsy-website/
 ├── faisabilite.php                      # Backend questionnaire (même pipeline que contact.php)
 ├── chat.php                             # Proxy IA de l'assistant (LLM Mistral + RAG llms-full.txt)
 ├── antispam.php                         # Filtre anti-spam partagé (contact + faisabilité)
-├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + trafic GitHub + chaîne YouTube + Search Console + pays/villes DB-IP + compteurs) → _secret/kpi-history.json
+├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + stories via carnet 24 h + trafic GitHub + chaîne YouTube + Search Console + pays/villes DB-IP + compteurs) → _secret/kpi-history.json
 ├── stats/                               # Dashboard KPI privé (Basic Auth) — cartes, courbes SVG, tables (index.html + data.php)
 ├── scripts/rejoue-jours.py              # Rejoue des journées du collecteur (pause 120 s — jamais enchaîner : blocage Infomaniak vécu le 29/08/2026)
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)

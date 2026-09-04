@@ -51,6 +51,19 @@ if (!hash_equals((string) $cfg['cron_key'], (string) ($_GET['key'] ?? ''))) {
     exit;
 }
 
+/* ── Mode STORIES, intrajournalier : ?key=…&stories=1 (toutes les 4 à 6 h).
+   N'écrit que le carnet _secret/kpi-stories.json — ni logs, ni historique. */
+if (($_GET['stories'] ?? '') === '1') {
+    $tokS = (string) ($cfg['fb_page_token'] ?? '');
+    $carnetS = ($tokS !== '' && !str_starts_with($tokS, 'CHANGE_ME'))
+        ? collecteStories($cfg, $tokS, __DIR__ . '/_secret/kpi-stories.json') : ['stories' => []];
+    $auj = date('Y-m-d');
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['ok' => true, 'mode' => 'stories', 'carnet' => count($carnetS['stories']),
+                      'facebook_aujourdhui' => count(storiesDuJour($carnetS, 'facebook', $auj)),
+                      'instagram_aujourdhui' => count(storiesDuJour($carnetS, 'instagram', $auj))], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 if (($_GET['run'] ?? '') !== '1') {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'run=1 attendu']);
@@ -762,7 +775,89 @@ function graphGet(string $path, string $token, array $params = []): array {
     $j = is_string($raw) ? json_decode($raw, true) : null;
     return is_array($j) && !isset($j['error']) ? $j : [];
 }
-$fb = ['abonnes' => null, 'posts' => [], 'vues' => null, 'engagements' => null,
+
+/* ── STORIES (Facebook Page + Instagram) — une vie de 24 h ───────────────────
+   Une story n'est lisible par l'API Graph que 24 h après sa parution ; la
+   collecte nocturne de J-1 ne verrait que celles publiées après l'heure de la
+   collecte. On tient donc un CARNET (_secret/kpi-stories.json), alimenté à
+   chaque passage — nocturne, ou intrajournalier via ?key=…&stories=1 (à
+   programmer toutes les 4 à 6 h) — qui mémorise chaque story vue et le
+   MAXIMUM de ses mesures. L'entrée du jour J reprend les stories du carnet
+   datées de J. Mesures Instagram : vues, portée, réponses, interactions ;
+   Facebook n'expose pas de mesure fiable par story : la story est comptée,
+   ses mesures restent « — » si l'API les refuse (GO owner 04/09/2026). */
+function collecteStories(array $cfg, string $tok, string $carnetFile): array
+{
+    $carnet = is_readable($carnetFile) ? (json_decode((string) file_get_contents($carnetFile), true) ?: []) : [];
+    $stories = is_array($carnet['stories'] ?? null) ? $carnet['stories'] : [];
+    $vu = date('c');
+    $garde = static function (array &$dst, string $id, array $neuf) use ($vu): void {
+        $ancien = $dst[$id] ?? [];
+        foreach (['vues', 'portee', 'reponses', 'interactions'] as $k) {
+            if (isset($neuf[$k]) || isset($ancien[$k])) { $neuf[$k] = max((int) ($neuf[$k] ?? 0), (int) ($ancien[$k] ?? 0)); }
+        }
+        $neuf['vu_le'] = $vu;
+        $neuf['premiere_vue'] = $ancien['premiere_vue'] ?? $vu;
+        $dst[$id] = $neuf;
+    };
+    // Facebook — stories de la Page
+    if (!empty($cfg['fb_page_id'])) {
+        $fbS = graphGet($cfg['fb_page_id'] . '/stories', $tok, ['fields' => 'post_id,status,creation_time,media_type,media_id,url', 'limit' => '50']);
+        foreach ($fbS['data'] ?? [] as $st) {
+            $id = (string) ($st['post_id'] ?? $st['media_id'] ?? '');
+            if ($id === '') { continue; }
+            $mes = [];
+            $ins = graphGet($id . '/insights', $tok, ['metric' => 'post_impressions_unique,post_impressions']);
+            foreach ($ins['data'] ?? [] as $m) {
+                $val = (int) ($m['values'][0]['value'] ?? 0);
+                if (($m['name'] ?? '') === 'post_impressions_unique') { $mes['portee'] = $val; }
+                if (($m['name'] ?? '') === 'post_impressions') { $mes['vues'] = $val; }
+            }
+            $garde($stories, 'fb:' . $id, ['reseau' => 'facebook', 'id' => $id,
+                'date' => substr((string) ($st['creation_time'] ?? ''), 0, 10), 'type' => (string) ($st['media_type'] ?? ''),
+                'url' => (string) ($st['url'] ?? ''), 'statut' => (string) ($st['status'] ?? '')] + $mes);
+        }
+    }
+    // Instagram — stories du compte
+    if (!empty($cfg['ig_user_id'])) {
+        $igS = graphGet($cfg['ig_user_id'] . '/stories', $tok, ['fields' => 'id,timestamp,media_type,permalink', 'limit' => '50']);
+        foreach ($igS['data'] ?? [] as $st) {
+            $id = (string) ($st['id'] ?? '');
+            if ($id === '') { continue; }
+            $mes = [];
+            $ins = graphGet($id . '/insights', $tok, ['metric' => 'views,reach,replies,total_interactions']);
+            if (!isset($ins['data'])) { $ins = graphGet($id . '/insights', $tok, ['metric' => 'reach,replies']); }
+            foreach ($ins['data'] ?? [] as $m) {
+                $val = (int) ($m['values'][0]['value'] ?? 0);
+                $cle = ['views' => 'vues', 'reach' => 'portee', 'replies' => 'reponses', 'total_interactions' => 'interactions'][$m['name'] ?? ''] ?? null;
+                if ($cle !== null) { $mes[$cle] = $val; }
+            }
+            $garde($stories, 'ig:' . $id, ['reseau' => 'instagram', 'id' => $id,
+                'date' => substr((string) ($st['timestamp'] ?? ''), 0, 10), 'type' => (string) ($st['media_type'] ?? ''),
+                'url' => (string) ($st['permalink'] ?? '')] + $mes);
+        }
+    }
+    // Le carnet ne garde qu'un an : au-delà, l'historique quotidien fait foi.
+    $limite = date('Y-m-d', strtotime('-400 days'));
+    $stories = array_filter($stories, static fn ($x) => (string) ($x['date'] ?? '') >= $limite);
+    @file_put_contents($carnetFile, json_encode(['stories' => $stories, 'maj' => $vu], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
+    return ['stories' => $stories];
+}
+/** Les stories du carnet datées d'un jour, pour un réseau. */
+function storiesDuJour(array $carnet, string $reseau, string $jour): array
+{
+    $out = [];
+    foreach ($carnet['stories'] ?? [] as $x) {
+        if (($x['reseau'] ?? '') === $reseau && ($x['date'] ?? '') === $jour) {
+            $out[] = ['id' => $x['id'], 'date' => $x['date'], 'type' => $x['type'] ?? '', 'url' => $x['url'] ?? '',
+                      'vues' => $x['vues'] ?? null, 'portee' => $x['portee'] ?? null, 'reponses' => $x['reponses'] ?? null,
+                      'interactions' => $x['interactions'] ?? null];
+        }
+    }
+    return $out;
+}
+
+$fb = ['stories' => [], 'ig_stories' => [], 'abonnes' => null, 'posts' => [], 'vues' => null, 'engagements' => null,
        'nouveaux_abonnes' => null, 'vues_video' => null, 'reactions' => null, 'actions' => null];
 $tok = (string) $cfg['fb_page_token'];
 if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
@@ -806,6 +901,9 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
             $fb[$cle] = (int) (is_array($val) ? array_sum($val) : $val);
         }
     }
+    $carnetS = collecteStories($cfg, $tok, __DIR__ . '/_secret/kpi-stories.json');
+    $fb['stories'] = storiesDuJour($carnetS, 'facebook', $target);
+    $fb['ig_stories'] = storiesDuJour($carnetS, 'instagram', $target);
     $posts = graphGet($cfg['fb_page_id'] . '/posts', $tok,
         ['fields' => 'id,created_time,permalink_url,message,likes.summary(true),comments.summary(true),shares', 'limit' => '10']);
     foreach ($posts['data'] ?? [] as $p) {
@@ -1159,6 +1257,12 @@ $collecteEvts = static function (array &$e) use ($ajouteEvt, $fb, $youtube, $ghT
     }
     foreach ($fb['ig_posts'] ?? [] as $p) {
         $ajouteEvt($e, (string) ($p['date'] ?? ''), 'instagram', ($p['titre'] ?? '') ?: 'publication', (string) ($p['url'] ?? ''));
+    }
+    foreach ($fb['stories'] ?? [] as $p) {
+        $ajouteEvt($e, (string) ($p['date'] ?? ''), 'facebook', 'story', (string) ($p['url'] ?? ''));
+    }
+    foreach ($fb['ig_stories'] ?? [] as $p) {
+        $ajouteEvt($e, (string) ($p['date'] ?? ''), 'instagram', 'story', (string) ($p['url'] ?? ''));
     }
     // 3. Vidéos YouTube.
     foreach ($youtube['derniers'] ?? [] as $v) {

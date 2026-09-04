@@ -376,6 +376,9 @@
     <div>
       <h3 id="h-igposts">Instagram — publications</h3>
       <table id="t-igposts"><thead><tr><th>Publication</th><th class="num">Vues</th><th class="num">Portée</th><th class="num">Inter.</th></tr></thead><tbody></tbody></table>
+      <h3 id="h-stories">Stories</h3>
+      <table id="t-stories"><thead><tr><th>Story</th><th>Réseau</th><th class="num">Vues</th><th class="num">Portée</th><th class="num">Réponses</th><th class="num">Inter.</th></tr></thead><tbody></tbody></table>
+      <p class="note" id="stories-note">Une story ne vit que 24 h dans l'API : elle est relevée par la collecte nocturne et par une passe intrajournalière, ses mesures sont le maximum observé. Facebook n'expose pas de mesure fiable par story : elle est comptée, ses chiffres restent « — ».</p>
     </div>
   </div>
 
@@ -1633,6 +1636,25 @@
       document.querySelector('#t-igposts tbody').innerHTML = igp.length
         ? igp.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues || 0)}</td><td class="num">${fmt(x.portee || 0)}</td><td class="num">${fmt(x.interactions || 0)}</td></tr>`).join('')
         : '<tr><td colspan="4" class="mono">aucun compte Instagram relié</td></tr>';
+      // Stories de la période : celles des jours sélectionnés, dédoublonnées
+      // par identifiant (une story vue par plusieurs collectes n'est qu'une).
+      {
+        const vues = new Map();
+        sel.forEach((d) => {
+          const f = D[d]?.fb || {};
+          (net !== 'ig' ? (f.stories || []) : []).forEach((x) => vues.set('fb:' + x.id, { ...x, r: 'FB' }));
+          (net !== 'fb' ? (f.ig_stories || []) : []).forEach((x) => vues.set('ig:' + x.id, { ...x, r: 'IG' }));
+        });
+        const liste = [...vues.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        const t = document.querySelector('#t-stories tbody');
+        if (t) {
+          $('h-stories').textContent = `Stories — ${liste.length} sur la période`;
+          const m = (v) => (v == null ? '—' : fmt(v));
+          t.innerHTML = liste.length
+            ? liste.map((x) => `<tr><td>${x.url ? `<a href="${x.url}" target="_blank" rel="noopener">${x.date}</a>` : x.date} ${(x.type || '').toLowerCase()}</td><td>${x.r}</td><td class="num">${m(x.vues)}</td><td class="num">${m(x.portee)}</td><td class="num">${m(x.reponses)}</td><td class="num">${m(x.interactions)}</td></tr>`).join('')
+            : '<tr><td colspan="6" class="mono">aucune story sur la période</td></tr>';
+        }
+      }
     }
 
     // ── Avis clients : une ligne par source, collectée ou non ────────────
