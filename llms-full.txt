@@ -143,6 +143,7 @@ associations et indépendants en transition numérique.
   automatisée : validation des inscriptions par un script exécuté dans un
   planificateur de tâches, messages privés de bienvenue et réponses aux
   présentations des nouveaux membres envoyés par la mascotte elle-même.
+  Depuis septembre 2026, le Père Hervé veille aussi sur le forum : il prépare des réponses aux sujets sans réponse et aux fils où il est cité, mises en file pour validation humaine avant publication ; sans source d'atelier ni fil du forum il n'écrit rien, et toute affirmation qu'aucune source ne porte est retirée puis reformulée — rien ne part sans un clic humain.
 - Référence publique (création web) : Le Cerf Thym — https://www.lecerfthym.fr —
   site vitrine du restaurant Le Cerf Thym à Sully-sur-Loire (Loiret) — la
   gérante a noté NSY 5/5 sur Google, PagesJaunes, Facebook et Sortlist
