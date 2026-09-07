@@ -2731,6 +2731,7 @@ footer.foot {
    liens vers les articles du journal dans les cartes Réalisations). Ajouter le
    sélecteur ici EN MÊME TEMPS qu'on ajoute un lien dans un nouveau bloc. */
 .tarifs-bloc .apres a,
+.cap p a,
 .realisation-desc a,
 .realisation-specs dd a,
 .realisation-quote blockquote a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
