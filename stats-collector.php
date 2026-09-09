@@ -32,8 +32,12 @@ ini_set('display_errors', '0'); // JSON propre — les erreurs vont au log PHP
    récidive impossible : les 5 premières erreurs vont au journal (diagnostic),
    au-delà de 10 le traitement est ABANDONNÉ net. Mieux vaut une collecte
    ratée qu'un hébergement bloqué. */
+error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);   // les dépréciations ne vont JAMAIS au journal (09/09/2026)
 $prvErreurs = 0;
 set_error_handler(static function ($no, $msg, $fichier, $ligne) use (&$prvErreurs) {
+    if (!(error_reporting() & $no)) {
+        return true;    // exclu par error_reporting (dépréciations) : silence — vécu le 09/09/2026 sur prv-concept
+    }
     if (++$prvErreurs <= 5) {
         error_log("stats-collector: [$no] $msg @ " . basename($fichier) . ":$ligne");
     }
@@ -43,7 +47,7 @@ set_error_handler(static function ($no, $msg, $fichier, $ligne) use (&$prvErreur
             'erreur' => "traitement STOPPE : $prvErreurs erreurs PHP - regle du 30/08/2026"]));
     }
     return true;    // comptée et maîtrisée : PHP ne la journalise pas une 2e fois
-});
+}, E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
 $cfg = require __DIR__ . '/_secret/kpi.php';
 if (!hash_equals((string) $cfg['cron_key'], (string) ($_GET['key'] ?? ''))) {
