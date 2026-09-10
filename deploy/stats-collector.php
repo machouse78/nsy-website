@@ -818,7 +818,7 @@ function collecteStories(array $cfg, string $tok, string $carnetFile): array
                 if (($m['name'] ?? '') === 'post_impressions') { $mes['vues'] = $val; }
             }
             $garde($stories, 'fb:' . $id, ['reseau' => 'facebook', 'id' => $id,
-                'date' => substr((string) ($st['creation_time'] ?? ''), 0, 10), 'type' => (string) ($st['media_type'] ?? ''),
+                'date' => jourParis($st['creation_time'] ?? ''), 'type' => (string) ($st['media_type'] ?? ''),
                 'url' => (string) ($st['url'] ?? ''), 'statut' => (string) ($st['status'] ?? '')] + $mes);
         }
     }
@@ -837,7 +837,7 @@ function collecteStories(array $cfg, string $tok, string $carnetFile): array
                 if ($cle !== null) { $mes[$cle] = $val; }
             }
             $garde($stories, 'ig:' . $id, ['reseau' => 'instagram', 'id' => $id,
-                'date' => substr((string) ($st['timestamp'] ?? ''), 0, 10), 'type' => (string) ($st['media_type'] ?? ''),
+                'date' => jourParis($st['timestamp'] ?? ''), 'type' => (string) ($st['media_type'] ?? ''),
                 'url' => (string) ($st['permalink'] ?? '')] + $mes);
         }
     }
@@ -846,6 +846,16 @@ function collecteStories(array $cfg, string $tok, string $carnetFile): array
     $stories = array_filter($stories, static fn ($x) => (string) ($x['date'] ?? '') >= $limite);
     @file_put_contents($carnetFile, json_encode(['stories' => $stories, 'maj' => $vu], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), LOCK_EX);
     return ['stories' => $stories];
+}
+/** Jour (heure de Paris) d'un horodatage Graph : Unix pour les stories Facebook,
+    ISO 8601 en UTC pour Instagram — les 10 premiers caractères ne valent une date
+    que dans le second cas. */
+function jourParis(mixed $t): string
+{
+    $s = trim((string) $t);
+    if ($s === '') { return ''; }
+    $ts = ctype_digit($s) ? (int) $s : strtotime($s);
+    return $ts ? date('Y-m-d', $ts) : '';
 }
 /** Les stories du carnet datées d'un jour, pour un réseau. */
 function storiesDuJour(array $carnet, string $reseau, string $jour): array
