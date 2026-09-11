@@ -205,6 +205,7 @@ cp public/supervision-thumb.mp4         deploy/public/   # vignette ANIMEE artic
 cp public/supervision-article.jpg       deploy/public/   # infographie FR article supervision (+ OG)
 cp public/supervision-article-en.jpg    deploy/public/   # infographie EN article supervision (+ OG)
 cp public/supervision-video.mp4         deploy/public/   # video pleine res article supervision (publication Facebook)
+cp public/prv-concept-deux-articles-video.mp4 deploy/public/   # video des deux articles PRV Concept (publication Facebook, 11/09/2026)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)
 cp public/ansley-fab.mp4                deploy/public/   # mascotte FAB (Ansley buste + logo, boomerang)
