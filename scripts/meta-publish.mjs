@@ -12,6 +12,7 @@
  *   node scripts/meta-publish.mjs smoke                      → post NON PUBLIÉ créé puis supprimé (invisible au public)
  *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--video-url https://…]       → RÉPÉTITION (dry-run)
  *   node scripts/meta-publish.mjs post -p post.txt -c comment.txt [--video-url https://…] --go  → publie réellement
+ *   node scripts/meta-publish.mjs comment --id <id> -c comment.txt [--go]  → 1ᵉʳ commentaire d'une publication DÉJÀ en ligne (reprise)
  *   (--video-url : post VIDÉO/réel — règle owner 17/08/2026 : le journal se
  *    publie en vidéo AU FORMAT ORIGINAL, jamais recomposée ; la vidéo doit être
  *    déjà en ligne sur nsy.fr, Meta la télécharge depuis le site.
@@ -93,8 +94,10 @@ async function graph(env, method, path, params = {}, token = env.FB_PAGE_TOKEN) 
   const json = await res.json().catch(() => ({}));
   if (!res.ok || json.error) {
     // Message d'erreur Graph sans jamais refléter le token.
+    // LÈVE (et ne quitte pas) : l'attente d'une vidéo en traitement rattrape « does not exist »
+    // (vécu 11/09/2026 : die() ici tuait la boucle d'attente, le 1ᵉʳ commentaire est parti à part).
     const e = json.error || {};
-    die(`Graph ${method} /${path} → ${res.status} ${e.type || ''} (code ${e.code ?? '?'}) : ${e.message || 'réponse illisible'}`);
+    throw new Error(`Graph ${method} /${path} → ${res.status} ${e.type || ''} (code ${e.code ?? '?'}) : ${e.message || 'réponse illisible'}`);
   }
   return json;
 }
@@ -225,13 +228,7 @@ async function post(env, args) {
     // « ready », l'objet répond « does not exist » et le commentaire échoue
     // (vécu 23/08/2026 : post publié, commentaire perdu). On attend donc la fin
     // du traitement — en général moins d'une minute — avant de commenter.
-    for (let i = 0; i < 30; i++) {
-      const st = await graph(env, 'GET', postId, { fields: 'status' }).catch(() => null);
-      const ph = st?.status?.video_status;
-      if (ph === 'ready') break;
-      if (ph === 'error') throw new Error('traitement vidéo en erreur côté Facebook');
-      await new Promise((r) => setTimeout(r, 5000));
-    }
+    await attendreVideo(env, postId);
   } else if (imageUrl) {
     const created = await graph(env, 'POST', `${env.FB_PAGE_ID}/photos`, { url: imageUrl, message: body });
     postId = created.post_id || created.id;
@@ -241,6 +238,22 @@ async function post(env, args) {
     postId = created.id;
     console.log(`✓ Post publié (${postId})`);
   }
+  await commenter(env, postId, comment);
+}
+
+/** Attend qu'une vidéo envoyée par file_url soit « ready » (l'objet répond « does not exist » avant). */
+async function attendreVideo(env, id) {
+  for (let i = 0; i < 60; i++) {
+    const st = await graph(env, 'GET', id, { fields: 'status' }).catch(() => null);
+    const ph = st?.status?.video_status;
+    if (ph === 'ready') { console.log(`✓ vidéo prête (${i * 5} s d'attente)`); return; }
+    if (ph === 'error') throw new Error('traitement vidéo en erreur côté Facebook');
+    await new Promise((r) => setTimeout(r, 5000));
+  }
+  throw new Error(`vidéo ${id} toujours en traitement après 5 min — relancer : comment --id ${id} -c … --go`);
+}
+
+async function commenter(env, postId, comment) {
   const com = await graph(env, 'POST', `${postId}/comments`, { message: comment });
   console.log(`✓ 1ᵉʳ commentaire posté (${com.id})`);
   const perma = await graph(env, 'GET', postId, { fields: 'permalink_url' });
@@ -249,10 +262,28 @@ async function post(env, args) {
   console.log(`\nURL de la publication (pour le câblage §4 du skill journal-nsy) :\n${purl}`);
 }
 
+/** comment — poste le 1ᵉʳ commentaire d'une publication DÉJÀ en ligne (reprise après un incident),
+ *  en attendant d'abord la fin du traitement si c'est une vidéo. Mêmes garde-fous que post. */
+async function comment(env, args) {
+  const ii = args.indexOf('--id');
+  const id = ii !== -1 ? args[ii + 1] : '';
+  if (!/^\d+(_\d+)?$/.test(id)) die('--id <identifiant de la publication> requis');
+  let texte = readText('--comment-file', args);
+  if (!args.includes('--no-utm')) texte = tagUtm(texte, 'facebook', 'page');
+  if (!/nsy\.fr/i.test(texte)) die("Le 1ᵉʳ commentaire ne contient aucun lien nsy.fr — c'est sa raison d'être (backlinks vers l'article).");
+  const deja = await graph(env, 'GET', `${id}/comments`, { fields: 'message', limit: '25' }).catch(() => ({ data: [] }));
+  if ((deja.data || []).some((c) => (c.message || '').trim() === texte.trim())) die('ce commentaire est déjà posté sous cette publication.');
+  console.log(`── 1ᵉʳ COMMENTAIRE pour ${id} (${texte.length} car.) ──\n${texte}\n`);
+  if (!args.includes('--go')) { console.log('Répétition (dry-run) : rien n\'a été publié. Relancer avec --go.'); return; }
+  await attendreVideo(env, id).catch((e) => { if (!/traitement/.test(e.message)) throw e; console.log('ℹ️ pas une vidéo en traitement, on commente directement'); });
+  await commenter(env, id, texte);
+}
+
 // ── Entrée ────────────────────────────────────────────────────────────────────
 const [cmd, ...args] = process.argv.slice(2);
-if (cmd === 'setup') await setup(loadEnv({ requirePage: false }));
-else if (cmd === 'check') await check(loadEnv());
-else if (cmd === 'smoke') await smoke(loadEnv());
-else if (cmd === 'post') await post(loadEnv(), args);
-else die('commande attendue : setup | check | smoke | post (voir l\'en-tête du script)');
+if (cmd === 'setup') await setup(loadEnv({ requirePage: false })).catch((e) => die(e.message));
+else if (cmd === 'check') await check(loadEnv()).catch((e) => die(e.message));
+else if (cmd === 'smoke') await smoke(loadEnv()).catch((e) => die(e.message));
+else if (cmd === 'post') await post(loadEnv(), args).catch((e) => die(e.message));
+else if (cmd === 'comment') await comment(loadEnv(), args).catch((e) => die(e.message));
+else die('commande attendue : setup | check | smoke | post | comment (voir l\'en-tête du script)');
