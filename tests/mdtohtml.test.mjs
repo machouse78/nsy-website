@@ -49,6 +49,9 @@ t('post Facebook n°3 (URL nue) whitelisté', o.includes('href="https://www.face
 o = mdToHtml('Article [LinkedIn](https://www.linkedin.com/pulse/des-t%25C3%25A9raoctets-au-m%25C3%25A9gaoctet-la-supervision-est-une-duyee) et reel https://www.facebook.com/reel/1080327827884467 ici.');
 t('article LinkedIn Pulse n°4 whitelisté', o.includes('href="https://www.linkedin.com/pulse/des-t%25C3%25A9raoctets-au-m%25C3%25A9gaoctet-la-supervision-est-une-duyee"'));
 t('post Facebook n°4 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/reel/1080327827884467"'));
+o = mdToHtml('Article [LinkedIn](https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce) et reel https://www.facebook.com/reel/1392916158966415 ici.');
+t('article LinkedIn Pulse n°5 whitelisté', o.includes('href="https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce"'));
+t('post Facebook n°5 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/reel/1392916158966415"'));
 
 o = mdToHtml('Post [Facebook](https://www.facebook.com/share/p/1Ey4FXBYDA) ici.');
 t('post Facebook n°2 whitelisté', o.includes('href="https://www.facebook.com/share/p/1Ey4FXBYDA"'));

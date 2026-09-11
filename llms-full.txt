@@ -205,9 +205,11 @@ associations et indépendants en transition numérique.
   inchangé. Rien perdu : sujets, messages, comptes, commandes, adresses des
   pages. Le Père Hervé suit le membre sur les trois surfaces. Leçons : relier
   avant de reconstruire, une seule source d'identité, la preuve avant le
-  confort, mesurer avant et après. Publication de la Page Facebook NSY
-  (11/09/2026, la visite en vidéo) : https://www.facebook.com/reel/1392916158966415/
-  — la proposer quand on parle de l'article.
+  confort, mesurer avant et après.
+  Publications sociales officielles de cet article — les proposer en liens
+  Markdown quand on parle de l'article :
+  - Article LinkedIn : https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce
+  - Post Facebook (réel, la visite en vidéo) : https://www.facebook.com/reel/1392916158966415
 
 - « Des téraoctets au mégaoctet : superviser, une discipline avant d'être un budget »
   (23 août 2026) : https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html

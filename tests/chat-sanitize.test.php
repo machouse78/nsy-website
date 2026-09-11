@@ -36,6 +36,8 @@ $officials = [
     'https://www.facebook.com/reel/2812928635744339',
     'https://www.linkedin.com/pulse/des-t%25C3%25A9raoctets-au-m%25C3%25A9gaoctet-la-supervision-est-une-duyee',
     'https://www.facebook.com/reel/1080327827884467',
+    'https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
+    'https://www.facebook.com/reel/1392916158966415/',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));
@@ -85,6 +87,9 @@ t('pas d\'article cité → rien d\'ajouté', !str_contains($r, 'facebook.com'))
 $r = nsy_sanitize_reply("Voir notre [article](chatbot-ia-forum-base-de-connaissances.html) sur le sujet et voilà.");
 t('article 2 cité sans socials → LinkedIn + Facebook ajoutés',
   str_contains($r, 'linkedin.com/pulse/votre-forum') && str_contains($r, 'facebook.com/share/p/1Ey4FXBYDA'));
+$r = nsy_sanitize_reply("Voir notre [article](reunir-site-forum-boutique-compte-unique.html) sur le sujet et voilà.");
+t('article 5 cité sans socials → LinkedIn + réel Facebook ajoutés',
+  str_contains($r, 'linkedin.com/pulse/r%25C3%25A9unir-un-site-forum') && str_contains($r, 'facebook.com/reel/1392916158966415'));
 
 // ── Formulations bannies (positionnement ESN) → réécrites côté serveur ──
 t('« sans intermédiaire » → « en prise directe »',

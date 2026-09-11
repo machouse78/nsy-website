@@ -404,6 +404,8 @@ function nsy_sanitize_reply(string $reply): string
         'https://www.facebook.com/reel/2812928635744339',
         'https://www.linkedin.com/pulse/des-t%25c3%25a9raoctets-au-m%25c3%25a9gaoctet-la-supervision-est-une-duyee',
         'https://www.facebook.com/reel/1080327827884467',
+        'https://www.linkedin.com/pulse/r%25c3%25a9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
+        'https://www.facebook.com/reel/1392916158966415',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -452,6 +454,10 @@ function nsy_sanitize_reply(string $reply): string
         'superviser-production-teraoctets-megaoctet.html' => [
             'linkedin' => 'https://www.linkedin.com/pulse/des-t%25C3%25A9raoctets-au-m%25C3%25A9gaoctet-la-supervision-est-une-duyee',
             'facebook' => 'https://www.facebook.com/reel/1080327827884467',
+        ],
+        'reunir-site-forum-boutique-compte-unique.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
+            'facebook' => 'https://www.facebook.com/reel/1392916158966415',
         ],
     ];
     if (!replyIsEnglish($reply)) {
