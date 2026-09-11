@@ -44,6 +44,9 @@ Allow: /public/weekend-site-article-en.jpg
 Allow: /public/supervision-thumb.jpg
 Allow: /public/supervision-article.jpg
 Allow: /public/supervision-article-en.jpg
+Allow: /public/compte-unique-thumb.jpg
+Allow: /public/compte-unique-article.jpg
+Allow: /public/compte-unique-article-en.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
@@ -58,6 +61,7 @@ Allow: /public/seo-geo-thumb.mp4
 Allow: /public/chatbot-forum-thumb.mp4
 Allow: /public/weekend-site-thumb.mp4
 Allow: /public/supervision-thumb.mp4
+Allow: /public/compte-unique-thumb.mp4
 # Modèles 3D — ils ne servent pas le SEO texte
 Disallow: /public/*.glb
 Disallow: /public/*.gltf

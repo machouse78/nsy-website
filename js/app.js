@@ -1380,7 +1380,8 @@
         || v.id === 'seo-geo-video'
         || v.id === 'chatbot-forum-video'
         || v.id === 'weekend-site-video'
-        || v.id === 'supervision-video') return; // boomerang déjà sans couture
+        || v.id === 'supervision-video'
+        || v.id === 'compte-unique-video') return; // boomerang déjà sans couture
     setupLoopFade(v);
   });
 

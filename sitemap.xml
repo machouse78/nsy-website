@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -77,7 +77,7 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -462,7 +462,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/glossaire-ia-web.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -471,7 +471,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-web-glossary.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -506,7 +506,7 @@
   <!-- Journal + pages géo (ajout 2026-07-29) -->
   <url>
     <loc>https://www.nsy.fr/blog.html</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -547,10 +547,17 @@
       <video:content_loc>https://www.nsy.fr/public/supervision-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/compte-unique-thumb.jpg</video:thumbnail_loc>
+      <video:title>Un site, un forum, une boutique, un seul compte — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : la visite du site, du forum et de la boutique de PRV Concept réunis sous le même habit — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/compte-unique-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-08-16</lastmod>
+    <lastmod>2026-09-11</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -580,6 +587,10 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/supervision-thumb.jpg</image:loc>
       <image:title>From terabytes to megabytes — illustration</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/compte-unique-thumb.jpg</image:loc>
+      <image:title>Un site, un forum, une boutique, un seul compte — vignette</image:title>
     </image:image>
   </url>
   <url>
@@ -611,6 +622,19 @@
     </image:image>
   </url>
   <url>
+    <loc>https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/compte-unique-article.jpg</image:loc>
+      <image:title>Infographie — Un site, un forum, une boutique, un seul compte</image:title>
+    </image:image>
+  </url>
+  <url>
     <loc>https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html</loc>
     <lastmod>2026-08-23</lastmod>
     <changefreq>monthly</changefreq>
@@ -621,6 +645,19 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/supervision-article.jpg</image:loc>
       <image:title>Infographie — Des téraoctets au mégaoctet : la supervision à deux échelles</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/one-site-forum-shop-single-account.html</loc>
+    <lastmod>2026-09-11</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/compte-unique-article-en.jpg</image:loc>
+      <image:title>Infographic — One site, one forum, one shop, one account</image:title>
     </image:image>
   </url>
   <url>

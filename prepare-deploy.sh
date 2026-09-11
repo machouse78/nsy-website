@@ -93,6 +93,8 @@ cp seo-geo-getting-cited-by-ai.html deploy/
 cp ai-chatbot-forum-knowledge-base.html deploy/
 cp superviser-production-teraoctets-megaoctet.html deploy/
 cp production-monitoring-terabytes-megabyte.html deploy/
+cp reunir-site-forum-boutique-compte-unique.html deploy/
+cp one-site-forum-shop-single-account.html deploy/
 cp site-ia-en-un-week-end.html deploy/
 cp ai-website-in-a-weekend.html deploy/
 cp stats-collector.php deploy/
@@ -205,6 +207,10 @@ cp public/supervision-thumb.mp4         deploy/public/   # vignette ANIMEE artic
 cp public/supervision-article.jpg       deploy/public/   # infographie FR article supervision (+ OG)
 cp public/supervision-article-en.jpg    deploy/public/   # infographie EN article supervision (+ OG)
 cp public/supervision-video.mp4         deploy/public/   # video pleine res article supervision (publication Facebook)
+cp public/compte-unique-thumb.jpg       deploy/public/   # poster vignette article compte unique
+cp public/compte-unique-thumb.mp4       deploy/public/   # vignette ANIMEE article compte unique
+cp public/compte-unique-article.jpg     deploy/public/   # infographie FR article compte unique (+ OG)
+cp public/compte-unique-article-en.jpg  deploy/public/   # infographie EN article compte unique (+ OG)
 cp public/prv-concept-deux-articles-video.mp4 deploy/public/   # video des deux articles PRV Concept (publication Facebook, 11/09/2026)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

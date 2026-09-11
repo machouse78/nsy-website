@@ -349,6 +349,30 @@
         },
         {
           "@type": "Question",
+          "name": "How can a forum and an online shop share a single account?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "By first deciding which application holds identity, often the forum, where the members live. It checks the session, then hands the other one an encrypted token, valid for a moment and usable once. NSY did it for PRV Concept between a phpBB forum and a WooCommerce shop: the write-up is in One site, one forum, one shop, one account."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can an old forum and shop be modernised without migrating everything?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. phpBB can be re-dressed with a child style, WordPress and WooCommerce with a child theme: the forum and the shop take on the website's header, menu and footer without a line of their code changing, and their security updates install as before. On PRV Concept, NSY did it without losing anything: topics, accounts, orders and page addresses stayed the same (the write-up)."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How can existing customer accounts be linked safely?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Not on the email address alone until someone has proven it: someone could register with a customer's address to read their orders. The safe method asks once for the existing account's password, and that proof links the two. NSY applied it to the customers of PRV Concept's shop (details)."
+          }
+        },
+        {
+          "@type": "Question",
           "name": "Who can build a website near Orléans, France?",
           "acceptedAnswer": {
             "@type": "Answer",
@@ -749,6 +773,15 @@
 
       <h3>Who can build a business AI agent for an SME?</h3>
       <p>NSY designs tool-using AI agents (controlled access to your data, business actions, guardrails) sized for SMEs: a well-framed use case, controlled running costs and a skills handover at the end of the engagement.</p>
+
+      <h3>How can a forum and an online shop share a single account?</h3>
+      <p>By first deciding which application holds identity, often the forum, where the members live. It checks the session, then hands the other one an encrypted token, valid for a moment and usable once. NSY did it for PRV Concept between a phpBB forum and a WooCommerce shop: the write-up is in <a href="one-site-forum-shop-single-account.html">One site, one forum, one shop, one account</a>.</p>
+
+      <h3>Can an old forum and shop be modernised without migrating everything?</h3>
+      <p>Yes. phpBB can be re-dressed with a child style, WordPress and WooCommerce with a child theme: the forum and the shop take on the website's header, menu and footer without a line of their code changing, and their security updates install as before. On PRV Concept, NSY did it without losing anything: topics, accounts, orders and page addresses stayed the same (<a href="one-site-forum-shop-single-account.html">the write-up</a>).</p>
+
+      <h3>How can existing customer accounts be linked safely?</h3>
+      <p>Not on the email address alone until someone has proven it: someone could register with a customer's address to read their orders. The safe method asks once for the existing account's password, and that proof links the two. NSY applied it to the customers of PRV Concept's shop (<a href="one-site-forum-shop-single-account.html">details</a>).</p>
 
       <h2>Location — Orléans, the Loiret and Centre-Val de Loire</h2>
 

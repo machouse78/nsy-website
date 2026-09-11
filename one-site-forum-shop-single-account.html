@@ -3,29 +3,29 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Insights — AI, SEO/GEO &amp; critical systems | NSY</title>
-<meta name="description" content="NSY Insights: concrete field notes on AI applied to the web, SEO/GEO and critical systems — by C&eacute;dric Barme, practitioner." />
+<title>One site, one forum, one shop, one account: bringing them together without rebuilding | NSY</title>
+<meta name="description" content="Bringing PRV Concept&#x27;s website, phpBB forum and WooCommerce shop together without rebuilding: a child style and a child theme, a single account held by the forum, a single-use encrypted token, proof required to link existing accounts." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://www.nsy.fr/blog-en.html" />
-<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
-<link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
-<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+<link rel="canonical" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="NSY" />
 <meta property="og:locale" content="en_GB" />
-<meta property="og:url" content="https://www.nsy.fr/blog-en.html" />
-<meta property="og:title" content="NSY — Insights" />
-<meta property="og:description" content="Field notes: AI applied to the web, SEO/GEO, critical systems." />
-<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="NSY — AI at the service of digital" />
+<meta property="og:url" content="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<meta property="og:title" content="One site, one forum, one shop, one account: bringing them together without rebuilding" />
+<meta property="og:description" content="Three tools, one look, one account — no migration. Which system holds identity, and why an email address is not proof enough." />
+<meta property="og:image" content="https://www.nsy.fr/public/compte-unique-article-en.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="642" />
+<meta property="og:image:alt" content="Infographic — One site, one forum, one shop, one account: the website, the phpBB forum and the WooCommerce shop under the same look, a single account held by the forum and a single-use encrypted token between the two" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="NSY — Insights" />
-<meta name="twitter:description" content="Concrete field notes — AI, SEO/GEO, critical systems." />
-<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta name="twitter:title" content="One account | NSY" />
+<meta name="twitter:description" content="Three tools, one look, one account — no migration. Which system holds identity, and why an email address is not proof enough." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/compte-unique-article-en.jpg" />
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
@@ -37,17 +37,6 @@
 <link rel="alternate" type="application/rss+xml" title="NSY — Insights" href="https://www.nsy.fr/feed-en.xml" />
 <link rel="stylesheet" href="css/style.css" />
 <style>
-  /* Blog : cartes d'articles + typo de lecture */
-  .blog-list { display: grid; gap: 18px; margin-top: 34px; }
-  .blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
-    padding: 24px 26px; background: rgba(255,255,255,0.02);
-    transition: border-color .2s, transform .2s; }
-  .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
-    color: var(--fg-2); text-transform: uppercase; }
-  .blog-card h2 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
-  .blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
-  .blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
   .article h2 { font-size: 24px; margin: 38px 0 12px; }
   .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
   .article p, .article li { color: var(--fg-1); line-height: 1.65; }
@@ -59,7 +48,6 @@
   .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
   .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
     color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
-  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
 </style>
 
 <script type="application/ld+json">
@@ -67,25 +55,25 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Blog",
-      "@id": "https://www.nsy.fr/blog-en.html#blog",
-      "name": "NSY Insights",
-      "description": "Practitioner field notes: AI applied to the web, SEO/GEO, critical systems.",
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/one-site-forum-shop-single-account.html#article",
+      "headline": "One site, one forum, one shop, one account: bringing them together without rebuilding",
+      "description": "Bringing PRV Concept's website, phpBB forum and WooCommerce shop together without rebuilding: a child style and a child theme, a single account held by the forum, a single-use encrypted token, proof required to link existing accounts.",
       "inLanguage": "en",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/about.html"},
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
-      "blogPost": [
-        { "@id": "https://www.nsy.fr/one-site-forum-shop-single-account.html#article" },
-        { "@id": "https://www.nsy.fr/production-monitoring-terabytes-megabyte.html#article" },
-        { "@id": "https://www.nsy.fr/ai-website-in-a-weekend.html#article" },
-        { "@id": "https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html#article" },
-        { "@id": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html#article" }
-      ]
+      "datePublished": "2026-09-11T12:00:00+02:00",
+      "dateModified": "2026-09-11T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/compte-unique-article-en.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/one-site-forum-shop-single-account.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog-en.html#blog" }
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
-        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.nsy.fr/blog-en.html" }
+        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.nsy.fr/blog-en.html" },
+        { "@type": "ListItem", "position": 3, "name": "One account", "item": "https://www.nsy.fr/one-site-forum-shop-single-account.html" }
       ]
     }
   ]
@@ -121,92 +109,67 @@
       </a>
     </div>
     <div class="nav-lang">
-      <a href="blog.html" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="reunir-site-forum-boutique-compte-unique.html" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
       <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
     </div>
     <span class="nav-break" aria-hidden="true"></span>
   </div>
 </nav>
 <!-- @endpartial:nav -->
-
 <main>
 <section class="block" style="padding-top: 64px;">
   <div class="container">
     <div class="eyebrow-row">
       <span class="block-eyebrow">Insights</span>
       <span class="line"></span>
-      <span class="mono">Field notes</span>
+      <span class="mono"><a href="blog-en.html" style="color: inherit;">← All articles</a></span>
     </div>
-    <div class="section-head">
-      <h1 style="font-size: clamp(32px, 5vw, 52px);">Insights.</h1>
-      <p class="lede">Concrete field notes — AI applied to the web, SEO &amp; GEO, critical systems. No generalities: what was built, measured and verified.</p>
-    </div>
-    <div class="blog-list">
-      <a class="blog-card has-thumb" href="one-site-forum-shop-single-account.html">
-        <div class="thumb"><video id="compte-unique-video" loop muted playsinline preload="none" poster="public/compte-unique-thumb.jpg" width="560" height="316" aria-label="Animated illustration: a tour of PRV Concept's website, forum and shop under the same look">
-          <source src="public/compte-unique-thumb.mp4" type="video/mp4" />
-          <img src="public/compte-unique-thumb.jpg" alt="One site, one forum, one shop, one account — illustration" width="560" height="316" />
-        </video></div>
-        <div>
-        <div class="meta">11 September 2026 · Redesign · Single account · Integration</div>
-        <h2>One site, one forum, one shop, one account: bringing them together without rebuilding</h2>
-        <p>PRV Concept&rsquo;s website, phpBB forum and WooCommerce shop brought together without migration: one look, one account held by the forum, and proof required rather than an email address.</p>
-        <span class="more">Read the article →</span>
+    <article class="legal-page article">
+      <div class="article-meta">11 September 2026 · Cédric Barme · Reading ≈ 7 min</div>
+      <div class="article-stats" data-journal-stats data-slug="reunir-site-forum-boutique-compte-unique.html" hidden>
+        <span class="js-views" aria-live="polite"></span>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
       </div>
-      </a>
-      <a class="blog-card has-thumb" href="production-monitoring-terabytes-megabyte.html">
-        <div class="thumb"><video id="supervision-video" loop muted playsinline preload="none" poster="public/supervision-thumb.jpg" width="560" height="316" aria-label="Animated illustration: a monitoring dashboard whose curves and indicators come alive">
-          <source src="public/supervision-thumb.mp4" type="video/mp4" />
-          <img src="public/supervision-thumb.jpg" alt="From terabytes to megabytes — illustration" width="560" height="316" />
-        </video></div>
-        <div>
-        <div class="meta">23 August 2026 · Monitoring · Observability · AI</div>
-        <h2>From terabytes to megabytes: monitoring is a discipline before it is a budget</h2>
-        <p>Dynatrace and ELK at a large insurance company, a cron job and a dashboard on a small-business site: a factor of a million in volume, the same four questions — and what AI really brings.</p>
-        <span class="more">Read the article →</span>
-      </div>
-      </a>
-      <a class="blog-card has-thumb" href="ai-website-in-a-weekend.html">
-        <div class="thumb"><video id="weekend-site-video" loop muted playsinline preload="none" poster="public/weekend-site-thumb.jpg" width="560" height="316" aria-label="Animated illustration: a holographic AI assembles a website before a business owner's eyes">
-          <source src="public/weekend-site-thumb.mp4" type="video/mp4" />
-          <img src="public/weekend-site-thumb.jpg" alt="Building your website with AI in a weekend — illustration" width="560" height="316" />
-        </video></div>
-        <div>
-        <div class="meta">16 August 2026 · AI · Vibe coding · Method</div>
-        <h2>Building your website with AI in a weekend: we took the promise at its word</h2>
-        <p>The vibe-coding promise tested on nsy.fr: V1 in 4 evenings, then nearly 140 hours of piloting measured action by action. The 10/90 rule — and why AI is mostly about going further.</p>
-        <span class="more">Read the article →</span>
-      </div>
-      </a>
-      <a class="blog-card has-thumb" href="ai-chatbot-forum-knowledge-base.html">
-        <div class="thumb"><video id="chatbot-forum-video" loop muted playsinline preload="none" poster="public/chatbot-forum-thumb.jpg" width="560" height="374" aria-label="Animated illustration: an AI chatbot connected to a forum">
-          <source src="public/chatbot-forum-thumb.mp4" type="video/mp4" />
-          <img src="public/chatbot-forum-thumb.jpg" alt="An AI chatbot wired into a forum — illustration" width="560" height="374" />
-        </video></div>
-        <div>
-        <div class="meta">8 August 2026 · AI · Chatbot · RAG</div>
-        <h2>Wiring an AI chatbot into a forum: web 1.0 as a knowledge base</h2>
-        <p>Years of enthusiast discussions sleep inside forums. How the PRV Concept chatbot queries the phpBB database directly — and the anti-hallucination guardrails that make the difference.</p>
-        <span class="more">Read the article →</span>
-      </div>
-      </a>
-      <a class="blog-card has-thumb" href="seo-geo-getting-cited-by-ai.html">
-        <div class="thumb"><video id="seo-geo-video" loop muted playsinline preload="none" poster="public/seo-geo-thumb.jpg" width="560" height="374" aria-label="Animated illustration: SEO versus GEO, two robots with magnifying glasses">
-          <source src="public/seo-geo-thumb.mp4" type="video/mp4" />
-          <img src="public/seo-geo-thumb.jpg" alt="SEO vs GEO — a Google robot and an AI robot face to face" width="560" height="374" />
-        </video></div>
-        <div>
-        <div class="meta">July 29, 2026 · SEO · GEO · AI</div>
-        <h2>SEO vs GEO: getting cited by ChatGPT, Claude and Perplexity</h2>
-        <p>Ranking on Google is no longer enough: AI assistants pick their sources differently. How a site becomes a cited source — with the setup deployed on nsy.fr and the first crawler visits observed.</p>
-        <span class="more">Read the article →</span>
-      </div>
-      </a>
-    </div>
-    <div style="margin-top: 32px;">
-      <a class="btn btn-ghost" href="feed-en.xml" title="RSS feed">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>RSS feed</a>
-    </div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">One site, one forum, one shop, one account:<br />bringing them together without rebuilding</h1>
+      <p class="lede" style="font-size: 17px;">For years, PRV Concept lived at three addresses: a website, a twenty-year-old phpBB forum and a WooCommerce shop opened in 2013. Each with its own look, each with its own account. PRV Concept is the association of PRV V6 enthusiasts chaired by NSY's founder, and it is our laboratory. In a case like this, the temptation is called a clean slate: migrate everything into a single tool. We did the opposite. The forum and the shop kept their engines, they took on the website's look, and a single account now opens all three. An engineering account of the project, with the two decisions that mattered: which system holds identity, and what proof we require.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/compte-unique-article-en.jpg" alt="Infographic — One site, one forum, one shop, one account: the website, the phpBB forum and the WooCommerce shop under the same look, a single account held by the forum and a single-use encrypted token between the two" loading="lazy" width="1140" height="642" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+      <h2>Three houses, three habits</h2>
+      <p>The forum wore a theme from another era, the shop the one it launched with. Moving from one to the other meant a new menu, a new visual identity and sometimes a new tab. A member had an account on the forum and, if they ordered from the shop, a second account with a second password.</p>
+      <p>For the association, three tools to maintain. For visitors, three sites that did not recognise one another.</p>
+      <h2>Why not rebuild everything</h2>
+      <p>Rebuilding the forum and the shop in a single tool means migrating twenty years of topics and posts, the members' accounts, the order history, and the addresses of thousands of pages that Google and the members know. A migration like that always loses something: a link, an attachment, a habit. And it replaces two proven pieces of software, maintained by their communities, with a bespoke build that would then have to be maintained alone.</p>
+      <p>PRV Concept's value is not in the software. It is in what the community has put into it. So the project set itself a simple rule: touch neither phpBB's core nor WooCommerce's, and lose nothing. At the end, the topics, posts, accounts, orders and page addresses are all the same.</p>
+      <h2>One look, without touching the core</h2>
+      <p>Both applications can be re-dressed: phpBB with a <em>child style</em>, WordPress with a <em>child theme</em>. It is a layer that inherits from the original and replaces only what it is asked to. The forum and the shop now carry the website's header, menu, breadcrumb trail and footer. Forum and Shop become two sections of the menu, opening in the same tab.</p>
+      <p>The benefit is not just cosmetic. A phpBB or WooCommerce security update installs as before, since none of their code has been modified; the look is maintained separately. And inherited flaws get fixed along the way: the shop, which had never had a "My account" page, now has one, with sign-in, password reset and order history.</p>
+      <h2>One account: which system is the source of truth?</h2>
+      <p>Linking two applications through a shared account starts with a decision: which one holds identity. Here, the forum. That is where the members live, with their groups and their rights to the association's members-only area. The shop trusts it; the reverse is not true.</p>
+      <p>The technical difficulty fits in one sentence: phpBB cannot run inside WordPress, as the two compete for the same server variables. Hence a small relay at the root of the site. It lets phpBB check the member's session itself, with all its safeguards: IP address, browser, "remember me", bans. It then hands the shop an encrypted, authenticated token (AES-256-GCM), valid for two minutes and usable once. The shop opens the member's session, or creates a customer record if there is none. Nobody types a second password, and signing out, wherever it starts, closes both.</p>
+      <p>The token cannot be read in the server logs. It carries the direction it travels in, forum to shop or the other way round, and is never accepted in the other. A replayed or tampered token is rejected.</p>
+      <h2>The email address trap</h2>
+      <p>To link the accounts that already existed, the obvious answer would have been the email address: same address on the forum and in the shop, same person. That is precisely what had to be avoided.</p>
+      <p>On this forum, registrations are approved by an administrator, not by a link sent to the address. The address on an account is therefore not proven by its holder. Someone could register with a shop customer's address and, through automatic matching, read their orders and delivery addresses.</p>
+      <p>Of the shop's 88 customers, 30 had a forum account with the same address. For them, the shop asks once for the password of their customer record, or for it to be reset through "lost password". That proof, and that proof alone, links the two accounts; after that, the forum is enough. A little less convenience on day one, in exchange for the certainty that nobody can take over someone else's orders.</p>
+      <h2>Safeguards checked at every sign-in</h2>
+      <p>The bridge's rules do not apply only on the day the accounts are linked: they are checked again at every sign-in. Only ordinary customer records can be opened through the forum, never an administrator account. One member maps to one record. And a session opened with the shop password is never closed by the forum.</p>
+      <h2>Testing in production without anyone seeing</h2>
+      <p>A single account can only really be tested for real: on the live server, with the real cookies and the real shop. The "Sign in with my forum account" button first lived in pilot mode: only a browser carrying a test cookie could see it.</p>
+      <p>Using test forum accounts, 26 scenarios out of 26 passed on the live site: record creation, linked sign-outs in both directions, replayed and tampered tokens rejected, linking by password, the checkout page button. The checkout flow stayed identical, and the server error log unchanged. The test records were deleted, then the switch was flipped for everyone.</p>
+      <h2>And the workshop foreman follows</h2>
+      <p>Bringing the three surfaces together also served the association's assistant. Père Hervé, a workshop foreman made of artificial intelligence, lives in the chat bubble of the website, the forum and the shop. He answers from the Library's digitised workshop manuals, citing the page and the folio, from forum topics with their exact titles, and from the shop's products. His rule: no source, no answer. On the forum, every one of his replies is reviewed by a human before it is published.</p>
+      <p>The single account benefits him directly: the same session tells him who he is talking to, and an authorised member can ask him about the association's members-only documents, which he will cite to nobody else. His architecture is detailed in our write-up on <a href="ai-chatbot-forum-knowledge-base.html">wiring an AI chatbot into a forum</a>; the association introduces him itself in <a href="https://www.prv-concept.com/en/journal/pere-herve-ai-workshop-foreman.html" target="_blank" rel="noopener">Père Hervé, a workshop foreman made of artificial intelligence</a>.</p>
+      <h2>What this project says about a web project</h2>
+      <ul>
+        <li><strong>Connect before you rebuild.</strong> The tools that already work often carry most of the value: the content, the habits, the links. Making them work together costs less and loses less than a migration.</li>
+        <li><strong>One source of identity.</strong> Two applications that trust each other are two front doors. Only one is the source of truth; the other consults it.</li>
+        <li><strong>Proof before convenience.</strong> An email address is not an identity until someone has proven it. A password asked for once is better than a hijacked account.</li>
+        <li><strong>Measure before and after.</strong> A check before connecting anything, an error log compared afterwards: you know what you changed, and what you did not break.</li>
+      </ul>
+      <p>It is the method of a well-run <a href="website-redesign.html">website redesign</a>: keep what works, rebuild the rest. The full project is described on our <a href="portfolio.html">Portfolio</a> page, and the association tells the members' side of the story, with video, in <a href="https://www.prv-concept.com/en/journal/one-site-one-account.html" target="_blank" rel="noopener">The site, the forum and the shop are now one</a>.</p>
+      <p style="margin-top: 30px;">A website, a forum or a shop each living its own life? <a href="contact-en.html">Let&rsquo;s talk</a> — or see how a <a href="website-redesign.html">redesign that keeps what works</a> is run.</p>
+    </article>
   </div>
 </section>
 </main>
@@ -293,32 +256,6 @@
 </footer>
 <!-- @endpartial:footer -->
 
-<script>
-// DefinedTermSet JSON-LD generated from the visible content (single source of
-// truth: the HTML above). Googlebot renders JS; AI crawlers read the text.
-(function () {
-  var terms = [];
-  document.querySelectorAll('.glossaire h3').forEach(function (h) {
-    var p = h.nextElementSibling;
-    if (!p || p.tagName !== 'P') return;
-    terms.push({
-      '@type': 'DefinedTerm',
-      name: h.textContent.trim(),
-      description: p.textContent.trim()
-    });
-  });
-  var s = document.createElement('script');
-  s.type = 'application/ld+json';
-  s.textContent = JSON.stringify({
-    '@context': 'https://schema.org',
-    '@type': 'DefinedTermSet',
-    name: 'AI & web glossary — NSY',
-    inLanguage: 'en',
-    hasDefinedTerm: terms
-  });
-  document.head.appendChild(s);
-})();
-</script>
 <!-- @partial:chatbot -->
 <!-- ───── Chatbot (AI assistant — Ansley, NSY architect) ───── -->
 <button class="cbot-fab" id="cbot-fab" aria-label="Open chat with Ansley">

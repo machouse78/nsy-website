@@ -3,29 +3,29 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Journal — IA, SEO/GEO &amp; syst&egrave;mes critiques | NSY</title>
-<meta name="description" content="Le journal de NSY : retours d&rsquo;exp&eacute;rience concrets sur l&rsquo;IA appliqu&eacute;e au web, le SEO/GEO et les syst&egrave;mes critiques — par C&eacute;dric Barme, praticien." />
+<title>Un site, un forum, une boutique, un seul compte : réunir sans reconstruire | NSY</title>
+<meta name="description" content="Réunir le site, le forum phpBB et la boutique WooCommerce de PRV Concept sans rien reconstruire : habillage par style et thème enfants, compte unique porté par le forum, jeton chiffré à usage unique, preuve exigée pour relier les comptes existants." />
 <meta name="robots" content="index, follow" />
-<link rel="canonical" href="https://www.nsy.fr/blog.html" />
-<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
-<link rel="alternate" hreflang="en" href="https://www.nsy.fr/blog-en.html" />
-<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/blog.html" />
+<link rel="canonical" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
 
 <meta property="og:type" content="article" />
 <meta property="og:site_name" content="NSY" />
 <meta property="og:locale" content="fr_FR" />
-<meta property="og:url" content="https://www.nsy.fr/blog.html" />
-<meta property="og:title" content="Le journal NSY" />
-<meta property="og:description" content="Retours d&rsquo;exp&eacute;rience : IA appliqu&eacute;e au web, SEO/GEO, syst&egrave;mes critiques." />
-<meta property="og:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:alt" content="NSY — L'IA au service du numérique" />
+<meta property="og:url" content="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<meta property="og:title" content="Un site, un forum, une boutique, un seul compte : réunir sans reconstruire" />
+<meta property="og:description" content="Trois outils, un seul habit, un seul compte — sans migration. Qui fait foi pour l&#x27;identité, et pourquoi l&#x27;adresse e-mail ne suffit pas comme preuve." />
+<meta property="og:image" content="https://www.nsy.fr/public/compte-unique-article.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="642" />
+<meta property="og:image:alt" content="Infographie — Un site, un forum, une boutique, un seul compte : le site, le forum phpBB et la boutique WooCommerce sous le même habit, un compte unique porté par le forum et un jeton chiffré à usage unique entre les deux" />
 
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Le journal NSY" />
-<meta name="twitter:description" content="Retours d&rsquo;exp&eacute;rience concrets — IA, SEO/GEO, syst&egrave;mes critiques." />
-<meta name="twitter:image" content="https://www.nsy.fr/public/nsy-og.jpg" />
+<meta name="twitter:title" content="Un seul compte | NSY" />
+<meta name="twitter:description" content="Trois outils, un seul habit, un seul compte — sans migration. Qui fait foi pour l&#x27;identité, et pourquoi l&#x27;adresse e-mail ne suffit pas comme preuve." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/compte-unique-article.jpg" />
 
 <link rel="icon" href="/favicon.ico" sizes="any" />
 <link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
@@ -37,17 +37,6 @@
 <link rel="alternate" type="application/rss+xml" title="NSY — Journal" href="https://www.nsy.fr/feed.xml" />
 <link rel="stylesheet" href="css/style.css" />
 <style>
-  /* Blog : cartes d'articles + typo de lecture */
-  .blog-list { display: grid; gap: 18px; margin-top: 34px; }
-  .blog-card { display: block; border: 1px solid var(--line-strong); border-radius: 14px;
-    padding: 24px 26px; background: rgba(255,255,255,0.02);
-    transition: border-color .2s, transform .2s; }
-  .blog-card:hover { border-color: var(--accent); transform: translateY(-2px); }
-  .blog-card .meta { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em;
-    color: var(--fg-2); text-transform: uppercase; }
-  .blog-card h2 { font-size: 22px; margin: 10px 0 8px; color: var(--fg-0); }
-  .blog-card p { margin: 0; color: var(--fg-1); font-size: 14.5px; line-height: 1.55; }
-  .blog-card .more { display: inline-block; margin-top: 14px; color: var(--accent); font-size: 13.5px; }
   .article h2 { font-size: 24px; margin: 38px 0 12px; }
   .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
   .article p, .article li { color: var(--fg-1); line-height: 1.65; }
@@ -59,7 +48,6 @@
   .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
   .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
     color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
-  .article blockquote { border-left: 2px solid var(--accent); margin: 0 0 16px; padding: 4px 0 4px 16px; color: var(--fg-1); font-style: italic; }
 </style>
 
 <script type="application/ld+json">
@@ -67,25 +55,25 @@
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": "Blog",
-      "@id": "https://www.nsy.fr/blog.html#blog",
-      "name": "Le journal NSY",
-      "description": "Retours d’expérience d’un praticien : IA appliquée au web, SEO/GEO, systèmes critiques.",
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html#article",
+      "headline": "Un site, un forum, une boutique, un seul compte : réunir sans reconstruire",
+      "description": "Réunir le site, le forum phpBB et la boutique WooCommerce de PRV Concept sans rien reconstruire : habillage par style et thème enfants, compte unique porté par le forum, jeton chiffré à usage unique, preuve exigée pour relier les comptes existants.",
       "inLanguage": "fr",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/a-propos.html"},
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
-      "blogPost": [
-        { "@id": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html#article" },
-        { "@id": "https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html#article" },
-        { "@id": "https://www.nsy.fr/site-ia-en-un-week-end.html#article" },
-        { "@id": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html#article" },
-        { "@id": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html#article" }
-      ]
+      "datePublished": "2026-09-11T12:00:00+02:00",
+      "dateModified": "2026-09-11T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/compte-unique-article.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog.html#blog" }
     },
     {
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
-        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" }
+        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" },
+        { "@type": "ListItem", "position": 3, "name": "Un seul compte", "item": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" }
       ]
     }
   ]
@@ -124,91 +112,74 @@
     </div>
     <div class="nav-lang">
       <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
-      <a href="blog-en.html" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+      <a href="one-site-forum-shop-single-account.html" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
     </div>
     <span class="nav-break" aria-hidden="true"></span>
   </div>
 </nav>
 <!-- @endpartial:nav -->
-
 <main>
 <section class="block" style="padding-top: 64px;">
   <div class="container">
     <div class="eyebrow-row">
       <span class="block-eyebrow">Journal</span>
       <span class="line"></span>
-      <span class="mono">Retours de terrain</span>
+      <span class="mono"><a href="blog.html" style="color: inherit;">← Tous les articles</a></span>
     </div>
-    <div class="section-head">
-      <h1 style="font-size: clamp(32px, 5vw, 52px);">Le journal.</h1>
-      <p class="lede">Des retours d&rsquo;exp&eacute;rience concrets — IA appliqu&eacute;e au web, SEO &amp; GEO, syst&egrave;mes critiques. Pas de g&eacute;n&eacute;ralit&eacute;s : ce qui a &eacute;t&eacute; fait, mesur&eacute; et v&eacute;rifi&eacute;.</p>
-    </div>
-    <div class="blog-list">
-      <a class="blog-card has-thumb" href="reunir-site-forum-boutique-compte-unique.html">
-        <div class="thumb"><video id="compte-unique-video" loop muted playsinline preload="none" poster="public/compte-unique-thumb.jpg" width="560" height="316" aria-label="Illustration animée : la visite du site, du forum et de la boutique de PRV Concept réunis sous le même habit">
-          <source src="public/compte-unique-thumb.mp4" type="video/mp4" />
-          <img src="public/compte-unique-thumb.jpg" alt="Un site, un forum, une boutique, un seul compte — illustration" width="560" height="316" />
-        </video></div>
-        <div>
-        <div class="meta">11 septembre 2026 · Refonte · Compte unique · Int&eacute;gration</div>
-        <h2>Un site, un forum, une boutique, un seul compte : réunir sans reconstruire</h2>
-        <p>Le site, le forum phpBB et la boutique WooCommerce de PRV Concept r&eacute;unis sans migration : un seul habit, un seul compte port&eacute; par le forum, et une preuve exig&eacute;e plut&ocirc;t que l&rsquo;adresse e-mail.</p>
-        <span class="more">Lire l&rsquo;article →</span>
+    <article class="legal-page article">
+      <div class="article-meta">11 septembre 2026 · Cédric Barme · Lecture ≈ 7 min</div>
+      <div class="article-stats" data-journal-stats data-slug="reunir-site-forum-boutique-compte-unique.html" hidden>
+        <span class="js-views" aria-live="polite"></span>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
       </div>
-      </a>
-      <a class="blog-card has-thumb" href="superviser-production-teraoctets-megaoctet.html">
-        <div class="thumb"><video id="supervision-video" loop muted playsinline preload="none" poster="public/supervision-thumb.jpg" width="560" height="316" aria-label="Illustration animée : un tableau de bord de supervision dont les courbes et les voyants s'animent">
-          <source src="public/supervision-thumb.mp4" type="video/mp4" />
-          <img src="public/supervision-thumb.jpg" alt="Des téraoctets au mégaoctet — illustration" width="560" height="316" />
-        </video></div>
-        <div>
-        <div class="meta">23 ao&ucirc;t 2026 · Supervision · Observabilit&eacute; · IA</div>
-        <h2>Des t&eacute;raoctets au m&eacute;gaoctet : superviser, une discipline avant d&rsquo;&ecirc;tre un budget</h2>
-        <p>Dynatrace et ELK chez un grand compte de l&rsquo;assurance, un cron et un tableau de bord sur un site de PME : un facteur d&rsquo;un million sur le volume, les quatre m&ecirc;mes questions — et ce que l&rsquo;IA apporte vraiment.</p>
-        <span class="more">Lire l&rsquo;article →</span>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Un site, un forum, une boutique, un seul compte :<br />réunir sans reconstruire</h1>
+      <p class="lede" style="font-size: 17px;">Pendant des années, PRV Concept a vécu à trois adresses : un site, un forum phpBB de vingt ans, une boutique WooCommerce ouverte en 2013. Chacun son allure, chacun son compte. PRV Concept est l'association des passionnés du V6 PRV que préside le fondateur de NSY, et c'est notre laboratoire. Dans ce cas de figure, la tentation s'appelle la table rase : tout migrer vers un outil unique. Nous avons fait l'inverse. Le forum et la boutique ont gardé leur moteur, ils ont pris l'habit du site, et un seul compte ouvre désormais les trois. Retour d'expérience côté ingénierie, avec les deux décisions qui ont compté : qui fait foi pour l'identité, et quelle preuve on exige.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/compte-unique-article.jpg" alt="Infographie — Un site, un forum, une boutique, un seul compte : le site, le forum phpBB et la boutique WooCommerce sous le même habit, un compte unique porté par le forum et un jeton chiffré à usage unique entre les deux" loading="lazy" width="1140" height="642" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+      <h2>Trois maisons, trois habitudes</h2>
+      <p>Le forum portait un thème d'une autre époque, la boutique celui de ses débuts. On passait de l'un à l'autre en changeant de menu, de charte et parfois d'onglet. Un membre avait un compte sur le forum et, s'il commandait à la boutique, un second compte avec un second mot de passe.</p>
+      <p>Pour l'association, trois outils à tenir. Pour le visiteur, trois sites qui ne se reconnaissaient pas entre eux.</p>
+      <h2>Pourquoi ne pas tout reconstruire</h2>
+      <p>Refaire le forum et la boutique dans un seul outil, c'est migrer vingt ans de sujets et de messages, les comptes des membres, l'historique des commandes, et les adresses de milliers de pages que Google et les membres connaissent. Une migration de ce genre perd toujours quelque chose : un lien, une pièce jointe, une habitude. Et elle remplace deux logiciels éprouvés, maintenus par leurs communautés, par un développement qu'il faudrait ensuite entretenir seul.</p>
+      <p>La valeur de PRV Concept n'est pas dans le logiciel. Elle est dans ce que la communauté y a déposé. Le chantier s'est donc donné une règle simple : ne toucher ni au cœur de phpBB ni à celui de WooCommerce, et ne rien perdre. À l'arrivée, les sujets, les messages, les comptes, les commandes et les adresses des pages sont les mêmes.</p>
+      <h2>Un seul habit, sans toucher au cœur</h2>
+      <p>Les deux applications savent se laisser habiller : phpBB par un <em>style enfant</em>, WordPress par un <em>thème enfant</em>. C'est une surcouche qui hérite de l'original et n'en remplace que ce qu'on lui demande. Le forum et la boutique reprennent ainsi l'en-tête, le menu, le fil d'Ariane et le pied de page du site. Forum et Boutique deviennent deux rubriques du menu, qui s'ouvrent dans le même onglet.</p>
+      <p>L'intérêt n'est pas que cosmétique. Une mise à jour de sécurité de phpBB ou de WooCommerce s'installe comme avant, puisque rien de leur code n'a été modifié ; l'habit se révise à part. Et les défauts hérités se corrigent au passage : la boutique, qui n'avait jamais eu de page « Mon compte », en a une, avec la connexion, le mot de passe oublié et l'historique des commandes.</p>
+      <h2>Un seul compte : qui fait foi ?</h2>
+      <p>Relier deux applications par un compte commun commence par une décision : laquelle détient l'identité. Ici, le forum. C'est là que vivent les membres, leurs groupes, leurs droits sur l'espace réservé de l'association. La boutique lui fait confiance ; l'inverse n'est pas vrai.</p>
+      <p>La difficulté technique tient en une phrase : on ne peut pas faire tourner phpBB à l'intérieur de WordPress, les deux se disputent les mêmes variables du serveur. D'où un petit relais à la racine du site. Il laisse phpBB vérifier lui-même la session du membre, avec tous ses contrôles : adresse IP, navigateur, « se souvenir de moi », bannissements. Puis il remet à la boutique un jeton chiffré et authentifié (AES-256-GCM), valable deux minutes et une seule fois. La boutique ouvre la session du membre, ou lui crée une fiche client s'il n'en a pas. Personne ne tape de second mot de passe, et une déconnexion, d'où qu'elle parte, ferme les deux.</p>
+      <p>Le jeton est illisible dans les journaux du serveur. Il porte le sens dans lequel il circule, du forum vers la boutique ou l'inverse, et n'est jamais accepté dans l'autre. Un jeton rejoué ou altéré est refusé.</p>
+      <h2>Le piège de l'adresse e-mail</h2>
+      <p>Pour rapprocher les comptes qui existaient déjà, la solution évidente aurait été l'adresse e-mail : même adresse sur le forum et sur la boutique, même personne. C'est précisément ce qu'il ne fallait pas faire.</p>
+      <p>Sur ce forum, les inscriptions sont validées par un administrateur, pas par un lien envoyé à l'adresse. L'adresse d'un compte n'y est donc pas prouvée par son titulaire. Quelqu'un pourrait s'inscrire avec l'adresse d'un client de la boutique et, par un rapprochement automatique, lire ses commandes et ses adresses de livraison.</p>
+      <p>Sur les 88 clients de la boutique, 30 avaient un compte du forum à la même adresse. Pour eux, la boutique demande une seule fois le mot de passe de leur fiche client, ou de le recréer par « mot de passe perdu ». C'est cette preuve, et elle seule, qui relie les deux comptes ; ensuite, le forum suffit. Un peu moins de confort le premier jour, contre la certitude que personne ne s'approprie les commandes d'un autre.</p>
+      <h2>Des garde-fous revérifiés à chaque connexion</h2>
+      <p>Les règles du pont ne s'appliquent pas seulement le jour du rapprochement : elles sont revérifiées à chaque connexion. Seules les fiches de simples clients s'ouvrent par le forum, jamais un compte d'administration. Un membre correspond à une seule fiche. Et une session ouverte avec le mot de passe de la boutique n'est jamais fermée par le forum.</p>
+      <h2>Tester en production, sans que personne ne le voie</h2>
+      <p>Un compte unique ne se teste vraiment qu'en vrai : sur le serveur réel, avec les vrais cookies et la vraie boutique. Le bouton « Se connecter avec mon compte du forum » a d'abord vécu en mode pilote : seul un navigateur porteur d'un cookie de test le voyait.</p>
+      <p>Avec des comptes de test du forum, 26 scénarios sur 26 sont passés en ligne : création de fiche, déconnexions liées dans les deux sens, jeton rejoué et jeton altéré refusés, rapprochement par mot de passe, bouton de la page de commande. Le tunnel d'achat est resté identique, et le journal d'erreurs du serveur inchangé. Les fiches de test ont été supprimées, puis l'interrupteur basculé pour tout le monde.</p>
+      <h2>Et le chef d'atelier suit</h2>
+      <p>Réunir les trois surfaces a aussi servi l'assistant de l'association. Le Père Hervé, chef d'atelier en intelligence artificielle, vit dans la bulle du site, du forum et de la boutique. Il répond à partir des manuels d'atelier numérisés de la Bibliothèque, dont il cite la page et le folio, des sujets du forum avec leurs titres exacts, et des produits de la boutique. Sa règle : sans source, il ne répond pas. Sur le forum, chacune de ses réponses est relue par un humain avant publication.</p>
+      <p>Le compte unique lui profite directement : la même session lui dit qui lui parle, et un membre habilité peut l'interroger sur les documents réservés de l'association, qu'il ne citera à personne d'autre. Son architecture est détaillée dans notre retour d'expérience sur <a href="chatbot-ia-forum-base-de-connaissances.html">un chatbot IA branché sur un forum</a> ; l'association le présente elle-même dans <a href="https://www.prv-concept.com/journal/pere-herve-chef-atelier-ia.html" target="_blank" rel="noopener">Le Père Hervé, un chef d'atelier en intelligence artificielle</a>.</p>
+      <h2>Ce que ce chantier dit d'un projet web</h2>
+      <ul>
+        <li><strong>Relier avant de reconstruire.</strong> Les outils qui marchent déjà portent souvent l'essentiel de la valeur : les contenus, les habitudes, les liens. Les faire travailler ensemble coûte moins et perd moins qu'une migration.</li>
+        <li><strong>Une seule source d'identité.</strong> Deux applications qui se font mutuellement confiance, ce sont deux portes d'entrée. Une seule fait foi, l'autre la consulte.</li>
+        <li><strong>La preuve avant le confort.</strong> Une adresse e-mail n'est pas une identité tant que personne ne l'a prouvée. Un mot de passe demandé une fois vaut mieux qu'un compte détourné.</li>
+        <li><strong>Mesurer avant et après.</strong> Un relevé avant de brancher, un journal d'erreurs comparé après : on sait ce qu'on a changé, et ce qu'on n'a pas cassé.</li>
+      </ul>
+      <p>C'est la méthode d'une <a href="refonte-site-internet.html">refonte de site internet</a> bien menée : garder ce qui marche, reconstruire le reste. Le projet complet est décrit sur notre page <a href="realisations.html">Réalisations</a>, et l'association raconte le résultat du côté des membres, vidéo à l'appui, dans <a href="https://www.prv-concept.com/journal/un-site-un-compte.html" target="_blank" rel="noopener">Le site, le forum et la boutique ne font plus qu'un</a>.</p>
+      <p style="margin-top: 30px;">Un site, un forum ou une boutique qui vivent chacun de leur côté ? <a href="contact.html">Parlons-en</a> — ou voyez comment se mène une <a href="refonte-site-internet.html">refonte qui garde ce qui marche</a>.</p>
+      <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-strong);">
+        <p class="mono" style="font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px;">Ce chantier vit aussi sur les réseaux — venez en discuter</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a class="btn btn-ghost" href="https://www.facebook.com/reel/1392916158966415" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M22.68 0H1.32C.59 0 0 .59 0 1.32v21.36C0 23.41.59 24 1.32 24h11.5v-9.29H9.69v-3.62h3.13V8.41c0-3.1 1.89-4.79 4.66-4.79 1.32 0 2.46.1 2.79.14v3.24h-1.92c-1.5 0-1.79.71-1.79 1.76v2.31h3.58l-.47 3.62h-3.11V24h6.1c.73 0 1.32-.59 1.32-1.32V1.32C24 .59 23.41 0 22.68 0z"/></svg>
+            La visite en vidéo sur Facebook</a>
+        </div>
       </div>
-      </a>
-      <a class="blog-card has-thumb" href="site-ia-en-un-week-end.html">
-        <div class="thumb"><video id="weekend-site-video" loop muted playsinline preload="none" poster="public/weekend-site-thumb.jpg" width="560" height="316" aria-label="Illustration animée : une IA holographique assemble un site web sous les yeux d'un dirigeant">
-          <source src="public/weekend-site-thumb.mp4" type="video/mp4" />
-          <img src="public/weekend-site-thumb.jpg" alt="Créer son site avec l'IA en un week-end — illustration" width="560" height="316" />
-        </video></div>
-        <div>
-        <div class="meta">16 ao&ucirc;t 2026 · IA · Vibe coding · M&eacute;thode</div>
-        <h2>Cr&eacute;er son site avec l&rsquo;IA en un week-end : on a pris la promesse au mot</h2>
-        <p>La promesse du vibe coding test&eacute;e sur nsy.fr : V1 en 4 soir&eacute;es, puis pr&egrave;s de 140 heures de pilotage mesur&eacute;es action par action. La r&egrave;gle des 10/90 — et pourquoi l&rsquo;IA sert surtout &agrave; aller plus loin.</p>
-        <span class="more">Lire l&rsquo;article →</span>
-      </div>
-      </a>
-      <a class="blog-card has-thumb" href="chatbot-ia-forum-base-de-connaissances.html">
-        <div class="thumb"><video id="chatbot-forum-video" loop muted playsinline preload="none" poster="public/chatbot-forum-thumb.jpg" width="560" height="374" aria-label="Illustration animée : un chatbot IA connecté à un forum">
-          <source src="public/chatbot-forum-thumb.mp4" type="video/mp4" />
-          <img src="public/chatbot-forum-thumb.jpg" alt="Un chatbot IA branché sur un forum — illustration" width="560" height="374" />
-        </video></div>
-        <div>
-        <div class="meta">8 ao&ucirc;t 2026 · IA · Chatbot · RAG</div>
-        <h2>Un chatbot IA branch&eacute; sur un forum : le web 1.0 comme base de connaissances</h2>
-        <p>Des ann&eacute;es de discussions de passionn&eacute;s dorment dans les forums. Comment le chatbot de PRV Concept interroge directement la base phpBB — et les garde-fous anti-hallucination qui font la diff&eacute;rence.</p>
-        <span class="more">Lire l&rsquo;article →</span>
-      </div>
-      </a>
-      <a class="blog-card has-thumb" href="seo-geo-etre-cite-par-les-ia.html">
-        <div class="thumb"><video id="seo-geo-video" loop muted playsinline preload="none" poster="public/seo-geo-thumb.jpg" width="560" height="374" aria-label="Illustration animée : SEO contre GEO, deux robots à la loupe">
-          <source src="public/seo-geo-thumb.mp4" type="video/mp4" />
-          <img src="public/seo-geo-thumb.jpg" alt="SEO vs GEO — un robot Google et un robot IA face à face" width="560" height="374" />
-        </video></div>
-        <div>
-        <div class="meta">29 juillet 2026 · SEO · GEO · IA</div>
-        <h2>SEO vs GEO : &ecirc;tre cit&eacute; par ChatGPT, Claude et Perplexity</h2>
-        <p>&Ecirc;tre bien class&eacute; sur Google ne suffit plus : les assistants IA choisissent leurs sources autrement. Comment un site devient une source cit&eacute;e — avec le dispositif mis en place sur nsy.fr et les premiers passages de crawlers observ&eacute;s.</p>
-        <span class="more">Lire l&rsquo;article →</span>
-      </div>
-      </a>
-    </div>
-    <div style="margin-top: 32px;">
-      <a class="btn btn-ghost" href="feed.xml" title="Flux RSS">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>Flux RSS</a>
-    </div>
+    </article>
   </div>
 </section>
 </main>
