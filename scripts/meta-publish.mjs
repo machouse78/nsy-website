@@ -275,7 +275,12 @@ async function comment(env, args) {
   if ((deja.data || []).some((c) => (c.message || '').trim() === texte.trim())) die('ce commentaire est déjà posté sous cette publication.');
   console.log(`── 1ᵉʳ COMMENTAIRE pour ${id} (${texte.length} car.) ──\n${texte}\n`);
   if (!args.includes('--go')) { console.log('Répétition (dry-run) : rien n\'a été publié. Relancer avec --go.'); return; }
-  await attendreVideo(env, id).catch((e) => { if (!/traitement/.test(e.message)) throw e; console.log('ℹ️ pas une vidéo en traitement, on commente directement'); });
+  // Un identifiant de PUBLICATION (« page_post ») n'a pas de champ status : sans ce
+  // test, attendreVideo() tournait 5 min pour rien avant de commenter (vécu le
+  // 11/09/2026 sous le reel PRV Concept). On n'attend que pour un identifiant de vidéo.
+  if (!id.includes('_')) {
+    await attendreVideo(env, id).catch((e) => { if (!/traitement/.test(e.message)) throw e; console.log('ℹ️ pas une vidéo en traitement, on commente directement'); });
+  }
   await commenter(env, id, texte);
 }
 
