@@ -271,16 +271,20 @@
             <span class="realisation-url">www.prv-concept.com</span>
           </div>
           <p class="realisation-desc">
-            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> l'association de référence du V6 PRV (Peugeot · Renault · Volvo) disposait déjà d'un site, d'un forum et d'une boutique — mais dispersés et vieillissants. La reprise a consisté à reconstruire la vitrine à la hauteur du patrimoine, sans rien perdre : forum phpBB et boutique conservés et raccrochés, contenus historiques repris, adresses préservées.
+            <strong style="color: var(--fg-1); font-weight: 600;">Le besoin :</strong> l'association de référence du V6 PRV (Peugeot · Renault · Volvo) disposait déjà d'un site, d'un forum et d'une boutique — mais dispersés et vieillissants. La reprise a d'abord reconstruit la vitrine à la hauteur du patrimoine, sans rien perdre : contenus historiques repris, adresses préservées. Elle a ensuite réuni les trois : le forum phpBB et la boutique WooCommerce portent aujourd'hui le même design que la vitrine, et un seul compte ouvre les deux.
           </p>
           <dl class="realisation-specs">
             <div>
               <dt>Périmètre</dt>
-              <dd>8 rubriques (histoire, moteurs, véhicules, préparateurs, protos, culture pop, bibliothèque…) + 25 fiches moteurs / véhicules / protos, toutes bilingues ; bibliothèque de documents d'époque consultable en ligne ; forum phpBB et boutique intégrés. La FAQ est passée de 87 à <strong style="color: var(--fg-1); font-weight: 600;">226 questions</strong> : les manuels de réparation et plaquettes d'époque de la bibliothèque ont été dépouillés un par un, et leurs valeurs techniques versées dans des réponses sourcées.</dd>
+              <dd>8 rubriques (histoire, moteurs, véhicules, préparateurs, protos, culture pop, bibliothèque…) + 25 fiches moteurs / véhicules / protos, toutes bilingues ; bibliothèque de documents d'époque consultable en ligne, chaque document avec son sujet de discussion sur le forum ; espace réservé aux membres de l'association — statuts, procès-verbaux, documents des meetings —, ouvert selon les groupes du forum, sans second mot de passe ; forum phpBB et boutique WooCommerce. La FAQ est passée de 87 à <strong style="color: var(--fg-1); font-weight: 600;">256 questions</strong> : les manuels de réparation et plaquettes d'époque de la bibliothèque ont été dépouillés un par un, et leurs valeurs techniques versées dans des réponses sourcées.</dd>
+            </div>
+            <div>
+              <dt>Un seul site</dt>
+              <dd>La vitrine, le forum et la boutique ne forment plus qu'un site : même en-tête, même menu, même fil d'Ariane et même pied de page sur les trois, grâce à un style phpBB et à un thème WooCommerce dessinés sur mesure. <strong style="color: var(--fg-1); font-weight: 600;">Un seul compte</strong> : celui du forum ouvre la boutique, la connexion comme la déconnexion suivent d'un côté à l'autre, et un rappel — avatar et pseudo aux couleurs du forum — accompagne le membre partout. Les comptes clients déjà existants ne sont rattachés que sur preuve, jamais sur la seule adresse e-mail.</dd>
             </div>
             <div>
               <dt>Technique</dt>
-              <dd>Site statique HTML/CSS/JS sans framework, responsive et léger ; pages anglaises générées par un pipeline maison — le contenu FR reste la source unique, zéro divergence entre langues ; lecteur PDF intégré pour les archives numérisées ; vidéo d'introduction optimisée ; hébergement mutualisé.</dd>
+              <dd>Site statique HTML/CSS/JS sans framework, responsive et léger ; pages anglaises générées par un pipeline maison — le contenu FR reste la source unique, zéro divergence entre langues ; lecteur PDF intégré pour les archives numérisées ; vidéo d'introduction optimisée ; hébergement mutualisé. Forum et boutique habillés par un style enfant phpBB et un thème enfant WordPress, sans toucher au cœur des applications ; identité partagée entre les trois par des jetons chiffrés à usage unique.</dd>
             </div>
             <div>
               <dt>Patrimoine sauvé</dt>
@@ -292,11 +296,11 @@
             </div>
             <div>
               <dt>Assistant IA</dt>
-              <dd>« Père Hervé », un chatbot conversationnel à mascotte animée, ancré sur les données du site et branché en direct sur la boutique et le forum — il répond aussi bien sur les produits que sur les sujets de la communauté. Repli résilient (les vraies données restent servies si le modèle est indisponible) et strictement factuel, sans jamais renvoyer hors du site. La vie du forum est elle aussi automatisée : la validation des inscriptions est assurée par un script exécuté dans un planificateur de tâches, et c'est la mascotte — le Père Hervé — qui envoie les messages privés de bienvenue et répond aux présentations des nouveaux membres. Depuis septembre 2026, il veille aussi sur le forum : il prépare des réponses aux sujets restés sans réponse et aux fils où il est cité, mises en file pour validation humaine avant publication — sans source d'atelier ni fil du forum il n'écrit rien, et toute affirmation qu'aucune source ne porte est retirée puis reformulée. Rien ne part sans un clic humain. Comment ce forum de vingt ans est devenu une base de connaissances : <a href="chatbot-ia-forum-base-de-connaissances.html">l&rsquo;article du journal</a> raconte le câblage.</dd>
+              <dd>« Père Hervé », un chatbot conversationnel à mascotte animée, ancré sur les données du site et branché en direct sur la boutique et le forum — il répond aussi bien sur les produits que sur les sujets de la communauté. Repli résilient (les vraies données restent servies si le modèle est indisponible) et strictement factuel, sans jamais renvoyer hors du site. Pour un membre habilité, il répond aussi sur les documents réservés de l'association — et à personne d'autre. La vie du forum est elle aussi automatisée : la validation des inscriptions est assurée par un script exécuté dans un planificateur de tâches, et c'est la mascotte — le Père Hervé — qui envoie les messages privés de bienvenue et répond aux présentations des nouveaux membres. Depuis septembre 2026, il veille aussi sur le forum : il prépare des réponses aux sujets restés sans réponse et aux fils où il est cité, mises en file pour validation humaine avant publication — sans source d'atelier ni fil du forum il n'écrit rien, et toute affirmation qu'aucune source ne porte est retirée puis reformulée. Rien ne part sans un clic humain. Comment ce forum de vingt ans est devenu une base de connaissances : <a href="chatbot-ia-forum-base-de-connaissances.html">l&rsquo;article du journal</a> raconte le câblage.</dd>
             </div>
             <div>
               <dt>Journal &amp; réseaux</dt>
-              <dd>Six articles de fond bilingues, avec flux RSS, compteurs de vues et de « j'aime », et une chaîne de publication automatisée : un article part sur la Page Facebook et sur Instagram en une commande, au format vidéo, les liens de retour placés dans le premier commentaire — et chaque article renvoie vers ses publications. Chaque article ouvre aussi son sujet sur le forum : le lecteur passe de la lecture à la discussion d'un clic, et la communauté prolonge l'article là où elle vit déjà.</dd>
+              <dd>Sept articles de fond bilingues, avec flux RSS, compteurs de vues et de « j'aime », et une chaîne de publication automatisée : un article part sur la Page Facebook et sur Instagram en une commande, au format vidéo, les liens de retour placés dans le premier commentaire — et chaque article renvoie vers ses publications. Chaque article ouvre aussi son sujet sur le forum : le lecteur passe de la lecture à la discussion d'un clic, et la communauté prolonge l'article là où elle vit déjà.</dd>
             </div>
             <div>
               <dt>Conformité</dt>
@@ -313,7 +317,7 @@
           </figure>
           <a class="realisation-visit is-inline" href="https://www.prv-concept.com" target="_blank" rel="noopener">Visiter le site <span class="arrow">→</span></a>
           <div class="realisation-tags">
-            <span>Refonte</span><span>Site vitrine</span><span>Bilingue FR/EN</span><span>Chatbot IA</span><span>Forum</span><span>Boutique</span><span>Bibliothèque PDF</span><span>Journal &amp; RSS</span><span>SEO · GEO</span><span>Tableau de bord KPI</span><span>Search Console</span><span>Sauvetage d&rsquo;archives</span>
+            <span>Refonte</span><span>Site vitrine</span><span>Bilingue FR/EN</span><span>Chatbot IA</span><span>Forum</span><span>Boutique</span><span>Compte unique</span><span>Espace membres</span><span>Bibliothèque PDF</span><span>Journal &amp; RSS</span><span>SEO · GEO</span><span>Tableau de bord KPI</span><span>Search Console</span><span>Sauvetage d&rsquo;archives</span>
           </div>
         </div>
       </div>

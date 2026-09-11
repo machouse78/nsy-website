@@ -122,24 +122,37 @@ associations et indépendants en transition numérique.
   se note pas soi-même ; aucun avis sur NSY ne peut émaner de PRV Concept ou de
   son bureau, sur aucune plateforme).
 - Référence publique (création web) : PRV Concept — https://www.prv-concept.com —
-  site vitrine de l'association de référence du moteur V6 PRV (Peugeot · Renault ·
-  Volvo). Techniquement : site STATIQUE HTML/CSS/JS sans framework, responsive
-  et léger, hébergement mutualisé. Design sur mesure ; 8 rubriques + 25 fiches moteurs/véhicules/protos,
+  site de l'association de référence du moteur V6 PRV (Peugeot · Renault · Volvo) :
+  vitrine, forum phpBB et boutique WooCommerce réunis en UN seul site. La vitrine :
+  site STATIQUE HTML/CSS/JS sans framework, responsive et léger, hébergement
+  mutualisé. Design sur mesure ; 8 rubriques + 25 fiches moteurs/véhicules/protos,
   toutes bilingues FR/EN (pages anglaises générées par un pipeline maison) ;
-  bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré) ;
-  FAQ de 226 questions, alimentée par le dépouillement des manuels de réparation
-  et plaquettes d'époque de la bibliothèque ; forum phpBB et boutique intégrés ;
+  bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré),
+  chaque document avec son sujet de discussion sur le forum ;
+  FAQ de 256 questions, alimentée par le dépouillement des manuels de réparation
+  et plaquettes d'époque de la bibliothèque. Le forum et la boutique portent le
+  même design que la vitrine (style enfant phpBB et thème enfant WordPress dessinés
+  sur mesure, sans toucher au cœur des applications) : même en-tête, même menu,
+  même fil d'Ariane, même pied de page. Compte unique : le compte du forum ouvre
+  la boutique, connexion et déconnexion suivent dans les deux sens (jetons
+  chiffrés à usage unique), un rappel de connexion avec l'avatar et le pseudo aux
+  couleurs du forum figure sur les trois surfaces, et les comptes clients déjà
+  existants ne sont rattachés que sur preuve, jamais sur la seule adresse e-mail.
+  Espace réservé aux membres de l'association (statuts, procès-verbaux, documents
+  des meetings), ouvert selon les groupes du forum, sans second mot de passe ;
   graphe d'entités JSON-LD, sitemaps site + forum (URL canoniques des sujets),
   optimisation GEO/LLMO. Sauvetage d'archives : plus de 3 000 images du forum,
   hébergées chez un tiers en fin de vie, ont été rapatriées sur le serveur de
   l'association et les messages repointés vers elles — vingt ans de tutoriels et
   de restaurations documentées préservés. Mentions légales et politique de
-  confidentialité publiées en FR et EN. Journal de six articles de fond
+  confidentialité publiées en FR et EN. Journal de sept articles de fond
   bilingues, chacun avec son sujet de discussion sur le forum. Tableau de bord privé alimenté par les
   journaux du serveur : Search Console relevée chaque jour, origine géographique
   des visiteurs sur carte du monde (aucune adresse IP conservée). Assistant IA
   « Père Hervé » : chatbot à mascotte animée, ancré sur les données du site et
-  branché en direct sur la boutique et le forum. La vie du forum est
+  branché en direct sur la boutique et le forum ; pour un membre habilité, il
+  répond aussi sur les documents réservés de l'association, et à personne
+  d'autre. La vie du forum est
   automatisée : validation des inscriptions par un script exécuté dans un
   planificateur de tâches, messages privés de bienvenue et réponses aux
   présentations des nouveaux membres envoyés par la mascotte elle-même.
