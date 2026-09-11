@@ -548,10 +548,10 @@
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
     <video:video>
-      <video:thumbnail_loc>https://www.nsy.fr/public/compte-unique-thumb.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://www.nsy.fr/public/compte-unique-illus-thumb.jpg</video:thumbnail_loc>
       <video:title>Un site, un forum, une boutique, un seul compte — illustration animée</video:title>
-      <video:description>Illustration animée de l'article : la visite du site, du forum et de la boutique de PRV Concept réunis sous le même habit — la vignette du journal NSY.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/compte-unique-thumb.mp4</video:content_loc>
+      <video:description>Illustration animée de l'article : trois façades sous le même habillage — une vitrine, un atelier, un comptoir de pièces — reliées par un fil de lumière à une seule carte-clé. La vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/compte-unique-illus-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>
@@ -589,7 +589,7 @@
       <image:title>From terabytes to megabytes — illustration</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://www.nsy.fr/public/compte-unique-thumb.jpg</image:loc>
+      <image:loc>https://www.nsy.fr/public/compte-unique-illus-thumb.jpg</image:loc>
       <image:title>Un site, un forum, une boutique, un seul compte — vignette</image:title>
     </image:image>
   </url>
