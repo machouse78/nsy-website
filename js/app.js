@@ -1653,16 +1653,17 @@
   }
 })();
 
-/* ───── Journal : compteurs de vues / « j'aime » (journal-stats.php) ─────
+/* ───── Journal : « j'aime » affiché, vues mesurées (journal-stats.php) ─────
    Clé = slug FR (data-slug, partagé par la paire FR/EN). La vue n'est comptée
    qu'une fois par session (sessionStorage) ; l'état « aimé » vit en
-   localStorage. Tout échec réseau laisse simplement la barre masquée. */
+   localStorage. Tout échec réseau laisse simplement la barre masquée.
+   owner, 13/09/2026 : le NOMBRE DE VUES N'EST PLUS AFFICHÉ dans l'article —
+   la mesure continue, elle ne se lit que dans le tableau de bord /stats/. */
 (function () {
   var el = document.querySelector('[data-journal-stats]');
   if (!el || !window.fetch) return;
   var slug = el.getAttribute('data-slug');
   var en = (document.documentElement.lang || 'fr') === 'en';
-  var viewsEl = el.querySelector('.js-views');
   var likeBtn = el.querySelector('.js-like');
   var likeLabel = el.querySelector('.js-like-label');
   var likedKey = 'nsy_liked_' + slug, viewedKey = 'nsy_viewed_' + slug;
@@ -1671,7 +1672,6 @@
 
   function fmt(n) { return Number(n || 0).toLocaleString(en ? 'en-GB' : 'fr-FR'); }
   function render(d) {
-    viewsEl.textContent = fmt(d.views) + (en ? (d.views > 1 ? ' views' : ' view') : (d.views > 1 ? ' vues' : ' vue'));
     likeLabel.textContent = (en ? 'Like' : 'J\u2019aime') + ' (' + fmt(d.likes) + ')';
     likeBtn.classList.toggle('liked', liked);
     likeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');
