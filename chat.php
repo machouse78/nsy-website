@@ -109,7 +109,7 @@ function nsy_alerte_llm(string $sujet, string $texte, string $cle): void
 
 // ───── Health-check : disponibilité de l'IA (voyant vert / orange) ─────
 // Réponse rapide, SANS génération. Cache 90 s alimenté par les vraies requêtes ;
-// sur cache périmé, sonde GRATUITE GET /v1/models (valide la clé + l'API amont).
+// sur cache périmé, une sonde d'un seul jeton AU MODÈLE DE PRODUCTION (voir plus bas).
 if (!empty($body['health'])) {
     if (!$hasKey) {
         respond(['ok' => true, 'available' => false, 'reason' => 'noconfig']);
@@ -317,9 +317,14 @@ function callProvider(string $url, string $key, array $payload): array
 // (« Service tier capacity exceeded », code 3505) — quand le premier est
 // saturé, on bascule sur un frère. Surchargable via 'fallback_models' dans
 // _secret/ai.php.
+// Un repli n'a de sens que s'il est un AUTRE moteur (owner, 14/09/2026) :
+// 'ministral-8b-latest' et 'open-mistral-nemo' servent aujourd'hui le même
+// ministral-8b-2512 que le modèle épinglé — replier dessus, c'est rejouer la
+// panne. 'ministral-3b-latest' est un modèle distinct, 750 requêtes/minute sur
+// le palier gratuit : plus faible, mais il répond quand l'autre est refusé.
 $models = array_values(array_unique(array_merge(
     [$model],
-    (array)($ai['fallback_models'] ?? ['ministral-8b-latest', 'open-mistral-nemo'])
+    (array)($ai['fallback_models'] ?? ['ministral-3b-latest'])
 )));
 
 $status = 0;

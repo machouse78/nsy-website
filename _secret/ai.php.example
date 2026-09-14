@@ -19,13 +19,15 @@
 return [
     'api_url' => 'https://api.mistral.ai/v1/chat/completions',
     'api_key' => 'CHANGE_ME_SET_THE_MISTRAL_API_KEY',
-    // mistral-small-latest : rapide, excellent en français, largement suffisant
-    // pour un assistant de site ancré dans llms-full.txt.
-    'model'   => 'mistral-small-latest',
+    // Modèle principal, ÉPINGLÉ à une version précise (owner, 14/09/2026) : un
+    // alias (…-latest) peut changer de moteur sous nos pieds. mistral-small
+    // n'est plus servi sur le palier gratuit depuis le 13/09/2026 (limite à 0).
+    'model'   => 'ministral-8b-2512',
     // Le palier gratuit a un pool de capacité PAR modèle (« Service tier
-    // capacity exceeded ») : si le modèle principal est saturé, chat.php
-    // bascule automatiquement sur ces frères (surchargable ici).
-    // 'fallback_models' => ['ministral-8b-latest', 'open-mistral-nemo'],
+    // capacity exceeded ») : si le principal est saturé ou refusé, chat.php
+    // bascule sur un AUTRE moteur — ministral-8b-latest et open-mistral-nemo
+    // servent le même ministral-8b-2512, ils ne replient rien (surchargable ici).
+    // 'fallback_models' => ['ministral-3b-latest'],
     // Quotas du rate-limiting (facultatif — valeurs par défaut du code sinon).
     // Ils ne vivent PAS dans le dépôt public : les publier, c'est publier la
     // limite exacte à ne pas dépasser pour épuiser le quota gratuit du modèle.
