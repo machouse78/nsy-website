@@ -88,6 +88,25 @@ function writeHealth(string $file, bool $available, string $model, string $reaso
     ]));
 }
 
+/**
+ * Prévient l'owner qu'un modèle ne répond plus — au plus une alerte par 24 h et
+ * par clé (mécanique de formulaires.php). Ne lève jamais, ne bloque jamais.
+ */
+function nsy_alerte_llm(string $sujet, string $texte, string $cle): void
+{
+    try {
+        $conf = is_file(__DIR__ . '/_secret/config.php') ? (array)(require __DIR__ . '/_secret/config.php') : [];
+        if (!$conf) return;
+        if (!function_exists('nsy_alerte_owner')) {
+            if (!is_file(__DIR__ . '/formulaires.php')) return;
+            require_once __DIR__ . '/formulaires.php';
+        }
+        if (function_exists('nsy_alerte_owner')) nsy_alerte_owner($conf, $sujet, $texte, $cle);
+    } catch (\Throwable $e) {
+        @error_log('NSY chat: alerte LLM impossible — ' . $e->getMessage());
+    }
+}
+
 // ───── Health-check : disponibilité de l'IA (voyant vert / orange) ─────
 // Réponse rapide, SANS génération. Cache 90 s alimenté par les vraies requêtes ;
 // sur cache périmé, sonde GRATUITE GET /v1/models (valide la clé + l'API amont).
@@ -99,17 +118,43 @@ if (!empty($body['health'])) {
     if (is_array($h) && isset($h['ts']) && (time() - (int)$h['ts']) < 90) {
         respond(['ok' => true, 'available' => (bool)$h['available'], 'model' => (string)($h['model'] ?? $model)]);
     }
-    $modelsUrl = preg_replace('#/chat/completions.*$#', '/models', $apiUrl);
-    $ch = curl_init($modelsUrl);
+    /* La sonde interroge LE MODÈLE DE PRODUCTION, pas /v1/models (owner,
+       14/09/2026). L'ancienne sonde listait les modèles : elle répondait 200
+       même quand notre modèle était refusé, et le voyant est resté vert dix-huit
+       heures le 13/09/2026 pendant que Mistral mettait mistral-small à zéro sur
+       le palier gratuit. Un jeton demandé, cache de 90 s : le coût est nul. */
+    $ch = curl_init($apiUrl);
     curl_setopt_array($ch, [
-        CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey],
+        CURLOPT_HTTPHEADER     => ['Authorization: Bearer ' . $apiKey, 'Content-Type: application/json'],
+        CURLOPT_POST           => true,
+        CURLOPT_POSTFIELDS     => json_encode([
+            'model'       => $model,
+            'messages'    => [['role' => 'user', 'content' => 'ping']],
+            'max_tokens'  => 1,
+            'temperature' => 0,
+        ]),
         CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_TIMEOUT        => 6,
+        CURLOPT_TIMEOUT        => 8,
         CURLOPT_CONNECTTIMEOUT => 4,
     ]);
-    curl_exec($ch);
+    $pbody   = curl_exec($ch);
     $pstatus = (int)curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-    $avail = ($pstatus >= 200 && $pstatus < 300);
+    $avail   = ($pstatus >= 200 && $pstatus < 300);
+    if (!$avail) {
+        $pdiag = substr(preg_replace('/\s+/', ' ', (string)$pbody), 0, 200);
+        @error_log(date('c') . ' sonde modèle ' . $model . ' → HTTP ' . $pstatus . ' — ' . $pdiag . "\n",
+                   3, __DIR__ . '/_secret/chat-errors.log');
+        nsy_alerte_llm(
+            '[NSY] Le modèle du chatbot ne répond plus — Ansley en repli',
+            'La sonde de disponibilité a reçu HTTP ' . $pstatus . ' pour le modèle configuré ('
+            . $model . ").\n\n" . 'Réponse du fournisseur : ' . $pdiag . "\n\n"
+            . "Le widget peut encore répondre via un modèle de repli, mais la qualité baisse.\n\n"
+            . "À vérifier : console.mistral.ai > Admin Panel > API > Limits. Les limites sont PAR\n"
+            . "MODÈLE : une limite à 0 n'est pas un quota épuisé, c'est un modèle retiré du palier.\n"
+            . "Alerte envoyée au plus une fois par 24 h.\n",
+            'llm-modele'
+        );
+    }
     writeHealth($healthFile, $avail, $model, $avail ? '' : ('probe' . $pstatus));
     respond(['ok' => true, 'available' => $avail, 'model' => $model]);
 }
@@ -280,6 +325,7 @@ $models = array_values(array_unique(array_merge(
 $status = 0;
 $res = '';
 $usedModel = $model;
+$modelePrincipalKO = 0;   // statut HTTP du modèle CONFIGURÉ s'il a été refusé
 foreach ($models as $idx => $tryModel) {
     $payload = [
         'model'       => $tryModel,
@@ -294,6 +340,7 @@ foreach ($models as $idx => $tryModel) {
         usleep(1200000);
         [$status, $res] = callProvider($apiUrl, $apiKey, $payload);
     }
+    if ($idx === 0 && ($status < 200 || $status >= 300)) { $modelePrincipalKO = $status; }
     if ($status !== 429) { $usedModel = $tryModel; break; }
     $usedModel = $tryModel;
 }
@@ -307,6 +354,19 @@ if ($status < 200 || $status >= 300) {
     @error_log($line, 3, __DIR__ . '/_secret/chat-errors.log');
     error_log('NSY chat: upstream HTTP ' . $status . ' — ' . $diag);
     writeHealth($healthFile, false, $usedModel, $status === 429 ? 'capacity' : ('upstream' . $status));
+    nsy_alerte_llm(
+        '[NSY] Le chatbot n\'a plus de modèle — Ansley muet',
+        "Aucun modèle de la cascade n'a répondu sur nsy.fr.\n\n"
+        . 'Modèle configuré : ' . $model . "\n"
+        . 'Replis essayés : ' . implode(', ', array_slice($models, 1)) . "\n"
+        . 'Dernier statut HTTP : ' . $status . "\n"
+        . 'Réponse du fournisseur : ' . $diag . "\n\n"
+        . "Le widget bascule sur son moteur de règles local ; le visiteur garde une réponse,\n"
+        . "mais sans l'IA.\n\n"
+        . "À vérifier : console.mistral.ai > Admin Panel > API > Limits, puis le champ 'model'\n"
+        . "de _secret/ai.php. Alerte envoyée au plus une fois par 24 h.\n",
+        'llm-panne'
+    );
     respond(['ok' => false, 'code' => $status === 429 ? 'ratelimit' : 'upstream'], 502);
 }
 
@@ -496,7 +556,20 @@ $reply = nsy_sanitize_reply($reply);
     }
 }
 
-// L'IA a répondu → voyant vert pour les prochains health-checks.
-writeHealth($healthFile, true, $usedModel, '');
+// L'IA a répondu → voyant vert pour les prochains health-checks, ORANGE si c'est
+// un modèle de REPLI qui a répondu (le modèle configuré ayant été refusé).
+writeHealth($healthFile, $modelePrincipalKO === 0, $usedModel, $modelePrincipalKO === 0 ? '' : 'repli' . $modelePrincipalKO);
+if ($modelePrincipalKO !== 0) {
+    nsy_alerte_llm(
+        '[NSY] Le modèle principal du chatbot est refusé — réponses en repli',
+        'Le modèle configuré (' . $model . ') a été refusé en HTTP ' . $modelePrincipalKO . ".\n"
+        . 'Un modèle de repli a pris le relais (' . $usedModel . ") : Ansley répond, mais avec un\n"
+        . "modèle plus faible.\n\n"
+        . "À vérifier : console.mistral.ai > Admin Panel > API > Limits. Les limites sont PAR\n"
+        . "MODÈLE : une limite à 0 n'est pas un quota épuisé, c'est un modèle retiré du palier.\n"
+        . "Alerte envoyée au plus une fois par 24 h.\n",
+        'llm-modele'
+    );
+}
 // Modèle affiché dans le badge de transparence du widget (famille, pas la clé).
 respond(['ok' => true, 'reply' => $reply, 'model' => $usedModel]);
