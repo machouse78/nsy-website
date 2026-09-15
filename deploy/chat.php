@@ -330,7 +330,8 @@ $models = array_values(array_unique(array_merge(
 $status = 0;
 $res = '';
 $usedModel = $model;
-$modelePrincipalKO = 0;   // statut HTTP du modèle CONFIGURÉ s'il a été refusé
+$modelePrincipalKO = 0;
+$modelesEssayes = [];   // ce qui a VRAIMENT été tenté, pour que l'alerte ne mente pas   // statut HTTP du modèle CONFIGURÉ s'il a été refusé
 foreach ($models as $idx => $tryModel) {
     $payload = [
         'model'       => $tryModel,
@@ -346,8 +347,17 @@ foreach ($models as $idx => $tryModel) {
         [$status, $res] = callProvider($apiUrl, $apiKey, $payload);
     }
     if ($idx === 0 && ($status < 200 || $status >= 300)) { $modelePrincipalKO = $status; }
-    if ($status !== 429) { $usedModel = $tryModel; break; }
+    /* On passe au modèle SUIVANT tant que l'échec peut venir du modèle ou du
+       réseau : 0 (aucune réponse — délai dépassé, DNS, TLS), 429 (cadence),
+       403 (modèle hors du palier) et les 5xx du fournisseur. Un autre 4xx vient
+       de NOUS (requête mal formée) : changer de modèle n'y changerait rien.
+       Vécu le 15/09/2026 : un seul HTTP 0 sur le modèle principal sortait de la
+       cascade sans même essayer le repli, et l'alerte annonçait des replis
+       « essayés » qui ne l'avaient pas été. */
+    $aRessayer = ($status === 0 || $status === 429 || $status === 403 || $status >= 500);
+    $modelesEssayes[] = $tryModel;
     $usedModel = $tryModel;
+    if (!$aRessayer) { break; }
 }
 
 if ($status < 200 || $status >= 300) {
@@ -363,7 +373,7 @@ if ($status < 200 || $status >= 300) {
         '[NSY] Le chatbot n\'a plus de modèle — Ansley muet',
         "Aucun modèle de la cascade n'a répondu sur nsy.fr.\n\n"
         . 'Modèle configuré : ' . $model . "\n"
-        . 'Replis essayés : ' . implode(', ', array_slice($models, 1)) . "\n"
+        . 'Modèles réellement essayés : ' . (implode(', ', $modelesEssayes) ?: 'aucun') . "\n"
         . 'Dernier statut HTTP : ' . $status . "\n"
         . 'Réponse du fournisseur : ' . $diag . "\n\n"
         . "Le widget bascule sur son moteur de règles local ; le visiteur garde une réponse,\n"
