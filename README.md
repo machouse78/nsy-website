@@ -410,6 +410,12 @@ tant qu'on ne la lance pas.
 - **Une seule connexion FTPS persistante** pour tous les fichiers : un envoi
   `curl` par fichier ouvrait ~63 connexions rapides → Infomaniak renvoie
   **450 (anti-flood)**. `scripts/ftp-deploy.py` règle ça (STOR séquentiel + retry).
+- **Garde-fou « arbre en retard »** : l'envoi est intégral (tout `deploy/`), donc un arbre
+  qui n'a pas tout `origin/main` remet en production d'anciennes versions. Vécu le
+  17/09/2026 : un worktree resté sur un commit du 12/09 a écrasé trois correctifs en
+  ligne (assistant, formulaires, articles) — réparé dans l'heure. Depuis,
+  `scripts/ftp-deploy.py` fait un `git fetch` et **refuse l'envoi** s'il manque des
+  commits d'`origin/main` (`DEPLOY_EN_RETARD=1` pour passer outre sciemment).
 - **Depuis un worktree git neuf** : `_secret/config.php` et `_secret/ftp.env` sont
   gitignorés, donc absents. `./prepare-deploy.sh` sort alors en code 1 sur
   « `deploy/_secret/config.php` MANQUANT » — sans conséquence, `_secret/` n'étant

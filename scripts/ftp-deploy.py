@@ -9,6 +9,7 @@ Identifiants via l'environnement : FTP_HOST, FTP_USER, FTP_PASS, FTP_DIR.
 Exclusions : _secret/, old-wp/, _old/, boutique/, forum/, .DS_Store.
 """
 import os
+import subprocess
 import sys
 import time
 from ftplib import FTP_TLS, error_perm, all_errors
@@ -19,6 +20,31 @@ PW = os.environ["FTP_PASS"]
 BASE = os.environ.get("FTP_DIR", "").strip("/")
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "deploy"))
 EXCL_DIRS = {"_secret", "old-wp", "_old", "boutique", "forum"}
+
+# ───── Garde-fou : ne jamais envoyer un arbre en retard sur origin/main ─────
+# Vécu 17/09/2026 : un worktree resté sur un commit du 12/09 a renvoyé ses 145
+# fichiers et remis en production d'anciennes versions de chat.php, de
+# formulaires.php, de js/app.js et des articles, corrigés entre-temps par un
+# autre chantier. L'envoi est INTÉGRAL : l'arbre doit contenir tout origin/main.
+# Passer outre en connaissance de cause : DEPLOY_EN_RETARD=1.
+def commits_de_retard():
+    racine = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+    try:
+        subprocess.run(["git", "-C", racine, "fetch", "-q", "origin"], check=True, timeout=90)
+        sortie = subprocess.run(["git", "-C", racine, "rev-list", "--count", "HEAD..origin/main"],
+                                check=True, capture_output=True, text=True, timeout=30).stdout
+        return int(sortie.strip())
+    except Exception as e:  # pas de réseau, pas de dépôt : on prévient sans bloquer
+        print("⚠️  Retard sur origin/main non vérifiable (%s) — envoi poursuivi." % e.__class__.__name__)
+        return 0
+
+
+retard = commits_de_retard()
+if retard and os.environ.get("DEPLOY_EN_RETARD") != "1":
+    print("⛔ Envoi refusé : cet arbre a %d commit(s) de retard sur origin/main." % retard)
+    print("   L'envoi est intégral : il écraserait en production ce que ces commits ont mis en ligne.")
+    print("   → git fetch origin && git rebase origin/main, relancer ./prepare-deploy.sh, puis renvoyer.")
+    sys.exit(1)
 
 ftp = FTP_TLS()
 ftp.connect(HOST, 21, timeout=60)
