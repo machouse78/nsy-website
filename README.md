@@ -44,7 +44,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 
 Le formulaire de contact reste servi par `contact.php` (inchangé). La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Conception 3D et FAQ sont accessibles depuis le footer.
 
-Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (4 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end », « Des téraoctets au mégaoctet » — vignettes animées), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (parcours **création ou refonte**), pages légales — **64 pages** au total.
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (5 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end », « Des téraoctets au mégaoctet », « Un site, un forum, une boutique, un seul compte » — vignettes animées, toutes au logo NSY), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (parcours **création ou refonte**), pages légales — **66 pages** au total.
 
 ## Bilingue (FR / EN)
 
@@ -74,7 +74,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 64 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 66 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -256,12 +256,17 @@ nsy-website/
 ├── partials/                            # ⭐ Source unique de la nav + footer + widget assistant (FR/EN)
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
 │   └── footer.fr.html / footer.en.html  #    Pied de page
-├── tests/                               # Tests unitaires du chatbot (code réel)
-│   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js
+├── tests/                               # Tests sur le code réel (chatbot + formulaires)
+│   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js / formulaires
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
-│   └── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
+│   ├── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
+│   ├── antispam.test.php                # Scoring de contenu, seuil, plafond journalier
+│   ├── turnstile.test.php               # Verdicts anti-bot : clé rejetée ou Cloudflare en panne → bypass, jamais 403
+│   ├── forms-http.test.php              # contact.php + faisabilite.php + journal-stats.php en bac à sable HTTP
+│   ├── ansley-plein-ecran.test.mjs      # Agrandir / réduire le panneau d'Ansley (Chrome headless)
+│   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 64 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 67 pages, 404 comprise (npm run partials)
 │   ├── jsonld-entities.mjs   # entités JSON-LD partagées + FAQPage depuis le HTML (build)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)
@@ -270,7 +275,8 @@ nsy-website/
 │   │                                    #   canonique déclarée vs retenue par Google)
 │   ├── partage-page.py                  # ⭐ Génère /stats/partage.html — tous les articles × registre de groupes
 │   ├── utm.mjs                          # Liens tracés (UTM) à l'unité — savoir quel post/groupe amène du trafic
-│   ├── meta-publish.mjs                 # Publication auto du journal sur la page Facebook — VIDÉO/réel au format original (+ 1ᵉʳ commentaire backlinks)
+│   ├── meta-publish.mjs                 # Publication auto du journal sur la page Facebook — VIDÉO/réel au format original (+ 1ᵉʳ commentaire backlinks ;
+│   │                                    #   `comment --id <id>` reprend un commentaire sous une publication déjà en ligne, sans jamais republier)
 │   ├── seo-crawl-report.mjs             # Rapport crawlers IA/moteurs depuis les access logs
 │   ├── capture-realisation.mjs          # (historique) vignette statique — remplacé par record-realisation
 │   ├── build-wireframe.sh               # Orchestrateur Blender → GL_LINES
@@ -325,7 +331,13 @@ nsy-website/
   (`turnstile_secret` vide → vérification sautée, SMTP sur port fermé → une
   soumission valide atteint l'étape d'envoi **sans qu'aucun email ne parte**) —
   405, honeypot, validation FR/EN, spam silencieux + journal, throttle par
-  envoi, plafond journalier, chemin d'envoi (valeurs lues dans `_secret/`).
+  envoi, plafond journalier, chemin d'envoi (valeurs lues dans `_secret/`) ;
+- **panneau d'Ansley en navigateur réel** (`ansley-plein-ecran.test.mjs`, Chrome
+  headless) : plein écran, retour à la taille d'origine, choix mémorisé, bouton
+  masqué sur mobile, intitulé anglais. Il vise `http://127.0.0.1:4181` et sert
+  le site lui-même si rien n'écoute — mais si un AUTRE serveur occupe ce port,
+  il échoue sur `#cbot-fab` introuvable : le relancer contre un serveur statique
+  sur un port libre (`node tests/ansley-plein-ecran.test.mjs http://127.0.0.1:<port>`).
 
 **À lancer avant tout commit qui touche `chat.php`, `js/app.js`, `contact.php`,
 `faisabilite.php`, `antispam.php` ou `journal-stats.php`.**
@@ -398,6 +410,12 @@ tant qu'on ne la lance pas.
 - **Une seule connexion FTPS persistante** pour tous les fichiers : un envoi
   `curl` par fichier ouvrait ~63 connexions rapides → Infomaniak renvoie
   **450 (anti-flood)**. `scripts/ftp-deploy.py` règle ça (STOR séquentiel + retry).
+- **Depuis un worktree git neuf** : `_secret/config.php` et `_secret/ftp.env` sont
+  gitignorés, donc absents. `./prepare-deploy.sh` sort alors en code 1 sur
+  « `deploy/_secret/config.php` MANQUANT » — sans conséquence, `_secret/` n'étant
+  jamais envoyé. Charger les identifiants du dépôt principal
+  (`set -a; source <dépôt principal>/_secret/ftp.env; set +a`) puis lancer
+  `python3 scripts/ftp-deploy.py`, et remettre `deploy/` à l'état commité ensuite.
 - **Exclusions** : `_secret/`, miroirs (`old-wp/`…), `.DS_Store`. `_secret/config.php`
   (SMTP, gitignoré) est à uploader **une seule fois à la main** au premier setup ;
   ensuite le déploiement n'y touche plus.
@@ -407,14 +425,14 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 64 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 64 pages
+- **Sitemap** : 66 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 66 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Conformité des données structurées** (3 alertes Search Console résolues en août 2026) : tout champ **requis** d'un type à résultat enrichi contient le **nœud typé inliné** (avec le même `@id`) — `ProfilePage.mainEntity`, mais aussi `author` et `publisher` des articles, les dates (`dateModified`, `datePublished`) sont en **ISO 8601 complet avec fuseau**, et chaque `<video>` porte un `poster=` avec son bloc `video:video` sous **chaque** page qui l'affiche. Détail des causes, correctifs et méthode d'audit : skill `seo-geo-llmo` §5
 - **Robots.txt** : un seul groupe `User-agent: *` qui porte TOUTES les règles (⚠️ une ligne vide ou `Sitemap:` entre `User-agent` et ses règles les rend orphelines — vécu), CSS et JS explorables (Googlebot rend la page), fichiers techniques bloqués, vidéos bloquées sauf celles du sitemap vidéo, `Sitemap:` en fin de fichier ; groupes dédiés pour les crawlers d'IA. Pas de groupe `Googlebot` dédié : il remplacerait le groupe `*` au lieu de le compléter
 - **Entités JSON-LD partagées** : `scripts/jsonld-entities.mjs` (lancé par `prepare-deploy.sh`, idempotent, `--check`) lit les nœuds `Organization` / `Person` complets de `index.html` et injecte leur version compacte dans toute page qui les référence (`@id`) sans les définir — Google ne suit pas un `@id` d'une page à l'autre. Il dote aussi les pages nues d'un `WebPage` + `BreadcrumbList`, et **génère le `FAQPage` au build depuis le HTML visible** (pages FAQ et toute page à section « Questions fréquentes ») : le balisage ne peut pas diverger du texte
-- **404 dédiée** (`404.html`, `noindex`) et **variantes « dossier » en 301** (`/contact/` → `contact.html`) ; anciennes URL WordPress en 301/410 ; la redirection automatique par langue sur `/` **exclut les robots** (hreflang fait le travail)
+- **404 dédiée** (`404.html`, `noindex`) et **variantes « dossier » en 301** (`/contact/` → `contact.html`) ; anciennes URL WordPress **toutes en 301** (l'article d'exemple `/hello-world/`, d'abord en 410, renvoie au journal depuis le 17/09/2026 : Search Console range le 410 avec les 404 et faisait échouer la validation « Introuvable (404) ») ; la redirection automatique par langue sur `/` **exclut les robots** (hreflang fait le travail)
 - **Drapeaux de langue = liens réels** vers la page alternative (écrits par `sync-partials` depuis le hreflang), le JS garde la main au clic
 - **Flux RSS du journal** : `feed.xml` (FR) / `feed-en.xml` (EN) — à mettre à jour à chaque article
 - **IndexNow** : clé à la racine + `node scripts/indexnow-ping.mjs` après chaque déploiement (indexation quasi immédiate côté Bing → ChatGPT Search/Copilot)
@@ -433,7 +451,7 @@ Objectif : être compris et **cité** par ChatGPT, Claude, Gemini, Perplexity, C
 
 - **18 crawlers IA explicitement autorisés** dans `robots.txt` (GPTBot, OAI-SearchBot, ClaudeBot, Claude-SearchBot, Google-Extended, PerplexityBot, CCBot, Amazonbot, meta-externalagent, MistralAI-User…)
 - **`llms.txt` / `llms-full.txt`** : identité, expertises, offres, graphe d'entités et règles de recommandation, au format lisible par les LLM — à tenir en phase avec les faits du site (même règle que le chatbot)
-- **FAQ bilingue 67 / 64 Q/R** (`faq.html` / `faq-en.html`) ciblant les requêtes conversationnelles (« Qui est expert WildFly en France ? », « Qui peut intégrer Claude ? »…) ; le `FAQPage` JSON-LD est **généré depuis le DOM** (source unique = HTML visible)
+- **FAQ bilingue 70 / 67 Q/R** (`faq.html` / `faq-en.html`) ciblant les requêtes conversationnelles (« Qui est expert WildFly en France ? », « Qui peut intégrer Claude ? »…) ; le `FAQPage` JSON-LD est **généré depuis le DOM** (source unique = HTML visible)
 - **Dates absolues** dans le texte statique (« depuis 2012 », « fondée en 2018 ») — jamais périmé
 - Stratégie complète, pages à créer et actions externes : `SEO-GEO-LLMO.md` (dépôt privé `nsy-strategie`)
 
@@ -460,6 +478,14 @@ Chaque article du journal suit le même cycle de publication — détaillé de b
 5. **Câbler Ansley** : les URLs des publications dans `llms-full.txt` (bloc « Journal »), whitelist aux 3 étages (`chat.php` + `js/app.js`, préfixes en minuscules), la paire slug→URLs dans la map `$journalSocials` de `chat.php` (ajout **déterministe** des liens à toute réponse FR citant l'article sans eux) et des cas dans les deux suites de tests.
 
 1ᵉʳ article servi par ce cycle : « SEO vs GEO » (posts LinkedIn + Facebook en ligne, boutons actifs).
+Le 5ᵉ, « Un site, un forum, une boutique, un seul compte » (11/09/2026), a inversé l'ordre : le réel Facebook existait
+avant l'article, qui porte donc son bouton Facebook dès la construction ; un commentaire de la Page sous le réel renvoie
+à l'article, et LinkedIn a suivi la mise en ligne. Règle retenue : **une URL sociale entre dans la whitelist d'Ansley le
+jour où elle entre dans `llms-full.txt`** — sinon l'assistant la cite dans ses sources et l'efface de ses réponses.
+
+**Vignettes du journal** : vidéo en boucle 560 px de large + poster jpg opaque, **logo NSY incrusté en haut à gauche**
+(80 px de large, en 18/13) sur la vidéo comme sur le poster. Sans crédit de génération vidéo, un zoom lent `zoompan` en
+aller-retour anime une image fixe. Un média remplacé change de nom de fichier (cache d'un mois).
 
 ### Open Graph & Twitter Card
 
