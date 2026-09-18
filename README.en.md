@@ -152,6 +152,13 @@ in the EU) through the OpenAI-compatible API.
 
 SMTP credentials live in `_secret/config.php` (gitignored). Template provided: `_secret/config.php.example`.
 
+### Journal newsletter — one email per new article
+
+- **Sign-up block** at the end of every article and on `blog.html` / `blog-en.html`, from `partials/newsletter.{fr,en}.html` (injected by `scripts/sync-partials.mjs`), sent by `js/app.js`; errors stay visible under the button.
+- **`newsletter.php`** (single endpoint, site settings in one block at the top): `POST ?action=inscrire` → pending subscriber + confirmation email (**double opt-in**, same neutral answer whether or not the address is already subscribed; honeypot, time trap, same-origin check, daily cap per hashed IP — no Turnstile); `GET ?action=confirmer&t=…` → confirmed; `GET|POST ?action=desinscrire&t=…` → unsubscribed (the POST is RFC 8058 one-click). Storage `_secret/newsletter.json` (email, language, state, token, dates — no IP), unconfirmed sign-ups purged after 30 days, events without addresses in `_secret/formulaires.log`, no `error_log()` (own capped log `_secret/newsletter-diag.log`).
+- **Sending**, from the owner's machine: `python3 scripts/newsletter-envoi.py <FR-slug>` (dry-run: counts + two HTML previews), `--test <address>`, then `--go` (one by one, stops at the first SMTP error, records the send in `_secret/newsletter-envois.json` and refuses a second send of the same slug without `--force`). The list is fetched over FTPS and kept in memory only.
+- Tests: `tests/newsletter.test.php`, `tests/newsletter-http.test.php` (PHP 8.5 sandbox, SMTP on a closed port) and `tests/newsletter-envoi.test.py` (dry-run on fake subscribers, no network).
+
 ## 3D wireframe pipeline
 
 The `public/renault-wireframe.glb` model (**575 KB**, neon cyan wireframe render) is generated from a source `.blend` via a reproducible chain (`scripts/`):

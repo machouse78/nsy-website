@@ -189,6 +189,28 @@ données traitées en UE) via l'API OpenAI-compatible.
 
 Les identifiants SMTP vivent dans `_secret/config.php` (gitignored). Modèle fourni : `_secret/config.php.example`.
 
+### Newsletter du journal — un e-mail à chaque nouvel article
+
+**Inscription** : bloc « Recevoir les prochains articles » en fin de chaque article (avant le bloc réseaux) et sous la liste de `blog.html` / `blog-en.html` — source unique `partials/newsletter.{fr,en}.html`, injectée par `scripts/sync-partials.mjs` (marqueurs `@partial:newsletter`, posés d'office dans un nouvel article de la liste). `js/app.js` l'envoie en `fetch` ; succès et erreurs restent affichés sous le bouton. Sans JS, le formulaire part quand même et reçoit une page HTML.
+
+**`newsletter.php`** (endpoint unique, bloc de configuration en tête — copiable tel quel sur un autre site) :
+- `POST ?action=inscrire` → abonné en **attente** + e-mail de confirmation (**double opt-in**, PHPMailer comme `contact.php`). Même réponse neutre pour une adresse déjà confirmée, un robot du honeypot ou une demande répétée sous 10 min : rien ne révèle qui est abonné. Remparts : honeypot, piège temporel (horodatages `rendu`/`envoi` posés par le JS ; « trop rapide » est un refus **visible**, un humain pressé peut réessayer ; absents = sans JS → accepté, fail-open), origine du site, plafond de 10 inscriptions / jour / IP hachée (`antispam.php`). Pas de Turnstile.
+- `GET ?action=confirmer&t=…` → **confirmé** (date du consentement), page aux couleurs du site, FR/EN selon l'abonné.
+- `GET|POST ?action=desinscrire&t=…` → **désinscrit** ; le POST est la désinscription **en un clic** des messageries (RFC 8058).
+- Stockage `_secret/newsletter.json` : e-mail, langue, état, jeton (`random_bytes(16)`), dates — pas d'IP. Verrou `flock` + renommage atomique ; un fichier illisible n'est jamais réécrit ; attentes de plus de 30 jours purgées à l'écriture suivante.
+- Événements dans `_secret/formulaires.log` (formulaire `newsletter`, **sans adresse**) : inscription, relance, confirmation, désinscription (lien / un clic), rejets. `nl_comptes()` / `nl_comptes_fichier()` : confirmés par langue, attentes, désinscrits — pour le tableau de bord (charger le fichier avec `NL_BIBLIOTHEQUE` défini).
+- Aucun `error_log()` : traces dans `_secret/newsletter-diag.log` (adresses masquées, remis à zéro à 2 Mo), garde-fou `set_error_handler` (5 traces, arrêt au-delà de 10). Échec SMTP : inscription annulée, erreur visible, alerte owner (1 / 24 h).
+
+**Envoi d'un article** — depuis le poste, jamais depuis le serveur :
+
+```bash
+python3 scripts/newsletter-envoi.py <slug-FR>                # DRY-RUN : comptes par langue + deux aperçus HTML, rien ne part
+python3 scripts/newsletter-envoi.py <slug-FR> --test moi@…   # les versions FR et EN à une seule adresse
+python3 scripts/newsletter-envoi.py <slug-FR> --go           # envoi réel, un par un (1 s), arrêt à la 1ʳᵉ erreur SMTP
+```
+
+Le script lit l'article FR et son pendant EN dans le dépôt (titre, chapô, `og:image`), lie l'article avec `utm_source=newsletter&utm_medium=email&utm_campaign=<slug-FR>`, pose un lien de désinscription personnel et les en-têtes `List-Unsubscribe` / `List-Unsubscribe-Post`. La liste arrive par FTPS (`_secret/ftp.env`) et reste **en mémoire** : jamais écrite sur le disque, jamais affichée. Chaque envoi est inscrit dans `_secret/newsletter-envois.json` sur le serveur ; un second envoi du même slug est refusé sans `--force`. SMTP : `_secret/config.php` (lu sans exécuter de PHP ; clé facultative `newsletter_from`).
+
 ## Pipeline wireframe 3D
 
 Le modèle `public/renault-wireframe.glb` (**575 Ko**, rendu filaire cyan néon) est généré depuis un `.blend` source via une chaîne reproductible (`scripts/`) :
@@ -258,12 +280,15 @@ nsy-website/
 ├── stats/                               # Dashboard KPI privé (Basic Auth) — cartes, courbes SVG, tables (index.html + data.php)
 ├── scripts/rejoue-jours.py              # Rejoue des journées du collecteur (pause 120 s — jamais enchaîner : blocage Infomaniak vécu le 29/08/2026)
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
+├── newsletter.php                       # Newsletter : inscription (double opt-in), confirmation, désinscription en un clic
+├── scripts/newsletter-envoi.py          # Envoi d'un article aux abonnés (dry-run par défaut, --test, --go)
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
 ├── partials/                            # ⭐ Source unique de la nav + footer + widget assistant (FR/EN)
 │   ├── nav.fr.html / nav.en.html        #    Menu du haut (token {{P}} = base des ancres)
-│   └── footer.fr.html / footer.en.html  #    Pied de page
+│   ├── footer.fr.html / footer.en.html  #    Pied de page
+│   └── newsletter.fr.html / .en.html    #    Bloc d'inscription (articles + pages Journal)
 ├── tests/                               # Tests sur le code réel (chatbot + formulaires)
 │   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js / formulaires
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
@@ -271,6 +296,9 @@ nsy-website/
 │   ├── antispam.test.php                # Scoring de contenu, seuil, plafond journalier
 │   ├── turnstile.test.php               # Verdicts anti-bot : clé rejetée ou Cloudflare en panne → bypass, jamais 403
 │   ├── forms-http.test.php              # contact.php + faisabilite.php + journal-stats.php en bac à sable HTTP
+│   ├── newsletter.test.php              # Newsletter : états, jetons, purge, stockage, garde-fou (PHP 8.5)
+│   ├── newsletter-http.test.php         # Newsletter en bac à sable HTTP : boîte factice, puis SMTP sur port fermé
+│   ├── newsletter-envoi.test.py         # Script d'envoi : dry-run sur abonnés factices, sans réseau
 │   ├── ansley-plein-ecran.test.mjs      # Agrandir / réduire le panneau d'Ansley (Chrome headless)
 │   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
@@ -340,6 +368,14 @@ nsy-website/
   soumission valide atteint l'étape d'envoi **sans qu'aucun email ne parte**) —
   405, honeypot, validation FR/EN, spam silencieux + journal, throttle par
   envoi, plafond journalier, chemin d'envoi (valeurs lues dans `_secret/`) ;
+- **newsletter** (PHP 8.5, la version du serveur) : transitions d'état, jetons,
+  purge des attentes, fichier cassé jamais réécrit, comptes sans adresse,
+  pièges anti-robot, garde-fou d'erreurs, aucun `error_log()` ; puis les trois
+  actions en bac à sable `php -S` — boîte aux lettres factice, puis PHPMailer
+  réel sur port fermé (échec visible, inscription annulée), réponse neutre,
+  journal de l'hébergeur vierge ; et le script d'envoi en **dry-run** sur une
+  liste factice, sans aucune ouverture de socket (`--go` et `--test` ne sont
+  jamais lancés par la suite) ;
 - **panneau d'Ansley en navigateur réel** (`ansley-plein-ecran.test.mjs`, Chrome
   headless) : plein écran, retour à la taille d'origine, choix mémorisé, bouton
   masqué sur mobile, intitulé anglais. Il vise `http://127.0.0.1:4181` et sert
@@ -348,7 +384,8 @@ nsy-website/
   sur un port libre (`node tests/ansley-plein-ecran.test.mjs http://127.0.0.1:<port>`).
 
 **À lancer avant tout commit qui touche `chat.php`, `js/app.js`, `contact.php`,
-`faisabilite.php`, `antispam.php` ou `journal-stats.php`.**
+`faisabilite.php`, `antispam.php`, `journal-stats.php`, `newsletter.php` ou
+`scripts/newsletter-envoi.py`.**
 
 Et à la demande, après un déploiement : `./tests/forms-live.sh` — smoke test
 **production** des deux formulaires sans jamais pouvoir envoyer d'email (405,
