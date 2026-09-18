@@ -50,6 +50,33 @@ set_error_handler(static function ($no, $msg, $fichier, $ligne) use (&$prvErreur
 }, E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
 
 $cfg = require __DIR__ . '/_secret/kpi.php';
+/* ── Mode GARDE, lecture seule : ?garde=<clé de garde> (18/09/2026) ─────────
+   Une collecte qui ne passe plus ne dit rien : la tâche planifiée reçoit un 404
+   et le tableau de bord s'arrête net, comme une semaine calme (vécu : six jours
+   sur un autre site, clé erronée dans le Planificateur). Un chien de garde
+   EXTERNE interroge donc ce mode chaque nuit. Il a sa propre clé, jamais celle
+   de la collecte — il ne peut rien déclencher — et ne reçoit que deux dates.
+   Sans le fichier _secret/kpi-garde.key, le mode n'existe pas (404). */
+if (isset($_GET['garde'])) {
+    $fGarde = __DIR__ . '/_secret/kpi-garde.key';
+    $cleGarde = is_file($fGarde) ? trim((string) file_get_contents($fGarde)) : '';
+    if ($cleGarde === '' || !hash_equals($cleGarde, (string) $_GET['garde'])) {
+        http_response_code(404);
+        exit;
+    }
+    $fH = __DIR__ . '/_secret/kpi-history.json';
+    $fS = __DIR__ . '/_secret/kpi-stories.json';
+    $hG = is_file($fH) ? json_decode((string) file_get_contents($fH), true) : null;
+    $joursG = is_array($hG['days'] ?? null) ? array_keys($hG['days']) : [];
+    sort($joursG);
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-store');
+    echo json_encode(['ok' => true, 'mode' => 'garde',
+        'dernier_jour'   => $joursG ? end($joursG) : null,
+        'historique_maj' => is_file($fH) ? date('c', (int) filemtime($fH)) : null,
+        'stories_maj'    => is_file($fS) ? date('c', (int) filemtime($fS)) : null], JSON_UNESCAPED_SLASHES);
+    exit;
+}
 if (!hash_equals((string) $cfg['cron_key'], (string) ($_GET['key'] ?? ''))) {
     http_response_code(404);
     exit;

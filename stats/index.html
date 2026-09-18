@@ -116,6 +116,9 @@
   #tip .src { color: var(--warm); font-size: 11.5px; margin-top: 4px; }
   .chart svg { cursor: crosshair; }
   #err { color: #F87171; margin: 18px 0; display: none; }
+  #fraicheur { border: 1px solid #F87171; background: rgba(248, 113, 113, .08); color: #F87171; border-radius: 10px;
+    padding: 12px 16px; margin: 16px 0 4px; font-size: 14px; line-height: 1.5; }
+  #fraicheur b { color: var(--fg0); }
   .export { position: relative; margin-left: auto; }
   .export > button { background: transparent; border: 1px solid var(--line); border-radius: 8px;
     color: var(--fg1); font: 600 12.5px Manrope, sans-serif; padding: 7px 13px; cursor: pointer; }
@@ -207,6 +210,7 @@
     <input type="text" id="kql" placeholder="ex. page:/expertise-* · bot:claude · ia:perplexity — Entrée pour appliquer" />
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
+  <div id="fraicheur" role="alert" hidden></div>
 
   <div class="resume" id="resume"></div>
 
@@ -2458,6 +2462,23 @@
   }
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
+  /* Fraîcheur (18/09/2026). Sur prv-concept.com la collecte s'est arrêtée six
+     jours (13 → 18/09) sans que rien ne le montre : le tableau s'arrêtait net,
+     comme une semaine calme. La collecte de J-1 passe au petit matin ; avant,
+     la dernière journée est J-2 et c'est normal. Plus vieux que J-2 : la
+     collecte est en panne, et la page le dit avant tout le reste. */
+  {
+    const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const avantHier = new Date(); avantHier.setDate(avantHier.getDate() - 2);
+    if (lastDay < ymd(avantHier)) {
+      const age = Math.round((new Date(ymd(new Date()) + 'T12:00:00') - new Date(lastDay + 'T12:00:00')) / 864e5);
+      const f = $('fraicheur');
+      f.innerHTML = `<b>Collecte arrêtée.</b> La dernière journée collectée est le ${dFmt(lastDay)}, il y a ${age} jours : `
+        + 'la tâche planifiée de collecte ne passe plus (clé, adresse ou tâche suspendue dans le Planificateur). '
+        + 'Les journées manquantes se rattrapent tant que l\'hébergeur conserve ses journaux.';
+      f.hidden = false;
+    }
+  }
   fillSelects();
   render();
 

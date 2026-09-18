@@ -124,6 +124,14 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   **illimité, alimenté UNIQUEMENT par les logs** (jamais d'export AWStats :
   bots inclus, échelle faussée), **aucune donnée personnelle**
   (agrégats seuls)
+- **Collecte en panne = visible** (18/09/2026) : une tâche planifiée qui échoue ne dit
+  rien — le tableau de bord s'arrête net, comme une semaine calme. Deux parades :
+  le tableau affiche « Collecte arrêtée » en tête dès que sa dernière journée est
+  plus vieille que J-2 ; et le collecteur a un mode **garde** en lecture seule
+  (`?garde=<clé>`, clé à part dans `_secret/kpi-garde.key`, jamais celle de la
+  collecte) qui ne renvoie que deux dates — la dernière journée collectée et la
+  dernière écriture du carnet des stories — à un chien de garde externe qui alerte
+  par courriel. Sans le fichier de clé, le mode n'existe pas (404).
 - **Compteurs de vues / « j'aime » du journal** : barre discrète sous la date de
   chaque article (`journal-stats.php`, stockage fichier dans `_secret/`, aucun
   contenu personnel — des agrégats par article, un seul compteur pour la paire
