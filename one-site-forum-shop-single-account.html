@@ -168,6 +168,26 @@
       </ul>
       <p>It is the method of a well-run <a href="website-redesign.html">website redesign</a>: keep what works, rebuild the rest. The full project is described on our <a href="portfolio.html">Portfolio</a> page, and the association tells the members' side of the story, with video, in <a href="https://www.prv-concept.com/en/journal/one-site-one-account.html" target="_blank" rel="noopener">The site, the forum and the shop are now one</a>.</p>
       <p style="margin-top: 30px;">A website, a forum or a shop each living its own life? <a href="contact-en.html">Let&rsquo;s talk</a> — or see how a <a href="website-redesign.html">redesign that keeps what works</a> is run.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Receive the next articles</p>
+  <p class="nl-texte">One email for each new journal article, nothing else. Unsubscribe in one click.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="en" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="name@company.com" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">Subscribe</span></button>
+    </div>
+    <p class="nl-rgpd">Your address is used only for these emails and is never shared. Details in our <a href="privacy.html#newsletter">privacy policy</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
     </article>
   </div>
 </section>

@@ -180,6 +180,26 @@
       <p>The rest is a matter of scale, and scale, as we have seen, can be adjusted: two specialised tools and an AI that opens tickets on one side; a script of a few hundred lines and a sober dashboard on the other. Between the two, six orders of magnitude in volume — and not the slightest difference in principle.</p>
       <p style="margin-top: 30px; color: var(--fg-2); font-size: 14px;"><em>NSY practises both scales: monitoring critical systems on consulting assignments, and the measured operation of the websites it designs. The dashboards described here ship with every delivered site.</em></p>
       <p style="margin-top: 30px;">A system in production and nobody to know it is well before your users do? <a href="contact-en.html">Let&rsquo;s talk</a> — and see what a <a href="ai-website-creation.html">site delivered by NSY</a> measures.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Receive the next articles</p>
+  <p class="nl-texte">One email for each new journal article, nothing else. Unsubscribe in one click.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="en" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="name@company.com" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">Subscribe</span></button>
+    </div>
+    <p class="nl-rgpd">Your address is used only for these emails and is never shared. Details in our <a href="privacy.html#newsletter">privacy policy</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
     </article>
   </div>
 </section>

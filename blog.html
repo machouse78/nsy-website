@@ -209,6 +209,26 @@
       <a class="btn btn-ghost" href="feed.xml" title="Flux RSS">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>Flux RSS</a>
     </div>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Recevoir les prochains articles</p>
+  <p class="nl-texte">Un e-mail à chaque nouvel article du journal, rien d'autre. Désinscription en un clic.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="fr" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="prenom@societe.fr" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">M'inscrire</span></button>
+    </div>
+    <p class="nl-rgpd">Votre adresse ne sert qu'à cet envoi et n'est jamais partagée. Détails dans la <a href="confidentialite.html#newsletter">politique de confidentialité</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
   </div>
 </section>
 </main>

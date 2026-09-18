@@ -182,6 +182,26 @@
       <p>Le reste est affaire d'échelle, et l'échelle, on l'a vu, se règle : deux outils spécialisés et une IA qui ouvre des tickets d'un côté ; un script de quelques centaines de lignes et un tableau de bord sobre de l'autre. Entre les deux, six ordres de grandeur sur le volume — et pas la moindre différence de principe.</p>
       <p style="margin-top: 30px; color: var(--fg-2); font-size: 14px;"><em>NSY pratique les deux échelles : la supervision de systèmes critiques en mission de conseil, et l'exploitation mesurée des sites qu'elle conçoit. Les tableaux de bord décrits ici équipent chaque site livré.</em></p>
       <p style="margin-top: 30px;">Un système en production et personne pour savoir s&rsquo;il va bien avant vos utilisateurs ? <a href="contact.html">Parlons-en</a> — et voyez ce que mesure un <a href="creation-site-ia.html">site livré par NSY</a>.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Recevoir les prochains articles</p>
+  <p class="nl-texte">Un e-mail à chaque nouvel article du journal, rien d'autre. Désinscription en un clic.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="fr" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="prenom@societe.fr" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">M'inscrire</span></button>
+    </div>
+    <p class="nl-rgpd">Votre adresse ne sert qu'à cet envoi et n'est jamais partagée. Détails dans la <a href="confidentialite.html#newsletter">politique de confidentialité</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
       <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-strong);">
         <p class="mono" style="font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px;">Cet article vit aussi sur les réseaux — venez en discuter</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">

@@ -183,6 +183,26 @@
       </ul>
 
       <p style="margin-top: 30px;">Le résultat se teste en direct sur <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — et la fiche complète de la réalisation est sur notre page <a href="realisations.html">Réalisations</a>. Un patrimoine documentaire à valoriser, un chatbot à ancrer dans vos données ? C&rsquo;est le cœur de notre offre de <a href="creation-site-ia.html">création de sites propulsés par l&rsquo;IA</a> — <a href="contact.html">parlons-en</a>, réponse sous 48 h ouvrées.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Recevoir les prochains articles</p>
+  <p class="nl-texte">Un e-mail à chaque nouvel article du journal, rien d'autre. Désinscription en un clic.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="fr" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="prenom@societe.fr" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">M'inscrire</span></button>
+    </div>
+    <p class="nl-rgpd">Votre adresse ne sert qu'à cet envoi et n'est jamais partagée. Détails dans la <a href="confidentialite.html#newsletter">politique de confidentialité</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
       <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-strong);">
         <p class="mono" style="font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px;">Cet article vit aussi sur les réseaux — venez en discuter</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">

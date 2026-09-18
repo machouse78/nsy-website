@@ -9,6 +9,9 @@
  * Every page declares the managed regions with HTML-comment markers:
  *   <!-- @partial:nav -->   ... <!-- @endpartial:nav -->
  *   <!-- @partial:footer --> ... <!-- @endpartial:footer -->
+ * Journal pages (active = 'blog') also carry the newsletter sign-up block:
+ *   <!-- @partial:newsletter --> ... <!-- @endpartial:newsletter -->
+ *   (partials/newsletter.fr.html · partials/newsletter.en.html)
  *
  * Running this script rewrites those regions IN PLACE in all pages from the
  * partials, so the committed .html always contains the rendered nav/footer
@@ -30,9 +33,24 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const read = (f) => readFileSync(join(ROOT, f), 'utf8');
 
 const partials = {
-  fr: { nav: read('partials/nav.fr.html').trim(), footer: read('partials/footer.fr.html').trim(), chatbot: read('partials/chatbot.fr.html').trim() },
-  en: { nav: read('partials/nav.en.html').trim(), footer: read('partials/footer.en.html').trim(), chatbot: read('partials/chatbot.en.html').trim() },
+  fr: { nav: read('partials/nav.fr.html').trim(), footer: read('partials/footer.fr.html').trim(), chatbot: read('partials/chatbot.fr.html').trim(), newsletter: read('partials/newsletter.fr.html').trim() },
+  en: { nav: read('partials/nav.en.html').trim(), footer: read('partials/footer.en.html').trim(), chatbot: read('partials/chatbot.en.html').trim(), newsletter: read('partials/newsletter.en.html').trim() },
 };
+
+// Bloc « Recevoir les prochains articles » (newsletter.php) : sur les pages du
+// journal (active = 'blog'). Dans un ARTICLE sans marqueurs, ils sont posés à la
+// première exécution — avant le bloc « … vit aussi sur les réseaux » s'il
+// existe, sinon juste avant </article> — : un nouvel article ajouté à la liste
+// ci-dessous reçoit le bloc sans qu'on y pense. blog.html / blog-en.html portent
+// leurs marqueurs à la main (sous le lien RSS).
+const NL_MARQUEURS = '<!-- @partial:newsletter -->\n<!-- @endpartial:newsletter -->\n';
+const RESEAUX = /\n[ \t]*<div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var\(--line-strong\);">\s*<p class="mono"[^>]*>[^<]*(?:réseaux|social)/;
+function poseMarqueursNewsletter(html) {
+  if (html.includes('<!-- @partial:newsletter -->') || !html.includes('</article>')) return html;
+  const reseaux = html.match(RESEAUX);
+  if (reseaux) return html.slice(0, reseaux.index + 1) + NL_MARQUEURS + html.slice(reseaux.index + 1);
+  return html.replace(/\n([ \t]*)<\/article>/, (m, indent) => `\n${NL_MARQUEURS}${indent}</article>`);
+}
 
 // [file, language, base-path for {{P}}, active nav data-target]
 // `active` = which top-nav link is highlighted on that page. The home pages use
@@ -152,6 +170,9 @@ for (const [file, lang, P, active = 'top'] of pages) {
       (m) => `<!-- @partial:chatbot -->\n<!-- @endpartial:chatbot -->\n\n${m}`);
   }
   html = replaceRegion(html, 'chatbot', partials[lang].chatbot, file);
+  if (active === 'blog') {
+    html = replaceRegion(poseMarqueursNewsletter(html), 'newsletter', partials[lang].newsletter, file);
+  }
   if (html !== before) { writeFileSync(join(ROOT, file), html); changed++; }
   console.log(`✓ ${file.padEnd(24)} (lang=${lang}, P='${P}')`);
 }
