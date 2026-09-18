@@ -237,7 +237,7 @@
 
   <h2 id="h-vis">Visiteurs</h2>
   <div class="chart"><svg id="c-vis"></svg></div>
-  <table id="t-payslogs"><thead><tr><th>Pays <span class="mono">— tous accès</span></th><th class="num">Adresses</th><th class="num">Part</th><th class="num">Dont ≥ 2 pages</th></tr></thead><tbody></tbody></table>
+  <table id="t-payslogs"><thead><tr><th>Pays <span class="mono">— tous accès</span></th><th class="num">Adresses</th><th class="num">Part</th><th class="num">Dont ≥ 2 pages</th><th class="num" id="th-pays-hc" hidden title="Adresses ayant lu au moins deux pages, hors réseaux d'hébergeurs et centres de données">≥ 2 pages, hors hébergeurs</th></tr></thead><tbody></tbody></table>
   <div class="note" id="payslogs-note"></div>
   <div class="chart"><svg id="c-carte-logs" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg></div>
   <div class="note">Molette pour zoomer sous le curseur, glisser pour déplacer, double-clic pour revenir au monde entier. Zoom <span class="mono" id="c-carte-logs-zoom">×1</span> — les lieux proches sont regroupés tant qu'ils se chevauchent à l'écran ; zoomer les sépare. Un point est la position que la base attribue à la PLAGE d'adresses, en général le centre de la ville déclarée — jamais celle d'une personne.</div>
@@ -2099,11 +2099,19 @@
         const tb = document.querySelector('#t-payslogs tbody');
         if (P) {
           const c = P.compte || {}, c2 = P.compte_2p || {};
+          // Hors centres de données (18/09/2026) : les lecteurs de 2 pages ou plus,
+          // moins les réseaux d'hébergeurs — sur prv-concept.com, 172 des 297
+          // « lecteurs » américains venaient d'Ashburn, Council Bluffs, The Dalles…
+          // Présent seulement sur les journées collectées depuis : sinon la
+          // colonne reste masquée plutôt que remplie de zéros trompeurs.
+          const c2h = P.compte_2p_hc, avecHc = !!c2h;
+          $('th-pays-hc').hidden = !avecHc;
           const tot = Object.values(c).reduce((a, b) => a + b, 0) || 1;
           tb.innerHTML = Object.entries(c).slice(0, 15).map(([k, n]) =>
             `<tr><td>${nomPays(k)} <span class="mono">${k}</span></td><td class="num">${fmt(n)}</td>`
             + `<td class="num">${Math.round(n / tot * 100)} %</td>`
-            + `<td class="num">${fmt(c2[k] || 0)}</td></tr>`).join('');
+            + `<td class="num">${fmt(c2[k] || 0)}</td>`
+            + (avecHc ? `<td class="num">${fmt(c2h[k] || 0)}</td>` : '') + '</tr>').join('');
           const lieux = (P.lieux || []).map((L) => {
             const [x, y] = projLL(L.lat, L.lon);
             return { x, y, n: L.n, nom: [L.ville, L.region, nomPays(L.cc)].filter(Boolean).join(', ') };
@@ -2111,8 +2119,10 @@
           dessineCarte('c-carte-logs', lieux, '#00E5FF', 'adresses');
           $('payslogs-note').textContent = `Relevé du ${jP}, base DB-IP ${P.base}. `
             + `La colonne de droite ne compte que les adresses ayant ouvert au moins deux pages : `
-            + `l'écart avec la première mesure la part de passages automatisés. Les adresses servent au calcul puis sont oubliées — seul le compteur par pays est conservé.`;
+            + `l'écart avec la première mesure la part de passages automatisés. Les adresses servent au calcul puis sont oubliées — seul le compteur par pays est conservé.`
+            + (avecHc ? ` La dernière colonne retire en plus les réseaux d'hébergeurs et de centres de données, reconnus au nom de l'opérateur : c'est l'estimation la plus proche du public humain.` : '');
         } else {
+          $('th-pays-hc').hidden = true;
           tb.innerHTML = '<tr><td colspan="4" class="mono">pas encore de relevé sur cette période</td></tr>';
           $('payslogs-note').textContent = '';
         }
