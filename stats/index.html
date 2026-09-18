@@ -2047,8 +2047,18 @@
       const sePages = aggMap(sel, (v) => v.se_pages);
       const extTot = ['ia', 'facebook', 'linkedin', 'google', 'bing', 'autres']
         .reduce((a, src) => a + sumKey(sel, (v) => vRef(v, src)), 0);
+      // ⚠️ Des robots se présentent avec « google.com » en referer : ce compteur
+      //    est un PLAFOND. Les clics que Google compte lui-même (Search Console,
+      //    un relevé par jour, décalé de 2-3 jours) sont affichés dessous — c'est
+      //    ce chiffre-là qui fait foi (18/09/2026 : 254 « visites » pour 9 clics).
+      const gscClics = (() => {
+        const vus = new Map();
+        for (const d of sel) { const pj = D[d]?.gsc?.perf_jour; if (pj?.date) vus.set(pj.date, pj.clics ?? 0); }
+        return vus.size ? [...vus.values()].reduce((a, b) => a + b, 0) : null;
+      })();
       $('goo-cards').innerHTML = [
-        ['Visites venues de Google', fmt(gVis), gPrev != null ? delta(gVis, gPrev) : ''],
+        ['Visites venues de Google', fmt(gVis), (gPrev != null ? delta(gVis, gPrev) : '')
+          + (gscClics != null ? `<br><span class="flat">dont ${fmt(gscClics)} clic${gscClics > 1 ? 's' : ''} compté${gscClics > 1 ? 's' : ''} par Google (Search Console) — l'écart vient surtout de robots qui se présentent comme venus de Google</span>` : '')],
         ['Part des clics entrants', extTot ? Math.round(gVis / extTot * 100) + '<small> %</small>' : '—',
          `<span class="flat">sur ${fmt(extTot)} clics identifiés</span>`],
         ['Passages de Googlebot', fmt(gBot), `<span class="flat">${fmt(seTot)} passages de moteurs au total</span>`],
@@ -2277,7 +2287,10 @@
         ? `Un agent « -User » (ChatGPT-User, Claude-User, Perplexity-User) lit une page parce qu'un humain vient de poser une question : c'est le signal le plus proche d'une mention. Il ne capte PAS les reponses donnees de memoire, sans lecture — celles-la ne laissent aucune trace. Distinction disponible depuis le ${dFmt(firstFam)}.`
         : 'Distinction par famille : disponible a partir de la prochaine collecte.';
 
-      const convPages = aggMap(sel, (v) => v.ia_conv_pages).slice(0, 12);
+      // Chemins de scanners déguisés en assistant (/@fs/…, .env, .aws…) : écartés
+      // à la source depuis le 18/09/2026, masqués ici pour les jours antérieurs.
+      const SCAN_CHEMIN = /\/@fs\/|\/\.env|\/\.aws\/|\/\.git\/|credentials|rootkey|serverless\.ya?ml|nginx\.conf|\/wp-login\.php|\/xmlrpc\.php|\/phpmyadmin/i;
+      const convPages = aggMap(sel, (v) => v.ia_conv_pages).filter(([pg]) => !SCAN_CHEMIN.test(pg)).slice(0, 12);
       document.querySelector('#t-iaconv tbody').innerHTML = convPages.length
         ? convPages.map(([pg, n]) => `<tr><td><a href="https://www.nsy.fr${pg}" target="_blank" rel="noopener">${pg}</a></td><td class="num">${fmt(n)}</td></tr>`).join('')
         : '<tr><td colspan="2" class="mono">aucune lecture declenchee par une conversation sur la periode</td></tr>';

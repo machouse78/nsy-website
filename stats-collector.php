@@ -157,6 +157,12 @@ $SE_NOMS = [
 ];
 $BOT_RE  = '/bot|crawl|spider|slurp|scanner|scan|python|curl|wget|go-http|aiohttp|httpx|libwww|okhttp|java\/|guzzle|facebookexternalhit|monitor|checker|probe|wp2shell|xploit|jetpack|feed|semrush|mj12|ahrefs|censys|netcraft|builtwith|barkrowler|dataprovider|client/i';
 $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/i';
+// Scanners DÉGUISÉS en assistant (vécu 18/09/2026 : des « ChatGPT-User » qui
+// demandaient /@fs/root/.aws/credentials, /.env, nginx.conf… gonflaient les
+// « lectures déclenchées par une conversation »). Un vrai agent d'IA ne lit que
+// des pages publiques : c'est le CHEMIN qui trahit le scanner, quel que soit
+// l'user-agent. Ces requêtes comptent comme scan, jamais comme lecture d'IA.
+$SCAN_PATH_RE = '#/@fs/|/\.env|/\.aws/|/\.git/|credentials|rootkey|serverless\.ya?ml|nginx\.conf|/wp-login\.php|/xmlrpc\.php|/phpmyadmin#i';
 
 $stats = [
     'pageviews' => 0, 'uniques' => [], 'ips' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
@@ -256,7 +262,8 @@ foreach ($files as $f) {
         $stats['status'][$sKey]++;
 
         $isAI = false;
-        foreach ($AI as $name => $rx) {
+        $scanChemin = (bool) preg_match($SCAN_PATH_RE, $clean);
+        foreach ($scanChemin ? [] : $AI as $name => $rx) {
             if (preg_match($rx, $ua)) {
                 $stats['ai'][$name] = ($stats['ai'][$name] ?? 0) + 1;
                 $stats['ai_hits']++;
@@ -270,7 +277,7 @@ foreach ($files as $f) {
                 break;
             }
         }
-        if (preg_match($SCAN_RE, $ua)) $stats['scan_hits']++;
+        if ($scanChemin || preg_match($SCAN_RE, $ua)) $stats['scan_hits']++;
         if (str_starts_with($path, '/llms')) $stats['llms_hits']++;
         // Agent conversationnel. ⚠️ Le voyant de disponibilité tape le MÊME
         // endpoint : sans marqueur (`?h=1` en POST, `?ping=1` en GET) ses
