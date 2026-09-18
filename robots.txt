@@ -20,6 +20,9 @@ Disallow: /.git/
 Disallow: /prepare-deploy.sh
 Disallow: /DEPLOIEMENT-INFOMANIAK.md
 Disallow: /README.md
+# Newsletter : liens personnels de confirmation / désinscription — jamais à explorer
+# (répété dans chaque groupe ci-dessous : un groupe nommé ignore celui-ci)
+Disallow: /newsletter.php
 # Assets visuels explicitement autorisés (images d'articles, logos, OG)
 Allow: /public/nsy-logo.png
 Allow: /public/nsy-og.jpg
@@ -77,6 +80,7 @@ Disallow: /public/*.gltf
 User-agent: GPTBot
 User-agent: OAI-SearchBot
 User-agent: ChatGPT-User
+Disallow: /newsletter.php
 Allow: /
 
 # Anthropic (Claude) — entraînement, recherche, navigation utilisateur
@@ -84,40 +88,49 @@ User-agent: ClaudeBot
 User-agent: Claude-SearchBot
 User-agent: Claude-User
 User-agent: anthropic-ai
+Disallow: /newsletter.php
 Allow: /
 
 # Google — usage IA générative (Gemini / AI Overviews)
 User-agent: Google-Extended
+Disallow: /newsletter.php
 Allow: /
 
 # Perplexity — index + navigation utilisateur
 User-agent: PerplexityBot
 User-agent: Perplexity-User
+Disallow: /newsletter.php
 Allow: /
 
 # ByteDance (Doubao / entraînement)
 User-agent: Bytespider
+Disallow: /newsletter.php
 Allow: /
 
 # Common Crawl (corpus d'entraînement de nombreux LLM)
 User-agent: CCBot
+Disallow: /newsletter.php
 Allow: /
 
 # Amazon (Alexa / Rufus)
 User-agent: Amazonbot
+Disallow: /newsletter.php
 Allow: /
 
 # Meta (Meta AI / Llama)
 User-agent: FacebookBot
 User-agent: meta-externalagent
+Disallow: /newsletter.php
 Allow: /
 
 # Apple (Apple Intelligence)
 User-agent: Applebot-Extended
+Disallow: /newsletter.php
 Allow: /
 
 # Mistral AI (Le Chat)
 User-agent: MistralAI-User
+Disallow: /newsletter.php
 Allow: /
 
 Sitemap: https://www.nsy.fr/sitemap.xml
