@@ -52,6 +52,7 @@ cp contact.php           deploy/
 cp faisabilite.php       deploy/
 cp chat.php              deploy/
 cp antispam.php          deploy/   # filtre anti-spam partage (contact + faisabilite)
+cp courriel-logo.php     deploy/   # logo en tête des courriels (alertes, formulaires) — 19/09/2026
 cp formulaires.php       deploy/   # socle formulaires : verdict Turnstile (bypass si clé rejetée), journal, alertes
 cp journal-stats.php     deploy/   # compteurs vues / j'aime du journal
 cp newsletter.php        deploy/   # newsletter du journal : inscription (double opt-in), confirmation, désinscription

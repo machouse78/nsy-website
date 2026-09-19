@@ -185,6 +185,7 @@ $headLine = $L('Nouvelle demande de faisabilité projet via nsy.fr', 'New projec
 
 $bodyHtml = '<div style="font-family:-apple-system,BlinkMacSystemFont,\'Segoe UI\',sans-serif;max-width:680px;margin:auto;padding:24px;background:#f5f7fb">'
     . '<div style="background:#fff;border-radius:12px;padding:32px;box-shadow:0 1px 4px rgba(0,0,0,0.06)">'
+    . '<img src="cid:logo_courriel" width="96" alt="NSY" style="display:block;width:96px;height:auto;border:0;margin:0 0 20px">'
     . '<h2 style="margin:0 0 8px;color:#0A0F1C;font-size:20px">' . $esc($headLine) . '</h2>'
     . '<p style="margin:0 0 20px;color:#555;font-size:14px">'
     .   '<strong style="color:#0A0F1C">' . $esc($name) . '</strong> · '
@@ -225,6 +226,7 @@ try {
     $mail->Body    = $bodyHtml;
     $mail->AltBody = $bodyText;
 
+    if (is_file(__DIR__ . '/courriel-logo.php')) { require_once __DIR__ . '/courriel-logo.php'; site_courriel_logo($mail); }   // logo en tête (owner, 19/09/2026)
     $mail->send();
 
     // ───── Auto-responder to the visitor (best effort — same dark NSY style as contact) ─────
@@ -270,6 +272,7 @@ try {
         $auto->Body = '<!doctype html><html lang="' . $lang . '"><body style="margin:0;padding:0;background:#05080F;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif">'
             . '<div style="max-width:560px;margin:0 auto;padding:32px 16px">'
             .   '<div style="background:#0F1626;border:1px solid rgba(140,170,220,0.15);border-radius:18px;padding:40px 32px">'
+            .     '<img src="cid:logo_courriel" width="110" alt="NSY" style="display:block;width:110px;height:auto;border:0;margin:0 0 24px">'
             .     '<div style="font-family:\'JetBrains Mono\',Consolas,monospace;font-size:11px;letter-spacing:0.18em;color:#00E5FF;text-transform:uppercase;margin-bottom:12px">NSY · IA · Web</div>'
             .     '<h1 style="font-size:28px;line-height:1.15;letter-spacing:-0.02em;color:#F2F6FF;margin:0 0 24px">' . $ar['greeting'] . '</h1>'
             .     '<p style="font-size:16px;line-height:1.6;color:#C5CEE3;margin:0 0 16px">' . $ar['p1'] . '</p>'
@@ -297,6 +300,7 @@ try {
             . "—\nCédric Barme\n" . $ar['role'] . "\n\n"
             . "NSY · SIREN 842 078 453\n";
 
+        if (is_file(__DIR__ . '/courriel-logo.php')) { require_once __DIR__ . '/courriel-logo.php'; site_courriel_logo($auto); }   // logo en tête (owner, 19/09/2026)
         $auto->send();
     } catch (\PHPMailer\PHPMailer\Exception $autoErr) {
         error_log('NSY faisabilité: autoresponder failed — ' . $auto->ErrorInfo);
