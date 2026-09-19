@@ -181,6 +181,29 @@ for args, attendu in ((["x", "--go", "--abonnes-fichier", FICHIER], "--abonnes-f
     except nl.Arret as e:
         t("arguments incohérents refusés AVANT toute action (%s)" % attendu, attendu in str(e), e)
 
+# ── Configuration SMTP : repli sur celle du SERVEUR quand la locale porte CHANGE_ME ──
+REP = tempfile.mkdtemp(prefix="nl-repli-")
+with open(os.path.join(REP, "config.php"), "w", encoding="utf-8") as fh:
+    fh.write("<?php return ['smtp_host' => 'mail.exemple.invalid', 'smtp_port' => 465, 'smtp_username' => 'a@exemple.invalid', 'smtp_password' => 'CHANGE_ME'];\n")
+with open(os.path.join(REP, "ftp.env"), "w", encoding="utf-8") as fh:
+    fh.write('FTP_HOST="ftp.exemple.invalid"\nFTP_USER="u"\nFTP_PASS="p"\nFTP_DIR=""\n')
+class FtpFactice:
+    lu = None
+    def retrbinary(self, cmd, rappel):
+        FtpFactice.lu = cmd
+        rappel(b"<?php return ['smtp_host' => 'mail.exemple.invalid', 'smtp_port' => 465, 'smtp_username' => 'a@exemple.invalid', 'smtp_password' => 'secret-du-serveur'];\n")
+    def quit(self):
+        pass
+avant = sorted(os.listdir(REP))
+nl.SECRETS, ouvrir = REP, nl.ftp_ouvrir
+nl.ftp_ouvrir = lambda env: FtpFactice()
+with contextlib.redirect_stdout(io.StringIO()) as sortie_repli:
+    cfg = nl.config_smtp()
+nl.ftp_ouvrir = ouvrir
+t("config locale CHANGE_ME → celle du serveur, lue par FTPS", cfg.get("smtp_password") == "secret-du-serveur" and FtpFactice.lu == "RETR _secret/config.php", FtpFactice.lu)
+t("… rien écrit sur le disque, le mot de passe jamais affiché", sorted(os.listdir(REP)) == avant and "secret-du-serveur" not in sortie_repli.getvalue())
+subprocess.run(["rm", "-rf", REP])
+
 subprocess.run(["rm", "-rf", TMP])
 print("NEWSLETTER-ENVOI : TOUS LES TESTS PASSENT" if echecs == 0 else "NEWSLETTER-ENVOI : %d ÉCHEC(S)" % echecs)
 sys.exit(0 if echecs == 0 else 1)

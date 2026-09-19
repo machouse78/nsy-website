@@ -346,7 +346,12 @@ def lire_config_php(chemin):
     if not os.path.isfile(chemin):
         raise Arret("%s manquant — nécessaire pour envoyer" % os.path.relpath(chemin, RACINE))
     with open(chemin, encoding="utf-8") as fh:
-        lignes = [l for l in fh.read().splitlines() if not re.match(r"\s*(//|#|/?\*)", l)]
+        return lire_config_php_texte(fh.read())
+
+
+def lire_config_php_texte(texte):
+    """Même lecture, depuis le texte du fichier (config du serveur lue en mémoire)."""
+    lignes = [l for l in texte.splitlines() if not re.match(r"\s*(//|#|/?\*)", l)]
     motif = re.compile(r"""(['"])(\w+)\1\s*=>\s*('(?:[^'\\]|\\.)*'|"(?:[^"\\]|\\.)*"|-?\d+|true|false|null)""", re.I)
     cfg = {}
     for cle_q, cle, val in motif.findall("\n".join(lignes)):
@@ -405,6 +410,28 @@ def ftp_lire_json(ftp, chemin, defaut):
 def ftp_ecrire_json(ftp, chemin, obj):
     donnees = json.dumps(obj, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
     ftp.storbinary("STOR " + chemin, io.BytesIO(donnees))
+
+
+def config_smtp():
+    """Configuration SMTP : _secret/config.php local ; à défaut (absent, incomplet ou
+    CHANGE_ME), celle du SERVEUR, lue par FTPS et gardée EN MÉMOIRE — jamais écrite sur
+    le disque, jamais affichée. Vécu 19/09/2026 : sur PRV Concept le mot de passe SMTP
+    n'existe que sur le serveur, le config.php local porte CHANGE_ME."""
+    try:
+        return lire_config_php(os.path.join(SECRETS, "config.php"))
+    except Arret as e:
+        if "CHANGE_ME" not in str(e) and "manquant" not in str(e):
+            raise
+    env = lire_env(os.path.join(SECRETS, "ftp.env"))
+    ftp = ftp_ouvrir(env)
+    tampon = io.BytesIO()
+    try:
+        ftp.retrbinary("RETR " + _distant(env, "_secret/config.php"), tampon.write)
+    finally:
+        ftp.quit()
+    cfg = lire_config_php_texte(tampon.getvalue().decode("utf-8"))
+    print("Configuration SMTP : celle du serveur (lue par FTPS, gardée en mémoire)")
+    return cfg
 
 
 # ───────────────────────────── SMTP ─────────────────────────────
@@ -469,7 +496,7 @@ def main(argv=None):
     if a.test:
         if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", a.test):
             raise Arret("--test : adresse invalide")
-        cfg = lire_config_php(os.path.join(SECRETS, "config.php"))
+        cfg = config_smtp()
         s = smtp_ouvrir(cfg)
         try:
             for lg in LANGUES:
@@ -529,7 +556,7 @@ def main(argv=None):
     if total == 0:
         print("Aucun abonné confirmé : rien à envoyer, rien d'enregistré.")
         return 0
-    cfg = lire_config_php(os.path.join(SECRETS, "config.php"))
+    cfg = config_smtp()
     exp, envoyes, erreur = expediteur(cfg), 0, None
     s = None
     try:
