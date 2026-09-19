@@ -189,6 +189,15 @@ données traitées en UE) via l'API OpenAI-compatible.
 
 Les identifiants SMTP vivent dans `_secret/config.php` (gitignored). Modèle fourni : `_secret/config.php.example`.
 
+**Le logo NSY en tête de chaque courriel** (owner, 19/09/2026 — en attendant BIMI, qui seul met le logo
+dans le rond de l'expéditeur) : `courriel-logo.php`, fonction `site_courriel_logo($m)` appelée juste
+avant chaque `send()`. La notification et l'auto-réponse de `contact.php` et de `faisabilite.php`
+placent `<img src="cid:logo_courriel">` en tête ; les alertes de `formulaires.php`, en texte brut,
+sont habillées d'un HTML aux couleurs du site (texte d'origine gardé en version texte). Logo
+incorporé (`public/nsy-logo.png`, 8 Ko), affiché sans « afficher les images ». Ne lève jamais : sans
+logo, le courriel part tel quel. La newsletter a son propre logo. Détail : skill `skill-nsy-website`,
+§ « Le logo dans les courriels ».
+
 ### Newsletter du journal — un e-mail à chaque nouvel article
 
 **Inscription** : bloc « Recevoir les prochains articles » en fin de chaque article (avant le bloc réseaux) et sous la liste de `blog.html` / `blog-en.html` — source unique `partials/newsletter.{fr,en}.html`, injectée par `scripts/sync-partials.mjs` (marqueurs `@partial:newsletter`, posés d'office dans un nouvel article de la liste). `js/app.js` l'envoie en `fetch` ; succès et erreurs restent affichés sous le bouton. Sans JS, le formulaire part quand même et reçoit une page HTML.
