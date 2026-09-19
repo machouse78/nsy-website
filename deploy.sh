@@ -80,7 +80,9 @@ echo "🚀 Envoi FTPS (connexion unique) vers ${FTP_HOST}/${base} ..."
 
 # Une SEULE connexion FTPS pour tous les fichiers (un curl par fichier
 # déclenchait le 450 anti-flood d'Infomaniak). Le script Python gère les
-# exclusions (_secret/, old-wp/, miroirs) et n'efface jamais rien côté serveur.
+# exclusions (_secret/, old-wp/, miroirs), envoie chaque fichier de façon
+# ATOMIQUE (nom temporaire + contrôle de taille + renommage, 19/09/2026) et
+# n'efface jamais un fichier en ligne.
 # Les identifiants sont déjà exportés (set -a; source) → lus depuis l'env.
 python3 scripts/ftp-deploy.py
 

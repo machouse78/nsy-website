@@ -291,6 +291,8 @@ nsy-website/
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
 ├── newsletter.php                       # Newsletter : inscription (double opt-in), confirmation, désinscription en un clic
 ├── scripts/newsletter-envoi.py          # Envoi d'un article aux abonnés (dry-run par défaut, --test, --go)
+├── scripts/ftp-deploy.py                # Envoi FTPS de deploy/ (connexion unique, lancé par ./deploy.sh)
+├── scripts/ftp_atomique.py              # Envoi ATOMIQUE d'un fichier : nom temporaire, contrôle de taille, renommage
 ├── css/style.css                        # Styles complets (inclut le namespace .qz- du questionnaire)
 ├── js/app.js                            # Chatbot, i18n, swaps vidéo, scroll-spy, 3D framing
 ├── js/faisabilite.js                    # Wizard du questionnaire (navigation + collecte + envoi)
@@ -308,6 +310,7 @@ nsy-website/
 │   ├── newsletter.test.php              # Newsletter : états, jetons, purge, stockage, garde-fou (PHP 8.5)
 │   ├── newsletter-http.test.php         # Newsletter en bac à sable HTTP : boîte factice, puis SMTP sur port fermé
 │   ├── newsletter-envoi.test.py         # Script d'envoi : dry-run sur abonnés factices, sans réseau
+│   ├── ftp-atomique.test.py             # Déploiement FTP : envois atomiques, exclusions, faux serveur sans réseau
 │   ├── ansley-plein-ecran.test.mjs      # Agrandir / réduire le panneau d'Ansley (Chrome headless)
 │   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
@@ -385,6 +388,11 @@ nsy-website/
   journal de l'hébergeur vierge ; et le script d'envoi en **dry-run** sur une
   liste factice, sans aucune ouverture de socket (`--go` et `--test` ne sont
   jamais lancés par la suite) ;
+- **déploiement FTP** (`ftp-atomique.test.py`, faux serveur en mémoire, aucune
+  socket) : chaque fichier part sous un nom temporaire puis est renommé — un
+  visiteur qui charge la cible PENDANT le transfert voit l'ancienne version —,
+  taille fausse → cible intacte et arrêt, 450 relancé, exclusions de
+  `ftp-deploy.py` et refus d'un arbre en retard, sans connexion ;
 - **panneau d'Ansley en navigateur réel** (`ansley-plein-ecran.test.mjs`, Chrome
   headless) : plein écran, retour à la taille d'origine, choix mémorisé, bouton
   masqué sur mobile, intitulé anglais. Il vise `http://127.0.0.1:4181` et sert
@@ -393,8 +401,8 @@ nsy-website/
   sur un port libre (`node tests/ansley-plein-ecran.test.mjs http://127.0.0.1:<port>`).
 
 **À lancer avant tout commit qui touche `chat.php`, `js/app.js`, `contact.php`,
-`faisabilite.php`, `antispam.php`, `journal-stats.php`, `newsletter.php` ou
-`scripts/newsletter-envoi.py`.**
+`faisabilite.php`, `antispam.php`, `journal-stats.php`, `newsletter.php`,
+`scripts/newsletter-envoi.py`, `scripts/ftp-deploy.py` ou `scripts/ftp_atomique.py`.**
 
 Et à la demande, après un déploiement : `./tests/forms-live.sh` — smoke test
 **production** des deux formulaires sans jamais pouvoir envoyer d'email (405,
@@ -447,7 +455,8 @@ continue, les formulaires fonctionnant en mode contourné.
 Le déploiement se fait **à la demande** avec **`./deploy.sh`** : le script
 reconstruit `deploy/` puis envoie son contenu en **FTPS** via
 [`scripts/ftp-deploy.py`](scripts/ftp-deploy.py), **sans suppression distante**
-(ne touche jamais `_secret/config.php` côté serveur). Une commande, rien ne part
+(ne touche jamais `_secret/config.php` côté serveur ; seul `DELE` possible : un
+temporaire d'envoi raté, voir « Envois atomiques »). Une commande, rien ne part
 tant qu'on ne la lance pas.
 
 ```bash
@@ -463,7 +472,22 @@ tant qu'on ne la lance pas.
   site ne sert pas).
 - **Une seule connexion FTPS persistante** pour tous les fichiers : un envoi
   `curl` par fichier ouvrait ~63 connexions rapides → Infomaniak renvoie
-  **450 (anti-flood)**. `scripts/ftp-deploy.py` règle ça (STOR séquentiel + retry).
+  **450 (anti-flood)**. `scripts/ftp-deploy.py` règle ça (envois séquentiels + retry).
+- **Envois atomiques (depuis le 19/09/2026)** : un `STOR` sur place VIDE le fichier
+  en ligne puis l'écrit ; une requête arrivée entre les deux charge un PHP à moitié
+  écrit (vécu sur prv-concept.com le 19/09/2026 à 21:36:36 : « Class … not found »,
+  erreur fatale au journal). Chaque fichier part donc sous un nom frère temporaire
+  (`<cible>.nsy-envoi-<hex>`, jamais exécuté), sa taille est contrôlée (`SIZE` ==
+  taille locale), puis il est **renommé** sur la cible (`RNFR/RNTO`, atomique côté
+  serveur) : le visiteur voit l'ancien fichier ou le nouveau, jamais un morceau.
+  Taille fausse → le temporaire est supprimé, la cible reste intacte, l'envoi
+  **s'arrête** en disant combien de fichiers étaient déjà partis. Code commun :
+  [`scripts/ftp_atomique.py`](scripts/ftp_atomique.py) (pendant de celui de
+  prv-concept) ; test hors réseau : `python3 -B tests/ftp-atomique.test.py`.
+  Vérifié sur le serveur le 19/09/2026 sur un fichier jetable (envoyé, remplacé,
+  supprimé, 404 ; journal d'erreurs vierge avant et après chaque action). Effet de
+  bord : un fichier renommé prend les droits d'un fichier neuf (un `STOR` sur place
+  gardait ceux de l'ancien) — sans objet pour ce qu'on envoie.
 - **Garde-fou « arbre en retard »** : l'envoi est intégral (tout `deploy/`), donc un arbre
   qui n'a pas tout `origin/main` remet en production d'anciennes versions. Vécu le
   17/09/2026 : un worktree resté sur un commit du 12/09 a écrasé trois correctifs en
@@ -482,6 +506,7 @@ tant qu'on ne la lance pas.
 
 > Un workflow GitHub Actions manuel ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
 > `workflow_dispatch`) existe aussi comme repli, mais la voie retenue est `./deploy.sh`.
+> ⚠️ Il passe par `FTP-Deploy-Action`, qui écrit **sur place** (pas d'envoi atomique).
 
 ## SEO, GEO & partage social
 

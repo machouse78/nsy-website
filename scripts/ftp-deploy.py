@@ -2,8 +2,11 @@
 """Envoi de deploy/ vers le FTP Infomaniak en UNE SEULE connexion FTPS.
 
 Un curl par fichier ouvrait 63 connexions rapides -> l'anti-flood du serveur
-renvoie 450. Ici : une connexion FTP_TLS persistante, STOR séquentiel, avec
-retry sur erreur transitoire. N'efface JAMAIS rien côté serveur.
+renvoie 450. Ici : une connexion FTP_TLS persistante, envois séquentiels, avec
+retry sur erreur transitoire. Chaque envoi est ATOMIQUE (ftp_atomique.py,
+19/09/2026) : nom temporaire, contrôle de taille, renommage sur la cible — un
+visiteur ne charge jamais un PHP à moitié écrit. N'efface JAMAIS un fichier en
+ligne (seul DELE : notre propre temporaire, après un envoi raté).
 
 Identifiants via l'environnement : FTP_HOST, FTP_USER, FTP_PASS, FTP_DIR.
 Exclusions : _secret/, old-wp/, _old/, boutique/, forum/, .DS_Store.
@@ -11,8 +14,10 @@ Exclusions : _secret/, old-wp/, _old/, boutique/, forum/, .DS_Store.
 import os
 import subprocess
 import sys
-import time
-from ftplib import FTP_TLS, error_perm, all_errors
+from ftplib import FTP_TLS, error_perm
+
+sys.dont_write_bytecode = True           # pas de scripts/__pycache__ laissé dans le dépôt
+from ftp_atomique import EnvoiEchoue, envoie  # noqa: E402
 
 HOST = os.environ["FTP_HOST"]
 USER = os.environ["FTP_USER"]
@@ -72,18 +77,6 @@ def ensure(remote_dir):
         _made.add(cur)
 
 
-def stor(local, remote, tries=3):
-    for i in range(tries):
-        try:
-            with open(local, "rb") as fh:
-                ftp.storbinary("STOR " + remote, fh)
-            return
-        except all_errors:
-            if i == tries - 1:
-                raise
-            time.sleep(1.5)
-
-
 # Liste des fichiers à envoyer (exclusions appliquées).
 files = []
 for dp, dns, fns in os.walk(ROOT):
@@ -104,7 +97,11 @@ for lp in files:
     remote = (BASE + "/" + rel) if BASE else rel
     rdir = "/".join(remote.split("/")[:-1])
     ensure(rdir)
-    stor(lp, remote)
+    try:
+        envoie(ftp, lp, remote)
+    except EnvoiEchoue as e:
+        ftp.quit()
+        sys.exit("\n❌ %s\n   Déploiement ARRÊTÉ après %d fichier(s) envoyé(s)." % (e, count))
     count += 1
     total += os.path.getsize(lp)
     print("  ↑ " + rel, flush=True)

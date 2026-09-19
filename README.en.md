@@ -280,8 +280,10 @@ counters endpoint, HTTP-tested in a `php -S` sandbox): `nsy_sanitize_reply()`
 from `chat.php` (official-links whitelist, FR/EN linkmap, `()` purge, cap,
 banned-phrasing rewrite — ESN positioning —, deterministic append of article
 social links) via Docker PHP, and `mdToHtml` from `js/app.js` (clickable
-whitelisted links, XSS escaping) via Node. **Run before any commit touching `chat.php`, `js/app.js`, `contact.php`,
-`faisabilite.php`, `antispam.php` or `journal-stats.php`.**
+whitelisted links, XSS escaping) via Node, and the FTP deploy's atomic uploads
+(`tests/ftp-atomique.test.py`: in-memory fake server, no socket — temp name +
+rename, size mismatch stops, `ftp-deploy.py` exclusions). **Run before any commit touching `chat.php`, `js/app.js`, `contact.php`,
+`faisabilite.php`, `antispam.php`, `journal-stats.php`, `scripts/ftp-deploy.py` or `scripts/ftp_atomique.py`.**
 
 ## Test locally
 
@@ -323,7 +325,8 @@ The `.htaccess` configures:
 Deployment is **on demand** via **`./deploy.sh`**: the script rebuilds `deploy/`
 then uploads its contents over **FTPS** through
 [`scripts/ftp-deploy.py`](scripts/ftp-deploy.py), with **no remote deletion**
-(never touches `_secret/config.php` on the server). One command, nothing ships
+(never touches `_secret/config.php` on the server; the only possible `DELE` is a
+failed upload's temp file, see "Atomic uploads"). One command, nothing ships
 until you run it.
 
 ```bash
@@ -339,13 +342,28 @@ until you run it.
   serve).
 - **A single persistent FTPS connection** for every file: one `curl` per file
   opened ~63 rapid connections → Infomaniak returns **450 (anti-flood)**.
-  `scripts/ftp-deploy.py` fixes this (sequential STOR + retry).
+  `scripts/ftp-deploy.py` fixes this (sequential uploads + retry).
+- **Atomic uploads (since 2026-09-19)**: an in-place `STOR` TRUNCATES the live
+  file, then writes it; a request landing in between loads a half-written PHP
+  (seen on prv-concept.com on 2026-09-19 at 21:36:36: "Class … not found", a fatal
+  error in the log). Each file now goes to a sibling temp name
+  (`<target>.nsy-envoi-<hex>`, never executed), its size is checked (`SIZE` ==
+  local size), then it is **renamed** onto the target (`RNFR/RNTO`, atomic on the
+  server): a visitor gets the old file or the new one, never a fragment. Size
+  mismatch → the temp file is deleted, the target is untouched, the upload
+  **stops** and says how many files had already gone. Shared code:
+  [`scripts/ftp_atomique.py`](scripts/ftp_atomique.py) (twin of prv-concept's);
+  offline test: `python3 -B tests/ftp-atomique.test.py`. Verified on the server on
+  2026-09-19 with a throwaway file (uploaded, replaced, deleted, 404; error log
+  clean before and after each step). Side effect: a renamed file gets fresh-file
+  permissions (an in-place `STOR` kept the old ones) — irrelevant for what we ship.
 - **Exclusions**: `_secret/`, mirrors (`old-wp/`…), `.DS_Store`. `_secret/config.php`
   (SMTP, gitignored) is uploaded **once by hand** on first setup; deployment
   leaves it alone afterwards.
 
 > A manual GitHub Actions workflow ([`.github/workflows/deploy.yml`](.github/workflows/deploy.yml),
 > `workflow_dispatch`) also exists as a fallback, but `./deploy.sh` is the chosen path.
+> ⚠️ It goes through `FTP-Deploy-Action`, which writes **in place** (no atomic upload).
 
 ## SEO, GEO & social sharing
 
