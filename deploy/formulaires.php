@@ -203,6 +203,7 @@ function nsy_alerte_owner(array $config, string $sujet, string $texte, string $c
         $m->addAddress($config['to_address'], $config['to_name'] ?? NSY_ALERTE_SITE);
         $m->Subject = $sujet;
         $m->Body    = $texte;
+        if (is_file(__DIR__ . '/courriel-logo.php')) { require_once __DIR__ . '/courriel-logo.php'; site_courriel_logo($m); }   // logo en tête (owner, 19/09/2026)
         $m->send();
         nsy_alerte_trace($cle, $sujet, 'ENVOYÉE');
         return true;
