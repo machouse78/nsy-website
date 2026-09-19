@@ -89,6 +89,10 @@ PAUSE_S = 1.0
 LANGUES = ("fr", "en")
 JETON_APERCU = "JETON-PERSONNEL-DE-L-ABONNE"
 RACINE = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+# Secrets (ftp.env, config.php) : _secret/ du dépôt, ou le dossier désigné par
+# NL_SECRETS — un worktree git n'a pas de _secret/ (gitignoré) : on y lance
+#   NL_SECRETS="<dépôt principal>/_secret" python3 scripts/newsletter-envoi.py <slug>
+SECRETS = os.environ.get("NL_SECRETS") or os.path.join(RACINE, "_secret")
 RE_JETON = re.compile(r"[a-f0-9]{32}\Z")
 RE_ADRESSE = re.compile(r"[^\s<>()\[\]\"'@,;:]+@[^\s<>()\[\]\"'@,;:]+")
 
@@ -465,7 +469,7 @@ def main(argv=None):
     if a.test:
         if not re.fullmatch(r"[^\s@]+@[^\s@]+\.[^\s@]+", a.test):
             raise Arret("--test : adresse invalide")
-        cfg = lire_config_php(os.path.join(RACINE, "_secret", "config.php"))
+        cfg = lire_config_php(os.path.join(SECRETS, "config.php"))
         s = smtp_ouvrir(cfg)
         try:
             for lg in LANGUES:
@@ -484,7 +488,7 @@ def main(argv=None):
             donnees = json.load(fh)
         source = "fichier local (essai)"
     else:
-        env = lire_env(os.path.join(RACINE, "_secret", "ftp.env"))
+        env = lire_env(os.path.join(SECRETS, "ftp.env"))
         ftp = ftp_ouvrir(env)
         try:
             donnees = ftp_lire_json(ftp, _distant(env, DISTANT_ABONNES), {"format": 1, "abonnes": []})
@@ -525,7 +529,7 @@ def main(argv=None):
     if total == 0:
         print("Aucun abonné confirmé : rien à envoyer, rien d'enregistré.")
         return 0
-    cfg = lire_config_php(os.path.join(RACINE, "_secret", "config.php"))
+    cfg = lire_config_php(os.path.join(SECRETS, "config.php"))
     exp, envoyes, erreur = expediteur(cfg), 0, None
     s = None
     try:
