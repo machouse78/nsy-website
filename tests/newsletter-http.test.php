@@ -156,15 +156,22 @@ t('horodatage falsifié → réponse IDENTIQUE, rien d\'enregistré', $c === 200
 [$c, $b] = req('HEAD', '/newsletter.php?action=confirmer&t=' . $marie['jeton']);
 t('HEAD sur le lien (sonde) → 200 sans rien modifier', $c === 200 && (fiche('marie@exemple.fr')['etat'] ?? '') === 'attente', "code $c");
 [$c, $b] = req('GET', '/newsletter.php?action=confirmer&t=' . $marie['jeton']);
+t('GET sur le lien (antivirus qui l\'ouvre) → page à bouton, RIEN ne change', $c === 200 && str_contains($b, 'Confirmer mon inscription')
+    && str_contains($b, '<form method="post" action="/newsletter.php?action=confirmer&amp;t=' . $marie['jeton'] . '"')
+    && (fiche('marie@exemple.fr')['etat'] ?? '') === 'attente', "code $c");
+[$c, $b] = req('POST', '/newsletter.php?action=confirmer&t=' . $marie['jeton'], []);
 $f = fiche('marie@exemple.fr');
-t('confirmer → 200, page « Inscription confirmée », état confirme + date', $c === 200 && str_contains($b, 'Inscription confirmée')
+t('confirmer (POST du bouton) → 200, page « Inscription confirmée », état confirme + date', $c === 200 && str_contains($b, 'Inscription confirmée')
     && str_contains($b, '<html lang="fr"') && ($f['etat'] ?? '') === 'confirme' && !empty($f['confirme']), "code $c");
 t('… page noindex, sans l\'adresse', str_contains($b, 'noindex') && !str_contains($b, 'marie@exemple.fr'));
 t('… logo et liens du même site : aucune URL absolue (une copie de test n\'appelle jamais la production)',
     str_contains($b, 'src="/public/nsy-logo.png"') && !preg_match('#(src|href)="https?://#', $b));
 t('… événement confirmation', (dernierEvenement()['issue'] ?? '') === 'confirmation');
+[$c, $b] = req('POST', '/newsletter.php?action=confirmer&t=' . $marie['jeton'], []);
+t('confirmer à nouveau (POST) → « déjà confirmée », date inchangée', $c === 200 && str_contains($b, 'déjà confirmée')
+    && (fiche('marie@exemple.fr')['confirme'] ?? '') === $f['confirme']);
 [$c, $b] = req('GET', '/newsletter.php?action=confirmer&t=' . $marie['jeton']);
-t('confirmer à nouveau → « déjà confirmée », date inchangée', $c === 200 && str_contains($b, 'déjà confirmée')
+t('lien de confirmation rouvert (GET) → « déjà confirmée », sans bouton', $c === 200 && str_contains($b, 'déjà confirmée')
     && (fiche('marie@exemple.fr')['confirme'] ?? '') === $f['confirme']);
 
 [$c, $b] = inscrire('marie@exemple.fr');
@@ -178,6 +185,8 @@ $mails = boite();
 t('inscription EN → message anglais, mail anglais', $c === 200 && str_contains($b, 'Check your inbox')
     && str_starts_with(end($mails)['sujet'], 'Confirm your subscription'), $b);
 [$c, $b] = req('GET', '/newsletter.php?action=confirmer&t=' . $john['jeton']);
+t('lien EN → bouton anglais', $c === 200 && str_contains($b, 'Confirm my subscription') && str_contains($b, '<html lang="en"'));
+[$c, $b] = req('POST', '/newsletter.php?action=confirmer&t=' . $john['jeton'], []);
 t('confirmation EN → page anglaise', $c === 200 && str_contains($b, 'Subscription confirmed') && str_contains($b, '<html lang="en"'));
 
 // ── Liens invalides ──
@@ -187,8 +196,8 @@ t('jeton mal formé → 404, page bilingue', $c === 404 && str_contains($b, 'Lie
 t('jeton inconnu → 404', $c === 404, "code $c");
 [$c, $b] = req('GET', '/newsletter.php?action=confirmer&t[]=x');
 t('jeton en tableau → 404, sans avertissement PHP', $c === 404, "code $c");
-[$c, $b] = req('POST', '/newsletter.php?action=confirmer&t=' . $marie['jeton'], []);
-t('confirmer en POST → 405', $c === 405, "code $c");
+[$c, $b] = req('PUT', '/newsletter.php?action=confirmer&t=' . $marie['jeton'], []);
+t('confirmer en PUT → 405', $c === 405, "code $c");
 
 // ── Désinscription ──
 [$c, $b] = req('POST', '/newsletter.php?action=desinscrire&t=' . $marie['jeton'], ['List-Unsubscribe' => 'One-Click']);
@@ -198,8 +207,11 @@ t('désinscription en un clic (POST RFC 8058, sans Origin) → 200, état desins
 $e = dernierEvenement();
 t('… événement desinscription, mode un_clic', ($e['issue'] ?? '') === 'desinscription' && ($e['mode'] ?? '') === 'un_clic');
 [$c, $b] = req('GET', '/newsletter.php?action=desinscrire&t=' . $john['jeton']);
-t('désinscription par le lien (GET) → page anglaise', $c === 200 && str_contains($b, 'You are unsubscribed')
-    && (fiche('john@example.co.uk')['etat'] ?? '') === 'desinscrit' && (dernierEvenement()['mode'] ?? '') === 'lien');
+t('lien de désinscription (GET) → bouton anglais, RIEN ne change', $c === 200 && str_contains($b, 'Unsubscribe me')
+    && (fiche('john@example.co.uk')['etat'] ?? '') === 'confirme');
+[$c, $b] = req('POST', '/newsletter.php?action=desinscrire&t=' . $john['jeton'], []);
+t('désinscription par le bouton (POST) → page anglaise, mode bouton', $c === 200 && str_contains($b, 'You are unsubscribed')
+    && (fiche('john@example.co.uk')['etat'] ?? '') === 'desinscrit' && (dernierEvenement()['mode'] ?? '') === 'bouton');
 [$c, $b] = req('GET', '/newsletter.php?action=desinscrire&t=' . $john['jeton']);
 t('désinscription répétée → « already unsubscribed »', $c === 200 && str_contains($b, 'Already unsubscribed'));
 [$c, $b] = req('GET', '/newsletter.php?action=confirmer&t=' . $john['jeton']);
@@ -225,7 +237,9 @@ $d['abonnes'][] = ['email' => 'oublie@exemple.fr', 'langue' => 'fr', 'etat' => '
     'inscrit' => date('c', time() - 31 * 86400), 'confirme' => null, 'desinscrit' => null];
 file_put_contents("$SB/_secret/newsletter.json", json_encode($d));
 [$c, $b] = req('GET', '/newsletter.php?action=confirmer&t=' . str_repeat('cd', 16));
-t('attente de 31 jours : lien expiré (404) et fiche purgée', $c === 404 && fiche('oublie@exemple.fr') === null, "code $c");
+t('attente de 31 jours : lien expiré (404) dès la lecture', $c === 404, "code $c");
+[$c, $b] = req('POST', '/newsletter.php?action=confirmer&t=' . str_repeat('cd', 16), []);
+t('… et fiche purgée à l\'écriture suivante', $c === 404 && fiche('oublie@exemple.fr') === null, "code $c");
 
 // ── Plafond journalier par IP ──
 resetLimits();

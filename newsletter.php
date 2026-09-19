@@ -7,10 +7,16 @@
  *        → abonné créé ou réactivé en « attente » + e-mail de CONFIRMATION
  *          (double opt-in, RGPD). Réponse JSON quand le navigateur la demande
  *          (Accept: application/json), page HTML sinon (formulaire sans JS).
- *   GET  ?action=confirmer&t=…     → « confirme », date du consentement, page HTML.
- *   GET  ?action=desinscrire&t=…   → « desinscrit », page HTML.
- *   POST ?action=desinscrire&t=…   → désinscription en un clic (RFC 8058 :
+ *   GET  ?action=confirmer&t=…     → page avec un BOUTON (lecture seule, rien ne change)
+ *   GET  ?action=desinscrire&t=…   → page avec un BOUTON (lecture seule, rien ne change)
+ *   POST ?action=confirmer&t=…     → « confirme », date du consentement (le bouton).
+ *   POST ?action=desinscrire&t=…   → « desinscrit » : le bouton, ou la désinscription
+ *                                    en un clic des messageries (RFC 8058 :
  *                                    List-Unsubscribe-Post: List-Unsubscribe=One-Click).
+ *   Pourquoi un bouton (18/09/2026) : les antivirus et messageries d'entreprise
+ *   OUVRENT les liens des e-mails pour les analyser. Un GET qui agirait
+ *   confirmerait une inscription — double opt-in sans humain — ou désinscrirait
+ *   un lecteur à son insu. Un robot ouvre un lien ; il ne clique pas un bouton.
  *
  * L'ENVOI des articles ne part pas d'ici : scripts/newsletter-envoi.py, lancé à
  * la main depuis le poste du owner, lit la liste par FTPS et envoie par SMTP.
@@ -98,7 +104,7 @@ const NL_ISSUES = [
     'cadence'         => 'Nouvelle demande trop proche (aucun mail)',
     'deja_inscrit'    => 'Adresse déjà confirmée (aucun mail)',
     'confirmation'    => 'Inscription confirmée',
-    'desinscription'  => 'Désinscription (mode : lien ou un_clic)',
+    'desinscription'  => 'Désinscription (mode : bouton ou un_clic)',
     'honeypot'        => 'Robot (honeypot)',
     'horodatage'      => 'Robot (horodatage falsifié)',
     'trop_rapide'     => 'Envoi trop rapide (refus visible)',
@@ -481,6 +487,8 @@ function nl_textes(string $langue): array
             'inconnu'         => ['Unknown or expired link', "This link is no longer valid. An unconfirmed sign-up is deleted after $jours days: you can subscribe again from the journal."],
             'panne'           => ['Temporarily unavailable', 'Please try again in a few minutes.'],
             'requete'         => ['Invalid request', 'This address does not match any page.'],
+            'q_confirmer'     => ['Confirm your subscription', "One last click to receive an email for each new article $de.", 'Confirm my subscription'],
+            'q_desinscrire'   => ['Unsubscribe', "You will no longer receive emails $de.", 'Unsubscribe me'],
             'mail' => [
                 'sujet'   => "Confirm your subscription $a",
                 'titre'   => 'Confirm your subscription',
@@ -513,6 +521,8 @@ function nl_textes(string $langue): array
         'inconnu'         => ['Lien inconnu ou expiré', "Ce lien n'est plus valable. Une inscription non confirmée est supprimée au bout de $jours jours : vous pouvez vous réinscrire depuis le journal."],
         'panne'           => ['Service momentanément indisponible', 'Réessayez dans quelques minutes.'],
         'requete'         => ['Requête invalide', 'Cette adresse ne correspond à aucune page.'],
+        'q_confirmer'     => ['Confirmer votre inscription', "Un dernier clic pour recevoir un e-mail à chaque nouvel article $de.", 'Confirmer mon inscription'],
+        'q_desinscrire'   => ['Se désinscrire', "Vous ne recevrez plus d'e-mail $de.", 'Me désinscrire'],
         'mail' => [
             'sujet'   => "Confirmez votre inscription $a",
             'titre'   => 'Confirmez votre inscription',
@@ -531,6 +541,12 @@ function nl_textes(string $langue): array
 function nl_lien(string $action, string $jeton): string
 {
     return NL_ENDPOINT . '?action=' . rawurlencode($action) . '&t=' . rawurlencode($jeton);
+}
+
+/** Même lien, en chemin du site (formulaire d'une page servie par lui). */
+function nl_lien_local(string $action, string $jeton): string
+{
+    return (string) parse_url(NL_ENDPOINT, PHP_URL_PATH) . '?action=' . rawurlencode($action) . '&t=' . rawurlencode($jeton);
 }
 
 /** Le message (pur, testable) : ['a', 'sujet', 'html', 'texte']. */
@@ -625,8 +641,10 @@ function nl_json(array $payload, int $code = 200): never
 /**
  * Page HTML sobre aux couleurs du site. $blocs = [[titre, texte], …] — plusieurs
  * blocs pour une page bilingue (lien inconnu : on ne sait pas à qui l'on parle).
+ * $formulaire = [url, libellé] : un bouton qui POSTE la demande, à la place du
+ * bouton « Lire le journal » (qui reste en lien discret).
  */
-function nl_page(string $langue, array $blocs, int $code = 200): never
+function nl_page(string $langue, array $blocs, int $code = 200, ?array $formulaire = null): never
 {
     while (ob_get_level() > 0) {
         ob_end_clean();
@@ -655,10 +673,16 @@ function nl_page(string $langue, array $blocs, int $code = 200): never
         . 'p{margin:0 0 20px;font-size:16px;line-height:1.6;}'
         . 'hr{border:0;border-top:1px solid ' . $c['bord'] . ';margin:28px 0;}'
         . '.btn{display:inline-block;background:' . $c['accent'] . ';color:' . $c['sur_accent'] . ';border-radius:999px;padding:12px 22px;font-weight:600;text-decoration:none;}'
+        . 'button.btn{border:0;cursor:pointer;font:inherit;font-weight:600;}'
+        . 'form{display:inline-block;margin:0 16px 0 0;}'
+        . '.discret{color:' . $c['discret'] . ';font-size:14px;}'
         . '</style></head><body><main>'
         . '<a class="logo" href="/"><img src="' . nl_esc($logo) . '" alt="' . nl_esc(NL_SITE_NOM) . '" /></a>'
         . '<div class="carte">' . $corps
-        . '<a class="btn" href="' . nl_esc($retour) . '">' . nl_esc(nl_textes($langue)['retour']) . '</a></div>'
+        . ($formulaire !== null
+            ? '<form method="post" action="' . nl_esc($formulaire[0]) . '"><button class="btn" type="submit">' . nl_esc($formulaire[1]) . '</button></form>'
+              . '<a class="discret" href="' . nl_esc($retour) . '">' . nl_esc(nl_textes($langue)['retour']) . '</a></div>'
+            : '<a class="btn" href="' . nl_esc($retour) . '">' . nl_esc(nl_textes($langue)['retour']) . '</a></div>')
         . '</main></body></html>';
     exit;
 }
@@ -759,13 +783,15 @@ function nl_action_inscrire(): never
     nl_repondre_inscription($langue, null);
 }
 
-/** confirmer | desinscrire : même squelette, transition différente. */
+/**
+ * confirmer | desinscrire : même squelette, transition différente.
+ * GET = lecture seule, page à bouton ; HEAD = sonde, rien ; POST = la transition.
+ */
 function nl_action_jeton(string $action): never
 {
     $methode = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-    $permises = $action === 'confirmer' ? ['GET', 'HEAD'] : ['GET', 'HEAD', 'POST'];
-    if (!in_array($methode, $permises, true)) {
-        header('Allow: ' . implode(', ', $permises));
+    if (!in_array($methode, ['GET', 'HEAD', 'POST'], true)) {
+        header('Allow: GET, HEAD, POST');
         nl_page_bilingue('requete', 405);
     }
     $jeton = nl_champ($_GET, 't');
@@ -780,6 +806,30 @@ function nl_action_jeton(string $action): never
         exit;
     }
     $maintenant = time();
+    if ($methode === 'GET') {                              // lecture seule : un robot qui ouvre le lien ne change rien
+        $ab = nl_charger(NL_STOCK);
+        if ($ab === null) {
+            nl_diag('stockage : newsletter.json illisible (lecture)');
+            nl_evenement('erreur_stockage');
+            nl_page_bilingue('panne', 503);
+        }
+        $ab = nl_purger($ab, $maintenant);                 // une attente périmée n'est plus un lien valable
+        $i = nl_index_jeton($ab, $jeton);
+        if ($i === null) {
+            nl_page_bilingue('inconnu', 404);
+        }
+        $langue = nl_langue($ab[$i]['langue'] ?? null);
+        $etat = (string) ($ab[$i]['etat'] ?? '');
+        $T = nl_textes($langue);
+        if ($action === 'confirmer' && $etat !== 'attente') {
+            nl_page($langue, [$T[$etat === 'confirme' ? 'deja_confirme' : 'desinscrit']]);
+        }
+        if ($action === 'desinscrire' && $etat === 'desinscrit') {
+            nl_page($langue, [$T['deja_desinscrit']]);
+        }
+        $q = $T['q_' . $action];
+        nl_page($langue, [[$q[0], $q[1]]], 200, [nl_lien_local($action, $jeton), $q[2]]);
+    }
     $r = nl_modifier(NL_STOCK, static function (array &$ab) use ($action, $jeton, $maintenant): array {
         return $action === 'confirmer' ? nl_confirmer($ab, $jeton, $maintenant) : nl_desinscrire($ab, $jeton, $maintenant);
     }, $maintenant);
@@ -796,7 +846,7 @@ function nl_action_jeton(string $action): never
     if ($issue === 'confirmation') {
         nl_evenement('confirmation', ['lang' => $langue]);
     } elseif ($issue === 'desinscription') {
-        nl_evenement('desinscription', ['lang' => $langue, 'mode' => $methode === 'POST' ? 'un_clic' : 'lien']);
+        nl_evenement('desinscription', ['lang' => $langue, 'mode' => isset($_POST['List-Unsubscribe']) ? 'un_clic' : 'bouton']);
     }
     nl_page($langue, [nl_textes($langue)[$issue]]);
 }
