@@ -23,7 +23,9 @@ Ce que fait le script :
      --go : envoie un par un (pause de 1 s) par SMTP (identifiants : _secret/config.php),
      s'arrête net à la première erreur SMTP, puis enregistre {slug: {date, envoyes}} dans
      _secret/newsletter-envois.json sur le serveur — un second envoi du même slug est refusé
-     sans --force.
+     sans --force. Écriture ATOMIQUE (scripts/ftp_atomique.py, 19/09/2026) : nom temporaire,
+     taille contrôlée, renommage — une coupure en plein STOR ne laisse jamais un journal
+     vidé, que ftp_lire_json() relirait comme {} en oubliant les envois passés.
 
 --abonnes-fichier <json> remplace le FTP par un fichier local (même format que le serveur) :
 réservé aux essais du dry-run, refusé avec --go.
@@ -47,6 +49,10 @@ from email.message import EmailMessage
 from email.utils import formataddr, formatdate, make_msgid
 from html.parser import HTMLParser
 from urllib.parse import urlencode, urlsplit, urlunsplit
+
+sys.dont_write_bytecode = True           # pas de scripts/__pycache__ laissé dans le dépôt
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from ftp_atomique import envoie_octets  # noqa: E402  — l'envoi FTP atomique commun du dépôt
 
 # ═══════════════════════════ CONFIGURATION DU SITE ═══════════════════════════
 SITE_NOM = "NSY"
@@ -408,8 +414,11 @@ def ftp_lire_json(ftp, chemin, defaut):
 
 
 def ftp_ecrire_json(ftp, chemin, obj):
+    """Écrit un JSON distant depuis la MÉMOIRE, sans jamais le vider en ligne : un STOR sur
+    place tronque d'abord le fichier (coupure = journal vide = envois passés oubliés). Ici,
+    temporaire + taille contrôlée + renommage ; taille fausse → EnvoiEchoue, ancien intact."""
     donnees = json.dumps(obj, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
-    ftp.storbinary("STOR " + chemin, io.BytesIO(donnees))
+    envoie_octets(ftp, donnees, chemin)
 
 
 def config_smtp():

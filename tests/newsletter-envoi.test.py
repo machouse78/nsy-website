@@ -4,7 +4,9 @@
 Uniquement le DRY-RUN, avec une liste d'abonnés FACTICE (--abonnes-fichier), et les
 fonctions pures (lecture d'article, message, en-têtes, lecture de config.php, liste).
 --go et --test ne sont JAMAIS exécutés ici. Pendant le dry-run en processus, toute
-ouverture de socket fait échouer le test : aucun appel réseau possible.
+ouverture de socket fait échouer le test : aucun appel réseau possible. L'écriture du
+journal des envois (ftp_ecrire_json) passe par un FAUX serveur FTP en mémoire : elle doit
+être atomique (scripts/ftp_atomique.py), jamais un STOR sur place.
 Lancer via tests/run-tests.sh (python3 3.9+ du poste).
 """
 import contextlib
@@ -203,6 +205,79 @@ nl.ftp_ouvrir = ouvrir
 t("config locale CHANGE_ME → celle du serveur, lue par FTPS", cfg.get("smtp_password") == "secret-du-serveur" and FtpFactice.lu == "RETR _secret/config.php", FtpFactice.lu)
 t("… rien écrit sur le disque, le mot de passe jamais affiché", sorted(os.listdir(REP)) == avant and "secret-du-serveur" not in sortie_repli.getvalue())
 subprocess.run(["rm", "-rf", REP])
+
+# ── Journal des envois : écriture ATOMIQUE, jamais un STOR sur place (19/09/2026) ──
+# Un STOR sur place VIDE d'abord le fichier : une coupure à ce moment laisse un journal vide,
+# ftp_lire_json le lit comme {} et un second --go du même slug n'est plus refusé.
+import ftp_atomique  # noqa: E402  (chemin posé par newsletter-envoi.py : scripts/)
+from ftplib import error_perm  # noqa: E402
+
+
+class FtpMemoire:
+    """Faux serveur FTP : STOR vide d'abord la cible, `lecteur` passe PENDANT le transfert."""
+
+    def __init__(self, fichiers, tronque=False, lecteur=None):
+        self.fichiers, self.tronque, self.lecteur, self.commandes = dict(fichiers), tronque, lecteur, []
+
+    def storbinary(self, cmd, fh, blocksize=8192):
+        nom = cmd[len("STOR "):]
+        self.commandes.append(cmd)
+        self.fichiers[nom] = b""
+        if self.lecteur:
+            self.lecteur(self)
+        donnees = fh.read()
+        self.fichiers[nom] = donnees[:-1] if self.tronque else donnees
+
+    def retrbinary(self, cmd, rappel):
+        nom = cmd[len("RETR "):]
+        if nom not in self.fichiers:
+            raise error_perm("550 no such file")
+        rappel(self.fichiers[nom])
+
+    def size(self, nom):
+        if nom not in self.fichiers:
+            raise error_perm("550 no such file")
+        return len(self.fichiers[nom])
+
+    def rename(self, de, vers):
+        self.commandes.append("RNFR %s RNTO %s" % (de, vers))
+        self.fichiers[vers] = self.fichiers.pop(de)
+
+    def delete(self, nom):
+        self.commandes.append("DELE " + nom)
+        del self.fichiers[nom]
+
+
+JOURNAL = "_secret/newsletter-envois.json"
+PASSE = {"article-precedent": {"date": "2026-09-01T10:00:00+02:00", "envoyes": 12}}
+PASSE_OCTETS = json.dumps(PASSE, ensure_ascii=False, indent=2).encode("utf-8") + b"\n"
+t("le piège : un journal VIDE se relit comme {} — d'où l'écriture atomique",
+  nl.ftp_lire_json(FtpMemoire({JOURNAL: b""}), JOURNAL, {}) == {})
+vus = []
+f = FtpMemoire({JOURNAL: PASSE_OCTETS}, lecteur=lambda s: vus.append(nl.ftp_lire_json(s, JOURNAL, {})))
+journal = nl.ftp_lire_json(f, JOURNAL, {})
+journal[SLUG] = {"date": "2026-09-19T22:30:00+02:00", "envoyes": 3}
+nl.ftp_ecrire_json(f, JOURNAL, journal)
+t("journal des envois : relu tel qu'écrit (envoi passé gardé, nouveau slug ajouté)",
+  nl.ftp_lire_json(f, JOURNAL, {}) == dict(PASSE, **{SLUG: journal[SLUG]}), f.fichiers.get(JOURNAL))
+t("journal des envois : un --go lancé PENDANT l'écriture lit l'ancien journal, entier (pas {})",
+  vus == [PASSE], vus)
+tmp = f.commandes[0][len("STOR "):]
+t("journal des envois : STOR sur un temporaire frère dans _secret/, puis renommage — jamais sur place",
+  tmp.startswith(JOURNAL + ".nsy-envoi-") and "STOR " + JOURNAL not in f.commandes
+  and f.commandes[-1] == "RNFR %s RNTO %s" % (tmp, JOURNAL), f.commandes)
+t("journal des envois : aucun temporaire laissé", sorted(f.fichiers) == [JOURNAL], sorted(f.fichiers))
+
+f = FtpMemoire({JOURNAL: PASSE_OCTETS}, tronque=True)
+try:
+    nl.ftp_ecrire_json(f, JOURNAL, dict(PASSE, **{SLUG: {"envoyes": 3}}))
+    t("journal des envois : taille fausse → erreur", False, "aucune erreur")
+except ftp_atomique.EnvoiEchoue:
+    t("journal des envois : taille fausse → erreur (main() la signale : « NON mis à jour »)", True)
+t("journal des envois : taille fausse → l'ancien journal reste INTACT, temporaire supprimé",
+  f.fichiers == {JOURNAL: PASSE_OCTETS}, f.fichiers)
+t("newsletter-envoi.py : plus aucun STOR direct, l'envoi atomique est celui de scripts/ (pas une copie)",
+  "storbinary" not in open(SCRIPT, encoding="utf-8").read() and nl.envoie_octets is ftp_atomique.envoie_octets)
 
 subprocess.run(["rm", "-rf", TMP])
 print("NEWSLETTER-ENVOI : TOUS LES TESTS PASSENT" if echecs == 0 else "NEWSLETTER-ENVOI : %d ÉCHEC(S)" % echecs)

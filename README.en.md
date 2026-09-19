@@ -156,7 +156,7 @@ SMTP credentials live in `_secret/config.php` (gitignored). Template provided: `
 
 - **Sign-up block** at the end of every article and on `blog.html` / `blog-en.html`, from `partials/newsletter.{fr,en}.html` (injected by `scripts/sync-partials.mjs`), sent by `js/app.js`; errors stay visible under the button.
 - **`newsletter.php`** (single endpoint, site settings in one block at the top): `POST ?action=inscrire` → pending subscriber + confirmation email (**double opt-in**, same neutral answer whether or not the address is already subscribed; honeypot, time trap, same-origin check, daily cap per hashed IP — no Turnstile); `GET ?action=confirmer&t=…` → confirmed; `GET|POST ?action=desinscrire&t=…` → unsubscribed (the POST is RFC 8058 one-click). Storage `_secret/newsletter.json` (email, language, state, token, dates — no IP), unconfirmed sign-ups purged after 30 days, events without addresses in `_secret/formulaires.log`, no `error_log()` (own capped log `_secret/newsletter-diag.log`).
-- **Sending**, from the owner's machine: `python3 scripts/newsletter-envoi.py <FR-slug>` (dry-run: counts + two HTML previews), `--test <address>`, then `--go` (one by one, stops at the first SMTP error, records the send in `_secret/newsletter-envois.json` and refuses a second send of the same slug without `--force`). The list is fetched over FTPS and kept in memory only.
+- **Sending**, from the owner's machine: `python3 scripts/newsletter-envoi.py <FR-slug>` (dry-run: counts + two HTML previews), `--test <address>`, then `--go` (one by one, stops at the first SMTP error, records the send in `_secret/newsletter-envois.json` — written ATOMICALLY since 2026-09-19, an in-place `STOR` cut short left an empty log read back as `{}` — and refuses a second send of the same slug without `--force`). The list is fetched over FTPS and kept in memory only.
 - Tests: `tests/newsletter.test.php`, `tests/newsletter-http.test.php` (PHP 8.5 sandbox, SMTP on a closed port) and `tests/newsletter-envoi.test.py` (dry-run on fake subscribers, no network).
 
 ## 3D wireframe pipeline
@@ -351,7 +351,9 @@ until you run it.
   local size), then it is **renamed** onto the target (`RNFR/RNTO`, atomic on the
   server): a visitor gets the old file or the new one, never a fragment. Size
   mismatch → the temp file is deleted, the target is untouched, the upload
-  **stops** and says how many files had already gone. Shared code:
+  **stops** and says how many files had already gone. Same mechanism, from memory
+  (`envoie_octets()`), for the newsletter's send log (`scripts/newsletter-envoi.py`):
+  no in-place `STOR` left in the repo, apart from the GitHub workflow below. Shared code:
   [`scripts/ftp_atomique.py`](scripts/ftp_atomique.py) (twin of prv-concept's);
   offline test: `python3 -B tests/ftp-atomique.test.py`. Verified on the server on
   2026-09-19 with a throwaway file (uploaded, replaced, deleted, 404; error log

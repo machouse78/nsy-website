@@ -218,7 +218,7 @@ python3 scripts/newsletter-envoi.py <slug-FR> --test moi@…   # les versions FR
 python3 scripts/newsletter-envoi.py <slug-FR> --go           # envoi réel, un par un (1 s), arrêt à la 1ʳᵉ erreur SMTP
 ```
 
-Le script lit l'article FR et son pendant EN dans le dépôt (titre, chapô, `og:image`), lie l'article avec `utm_source=newsletter&utm_medium=email&utm_campaign=<slug-FR>`, pose un lien de désinscription personnel et les en-têtes `List-Unsubscribe` / `List-Unsubscribe-Post`. La liste arrive par FTPS (`_secret/ftp.env`) et reste **en mémoire** : jamais écrite sur le disque, jamais affichée. Chaque envoi est inscrit dans `_secret/newsletter-envois.json` sur le serveur ; un second envoi du même slug est refusé sans `--force`. SMTP : `_secret/config.php` (lu sans exécuter de PHP ; clé facultative `newsletter_from`).
+Le script lit l'article FR et son pendant EN dans le dépôt (titre, chapô, `og:image`), lie l'article avec `utm_source=newsletter&utm_medium=email&utm_campaign=<slug-FR>`, pose un lien de désinscription personnel et les en-têtes `List-Unsubscribe` / `List-Unsubscribe-Post`. La liste arrive par FTPS (`_secret/ftp.env`) et reste **en mémoire** : jamais écrite sur le disque, jamais affichée. Chaque envoi est inscrit dans `_secret/newsletter-envois.json` sur le serveur ; un second envoi du même slug est refusé sans `--force`. Ce journal s'écrit de façon **atomique** (`envoie_octets()` de `scripts/ftp_atomique.py`, 19/09/2026) : un `STOR` sur place le vidait d'abord, et une coupure à ce moment laissait un journal vide, relu comme `{}` — le refus du second envoi s'évaporait. SMTP : `_secret/config.php` (lu sans exécuter de PHP ; clé facultative `newsletter_from`).
 
 ## Pipeline wireframe 3D
 
@@ -309,7 +309,7 @@ nsy-website/
 │   ├── forms-http.test.php              # contact.php + faisabilite.php + journal-stats.php en bac à sable HTTP
 │   ├── newsletter.test.php              # Newsletter : états, jetons, purge, stockage, garde-fou (PHP 8.5)
 │   ├── newsletter-http.test.php         # Newsletter en bac à sable HTTP : boîte factice, puis SMTP sur port fermé
-│   ├── newsletter-envoi.test.py         # Script d'envoi : dry-run sur abonnés factices, sans réseau
+│   ├── newsletter-envoi.test.py         # Script d'envoi : dry-run sur abonnés factices, journal des envois atomique, sans réseau
 │   ├── ftp-atomique.test.py             # Déploiement FTP : envois atomiques, exclusions, faux serveur sans réseau
 │   ├── ansley-plein-ecran.test.mjs      # Agrandir / réduire le panneau d'Ansley (Chrome headless)
 │   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
@@ -481,7 +481,10 @@ tant qu'on ne la lance pas.
   taille locale), puis il est **renommé** sur la cible (`RNFR/RNTO`, atomique côté
   serveur) : le visiteur voit l'ancien fichier ou le nouveau, jamais un morceau.
   Taille fausse → le temporaire est supprimé, la cible reste intacte, l'envoi
-  **s'arrête** en disant combien de fichiers étaient déjà partis. Code commun :
+  **s'arrête** en disant combien de fichiers étaient déjà partis. Même mécanique,
+  depuis la mémoire (`envoie_octets()`), pour le journal des envois de la
+  newsletter (`scripts/newsletter-envoi.py`) : plus aucun `STOR` sur place dans le
+  dépôt, hors le workflow GitHub ci-dessous. Code commun :
   [`scripts/ftp_atomique.py`](scripts/ftp_atomique.py) (pendant de celui de
   prv-concept) ; test hors réseau : `python3 -B tests/ftp-atomique.test.py`.
   Vérifié sur le serveur le 19/09/2026 sur un fichier jetable (envoyé, remplacé,
