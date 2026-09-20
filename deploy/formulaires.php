@@ -132,6 +132,23 @@ function nsy_turnstile_sante(string $secret): array
 }
 
 /** Journal des tentatives — une ligne JSON, sans donnée personnelle. */
+/**
+ * Diagnostic des formulaires — NOTRE fichier, jamais le journal de l'hébergement.
+ * Un error_log() SANS destination écrit dans ~/ik-logs/error.log, celui dont le
+ * débordement a laissé nsy.fr et prv-concept.com hors ligne tout le week-end des
+ * 29-30/08/2026 ; et la sonde du journal s'arrête sur toute ligne PHP, donc un
+ * seul robot refusé bloquait les déploiements. Daté, remis à zéro au-delà de
+ * 2 Mo. Jumeau de nsy_form_diag() de prv-concept.
+ */
+function nsy_form_diag(string $m, ?string $f = null): void
+{
+    $f ??= __DIR__ . '/_secret/formulaires-diag.log';
+    if (is_file($f) && filesize($f) > 2097152) {
+        @file_put_contents($f, '');
+    }
+    @file_put_contents($f, date('Y-m-d H:i:s') . ' ' . $m . "\n", FILE_APPEND | LOCK_EX);
+}
+
 function nsy_form_event(string $form, string $issue, array $extra = []): void
 {
     $ligne = ['t' => date('c'), 'form' => $form, 'issue' => $issue] + $extra;
@@ -208,7 +225,9 @@ function nsy_alerte_owner(array $config, string $sujet, string $texte, string $c
         nsy_alerte_trace($cle, $sujet, 'ENVOYÉE');
         return true;
     } catch (\Throwable $e) {
-        error_log(NSY_ALERTE_SITE . ' alerte: envoi impossible — ' . $e->getMessage());
+        // Pas d'error_log() nu : nsy_alerte_trace() écrit déjà « ÉCHEC — … » dans
+        // _secret/alertes.log, et le journal de l'hébergement bloque le site quand
+        // il déborde (29-30/08/2026).
         nsy_alerte_trace($cle, $sujet, 'ÉCHEC — ' . $e->getMessage());
         return false;
     }

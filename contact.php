@@ -72,15 +72,17 @@ if (!empty($config['turnstile_secret']) && $config['turnstile_secret'] !== 'CHAN
         exit;
     }
     if ($tv['verdict'] === 'bot') {
-        error_log('NSY contact: Turnstile a refusé le jeton — ' . $tv['raison']);
-        nsy_form_event('contact', 'antibot_refuse');
+        // Un refus par robot : sa raison va dans _secret/formulaires.log, plus au
+        // journal de l'hébergement. « timeout-or-duplicate » peut être un humain
+        // resté plus de 5 min sur la page.
+        nsy_form_event('contact', 'antibot_refuse', ['raison' => $tv['raison']]);
         http_response_code(403);
         echo json_encode(['ok' => false, 'error' => $L('Vérification anti-bot échouée. Rechargez la page et réessayez.', 'Anti-bot check failed. Reload the page and try again.')]);
         exit;
     }
     if ($tv['verdict'] === 'bypass') {
         $antiBotBypass = $tv['raison'];
-        error_log('NSY contact: Turnstile HORS SERVICE (' . $antiBotBypass . ') — contrôle contourné, autres filtres actifs');
+        nsy_form_diag('NSY contact: Turnstile HORS SERVICE (' . $antiBotBypass . ') — contrôle contourné, autres filtres actifs');
         nsy_alerte_owner($config, '[NSY] Anti-bot Turnstile hors service — formulaires en mode dégradé',
             "Cloudflare Turnstile ne valide plus les envois du site : " . $antiBotBypass . "\n\n"
             . "Les formulaires (contact, faisabilité) continuent de fonctionner SANS ce contrôle,\n"
@@ -307,7 +309,7 @@ try {
         $auto->send();
     } catch (\PHPMailer\PHPMailer\Exception $autoErr) {
         // Auto-responder failed — log but don't fail the user's request.
-        error_log('NSY contact: autoresponder failed — ' . $auto->ErrorInfo);
+        nsy_form_diag('NSY contact: autoresponder failed — ' . $auto->ErrorInfo);
     }
 
     if (ob_get_length()) ob_clean(); // drop any stray notice/deprecation before the JSON
@@ -316,7 +318,8 @@ try {
 } catch (\PHPMailer\PHPMailer\Exception $e) {
     $detail = $mail->ErrorInfo ?: $e->getMessage();
     $errMsg = '[' . date('Y-m-d H:i:s') . '] NSY contact: ' . $detail . "\n";
-    error_log($errMsg);
+    // Pas d'error_log() nu : les deux écritures ci-dessous portent déjà $errMsg,
+    // et l'issue erreur_envoi de _secret/formulaires.log aussi.
     // Try writing to two locations in case _secret/ is not writable.
     @file_put_contents(__DIR__ . '/_secret/contact-errors.log', $errMsg, FILE_APPEND);
     @file_put_contents(__DIR__ . '/contact-errors.log', $errMsg, FILE_APPEND);

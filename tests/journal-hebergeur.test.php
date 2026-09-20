@@ -106,30 +106,11 @@ $config = [
 $gardeFou = [
     'stats-collector.php' => ['"stats-collector: [$no] $msg @ ".basename($fichier).":$ligne"'],
 ];
-// 3. DETTE, pas une permission : le chantier « plus rien au journal de
-//    l'hébergement » a été fait sur chat.php le 20/09/2026, PAS encore sur les
-//    formulaires. Ces NEUF appels (4 + 4 + 1) DOUBLONNENT déjà un journal à nous
-//    (_secret/contact-errors.log, _secret/formulaires.log, nsy_alerte_trace) ou
-//    devraient passer par un nsy_form_diag() qui n'existe pas encore ici.
-//    La liste est CLOSE : tout appel nu qui n'y figure pas fait échouer le test.
-//    prv-concept a résorbé la sienne les 17 et 19/09/2026 — modèle à suivre.
-$dette = [
-    'contact.php' => [
-        "'NSY contact: Turnstile HORS SERVICE ('.\$antiBotBypass.') — contrôle contourné, autres filtres actifs'",
-        "'NSY contact: Turnstile a refusé le jeton — '.\$tv['raison']",
-        "'NSY contact: autoresponder failed — '.\$auto->ErrorInfo",
-        '$errMsg',
-    ],
-    'faisabilite.php' => [
-        "'NSY faisabilité: Turnstile HORS SERVICE ('.\$antiBotBypass.') — contrôle contourné, autres filtres actifs'",
-        "'NSY faisabilité: Turnstile a refusé le jeton — '.\$tv['raison']",
-        "'NSY faisabilité: autoresponder failed — '.\$auto->ErrorInfo",
-        '$errMsg',
-    ],
-    'formulaires.php' => [
-        "NSY_ALERTE_SITE.' alerte: envoi impossible — '.\$e->getMessage()",
-    ],
-];
+// 3. La DETTE est RÉSORBÉE (20/09/2026) : contact.php, faisabilite.php et
+//    formulaires.php ne portent plus aucun error_log() nu. La liste reste ici,
+//    VIDE, pour que ce soit un choix visible et non un oubli — la remplir de
+//    nouveau demande une décision, pas une distraction.
+$dette = [];
 
 // ── Le code réel : tout PHP de la vitrine qui tourne sur le serveur ──
 $racine = dirname(__DIR__);
@@ -200,6 +181,50 @@ t('chat.php : les ' . count($m[1]) . " écritures dans chat-errors.log portent t
 // ── newsletter.php (19/09/2026) : pas même un error_log() avec destination ──
 $newsletter = (string)file_get_contents("$racine/newsletter.php");
 t('newsletter.php : AUCUN appel error_log(), même avec destination', !appelle($newsletter, 'error_log'));
+
+// ── Les formulaires : le chantier du 20/09/2026, verrouillé ──
+$contact = (string)file_get_contents("$racine/contact.php");
+$faisa   = (string)file_get_contents("$racine/faisabilite.php");
+$forms   = (string)file_get_contents("$racine/formulaires.php");
+t('formulaires.php définit nsy_form_diag(), qui écrit _secret/formulaires-diag.log',
+  str_contains($forms, 'function nsy_form_diag(string $m, ?string $f = null): void')
+  && str_contains($forms, "__DIR__ . '/_secret/formulaires-diag.log'"));
+t('nsy_form_diag() est datée et remise à zéro au-delà de 2 Mo',
+  str_contains($forms, 'filesize($f) > 2097152') && str_contains($forms, "date('Y-m-d H:i:s')"));
+foreach (['contact.php' => $contact, 'faisabilite.php' => $faisa] as $nom => $src) {
+    t("$nom : « Turnstile HORS SERVICE » et « autoresponder » passent par nsy_form_diag",
+      substr_count($src, 'nsy_form_diag(') === 2
+      && str_contains($src, 'nsy_form_diag(\'NSY ') && str_contains($src, 'Turnstile HORS SERVICE')
+      && str_contains($src, 'autoresponder failed'));
+    t("$nom : le jeton refusé porte sa RAISON dans l'événement, plus au journal",
+      str_contains($src, "'antibot_refuse', ['raison' => \$tv['raison']]"));
+    t("$nom : l'échec SMTP n'est plus journalisé qu'en double chez nous",
+      !str_contains($src, 'error_log($errMsg);')
+      && str_contains($src, "@file_put_contents(__DIR__ . '/_secret/contact-errors.log', \$errMsg, FILE_APPEND);"));
+}
+t('formulaires.php : « alerte : envoi impossible » n\'est plus que dans _secret/alertes.log',
+  !str_contains($forms, "error_log(NSY_ALERTE_SITE")
+  && str_contains($forms, "nsy_alerte_trace(\$cle, \$sujet, 'ÉCHEC — ' . \$e->getMessage());"));
+
+// ── nsy_form_diag() : NOTRE fichier, daté, plafonné (comportement réel) ──
+require_once "$racine/formulaires.php";
+if (!function_exists('nsy_form_diag')) {
+    t('formulaires.php expose nsy_form_diag()', false);
+} else {
+    $diagLog = sys_get_temp_dir() . '/nsy-form-diag-' . bin2hex(random_bytes(4)) . '.log';
+    nsy_form_diag('NSY contact: Turnstile HORS SERVICE (test)', $diagLog);
+    t('nsy_form_diag écrit une ligne datée dans son fichier',
+      (bool)preg_match('/^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} NSY contact: Turnstile HORS SERVICE \(test\)\n$/',
+                       (string)@file_get_contents($diagLog)));
+    nsy_form_diag('deuxième', $diagLog);
+    t('nsy_form_diag ajoute sans écraser', substr_count((string)file_get_contents($diagLog), "\n") === 2);
+    file_put_contents($diagLog, str_repeat('x', 2097153));
+    nsy_form_diag('après plafond', $diagLog);
+    clearstatcache();
+    t('nsy_form_diag remet à zéro au-delà de 2 Mo',
+      filesize($diagLog) < 100 && str_contains((string)file_get_contents($diagLog), 'après plafond'));
+    @unlink($diagLog);
+}
 
 echo $fail === 0 ? "JOURNAL-HÉBERGEUR : TOUS LES TESTS PASSENT\n" : "JOURNAL-HÉBERGEUR : $fail ÉCHEC(S)\n";
 exit($fail === 0 ? 0 : 1);
