@@ -336,7 +336,7 @@ def main() -> int:
 
     try:
         out = interroge({k: v["taille"] for k, v in etat.items()})
-    except (all_errors, urllib.error.URLError, OSError, ValueError) as err:
+    except (*all_errors, urllib.error.URLError, OSError, ValueError) as err:
         print(f"❌ sonde en échec : {err}")
         return 1
 

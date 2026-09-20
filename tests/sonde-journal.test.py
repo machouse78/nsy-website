@@ -10,6 +10,7 @@ est un arbre fabriqué : le résultat ne dépend pas de ce que livre le dépôt.
     python3 tests/sonde-journal.test.py
 """
 import contextlib
+import ftplib
 import importlib.util
 import io
 import json
@@ -17,6 +18,7 @@ import os
 import shutil
 import sys
 import tempfile
+import urllib.error
 
 ICI = os.path.dirname(os.path.abspath(__file__))
 spec = importlib.util.spec_from_file_location("sonde", os.path.join(ICI, "..", "scripts", "sonde-journal.py"))
@@ -179,6 +181,36 @@ c, s, _ = joue(S, {})
 t("aucun octet de plus → JOURNAL VIERGE", c, 0, s, ["JOURNAL VIERGE"], ["toléré"])
 c, s, _ = joue(["--tolere-scanner"], {LOG: SCAN})
 t("option mal orthographiée → reste strict", c, 2, s)
+
+
+# La sonde qui ÉCHOUE : le seul chemin que `joue()` ne traverse jamais, puisqu'elle
+# remplace interroge() par une réponse toute faite. Vécu : la clause s'était écrite
+# `except (all_errors, ...)` au lieu de `(*all_errors, ...)` — all_errors est un
+# TUPLE, un tuple imbriqué dans un except lève TypeError au lieu d'attraper, et la
+# CAUSE de l'échec (identifiants absents, FTP refusé, 450 anti-flood) était perdue
+# derrière une trace d'exécution.
+def joue_echec(erreur):
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
+        json.dump({LOG: {"taille": 1000}, CHAT: {"taille": 1000}}, fh)
+
+    def boum(depuis):
+        raise erreur
+    sonde.interroge = boum
+    sys.argv = ["sonde-journal.py", "--etat", fh.name]
+    tampon = io.StringIO()
+    with contextlib.redirect_stdout(tampon):
+        code = sonde.main()
+    os.unlink(fh.name)
+    return code, tampon.getvalue()
+
+
+for nom, erreur in (("FTP refusé (ftplib.error_perm)", ftplib.error_perm("550 interdit")),
+                    ("identifiants absents (OSError d'env())", OSError("identifiants FTP absents (FTP_PASS)")),
+                    ("réseau coupé (URLError)", urllib.error.URLError("nom introuvable")),
+                    ("réponse illisible (ValueError)", ValueError("JSON tronqu\u00e9")),
+                    ("connexion fermée (EOFError)", EOFError("coupure"))):
+    c, s_ = joue_echec(erreur)
+    t(f"sonde en échec — {nom} : code 1 et la CAUSE affichée", c, 1, s_, ["sonde en échec", str(erreur)[:20]])
 
 shutil.rmtree(FAUX, ignore_errors=True)
 print("SONDE-JOURNAL : TOUS LES TESTS PASSENT" if not echecs else f"SONDE-JOURNAL : {echecs} ÉCHEC(S)")
