@@ -126,7 +126,6 @@
     <article class="legal-page article">
       <div class="article-meta">8 August 2026 · Cédric Barme · Reading ≈ 7 min</div>
       <div class="article-stats" data-journal-stats data-slug="chatbot-ia-forum-base-de-connaissances.html" hidden>
-        <span class="js-views" aria-live="polite"></span>
         <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
       </div>
       <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Wiring an AI chatbot into a forum:<br />web 1.0 as a knowledge base</h1>
@@ -182,6 +181,26 @@
       </ul>
 
       <p style="margin-top: 30px;">The result can be tested live on <a href="https://www.prv-concept.com" target="_blank" rel="noopener">prv-concept.com</a> — and the full project file is on our <a href="portfolio.html">Work</a> page. Documentary heritage to put to work, a chatbot to ground in your data? That is the heart of our <a href="ai-website-creation.html">AI-powered website creation</a> offering — <a href="contact-en.html">let&rsquo;s talk</a>, answer within 48 business hours.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Receive the next articles</p>
+  <p class="nl-texte">One email for each new journal article, nothing else. Unsubscribe at any time.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="en" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="name@company.com" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">Subscribe</span></button>
+    </div>
+    <p class="nl-rgpd">Your address is used only for these emails and is never shared. Details in our <a href="privacy.html#newsletter">privacy policy</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
     </article>
   </div>
 </section>

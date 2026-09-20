@@ -7,6 +7,13 @@
   <language>en</language>
   <atom:link href="https://www.nsy.fr/feed-en.xml" rel="self" type="application/rss+xml" />
   <item>
+    <title>One site, one forum, one shop, one account: bringing them together without rebuilding</title>
+    <link>https://www.nsy.fr/one-site-forum-shop-single-account.html</link>
+    <guid isPermaLink="true">https://www.nsy.fr/one-site-forum-shop-single-account.html</guid>
+    <pubDate>Fri, 11 Sep 2026 12:00:00 +0200</pubDate>
+    <description>Bringing PRV Concept's website, phpBB forum and WooCommerce shop together without rebuilding: a child style and a child theme, a single account held by the forum, a single-use encrypted token, proof required to link existing accounts.</description>
+  </item>
+  <item>
     <title>From terabytes to megabytes: monitoring is a discipline before it is a budget</title>
     <link>https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</link>
     <guid isPermaLink="true">https://www.nsy.fr/production-monitoring-terabytes-megabyte.html</guid>

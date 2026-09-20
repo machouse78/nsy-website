@@ -138,8 +138,10 @@ ErrorDocument 404 /404.html
     RewriteRule ^clients/?$                  /realisations.html  [L,R=301]
     RewriteRule ^eportfolio/?$               /realisations.html  [L,R=301]
     RewriteRule ^cv/CV_BARME_Cedric\.pdf$    /a-propos.html      [L,R=301]
-    # Article d'exemple de WordPress, sans équivalent : 410 Gone, Google le retire plus vite qu'un 404.
-    RewriteRule ^hello-world/?$              - [G]
+    # Article d'exemple de WordPress. D'abord servi en 410 Gone (24/08/2026) ; Search Console range
+    # le 410 avec les 404, si bien que la validation « Introuvable (404) » a échoué le 15/09/2026 sur
+    # cette seule adresse. C'était un billet de blog : 301 vers le journal (owner, 17/09/2026).
+    RewriteRule ^hello-world/?$              /blog.html          [L,R=301]
 
     # ───── Auto-détection langue (Accept-Language) ─────
     # Sur racine ou /index.html : si pas de cookie nsy_lang ET navigateur en anglais,

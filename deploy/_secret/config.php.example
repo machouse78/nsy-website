@@ -14,6 +14,10 @@ return [
     'smtp_password'    => 'CHANGE_ME_SET_THE_REAL_PASSWORD_HERE',
     'to_address'       => 'contact@nsy.fr',
     'to_name'          => 'Cédric Barme (NSY)',
+    // Newsletter (newsletter.php + scripts/newsletter-envoi.py) — FACULTATIF :
+    // adresse d'expédition, sinon smtp_username. Doit être autorisée à envoyer
+    // par ce compte SMTP (adresse du compte ou alias).
+    // 'newsletter_from' => 'journal@nsy.fr',
     // Cloudflare Turnstile (anti-bot) — get yours at https://dash.cloudflare.com/?to=/:account/turnstile
     'turnstile_secret' => 'CHANGE_ME_SET_THE_TURNSTILE_SECRET_KEY',
 ];

@@ -116,6 +116,9 @@
   #tip .src { color: var(--warm); font-size: 11.5px; margin-top: 4px; }
   .chart svg { cursor: crosshair; }
   #err { color: #F87171; margin: 18px 0; display: none; }
+  #fraicheur { border: 1px solid #F87171; background: rgba(248, 113, 113, .08); color: #F87171; border-radius: 10px;
+    padding: 12px 16px; margin: 16px 0 4px; font-size: 14px; line-height: 1.5; }
+  #fraicheur b { color: var(--fg0); }
   .export { position: relative; margin-left: auto; }
   .export > button { background: transparent; border: 1px solid var(--line); border-radius: 8px;
     color: var(--fg1); font: 600 12.5px Manrope, sans-serif; padding: 7px 13px; cursor: pointer; }
@@ -207,6 +210,7 @@
     <input type="text" id="kql" placeholder="ex. page:/expertise-* · bot:claude · ia:perplexity — Entrée pour appliquer" />
   </div>
   <div id="err">Impossible de charger les données (data.php).</div>
+  <div id="fraicheur" role="alert" hidden></div>
 
   <div class="resume" id="resume"></div>
 
@@ -233,7 +237,7 @@
 
   <h2 id="h-vis">Visiteurs</h2>
   <div class="chart"><svg id="c-vis"></svg></div>
-  <table id="t-payslogs"><thead><tr><th>Pays <span class="mono">— tous accès</span></th><th class="num">Adresses</th><th class="num">Part</th><th class="num">Dont ≥ 2 pages</th></tr></thead><tbody></tbody></table>
+  <table id="t-payslogs"><thead><tr><th>Pays <span class="mono">— tous accès</span></th><th class="num">Adresses</th><th class="num">Part</th><th class="num">Dont ≥ 2 pages</th><th class="num" id="th-pays-hc" hidden title="Adresses ayant lu au moins deux pages, hors réseaux d'hébergeurs et centres de données">≥ 2 pages, hors hébergeurs</th></tr></thead><tbody></tbody></table>
   <div class="note" id="payslogs-note"></div>
   <div class="chart"><svg id="c-carte-logs" viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet"></svg></div>
   <div class="note">Molette pour zoomer sous le curseur, glisser pour déplacer, double-clic pour revenir au monde entier. Zoom <span class="mono" id="c-carte-logs-zoom">×1</span> — les lieux proches sont regroupés tant qu'ils se chevauchent à l'écran ; zoomer les sépare. Un point est la position que la base attribue à la PLAGE d'adresses, en général le centre de la ville déclarée — jamais celle d'une personne.</div>
@@ -376,6 +380,9 @@
     <div>
       <h3 id="h-igposts">Instagram — publications</h3>
       <table id="t-igposts"><thead><tr><th>Publication</th><th class="num">Vues</th><th class="num">Portée</th><th class="num">Inter.</th></tr></thead><tbody></tbody></table>
+      <h3 id="h-stories">Stories</h3>
+      <table id="t-stories"><thead><tr><th>Story</th><th>Réseau</th><th class="num">Vues</th><th class="num">Portée</th><th class="num">Réponses</th><th class="num">Inter.</th></tr></thead><tbody></tbody></table>
+      <p class="note" id="stories-note">Une story ne vit que 24 h dans l'API : elle est relevée par la collecte nocturne et par une passe intrajournalière, ses mesures sont le maximum observé. Facebook n'expose pas de mesure fiable par story : elle est comptée, ses chiffres restent « — ».</p>
     </div>
   </div>
 
@@ -1633,6 +1640,25 @@
       document.querySelector('#t-igposts tbody').innerHTML = igp.length
         ? igp.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)}</td><td class="num">${fmt(x.vues || 0)}</td><td class="num">${fmt(x.portee || 0)}</td><td class="num">${fmt(x.interactions || 0)}</td></tr>`).join('')
         : '<tr><td colspan="4" class="mono">aucun compte Instagram relié</td></tr>';
+      // Stories de la période : celles des jours sélectionnés, dédoublonnées
+      // par identifiant (une story vue par plusieurs collectes n'est qu'une).
+      {
+        const vues = new Map();
+        sel.forEach((d) => {
+          const f = D[d]?.fb || {};
+          (net !== 'ig' ? (f.stories || []) : []).forEach((x) => vues.set('fb:' + x.id, { ...x, r: 'FB' }));
+          (net !== 'fb' ? (f.ig_stories || []) : []).forEach((x) => vues.set('ig:' + x.id, { ...x, r: 'IG' }));
+        });
+        const liste = [...vues.values()].sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+        const t = document.querySelector('#t-stories tbody');
+        if (t) {
+          $('h-stories').textContent = `Stories — ${liste.length} sur la période`;
+          const m = (v) => (v == null ? '—' : fmt(v));
+          t.innerHTML = liste.length
+            ? liste.map((x) => `<tr><td>${x.url ? `<a href="${x.url}" target="_blank" rel="noopener">${x.date}</a>` : x.date} ${(x.type || '').toLowerCase()}</td><td>${x.r}</td><td class="num">${m(x.vues)}</td><td class="num">${m(x.portee)}</td><td class="num">${m(x.reponses)}</td><td class="num">${m(x.interactions)}</td></tr>`).join('')
+            : '<tr><td colspan="6" class="mono">aucune story sur la période</td></tr>';
+        }
+      }
     }
 
     // ── Avis clients : une ligne par source, collectée ou non ────────────
@@ -2025,8 +2051,18 @@
       const sePages = aggMap(sel, (v) => v.se_pages);
       const extTot = ['ia', 'facebook', 'linkedin', 'google', 'bing', 'autres']
         .reduce((a, src) => a + sumKey(sel, (v) => vRef(v, src)), 0);
+      // ⚠️ Des robots se présentent avec « google.com » en referer : ce compteur
+      //    est un PLAFOND. Les clics que Google compte lui-même (Search Console,
+      //    un relevé par jour, décalé de 2-3 jours) sont affichés dessous — c'est
+      //    ce chiffre-là qui fait foi (18/09/2026 : 254 « visites » pour 9 clics).
+      const gscClics = (() => {
+        const vus = new Map();
+        for (const d of sel) { const pj = D[d]?.gsc?.perf_jour; if (pj?.date) vus.set(pj.date, pj.clics ?? 0); }
+        return vus.size ? [...vus.values()].reduce((a, b) => a + b, 0) : null;
+      })();
       $('goo-cards').innerHTML = [
-        ['Visites venues de Google', fmt(gVis), gPrev != null ? delta(gVis, gPrev) : ''],
+        ['Visites venues de Google', fmt(gVis), (gPrev != null ? delta(gVis, gPrev) : '')
+          + (gscClics != null ? `<br><span class="flat">dont ${fmt(gscClics)} clic${gscClics > 1 ? 's' : ''} compté${gscClics > 1 ? 's' : ''} par Google (Search Console) — l'écart vient surtout de robots qui se présentent comme venus de Google</span>` : '')],
         ['Part des clics entrants', extTot ? Math.round(gVis / extTot * 100) + '<small> %</small>' : '—',
          `<span class="flat">sur ${fmt(extTot)} clics identifiés</span>`],
         ['Passages de Googlebot', fmt(gBot), `<span class="flat">${fmt(seTot)} passages de moteurs au total</span>`],
@@ -2063,11 +2099,19 @@
         const tb = document.querySelector('#t-payslogs tbody');
         if (P) {
           const c = P.compte || {}, c2 = P.compte_2p || {};
+          // Hors centres de données (18/09/2026) : les lecteurs de 2 pages ou plus,
+          // moins les réseaux d'hébergeurs — sur prv-concept.com, 172 des 297
+          // « lecteurs » américains venaient d'Ashburn, Council Bluffs, The Dalles…
+          // Présent seulement sur les journées collectées depuis : sinon la
+          // colonne reste masquée plutôt que remplie de zéros trompeurs.
+          const c2h = P.compte_2p_hc, avecHc = !!c2h;
+          $('th-pays-hc').hidden = !avecHc;
           const tot = Object.values(c).reduce((a, b) => a + b, 0) || 1;
           tb.innerHTML = Object.entries(c).slice(0, 15).map(([k, n]) =>
             `<tr><td>${nomPays(k)} <span class="mono">${k}</span></td><td class="num">${fmt(n)}</td>`
             + `<td class="num">${Math.round(n / tot * 100)} %</td>`
-            + `<td class="num">${fmt(c2[k] || 0)}</td></tr>`).join('');
+            + `<td class="num">${fmt(c2[k] || 0)}</td>`
+            + (avecHc ? `<td class="num">${fmt(c2h[k] || 0)}</td>` : '') + '</tr>').join('');
           const lieux = (P.lieux || []).map((L) => {
             const [x, y] = projLL(L.lat, L.lon);
             return { x, y, n: L.n, nom: [L.ville, L.region, nomPays(L.cc)].filter(Boolean).join(', ') };
@@ -2075,8 +2119,10 @@
           dessineCarte('c-carte-logs', lieux, '#00E5FF', 'adresses');
           $('payslogs-note').textContent = `Relevé du ${jP}, base DB-IP ${P.base}. `
             + `La colonne de droite ne compte que les adresses ayant ouvert au moins deux pages : `
-            + `l'écart avec la première mesure la part de passages automatisés. Les adresses servent au calcul puis sont oubliées — seul le compteur par pays est conservé.`;
+            + `l'écart avec la première mesure la part de passages automatisés. Les adresses servent au calcul puis sont oubliées — seul le compteur par pays est conservé.`
+            + (avecHc ? ` La dernière colonne retire en plus les réseaux d'hébergeurs et de centres de données, reconnus au nom de l'opérateur : c'est l'estimation la plus proche du public humain.` : '');
         } else {
+          $('th-pays-hc').hidden = true;
           tb.innerHTML = '<tr><td colspan="4" class="mono">pas encore de relevé sur cette période</td></tr>';
           $('payslogs-note').textContent = '';
         }
@@ -2255,7 +2301,10 @@
         ? `Un agent « -User » (ChatGPT-User, Claude-User, Perplexity-User) lit une page parce qu'un humain vient de poser une question : c'est le signal le plus proche d'une mention. Il ne capte PAS les reponses donnees de memoire, sans lecture — celles-la ne laissent aucune trace. Distinction disponible depuis le ${dFmt(firstFam)}.`
         : 'Distinction par famille : disponible a partir de la prochaine collecte.';
 
-      const convPages = aggMap(sel, (v) => v.ia_conv_pages).slice(0, 12);
+      // Chemins de scanners déguisés en assistant (/@fs/…, .env, .aws…) : écartés
+      // à la source depuis le 18/09/2026, masqués ici pour les jours antérieurs.
+      const SCAN_CHEMIN = /\/@fs\/|\/\.env|\/\.aws\/|\/\.git\/|credentials|rootkey|serverless\.ya?ml|nginx\.conf|\/wp-login\.php|\/xmlrpc\.php|\/phpmyadmin/i;
+      const convPages = aggMap(sel, (v) => v.ia_conv_pages).filter(([pg]) => !SCAN_CHEMIN.test(pg)).slice(0, 12);
       document.querySelector('#t-iaconv tbody').innerHTML = convPages.length
         ? convPages.map(([pg, n]) => `<tr><td><a href="https://www.nsy.fr${pg}" target="_blank" rel="noopener">${pg}</a></td><td class="num">${fmt(n)}</td></tr>`).join('')
         : '<tr><td colspan="2" class="mono">aucune lecture declenchee par une conversation sur la periode</td></tr>';
@@ -2423,6 +2472,23 @@
   }
 
   $('stamp').textContent = `historique : ${dFmt(first)} → ${dFmt(lastDay)} · ${allDays.length} jours`;
+  /* Fraîcheur (18/09/2026). Sur prv-concept.com la collecte s'est arrêtée six
+     jours (13 → 18/09) sans que rien ne le montre : le tableau s'arrêtait net,
+     comme une semaine calme. La collecte de J-1 passe au petit matin ; avant,
+     la dernière journée est J-2 et c'est normal. Plus vieux que J-2 : la
+     collecte est en panne, et la page le dit avant tout le reste. */
+  {
+    const ymd = (d) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const avantHier = new Date(); avantHier.setDate(avantHier.getDate() - 2);
+    if (lastDay < ymd(avantHier)) {
+      const age = Math.round((new Date(ymd(new Date()) + 'T12:00:00') - new Date(lastDay + 'T12:00:00')) / 864e5);
+      const f = $('fraicheur');
+      f.innerHTML = `<b>Collecte arrêtée.</b> La dernière journée collectée est le ${dFmt(lastDay)}, il y a ${age} jours : `
+        + 'la tâche planifiée de collecte ne passe plus (clé, adresse ou tâche suspendue dans le Planificateur). '
+        + 'Les journées manquantes se rattrapent tant que l\'hébergeur conserve ses journaux.';
+      f.hidden = false;
+    }
+  }
   fillSelects();
   render();
 

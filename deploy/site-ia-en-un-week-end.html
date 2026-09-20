@@ -128,7 +128,6 @@
     <article class="legal-page article">
       <div class="article-meta">16 août 2026 · Cédric Barme · Lecture ≈ 7 min</div>
       <div class="article-stats" data-journal-stats data-slug="site-ia-en-un-week-end.html" hidden>
-        <span class="js-views" aria-live="polite"></span>
         <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
       </div>
       <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Créer son site avec l&rsquo;IA en un week-end :<br />on a pris la promesse au mot</h1>
@@ -182,6 +181,27 @@
       <p>Et au moment de passer au site qui travaille, posez la vraie question — pas seulement <em>« en combien de temps, pour combien ? »</em>, mais <em>« <strong>qu&rsquo;est-ce que l&rsquo;IA nous permet d&rsquo;explorer</strong> que nous n&rsquo;aurions pas osé chiffrer avant ? »</em>. Une animation 3D de votre produit ? Un assistant qui répond la nuit sans dire de bêtises ? Être la réponse que donnent les IA quand on cherche votre métier dans votre région ? C&rsquo;est le même budget qu&rsquo;hier. Ce n&rsquo;est plus le même site.</p>
 
       <p style="margin-top: 30px;">Vous avez une V1 qui dort, ou un projet qui démarre ? <a href="contact.html">Parlons-en</a> — ou testez votre idée en 5 minutes avec notre <a href="faisabilite.html">questionnaire de faisabilité</a>.</p>
+      <p style="margin-top: 18px;">La suite de ce chantier : <a href="chatbot-ia-forum-base-de-connaissances.html">un chatbot IA branché sur le forum, le web 1.0 comme base de connaissances</a>.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Recevoir les prochains articles</p>
+  <p class="nl-texte">Un e-mail à chaque nouvel article du journal, rien d'autre. Désinscription à tout moment.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="fr" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="prenom@societe.fr" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">M'inscrire</span></button>
+    </div>
+    <p class="nl-rgpd">Votre adresse ne sert qu'à cet envoi et n'est jamais partagée. Détails dans la <a href="confidentialite.html#newsletter">politique de confidentialité</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
       <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-strong);">
         <p class="mono" style="font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px;">Cet article vit aussi sur les réseaux — venez en discuter</p>
         <div style="display: flex; gap: 12px; flex-wrap: wrap;">

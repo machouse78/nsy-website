@@ -73,7 +73,13 @@
       "description": "Retours d’expérience d’un praticien : IA appliquée au web, SEO/GEO, systèmes critiques.",
       "inLanguage": "fr",
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
-      "blogPost": [ { "@id": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html#article" } ]
+      "blogPost": [
+        { "@id": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html#article" },
+        { "@id": "https://www.nsy.fr/superviser-production-teraoctets-megaoctet.html#article" },
+        { "@id": "https://www.nsy.fr/site-ia-en-un-week-end.html#article" },
+        { "@id": "https://www.nsy.fr/chatbot-ia-forum-base-de-connaissances.html#article" },
+        { "@id": "https://www.nsy.fr/seo-geo-etre-cite-par-les-ia.html#article" }
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -138,6 +144,18 @@
       <p class="lede">Des retours d&rsquo;exp&eacute;rience concrets — IA appliqu&eacute;e au web, SEO &amp; GEO, syst&egrave;mes critiques. Pas de g&eacute;n&eacute;ralit&eacute;s : ce qui a &eacute;t&eacute; fait, mesur&eacute; et v&eacute;rifi&eacute;.</p>
     </div>
     <div class="blog-list">
+      <a class="blog-card has-thumb" href="reunir-site-forum-boutique-compte-unique.html">
+        <div class="thumb"><video id="compte-unique-video" loop muted playsinline preload="none" poster="public/compte-unique-illus-thumb.jpg" width="560" height="316" aria-label="Illustration animée : trois façades sous le même habillage, reliées par un fil de lumière à une seule carte-clé">
+          <source src="public/compte-unique-illus-thumb.mp4" type="video/mp4" />
+          <img src="public/compte-unique-illus-thumb.jpg" alt="Un site, un forum, une boutique, un seul compte — illustration" width="560" height="316" />
+        </video></div>
+        <div>
+        <div class="meta">11 septembre 2026 · Refonte · Compte unique · Int&eacute;gration</div>
+        <h2>Un site, un forum, une boutique, un seul compte : réunir sans reconstruire</h2>
+        <p>Le site, le forum phpBB et la boutique WooCommerce de PRV Concept r&eacute;unis sans migration : un seul habit, un seul compte port&eacute; par le forum, et une preuve exig&eacute;e plut&ocirc;t que l&rsquo;adresse e-mail.</p>
+        <span class="more">Lire l&rsquo;article →</span>
+      </div>
+      </a>
       <a class="blog-card has-thumb" href="superviser-production-teraoctets-megaoctet.html">
         <div class="thumb"><video id="supervision-video" loop muted playsinline preload="none" poster="public/supervision-thumb.jpg" width="560" height="316" aria-label="Illustration animée : un tableau de bord de supervision dont les courbes et les voyants s'animent">
           <source src="public/supervision-thumb.mp4" type="video/mp4" />
@@ -191,6 +209,26 @@
       <a class="btn btn-ghost" href="feed.xml" title="Flux RSS">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>Flux RSS</a>
     </div>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Recevoir les prochains articles</p>
+  <p class="nl-texte">Un e-mail à chaque nouvel article du journal, rien d'autre. Désinscription à tout moment.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="fr" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="prenom@societe.fr" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">M'inscrire</span></button>
+    </div>
+    <p class="nl-rgpd">Votre adresse ne sert qu'à cet envoi et n'est jamais partagée. Détails dans la <a href="confidentialite.html#newsletter">politique de confidentialité</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
   </div>
 </section>
 </main>

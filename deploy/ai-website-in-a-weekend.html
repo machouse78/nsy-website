@@ -126,7 +126,6 @@
     <article class="legal-page article">
       <div class="article-meta">16 August 2026 · Cédric Barme · Reading ≈ 7 min</div>
       <div class="article-stats" data-journal-stats data-slug="site-ia-en-un-week-end.html" hidden>
-        <span class="js-views" aria-live="polite"></span>
         <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
       </div>
       <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Building your website with AI in a weekend:<br />we took the promise at its word</h1>
@@ -180,6 +179,27 @@
       <p>And when the time comes to move to a website that works for you, ask the real question — not just <em>“how long, for how much?”</em>, but <em>“<strong>what does AI let us explore</strong> that we would never have dared to price before?”</em>. A 3D animation of your product? An assistant that answers at night without talking nonsense? Being the answer AIs give when someone looks for your trade in your region? It is the same budget as yesterday. It is no longer the same website.</p>
 
       <p style="margin-top: 30px;">A V1 gathering dust, or a project getting started? <a href="contact-en.html">Let&rsquo;s talk</a> — or test your idea in 5 minutes with our <a href="feasibility.html">feasibility questionnaire</a>.</p>
+      <p style="margin-top: 18px;">Where this project went next: <a href="ai-chatbot-forum-knowledge-base.html">wiring an AI chatbot into the forum, web 1.0 as a knowledge base</a>.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Receive the next articles</p>
+  <p class="nl-texte">One email for each new journal article, nothing else. Unsubscribe at any time.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="en" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="name@company.com" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">Subscribe</span></button>
+    </div>
+    <p class="nl-rgpd">Your address is used only for these emails and is never shared. Details in our <a href="privacy.html#newsletter">privacy policy</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
     </article>
   </div>
 </section>

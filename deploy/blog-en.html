@@ -73,7 +73,13 @@
       "description": "Practitioner field notes: AI applied to the web, SEO/GEO, critical systems.",
       "inLanguage": "en",
       "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
-      "blogPost": [ { "@id": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html#article" } ]
+      "blogPost": [
+        { "@id": "https://www.nsy.fr/one-site-forum-shop-single-account.html#article" },
+        { "@id": "https://www.nsy.fr/production-monitoring-terabytes-megabyte.html#article" },
+        { "@id": "https://www.nsy.fr/ai-website-in-a-weekend.html#article" },
+        { "@id": "https://www.nsy.fr/ai-chatbot-forum-knowledge-base.html#article" },
+        { "@id": "https://www.nsy.fr/seo-geo-getting-cited-by-ai.html#article" }
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -136,6 +142,18 @@
       <p class="lede">Concrete field notes — AI applied to the web, SEO &amp; GEO, critical systems. No generalities: what was built, measured and verified.</p>
     </div>
     <div class="blog-list">
+      <a class="blog-card has-thumb" href="one-site-forum-shop-single-account.html">
+        <div class="thumb"><video id="compte-unique-video" loop muted playsinline preload="none" poster="public/compte-unique-illus-thumb.jpg" width="560" height="316" aria-label="Animated illustration: three storefronts under the same look, linked by a thread of light to a single key card">
+          <source src="public/compte-unique-illus-thumb.mp4" type="video/mp4" />
+          <img src="public/compte-unique-illus-thumb.jpg" alt="One site, one forum, one shop, one account — illustration" width="560" height="316" />
+        </video></div>
+        <div>
+        <div class="meta">11 September 2026 · Redesign · Single account · Integration</div>
+        <h2>One site, one forum, one shop, one account: bringing them together without rebuilding</h2>
+        <p>PRV Concept&rsquo;s website, phpBB forum and WooCommerce shop brought together without migration: one look, one account held by the forum, and proof required rather than an email address.</p>
+        <span class="more">Read the article →</span>
+      </div>
+      </a>
       <a class="blog-card has-thumb" href="production-monitoring-terabytes-megabyte.html">
         <div class="thumb"><video id="supervision-video" loop muted playsinline preload="none" poster="public/supervision-thumb.jpg" width="560" height="316" aria-label="Animated illustration: a monitoring dashboard whose curves and indicators come alive">
           <source src="public/supervision-thumb.mp4" type="video/mp4" />
@@ -189,6 +207,26 @@
       <a class="btn btn-ghost" href="feed-en.xml" title="RSS feed">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M6.18 15.64a2.18 2.18 0 1 1 0 4.36 2.18 2.18 0 0 1 0-4.36zM4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73H19.6C19.6 11.4 12.6 4.44 4 4.44zm0 5.66v2.83a7.3 7.3 0 0 1 7.3 7.3h2.83c0-5.59-4.54-10.13-10.13-10.13z"/></svg>RSS feed</a>
     </div>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Receive the next articles</p>
+  <p class="nl-texte">One email for each new journal article, nothing else. Unsubscribe at any time.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="en" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="name@company.com" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">Subscribe</span></button>
+    </div>
+    <p class="nl-rgpd">Your address is used only for these emails and is never shared. Details in our <a href="privacy.html#newsletter">privacy policy</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
   </div>
 </section>
 </main>

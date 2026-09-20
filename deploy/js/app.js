@@ -164,6 +164,64 @@
     });
   }
 
+  // ───── Newsletter du journal (partials/newsletter.{fr,en}.html → newsletter.php) ─────
+  // Double opt-in : le serveur envoie un e-mail de confirmation. `rendu` et
+  // `envoi` sont deux horodatages de la MÊME horloge (celle du navigateur) :
+  // le serveur n'en compare que l'écart (piège temporel). Sans JS, le
+  // formulaire part quand même et reçoit une page HTML (fail-open).
+  // Le message de succès et l'erreur restent affichés jusqu'au prochain envoi.
+  document.querySelectorAll('form.nl-form').forEach((nlForm) => {
+    const N = pageLang === 'en' ? {
+      sending: 'Sending…',
+      ok: 'Check your inbox to confirm.',
+      errSend: 'Sign-up failed — please try again in a few minutes.',
+      errNet: 'Network error — please try again.',
+    } : {
+      sending: 'Envoi…',
+      ok: 'Vérifiez votre boîte mail pour confirmer.',
+      errSend: 'Inscription impossible — réessayez dans quelques minutes.',
+      errNet: 'Erreur réseau — veuillez réessayer.',
+    };
+    const champ = (nom) => nlForm.querySelector(`input[name="${nom}"]`);
+    if (champ('rendu')) champ('rendu').value = String(Date.now());
+    const btn = nlForm.querySelector('button[type="submit"]');
+    const label = btn ? (btn.querySelector('.btn-label') || btn) : null;
+    const statut = nlForm.querySelector('.nl-statut');
+    const erreur = nlForm.querySelector('.form-erreur');
+    const montre = (el, texte) => { if (el) { el.textContent = texte; el.hidden = !texte; } };
+
+    nlForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (champ('envoi')) champ('envoi').value = String(Date.now());
+      montre(statut, '');
+      montre(erreur, '');
+      const initial = label ? label.textContent : '';
+      if (btn) btn.disabled = true;
+      if (label) label.textContent = N.sending;
+      try {
+        // getAttribute : `nlForm.action` pourrait désigner un champ nommé « action ».
+        const res = await fetch(nlForm.getAttribute('action'), {
+          method: 'POST',
+          body: new FormData(nlForm),
+          headers: { Accept: 'application/json' },
+        });
+        let data = {};
+        try { data = await res.json(); } catch (_) {}
+        if (res.ok && data.ok) {
+          montre(statut, N.ok);
+          if (champ('email')) champ('email').value = '';
+        } else {
+          montre(erreur, '✕ ' + (data.error || N.errSend));
+        }
+      } catch (_) {
+        montre(erreur, '✕ ' + N.errNet);
+      } finally {
+        if (btn) btn.disabled = false;
+        if (label) label.textContent = initial;
+      }
+    });
+  });
+
   // ───── Chatbot ─────
   const fab = document.getElementById('cbot-fab');
   const panel = document.getElementById('cbot');
@@ -426,6 +484,8 @@
       'https://www.facebook.com/reel/2812928635744339',
       'https://www.linkedin.com/pulse/des-t%25c3%25a9raoctets-au-m%25c3%25a9gaoctet-la-supervision-est-une-duyee',
       'https://www.facebook.com/reel/1080327827884467',
+      'https://www.linkedin.com/pulse/r%25c3%25a9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
+      'https://www.facebook.com/reel/1392916158966415',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
@@ -1380,7 +1440,8 @@
         || v.id === 'seo-geo-video'
         || v.id === 'chatbot-forum-video'
         || v.id === 'weekend-site-video'
-        || v.id === 'supervision-video') return; // boomerang déjà sans couture
+        || v.id === 'supervision-video'
+        || v.id === 'compte-unique-video') return; // boomerang déjà sans couture
     setupLoopFade(v);
   });
 
@@ -1650,16 +1711,17 @@
   }
 })();
 
-/* ───── Journal : compteurs de vues / « j'aime » (journal-stats.php) ─────
+/* ───── Journal : « j'aime » affiché, vues mesurées (journal-stats.php) ─────
    Clé = slug FR (data-slug, partagé par la paire FR/EN). La vue n'est comptée
    qu'une fois par session (sessionStorage) ; l'état « aimé » vit en
-   localStorage. Tout échec réseau laisse simplement la barre masquée. */
+   localStorage. Tout échec réseau laisse simplement la barre masquée.
+   owner, 13/09/2026 : le NOMBRE DE VUES N'EST PLUS AFFICHÉ dans l'article —
+   la mesure continue, elle ne se lit que dans le tableau de bord /stats/. */
 (function () {
   var el = document.querySelector('[data-journal-stats]');
   if (!el || !window.fetch) return;
   var slug = el.getAttribute('data-slug');
   var en = (document.documentElement.lang || 'fr') === 'en';
-  var viewsEl = el.querySelector('.js-views');
   var likeBtn = el.querySelector('.js-like');
   var likeLabel = el.querySelector('.js-like-label');
   var likedKey = 'nsy_liked_' + slug, viewedKey = 'nsy_viewed_' + slug;
@@ -1668,7 +1730,6 @@
 
   function fmt(n) { return Number(n || 0).toLocaleString(en ? 'en-GB' : 'fr-FR'); }
   function render(d) {
-    viewsEl.textContent = fmt(d.views) + (en ? (d.views > 1 ? ' views' : ' view') : (d.views > 1 ? ' vues' : ' vue'));
     likeLabel.textContent = (en ? 'Like' : 'J\u2019aime') + ' (' + fmt(d.likes) + ')';
     likeBtn.classList.toggle('liked', liked);
     likeBtn.setAttribute('aria-pressed', liked ? 'true' : 'false');

@@ -1598,6 +1598,60 @@ section.block:first-of-type { border-top: 0; }
 /* Erreur d'envoi sous le bouton — reste visible tant qu'un nouvel envoi n'a pas été tenté. */
 .form-erreur { margin: 12px 0 0; color: #ff6b6b; font-size: 0.95rem; line-height: 1.45; }
 .form-erreur[hidden] { display: none; }
+
+/* ───── Newsletter du journal (partials/newsletter.{fr,en}.html) ─────
+   Même carte que les .blog-card. Sélecteurs à deux classes : dans un article,
+   le bloc vit sous .legal-page, dont les règles p / a / h2 l'emporteraient. */
+.nl-bloc {
+  margin: 40px 0 0;
+  padding: 24px 26px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: rgba(255,255,255,0.02);
+}
+.nl-bloc .nl-titre {
+  margin: 0 0 6px;
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--fg-0);
+}
+.nl-bloc .nl-texte { margin: 0 0 16px; color: var(--fg-1); font-size: 15px; line-height: 1.55; }
+.nl-bloc .nl-form { max-width: 560px; }
+.nl-bloc .nl-ligne { display: flex; flex-wrap: wrap; gap: 10px; }
+.nl-bloc .nl-ligne input[type="email"] {
+  flex: 1 1 240px;
+  min-width: 0;
+  background: rgba(5,8,15,0.6);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 13px 18px;
+  color: var(--fg-0);
+  font-family: var(--font-body);
+  font-size: 15px;
+  outline: none;
+  transition: border-color .15s, background .15s;
+}
+.nl-bloc .nl-ligne input[type="email"]:focus { border-color: var(--accent); background: rgba(0,229,255,0.04); }
+.nl-bloc .nl-ligne .btn { flex: 0 0 auto; justify-content: center; }
+@media (max-width: 480px) { .nl-bloc .nl-ligne .btn { flex: 1 1 100%; } }
+.nl-bloc .nl-rgpd { margin: 12px 0 0; color: var(--fg-2); font-size: 12.5px; line-height: 1.5; }
+.nl-bloc .nl-rgpd a { color: var(--fg-1); text-decoration: underline; text-underline-offset: 3px; }
+.nl-bloc .nl-rgpd a:hover { color: var(--accent); }
+.nl-bloc .nl-statut { margin: 12px 0 0; color: var(--accent); font-size: 0.95rem; line-height: 1.45; }
+.nl-bloc .form-erreur { margin: 12px 0 0; color: #ff6b6b; }
+.nl-bloc .nl-statut[hidden], .nl-bloc .form-erreur[hidden] { display: none; }
+.nl-bloc .nl-label, .nl-bloc .nl-hp {
+  position: absolute;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+@media (max-width: 480px) { .nl-bloc { padding: 20px 18px; } }
 @keyframes toast-in {
   from { transform: translateY(8px); opacity: 0; }
 }
@@ -2731,6 +2785,7 @@ footer.foot {
    liens vers les articles du journal dans les cartes Réalisations). Ajouter le
    sélecteur ici EN MÊME TEMPS qu'on ajoute un lien dans un nouveau bloc. */
 .tarifs-bloc .apres a,
+.cap p a,
 .realisation-desc a,
 .realisation-specs dd a,
 .realisation-quote blockquote a { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
