@@ -180,6 +180,22 @@ t('chat.php : « alerte LLM impossible » et « empty completion » passent par 
   && str_contains($chat, "nsy_diag('NSY chat: empty completion')"));
 t('chat.php : la sonde de disponibilité garde sa destination (_secret/chat-errors.log)',
   count(array_filter(error_log_nus($chat))) === 0);
+// Tout ce qui entre dans chat-errors.log doit porter « upstream HTTP <code> » : c'est
+// le seul marqueur que le motif AMONT de scripts/sonde-journal.py reconnaît, donc le
+// seul que --tolere-amont puisse tolérer. La sonde de disponibilité écrivait
+// « sonde modèle … → HTTP 429 » : un simple 429 du voyant faisait rendre 2 à la
+// sonde et bloquait tout déploiement (corrigé le 20/09/2026).
+preg_match_all('/@?error_log\(\s*(.+?),\s*3,\s*__DIR__ \. \'\/_secret\/chat-errors\.log\'/s', $chat, $m);
+/** Le 1er argument porte-t-il le marqueur ? Une variable est résolue par son affectation. */
+$porteLeMarqueur = static function (string $arg) use ($chat): bool {
+    $marqueur = "' upstream HTTP '";
+    if (preg_match('/^\$(\w+)$/', trim($arg), $v)) {
+        return (bool)preg_match('/\$' . preg_quote($v[1], '/') . '\s*=\s*[^;]*' . preg_quote($marqueur, '/') . '/', $chat);
+    }
+    return str_contains($arg, $marqueur);
+};
+t('chat.php : les ' . count($m[1]) . " écritures dans chat-errors.log portent toutes « upstream HTTP »",
+  count($m[1]) === 2 && count(array_filter($m[1], $porteLeMarqueur)) === 2);
 
 // ── newsletter.php (19/09/2026) : pas même un error_log() avec destination ──
 $newsletter = (string)file_get_contents("$racine/newsletter.php");

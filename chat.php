@@ -155,7 +155,12 @@ if (!empty($body['health'])) {
     $avail   = ($pstatus >= 200 && $pstatus < 300);
     if (!$avail) {
         $pdiag = substr(preg_replace('/\s+/', ' ', (string)$pbody), 0, 200);
-        @error_log(date('c') . ' sonde modèle ' . $model . ' → HTTP ' . $pstatus . ' — ' . $pdiag . "\n",
+        // Même préfixe « upstream HTTP <code> » que le refus du parcours de génération
+        // (plus bas) : c'est LUI que le motif AMONT de scripts/sonde-journal.py
+        // reconnaît, et donc que --tolere-amont tolère. Écrit « sonde modèle … » en
+        // tête, la ligne ne matchait pas et un simple 429 du voyant faisait rendre 2
+        // à la sonde — barrière levée à tort, tout déploiement bloqué (20/09/2026).
+        @error_log(date('c') . ' upstream HTTP ' . $pstatus . ' — sonde modèle ' . $model . ' : ' . $pdiag . "\n",
                    3, __DIR__ . '/_secret/chat-errors.log');
         nsy_alerte_llm(
             '[NSY] Le modèle du chatbot ne répond plus — Ansley en repli',

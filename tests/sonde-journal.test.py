@@ -70,6 +70,14 @@ PHP_WARN = (H + "[proxy_fcgi:error] " + P + "AH01071: Got error 'PHP message: PH
             f"variable $x in {WEB}/chat.php on line 3'")
 PHP_DEPR = PHP_WARN.replace("PHP Warning:  Undefined variable $x", "PHP Deprecated:  str_getcsv(): the $escape parameter")
 PHP_FATAL = PHP_WARN.replace("PHP Warning:  Undefined variable $x", "PHP Fatal error:  Uncaught Error")
+# La sonde de DISPONIBILITÉ de chat.php (le voyant du widget) écrit dans
+# chat-errors.log. Elle a longtemps écrit « sonde modèle <modèle> → HTTP 429 »,
+# que le motif AMONT ne reconnaissait pas : un seul 429 du voyant — et small et
+# medium sont à 0 req/min depuis le 13/09/2026 — faisait rendre 2 à la sonde du
+# journal, donc bloquait tout déploiement. Alignée le 20/09/2026 sur le même
+# préfixe que le parcours de génération.
+VOYANT = "2026-09-20T09:00:00+02:00 upstream HTTP 429 — sonde modèle ministral-8b-2512 : capacity"
+VOYANT_403 = "2026-09-20T09:00:00+02:00 upstream HTTP 403 — sonde modèle mistral-medium : plan inactif"
 CHAT_AMONT = H + "[proxy_fcgi:error] " + P + "AH01071: Got error 'PHP message: NSY chat: upstream HTTP 429 — capacity'"
 AMONT = "2026-09-17T09:00:00+02:00 upstream HTTP 429 (mistral-small-latest)"
 
@@ -211,6 +219,17 @@ for nom, erreur in (("FTP refusé (ftplib.error_perm)", ftplib.error_perm("550 i
                     ("connexion fermée (EOFError)", EOFError("coupure"))):
     c, s_ = joue_echec(erreur)
     t(f"sonde en échec — {nom} : code 1 et la CAUSE affichée", c, 1, s_, ["sonde en échec", str(erreur)[:20]])
+
+
+c, s_, _ = joue(["--tolere-amont"], {CHAT: VOYANT})
+t("--tolere-amont : le 429 du VOYANT de chat.php est toléré (format aligné 20/09)", c, 0, s_,
+  ["refus amont du fournisseur, toléré", "JOURNAL VIERGE"])
+c, s_, _ = joue([], {CHAT: VOYANT})
+t("sans l'option, le 429 du voyant arrête quand même", c, 2, s_)
+c, s_, _ = joue(["--tolere-amont"], {CHAT: VOYANT_403})
+t("un 403 du voyant (modèle hors du palier) ARRÊTE, comme en génération", c, 2, s_)
+c, s_, _ = joue(["--tolere-amont"], {LOG: VOYANT})
+t("la même ligne dans le journal de l'HÉBERGEMENT arrête toujours", c, 2, s_)
 
 shutil.rmtree(FAUX, ignore_errors=True)
 print("SONDE-JOURNAL : TOUS LES TESTS PASSENT" if not echecs else f"SONDE-JOURNAL : {echecs} ÉCHEC(S)")
