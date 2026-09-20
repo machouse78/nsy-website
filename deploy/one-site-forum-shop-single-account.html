@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>One site, one forum, one shop, one account: bringing them together without rebuilding | NSY</title>
+<meta name="description" content="Bringing PRV Concept&#x27;s website, phpBB forum and WooCommerce shop together without rebuilding: a child style and a child theme, a single account held by the forum, a single-use encrypted token, proof required to link existing accounts." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="en_GB" />
+<meta property="og:url" content="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<meta property="og:title" content="One site, one forum, one shop, one account: bringing them together without rebuilding" />
+<meta property="og:description" content="Three tools, one look, one account — no migration. Which system holds identity, and why an email address is not proof enough." />
+<meta property="og:image" content="https://www.nsy.fr/public/compte-unique-article-en.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="642" />
+<meta property="og:image:alt" content="Infographic — One site, one forum, one shop, one account: the website, the phpBB forum and the WooCommerce shop under the same look, a single account held by the forum and a single-use encrypted token between the two" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="One account | NSY" />
+<meta name="twitter:description" content="Three tools, one look, one account — no migration. Which system holds identity, and why an email address is not proof enough." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/compte-unique-article-en.jpg" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="alternate" type="application/rss+xml" title="NSY — Insights" href="https://www.nsy.fr/feed-en.xml" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
+  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
+  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/one-site-forum-shop-single-account.html#article",
+      "headline": "One site, one forum, one shop, one account: bringing them together without rebuilding",
+      "description": "Bringing PRV Concept's website, phpBB forum and WooCommerce shop together without rebuilding: a child style and a child theme, a single account held by the forum, a single-use encrypted token, proof required to link existing accounts.",
+      "inLanguage": "en",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/about.html"},
+      "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
+      "datePublished": "2026-09-11T12:00:00+02:00",
+      "dateModified": "2026-09-11T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/compte-unique-article-en.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/one-site-forum-shop-single-account.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog-en.html#blog" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.nsy.fr/index-en.html" },
+        { "@type": "ListItem", "position": 2, "name": "Insights", "item": "https://www.nsy.fr/blog-en.html" },
+        { "@type": "ListItem", "position": 3, "name": "One account", "item": "https://www.nsy.fr/one-site-forum-shop-single-account.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index-en.html#top" aria-label="NSY — Home">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text"><small>Consulting · AI · Web</small></div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index-en.html#top">Home</a>
+      <a class="nav-link active" data-target="blog" href="blog-en.html">Insights</a>
+      <a class="nav-link" data-target="services" href="services-en.html">Services</a>
+      <a class="nav-link" data-target="realisations" href="portfolio.html">Work</a>
+      <a class="nav-link" data-target="about" href="about.html">About</a>
+      <a class="nav-link" data-target="contact" href="contact-en.html">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="reunir-site-forum-boutique-compte-unique.html" class="lang-flag" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="#" class="lang-flag active" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Insights</span>
+      <span class="line"></span>
+      <span class="mono"><a href="blog-en.html" style="color: inherit;">← All articles</a></span>
+    </div>
+    <article class="legal-page article">
+      <div class="article-meta">11 September 2026 · Cédric Barme · Reading ≈ 7 min</div>
+      <div class="article-stats" data-journal-stats data-slug="reunir-site-forum-boutique-compte-unique.html" hidden>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
+      </div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">One site, one forum, one shop, one account:<br />bringing them together without rebuilding</h1>
+      <p class="lede" style="font-size: 17px;">For years, PRV Concept lived at three addresses: a website, a twenty-year-old phpBB forum and a WooCommerce shop opened in 2013. Each with its own look, each with its own account. PRV Concept is the association of PRV V6 enthusiasts chaired by NSY's founder, and it is our laboratory. In a case like this, the temptation is called a clean slate: migrate everything into a single tool. We did the opposite. The forum and the shop kept their engines, they took on the website's look, and a single account now opens all three. An engineering account of the project, with the two decisions that mattered: which system holds identity, and what proof we require.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/compte-unique-article-en.jpg" alt="Infographic — One site, one forum, one shop, one account: the website, the phpBB forum and the WooCommerce shop under the same look, a single account held by the forum and a single-use encrypted token between the two" loading="lazy" width="1140" height="642" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+      <h2>Three houses, three habits</h2>
+      <p>The forum wore a theme from another era, the shop the one it launched with. Moving from one to the other meant a new menu, a new visual identity and sometimes a new tab. A member had an account on the forum and, if they ordered from the shop, a second account with a second password.</p>
+      <p>For the association, three tools to maintain. For visitors, three sites that did not recognise one another.</p>
+      <h2>Why not rebuild everything</h2>
+      <p>Rebuilding the forum and the shop in a single tool means migrating twenty years of topics and posts, the members' accounts, the order history, and the addresses of thousands of pages that Google and the members know. A migration like that always loses something: a link, an attachment, a habit. And it replaces two proven pieces of software, maintained by their communities, with a bespoke build that would then have to be maintained alone.</p>
+      <p>PRV Concept's value is not in the software. It is in what the community has put into it. So the project set itself a simple rule: touch neither phpBB's core nor WooCommerce's, and lose nothing. At the end, the topics, posts, accounts, orders and page addresses are all the same.</p>
+      <h2>One look, without touching the core</h2>
+      <p>Both applications can be re-dressed: phpBB with a <em>child style</em>, WordPress with a <em>child theme</em>. It is a layer that inherits from the original and replaces only what it is asked to. The forum and the shop now carry the website's header, menu, breadcrumb trail and footer. Forum and Shop become two sections of the menu, opening in the same tab.</p>
+      <p>The benefit is not just cosmetic. A phpBB or WooCommerce security update installs as before, since none of their code has been modified; the look is maintained separately. And inherited flaws get fixed along the way: the shop, which had never had a "My account" page, now has one, with sign-in, password reset and order history.</p>
+      <h2>One account: which system is the source of truth?</h2>
+      <p>Linking two applications through a shared account starts with a decision: which one holds identity. Here, the forum. That is where the members live, with their groups and their rights to the association's members-only area. The shop trusts it; the reverse is not true.</p>
+      <p>The technical difficulty fits in one sentence: phpBB cannot run inside WordPress, as the two compete for the same server variables. Hence a small relay at the root of the site. It lets phpBB check the member's session itself, with all its safeguards: IP address, browser, "remember me", bans. It then hands the shop an encrypted, authenticated token (AES-256-GCM), valid for two minutes and usable once. The shop opens the member's session, or creates a customer record if there is none. Nobody types a second password, and signing out, wherever it starts, closes both.</p>
+      <p>The token cannot be read in the server logs. It carries the direction it travels in, forum to shop or the other way round, and is never accepted in the other. A replayed or tampered token is rejected.</p>
+      <h2>The email address trap</h2>
+      <p>To link the accounts that already existed, the obvious answer would have been the email address: same address on the forum and in the shop, same person. That is precisely what had to be avoided.</p>
+      <p>On this forum, registrations are approved by an administrator, not by a link sent to the address. The address on an account is therefore not proven by its holder. Someone could register with a shop customer's address and, through automatic matching, read their orders and delivery addresses.</p>
+      <p>Of the shop's 88 customers, 30 had a forum account with the same address. For them, the shop asks once for the password of their customer record, or for it to be reset through "lost password". That proof, and that proof alone, links the two accounts; after that, the forum is enough. A little less convenience on day one, in exchange for the certainty that nobody can take over someone else's orders.</p>
+      <h2>Safeguards checked at every sign-in</h2>
+      <p>The bridge's rules do not apply only on the day the accounts are linked: they are checked again at every sign-in. Only ordinary customer records can be opened through the forum, never an administrator account. One member maps to one record. And a session opened with the shop password is never closed by the forum.</p>
+      <h2>Testing in production without anyone seeing</h2>
+      <p>A single account can only really be tested for real: on the live server, with the real cookies and the real shop. The "Sign in with my forum account" button first lived in pilot mode: only a browser carrying a test cookie could see it.</p>
+      <p>Using test forum accounts, 26 scenarios out of 26 passed on the live site: record creation, linked sign-outs in both directions, replayed and tampered tokens rejected, linking by password, the checkout page button. The checkout flow stayed identical, and the server error log unchanged. The test records were deleted, then the switch was flipped for everyone.</p>
+      <h2>And the workshop foreman follows</h2>
+      <p>Bringing the three surfaces together also served the association's assistant. Père Hervé, a workshop foreman made of artificial intelligence, lives in the chat bubble of the website, the forum and the shop. He answers from the Library's digitised workshop manuals, citing the page and the folio, from forum topics with their exact titles, and from the shop's products. His rule: no source, no answer. On the forum, every one of his replies is reviewed by a human before it is published.</p>
+      <p>The single account benefits him directly: the same session tells him who he is talking to, and an authorised member can ask him about the association's members-only documents, which he will cite to nobody else. His architecture is detailed in our write-up on <a href="ai-chatbot-forum-knowledge-base.html">wiring an AI chatbot into a forum</a>; the association introduces him itself in <a href="https://www.prv-concept.com/en/journal/pere-herve-ai-workshop-foreman.html" target="_blank" rel="noopener">Père Hervé, a workshop foreman made of artificial intelligence</a>.</p>
+      <h2>What this project says about a web project</h2>
+      <ul>
+        <li><strong>Connect before you rebuild.</strong> The tools that already work often carry most of the value: the content, the habits, the links. Making them work together costs less and loses less than a migration.</li>
+        <li><strong>One source of identity.</strong> Two applications that trust each other are two front doors. Only one is the source of truth; the other consults it.</li>
+        <li><strong>Proof before convenience.</strong> An email address is not an identity until someone has proven it. A password asked for once is better than a hijacked account.</li>
+        <li><strong>Measure before and after.</strong> A check before connecting anything, an error log compared afterwards: you know what you changed, and what you did not break.</li>
+      </ul>
+      <p>It is the method of a well-run <a href="website-redesign.html">website redesign</a>: keep what works, rebuild the rest. The full project is described on our <a href="portfolio.html">Portfolio</a> page, and the association tells the members' side of the story, with video, in <a href="https://www.prv-concept.com/en/journal/one-site-one-account.html" target="_blank" rel="noopener">The site, the forum and the shop are now one</a>.</p>
+      <p style="margin-top: 30px;">A website, a forum or a shop each living its own life? <a href="contact-en.html">Let&rsquo;s talk</a> — or see how a <a href="website-redesign.html">redesign that keeps what works</a> is run.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Receive the next articles</p>
+  <p class="nl-texte">One email for each new journal article, nothing else. Unsubscribe at any time.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="en" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Email address</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="name@company.com" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">Subscribe</span></button>
+    </div>
+    <p class="nl-rgpd">Your address is used only for these emails and is never shared. Details in our <a href="privacy.html#newsletter">privacy policy</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">INDEPENDENT COMPANY · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index-en.html#top">Home</a>
+        <a href="services-en.html">Services</a>
+        <a href="portfolio.html">Work</a>
+        <a href="about.html">About</a>
+        <a href="why-nsy.html">Why NSY?</a>
+        <a href="3d-design.html">3D Design</a>
+        <a href="faq-en.html">FAQ</a>
+        <a href="blog-en.html">Insights</a>
+        <a href="contact-en.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertise</h5>
+        <a href="java-ee-migration.html">Java EE migration</a>
+        <a href="wildfly-jboss-expert.html">WildFly · JBoss EAP</a>
+        <a href="openshift-kubernetes-expert.html">OpenShift · Kubernetes</a>
+        <a href="kafka-messaging-expert.html">Kafka · Messaging</a>
+        <a href="dora-compliance.html">DORA compliance</a>
+        <a href="claude-integration.html">Claude integration</a>
+        <a href="ai-website-creation.html">AI website creation</a>
+        <a href="website-redesign.html">Website redesign</a>
+        <a href="ai-web-glossary.html">AI & web glossary</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="feasibility.html">Feasibility request</a>
+      </div>
+      <div class="foot-col">
+        <h5>Where I work</h5>
+        <a href="website-creation-loiret.html">Website · Loiret</a>
+        <a href="website-creation-orleans.html">Website · Orléans</a>
+        <a href="website-creation-tours.html">Website · Tours</a>
+        <a href="website-creation-paris.html">Website · Paris</a>
+        <a href="website-creation-lyon.html">Website · Lyon</a>
+        <a href="website-creation-bordeaux.html">Website · Bordeaux</a>
+        <a href="technical-consultant-paris.html">Technical consultant · Paris</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
+      <div><a href="legal-notice.html">Legal notice</a> · <a href="privacy.html">Privacy</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<!-- @partial:chatbot -->
+<!-- ───── Chatbot (AI assistant — Ansley, NSY architect) ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Open chat with Ansley">
+  <video class="cbot-fab-face" id="ansley-fab-video" autoplay loop muted playsinline preload="auto" poster="public/ansley-fab.png" aria-hidden="true">
+    <source src="public/ansley-fab.mp4" type="video/mp4" />
+    <img src="public/ansley-fab.png" alt="Ansley" />
+  </video>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+</button>
+
+<div class="cbot-greeter" id="cbot-greeter" role="dialog" aria-label="Message from Ansley">
+  <button class="cbot-greeter-close" id="cbot-greeter-close" aria-label="Dismiss message">&times;</button>
+  <p>Hi! I'm <b>Ansley</b>, NSY's AI architect. A question about our services, AI, a web project?</p>
+</div>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Ansley — NSY AI assistant">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <video id="ansley-video" class="cbot-avatar-vid" loop muted playsinline preload="none" poster="public/ansley.png" aria-label="Ansley, NSY AI architect">
+        <source src="public/ansley.mp4" type="video/mp4" />
+        <img src="public/ansley.png" alt="Ansley" class="cbot-avatar-img" />
+      </video>
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Ansley <span class="cbot-ai-badge" id="cbot-ai-badge" title="Ansley, NSY's AI architect — generative assistant grounded in the site's data (RAG), model hosted in the European Union.">AI</span></div>
+      <div class="cbot-status" id="cbot-status"><span class="cbot-online"></span>Online · Generative AI</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Close">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/ansley.png" alt="Ansley" /></div>
+      <div class="cbot-bubble">Hello 👋 I'm <b>Ansley</b>, NSY's AI architect: I know the whole site and answer in your language. Services, expertise, methods, availability — ask away.</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">What services do you offer?</button>
+    <button class="cbot-chip">How much does an AI website cost?</button>
+    <button class="cbot-chip">Do you work with banks?</button>
+    <button class="cbot-chip">How does this assistant work?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Ask your question…" maxlength="800" />
+    <button class="cbot-send" id="cbot-send" aria-label="Send">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span id="cbot-note">AI-generated answers (Mistral, EU) · no sensitive data</span>
+    <button id="cbot-escalate">Talk to Cédric →</button>
+  </div>
+</div>
+<!-- @endpartial:chatbot -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>

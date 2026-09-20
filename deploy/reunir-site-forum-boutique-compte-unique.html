@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Un site, un forum, une boutique, un seul compte : réunir sans reconstruire | NSY</title>
+<meta name="description" content="Réunir le site, le forum phpBB et la boutique WooCommerce de PRV Concept sans rien reconstruire : habillage par style et thème enfants, compte unique porté par le forum, jeton chiffré à usage unique, preuve exigée pour relier les comptes existants." />
+<meta name="robots" content="index, follow" />
+<link rel="canonical" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<link rel="alternate" hreflang="fr" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<link rel="alternate" hreflang="en" href="https://www.nsy.fr/one-site-forum-shop-single-account.html" />
+<link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+
+<meta property="og:type" content="article" />
+<meta property="og:site_name" content="NSY" />
+<meta property="og:locale" content="fr_FR" />
+<meta property="og:url" content="https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" />
+<meta property="og:title" content="Un site, un forum, une boutique, un seul compte : réunir sans reconstruire" />
+<meta property="og:description" content="Trois outils, un seul habit, un seul compte — sans migration. Qui fait foi pour l&#x27;identité, et pourquoi l&#x27;adresse e-mail ne suffit pas comme preuve." />
+<meta property="og:image" content="https://www.nsy.fr/public/compte-unique-article.jpg" />
+<meta property="og:image:width" content="1140" />
+<meta property="og:image:height" content="642" />
+<meta property="og:image:alt" content="Infographie — Un site, un forum, une boutique, un seul compte : le site, le forum phpBB et la boutique WooCommerce sous le même habit, un compte unique porté par le forum et un jeton chiffré à usage unique entre les deux" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Un seul compte | NSY" />
+<meta name="twitter:description" content="Trois outils, un seul habit, un seul compte — sans migration. Qui fait foi pour l&#x27;identité, et pourquoi l&#x27;adresse e-mail ne suffit pas comme preuve." />
+<meta name="twitter:image" content="https://www.nsy.fr/public/compte-unique-article.jpg" />
+
+<link rel="icon" href="/favicon.ico" sizes="any" />
+<link rel="icon" type="image/png" sizes="192x192" href="public/cropped-NSY-logo-192x192.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="public/cropped-NSY-logo-32x32.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="public/cropped-NSY-logo-180x180.png" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="alternate" type="application/rss+xml" title="NSY — Journal" href="https://www.nsy.fr/feed.xml" />
+<link rel="stylesheet" href="css/style.css" />
+<style>
+  .article h2 { font-size: 24px; margin: 38px 0 12px; }
+  .article h3 { font-size: 18px; margin: 26px 0 8px; color: var(--fg-0); }
+  .article p, .article li { color: var(--fg-1); line-height: 1.65; }
+  .article p { margin: 0 0 16px; }
+  .article ul, .article ol { margin: 0 0 16px 22px; }
+  .article li { margin-bottom: 8px; }
+  .article table { width: 100%; border-collapse: collapse; margin: 18px 0 24px; font-size: 14px; }
+  .article th, .article td { border: 1px solid var(--line-strong); padding: 10px 12px; text-align: left; vertical-align: top; color: var(--fg-1); }
+  .article th { color: var(--fg-0); font-family: var(--font-display); font-weight: 600; background: rgba(255,255,255,0.03); }
+  .article .article-meta { font-family: var(--font-mono); font-size: 11.5px; letter-spacing: .05em;
+    color: var(--fg-2); text-transform: uppercase; margin-bottom: 26px; }
+</style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "BlogPosting",
+      "@id": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html#article",
+      "headline": "Un site, un forum, une boutique, un seul compte : réunir sans reconstruire",
+      "description": "Réunir le site, le forum phpBB et la boutique WooCommerce de PRV Concept sans rien reconstruire : habillage par style et thème enfants, compte unique porté par le forum, jeton chiffré à usage unique, preuve exigée pour relier les comptes existants.",
+      "inLanguage": "fr",
+      "author": {"@type": "Person", "@id": "https://www.nsy.fr/#person", "name": "Cédric Barme", "url": "https://www.nsy.fr/a-propos.html"},
+      "publisher": {"@type": "Organization", "@id": "https://www.nsy.fr/#org", "name": "NSY", "url": "https://www.nsy.fr/", "logo": {"@type": "ImageObject", "url": "https://www.nsy.fr/public/nsy-logo.png"}},
+      "datePublished": "2026-09-11T12:00:00+02:00",
+      "dateModified": "2026-09-11T12:00:00+02:00",
+      "image": "https://www.nsy.fr/public/compte-unique-article.jpg",
+      "mainEntityOfPage": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html",
+      "isPartOf": { "@id": "https://www.nsy.fr/blog.html#blog" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Accueil", "item": "https://www.nsy.fr/" },
+        { "@type": "ListItem", "position": 2, "name": "Journal", "item": "https://www.nsy.fr/blog.html" },
+        { "@type": "ListItem", "position": 3, "name": "Un seul compte", "item": "https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html" }
+      ]
+    }
+  ]
+}
+</script>
+</head>
+<body>
+
+<!-- @partial:nav -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="brand" href="index.html#top" aria-label="NSY — Accueil">
+      <img src="public/nsy-logo.png" alt="NSY" class="brand-mark" />
+      <div class="brand-text">
+        <small>Conseil · IA · Web</small>
+      </div>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" data-target="top" href="index.html#top">Accueil</a>
+      <a class="nav-link active" data-target="blog" href="blog.html">Journal</a>
+      <a class="nav-link" data-target="services" href="services.html">Services</a>
+      <a class="nav-link" data-target="realisations" href="realisations.html">Réalisations</a>
+      <a class="nav-link" data-target="about" href="a-propos.html">À propos</a>
+      <a class="nav-link" data-target="contact" href="contact.html">Contact</a>
+    </div>
+    <div class="nav-social">
+      <a class="nav-icon" href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+      </a>
+      <a class="nav-icon" href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+      </a>
+    </div>
+    <div class="nav-lang">
+      <a href="#" class="lang-flag active" data-lang="fr" title="Français" aria-label="Français">🇫🇷</a>
+      <a href="one-site-forum-shop-single-account.html" class="lang-flag" data-lang="en" title="English" aria-label="English">🇬🇧</a>
+    </div>
+    <span class="nav-break" aria-hidden="true"></span>
+  </div>
+</nav>
+<!-- @endpartial:nav -->
+<main>
+<section class="block" style="padding-top: 64px;">
+  <div class="container">
+    <div class="eyebrow-row">
+      <span class="block-eyebrow">Journal</span>
+      <span class="line"></span>
+      <span class="mono"><a href="blog.html" style="color: inherit;">← Tous les articles</a></span>
+    </div>
+    <article class="legal-page article">
+      <div class="article-meta">11 septembre 2026 · Cédric Barme · Lecture ≈ 7 min</div>
+      <div class="article-stats" data-journal-stats data-slug="reunir-site-forum-boutique-compte-unique.html" hidden>
+        <button type="button" class="js-like" aria-pressed="false"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg><span class="js-like-label"></span></button>
+      </div>
+      <h1 style="font-size: clamp(30px, 4.5vw, 44px); margin-bottom: 18px;">Un site, un forum, une boutique, un seul compte :<br />réunir sans reconstruire</h1>
+      <p class="lede" style="font-size: 17px;">Pendant des années, PRV Concept a vécu à trois adresses : un site, un forum phpBB de vingt ans, une boutique WooCommerce ouverte en 2013. Chacun son allure, chacun son compte. PRV Concept est l'association des passionnés du V6 PRV que préside le fondateur de NSY, et c'est notre laboratoire. Dans ce cas de figure, la tentation s'appelle la table rase : tout migrer vers un outil unique. Nous avons fait l'inverse. Le forum et la boutique ont gardé leur moteur, ils ont pris l'habit du site, et un seul compte ouvre désormais les trois. Retour d'expérience côté ingénierie, avec les deux décisions qui ont compté : qui fait foi pour l'identité, et quelle preuve on exige.</p>
+      <figure style="margin: 26px 0 6px;">
+        <img src="public/compte-unique-article.jpg" alt="Infographie — Un site, un forum, une boutique, un seul compte : le site, le forum phpBB et la boutique WooCommerce sous le même habit, un compte unique porté par le forum et un jeton chiffré à usage unique entre les deux" loading="lazy" width="1140" height="642" style="width: 100%; height: auto; border-radius: 14px; border: 1px solid var(--line-strong); display: block;" />
+      </figure>
+      <h2>Trois maisons, trois habitudes</h2>
+      <p>Le forum portait un thème d'une autre époque, la boutique celui de ses débuts. On passait de l'un à l'autre en changeant de menu, de charte et parfois d'onglet. Un membre avait un compte sur le forum et, s'il commandait à la boutique, un second compte avec un second mot de passe.</p>
+      <p>Pour l'association, trois outils à tenir. Pour le visiteur, trois sites qui ne se reconnaissaient pas entre eux.</p>
+      <h2>Pourquoi ne pas tout reconstruire</h2>
+      <p>Refaire le forum et la boutique dans un seul outil, c'est migrer vingt ans de sujets et de messages, les comptes des membres, l'historique des commandes, et les adresses de milliers de pages que Google et les membres connaissent. Une migration de ce genre perd toujours quelque chose : un lien, une pièce jointe, une habitude. Et elle remplace deux logiciels éprouvés, maintenus par leurs communautés, par un développement qu'il faudrait ensuite entretenir seul.</p>
+      <p>La valeur de PRV Concept n'est pas dans le logiciel. Elle est dans ce que la communauté y a déposé. Le chantier s'est donc donné une règle simple : ne toucher ni au cœur de phpBB ni à celui de WooCommerce, et ne rien perdre. À l'arrivée, les sujets, les messages, les comptes, les commandes et les adresses des pages sont les mêmes.</p>
+      <h2>Un seul habit, sans toucher au cœur</h2>
+      <p>Les deux applications savent se laisser habiller : phpBB par un <em>style enfant</em>, WordPress par un <em>thème enfant</em>. C'est une surcouche qui hérite de l'original et n'en remplace que ce qu'on lui demande. Le forum et la boutique reprennent ainsi l'en-tête, le menu, le fil d'Ariane et le pied de page du site. Forum et Boutique deviennent deux rubriques du menu, qui s'ouvrent dans le même onglet.</p>
+      <p>L'intérêt n'est pas que cosmétique. Une mise à jour de sécurité de phpBB ou de WooCommerce s'installe comme avant, puisque rien de leur code n'a été modifié ; l'habit se révise à part. Et les défauts hérités se corrigent au passage : la boutique, qui n'avait jamais eu de page « Mon compte », en a une, avec la connexion, le mot de passe oublié et l'historique des commandes.</p>
+      <h2>Un seul compte : qui fait foi ?</h2>
+      <p>Relier deux applications par un compte commun commence par une décision : laquelle détient l'identité. Ici, le forum. C'est là que vivent les membres, leurs groupes, leurs droits sur l'espace réservé de l'association. La boutique lui fait confiance ; l'inverse n'est pas vrai.</p>
+      <p>La difficulté technique tient en une phrase : on ne peut pas faire tourner phpBB à l'intérieur de WordPress, les deux se disputent les mêmes variables du serveur. D'où un petit relais à la racine du site. Il laisse phpBB vérifier lui-même la session du membre, avec tous ses contrôles : adresse IP, navigateur, « se souvenir de moi », bannissements. Puis il remet à la boutique un jeton chiffré et authentifié (AES-256-GCM), valable deux minutes et une seule fois. La boutique ouvre la session du membre, ou lui crée une fiche client s'il n'en a pas. Personne ne tape de second mot de passe, et une déconnexion, d'où qu'elle parte, ferme les deux.</p>
+      <p>Le jeton est illisible dans les journaux du serveur. Il porte le sens dans lequel il circule, du forum vers la boutique ou l'inverse, et n'est jamais accepté dans l'autre. Un jeton rejoué ou altéré est refusé.</p>
+      <h2>Le piège de l'adresse e-mail</h2>
+      <p>Pour rapprocher les comptes qui existaient déjà, la solution évidente aurait été l'adresse e-mail : même adresse sur le forum et sur la boutique, même personne. C'est précisément ce qu'il ne fallait pas faire.</p>
+      <p>Sur ce forum, les inscriptions sont validées par un administrateur, pas par un lien envoyé à l'adresse. L'adresse d'un compte n'y est donc pas prouvée par son titulaire. Quelqu'un pourrait s'inscrire avec l'adresse d'un client de la boutique et, par un rapprochement automatique, lire ses commandes et ses adresses de livraison.</p>
+      <p>Sur les 88 clients de la boutique, 30 avaient un compte du forum à la même adresse. Pour eux, la boutique demande une seule fois le mot de passe de leur fiche client, ou de le recréer par « mot de passe perdu ». C'est cette preuve, et elle seule, qui relie les deux comptes ; ensuite, le forum suffit. Un peu moins de confort le premier jour, contre la certitude que personne ne s'approprie les commandes d'un autre.</p>
+      <h2>Des garde-fous revérifiés à chaque connexion</h2>
+      <p>Les règles du pont ne s'appliquent pas seulement le jour du rapprochement : elles sont revérifiées à chaque connexion. Seules les fiches de simples clients s'ouvrent par le forum, jamais un compte d'administration. Un membre correspond à une seule fiche. Et une session ouverte avec le mot de passe de la boutique n'est jamais fermée par le forum.</p>
+      <h2>Tester en production, sans que personne ne le voie</h2>
+      <p>Un compte unique ne se teste vraiment qu'en vrai : sur le serveur réel, avec les vrais cookies et la vraie boutique. Le bouton « Se connecter avec mon compte du forum » a d'abord vécu en mode pilote : seul un navigateur porteur d'un cookie de test le voyait.</p>
+      <p>Avec des comptes de test du forum, 26 scénarios sur 26 sont passés en ligne : création de fiche, déconnexions liées dans les deux sens, jeton rejoué et jeton altéré refusés, rapprochement par mot de passe, bouton de la page de commande. Le tunnel d'achat est resté identique, et le journal d'erreurs du serveur inchangé. Les fiches de test ont été supprimées, puis l'interrupteur basculé pour tout le monde.</p>
+      <h2>Et le chef d'atelier suit</h2>
+      <p>Réunir les trois surfaces a aussi servi l'assistant de l'association. Le Père Hervé, chef d'atelier en intelligence artificielle, vit dans la bulle du site, du forum et de la boutique. Il répond à partir des manuels d'atelier numérisés de la Bibliothèque, dont il cite la page et le folio, des sujets du forum avec leurs titres exacts, et des produits de la boutique. Sa règle : sans source, il ne répond pas. Sur le forum, chacune de ses réponses est relue par un humain avant publication.</p>
+      <p>Le compte unique lui profite directement : la même session lui dit qui lui parle, et un membre habilité peut l'interroger sur les documents réservés de l'association, qu'il ne citera à personne d'autre. Son architecture est détaillée dans notre retour d'expérience sur <a href="chatbot-ia-forum-base-de-connaissances.html">un chatbot IA branché sur un forum</a> ; l'association le présente elle-même dans <a href="https://www.prv-concept.com/journal/pere-herve-chef-atelier-ia.html" target="_blank" rel="noopener">Le Père Hervé, un chef d'atelier en intelligence artificielle</a>.</p>
+      <h2>Ce que ce chantier dit d'un projet web</h2>
+      <ul>
+        <li><strong>Relier avant de reconstruire.</strong> Les outils qui marchent déjà portent souvent l'essentiel de la valeur : les contenus, les habitudes, les liens. Les faire travailler ensemble coûte moins et perd moins qu'une migration.</li>
+        <li><strong>Une seule source d'identité.</strong> Deux applications qui se font mutuellement confiance, ce sont deux portes d'entrée. Une seule fait foi, l'autre la consulte.</li>
+        <li><strong>La preuve avant le confort.</strong> Une adresse e-mail n'est pas une identité tant que personne ne l'a prouvée. Un mot de passe demandé une fois vaut mieux qu'un compte détourné.</li>
+        <li><strong>Mesurer avant et après.</strong> Un relevé avant de brancher, un journal d'erreurs comparé après : on sait ce qu'on a changé, et ce qu'on n'a pas cassé.</li>
+      </ul>
+      <p>C'est la méthode d'une <a href="refonte-site-internet.html">refonte de site internet</a> bien menée : garder ce qui marche, reconstruire le reste. Le projet complet est décrit sur notre page <a href="realisations.html">Réalisations</a>, et l'association raconte le résultat du côté des membres, vidéo à l'appui, dans <a href="https://www.prv-concept.com/journal/un-site-un-compte.html" target="_blank" rel="noopener">Le site, le forum et la boutique ne font plus qu'un</a>.</p>
+      <p style="margin-top: 30px;">Un site, un forum ou une boutique qui vivent chacun de leur côté ? <a href="contact.html">Parlons-en</a> — ou voyez comment se mène une <a href="refonte-site-internet.html">refonte qui garde ce qui marche</a>.</p>
+<!-- @partial:newsletter -->
+<aside class="nl-bloc" aria-labelledby="nl-titre">
+  <p class="nl-titre" id="nl-titre">Recevoir les prochains articles</p>
+  <p class="nl-texte">Un e-mail à chaque nouvel article du journal, rien d'autre. Désinscription à tout moment.</p>
+  <form class="nl-form" action="newsletter.php?action=inscrire" method="post">
+    <input type="hidden" name="lang" value="fr" />
+    <input type="hidden" name="rendu" value="" />
+    <input type="hidden" name="envoi" value="" />
+    <div class="nl-hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off" /></div>
+    <div class="nl-ligne">
+      <label class="nl-label" for="nl-email">Adresse e-mail</label>
+      <input id="nl-email" type="email" name="email" required maxlength="254" autocomplete="email" placeholder="prenom@societe.fr" />
+      <button type="submit" class="btn btn-primary"><span class="btn-label">M'inscrire</span></button>
+    </div>
+    <p class="nl-rgpd">Votre adresse ne sert qu'à cet envoi et n'est jamais partagée. Détails dans la <a href="confidentialite.html#newsletter">politique de confidentialité</a>.</p>
+    <p class="nl-statut" role="status" hidden></p>
+    <p class="form-erreur" role="alert" hidden></p>
+  </form>
+</aside>
+<!-- @endpartial:newsletter -->
+      <div style="margin-top: 36px; padding-top: 24px; border-top: 1px solid var(--line-strong);">
+        <p class="mono" style="font-size: 11.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--fg-2); margin-bottom: 14px;">Ce chantier vit aussi sur les réseaux — venez en discuter</p>
+        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+          <a class="btn btn-ghost" href="https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>Lire sur LinkedIn</a>
+          <a class="btn btn-ghost" href="https://www.facebook.com/reel/1392916158966415" target="_blank" rel="noopener">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="margin-right: 8px; vertical-align: -2px;"><path d="M22.68 0H1.32C.59 0 0 .59 0 1.32v21.36C0 23.41.59 24 1.32 24h11.5v-9.29H9.69v-3.62h3.13V8.41c0-3.1 1.89-4.79 4.66-4.79 1.32 0 2.46.1 2.79.14v3.24h-1.92c-1.5 0-1.79.71-1.79 1.76v2.31h3.58l-.47 3.62h-3.11V24h6.1c.73 0 1.32-.59 1.32-1.32V1.32C24 .59 23.41 0 22.68 0z"/></svg>
+            La visite en vidéo sur Facebook</a>
+        </div>
+      </div>
+    </article>
+  </div>
+</section>
+</main>
+
+<!-- @partial:footer -->
+<footer class="foot">
+  <div class="container">
+    <div class="foot-top">
+      <div class="foot-col">
+        <div class="foot-brand">
+          <img src="public/nsy-logo.png" alt="NSY" />
+          <div>
+            <div style="font-family: var(--font-display); font-size: 18px; font-weight: 600;">NSY</div>
+            <div class="mono" style="font-size: 10px;">SOCIÉTÉ INDÉPENDANTE · CENTRE-VAL DE LOIRE</div>
+          </div>
+        </div>
+        <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
+          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+        </p>
+      </div>
+      <div class="foot-col">
+        <h5>Navigation</h5>
+        <a href="index.html#top">Accueil</a>
+        <a href="services.html">Services</a>
+        <a href="realisations.html">Réalisations</a>
+        <a href="a-propos.html">À propos</a>
+        <a href="pourquoi-nsy.html">Pourquoi NSY ?</a>
+        <a href="conception-3d.html">Conception 3D</a>
+        <a href="faq.html">FAQ</a>
+        <a href="blog.html">Journal</a>
+        <a href="contact.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>Expertises</h5>
+        <a href="expertise-migration-java-ee.html">Migration Java EE</a>
+        <a href="expertise-wildfly-jboss.html">WildFly · JBoss EAP</a>
+        <a href="expertise-openshift-kubernetes.html">OpenShift · Kubernetes</a>
+        <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
+        <a href="conformite-dora.html">Conformité DORA</a>
+        <a href="integration-claude-entreprise.html">Intégration Claude</a>
+        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="refonte-site-internet.html">Refonte de site</a>
+        <a href="glossaire-ia-web.html">Glossaire IA & web</a>
+      </div>
+      <div class="foot-col">
+        <h5>Contact</h5>
+        <a href="tel:+33672947106">+33 (0)6 72 94 71 06</a>
+        <a href="faisabilite.html">Demande de faisabilité</a>
+      </div>
+      <div class="foot-col">
+        <h5>Où j'interviens</h5>
+        <a href="creation-site-internet-loiret.html">Site internet · Loiret</a>
+        <a href="creation-site-internet-orleans.html">Site internet · Orléans</a>
+        <a href="creation-site-internet-tours.html">Site internet · Tours</a>
+        <a href="creation-site-internet-paris.html">Site internet · Paris</a>
+        <a href="creation-site-internet-lyon.html">Site internet · Lyon</a>
+        <a href="creation-site-internet-bordeaux.html">Site internet · Bordeaux</a>
+        <a href="consultant-technique-paris.html">Consultant technique · Paris</a>
+        <div class="foot-social">
+          <a href="https://www.linkedin.com/in/c%C3%A9dric-barme/" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.13 1.45-2.13 2.94v5.67H9.36V9h3.41v1.56h.05c.47-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28zM5.34 7.43a2.06 2.06 0 1 1 0-4.11 2.06 2.06 0 0 1 0 4.11zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+            LinkedIn
+          </a>
+          <a href="https://www.facebook.com/nsy.france/" target="_blank" rel="noopener" aria-label="Facebook">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.07C24 5.4 18.63 0 12 0S0 5.4 0 12.07C0 18.1 4.39 23.1 10.13 24v-8.44H7.08v-3.49h3.05V9.41c0-3.02 1.79-4.69 4.53-4.69 1.31 0 2.68.24 2.68.24v2.96h-1.51c-1.49 0-1.96.93-1.96 1.89v2.26h3.33l-.53 3.49h-2.8V24C19.61 23.1 24 18.1 24 12.07z"/></svg>
+            Facebook
+          </a>
+          <a href="https://github.com/machouse78/nsy-website" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .3a12 12 0 0 0-3.79 23.4c.6.1.82-.26.82-.58v-2c-3.34.72-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.09 1.84 1.24 1.84 1.24 1.07 1.84 2.81 1.31 3.5 1 .1-.78.42-1.31.76-1.61-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.31 1.23a11.5 11.5 0 0 1 6.02 0c2.3-1.55 3.31-1.23 3.31-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 12 .3z"/></svg>
+            GitHub
+          </a>
+          <a href="https://youtube.com/@new-software-yard" target="_blank" rel="noopener" aria-label="YouTube">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.8 3.02 3.02 0 0 0 2.12 2.14C4.5 20.45 12 20.45 12 20.45s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+            YouTube
+          </a>
+        </div>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© <span data-current-year>2026</span> NSY · SIREN 842 078 453 · 8 Hameau de Poiseaux, 45130 Épieds-en-Beauce, Loiret, France</div>
+      <div><a href="mentions-legales.html">Mentions légales</a> · <a href="confidentialite.html">Confidentialité</a></div>
+    </div>
+  </div>
+</footer>
+<!-- @endpartial:footer -->
+
+<!-- @partial:chatbot -->
+<!-- ───── Chatbot (assistant IA — Ansley, architecte NSY) ───── -->
+<button class="cbot-fab" id="cbot-fab" aria-label="Ouvrir le chat avec Ansley">
+  <video class="cbot-fab-face" id="ansley-fab-video" autoplay loop muted playsinline preload="auto" poster="public/ansley-fab.png" aria-hidden="true">
+    <source src="public/ansley-fab.mp4" type="video/mp4" />
+    <img src="public/ansley-fab.png" alt="Ansley" />
+  </video>
+  <svg class="icon-close" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+</button>
+
+<div class="cbot-greeter" id="cbot-greeter" role="dialog" aria-label="Message d'Ansley">
+  <button class="cbot-greeter-close" id="cbot-greeter-close" aria-label="Masquer le message">&times;</button>
+  <p>Bonjour&nbsp;! Je suis <b>Ansley</b>, l'architecte IA de NSY. Une question sur nos services, l'IA, un projet web&nbsp;?</p>
+</div>
+
+<div class="cbot" id="cbot" role="dialog" aria-label="Ansley — assistant IA NSY">
+  <div class="cbot-head">
+    <div class="cbot-avatar">
+      <span class="cbot-avatar-pulse"></span>
+      <video id="ansley-video" class="cbot-avatar-vid" loop muted playsinline preload="none" poster="public/ansley.png" aria-label="Ansley, architecte IA de NSY">
+        <source src="public/ansley.mp4" type="video/mp4" />
+        <img src="public/ansley.png" alt="Ansley" class="cbot-avatar-img" />
+      </video>
+    </div>
+    <div class="cbot-head-info">
+      <div class="cbot-name">Ansley <span class="cbot-ai-badge" id="cbot-ai-badge" title="Ansley, architecte IA de NSY — assistant génératif ancré dans les données du site (RAG), modèle hébergé en Union européenne.">IA</span></div>
+      <div class="cbot-status" id="cbot-status"><span class="cbot-online"></span>En ligne · IA générative</div>
+    </div>
+    <button class="cbot-close" id="cbot-close" aria-label="Fermer">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6L18 18M18 6L6 18"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-body" id="cbot-body">
+    <div class="cbot-msg cbot-msg-assistant">
+      <div class="cbot-msg-avatar"><img src="public/ansley.png" alt="Ansley" /></div>
+      <div class="cbot-bubble">Bonjour 👋 Je suis <b>Ansley</b>, l'architecte IA de NSY : je connais tout le site et je réponds dans votre langue. Services, expertises, méthodes, disponibilité — posez votre question librement.</div>
+    </div>
+  </div>
+
+  <div class="cbot-suggestions" id="cbot-suggestions">
+    <button class="cbot-chip">Quels sont vos services ?</button>
+    <button class="cbot-chip">Quel est le tarif d'un site IA ?</button>
+    <button class="cbot-chip">Travaillez-vous avec les banques ?</button>
+    <button class="cbot-chip">Comment fonctionne cet assistant ?</button>
+  </div>
+
+  <div class="cbot-input">
+    <input type="text" id="cbot-input" placeholder="Posez votre question…" maxlength="800" />
+    <button class="cbot-send" id="cbot-send" aria-label="Envoyer">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+    </button>
+  </div>
+
+  <div class="cbot-foot">
+    <span id="cbot-note">Réponses générées par IA (Mistral, UE) · pas de données sensibles</span>
+    <button id="cbot-escalate">Parler à Cédric →</button>
+  </div>
+</div>
+<!-- @endpartial:chatbot -->
+
+<script src="js/app.js" defer></script>
+</body>
+</html>
