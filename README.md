@@ -304,6 +304,7 @@ nsy-website/
 ├── tests/                               # Tests sur le code réel (chatbot + formulaires)
 │   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js / formulaires
 │   ├── sonde-journal.test.py            # scripts/sonde-journal.py hors ligne : ce qui est toléré, et tout ce qui doit continuer d'ARRÊTER
+│   ├── journal-hebergeur.test.php       # AUCUN error_log() sans destination dans les PHP servis (tokenizer) — le journal de l'hébergement bloque le site quand il déborde
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
 │   ├── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 │   ├── antispam.test.php                # Scoring de contenu, seuil, plafond journalier
@@ -366,6 +367,12 @@ nsy-website/
 
 `./tests/run-tests.sh` — lint + suites sur le **code réel** (Docker PHP + Node) :
 
+- **journal de l'hébergement** : aucun `error_log()` sans destination dans les
+  PHP servis, lu au tokenizer sur le code réel (une mention en commentaire ne
+  compte pas). Trois listes nommées seulement — `$config` (`_secret/config.php`
+  absent, vraie panne), `$gardeFou` (le gestionnaire de `stats-collector.php`)
+  et `$dette` (les dix appels restants de `contact.php`, `faisabilite.php` et
+  `formulaires.php`, à résorber) ; tout appel nu hors listes fait échouer ;
 - `nsy_sanitize_reply()` de `chat.php` : whitelist des liens officiels, linkmap
   FR/EN, purge des `()`, cap, réécriture des formulations bannies (positionnement
   ESN), ajout déterministe des publications sociales des articles ;
