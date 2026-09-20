@@ -108,7 +108,7 @@ $gardeFou = [
 ];
 // 3. DETTE, pas une permission : le chantier « plus rien au journal de
 //    l'hébergement » a été fait sur chat.php le 20/09/2026, PAS encore sur les
-//    formulaires. Ces dix appels DOUBLONNENT déjà un journal à nous
+//    formulaires. Ces NEUF appels (4 + 4 + 1) DOUBLONNENT déjà un journal à nous
 //    (_secret/contact-errors.log, _secret/formulaires.log, nsy_alerte_trace) ou
 //    devraient passer par un nsy_form_diag() qui n'existe pas encore ici.
 //    La liste est CLOSE : tout appel nu qui n'y figure pas fait échouer le test.

@@ -371,7 +371,7 @@ nsy-website/
   PHP servis, lu au tokenizer sur le code réel (une mention en commentaire ne
   compte pas). Trois listes nommées seulement — `$config` (`_secret/config.php`
   absent, vraie panne), `$gardeFou` (le gestionnaire de `stats-collector.php`)
-  et `$dette` (les dix appels restants de `contact.php`, `faisabilite.php` et
+  et `$dette` (les neuf appels restants de `contact.php`, `faisabilite.php` et
   `formulaires.php`, à résorber) ; tout appel nu hors listes fait échouer ;
 - `nsy_sanitize_reply()` de `chat.php` : whitelist des liens officiels, linkmap
   FR/EN, purge des `()`, cap, réécriture des formulations bannies (positionnement
