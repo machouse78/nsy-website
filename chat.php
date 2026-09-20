@@ -92,6 +92,19 @@ function writeHealth(string $file, bool $available, string $model, string $reaso
  * Prévient l'owner qu'un modèle ne répond plus — au plus une alerte par 24 h et
  * par clé (mécanique de formulaires.php). Ne lève jamais, ne bloque jamais.
  */
+/* Diagnostic du chatbot — NOTRE fichier, jamais le journal de l'hébergement.
+   Un error_log() SANS destination écrit dans ~/ik-logs/error.log, celui dont le
+   débordement a bloqué nsy.fr et prv-concept.com tout le week-end des 29-30/08/2026.
+   Daté, remis à zéro au-delà de 2 Mo. Jumeau de prv_diag() de prv-concept. */
+function nsy_diag(string $m): void
+{
+    $f = __DIR__ . '/_secret/chat-diag.log';
+    if (is_file($f) && filesize($f) > 2097152) {
+        @file_put_contents($f, '');
+    }
+    @file_put_contents($f, date('Y-m-d H:i:s') . ' ' . $m . "\n", FILE_APPEND | LOCK_EX);
+}
+
 function nsy_alerte_llm(string $sujet, string $texte, string $cle): void
 {
     try {
@@ -103,7 +116,7 @@ function nsy_alerte_llm(string $sujet, string $texte, string $cle): void
         }
         if (function_exists('nsy_alerte_owner')) nsy_alerte_owner($conf, $sujet, $texte, $cle);
     } catch (\Throwable $e) {
-        @error_log('NSY chat: alerte LLM impossible — ' . $e->getMessage());
+        nsy_diag('NSY chat: alerte LLM impossible — ' . $e->getMessage());
     }
 }
 
@@ -367,7 +380,6 @@ if ($status < 200 || $status >= 300) {
     $diag = substr(preg_replace('/\s+/', ' ', (string)$res), 0, 300);
     $line = date('c') . ' upstream HTTP ' . $status . ' — ' . $diag . "\n";
     @error_log($line, 3, __DIR__ . '/_secret/chat-errors.log');
-    error_log('NSY chat: upstream HTTP ' . $status . ' — ' . $diag);
     writeHealth($healthFile, false, $usedModel, $status === 429 ? 'capacity' : ('upstream' . $status));
     nsy_alerte_llm(
         '[NSY] Le chatbot n\'a plus de modèle — Ansley muet',
@@ -388,7 +400,7 @@ if ($status < 200 || $status >= 300) {
 $data = json_decode($res, true);
 $reply = trim((string)($data['choices'][0]['message']['content'] ?? ''));
 if ($reply === '') {
-    error_log('NSY chat: empty completion');
+    nsy_diag('NSY chat: empty completion');
     writeHealth($healthFile, false, $usedModel, 'empty');
     respond(['ok' => false, 'code' => 'upstream'], 502);
 }

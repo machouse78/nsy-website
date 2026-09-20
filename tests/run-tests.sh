@@ -11,6 +11,8 @@ echo "── Sonde du journal d'erreurs (scripts/sonde-journal.py, code réel, h
 python3 -B tests/sonde-journal.test.py
 echo "── mdToHtml (js/app.js, code réel) ──"
 node tests/mdtohtml.test.mjs
+echo "── Journal de l'hébergement : aucun error_log() nu (code réel, tokenizer) ──"
+docker run --rm -v "$PWD:/app" php:8.5-cli-alpine php /app/tests/journal-hebergeur.test.php
 echo "── nsy_sanitize_reply (chat.php, code réel) ──"
 docker run --rm -v "$PWD:/app" php:8.3-cli-alpine php /app/tests/chat-sanitize.test.php
 echo "── Turnstile : verdicts et bypass (formulaires.php, code réel) ──"
