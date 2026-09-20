@@ -288,6 +288,7 @@ nsy-website/
 ├── stats-collector.php                  # Collecteur KPI quotidien (logs ik-logs + API Graph FB + stories via carnet 24 h + trafic GitHub + chaîne YouTube + Search Console + pays/villes DB-IP + compteurs) → _secret/kpi-history.json
 ├── stats/                               # Dashboard KPI privé (Basic Auth) — cartes, courbes SVG, tables (index.html + data.php)
 ├── scripts/rejoue-jours.py              # Rejoue des journées du collecteur (pause 120 s — jamais enchaîner : blocage Infomaniak vécu le 29/08/2026)
+├── scripts/sonde-journal.py             # Lit le journal d'erreurs du serveur par une sonde PHP JETABLE (STOR, une requête, DELE) — delta de TAILLE, jamais de filtre par date. Code 0 rien de grave · 2 NON vierge → STOP · 1 sonde en échec. `--tolere-scanners` décompte sans arrêter le bruit de scanners refusé avant tout script (AH01276, AH01630, AH10244, ModSecurity « Access denied ») ; PHP, proxy_fcgi et tout le reste arrêtent toujours. Lit `_secret/ftp.env` du dépôt principal depuis un worktree
 ├── journal-stats.php                    # Compteurs vues / « j'aime » du journal (stockage _secret/)
 ├── newsletter.php                       # Newsletter : inscription (double opt-in), confirmation, désinscription en un clic
 ├── scripts/newsletter-envoi.py          # Envoi d'un article aux abonnés (dry-run par défaut, --test, --go)
@@ -302,6 +303,7 @@ nsy-website/
 │   └── newsletter.fr.html / .en.html    #    Bloc d'inscription (articles + pages Journal)
 ├── tests/                               # Tests sur le code réel (chatbot + formulaires)
 │   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js / formulaires
+│   ├── sonde-journal.test.py            # scripts/sonde-journal.py hors ligne : ce qui est toléré, et tout ce qui doit continuer d'ARRÊTER
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
 │   ├── mdtohtml.test.mjs                # mdToHtml de js/app.js (liens cliquables, XSS…)
 │   ├── antispam.test.php                # Scoring de contenu, seuil, plafond journalier

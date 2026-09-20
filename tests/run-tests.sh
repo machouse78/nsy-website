@@ -7,6 +7,8 @@ echo "── Lint ──"
 node --check js/app.js && echo "  ✓ js/app.js"
 docker run --rm -v "$PWD:/app" php:8.3-cli-alpine sh -c 'php -l /app/chat.php && php -l /app/contact.php && php -l /app/faisabilite.php && php -l /app/antispam.php && php -l /app/formulaires.php && php -l /app/journal-stats.php && php -l /app/newsletter.php' | sed 's/^/  ✓ /'
 python3 -B -c 'import ast, sys; ast.parse(open(sys.argv[1], encoding="utf-8").read())' scripts/newsletter-envoi.py && echo "  ✓ scripts/newsletter-envoi.py"
+echo "── Sonde du journal d'erreurs (scripts/sonde-journal.py, code réel, hors ligne) ──"
+python3 -B tests/sonde-journal.test.py
 echo "── mdToHtml (js/app.js, code réel) ──"
 node tests/mdtohtml.test.mjs
 echo "── nsy_sanitize_reply (chat.php, code réel) ──"
