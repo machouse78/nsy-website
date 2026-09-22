@@ -220,6 +220,10 @@ python3 scripts/newsletter-envoi.py <slug-FR> --go           # envoi réel, un p
 
 Le script lit l'article FR et son pendant EN dans le dépôt (titre, chapô, `og:image`), lie l'article avec `utm_source=newsletter&utm_medium=email&utm_campaign=<slug-FR>`, pose un lien de désinscription personnel et les en-têtes `List-Unsubscribe` / `List-Unsubscribe-Post`. La liste arrive par FTPS (`_secret/ftp.env`) et reste **en mémoire** : jamais écrite sur le disque, jamais affichée. Chaque envoi est inscrit dans `_secret/newsletter-envois.json` sur le serveur ; un second envoi du même slug est refusé sans `--force`. Ce journal s'écrit de façon **atomique** (`envoie_octets()` de `scripts/ftp_atomique.py`, 19/09/2026) : un `STOR` sur place le vidait d'abord, et une coupure à ce moment laissait un journal vide, relu comme `{}` — le refus du second envoi s'évaporait. SMTP : `_secret/config.php` (lu sans exécuter de PHP ; clé facultative `newsletter_from`).
 
+**Sous le bouton « Lire l'article », une icône par publication** (owner, 22/09/2026) : LinkedIn et Facebook. Le script lit les liens DANS l'article, dans ses boutons de retour « Lire sur LinkedIn / Facebook » ; seules les adresses de **publication** comptent (`linkedin.com/pulse|posts|feed/update`, `facebook.com/share|reel|…/posts`) — jamais la page Facebook ni le profil LinkedIn de l'en-tête. Un article pas encore publié n'a pas l'icône, et le dry-run le dit (« ABSENTES de l'article : … ») : **l'e-mail part après la publication et le câblage des boutons**. Icônes hébergées (`public/newsletter/linkedin.png`, `facebook.png`, 84 px affichées en 28), mêmes liens en clair dans la version texte. Sur prv-concept.com, les mêmes icônes sont Facebook, Instagram et le Père Hervé (forum).
+
+**Tableau de bord, onglet « Newsletter »** (owner, 22/09/2026 : « le nombre d'inscrits et les adresses ») : `stats/newsletter.php` lit `_secret/newsletter.json` en lecture seule avec les fonctions de `newsletter.php` en mode bibliothèque (`NL_BIBLIOTHEQUE`) — les comptes sont ceux de l'envoi. Trois compteurs (inscrits FR/EN, en attente, désinscrits) et la liste : adresse, langue, état, dates. **Le jeton d'une fiche ne sort jamais** (il vaut signature : confirmer, se désinscrire). Lien direct : `stats/#newsletter`. Même onglet sur prv-concept.com.
+
 ## Pipeline wireframe 3D
 
 Le modèle `public/renault-wireframe.glb` (**575 Ko**, rendu filaire cyan néon) est généré depuis un `.blend` source via une chaîne reproductible (`scripts/`) :
@@ -312,7 +316,8 @@ nsy-website/
 │   ├── forms-http.test.php              # contact.php + faisabilite.php + journal-stats.php en bac à sable HTTP
 │   ├── newsletter.test.php              # Newsletter : états, jetons, purge, stockage, garde-fou (PHP 8.5)
 │   ├── newsletter-http.test.php         # Newsletter en bac à sable HTTP : boîte factice, puis SMTP sur port fermé
-│   ├── newsletter-envoi.test.py         # Script d'envoi : dry-run sur abonnés factices, journal des envois atomique, sans réseau
+│   ├── newsletter-envoi.test.py         # Script d'envoi : dry-run sur abonnés factices, journal des envois atomique, icônes des publications, sans réseau
+│   ├── stats-newsletter.test.php        # Onglet « Newsletter » du tableau de bord : jamais de jeton, comptes, ordre, fichier cassé intact (PHP 8.5)
 │   ├── ftp-atomique.test.py             # Déploiement FTP : envois atomiques, exclusions, faux serveur sans réseau
 │   ├── ansley-plein-ecran.test.mjs      # Agrandir / réduire le panneau d'Ansley (Chrome headless)
 │   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
