@@ -111,6 +111,11 @@ PAUSE_S = 1.0
 
 LANGUES = ("fr", "en")
 JETON_APERCU = "JETON-PERSONNEL-DE-L-ABONNE"
+# Objet des e-mails de --test (22/09/2026). « [TEST] » en tête ne suffisait pas : Gmail ignore ce
+# genre d'étiquette pour regrouper, et le vrai envoi s'est rangé dans la conversation du test — dont
+# le titre, celui du premier message, restait « [TEST]… » (le owner a cru que le vrai l'avait gardé).
+# Un objet réellement différent ouvre sa propre conversation.
+PREFIXE_TEST = "Aperçu de la newsletter (test) — "
 RACINE = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
 # Secrets (ftp.env, config.php) : _secret/ du dépôt, ou le dossier désigné par
 # NL_SECRETS — un worktree git n'a pas de _secret/ (gitignoré) : on y lance
@@ -570,7 +575,7 @@ def main(argv=None):
         try:
             for lg in LANGUES:
                 s.send_message(construire_message(lg, paire[lg], slug, JETON_APERCU, a.test, expediteur(cfg),
-                                                  cfg.get("to_address"), prefixe="[TEST] "))
+                                                  cfg.get("to_address"), prefixe=PREFIXE_TEST))
                 time.sleep(PAUSE_S)
         finally:
             s.quit()
