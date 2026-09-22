@@ -76,6 +76,7 @@ TEXTES = {
         "desinscrire": "Se désinscrire",
         "lire_texte": "Lire l'article :",
         "desinscrire_texte": "Se désinscrire :",
+        "aussi_texte": "L'article est aussi sur :",
     },
     "en": {
         "sujet": "New article: {titre}",
@@ -85,8 +86,24 @@ TEXTES = {
         "desinscrire": "Unsubscribe",
         "lire_texte": "Read the article:",
         "desinscrire_texte": "Unsubscribe:",
+        "aussi_texte": "The article is also on:",
     },
 }
+# Les publications de l'article (owner, 22/09/2026) : sous le bouton « Lire l'article », une
+# petite icône par publication. Les liens sont lus DANS L'ARTICLE, dans ses boutons de retour
+# « Lire sur LinkedIn / Facebook » (skill journal-nsy §4) : un article pas encore publié ailleurs
+# n'a pas le lien, et l'e-mail n'a pas l'icône. Le MOTIF ne retient que les adresses de
+# PUBLICATION — jamais la page Facebook (facebook.com/nsy.france/) ni le profil LinkedIn
+# (linkedin.com/in/…) de l'en-tête et du pied de page. `classe` : None (les boutons NSY n'en ont
+# pas de propre) ; sur prv-concept.com c'est la classe des pastilles (a.fb / a.ig / a.fo).
+PUBLICATIONS = (
+    {"cle": "linkedin", "classe": None, "motif": r"https://(?:[a-z]+\.)?linkedin\.com/(?:pulse|posts|feed/update)/",
+     "libelle": {"fr": "LinkedIn", "en": "LinkedIn"}, "icone": SITE_URL + "/public/newsletter/linkedin.png"},
+    {"cle": "facebook", "classe": None,
+     "motif": r"https://(?:www\.|m\.)?facebook\.com/(?:share/|reel/|watch|story\.php|permalink\.php|[^/?#]+/(?:posts|videos)/)",
+     "libelle": {"fr": "Facebook", "en": "Facebook"}, "icone": SITE_URL + "/public/newsletter/facebook.png"},
+)
+ICONE_TAILLE = 28                                     # px affichés (PNG en 84 px : écrans denses)
 DISTANT_ABONNES = "_secret/newsletter.json"          # relatif à FTP_DIR
 DISTANT_ENVOIS = "_secret/newsletter-envois.json"
 PAUSE_S = 1.0
@@ -122,6 +139,7 @@ class _Extracteur(HTMLParser):
         self.meta, self.alternates = {}, {}
         self.canonical = None
         self.textes = {}                  # 'title', 'h1', 'lede', 'p' → texte
+        self.liens = []                   # (classes, href) de chaque <a>, dans l'ordre
         self._dans_article = 0
         self._capture, self._balise, self._tampon = None, None, []
 
@@ -136,6 +154,8 @@ class _Extracteur(HTMLParser):
                 self.alternates[a["hreflang"]] = a.get("href", "")
         elif tag == "article":
             self._dans_article += 1
+        elif tag == "a" and a.get("href"):
+            self.liens.append((set(a.get("class", "").split()), a["href"]))
         elif tag == "br" and self._capture:
             self._tampon.append(" ")
         if self._capture:
@@ -192,7 +212,20 @@ def lire_article(racine, fichier):
         "image": x.meta.get("og:image", ""),
         "url": x.canonical or "%s/%s" % (SITE_URL, fichier),
         "alternates": x.alternates,
+        "publications": publications_de(x.liens),
     }
+
+
+def publications_de(liens):
+    """[(cle, url)] dans l'ordre de PUBLICATIONS : le premier lien de chaque sorte qui porte
+    sa classe (si elle en a une) ET dont l'adresse suit son motif ; une sorte sans lien est absente."""
+    out = []
+    for p in PUBLICATIONS:
+        for classes, href in liens:
+            if (not p["classe"] or p["classe"] in classes) and re.match(p["motif"], href):
+                out.append((p["cle"], href))
+                break
+    return out
 
 
 def lire_paire(racine, slug):
@@ -202,7 +235,10 @@ def lire_paire(racine, slug):
     fichier_en = os.path.basename(urlsplit(href_en).path) if href_en else ""
     if not fichier_en or fichier_en == fr["fichier"]:
         raise Arret("%s : pas de pendant anglais (lien hreflang=\"en\" absent)" % fr["fichier"])
-    return {"fr": fr, "en": lire_article(racine, fichier_en)}
+    en = lire_article(racine, fichier_en)
+    if not en["publications"]:                  # pendant EN sans ses boutons : mêmes publications
+        en["publications"] = fr["publications"]
+    return {"fr": fr, "en": en}
 
 
 def lien_article(url, slug):
@@ -216,6 +252,21 @@ def lien_desinscription(jeton):
 
 
 # ───────────────────────────── Message ─────────────────────────────
+
+def icones_html(langue, article):
+    """La rangée de petites icônes des publications, sous le bouton ; vide sans publication."""
+    e, par_cle = html.escape, {p["cle"]: p for p in PUBLICATIONS}
+    cases = "".join(
+        '<td style="padding:0 14px 0 0;"><a href="%s" title="%s"><img src="%s" width="%d" height="%d" alt="%s" '
+        'style="display:block;border:0;" /></a></td>'
+        % (e(url), e(par_cle[cle]["libelle"][langue]), e(par_cle[cle]["icone"]), ICONE_TAILLE, ICONE_TAILLE,
+           e(par_cle[cle]["libelle"][langue]))
+        for cle, url in article.get("publications", []))
+    if not cases:
+        return ""
+    return ('<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin-top:22px;">'
+            '<tr>%s</tr></table>' % cases)
+
 
 def html_mail(langue, article, lien, lien_desinscr):
     c, t, e = COULEURS, TEXTES[langue], html.escape
@@ -243,7 +294,7 @@ def html_mail(langue, article, lien, lien_desinscr):
         '<p style="margin:0 0 24px;font-size:16px;line-height:1.6;color:%s;">%s</p>'
         '<table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr><td bgcolor="%s" style="background:%s;border-radius:999px;">'
         '<a href="%s" style="display:inline-block;padding:13px 24px;font-size:15px;font-weight:600;color:%s;text-decoration:none;">%s</a>'
-        '</td></tr></table>'
+        '</td></tr></table>%s'
         '</td></tr></table></td></tr>'
         '<tr><td style="padding:20px 8px 0;font-size:12px;line-height:1.6;color:%s;">%s<br />'
         '<a href="%s" style="color:%s;">%s</a> · %s · <a href="%s/" style="color:%s;">%s</a></td></tr>'
@@ -255,16 +306,20 @@ def html_mail(langue, article, lien, lien_desinscr):
         c["accent"], e(t["etiquette"]),
         e(lien), c["titre"], e(article["titre"]),
         c["texte"], e(article["chapo"]),
-        c["accent"], c["accent"], e(lien), c["sur_accent"], e(t["bouton"]),
+        c["accent"], c["accent"], e(lien), c["sur_accent"], e(t["bouton"]), icones_html(langue, article),
         c["pale"], e(t["pourquoi"]),
         e(lien_desinscr), c["discret"], e(t["desinscrire"]), e(SITE_NOM), e(SITE_URL), c["pale"], e(urlsplit(SITE_URL).netloc),
     )
 
 
 def texte_mail(langue, article, lien, lien_desinscr):
-    t = TEXTES[langue]
-    return "%s\n\n%s\n\n%s\n%s\n\n—\n%s\n%s\n%s\n%s · %s\n" % (
-        article["titre"], article["chapo"], t["lire_texte"], lien,
+    t, par_cle = TEXTES[langue], {p["cle"]: p for p in PUBLICATIONS}
+    aussi = ""
+    if article.get("publications"):
+        aussi = "\n%s\n%s\n" % (t["aussi_texte"], "\n".join(
+            "- %s : %s" % (par_cle[cle]["libelle"][langue], url) for cle, url in article["publications"]))
+    return "%s\n\n%s\n\n%s\n%s\n%s\n—\n%s\n%s\n%s\n%s · %s\n" % (
+        article["titre"], article["chapo"], t["lire_texte"], lien, aussi,
         t["pourquoi"], t["desinscrire_texte"], lien_desinscr, SITE_NOM, SITE_URL)
 
 
@@ -500,6 +555,11 @@ def main(argv=None):
     paire = lire_paire(RACINE, slug)
     for lg in LANGUES:
         print("Article %s : %s — « %s »" % (lg.upper(), paire[lg]["fichier"], paire[lg]["titre"]))
+    pubs = [c for c, _ in paire["fr"]["publications"]]
+    manque = [p["cle"] for p in PUBLICATIONS if p["cle"] not in pubs]
+    print("Publications sous le bouton : %s%s" % (", ".join(pubs) or "aucune",
+          (" — ABSENTES de l'article : %s (publier, puis câbler les boutons de retour — skill journal-nsy §4)"
+           % ", ".join(manque)) if manque else ""))
 
     # ── Test : les deux versions à une seule adresse, ni FTP ni journal ──
     if a.test:

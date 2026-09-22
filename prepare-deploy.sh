@@ -184,6 +184,9 @@ cp public/cropped-NSY-logo-32x32.png    deploy/public/
 cp public/cropped-NSY-logo-180x180.png  deploy/public/
 cp public/cropped-NSY-logo-192x192.png  deploy/public/
 cp public/cropped-NSY-logo-270x270.png  deploy/public/
+mkdir -p deploy/public/newsletter
+cp public/newsletter/linkedin.png       deploy/public/newsletter/   # icônes de la newsletter : une par publication
+cp public/newsletter/facebook.png       deploy/public/newsletter/   # de l'article, sous « Lire l'article » (22/09/2026)
 
 # Vidéos
 cp public/nsy-hero.mp4                  deploy/public/

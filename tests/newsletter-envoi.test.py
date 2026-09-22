@@ -183,6 +183,29 @@ for args, attendu in ((["x", "--go", "--abonnes-fichier", FICHIER], "--abonnes-f
     except nl.Arret as e:
         t("arguments incohérents refusés AVANT toute action (%s)" % attendu, attendu in str(e), e)
 
+# ── Publications de l'article : une icône par publication sous le bouton (owner, 22/09/2026) ──
+liens = [(set(), "https://www.facebook.com/nsy.france/"),                    # la PAGE (en-tête, pied) : jamais prise
+         (set(), "https://www.linkedin.com/in/c%C3%A9dric-barme/"),          # le PROFIL : jamais pris
+         ({"btn", "btn-ghost"}, "https://www.facebook.com/reel/1392916158966415"),
+         ({"btn", "btn-ghost"}, "https://www.linkedin.com/pulse/un-article-0znee")]
+t("publications : LinkedIn puis Facebook, adresses de publication seulement",
+  nl.publications_de(liens) == [("linkedin", "https://www.linkedin.com/pulse/un-article-0znee"),
+                                ("facebook", "https://www.facebook.com/reel/1392916158966415")], nl.publications_de(liens))
+t("publications : article pas encore publié → aucune", nl.publications_de(liens[:2]) == [])
+t("publications : lien de partage Facebook accepté",
+  nl.publications_de([(set(), "https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr")]) == [("facebook", "https://www.facebook.com/share/17vyLQjakE/?mibextid=wwXIfr")])
+art = dict(paire["fr"], publications=nl.publications_de(liens))
+h = nl.html_mail("fr", art, "https://www.nsy.fr/x.html", "https://x/d")
+t("HTML : les deux icônes, hébergées sur le site, sous le bouton",
+  'alt="LinkedIn"' in h and 'alt="Facebook"' in h and "https://www.nsy.fr/public/newsletter/linkedin.png" in h
+  and h.index("Lire l&#x27;article") < h.index('alt="LinkedIn"'))
+t("HTML : sans publication, pas de rangée d'icônes",
+  'alt="LinkedIn"' not in nl.html_mail("fr", dict(paire["fr"], publications=[]), "https://x/a", "https://x/d"))
+tx = nl.texte_mail("en", art, "https://x/a", "https://x/d")
+t("texte : les publications en clair", "The article is also on:" in tx and "- LinkedIn : https://www.linkedin.com/pulse/un-article-0znee" in tx)
+t("icônes : les fichiers existent dans le dépôt",
+  all(os.path.isfile(os.path.join(RACINE, p["icone"].split("nsy.fr/", 1)[1])) for p in nl.PUBLICATIONS))
+
 # ── Configuration SMTP : repli sur celle du SERVEUR quand la locale porte CHANGE_ME ──
 REP = tempfile.mkdtemp(prefix="nl-repli-")
 with open(os.path.join(REP, "config.php"), "w", encoding="utf-8") as fh:
