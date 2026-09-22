@@ -106,6 +106,7 @@ mkdir -p deploy/stats
 cp stats/.htaccess stats/index.html stats/data.php stats/html2canvas.min.js deploy/stats/
 cp stats/carte-monde.js deploy/stats/   # fond de carte du dashboard (généré par tools/carte-monde.py)
 cp stats/chat.php       deploy/stats/   # agent d'analyse PRIVÉ du dashboard (≠ /chat.php public)
+cp stats/newsletter.php deploy/stats/   # onglet « Newsletter » : abonnés du journal, sans leurs jetons (22/09/2026)
 [ -f stats/partage.html ] && cp stats/partage.html deploy/stats/   # page « Partager » (kits par groupe)
 cp consultant-technique-paris.html  deploy/
 cp technical-consultant-paris.html  deploy/

@@ -444,6 +444,13 @@
     <div></div>
   </div>
 
+  <!-- ═══ Newsletter du journal (owner, 22/09/2026 : « le nombre d'inscrits et les adresses ») :
+       lue dans stats/newsletter.php, qui ne laisse jamais sortir le jeton d'un abonné. ═══ -->
+  <div class="sec-h" id="r-newsletter" hidden><h2>Newsletter</h2><span>abonnés du journal — un e-mail à chaque nouvel article</span></div>
+  <div class="grid" id="nl-cards" hidden></div>
+  <div class="note" id="nl-note" hidden></div>
+  <div id="nl-liste" hidden></div>
+
   <div class="sec-h" id="r-forum" hidden><h2>Forum</h2><span>vie de la communauté : messages, sujets, membres</span></div>
   <div class="grid" id="fo-cards" hidden></div>
   <div class="chart-head" id="fo-head" hidden><h2 id="h-fo">Activité du forum</h2></div>
@@ -737,6 +744,7 @@
     if (RUB_DISPO.agent()) l.push(['agent', 'Agent conversationnel']);
     l.push(['contenu', 'Contenu']);
     l.push(['parcours', 'Parcours']);
+    l.push(['newsletter', 'Newsletter']);
     if (aDonnee((v) => (v.fb?.vues ?? 0) || (v.fb?.abonnes ?? 0))) l.push(['facebook', 'Facebook']);
     if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
     if (aDonnee((v) => v.avis)) l.push(['avis', 'Avis clients']);
@@ -777,6 +785,7 @@
     youtube: ['r-youtube'],
     forum: ['r-forum'],
     boutique: ['r-boutique'],
+    newsletter: ['r-newsletter'],
   };
   // Une rubrique ne s'affiche jamais sans donnée, même en vue « Tout » :
   // une section vide se lit comme une panne.
@@ -826,9 +835,43 @@
     montre(RUBRIQUES.youtube, (tout || cat === 'youtube') && RUB_DISPO.youtube());
     montre(RUBRIQUES.forum, (tout || peri === 'forum') && RUB_DISPO.forum());
     montre(RUBRIQUES.boutique, (tout || peri === 'boutique') && RUB_DISPO.boutique());
+    // La liste des abonnés ne se mêle pas au récit chiffré : elle n'apparaît que
+    // sur son onglet, et elle se charge à ce moment-là.
+    montre(RUBRIQUES.newsletter, cat === 'newsletter');
+    if (cat === 'newsletter') chargeNewsletter();
     // Le réseau des graphes sociaux se déduit de `cat` au moment du rendu
     // (voir `reseau` plus bas) : plus de sélecteur à tenir synchronisé.
     // Le résumé, les cartes et la barre de temps restent visibles partout.
+  }
+  // ── La newsletter du journal (owner, 22/09/2026) ─────────────────────────
+  // Lit stats/newsletter.php (même Basic Auth que cette page) : les comptes de
+  // l'envoi et la liste des adresses. Le jeton d'un abonné n'en sort jamais.
+  async function chargeNewsletter() {
+    const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const liste = $('nl-liste'); const cards = $('nl-cards'); const note = $('nl-note');
+    if (!liste) return;
+    [liste, cards].forEach((el) => el.hidden = false);
+    liste.innerHTML = '<div class="note">Chargement des abonnés…</div>';
+    let d;
+    try { d = await (await fetch('newsletter.php', { cache: 'no-store' })).json(); }
+    catch (e) { liste.innerHTML = '<div class="note">La liste des abonnés est injoignable.</div>'; return; }
+    if (!d.ok) { liste.innerHTML = `<div class="note">${esc(d.erreur || 'Lecture impossible.')}</div>`; return; }
+    const c = d.comptes;
+    cards.innerHTML = [
+      ['Inscrits', c.confirmes_total, `FR ${c.confirmes.fr ?? 0} · EN ${c.confirmes.en ?? 0}`],
+      ['En attente', c.attente, 'lien de confirmation pas encore cliqué'],
+      ['Désinscrits', c.desinscrits, ''],
+    ].map(([l, v, sub]) => `<div class="card"><div class="k">${esc(l)}</div><div class="v">${esc(v)}</div><div class="s">${esc(sub)}</div></div>`).join('');
+    note.innerHTML = 'Seuls les <b>inscrits</b> reçoivent l\'e-mail d\'un nouvel article. Une inscription non confirmée sous 30 jours est oubliée.';
+    note.hidden = false;
+    const ETAT = { confirme: 'inscrit', attente: 'en attente', desinscrit: 'désinscrit' };
+    const jour = (iso) => iso ? new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+    liste.innerHTML = d.abonnes.length
+      ? `<table><thead><tr><th>Adresse</th><th>Langue</th><th>État</th><th>Inscription</th><th>Confirmation</th><th>Désinscription</th></tr></thead><tbody>${
+          d.abonnes.map((a) => `<tr><td style="word-break: break-all;">${esc(a.email)}</td><td>${esc(a.langue.toUpperCase())}</td><td>${esc(ETAT[a.etat] || a.etat)}</td>`
+            + `<td class="mono">${jour(a.inscrit)}</td><td class="mono">${jour(a.confirme)}</td><td class="mono">${jour(a.desinscrit)}</td></tr>`).join('')
+        }</tbody></table>`
+      : '<div class="note">Aucun abonné pour l\'instant.</div>';
   }
   function renderCatnav() {
     $('catnav').innerHTML = CATS().map(([k, lib]) =>
