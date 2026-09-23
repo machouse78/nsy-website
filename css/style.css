@@ -2858,7 +2858,7 @@ footer.foot {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
   color: var(--accent);
 }
-.realisation-specs dd { margin: 0; color: var(--fg-3); font-size: 13px; line-height: 1.55; }
+.realisation-specs dd { margin: 0; color: var(--fg-2); font-size: 13px; line-height: 1.55; }
 /* Pastille de type de projet : site neuf ou reprise d'un site existant.
    Elle répond à la question que se pose tout prospect en regardant une
    réalisation — « et si mon site existe déjà ? ». */
