@@ -30,7 +30,14 @@ set_error_handler(static function (int $no, string $msg, string $fichier, int $l
         return true;
     }
     if (++$prvErreurs <= 5) {
-        error_log("stats/newsletter.php: [$no] $msg @ $fichier:$ligne");
+        // ⛔ JAMAIS error_log() nu : il écrit dans le journal de l'HÉBERGEMENT, et
+        // c'est son débordement qui a mis nsy.fr et prv-concept.com hors ligne un
+        // week-end entier (règle du 30/08/2026). Les traces vont dans NOTRE
+        // fichier, par nl_diag() — qui n'existe qu'après le require ci-dessous.
+        // Dette relevée par tests/journal-hebergeur.test.php le 23/09/2026.
+        if (function_exists('nl_diag')) {
+            nl_diag("stats/newsletter.php: [$no] $msg @ $fichier:$ligne");
+        }
     }
     if ($prvErreurs > 10) {
         http_response_code(500);
