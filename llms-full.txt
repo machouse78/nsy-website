@@ -130,7 +130,7 @@ associations et indépendants en transition numérique.
   toutes bilingues FR/EN (pages anglaises générées par un pipeline maison) ;
   bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré),
   chaque document avec son sujet de discussion sur le forum ;
-  FAQ de 256 questions, alimentée par le dépouillement des manuels de réparation
+  FAQ de 697 questions, alimentée par le dépouillement des manuels de réparation
   et plaquettes d'époque de la bibliothèque. Le forum et la boutique portent le
   même design que la vitrine (style enfant phpBB et thème enfant WordPress dessinés
   sur mesure, sans toucher au cœur des applications) : même en-tête, même menu,
@@ -146,8 +146,18 @@ associations et indépendants en transition numérique.
   hébergées chez un tiers en fin de vie, ont été rapatriées sur le serveur de
   l'association et les messages repointés vers elles — vingt ans de tutoriels et
   de restaurations documentées préservés. Mentions légales et politique de
-  confidentialité publiées en FR et EN. Journal de sept articles de fond
-  bilingues, chacun avec son sujet de discussion sur le forum. Tableau de bord privé alimenté par les
+  confidentialité publiées en FR et EN. Journal de neuf articles de fond
+  bilingues, chacun avec son sujet de discussion sur le forum et ses
+  publications Facebook et Instagram ; newsletter à double confirmation — un
+  e-mail à chaque nouvel article, désinscription en un clic, aucune adresse IP
+  conservée. Pont automatique entre le forum et les réseaux sociaux, dans les
+  DEUX sens : un nouveau sujet part en Reel sur la Page Facebook et sur
+  Instagram (la carte du sujet animée en vidéo verticale par le serveur, le
+  lien du sujet dans le premier commentaire), les publications reviennent en
+  sujets du forum et les réponses traversent dans les deux sens, images
+  rapatriées sur le serveur de l'association ; le périmètre est recalculé à
+  chaque passage sur les droits réels du forum, les petites annonces des
+  membres en sont exclues. Tableau de bord privé alimenté par les
   journaux du serveur : Search Console relevée chaque jour, origine géographique
   des visiteurs sur carte du monde (aucune adresse IP conservée). Assistant IA
   « Père Hervé » : chatbot à mascotte animée, ancré sur les données du site et
