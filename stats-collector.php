@@ -192,7 +192,7 @@ $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/
 $SCAN_PATH_RE = '#/@fs/|/\.env|/\.aws/|/\.git/|credentials|rootkey|serverless\.ya?ml|nginx\.conf|/wp-login\.php|/xmlrpc\.php|/phpmyadmin#i';
 
 $stats = [
-    'pageviews' => 0, 'uniques' => [], 'ips' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
+    'pageviews' => 0, 'uniques' => [], 'ips' => [], 'vh_ip' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
     'ia_familles' => ['conversation' => 0, 'recherche' => 0, 'indexation' => 0],
     'ia_conv_pages' => [], // page lue lors d'une récupération DÉCLENCHÉE par une question
@@ -350,6 +350,10 @@ foreach ($files as $f) {
                jamais de ce script et n'entre pas dans l'historique. */
             if ($peri === $PERI_DEFAUT && count($stats['ips']) < 60000) {
                 $stats['ips'][$ip] = ($stats['ips'][$ip] ?? 0) + 1;
+                /* L'IP qui porte cette empreinte de visiteur — le temps du calcul,
+                   comme $stats['ips'] : elle ne sort jamais du script. Sert à
+                   compter les visiteurs HORS centres de données (24/09/2026). */
+                $stats['vh_ip'][$vh] = $ip;
             }
             $stats['peri'][$peri]['pages_vues']++;
             $stats['peri'][$peri]['visiteurs'][$vh] = 1;
@@ -727,12 +731,13 @@ if ($stats['ips']) {
                           'contabo', 'leaseweb', 'm247', 'proxy', 'vpn', 'scaleway',
                           'choopa', 'ip volume', 'packethub', 'stark industries', 'alibaba',
                           'tencent', 'huawei', 'cloudflare', 'fastly', 'akamai', 'datacamp'];
-            $dc = 0; $horsDc = 0;
+            $dc = 0; $horsDc = 0; $estDc = [];
             foreach (array_keys($stats['ips']) as $ipx) {
                 $nom = $asParIp[$ipx] ?? '';
                 $n_l = mb_strtolower($nom);
                 $est = false;
                 foreach ($marqueurs as $mk) { if ($nom !== '' && str_contains($n_l, $mk)) { $est = true; break; } }
+                $estDc[$ipx] = $est;
                 if ($est) { $dc++; } else { $horsDc++; }
                 if ($nom !== '') { $asNoms[$nom] = ($asNoms[$nom] ?? 0) + 1; }
             }
@@ -751,6 +756,20 @@ if ($stats['ips']) {
                courbe historique — elle reste comparable à elle-même — on pose
                celle-ci à côté. */
             $pays['visiteurs_2p'] = count(array_filter($stats['ips'], static fn($v) => $v >= 2));
+            /* LE compteur corrigé (owner, 24/09/2026). Sur prv-concept.com le 23/09,
+               15 458 requêtes d'une seule plage d'hébergeur ont fait passer « visiteurs »
+               de ~150 à 1 963, référent « google.com » fabriqué à l'appui — quand Search
+               Console comptait 28 clics. Ces robots portent un user-agent de navigateur :
+               le filtre à robots ne les voit pas. Celui-ci si, par le RÉSEAU.
+               ⚠️ On ne réécrit pas « visiteurs » : l'historique ne l'a pas, et une courbe
+               doit rester comparable à elle-même. On pose celle-ci à côté. Bloquer une
+               plage ne protège pas du suivant ; ce compteur, si. */
+            $visHc = 0;
+            foreach ($stats['vh_ip'] as $ipDeVh) {
+                if (empty($estDc[$ipDeVh])) { $visHc++; }
+            }
+            $pays['visiteurs_hors_centres'] = $visHc;
+            $pays['visiteurs_empreintes'] = count($stats['vh_ip']);
             $pays['vues_par_ip'] = [
                 'moyenne' => count($vues) ? round(array_sum($vues) / count($vues), 2) : 0,
                 'mediane' => count($vues) ? $vues[intdiv(count($vues), 2)] : 0,

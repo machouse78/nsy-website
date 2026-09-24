@@ -42,7 +42,16 @@ L'option en tolère QUATRE motifs, validés par le owner, pas un de plus :
   - AH10244 [core:error]       « invalid URI path » (traversée de répertoires) ;
   - ModSecurity [-:error]      « Access denied with code … » — le pare-feu de
     l'hébergeur refuse la requête avant nos scripts. Les autres messages de
-    ModSecurity (Warning, corps de requête trop gros…) ne sont PAS tolérés.
+    ModSecurity (Warning, corps de requête trop gros…) ne sont PAS tolérés ;
+  - AH02032 [ssl:error]        « Hostname <nom>. provided via SNI … no compatible
+    SSL setup » — et UNIQUEMENT quand le nom d'hôte finit par un POINT (la forme
+    DNS absolue). Des robots gardent en mémoire « https://forum.prv-concept.com./
+    robots.txt » : le certificat ne couvre pas ce nom-là sous la politique
+    « secure », Apache répond 421 AVANT tout .htaccess et tout code à nous. Rien
+    n'est réparable de notre côté — seule la configuration de vhost de
+    l'hébergeur le pourrait. Relevé le 24/09/2026 : 5 lignes en huit jours, cinq
+    adresses différentes, toujours le même nom. ⚠️ Un AH02032 sur un nom SANS
+    point final reste GRAVE : ce serait un vrai défaut de certificat.
 Elle affiche le décompte par motif et les cibles visées — à parcourir d'un
 œil : une cible qui serait un fichier À NOUS n'est pas forcément un scanner.
 Un refus ModSecurity visant un fichier que `deploy/` livre est tout de même
@@ -145,6 +154,16 @@ SCANNERS = (
      re.compile(_DEBUT % "-:error" + r"(?:\[client [^\]]+\] )?"
                 r"ModSecurity: Access denied with code \d+ .*"
                 r"\[uri \"(?P<cible>[^\"]*)\"\]"), "fichier"),
+    # Le POINT FINAL est la condition, pas un détail : « \S+\. » n'accepte que la
+    # forme DNS absolue. Sur un nom normal, le motif NE MORD PAS (essayé : il
+    # faudrait que « provided via SNI » suive le dernier point, ce qui n'arrive
+    # pas) — et la ligne redevient grave, comme doit l'être un vrai défaut de
+    # certificat. La cible est un nom d'hôte, pas un chemin : rien à comparer
+    # avec `deploy/`, d'où None.
+    ("AH02032 ssl (nom d'hôte à POINT FINAL, refusé par la politique TLS)",
+     re.compile(_ENTETE % ("ssl:error", "AH02032")
+                + r"Hostname (?P<cible>\S+\.) provided via SNI and hostname \S+ "
+                  r"provided via HTTP have no compatible SSL setup"), None),
 )
 RACINE_WEB = re.compile(r"^/home/clients/[^/]+/web(?=/|$)")
 

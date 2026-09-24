@@ -64,8 +64,16 @@ SCAN = "\n".join([autoindex("/.well-known/"), autoindex("/.well-known/"), autoin
 FCGI_1 = H + "[proxy_fcgi:error] [pid 1234:tid 140000000000000] [client 10.0.0.1:0] AH01067: Failed to read FastCGI header"
 FCGI_2 = (H + "[proxy_fcgi:error] [pid 1234:tid 140000000000000] (104)Connection reset by peer: "
           "[client 10.0.0.1:0] AH01075: Error dispatching request to : ")
-SSL = (H + "[ssl:error] " + P + "AH02032: Hostname nsy.fr. provided via SNI and hostname nsy.fr provided "
-       "via HTTP have no compatible SSL setup for policy 'secure'")
+def ssl_sni(hote):
+    return (H + "[ssl:error] " + P + f"AH02032: Hostname {hote} provided via SNI and hostname "
+            f"{hote.rstrip('.')} provided via HTTP have no compatible SSL setup for policy 'secure', "
+            f"referer https://{hote}/robots.txt")
+
+
+# Le POINT FINAL fait toute la différence : forme DNS absolue qu'Apache refuse
+# AVANT tout code à nous (rien de réparable), contre un vrai défaut de certificat.
+SSL_POINT = ssl_sni("nsy.fr.")
+SSL = ssl_sni("nsy.fr")
 PHP_WARN = (H + "[proxy_fcgi:error] " + P + "AH01071: Got error 'PHP message: PHP Warning:  Undefined "
             f"variable $x in {WEB}/chat.php on line 3'")
 PHP_DEPR = PHP_WARN.replace("PHP Warning:  Undefined variable $x", "PHP Deprecated:  str_getcsv(): the $escape parameter")
@@ -134,8 +142,14 @@ t("les cibles sont affichées relatives au site, sans le chemin de l'hébergemen
   ["2 × /.git", "2 × /.well-known/", "1 × /public/", "1 × /vendor/.env", "1 × /phpinfo.php.old"],
   ["/home/clients/", "referer"])
 
+c, s, _ = joue(S, {LOG: SCAN + "\n" + SSL_POINT})
+t("--tolere-scanners : AH02032 à POINT FINAL est toléré et décompté", c, 0, s,
+  ["AH02032 × 1", "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
+c, s, _ = joue([], {LOG: SSL_POINT})
+t("sans l'option, AH02032 à point final ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+
 for nom, ligne in (("proxy_fcgi AH01067 (coupure FastCGI)", FCGI_1), ("proxy_fcgi AH01075 (coupure FastCGI)", FCGI_2),
-                   ("ssl AH02032 (motif non validé par le owner)", SSL),
+                   ("ssl AH02032 sur un nom SANS point final (vrai défaut de certificat)", SSL),
                    ("PHP Warning", PHP_WARN), ("PHP Deprecated", PHP_DEPR), ("PHP Fatal", PHP_FATAL),
                    ("refus amont écrit par chat.php au journal de l'hébergement", CHAT_AMONT),
                    ("ModSecurity Warning (pas un Access denied)", modsec("/x", "Warning.")),
