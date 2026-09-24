@@ -2189,9 +2189,18 @@
             ['Ont lu au moins 2 pages', fmt(A.visiteurs_2p), `<span class="flat">soit ${part} % — le reste n'a fait que passer</span>`],
             ['Pages par adresse', nb1(v.moyenne), `<span class="flat">médiane ${fmt(v.mediane)}, maximum ${fmt(v.max)}</span>`],
             ['Sur réseau d\'hébergeur', fmt(A.centres_donnees), '<span class="flat">reconnu au nom de l\'opérateur</span>'],
+            // Le compteur CORRIGÉ (24/09/2026). Sur prv-concept.com le 23/09, une seule
+            // plage cloud a fait passer « visiteurs » de ~150 à 1 963, avec un référent
+            // « google.com » fabriqué — Search Console comptait 28 clics ce jour-là. Ces
+            // robots portent un user-agent de navigateur ; le réseau les trahit. Il manque
+            // à l'historique : on n'affiche rien plutôt qu'un zéro trompeur.
+            ['Visiteurs hors hébergeurs', A.visiteurs_hors_centres != null ? fmt(A.visiteurs_hors_centres) : '—',
+             A.visiteurs_hors_centres != null
+               ? `<span class="flat">le chiffre à lire — ${fmt((A.visiteurs_empreintes ?? 0) - A.visiteurs_hors_centres)} écarté(s) sur ${fmt(A.visiteurs_empreintes ?? 0)}</span>`
+               : '<span class="flat">démarre à la première collecte qui suit sa mise en place</span>'],
           ].map(([t, x, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${x}</div><div class="d">${d}</div></div>`).join('');
           const top = Object.entries(A.as_top || {}).slice(0, 3).map(([k, n]) => `${k} (${fmt(n)})`).join(', ');
-          $('aud-note').textContent = `Relevé du ${jA}. ${fmt(v.a_une_seule_page)} adresses sur ${fmt(A.total)} n'ont ouvert qu'une seule page : ce sont des passages, pas des lectures. Principaux opérateurs : ${top}. La courbe « visiteurs » ci-dessus n'a pas été corrigée — elle reste comparable à son propre historique.`;
+          $('aud-note').textContent = `Relevé du ${jA}. ${fmt(v.a_une_seule_page)} adresses sur ${fmt(A.total)} n'ont ouvert qu'une seule page : ce sont des passages, pas des lectures. Principaux opérateurs : ${top}. La courbe « visiteurs » ci-dessus n'a pas été corrigée — elle reste comparable à son propre historique${A.visiteurs_hors_centres != null ? ", et « Visiteurs hors hébergeurs » est le chiffre à lire à sa place" : ""}.`;
         } else {
           $('aud-cards').innerHTML = '';
           $('aud-note').textContent = "Pas encore de relevé : la ventilation par opérateur démarre à la première collecte qui suit sa mise en place.";
