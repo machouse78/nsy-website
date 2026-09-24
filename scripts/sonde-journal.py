@@ -70,6 +70,16 @@ Restent bloquants, avec ou sans l'option :
     lecture partielle, et l'état s'arrête à ce qui a été LU (l'appel suivant
     montre la suite).
 
+⚠️ ROTATION DE MINUIT (24/09/2026). Apache tourne `error.log` en
+`error.log-<date>` : ce fichier est NOUVEAU pour la sonde, tout son contenu
+compte comme delta, et le verdict est « NON VIERGE » alors que rien ne s'est
+produit depuis la dernière lecture — les lignes montrées sont celles de la
+VEILLE. Et un SECOND appel écrit le nouvel état : le delta est PERDU. Donc au
+premier « NON VIERGE », lire la sortie COMPLÈTE tout de suite (sans --bref). Si
+le delta est déjà perdu : copier `_secret/sonde-journal-etat.json`, y baisser les
+tailles (0 = relire tout le fichier) et rappeler la sonde avec `--etat
+/tmp/<copie>.json` — l'état officiel reste intact.
+
 Codes de sortie : 0 = journal vierge, ou rien d'autre que du toléré (ou
 référence posée), 2 = NON vierge (STOP), 1 = la sonde elle-même a échoué.
 
