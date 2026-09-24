@@ -148,6 +148,18 @@ t("--tolere-scanners : AH02032 à POINT FINAL est toléré et décompté", c, 0,
 c, s, _ = joue([], {LOG: SSL_POINT})
 t("sans l'option, AH02032 à point final ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
 
+# --bref : une seule ligne, et SURTOUT le code de sortie intact. C'est l'option qui rend
+# « sonde && envoi » sûr — sans elle on pipe, et « && » lit le code de `tail` (vécu
+# deux fois : 22/09 vers nsy.fr, 24/09 vers prv-concept.com).
+c, s, _ = joue(S + ["--bref"], {LOG: SCAN})
+t("--bref : le verdict seul, code 0", c, 0, s, ["AUCUNE ERREUR À NOUS"], ["-> ", "NOUVEAU"])
+c, s, _ = joue(["--bref"], {LOG: SCAN})
+t("--bref : le code 2 est CONSERVÉ quand le journal n'est pas vierge", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(["--bref"], {LOG: SCAN})
+t("--bref : rien d'autre que les lignes [sonde]", c, 2,
+  "\n".join(l for l in s.splitlines() if l and not l.startswith("[sonde]")) or "(vide)",
+  ["(vide)"])
+
 for nom, ligne in (("proxy_fcgi AH01067 (coupure FastCGI)", FCGI_1), ("proxy_fcgi AH01075 (coupure FastCGI)", FCGI_2),
                    ("ssl AH02032 sur un nom SANS point final (vrai défaut de certificat)", SSL),
                    ("PHP Warning", PHP_WARN), ("PHP Deprecated", PHP_DEPR), ("PHP Fatal", PHP_FATAL),

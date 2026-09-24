@@ -84,6 +84,7 @@ Pendant de `tools/sonde-journal.py` du dépôt prv-concept : toute évolution de
 motifs tolérés se reporte des deux côtés. Essais hors ligne :
 `python3 tests/sonde-journal.test.py`.
 """
+import builtins
 import io
 import json
 import os
@@ -345,8 +346,16 @@ def trie(f: str, lignes: list, tolere_amont: bool, tolere_scanners: bool):
 
 
 def main() -> int:
+
+    def print(*a, **k):                     # noqa: A001 — filtre local au mode --bref
+        """En mode --bref, seules les lignes de VERDICT sortent ; le code de sortie,
+        lui, ne change pas. builtins.print, et non la globale : définir « print » ici
+        en fait un nom LOCAL à toute la fonction."""
+        if "--bref" not in sys.argv or (a and str(a[0]).startswith("[sonde]")):
+            builtins.print(*a, **k)
     etat_f = sys.argv[sys.argv.index("--etat") + 1] if "--etat" in sys.argv else ETAT
     tolere_amont = "--tolere-amont" in sys.argv
+    bref = "--bref" in sys.argv        # seul le verdict final s'affiche
     tolere_scanners = "--tolere-scanners" in sys.argv
     etat = {}
     if os.path.exists(etat_f):
