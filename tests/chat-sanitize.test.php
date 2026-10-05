@@ -38,6 +38,7 @@ $officials = [
     'https://www.facebook.com/reel/1080327827884467',
     'https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
     'https://www.facebook.com/reel/1392916158966415/',
+    'https://www.facebook.com/reel/1422266333377597/',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));
@@ -90,6 +91,11 @@ t('article 2 cité sans socials → LinkedIn + Facebook ajoutés',
 $r = nsy_sanitize_reply("Voir notre [article](reunir-site-forum-boutique-compte-unique.html) sur le sujet et voilà.");
 t('article 5 cité sans socials → LinkedIn + réel Facebook ajoutés',
   str_contains($r, 'linkedin.com/pulse/r%25C3%25A9unir-un-site-forum') && str_contains($r, 'facebook.com/reel/1392916158966415'));
+$r = nsy_sanitize_reply("Voir notre [article](forum-base-de-connaissances-reseaux-sociaux.html) sur le sujet et voilà.");
+t('article 6 cité sans socials → réel Facebook ajouté, pas de LinkedIn tant qu\'il n\'existe pas',
+  str_contains($r, 'facebook.com/reel/1422266333377597') && !str_contains($r, 'Lire sur LinkedIn'));
+$r = nsy_sanitize_reply("Voir notre [article](forum-base-de-connaissances-reseaux-sociaux.html) et son [réel](https://www.facebook.com/reel/1422266333377597/) et voilà.");
+t('article 6 cité AVEC son réel → rien d\'ajouté', substr_count($r, '1422266333377597') === 1);
 
 // ── Formulations bannies (positionnement ESN) → réécrites côté serveur ──
 t('« sans intermédiaire » → « en prise directe »',

@@ -498,6 +498,7 @@ function nsy_sanitize_reply(string $reply): string
         'https://www.facebook.com/reel/1080327827884467',
         'https://www.linkedin.com/pulse/r%25c3%25a9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
         'https://www.facebook.com/reel/1392916158966415',
+        'https://www.facebook.com/reel/1422266333377597',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -551,14 +552,24 @@ function nsy_sanitize_reply(string $reply): string
             'linkedin' => 'https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
             'facebook' => 'https://www.facebook.com/reel/1392916158966415',
         ],
+        // Article 6 (05/10/2026) : Facebook publié, LinkedIn à ajouter quand le owner aura collé l'article.
+        'forum-base-de-connaissances-reseaux-sociaux.html' => [
+            'facebook' => 'https://www.facebook.com/reel/1422266333377597/',
+        ],
     ];
     if (!replyIsEnglish($reply)) {
         $low = mb_strtolower($reply);
         foreach ($journalSocials as $slug => $links) {
             if (str_contains($reply, $slug)
                 && !str_contains($low, 'linkedin.com/pulse/')
-                && !str_contains($low, 'facebook.com/share/')) {
-                $reply .= "\n\nCet article vit aussi sur les réseaux : [Lire sur LinkedIn]({$links['linkedin']}) · [Lire sur Facebook]({$links['facebook']})";
+                && !str_contains($low, 'facebook.com/share/')
+                && !str_contains($low, 'facebook.com/reel/')) {
+                // Seuls les réseaux déjà publiés sont proposés (un article peut
+                // n'avoir que Facebook le temps que LinkedIn soit collé).
+                $parts = [];
+                if (!empty($links['linkedin'])) $parts[] = "[Lire sur LinkedIn]({$links['linkedin']})";
+                if (!empty($links['facebook'])) $parts[] = "[Lire sur Facebook]({$links['facebook']})";
+                if ($parts) $reply .= "\n\nCet article vit aussi sur les réseaux : " . implode(' · ', $parts);
             }
         }
     }

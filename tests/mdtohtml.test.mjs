@@ -52,6 +52,8 @@ t('post Facebook n°4 (URL nue) whitelisté', o.includes('href="https://www.face
 o = mdToHtml('Article [LinkedIn](https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce) et reel https://www.facebook.com/reel/1392916158966415 ici.');
 t('article LinkedIn Pulse n°5 whitelisté', o.includes('href="https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce"'));
 t('post Facebook n°5 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/reel/1392916158966415"'));
+o = mdToHtml('Réel https://www.facebook.com/reel/1422266333377597/ ici.');
+t('post Facebook n°6 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/reel/1422266333377597/"'));
 
 o = mdToHtml('Post [Facebook](https://www.facebook.com/share/p/1Ey4FXBYDA) ici.');
 t('post Facebook n°2 whitelisté', o.includes('href="https://www.facebook.com/share/p/1Ey4FXBYDA"'));
