@@ -1441,7 +1441,8 @@
         || v.id === 'chatbot-forum-video'
         || v.id === 'weekend-site-video'
         || v.id === 'supervision-video'
-        || v.id === 'compte-unique-video') return; // boomerang déjà sans couture
+        || v.id === 'compte-unique-video'
+        || v.id === 'forum-classe-video') return; // boomerang ou boucle continue déjà sans couture
     setupLoopFade(v);
   });
 

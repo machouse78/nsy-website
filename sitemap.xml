@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -77,7 +77,7 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -313,7 +313,7 @@
   <!-- FAQ — 50+ questions/réponses expertise & offres (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faq.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -324,7 +324,7 @@
 
   <url>
     <loc>https://www.nsy.fr/faq-en.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -462,7 +462,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/glossaire-ia-web.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -471,7 +471,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-web-glossary.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -506,7 +506,7 @@
   <!-- Journal + pages géo (ajout 2026-07-29) -->
   <url>
     <loc>https://www.nsy.fr/blog.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -557,7 +557,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -576,6 +576,13 @@
       <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/forum-classe-thumb.jpg</video:thumbnail_loc>
+      <video:title>La même question, tous les trois mois — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : un meuble de classement aux fiches lumineuses relié par un flux de lumière à un nuage de bulles de conversation — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/forum-classe-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
     <image:image>
       <image:loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</image:loc>
       <image:title>An AI chatbot wired into a forum — illustration</image:title>
@@ -591,6 +598,10 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/compte-unique-anim-thumb.jpg</image:loc>
       <image:title>Un site, un forum, une boutique, un seul compte — vignette</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/forum-classe-thumb.jpg</image:loc>
+      <image:title>La même question, tous les trois mois — vignette</image:title>
     </image:image>
   </url>
   <url>
@@ -658,6 +669,32 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/compte-unique-article-en.jpg</image:loc>
       <image:title>Infographic — One site, one forum, one shop, one account</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/forum-knowledge-base-social-media.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/forum-classe-article.jpg</image:loc>
+      <image:title>Illustration — La même question, tous les trois mois</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/forum-knowledge-base-social-media.html</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/forum-knowledge-base-social-media.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/forum-classe-article.jpg</image:loc>
+      <image:title>Illustration — The same question, every three months</image:title>
     </image:image>
   </url>
   <url>

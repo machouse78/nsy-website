@@ -44,7 +44,7 @@
 
 The contact form is still served by `contact.php` (unchanged). The top nav has **6 links** (Home, Insights, Services, Work, About, Contact); 3D Design and the FAQ are reachable from the footer.
 
-Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (4: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend », « From terabytes to a megabyte » — animated thumbnails), **5 city pages** as FR/EN pairs (Orléans · Tours · Paris · Lyon · Bordeaux) + **Paris technical consultant**, **redesign offering** `refonte-site-internet.html` / `website-redesign.html`, **feasibility questionnaire** `faisabilite.html` / `feasibility.html` (**new build or redesign** paths), legal pages — **64 pages** in total.
+Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (6: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend », « From terabytes to a megabyte », « One site, one forum, one shop, one account », « The same question, every three months » — animated thumbnails), **5 city pages** as FR/EN pairs (Orléans · Tours · Paris · Lyon · Bordeaux) + **Paris technical consultant**, **redesign offering** `refonte-site-internet.html` / `website-redesign.html`, **feasibility questionnaire** `faisabilite.html` / `feasibility.html` (**new build or redesign** paths), legal pages — **68 pages** in total.
 
 ## Bilingual (FR / EN)
 
