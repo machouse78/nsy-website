@@ -1187,6 +1187,8 @@
   // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
   // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
   const SLUG_FR_TO_EN = {
+    'forum-base-de-connaissances-reseaux-sociaux.html': 'forum-knowledge-base-social-media.html',
+    'reunir-site-forum-boutique-compte-unique.html': 'one-site-forum-shop-single-account.html',
     'superviser-production-teraoctets-megaoctet.html': 'production-monitoring-terabytes-megabyte.html',
     'site-ia-en-un-week-end.html': 'ai-website-in-a-weekend.html',
     'index.html': 'index-en.html',
@@ -1209,6 +1211,11 @@
     'consultant-technique-paris.html': 'technical-consultant-paris.html',
     'creation-site-internet-loiret.html': 'website-creation-loiret.html',
     'creation-site-internet-orleans.html': 'website-creation-orleans.html',
+    'creation-site-internet-tours.html': 'website-creation-tours.html',
+    'creation-site-internet-paris.html': 'website-creation-paris.html',
+    'creation-site-internet-lyon.html': 'website-creation-lyon.html',
+    'creation-site-internet-bordeaux.html': 'website-creation-bordeaux.html',
+    'refonte-site-internet.html': 'website-redesign.html',
     'pourquoi-nsy.html': 'why-nsy.html',
     'services.html': 'services-en.html',
     'a-propos.html': 'about.html',
@@ -1226,19 +1233,29 @@
       // Persist preference for 1 year so the auto-detect on / does not override
       document.cookie = `nsy_lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
 
-      // Derive the target URL from the current pathname
+      // Cible : 1) le lien RÉEL du drapeau (écrit par sync-partials depuis le
+      // hreflang de la page — source unique, toujours à jour) ; 2) sinon le
+      // <link rel="alternate" hreflang> de la page ; 3) sinon la table ci-dessus.
+      // Vécu 05/10/2026 : la table seule ignorait les deux derniers articles,
+      // quatre pages villes et la page refonte — le drapeau laissait sur place.
       const path = window.location.pathname;
       const file = path.split('/').pop() || 'index.html';
       const hash = window.location.hash || '';
+      const hrefAttr = flag.getAttribute('href');
+      const alt = document.querySelector(`link[rel="alternate"][hreflang="${lang}"]`);
       let target;
-      if (lang === 'en') {
+      if (hrefAttr && hrefAttr !== '#') {
+        target = hrefAttr;
+      } else if (alt && alt.getAttribute('href')) {
+        target = alt.getAttribute('href');
+      } else if (lang === 'en') {
         // FR → EN: look up, or stay on the same page if already EN
         target = SLUG_FR_TO_EN[file] || file;
       } else {
         // EN → FR: reverse lookup, or stay on the same page if already FR
         target = SLUG_EN_TO_FR[file] || file;
       }
-      window.location.href = target + hash;
+      window.location.href = target + (target.includes('#') ? '' : hash);
     });
   });
 

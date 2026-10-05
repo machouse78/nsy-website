@@ -72,7 +72,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 | `contact.html` | `contact-en.html` |
 | `conception-3d.html` | `3d-design.html` |
 
-- **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. Mapping de slugs explicite dans `js/app.js`.
+- **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. La cible est le **lien réel du drapeau** (écrit par `scripts/sync-partials.mjs` depuis le hreflang de chaque page), sinon le `<link rel="alternate" hreflang>`, et en dernier recours la table de slugs de `js/app.js` (vécu 05/10/2026 : la table seule oubliait sept paires, le drapeau laissait sur place).
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
 - **hreflang réciproque** `fr` / `en` / `x-default` sur les 66 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.

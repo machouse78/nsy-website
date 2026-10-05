@@ -72,7 +72,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 | `contact.html` | `contact-en.html` |
 | `conception-3d.html` | `3d-design.html` |
 
-- **Language switch** : 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. Explicit slug mapping in `js/app.js`.
+- **Language switch**: 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. The target is the **flag's real link** (written by `scripts/sync-partials.mjs` from each page's hreflang), then the page's `<link rel="alternate" hreflang>`, and only as a last resort the slug table in `js/app.js` (05/10/2026: the table alone was missing seven pairs and the flag stayed put).
 - **Auto-detection** : on `/` (no cookie), `.htaccess` reads `Accept-Language` and 302-redirects to `/index-en.html` if the browser is in English. The user's choice (cookie) then takes precedence.
 - **Reciprocal hreflang** `fr` / `en` / `x-default` on all 64 pages, self-referencing canonicals.
 - **`nsy_lang` cookie** : the only functional cookie, set on explicit action (flag click) — consent-exempt (CNIL deliberation 2020-091). Documented on the legal pages.
