@@ -1092,6 +1092,19 @@
   }
 
   const bkSum = (bk, fn) => bk.keys.map((k) => bk.map.get(k).reduce((a, d) => a + fn(D[d]), 0));
+  // Un CUMUL (lectures d'une publication depuis sa parution) ne s'additionne pas
+  // d'un jour à l'autre : il se lit à la dernière valeur du bucket. Et un jour
+  // sans relevé — `lire` rend null quand la publication manque dans la liste du
+  // jour : appel Meta en échec les 18/09 et 27/09/2026 — reprend la dernière
+  // valeur connue, jamais 0. Un cumul ne redescend pas non plus : une valeur
+  // plus basse que la précédente (insights revenus à 0) est ignorée.
+  const bkCumul = (bk, lire) => {
+    let dernier = 0;
+    return bk.keys.map((k) => {
+      for (const d of bk.map.get(k)) { const v = lire(D[d]); if (v != null && v >= dernier) dernier = v; }
+      return dernier;
+    });
+  };
 
   // ── filtres : listes déroulantes (valeurs réelles de l'historique) ──
   const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia', peri: 'f-peri' };
@@ -1648,15 +1661,18 @@
         ig: { champ: 'ig_posts', lect: (x) => x.vues || 0, tag: 'IG' },
       };
       const reseaux = net === 'tout' ? ['fb', 'ig'] : [net];
-      const dernier = D[sel.at(-1)]?.fb || {};
+      // Le dernier jour RELEVÉ, pas le dernier jour de la période : un jour où
+      // l'appel Meta a échoué a une liste vide, et viderait le tableau.
+      const avecPosts = [...sel].reverse().find((d) => reseaux.some((r) => (D[d]?.fb?.[SRC[r].champ] || []).length));
+      const dernier = D[avecPosts ?? sel.at(-1)]?.fb || {};
       const cands = reseaux.flatMap((r) => (dernier[SRC[r].champ] || []).map((post) => ({ post, r })));
       const tops = cands.sort((a, b) => SRC[b.r].lect(b.post) - SRC[a.r].lect(a.post)).slice(0, 5);
       const serie = tops.map(({ post, r }, i) => ({
         label: `${net === 'tout' ? SRC[r].tag + ' · ' : ''}${post.date} · ${(post.titre || '').slice(0, 24) || 'publication'}`,
         color: COLORS[i % COLORS.length],
-        pts: bkSum(bk, (v) => {
+        pts: bkCumul(bk, (v) => {
           const l = (v.fb?.[SRC[r].champ] || []).find((x) => x.id === post.id);
-          return l ? SRC[r].lect(l) : 0;
+          return l ? SRC[r].lect(l) : null;
         }),
       }));
       $('h-posts').textContent = `Lecture par publication — ${net === 'fb' ? 'Facebook' : net === 'ig' ? 'Instagram' : 'Facebook + Instagram'}`;
@@ -1666,7 +1682,7 @@
       $('posts-note').textContent = (net === 'ig'
         ? 'Vues Instagram'
         : "Facebook : vues des vidéos, à défaut clics — Meta a retiré les impressions au niveau d'une publication" + (net === 'tout' ? ' ; Instagram : vues' : '')) +
-        '. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte.';
+        '. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte ; un jour sans relevé (appel Meta en échec) garde la dernière valeur connue.';
 
       document.querySelector('#t-fbposts tbody').innerHTML = (dernier.posts || [])
         .map((x) => {

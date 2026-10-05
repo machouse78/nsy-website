@@ -823,14 +823,40 @@ $day = [
 ];
 
 // ── 2. Facebook (API Graph) — état du JOUR de collecte ───────────────────────
-function graphGet(string $path, string $token, array $params = []): array {
+// Chaque appel Graph en échec est NOTÉ (chemin sans identifiant, motif, nombre
+// d'essais) dans $GRAPH_ERREURS, repris dans fb.erreurs du jour. Vécu 18/09 et
+// 27/09/2026 : la liste des publications est revenue vide (un échec silencieux,
+// la Page répondait par ailleurs), le jour a été enregistré avec posts = [] et
+// le tableau de bord a tracé des zéros — un cumul qui tombe à zéro, c'est un
+// trou de mesure, pas une baisse. D'où : jusqu'à trois essais espacés de 2 s
+// sur un échec transitoire, aucun nouvel essai sur un refus de droits ou de
+// jeton (codes 10, 190, 200 : réessayer ne changerait rien).
+$GRAPH_ERREURS = [];
+function graphGet(string $path, string $token, array $params = [], int $essais = 3): array {
+    global $GRAPH_ERREURS;
     $params['access_token'] = $token;
     $url = 'https://graph.facebook.com/v21.0/' . $path . '?' . http_build_query($params);
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5]);
-    $raw = curl_exec($ch);
-    $j = is_string($raw) ? json_decode($raw, true) : null;
-    return is_array($j) && !isset($j['error']) ? $j : [];
+    $motif = '';
+    $faits = 0;
+    for ($i = 1; $i <= $essais; $i++) {
+        $faits = $i;
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5]);
+        $raw = curl_exec($ch);
+        $curlErr = (string) curl_error($ch);
+        $http = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        curl_close($ch);
+        $j = is_string($raw) ? json_decode($raw, true) : null;
+        if (is_array($j) && !isset($j['error'])) return $j;
+        $code = is_array($j) ? (int) ($j['error']['code'] ?? 0) : 0;
+        $motif = $curlErr !== '' ? 'curl : ' . $curlErr
+            : ($code ? 'graph ' . $code . ' : ' . mb_substr((string) ($j['error']['message'] ?? ''), 0, 120)
+                     : 'http ' . $http . ' : réponse illisible');
+        if (in_array($code, [10, 190, 200], true)) break;
+        if ($i < $essais) sleep(2);
+    }
+    $GRAPH_ERREURS[] = ['appel' => preg_replace('/[\d_]{6,}/', '{id}', $path), 'erreur' => $motif, 'essais' => $faits];
+    return [];
 }
 
 /* ── STORIES (Facebook Page + Instagram) — une vie de 24 h ───────────────────
@@ -1017,6 +1043,9 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
             'reshares'   => $reshares,
         ];
     }
+    // Les échecs d'appels Graph du jour, pour que le tableau de bord puisse
+    // dire « non relevé » plutôt que zéro. Jamais le jeton, jamais d'identifiant.
+    if ($GRAPH_ERREURS) $fb['erreurs'] = $GRAPH_ERREURS;
 }
 
 // ── 2 bis. Avis clients, par source ──────────────────────────────────────────
