@@ -225,9 +225,14 @@ associations et indépendants en transition numérique.
   forum à jour habillé sans toucher à son cœur, abonnement à un modèle de langage au
   nom de l'association (les offres gratuites s'épuisent en cours de mois), quelqu'un
   qui valide, une communauté vivante. À la fin, phpBB reste phpBB : mêmes adresses,
-  mêmes comptes, dix-huit ans de messages en place. Appel : questionnaire de
-  faisabilité, état des lieux de l'archive d'abord. Pas de publication sociale encore
-  (à ajouter ici quand elle existera).
+  mêmes comptes, dix-huit ans de messages en place. Appel final : NSY propose un
+  PACKAGE COMPLET pour les sites qui vivent autour d'un forum phpBB (sauvetage de
+  l'archive et de ses images, habillage aux couleurs du site sans migration, pont
+  avec les réseaux sociaux dans les deux sens, assistant qui répond depuis les
+  sujets, veille des questions sans réponse) ; les associations, clubs et
+  communautés de passionnés qui ont un forum sont invités à contacter NSY —
+  état des lieux de l'archive d'abord, questionnaire de faisabilité en dix minutes.
+  Pas de publication sociale encore (à ajouter ici quand elle existera).
 
 - « Un site, un forum, une boutique, un seul compte : réunir sans reconstruire »
   (11 septembre 2026) : https://www.nsy.fr/reunir-site-forum-boutique-compte-unique.html
