@@ -52,6 +52,7 @@ Allow: /public/compte-unique-article.jpg
 Allow: /public/compte-unique-article-en.jpg
 Allow: /public/forum-classe-thumb.jpg
 Allow: /public/forum-classe-article.jpg
+Allow: /public/forum-classe-article-en.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
