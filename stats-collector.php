@@ -832,8 +832,9 @@ $day = [
 // sur un échec transitoire, aucun nouvel essai sur un refus de droits ou de
 // jeton (codes 10, 190, 200 : réessayer ne changerait rien).
 $GRAPH_ERREURS = [];
+$GRAPH_ESSAIS_RESTANTS = 4;   // budget de nouveaux essais pour TOUTE la collecte
 function graphGet(string $path, string $token, array $params = [], int $essais = 3): array {
-    global $GRAPH_ERREURS;
+    global $GRAPH_ERREURS, $GRAPH_ESSAIS_RESTANTS;
     $params['access_token'] = $token;
     $url = 'https://graph.facebook.com/v21.0/' . $path . '?' . http_build_query($params);
     $motif = '';
@@ -845,15 +846,23 @@ function graphGet(string $path, string $token, array $params = [], int $essais =
         $raw = curl_exec($ch);
         $curlErr = (string) curl_error($ch);
         $http = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
-        curl_close($ch);
+        // Pas de fermeture explicite du handle : sans effet depuis PHP 8.0 et
+        // DÉPRÉCIÉE en 8.5 — vécu le 05/10/2026 : vingt-deux dépréciations par
+        // collecte, et le garde-fou du Cerf Thym (qui les comptait encore) a coupé en 500.
         $j = is_string($raw) ? json_decode($raw, true) : null;
         if (is_array($j) && !isset($j['error'])) return $j;
         $code = is_array($j) ? (int) ($j['error']['code'] ?? 0) : 0;
         $motif = $curlErr !== '' ? 'curl : ' . $curlErr
             : ($code ? 'graph ' . $code . ' : ' . mb_substr((string) ($j['error']['message'] ?? ''), 0, 120)
                      : 'http ' . $http . ' : réponse illisible');
-        if (in_array($code, [10, 190, 200], true)) break;
-        if ($i < $essais) sleep(2);
+        // On ne réessaie QUE le transitoire : panne de transport, 5xx, ou les
+        // codes que Meta documente comme temporaires (1, 2, 4, 17, 32, 613).
+        // Tout autre refus est définitif pour cette collecte — réessayer ne
+        // ferait qu'allonger la nuit. Et le budget est global : au plus
+        // GRAPH_ESSAIS_RESTANTS nouveaux essais par collecte, quoi qu'il arrive.
+        $transitoire = $curlErr !== '' || $http >= 500 || in_array($code, [1, 2, 4, 17, 32, 613], true);
+        if (!$transitoire || $GRAPH_ESSAIS_RESTANTS <= 0) break;
+        if ($i < $essais) { $GRAPH_ESSAIS_RESTANTS--; sleep(1); }
     }
     $GRAPH_ERREURS[] = ['appel' => preg_replace('/[\d_]{6,}/', '{id}', $path), 'erreur' => $motif, 'essais' => $faits];
     return [];
