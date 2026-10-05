@@ -222,6 +222,7 @@ cp public/compte-unique-article-en.jpg  deploy/public/   # infographie EN articl
 cp public/forum-classe-thumb.jpg        deploy/public/   # poster vignette article forum classé (05/10/2026)
 cp public/forum-classe-thumb.mp4        deploy/public/   # vignette ANIMEE article forum classé (boucle continue)
 cp public/forum-classe-article.jpg      deploy/public/   # illustration FR+EN article forum classé (+ OG)
+cp public/forum-classe-video.mp4        deploy/public/   # video pleine res article forum classé (publication Facebook, boucle continue + piste silencieuse)
 cp public/prv-concept-deux-articles-video.mp4 deploy/public/   # video des deux articles PRV Concept (publication Facebook, 11/09/2026)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)
