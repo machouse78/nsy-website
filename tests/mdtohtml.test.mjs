@@ -54,6 +54,8 @@ t('article LinkedIn Pulse n°5 whitelisté', o.includes('href="https://www.linke
 t('post Facebook n°5 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/reel/1392916158966415"'));
 o = mdToHtml('Réel https://www.facebook.com/reel/1422266333377597/ ici.');
 t('post Facebook n°6 (URL nue) whitelisté', o.includes('href="https://www.facebook.com/reel/1422266333377597/"'));
+o = mdToHtml('Article [LinkedIn](https://www.linkedin.com/pulse/la-m%25C3%25AAme-question-tous-les-trois-mois-pourquoi-un-ytvne) ici.');
+t('article LinkedIn Pulse n°6 whitelisté', o.includes('href="https://www.linkedin.com/pulse/la-m%25C3%25AAme-question-tous-les-trois-mois-pourquoi-un-ytvne"'));
 
 o = mdToHtml('Post [Facebook](https://www.facebook.com/share/p/1Ey4FXBYDA) ici.');
 t('post Facebook n°2 whitelisté', o.includes('href="https://www.facebook.com/share/p/1Ey4FXBYDA"'));

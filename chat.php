@@ -499,6 +499,7 @@ function nsy_sanitize_reply(string $reply): string
         'https://www.linkedin.com/pulse/r%25c3%25a9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
         'https://www.facebook.com/reel/1392916158966415',
         'https://www.facebook.com/reel/1422266333377597',
+        'https://www.linkedin.com/pulse/la-m%25c3%25aame-question-tous-les-trois-mois-pourquoi-un-ytvne',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -552,8 +553,8 @@ function nsy_sanitize_reply(string $reply): string
             'linkedin' => 'https://www.linkedin.com/pulse/r%25C3%25A9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
             'facebook' => 'https://www.facebook.com/reel/1392916158966415',
         ],
-        // Article 6 (05/10/2026) : Facebook publié, LinkedIn à ajouter quand le owner aura collé l'article.
         'forum-base-de-connaissances-reseaux-sociaux.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/la-m%25C3%25AAme-question-tous-les-trois-mois-pourquoi-un-ytvne',
             'facebook' => 'https://www.facebook.com/reel/1422266333377597/',
         ],
     ];
