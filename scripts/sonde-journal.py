@@ -36,7 +36,7 @@ que le fichier grossissait. On note la TAILLE, et on relit ce qui dépasse.
 scanners qui demandent `/.git`, `/.env`, `/.well-known/`… Apache les refuse
 AVANT tout script, et l'écrit au journal. Ces lignes rendaient « NON VIERGE »
 avant chaque mise en ligne : on relisait à la main, et le STOP se banalisait.
-L'option en tolère QUATRE motifs, validés par le owner, pas un de plus :
+L'option tolère les motifs ci-dessous, validés un à un par le owner, pas un de plus :
   - AH01276 [autoindex:error]  « Cannot serve directory … » (listage refusé) ;
   - AH01630 [authz_core:error] « client denied by server configuration » ;
   - AH10244 [core:error]       « invalid URI path » (traversée de répertoires) ;
@@ -52,6 +52,18 @@ L'option en tolère QUATRE motifs, validés par le owner, pas un de plus :
     l'hébergeur le pourrait. Relevé le 24/09/2026 : 5 lignes en huit jours, cinq
     adresses différentes, toujours le même nom. ⚠️ Un AH02032 sur un nom SANS
     point final reste GRAVE : ce serait un vrai défaut de certificat.
+  - « Rejected, too many connections from this host » [-:error] (owner, 04/10/2026 :
+    « oui, tolère les refus de l'hébergeur », reporté ici le 11/10/2026) — le limiteur
+    de connexions de l'hébergeur refoule un client qui ouvre plus de 30 connexions à la
+    fois (robots Azure sur wp-login.php et xmlrpc.php, aspirateurs), AVANT tout script.
+    Comme ModSecurity, un refus qui vise un fichier que `deploy/` livre reste toléré
+    mais SIGNALÉ ⚠️ (visiteur légitime ?).
+  - AH00036 [core:error] « (36)File name too long » (owner, 11/10/2026 : « oui vas-y,
+    reporte les deux motifs pour nsy.fr ») — relevé sur prv-concept.com : un robot mal
+    écrit prend le texte d'un attribut (une traduction `data-en`) pour un lien relatif
+    et demande une adresse de 700 caractères. Apache refuse AVANT tout script : un nom
+    de plus de 255 octets ne peut être aucun fichier du site. SEUL l'errno 36 est
+    toléré — un autre errno sur AH00036 (droits, par exemple) reste grave.
 Elle affiche le décompte par motif et les cibles visées — à parcourir d'un
 œil : une cible qui serait un fichier À NOUS n'est pas forcément un scanner.
 Un refus ModSecurity visant un fichier que `deploy/` livre est tout de même
@@ -171,6 +183,17 @@ SCANNERS = (
     # pas) — et la ligne redevient grave, comme doit l'être un vrai défaut de
     # certificat. La cible est un nom d'hôte, pas un chemin : rien à comparer
     # avec `deploy/`, d'où None.
+    # Le limiteur de connexions de l'hébergeur : ni code AH ni module, la cible est
+    # l'« uri: » de la parenthèse finale, que pose l'hébergeur (04/10/2026).
+    ("trop-de-connexions (refus du limiteur de l'hébergeur, plus de 30 connexions depuis une adresse)",
+     re.compile(_DEBUT % "-:error"
+                + r"Rejected, too many connections from this host\. "
+                  r"\(vhost:\S+ uri:(?P<cible>\S+) current:\d+ limit:\d+"), "fichier"),
+    # L'errno se glisse ENTRE [pid …] et [client …] (format relevé le 11/10/2026) :
+    # _ENTETE ne convient pas. « (36) » = ENAMETOOLONG, la seule cause tolérée.
+    ("AH00036 core (adresse trop longue pour être un fichier, refusée par Apache)",
+     re.compile(r"^\S+ \[[^\]]+\] \[core:error\] \[pid [^\]]+\] \(36\)File name too long: "
+                r"\[client [^\]]+\] AH00036: access to (?P<cible>\S+) failed"), None),
     ("AH02032 ssl (nom d'hôte à POINT FINAL, refusé par la politique TLS)",
      re.compile(_ENTETE % ("ssl:error", "AH02032")
                 + r"Hostname (?P<cible>\S+\.) provided via SNI and hostname \S+ "
@@ -323,7 +346,9 @@ def scanner(ligne: str):
         elif compare == "fichier":
             livre = chez_nous(cible) or chez_nous(cible, INDEX_DEFAUT)
             if livre:
-                alerte = (f"⚠️  ModSecurity a refusé une requête vers {cible} ({livre}, un "
+                qui = "ModSecurity a refusé" if motif.startswith("ModSecurity") \
+                      else "L'hébergeur a refoulé (trop de connexions)"
+                alerte = (f"⚠️  {qui} une requête vers {cible} ({livre}, un "
                           "fichier À NOUS) — scanner ou visiteur légitime ? À lire")
         return motif, cible, grave, alerte
     return None, None, None, None
@@ -439,7 +464,7 @@ def main() -> int:
         # owner doit pouvoir reprendre cette ligne telle quelle, et être vrai.
         detail = ", ".join(f"{m.split()[0]} × {n}" for m, n in toleres.items())
         print(f"[sonde] AUCUNE ERREUR À NOUS — bruit de scanners toléré : {detail}"
-              + (f" — ⚠️ {a_lire} cible(s) À NOUS refusée(s) par ModSecurity, à lire" if a_lire else ""))
+              + (f" — ⚠️ {a_lire} cible(s) À NOUS refusée(s) par l'hébergeur, à lire" if a_lire else ""))
     else:
         print("[sonde] JOURNAL VIERGE")
     return 0

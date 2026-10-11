@@ -72,6 +72,22 @@ def ssl_sni(hote):
 
 # Le POINT FINAL fait toute la différence : forme DNS absolue qu'Apache refuse
 # AVANT tout code à nous (rien de réparable), contre un vrai défaut de certificat.
+def limite(uri, referer=""):
+    # format relevé le 04/10/2026 : ni code AH, une parenthèse finale posée par l'hébergeur
+    return (H + "[-:error] " + P + f"Rejected, too many connections from this host. "
+            f"(vhost:nsy.fr uri:{uri} current:31 limit:30{referer}")
+
+
+def trop_long(uri, errno="(36)File name too long"):
+    # format relevé le 11/10/2026 : l'errno se glisse AVANT [client …]
+    return (H + "[core:error] [pid 1234:tid 140000000000000] " + errno + ": [client 192.0.2.10:0] "
+            f"AH00036: access to {uri} failed (filesystem path '{WEB}{uri}'), "
+            "referer https://www.nsy.fr/blog.html")
+
+
+LONG = "/blog/OnFriday,itwasofftothesouthoftheisland" + "x" * 300
+
+
 SSL_POINT = ssl_sni("nsy.fr.")
 SSL = ssl_sni("nsy.fr")
 PHP_WARN = (H + "[proxy_fcgi:error] " + P + "AH01071: Got error 'PHP message: PHP Warning:  Undefined "
@@ -148,6 +164,24 @@ t("--tolere-scanners : AH02032 à POINT FINAL est toléré et décompté", c, 0,
 c, s, _ = joue([], {LOG: SSL_POINT})
 t("sans l'option, AH02032 à point final ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
 
+c, s, _ = joue(S, {LOG: SCAN + "\n" + limite("/wp-login.php") + "\n" + limite("/xmlrpc.php", ", referer http://exemple.test/")})
+t("--tolere-scanners : les refus de l'hébergeur (trop de connexions) sont tolérés et décomptés", c, 0, s,
+  ["trop-de-connexions (refus du limiteur de l'hébergeur, plus de 30 connexions depuis une adresse) : 2 ligne(s)",
+   "trop-de-connexions × 2", "1 × /wp-login.php", "1 × /xmlrpc.php",
+   "AUCUNE ERREUR À NOUS"], ["NON VIERGE", "⚠️"])
+c, s, _ = joue([], {LOG: limite("/wp-login.php")})
+t("sans l'option, un refus de l'hébergeur ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: limite("/")})
+t("refus de l'hébergeur sur la page d'accueil → toléré mais ⚠️ (deploy/index.html)", c, 0, s,
+  ["L'hébergeur a refoulé (trop de connexions) une requête vers / (deploy/index.html",
+   "1 cible(s) À NOUS refusée(s) par l'hébergeur"])
+c, s, _ = joue(S, {LOG: SCAN + "\n" + trop_long(LONG) + "\n" + trop_long(LONG)})
+t("--tolere-scanners : AH00036 « File name too long » est toléré et décompté", c, 0, s,
+  ["AH00036 core (adresse trop longue pour être un fichier, refusée par Apache) : 2 ligne(s)",
+   "AH00036 × 2", "AUCUNE ERREUR À NOUS"], ["NON VIERGE", "/home/clients/"])
+c, s, _ = joue([], {LOG: trop_long(LONG)})
+t("sans l'option, AH00036 ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+
 # --bref : une seule ligne, et SURTOUT le code de sortie intact. C'est l'option qui rend
 # « sonde && envoi » sûr — sans elle on pipe, et « && » lit le code de `tail` (vécu
 # deux fois : 22/09 vers nsy.fr, 24/09 vers prv-concept.com).
@@ -165,6 +199,11 @@ for nom, ligne in (("proxy_fcgi AH01067 (coupure FastCGI)", FCGI_1), ("proxy_fcg
                    ("PHP Warning", PHP_WARN), ("PHP Deprecated", PHP_DEPR), ("PHP Fatal", PHP_FATAL),
                    ("refus amont écrit par chat.php au journal de l'hébergement", CHAT_AMONT),
                    ("ModSecurity Warning (pas un Access denied)", modsec("/x", "Warning.")),
+                   ("AH00036 avec un AUTRE errno que 36 (droits)", trop_long("/blog.html", "(13)Permission denied")),
+                   ("AH00036 RECOPIÉ dans un message PHP", PHP_WARN[:-1] + " " + trop_long(LONG) + "'"),
+                   ("refus de l'hébergeur RECOPIÉ dans un message PHP", PHP_WARN[:-1] + " " + limite("/x") + "'"),
+                   ("un autre refus de l'hébergeur que « too many connections »",
+                    H + "[-:error] " + P + "Rejected, request rate exceeded. (vhost:nsy.fr uri:/ current:31 limit:30"),
                    ("ModSecurity corps de requête trop gros", modsec("/contact.php", "Request body (Content-Length) is larger than the configured limit (13107200).")),
                    ("ligne de scanner RECOPIÉE dans un message PHP", PHP_WARN[:-1] + " " + refuse("/.git") + "'"),
                    ("ligne ModSecurity RECOPIÉE dans un message PHP", PHP_WARN[:-1] + " " + modsec("/x") + "'"),
@@ -196,7 +235,7 @@ t("AH01276 sur un répertoire dont deploy/ livre l'index → ARRÊTE", c, 2, s,
 
 c, s, _ = joue(S, {LOG: SCAN + "\n" + modsec("/chat.php")})
 t("ModSecurity sur un fichier À NOUS → toléré, mais ⚠️ jusque dans la ligne finale", c, 0, s,
-  ["ModSecurity a refusé une requête vers /chat.php (deploy/chat.php", "1 cible(s) À NOUS refusée(s) par ModSecurity"])
+  ["ModSecurity a refusé une requête vers /chat.php (deploy/chat.php", "1 cible(s) À NOUS refusée(s) par l'hébergeur"])
 c, s, _ = joue(S, {LOG: modsec("/")})
 t("ModSecurity sur la page d'accueil → ⚠️ (deploy/index.html)", c, 0, s, ["(deploy/index.html"])
 c, s, _ = joue(S, {LOG: modsec("/../_secret/ftp.env")})
