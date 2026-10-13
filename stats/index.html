@@ -433,7 +433,7 @@
 
   <div class="sec-h" id="r-youtube" hidden><h2>Chaîne YouTube</h2><span>audience de la chaîne et des vidéos</span></div>
   <div class="grid" id="yt-cards" hidden></div>
-  <div class="chart-head" id="yt-head" hidden><h2 id="h-yt">Vues et abonnés gagnés</h2></div>
+  <div class="chart-head" id="yt-head" hidden><h2 id="h-yt">Vues et abonnés de la chaîne</h2></div>
   <div class="chart" id="yt-chart" hidden><div class="legend" id="yt-legend"></div><svg id="c-yt"></svg></div>
   <div class="note" id="yt-note" hidden></div>
   <div class="cols" id="yt-cols" hidden>
@@ -1957,14 +1957,36 @@
           ['Vidéos publiées', fmt(etat.videos), `<span class="flat"><a href="${etat.url}" target="_blank" rel="noopener">${etat.nom || 'la chaîne'}</a></span>`],
         ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
+        // La courbe montre les CUMULS (owner, 13/10/2026 : « abonnés et vues cumulés plutôt
+        // que vues et nouveaux abonnés par jour ») : le total lu à la dernière collecte de
+        // chaque jour, semaine ou mois. Un jour sans collecte garde la dernière valeur connue,
+        // y compris celle d'avant la période affichée — jamais un faux zéro. Les vues ne
+        // redescendent pas (une baisse = anomalie d'API, ignorée) ; les abonnés, si.
+        const cumul = (cle, monotone) => {
+          const debut = bk.map.get(bk.keys[0])?.[0];
+          const garde = (v, der) => v != null && (!monotone || der == null || v >= der);
+          let der = null;
+          for (const d of jrs) {
+            if (d >= debut) break;
+            if (garde(D[d].youtube[cle], der)) der = D[d].youtube[cle];
+          }
+          const pts = bk.keys.map((k) => {
+            for (const d of bk.map.get(k)) { const v = D[d]?.youtube?.[cle]; if (garde(v, der)) der = v; }
+            return der;
+          });
+          // Avant le tout premier relevé, rien n'est connu : la courbe part du premier
+          // relevé plutôt que de zéro (un saut depuis 0 ferait croire à une explosion).
+          const p0 = pts.find((v) => v != null) ?? 0;
+          return pts.map((v) => v ?? p0);
+        };
         const ys = [
-          { label: 'Vues gagnées', color: COLORS[0], pts: bk.keys.map((k) => somme(bk.map.get(k), 'vues')) },
-          { label: 'Abonnés gagnés (axe droit)', color: COLORS[1], axis: 'right', pts: bk.keys.map((k) => somme(bk.map.get(k), 'abonnes')) },
+          { label: 'Vues (cumul)', color: COLORS[0], pts: cumul('vues', true) },
+          { label: 'Abonnés (cumul, axe droit)', color: COLORS[1], axis: 'right', pts: cumul('abonnes', false) },
         ];
-        $('h-yt').textContent = `Vues et abonnés gagnés — par ${bk.mode}`;
+        $('h-yt').textContent = `Vues et abonnés de la chaîne — cumul par ${bk.mode}`;
         $('yt-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
         drawChart('c-yt', bk, ys);
-        $('yt-note').textContent = `YouTube ne publie que des totaux cumulés : ces gains sont calculés d'une collecte à l'autre, depuis le ${dFmt(jrs[0])}. Les vues des vidéos ci-dessous sont, elles, des cumuls depuis leur mise en ligne.`;
+        $('yt-note').textContent = `YouTube ne publie que des totaux cumulés : la courbe lit le total à la dernière collecte de chaque ${bk.mode}, et un jour sans collecte garde la dernière valeur connue (relevés depuis le ${dFmt(jrs[0])}). Les cartes donnent le gain sur la période ; les vues des vidéos ci-dessous sont des cumuls depuis leur mise en ligne.`;
 
         document.querySelector('#t-ytvideos tbody').innerHTML = (etat.derniers || []).length
           ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 45)}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
