@@ -205,7 +205,6 @@
       </div>
 
       <form class="form" id="contact-form" action="contact.php" method="POST" novalidate>
-        <input type="hidden" id="service" name="service" value="consulting" />
         <input type="hidden" name="lang" value="fr" />
         <!-- Honeypot anti-bot — humans never see it, bots fill it and get silently rejected -->
         <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none" aria-hidden="true" />
@@ -229,23 +228,14 @@
           </div>
 
           <div class="field full">
-            <label>Service concerné</label>
-            <div class="opts">
-              <div class="opt active" data-service="consulting">
-                <div class="ch"></div>
-                <div>
-                  <div class="opt-t">Conseil technique</div>
-                  <div class="opt-d">Mission senior pour finance, assurance, asset management.</div>
-                </div>
-              </div>
-              <div class="opt" data-service="web-ai">
-                <div class="ch"></div>
-                <div>
-                  <div class="opt-t">Création web · IA</div>
-                  <div class="opt-d">Site nouvelle génération propulsé par l'IA, clé en main.</div>
-                </div>
-              </div>
-            </div>
+            <label for="service">Objet de la demande</label>
+            <select id="service" name="service">
+              <option value="consulting" selected>Conseil technique — mission senior finance, assurance, asset management</option>
+              <option value="web-ai">Site internet — création ou refonte, IA intégrée</option>
+              <option value="motion">Motion design pour YouTube — intro, générique, vidéo de marque ou d'événement</option>
+              <option value="3d">Animation 3D — logo en volume, objet, modèle interactif</option>
+              <option value="other">Autre demande</option>
+            </select>
           </div>
 
           <div class="field full">
@@ -295,7 +285,7 @@
           </div>
         </div>
         <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
-          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+          Cabinet de conseil technique indépendant. Architecture, expertise et services IA : sites internet, motion design, animation 3D.
         </p>
       </div>
       <div class="foot-col">
@@ -305,7 +295,7 @@
         <a href="realisations.html">Réalisations</a>
         <a href="a-propos.html">À propos</a>
         <a href="pourquoi-nsy.html">Pourquoi NSY ?</a>
-        <a href="conception-3d.html">Conception 3D</a>
+        <a href="conception-3d.html">Animation 3D</a>
         <a href="faq.html">FAQ</a>
         <a href="blog.html">Journal</a>
         <a href="contact.html">Contact</a>
@@ -318,8 +308,9 @@
         <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
         <a href="conformite-dora.html">Conformité DORA</a>
         <a href="integration-claude-entreprise.html">Intégration Claude</a>
-        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="creation-site-ia.html">Site internet IA</a>
         <a href="refonte-site-internet.html">Refonte de site</a>
+        <a href="motion-design-youtube.html">Motion design YouTube</a>
         <a href="glossaire-ia-web.html">Glossaire IA & web</a>
       </div>
       <div class="foot-col">

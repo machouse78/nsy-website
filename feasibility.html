@@ -179,11 +179,13 @@
 
       <div class="qz-steps" id="qzSteps" aria-hidden="true">
         <div class="qz-step">About</div>
-        <div class="qz-step">Identity &amp; goals</div>
-        <div class="qz-step">Site &amp; content</div>
-        <div class="qz-step">Brand &amp; features</div>
-        <div class="qz-step">Social &amp; technical</div>
-        <div class="qz-step">GDPR, SEO &amp; GEO</div>
+        <div class="qz-step" data-if="creation refonte">Identity &amp; goals</div>
+        <div class="qz-step" data-if="creation refonte">Site &amp; content</div>
+        <div class="qz-step" data-if="creation refonte">Brand &amp; features</div>
+        <div class="qz-step" data-if="creation refonte">Social &amp; technical</div>
+        <div class="qz-step" data-if="creation refonte">GDPR, SEO &amp; GEO</div>
+        <div class="qz-step" data-if="motion">Your video</div>
+        <div class="qz-step" data-if="3d">Your 3D animation</div>
         <div class="qz-step">Timeline &amp; budget</div>
       </div>
       <div class="qz-progress"><div class="qz-progress-bar" id="qzBar"></div></div>
@@ -200,11 +202,13 @@
 
           <div class="qz-sublabel">Your project</div>
           <div class="qz-field">
-            <label class="qz-label">Is this a new build or a redesign? <span class="qz-req">*</span></label>
-            <p class="qz-hint">The rest of the questionnaire adapts to your answer.</p>
+            <label class="qz-label">What is your project? <span class="qz-req">*</span></label>
+            <p class="qz-hint">The rest of the questionnaire adapts to your answer: seven steps for a website, a short path for video and 3D.</p>
             <div class="qz-radio-group" data-required>
               <label><input type="radio" name="projet_type" value="New website" data-mode="creation" /> A brand-new website</label>
               <label><input type="radio" name="projet_type" value="Redesign of an existing site" data-mode="refonte" /> A redesign of an existing site</label>
+              <label><input type="radio" name="projet_type" value="Motion design for YouTube (intro, ident, video)" data-mode="motion" /> Motion design for YouTube — intro, ident, video</label>
+              <label><input type="radio" name="projet_type" value="3D animation (logo, object, interactive model)" data-mode="3d" /> 3D animation — logo in volume, object, interactive model</label>
             </div>
           </div>
 
@@ -238,7 +242,7 @@
         </section>
 
         <!-- STEP 2 -->
-        <section class="qz-section" data-step="2">
+        <section class="qz-section" data-step="2" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">02</span> Identity &amp; website goals</div>
 
           <div class="qz-sublabel">Identity</div>
@@ -320,7 +324,7 @@
         </section>
 
         <!-- STEP 3 -->
-        <section class="qz-section" data-step="3">
+        <section class="qz-section" data-step="3" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">03</span> <span data-title data-title-creation="Content of the new site" data-title-refonte="Existing site &amp; content">Existing site &amp; content</span></div>
 
           <div class="qz-sublabel" data-if="refonte">Existing site</div>
@@ -416,7 +420,7 @@
         </section>
 
         <!-- STEP 4 -->
-        <section class="qz-section" data-step="4">
+        <section class="qz-section" data-step="4" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">04</span> Brand &amp; features</div>
 
           <div class="qz-sublabel">Brand guidelines</div>
@@ -490,7 +494,7 @@
         </section>
 
         <!-- STEP 5 -->
-        <section class="qz-section" data-step="5">
+        <section class="qz-section" data-step="5" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">05</span> Social media &amp; technical</div>
 
           <div class="qz-sublabel">Social media</div>
@@ -551,7 +555,7 @@
         </section>
 
         <!-- STEP 6 -->
-        <section class="qz-section" data-step="6">
+        <section class="qz-section" data-step="6" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">06</span> GDPR, SEO &amp; GEO</div>
 
           <div class="qz-sublabel">GDPR &amp; data</div>
@@ -611,10 +615,107 @@
         </section>
 
         <!-- STEP 7 -->
-        <section class="qz-section" data-step="7">
-          <div class="qz-section-title"><span class="qz-num">07</span> Timeline &amp; budget</div>
+        <!-- STEP 7 — MOTION DESIGN path (the only step shown after step 1 in this mode) -->
+        <section class="qz-section" data-step="7" data-if="motion">
+          <div class="qz-section-title"><span class="qz-num">07</span> Your video</div>
           <div class="qz-field">
-            <label class="qz-label">Do you have a desired go-live date?</label>
+            <label class="qz-label">What would you like to make? <span class="qz-req">*</span></label>
+            <div class="qz-check-group" data-required>
+              <label><input type="checkbox" name="motion_type" value="Channel intro" /> Channel intro</label>
+              <label><input type="checkbox" name="motion_type" value="Ident or brand ending" /> Ident or brand ending</label>
+              <label><input type="checkbox" name="motion_type" value="Lower thirds: titles, banners, end cards" /> Lower thirds: titles, banners, end cards</label>
+              <label><input type="checkbox" name="motion_type" value="Brand or presentation video" /> Brand or presentation video</label>
+              <label><input type="checkbox" name="motion_type" value="Event film — editing of footage" /> Event film — editing of footage</label>
+              <label><input type="checkbox" name="motion_type" value="Other" /> Other</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Your YouTube channel or social accounts</label>
+            <input type="text" name="motion_chaine" placeholder="https://" />
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Target duration</label>
+            <div class="qz-radio-group">
+              <label><input type="radio" name="motion_duree" value="5 to 10 seconds" /> 5 to 10 seconds</label>
+              <label><input type="radio" name="motion_duree" value="10 to 20 seconds" /> 10 to 20 seconds</label>
+              <label><input type="radio" name="motion_duree" value="20 to 60 seconds" /> 20 to 60 seconds</label>
+              <label><input type="radio" name="motion_duree" value="1 to 5 minutes" /> 1 to 5 minutes</label>
+              <label><input type="radio" name="motion_duree" value="More than 5 minutes" /> More than 5 minutes</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Formats wanted</label>
+            <div class="qz-check-group">
+              <label><input type="checkbox" name="motion_format" value="16:9 (YouTube)" /> 16:9 — YouTube</label>
+              <label><input type="checkbox" name="motion_format" value="9:16 (Shorts, Reels, stories)" /> 9:16 — Shorts, Reels, stories</label>
+              <label><input type="checkbox" name="motion_format" value="4K" /> 4K</label>
+              <label><input type="checkbox" name="motion_format" value="Transparent version (overlay)" /> Transparent version for overlays</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">What you already have</label>
+            <div class="qz-check-group">
+              <label><input type="checkbox" name="motion_assets" value="Vector logo (SVG, AI, PDF)" /> Vector logo (SVG, AI, PDF)</label>
+              <label><input type="checkbox" name="motion_assets" value="Brand guidelines" /> Brand guidelines</label>
+              <label><input type="checkbox" name="motion_assets" value="Music chosen or composed" /> Music chosen or composed</label>
+              <label><input type="checkbox" name="motion_assets" value="Footage or videos" /> Footage or videos</label>
+              <label><input type="checkbox" name="motion_assets" value="Scripts or voice-over" /> Scripts or voice-over</label>
+              <label><input type="checkbox" name="motion_assets" value="Nothing yet" /> Nothing yet</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Describe the expected result</label>
+            <p class="qz-hint">Atmosphere, videos you like, what to avoid…</p>
+            <textarea name="motion_description" rows="4"></textarea>
+          </div>
+        </section>
+
+        <!-- STEP 8 — 3D ANIMATION path -->
+        <section class="qz-section" data-step="8" data-if="3d">
+          <div class="qz-section-title"><span class="qz-num">08</span> Your 3D animation</div>
+          <div class="qz-field">
+            <label class="qz-label">What would you like to make? <span class="qz-req">*</span></label>
+            <div class="qz-check-group" data-required>
+              <label><input type="checkbox" name="anim3d_type" value="Logo in volume" /> Logo in volume</label>
+              <label><input type="checkbox" name="anim3d_type" value="Animation of an object or a product" /> Animation of an object or a product</label>
+              <label><input type="checkbox" name="anim3d_type" value="Interactive 3D model for a web page" /> Interactive 3D model for a web page</label>
+              <label><input type="checkbox" name="anim3d_type" value="Renders for a film or a video" /> Renders for a film or a video</label>
+              <label><input type="checkbox" name="anim3d_type" value="Other" /> Other</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Where will it be shown?</label>
+            <div class="qz-radio-group">
+              <label><input type="radio" name="anim3d_usage" value="Video (YouTube, social media)" /> Video — YouTube, social media</label>
+              <label><input type="radio" name="anim3d_usage" value="Web page (interactive model)" /> Web page — interactive model</label>
+              <label><input type="radio" name="anim3d_usage" value="Both" /> Both</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">What you already have</label>
+            <div class="qz-check-group">
+              <label><input type="checkbox" name="anim3d_assets" value="Vector logo (SVG, AI, PDF)" /> Vector logo (SVG, AI, PDF)</label>
+              <label><input type="checkbox" name="anim3d_assets" value="Drawings, photos or 3D files of the object (STEP, OBJ, FBX, GLB)" /> Drawings, photos or 3D files of the object (STEP, OBJ, FBX, GLB)</label>
+              <label><input type="checkbox" name="anim3d_assets" value="Brand guidelines" /> Brand guidelines</label>
+              <label><input type="checkbox" name="anim3d_assets" value="Nothing yet" /> Nothing yet</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Duration or number of shots in mind</label>
+            <input type="text" name="anim3d_duree" placeholder="E.g. 8 seconds, or 3 shots" />
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Describe the expected result</label>
+            <p class="qz-hint">Materials (brushed metal, glass, paint…), atmosphere, references…</p>
+            <textarea name="anim3d_description" rows="4"></textarea>
+          </div>
+        </section>
+
+        <!-- STEP 9 — shared by every path -->
+        <section class="qz-section" data-step="9">
+          <div class="qz-section-title"><span class="qz-num">09</span> Timeline &amp; budget</div>
+          <div class="qz-field">
+            <label class="qz-label">Do you have a desired go-live or publication date?</label>
             <input type="text" name="date_mise_en_ligne" placeholder="E.g. end of September 2026" />
           </div>
           <div class="qz-field">
@@ -643,7 +744,7 @@
               <label><input type="radio" name="budget" value="I don't know yet — I'd like an estimate first" /> I don't know yet — I'd like an estimate first</label>
             </div>
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="creation refonte">
             <label class="qz-label">Would you like a recap memo of the site delivered?</label>
             <p class="qz-hint">The memo covers the essentials: sitemap, brand guidelines, features, back-office access…</p>
             <div class="qz-radio-group">
@@ -692,7 +793,7 @@
           </div>
         </div>
         <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
-          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+          Independent technical consulting practice. Architecture, expertise and AI services: websites, motion design, 3D animation.
         </p>
       </div>
       <div class="foot-col">
@@ -702,7 +803,7 @@
         <a href="portfolio.html">Work</a>
         <a href="about.html">About</a>
         <a href="why-nsy.html">Why NSY?</a>
-        <a href="3d-design.html">3D Design</a>
+        <a href="3d-design.html">3D animation</a>
         <a href="faq-en.html">FAQ</a>
         <a href="blog-en.html">Insights</a>
         <a href="contact-en.html">Contact</a>
@@ -717,6 +818,7 @@
         <a href="claude-integration.html">Claude integration</a>
         <a href="ai-website-creation.html">AI website creation</a>
         <a href="website-redesign.html">Website redesign</a>
+        <a href="youtube-motion-design.html">YouTube motion design</a>
         <a href="ai-web-glossary.html">AI & web glossary</a>
       </div>
       <div class="foot-col">

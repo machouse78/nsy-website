@@ -151,7 +151,10 @@ if ($spamScore >= NSY_SPAM_THRESHOLD) {
 // ───── Map IDs → libellés humains ─────
 $serviceMap = [
     'consulting' => 'Conseil technique',
-    'web-ai'     => 'Création web · IA',
+    'web-ai'     => 'Site internet · IA',
+    'motion'     => 'Motion design YouTube',
+    '3d'         => 'Animation 3D',
+    'other'      => 'Autre demande',
 ];
 $timingMap = [
     'now'    => 'Dès maintenant',
@@ -165,7 +168,10 @@ $timingLabel  = $timingMap[$timing]   ?? $timing;
 // Service label in the visitor's language (used in the auto-responder).
 $serviceMapEn = [
     'consulting' => 'Technical consulting',
-    'web-ai'     => 'Web creation · AI',
+    'web-ai'     => 'Website · AI',
+    'motion'     => 'YouTube motion design',
+    '3d'         => '3D animation',
+    'other'      => 'Other request',
 ];
 $serviceLabelClient = $lang === 'en' ? ($serviceMapEn[$service] ?? $serviceLabel) : $serviceLabel;
 

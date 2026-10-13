@@ -203,7 +203,6 @@
       </div>
 
       <form class="form" id="contact-form" action="contact.php" method="POST" novalidate>
-        <input type="hidden" id="service" name="service" value="consulting" />
         <input type="hidden" name="lang" value="en" />
         <input type="text" name="website" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;top:-9999px;opacity:0;pointer-events:none" aria-hidden="true" />
 
@@ -226,23 +225,14 @@
           </div>
 
           <div class="field full">
-            <label>Service of interest</label>
-            <div class="opts">
-              <div class="opt active" data-service="consulting">
-                <div class="ch"></div>
-                <div>
-                  <div class="opt-t">Technical consulting</div>
-                  <div class="opt-d">Senior mission for finance, insurance, asset management.</div>
-                </div>
-              </div>
-              <div class="opt" data-service="web-ai">
-                <div class="ch"></div>
-                <div>
-                  <div class="opt-t">Web creation · AI</div>
-                  <div class="opt-d">Next-generation AI-powered website, turnkey.</div>
-                </div>
-              </div>
-            </div>
+            <label for="service">Subject of your request</label>
+            <select id="service" name="service">
+              <option value="consulting" selected>Technical consulting — senior mission for finance, insurance, asset management</option>
+              <option value="web-ai">Website — new build or redesign, AI built in</option>
+              <option value="motion">Motion design for YouTube — intro, ident, brand or event film</option>
+              <option value="3d">3D animation — logo in volume, object, interactive model</option>
+              <option value="other">Other request</option>
+            </select>
           </div>
 
           <div class="field full">
@@ -292,7 +282,7 @@
           </div>
         </div>
         <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
-          Independent technical consulting practice. Architecture, expertise and AI-powered web creation.
+          Independent technical consulting practice. Architecture, expertise and AI services: websites, motion design, 3D animation.
         </p>
       </div>
       <div class="foot-col">
@@ -302,7 +292,7 @@
         <a href="portfolio.html">Work</a>
         <a href="about.html">About</a>
         <a href="why-nsy.html">Why NSY?</a>
-        <a href="3d-design.html">3D Design</a>
+        <a href="3d-design.html">3D animation</a>
         <a href="faq-en.html">FAQ</a>
         <a href="blog-en.html">Insights</a>
         <a href="contact-en.html">Contact</a>
@@ -317,6 +307,7 @@
         <a href="claude-integration.html">Claude integration</a>
         <a href="ai-website-creation.html">AI website creation</a>
         <a href="website-redesign.html">Website redesign</a>
+        <a href="youtube-motion-design.html">YouTube motion design</a>
         <a href="ai-web-glossary.html">AI & web glossary</a>
       </div>
       <div class="foot-col">

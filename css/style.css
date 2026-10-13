@@ -2868,6 +2868,9 @@ footer.foot {
 }
 .realisation-type.neuf { color: var(--accent); border: 1px solid rgba(0, 229, 255, .45); }
 .realisation-type.reprise { color: var(--warm); border: 1px solid rgba(240, 138, 44, .5); }
+.realisation-type.video { color: var(--warm); border: 1px solid rgba(240, 138, 44, .5); }
+.realisations-sub { margin-top: 72px; scroll-margin-top: 96px; }
+.realisations-sub h2 { font-size: clamp(28px, 3.6vw, 40px); }
 .realisation-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .realisation-tags span {
   font-family: var(--font-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;

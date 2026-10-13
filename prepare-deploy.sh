@@ -47,6 +47,7 @@ cp expertise-kafka-messagerie.html     deploy/
 cp conformite-dora.html                deploy/
 cp integration-claude-entreprise.html  deploy/
 cp creation-site-ia.html               deploy/
+cp motion-design-youtube.html          deploy/   # offre motion design (13/10/2026)
 cp glossaire-ia-web.html               deploy/
 cp contact.php           deploy/
 cp faisabilite.php       deploy/
@@ -86,6 +87,7 @@ cp kafka-messaging-expert.html      deploy/
 cp dora-compliance.html             deploy/
 cp claude-integration.html          deploy/
 cp ai-website-creation.html         deploy/
+cp youtube-motion-design.html       deploy/
 cp ai-web-glossary.html             deploy/
 cp blog.html                        deploy/
 cp blog-en.html                     deploy/
@@ -270,6 +272,8 @@ required=(
   "deploy/conformite-dora.html"
   "deploy/integration-claude-entreprise.html"
   "deploy/creation-site-ia.html"
+  "deploy/motion-design-youtube.html"
+  "deploy/youtube-motion-design.html"
   "deploy/glossaire-ia-web.html"
   "deploy/java-ee-migration.html"
   "deploy/wildfly-jboss-expert.html"
