@@ -64,6 +64,11 @@ L'option tolère les motifs ci-dessous, validés un à un par le owner, pas un d
     et demande une adresse de 700 caractères. Apache refuse AVANT tout script : un nom
     de plus de 255 octets ne peut être aucun fichier du site. SEUL l'errno 36 est
     toléré — un autre errno sur AH00036 (droits, par exemple) reste grave.
+  - AH00690 [negotiation:error] « no acceptable variant: /usr/share/apache2/error/….html.var »
+    (owner, 13/10/2026 : « tolère aussi le AH00690 ») — Apache ne trouve pas la variante de SA
+    PROPRE page d'erreur (relevé sur prv-concept.com : la 400 servie à un robot qui demandait
+    « /../../assets/favicon… »). Seuls les documents d'erreur d'Apache sont tolérés, sous
+    /usr/share/apache2/error/.
 Elle affiche le décompte par motif et les cibles visées — à parcourir d'un
 œil : une cible qui serait un fichier À NOUS n'est pas forcément un scanner.
 Un refus ModSecurity visant un fichier que `deploy/` livre est tout de même
@@ -194,6 +199,11 @@ SCANNERS = (
     ("AH00036 core (adresse trop longue pour être un fichier, refusée par Apache)",
      re.compile(r"^\S+ \[[^\]]+\] \[core:error\] \[pid [^\]]+\] \(36\)File name too long: "
                 r"\[client [^\]]+\] AH00036: access to (?P<cible>\S+) failed"), None),
+    # Apache ne sait pas servir SA page d'erreur (négociation de langue) : le chemin est
+    # celui de ses propres documents, jamais un fichier à nous (13/10/2026).
+    ("AH00690 negotiation (page d'erreur d'Apache sans variante acceptable)",
+     re.compile(_ENTETE % ("negotiation:error", "AH00690")
+                + r"no acceptable variant: (?P<cible>/usr/share/apache2/error/[\w.-]+\.html\.var)$"), None),
     ("AH02032 ssl (nom d'hôte à POINT FINAL, refusé par la politique TLS)",
      re.compile(_ENTETE % ("ssl:error", "AH02032")
                 + r"Hostname (?P<cible>\S+\.) provided via SNI and hostname \S+ "

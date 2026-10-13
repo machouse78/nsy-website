@@ -85,6 +85,11 @@ def trop_long(uri, errno="(36)File name too long"):
             "referer https://www.nsy.fr/blog.html")
 
 
+def sans_variante(doc="HTTP_BAD_REQUEST", chemin="/usr/share/apache2/error/"):
+    # format relevé le 13/10/2026 sur prv-concept.com
+    return H + "[negotiation:error] " + P + f"AH00690: no acceptable variant: {chemin}{doc}.html.var"
+
+
 LONG = "/blog/OnFriday,itwasofftothesouthoftheisland" + "x" * 300
 
 
@@ -181,6 +186,12 @@ t("--tolere-scanners : AH00036 « File name too long » est toléré et décompt
    "AH00036 × 2", "AUCUNE ERREUR À NOUS"], ["NON VIERGE", "/home/clients/"])
 c, s, _ = joue([], {LOG: trop_long(LONG)})
 t("sans l'option, AH00036 ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: SCAN + "\n" + sans_variante() + "\n" + sans_variante("HTTP_NOT_FOUND")})
+t("--tolere-scanners : AH00690 sur une page d'erreur d'Apache est toléré et décompté", c, 0, s,
+  ["AH00690 negotiation (page d'erreur d'Apache sans variante acceptable) : 2 ligne(s)",
+   "AH00690 × 2", "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
+c, s, _ = joue([], {LOG: sans_variante()})
+t("sans l'option, AH00690 ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
 
 # --bref : une seule ligne, et SURTOUT le code de sortie intact. C'est l'option qui rend
 # « sonde && envoi » sûr — sans elle on pipe, et « && » lit le code de `tail` (vécu
@@ -199,6 +210,8 @@ for nom, ligne in (("proxy_fcgi AH01067 (coupure FastCGI)", FCGI_1), ("proxy_fcg
                    ("PHP Warning", PHP_WARN), ("PHP Deprecated", PHP_DEPR), ("PHP Fatal", PHP_FATAL),
                    ("refus amont écrit par chat.php au journal de l'hébergement", CHAT_AMONT),
                    ("ModSecurity Warning (pas un Access denied)", modsec("/x", "Warning.")),
+                   ("AH00690 hors des pages d'erreur d'Apache", sans_variante("index", WEB + "/journal/")),
+                   ("AH00690 RECOPIÉ dans un message PHP", PHP_WARN[:-1] + " " + sans_variante() + "'"),
                    ("AH00036 avec un AUTRE errno que 36 (droits)", trop_long("/blog.html", "(13)Permission denied")),
                    ("AH00036 RECOPIÉ dans un message PHP", PHP_WARN[:-1] + " " + trop_long(LONG) + "'"),
                    ("refus de l'hébergeur RECOPIÉ dans un message PHP", PHP_WARN[:-1] + " " + limite("/x") + "'"),
