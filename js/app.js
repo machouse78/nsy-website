@@ -757,11 +757,11 @@
               'deroulement','how it works','how does it work','next step','onboarding'],
       fr: [
         `Le déroulé : (1) un premier échange pour comprendre le contexte, (2) un cadrage honnête — faisabilité, ordre de grandeur, prochain pas concret, (3) une proposition si le projet s'y prête, (4) la réalisation, du cadrage à la mise en production. Première réponse sous 48 h ouvrées.`,
-        `En pratique : vous décrivez le besoin → retour sous 48 h ouvrées avec une lecture franche (faisabilité + ordre de grandeur) → proposition → réalisation livrée par la même personne qui l'a proposée, jusqu'à la prod. Pas de pyramide, pas d'intermédiaire.`
+        `En pratique : vous décrivez le besoin → retour sous 48 h ouvrées avec une lecture franche (faisabilité + ordre de grandeur) → proposition → réalisation livrée par la même personne qui l'a proposée, jusqu'à la prod. Un seul interlocuteur, en prise directe.`
       ],
       en: [
         `The flow: (1) a first conversation to understand the context, (2) an honest scoping — feasibility, ballpark, concrete next step, (3) a proposal if the project fits, (4) delivery, from scoping to production. First reply within 48 business hours.`,
-        `In practice: you describe the need → reply within 48 business hours with a straight read (feasibility + ballpark) → proposal → delivery by the same person who pitched it, all the way to production. No pyramid, no middleman.`
+        `In practice: you describe the need → reply within 48 business hours with a straight read (feasibility + ballpark) → proposal → delivery by the same person who pitched it, all the way to production. One point of contact, direct accountability.`
       ]
     },
     {
@@ -809,12 +809,12 @@
       cues: ['pourquoi','difference','differenc','avantage','valeur ajoutee','plutot que','vs','versus',
               'why nsy','why you','why choose','what makes'],
       fr: [
-        `Trois principes : <b>sans pyramide</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>disponibilité réelle</b> — une mission n'est acceptée que si le planning permet de la tenir. De l'ingénierie senior, en direct, sans surcouche commerciale.`,
-        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod (pas d'intermédiaire), une parole franche sur la faisabilité, et une disponibilité qui se vérifie à chaque demande. Vous parlez à celui qui construit, pas à un commercial.`
+        `Trois principes : <b>en prise directe</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>disponibilité réelle</b> — une mission n'est acceptée que si le planning permet de la tenir. De l'ingénierie senior, en prise directe — en direct ou via votre ESN référencée.`,
+        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod, une parole franche sur la faisabilité, et une disponibilité qui se vérifie à chaque demande. Vous parlez à celui qui construit, pas à un commercial.`
       ],
       en: [
-        `Three principles: <b>no pyramid</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>real availability</b> — an engagement is only taken on when the schedule can hold it. Senior engineering, direct, with no commercial layer.`,
-        `What sets NSY apart: a single senior point of contact from scoping to production (no middleman), a straight word on feasibility, and availability checked at every request. You talk to the person who builds, not a salesperson.`
+        `Three principles: <b>direct accountability</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>real availability</b> — an engagement is only taken on when the schedule can hold it. Senior engineering, with direct accountability — directly or through your referenced IT services partner.`,
+        `What sets NSY apart: a single senior point of contact from scoping to production, a straight word on feasibility, and availability checked at every request. You talk to the person who builds, not a salesperson.`
       ]
     },
     {
