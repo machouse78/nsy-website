@@ -691,11 +691,11 @@
       cues: ['motion','motion design','intro','generique','habillage','montage','video','vidéo','film','reel','reels','short','shorts','after effects','premiere',
               'ident','lower third','editing','brand film','event film','clip'],
       fr: [
-        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, films de marque ou d'événement — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender, After Effects, Premiere Pro. Deux exemples sur la page Réalisations (intro « Le V à 90° » et film du meeting d'Oléron). Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
+        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, films de marque ou d'événement — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender pour la 3D, animation et montage pilotés par scripts. Deux exemples sur la page Réalisations (intro « Le V à 90° » et film du meeting d'Oléron). Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
         `Oui : NSY réalise des intros, génériques et vidéos de marque pour YouTube, et monte des films d'événement. La méthode : charte, musique décidée avant l'animation, storyboard-partition, contrôle image par image. Tout est décrit sur ${motionPath} — et la demande de faisabilité a un parcours dédié « motion design ».`
       ],
       en: [
-        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, brand or event films — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender, After Effects, Premiere Pro. Two examples on the Work page (the "Le V à 90°" intro and the Oléron meeting film). Details: ${motionPath}. Quoted after scoping.`,
+        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, brand or event films — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender for 3D, script-driven animation and editing. Two examples on the Work page (the "Le V à 90°" intro and the Oléron meeting film). Details: ${motionPath}. Quoted after scoping.`,
         `Yes: NSY produces intros, idents and brand videos for YouTube, and edits event films. The method: brand guidelines, music decided before the animation, storyboard as a score, frame-by-frame checks. All described on ${motionPath} — and the feasibility request has a dedicated "motion design" path.`
       ]
     },

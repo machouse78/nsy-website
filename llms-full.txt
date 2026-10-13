@@ -98,8 +98,8 @@ quand un projet n'est pas la bonne idée), trois clients en parallèle maximum.
   grille de tempo ou mesurée) ; storyboard écrit comme une partition, minuté en
   mesures, validé avant tout rendu ; animatique basse définition ; contrôle image par
   image ; rendu final
-- Outils : Blender (3D, mécanique, particules), After Effects (tracés, typographie,
-  lumière, film), Premiere Pro (montage), ffmpeg (livraison) — pilotés par scripts,
+- Outils : Blender (3D, mécanique, particules), un logiciel d'animation (tracés,
+  typographie, lumière, film), un logiciel de montage, ffmpeg (livraison) — pilotés par scripts,
   chaque vidéo est rejouable
 - Livrables : 16:9 en 1080p et 4K, 9:16 recomposé (jamais recadré), version
   transparente pour l'incrustation, son seul en WAV, niveau sonore conforme aux plateformes
@@ -394,7 +394,7 @@ NSY :
 - est spécialiste de → l'IA appliquée au web, l'intégration LLM, l'architecture cloud
 - propose → des services IA : réalisation de sites internet, motion design pour YouTube, animation 3D (sur devis après cadrage)
 - a réalisé → l'intro YouTube « Le V à 90° » de PRV Concept (motion design, 14 s, 4K 60 i/s) et le film du meeting R25 d'Oléron 2026 (montage, 3 min 56 s)
-- utilise → Blender, After Effects, Premiere Pro pour la vidéo et la 3D
+- utilise → Blender pour la 3D, des outils d'animation et de montage pilotés par scripts pour la vidéo
 - sert → la banque, l'assurance, la finance, les PME/ETI en transition IA
 - a réalisé → le site PRV Concept (www.prv-concept.com)
 - a réalisé → le site du restaurant Le Cerf Thym (www.lecerfthym.fr) : vitrine en
@@ -421,7 +421,7 @@ tech lead indépendant, expertise production, supervision, observabilité,
 monitoring, Dynatrace, ELK, Elastic, watchers, alerting, ServiceNow, fausses
 alertes, tableau de bord KPI, création site web IA France,
 intégration Claude application métier, intégration OpenAI site web, intégration
-Mistral AI, chatbot entreprise, agent IA PME, recherche sémantique, RAG, motion design YouTube, intro de chaîne YouTube, générique de chaîne, habillage vidéo, film d'événement, montage vidéo, animation 3D, logo 3D, logo en volume, modèle 3D interactif, Blender, After Effects, Premiere Pro, vidéo 16:9 et 9:16, SEO
+Mistral AI, chatbot entreprise, agent IA PME, recherche sémantique, RAG, motion design YouTube, intro de chaîne YouTube, générique de chaîne, habillage vidéo, film d'événement, montage vidéo, animation 3D, logo 3D, logo en volume, modèle 3D interactif, Blender, vidéo 16:9 et 9:16, SEO
 sémantique, GEO, LLMO, Next.js, Astro, Vercel, Cloudflare, Supabase, site bilingue
 optimisé SEO, forum phpBB base de connaissances, sauvetage des images d'un forum, pont forum réseaux sociaux, veille des sujets sans réponse, refonte sans migration, compte unique forum et boutique, authentification unique (SSO), phpBB, WooCommerce, style enfant phpBB, thème enfant WordPress, consultant indépendant (en direct ou en sous-traitance ESN), société de conseil technique indépendante.
 
