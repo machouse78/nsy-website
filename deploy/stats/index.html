@@ -433,7 +433,7 @@
 
   <div class="sec-h" id="r-youtube" hidden><h2>Chaîne YouTube</h2><span>audience de la chaîne et des vidéos</span></div>
   <div class="grid" id="yt-cards" hidden></div>
-  <div class="chart-head" id="yt-head" hidden><h2 id="h-yt">Vues et abonnés gagnés</h2></div>
+  <div class="chart-head" id="yt-head" hidden><h2 id="h-yt">Vues et abonnés de la chaîne</h2></div>
   <div class="chart" id="yt-chart" hidden><div class="legend" id="yt-legend"></div><svg id="c-yt"></svg></div>
   <div class="note" id="yt-note" hidden></div>
   <div class="cols" id="yt-cols" hidden>
@@ -443,6 +443,13 @@
     </div>
     <div></div>
   </div>
+
+  <!-- ═══ Newsletter du journal (owner, 22/09/2026 : « le nombre d'inscrits et les adresses ») :
+       lue dans stats/newsletter.php, qui ne laisse jamais sortir le jeton d'un abonné. ═══ -->
+  <div class="sec-h" id="r-newsletter" hidden><h2>Newsletter</h2><span>abonnés du journal — un e-mail à chaque nouvel article</span></div>
+  <div class="grid" id="nl-cards" hidden></div>
+  <div class="note" id="nl-note" hidden></div>
+  <div id="nl-liste" hidden></div>
 
   <div class="sec-h" id="r-forum" hidden><h2>Forum</h2><span>vie de la communauté : messages, sujets, membres</span></div>
   <div class="grid" id="fo-cards" hidden></div>
@@ -737,6 +744,7 @@
     if (RUB_DISPO.agent()) l.push(['agent', 'Agent conversationnel']);
     l.push(['contenu', 'Contenu']);
     l.push(['parcours', 'Parcours']);
+    l.push(['newsletter', 'Newsletter']);
     if (aDonnee((v) => (v.fb?.vues ?? 0) || (v.fb?.abonnes ?? 0))) l.push(['facebook', 'Facebook']);
     if (aDonnee((v) => v.fb?.ig_abonnes != null || (v.fb?.ig?.views ?? 0))) l.push(['instagram', 'Instagram']);
     if (aDonnee((v) => v.avis)) l.push(['avis', 'Avis clients']);
@@ -777,6 +785,7 @@
     youtube: ['r-youtube'],
     forum: ['r-forum'],
     boutique: ['r-boutique'],
+    newsletter: ['r-newsletter'],
   };
   // Une rubrique ne s'affiche jamais sans donnée, même en vue « Tout » :
   // une section vide se lit comme une panne.
@@ -826,9 +835,43 @@
     montre(RUBRIQUES.youtube, (tout || cat === 'youtube') && RUB_DISPO.youtube());
     montre(RUBRIQUES.forum, (tout || peri === 'forum') && RUB_DISPO.forum());
     montre(RUBRIQUES.boutique, (tout || peri === 'boutique') && RUB_DISPO.boutique());
+    // La liste des abonnés ne se mêle pas au récit chiffré : elle n'apparaît que
+    // sur son onglet, et elle se charge à ce moment-là.
+    montre(RUBRIQUES.newsletter, cat === 'newsletter');
+    if (cat === 'newsletter') chargeNewsletter();
     // Le réseau des graphes sociaux se déduit de `cat` au moment du rendu
     // (voir `reseau` plus bas) : plus de sélecteur à tenir synchronisé.
     // Le résumé, les cartes et la barre de temps restent visibles partout.
+  }
+  // ── La newsletter du journal (owner, 22/09/2026) ─────────────────────────
+  // Lit stats/newsletter.php (même Basic Auth que cette page) : les comptes de
+  // l'envoi et la liste des adresses. Le jeton d'un abonné n'en sort jamais.
+  async function chargeNewsletter() {
+    const esc = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    const liste = $('nl-liste'); const cards = $('nl-cards'); const note = $('nl-note');
+    if (!liste) return;
+    [liste, cards].forEach((el) => el.hidden = false);
+    liste.innerHTML = '<div class="note">Chargement des abonnés…</div>';
+    let d;
+    try { d = await (await fetch('newsletter.php', { cache: 'no-store' })).json(); }
+    catch (e) { liste.innerHTML = '<div class="note">La liste des abonnés est injoignable.</div>'; return; }
+    if (!d.ok) { liste.innerHTML = `<div class="note">${esc(d.erreur || 'Lecture impossible.')}</div>`; return; }
+    const c = d.comptes;
+    cards.innerHTML = [
+      ['Inscrits', c.confirmes_total, `FR ${c.confirmes.fr ?? 0} · EN ${c.confirmes.en ?? 0}`],
+      ['En attente', c.attente, 'lien de confirmation pas encore cliqué'],
+      ['Désinscrits', c.desinscrits, ''],
+    ].map(([l, v, sub]) => `<div class="card"><div class="k">${esc(l)}</div><div class="v">${esc(v)}</div><div class="s">${esc(sub)}</div></div>`).join('');
+    note.innerHTML = 'Seuls les <b>inscrits</b> reçoivent l\'e-mail d\'un nouvel article. Une inscription non confirmée sous 30 jours est oubliée.';
+    note.hidden = false;
+    const ETAT = { confirme: 'inscrit', attente: 'en attente', desinscrit: 'désinscrit' };
+    const jour = (iso) => iso ? new Date(iso).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' }) : '—';
+    liste.innerHTML = d.abonnes.length
+      ? `<table><thead><tr><th>Adresse</th><th>Langue</th><th>État</th><th>Inscription</th><th>Confirmation</th><th>Désinscription</th></tr></thead><tbody>${
+          d.abonnes.map((a) => `<tr><td style="word-break: break-all;">${esc(a.email)}</td><td>${esc(a.langue.toUpperCase())}</td><td>${esc(ETAT[a.etat] || a.etat)}</td>`
+            + `<td class="mono">${jour(a.inscrit)}</td><td class="mono">${jour(a.confirme)}</td><td class="mono">${jour(a.desinscrit)}</td></tr>`).join('')
+        }</tbody></table>`
+      : '<div class="note">Aucun abonné pour l\'instant.</div>';
   }
   function renderCatnav() {
     $('catnav').innerHTML = CATS().map(([k, lib]) =>
@@ -1049,6 +1092,19 @@
   }
 
   const bkSum = (bk, fn) => bk.keys.map((k) => bk.map.get(k).reduce((a, d) => a + fn(D[d]), 0));
+  // Un CUMUL (lectures d'une publication depuis sa parution) ne s'additionne pas
+  // d'un jour à l'autre : il se lit à la dernière valeur du bucket. Et un jour
+  // sans relevé — `lire` rend null quand la publication manque dans la liste du
+  // jour : appel Meta en échec les 18/09 et 27/09/2026 — reprend la dernière
+  // valeur connue, jamais 0. Un cumul ne redescend pas non plus : une valeur
+  // plus basse que la précédente (insights revenus à 0) est ignorée.
+  const bkCumul = (bk, lire) => {
+    let dernier = 0;
+    return bk.keys.map((k) => {
+      for (const d of bk.map.get(k)) { const v = lire(D[d]); if (v != null && v >= dernier) dernier = v; }
+      return dernier;
+    });
+  };
 
   // ── filtres : listes déroulantes (valeurs réelles de l'historique) ──
   const SEL = { bot: 'f-bot', page: 'f-page', referral: 'f-referral', ia: 'f-ia', peri: 'f-peri' };
@@ -1605,15 +1661,18 @@
         ig: { champ: 'ig_posts', lect: (x) => x.vues || 0, tag: 'IG' },
       };
       const reseaux = net === 'tout' ? ['fb', 'ig'] : [net];
-      const dernier = D[sel.at(-1)]?.fb || {};
+      // Le dernier jour RELEVÉ, pas le dernier jour de la période : un jour où
+      // l'appel Meta a échoué a une liste vide, et viderait le tableau.
+      const avecPosts = [...sel].reverse().find((d) => reseaux.some((r) => (D[d]?.fb?.[SRC[r].champ] || []).length));
+      const dernier = D[avecPosts ?? sel.at(-1)]?.fb || {};
       const cands = reseaux.flatMap((r) => (dernier[SRC[r].champ] || []).map((post) => ({ post, r })));
       const tops = cands.sort((a, b) => SRC[b.r].lect(b.post) - SRC[a.r].lect(a.post)).slice(0, 5);
       const serie = tops.map(({ post, r }, i) => ({
         label: `${net === 'tout' ? SRC[r].tag + ' · ' : ''}${post.date} · ${(post.titre || '').slice(0, 24) || 'publication'}`,
         color: COLORS[i % COLORS.length],
-        pts: bkSum(bk, (v) => {
+        pts: bkCumul(bk, (v) => {
           const l = (v.fb?.[SRC[r].champ] || []).find((x) => x.id === post.id);
-          return l ? SRC[r].lect(l) : 0;
+          return l ? SRC[r].lect(l) : null;
         }),
       }));
       $('h-posts').textContent = `Lecture par publication — ${net === 'fb' ? 'Facebook' : net === 'ig' ? 'Instagram' : 'Facebook + Instagram'}`;
@@ -1623,7 +1682,7 @@
       $('posts-note').textContent = (net === 'ig'
         ? 'Vues Instagram'
         : "Facebook : vues des vidéos, à défaut clics — Meta a retiré les impressions au niveau d'une publication" + (net === 'tout' ? ' ; Instagram : vues' : '')) +
-        '. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte.';
+        '. Valeurs cumulées depuis la parution : la courbe monte par paliers à chaque collecte ; un jour sans relevé (appel Meta en échec) garde la dernière valeur connue.';
 
       document.querySelector('#t-fbposts tbody').innerHTML = (dernier.posts || [])
         .map((x) => {
@@ -1898,14 +1957,36 @@
           ['Vidéos publiées', fmt(etat.videos), `<span class="flat"><a href="${etat.url}" target="_blank" rel="noopener">${etat.nom || 'la chaîne'}</a></span>`],
         ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
 
+        // La courbe montre les CUMULS (owner, 13/10/2026 : « abonnés et vues cumulés plutôt
+        // que vues et nouveaux abonnés par jour ») : le total lu à la dernière collecte de
+        // chaque jour, semaine ou mois. Un jour sans collecte garde la dernière valeur connue,
+        // y compris celle d'avant la période affichée — jamais un faux zéro. Les vues ne
+        // redescendent pas (une baisse = anomalie d'API, ignorée) ; les abonnés, si.
+        const cumul = (cle, monotone) => {
+          const debut = bk.map.get(bk.keys[0])?.[0];
+          const garde = (v, der) => v != null && (!monotone || der == null || v >= der);
+          let der = null;
+          for (const d of jrs) {
+            if (d >= debut) break;
+            if (garde(D[d].youtube[cle], der)) der = D[d].youtube[cle];
+          }
+          const pts = bk.keys.map((k) => {
+            for (const d of bk.map.get(k)) { const v = D[d]?.youtube?.[cle]; if (garde(v, der)) der = v; }
+            return der;
+          });
+          // Avant le tout premier relevé, rien n'est connu : la courbe part du premier
+          // relevé plutôt que de zéro (un saut depuis 0 ferait croire à une explosion).
+          const p0 = pts.find((v) => v != null) ?? 0;
+          return pts.map((v) => v ?? p0);
+        };
         const ys = [
-          { label: 'Vues gagnées', color: COLORS[0], pts: bk.keys.map((k) => somme(bk.map.get(k), 'vues')) },
-          { label: 'Abonnés gagnés (axe droit)', color: COLORS[1], axis: 'right', pts: bk.keys.map((k) => somme(bk.map.get(k), 'abonnes')) },
+          { label: 'Vues (cumul)', color: COLORS[0], pts: cumul('vues', true) },
+          { label: 'Abonnés (cumul, axe droit)', color: COLORS[1], axis: 'right', pts: cumul('abonnes', false) },
         ];
-        $('h-yt').textContent = `Vues et abonnés gagnés — par ${bk.mode}`;
+        $('h-yt').textContent = `Vues et abonnés de la chaîne — cumul par ${bk.mode}`;
         $('yt-legend').innerHTML = ys.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
         drawChart('c-yt', bk, ys);
-        $('yt-note').textContent = `YouTube ne publie que des totaux cumulés : ces gains sont calculés d'une collecte à l'autre, depuis le ${dFmt(jrs[0])}. Les vues des vidéos ci-dessous sont, elles, des cumuls depuis leur mise en ligne.`;
+        $('yt-note').textContent = `YouTube ne publie que des totaux cumulés : la courbe lit le total à la dernière collecte de chaque ${bk.mode}, et un jour sans collecte garde la dernière valeur connue (relevés depuis le ${dFmt(jrs[0])}). Les cartes donnent le gain sur la période ; les vues des vidéos ci-dessous sont des cumuls depuis leur mise en ligne.`;
 
         document.querySelector('#t-ytvideos tbody').innerHTML = (etat.derniers || []).length
           ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 45)}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
@@ -2146,9 +2227,18 @@
             ['Ont lu au moins 2 pages', fmt(A.visiteurs_2p), `<span class="flat">soit ${part} % — le reste n'a fait que passer</span>`],
             ['Pages par adresse', nb1(v.moyenne), `<span class="flat">médiane ${fmt(v.mediane)}, maximum ${fmt(v.max)}</span>`],
             ['Sur réseau d\'hébergeur', fmt(A.centres_donnees), '<span class="flat">reconnu au nom de l\'opérateur</span>'],
+            // Le compteur CORRIGÉ (24/09/2026). Sur prv-concept.com le 23/09, une seule
+            // plage cloud a fait passer « visiteurs » de ~150 à 1 963, avec un référent
+            // « google.com » fabriqué — Search Console comptait 28 clics ce jour-là. Ces
+            // robots portent un user-agent de navigateur ; le réseau les trahit. Il manque
+            // à l'historique : on n'affiche rien plutôt qu'un zéro trompeur.
+            ['Visiteurs hors hébergeurs', A.visiteurs_hors_centres != null ? fmt(A.visiteurs_hors_centres) : '—',
+             A.visiteurs_hors_centres != null
+               ? `<span class="flat">le chiffre à lire — ${fmt((A.visiteurs_empreintes ?? 0) - A.visiteurs_hors_centres)} écarté(s) sur ${fmt(A.visiteurs_empreintes ?? 0)}</span>`
+               : '<span class="flat">démarre à la première collecte qui suit sa mise en place</span>'],
           ].map(([t, x, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${x}</div><div class="d">${d}</div></div>`).join('');
           const top = Object.entries(A.as_top || {}).slice(0, 3).map(([k, n]) => `${k} (${fmt(n)})`).join(', ');
-          $('aud-note').textContent = `Relevé du ${jA}. ${fmt(v.a_une_seule_page)} adresses sur ${fmt(A.total)} n'ont ouvert qu'une seule page : ce sont des passages, pas des lectures. Principaux opérateurs : ${top}. La courbe « visiteurs » ci-dessus n'a pas été corrigée — elle reste comparable à son propre historique.`;
+          $('aud-note').textContent = `Relevé du ${jA}. ${fmt(v.a_une_seule_page)} adresses sur ${fmt(A.total)} n'ont ouvert qu'une seule page : ce sont des passages, pas des lectures. Principaux opérateurs : ${top}. La courbe « visiteurs » ci-dessus n'a pas été corrigée — elle reste comparable à son propre historique${A.visiteurs_hors_centres != null ? ", et « Visiteurs hors hébergeurs » est le chiffre à lire à sa place" : ""}.`;
         } else {
           $('aud-cards').innerHTML = '';
           $('aud-note').textContent = "Pas encore de relevé : la ventilation par opérateur démarre à la première collecte qui suit sa mise en place.";

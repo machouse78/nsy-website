@@ -192,7 +192,7 @@ $SCAN_RE = '/wp2shell|vuln|xploit|security-auditor|censys|scanner|sqlmap|nuclei/
 $SCAN_PATH_RE = '#/@fs/|/\.env|/\.aws/|/\.git/|credentials|rootkey|serverless\.ya?ml|nginx\.conf|/wp-login\.php|/xmlrpc\.php|/phpmyadmin#i';
 
 $stats = [
-    'pageviews' => 0, 'uniques' => [], 'ips' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
+    'pageviews' => 0, 'uniques' => [], 'ips' => [], 'vh_ip' => [], 'hits' => 0, 'status' => ['200' => 0, '301' => 0, '404' => 0, 'other' => 0],
     'ai' => [], 'ai_hits' => 0, 'se_hits' => 0, 'bot_hits' => 0, 'scan_hits' => 0,
     'ia_familles' => ['conversation' => 0, 'recherche' => 0, 'indexation' => 0],
     'ia_conv_pages' => [], // page lue lors d'une récupération DÉCLENCHÉE par une question
@@ -350,6 +350,10 @@ foreach ($files as $f) {
                jamais de ce script et n'entre pas dans l'historique. */
             if ($peri === $PERI_DEFAUT && count($stats['ips']) < 60000) {
                 $stats['ips'][$ip] = ($stats['ips'][$ip] ?? 0) + 1;
+                /* L'IP qui porte cette empreinte de visiteur — le temps du calcul,
+                   comme $stats['ips'] : elle ne sort jamais du script. Sert à
+                   compter les visiteurs HORS centres de données (24/09/2026). */
+                $stats['vh_ip'][$vh] = $ip;
             }
             $stats['peri'][$peri]['pages_vues']++;
             $stats['peri'][$peri]['visiteurs'][$vh] = 1;
@@ -727,12 +731,13 @@ if ($stats['ips']) {
                           'contabo', 'leaseweb', 'm247', 'proxy', 'vpn', 'scaleway',
                           'choopa', 'ip volume', 'packethub', 'stark industries', 'alibaba',
                           'tencent', 'huawei', 'cloudflare', 'fastly', 'akamai', 'datacamp'];
-            $dc = 0; $horsDc = 0;
+            $dc = 0; $horsDc = 0; $estDc = [];
             foreach (array_keys($stats['ips']) as $ipx) {
                 $nom = $asParIp[$ipx] ?? '';
                 $n_l = mb_strtolower($nom);
                 $est = false;
                 foreach ($marqueurs as $mk) { if ($nom !== '' && str_contains($n_l, $mk)) { $est = true; break; } }
+                $estDc[$ipx] = $est;
                 if ($est) { $dc++; } else { $horsDc++; }
                 if ($nom !== '') { $asNoms[$nom] = ($asNoms[$nom] ?? 0) + 1; }
             }
@@ -751,6 +756,20 @@ if ($stats['ips']) {
                courbe historique — elle reste comparable à elle-même — on pose
                celle-ci à côté. */
             $pays['visiteurs_2p'] = count(array_filter($stats['ips'], static fn($v) => $v >= 2));
+            /* LE compteur corrigé (owner, 24/09/2026). Sur prv-concept.com le 23/09,
+               15 458 requêtes d'une seule plage d'hébergeur ont fait passer « visiteurs »
+               de ~150 à 1 963, référent « google.com » fabriqué à l'appui — quand Search
+               Console comptait 28 clics. Ces robots portent un user-agent de navigateur :
+               le filtre à robots ne les voit pas. Celui-ci si, par le RÉSEAU.
+               ⚠️ On ne réécrit pas « visiteurs » : l'historique ne l'a pas, et une courbe
+               doit rester comparable à elle-même. On pose celle-ci à côté. Bloquer une
+               plage ne protège pas du suivant ; ce compteur, si. */
+            $visHc = 0;
+            foreach ($stats['vh_ip'] as $ipDeVh) {
+                if (empty($estDc[$ipDeVh])) { $visHc++; }
+            }
+            $pays['visiteurs_hors_centres'] = $visHc;
+            $pays['visiteurs_empreintes'] = count($stats['vh_ip']);
             $pays['vues_par_ip'] = [
                 'moyenne' => count($vues) ? round(array_sum($vues) / count($vues), 2) : 0,
                 'mediane' => count($vues) ? $vues[intdiv(count($vues), 2)] : 0,
@@ -804,14 +823,49 @@ $day = [
 ];
 
 // ── 2. Facebook (API Graph) — état du JOUR de collecte ───────────────────────
-function graphGet(string $path, string $token, array $params = []): array {
+// Chaque appel Graph en échec est NOTÉ (chemin sans identifiant, motif, nombre
+// d'essais) dans $GRAPH_ERREURS, repris dans fb.erreurs du jour. Vécu 18/09 et
+// 27/09/2026 : la liste des publications est revenue vide (un échec silencieux,
+// la Page répondait par ailleurs), le jour a été enregistré avec posts = [] et
+// le tableau de bord a tracé des zéros — un cumul qui tombe à zéro, c'est un
+// trou de mesure, pas une baisse. D'où : jusqu'à trois essais espacés de 2 s
+// sur un échec transitoire, aucun nouvel essai sur un refus de droits ou de
+// jeton (codes 10, 190, 200 : réessayer ne changerait rien).
+$GRAPH_ERREURS = [];
+$GRAPH_ESSAIS_RESTANTS = 4;   // budget de nouveaux essais pour TOUTE la collecte
+function graphGet(string $path, string $token, array $params = [], int $essais = 3): array {
+    global $GRAPH_ERREURS, $GRAPH_ESSAIS_RESTANTS;
     $params['access_token'] = $token;
     $url = 'https://graph.facebook.com/v21.0/' . $path . '?' . http_build_query($params);
-    $ch = curl_init($url);
-    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5]);
-    $raw = curl_exec($ch);
-    $j = is_string($raw) ? json_decode($raw, true) : null;
-    return is_array($j) && !isset($j['error']) ? $j : [];
+    $motif = '';
+    $faits = 0;
+    for ($i = 1; $i <= $essais; $i++) {
+        $faits = $i;
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5]);
+        $raw = curl_exec($ch);
+        $curlErr = (string) curl_error($ch);
+        $http = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        // Pas de fermeture explicite du handle : sans effet depuis PHP 8.0 et
+        // DÉPRÉCIÉE en 8.5 — vécu le 05/10/2026 : vingt-deux dépréciations par
+        // collecte, et le garde-fou du Cerf Thym (qui les comptait encore) a coupé en 500.
+        $j = is_string($raw) ? json_decode($raw, true) : null;
+        if (is_array($j) && !isset($j['error'])) return $j;
+        $code = is_array($j) ? (int) ($j['error']['code'] ?? 0) : 0;
+        $motif = $curlErr !== '' ? 'curl : ' . $curlErr
+            : ($code ? 'graph ' . $code . ' : ' . mb_substr((string) ($j['error']['message'] ?? ''), 0, 120)
+                     : 'http ' . $http . ' : réponse illisible');
+        // On ne réessaie QUE le transitoire : panne de transport, 5xx, ou les
+        // codes que Meta documente comme temporaires (1, 2, 4, 17, 32, 613).
+        // Tout autre refus est définitif pour cette collecte — réessayer ne
+        // ferait qu'allonger la nuit. Et le budget est global : au plus
+        // GRAPH_ESSAIS_RESTANTS nouveaux essais par collecte, quoi qu'il arrive.
+        $transitoire = $curlErr !== '' || $http >= 500 || in_array($code, [1, 2, 4, 17, 32, 613], true);
+        if (!$transitoire || $GRAPH_ESSAIS_RESTANTS <= 0) break;
+        if ($i < $essais) { $GRAPH_ESSAIS_RESTANTS--; sleep(1); }
+    }
+    $GRAPH_ERREURS[] = ['appel' => preg_replace('/[\d_]{6,}/', '{id}', $path), 'erreur' => $motif, 'essais' => $faits];
+    return [];
 }
 
 /* ── STORIES (Facebook Page + Instagram) — une vie de 24 h ───────────────────
@@ -998,6 +1052,9 @@ if ($tok !== '' && !str_starts_with($tok, 'CHANGE_ME')) {
             'reshares'   => $reshares,
         ];
     }
+    // Les échecs d'appels Graph du jour, pour que le tableau de bord puisse
+    // dire « non relevé » plutôt que zéro. Jamais le jeton, jamais d'identifiant.
+    if ($GRAPH_ERREURS) $fb['erreurs'] = $GRAPH_ERREURS;
 }
 
 // ── 2 bis. Avis clients, par source ──────────────────────────────────────────

@@ -56,9 +56,14 @@
     sections.forEach((s) => io.observe(s));
   }
 
-  // Service-option radio (form)
-  const opts = document.querySelectorAll('.opt[data-service]');
+  // Objet de la demande (contact) : <select id="service"> depuis le 13/10/2026 ;
+  // ?service=motion|3d|web-ai|consulting préselectionne l'objet (liens des pages d'offre).
   const serviceInput = document.getElementById('service');
+  if (serviceInput && serviceInput.tagName === 'SELECT') {
+    const want = new URLSearchParams(window.location.search).get('service');
+    if (want && [...serviceInput.options].some((o) => o.value === want)) serviceInput.value = want;
+  }
+  const opts = document.querySelectorAll('.opt[data-service]');
   opts.forEach((opt) => {
     opt.addEventListener('click', () => {
       opts.forEach((o) => o.classList.remove('active'));
@@ -364,7 +369,8 @@
 
   // Le widget est injecté sur les 36 pages via partials/chatbot.{fr,en}.html
   // (script sync-partials) — le code ne s'active que si le markup est présent.
-  const hobbiePath = pageLang === 'en' ? 'the 3D Design page' : 'la page Conception 3D';
+  const hobbiePath = pageLang === 'en' ? 'the 3D animation page' : 'la page Animation 3D';
+  const motionPath = pageLang === 'en' ? 'the Motion design for YouTube page' : 'la page Motion design pour YouTube';
 
   // ───── Assistant IA (LLM via chat.php) ─────
   // Le widget interroge d'abord le proxy serveur chat.php : un LLM (Mistral,
@@ -486,6 +492,8 @@
       'https://www.facebook.com/reel/1080327827884467',
       'https://www.linkedin.com/pulse/r%25c3%25a9unir-un-site-forum-et-une-boutique-sans-rien-reconstruire-yrhce',
       'https://www.facebook.com/reel/1392916158966415',
+      'https://www.facebook.com/reel/1422266333377597',
+      'https://www.linkedin.com/pulse/la-m%25c3%25aame-question-tous-les-trois-mois-pourquoi-un-ytvne',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc
@@ -627,12 +635,12 @@
       cues: ['tarif','prix','cout','combien','devis','budget','cher','montant','ca coute','prix indicatif',
               'price','pricing','cost','rate','quote','how much','fee'],
       fr: [
-        `La tarification s'établit <b>en fonction du besoin</b> : périmètre, complexité, échéances. Conseil technique comme création web · IA font l'objet d'un devis après cadrage — décrivez votre projet via le formulaire, réponse sous 48 h ouvrées.`,
-        `Pas de grille tarifaire toute faite : chaque mission est chiffrée selon son périmètre réel. Le plus efficace : le formulaire de contact (ou le questionnaire de faisabilité pour un projet web) — vous recevez une lecture honnête et un ordre de grandeur sous 48 h ouvrées.`
+        `La tarification s'établit <b>en fonction du besoin</b> : périmètre, complexité, échéances. Conseil technique comme services IA (site internet, motion design, animation 3D) font l'objet d'un devis après cadrage — décrivez votre projet via le formulaire, réponse sous 48 h ouvrées.`,
+        `Pas de grille tarifaire toute faite : chaque mission est chiffrée selon son périmètre réel. Le plus efficace : le formulaire de contact (ou le questionnaire de faisabilité pour un projet web) — vous recevez une lecture honnête et un premier cadrage sous 48 h ouvrées.`
       ],
       en: [
-        `Pricing is <b>based on your need</b>: scope, complexity, deadlines. Consulting and web creation · AI alike are quoted after scoping — describe your project through the form, reply within 48 business hours.`,
-        `No standard price list: every engagement is quoted on its real scope. The most effective route: the contact form (or the feasibility questionnaire for a web project) — you get an honest read and a ballpark within 48 business hours.`
+        `Pricing is <b>based on your need</b>: scope, complexity, deadlines. Consulting and AI services (website, motion design, 3D animation) alike are quoted after scoping — describe your project through the form, reply within 48 business hours.`,
+        `No standard price list: every engagement is quoted on its real scope. The most effective route: the contact form (or the feasibility questionnaire for a web project) — you get an honest read and a first scoping within 48 business hours.`
       ]
     },
     {
@@ -679,16 +687,29 @@
       ]
     },
     {
-      id: 'threeD',
-      cues: ['3d','blender','wireframe','animation','modele','rendu','render','voiture','renault','baccara',
-              'loisir','hobby','hobbies','conception','youtube'],
+      id: 'motion',
+      cues: ['motion','motion design','intro','generique','habillage','video','vidéo','reel','reels','short','shorts',
+              'ident','lower third','brand video','animated video'],
       fr: [
-        `La 3D fait partie des cordes créatives : rendus Blender optimisés pour le web, légers et rapides. Deux exemples concrets sur la page Conception 3D — une animation 3D (vidéo YouTube) et un modèle wireframe interactif d'une Renault R25 Baccara que vous pouvez faire pivoter. À voir : ${hobbiePath}.`,
-        `Oui, animations et modèles 3D maison — du Blender pensé pour le web (zéro ralentissement). Le wireframe cyan de la Renault R25 sur ${hobbiePath} est interactif : cliquez-glissez pour le faire tourner. Et oui, ça aussi ça peut s'intégrer à votre site.`
+        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, vidéos de marque animées — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender pour la 3D, animation pilotée par scripts. Un exemple sur la page Réalisations : l'intro « Le V à 90° ». Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
+        `Oui : NSY réalise des intros, génériques et vidéos de marque animées pour YouTube. La méthode : charte, musique décidée avant l'animation, storyboard-partition, contrôle image par image. Tout est décrit sur ${motionPath} — et la demande de faisabilité a un parcours dédié « motion design ».`
       ],
       en: [
-        `3D is one of the creative strings: Blender renders optimised for the web — light and fast. Two live examples on the 3D Design page — a 3D animation (YouTube video) and an interactive wireframe model of a Renault R25 Baccara you can rotate. Have a look: ${hobbiePath}.`,
-        `Yes, in-house 3D animations and models — Blender built for the web (no slowdown). The cyan Renault R25 wireframe on ${hobbiePath} is interactive: click and drag to spin it. And yes, this can be embedded into your site too.`
+        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, animated brand videos — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender for 3D, script-driven animation. One example on the Work page: the "Le V à 90°" intro. Details: ${motionPath}. Quoted after scoping.`,
+        `Yes: NSY produces intros, idents and animated brand videos for YouTube. The method: brand guidelines, music decided before the animation, storyboard as a score, frame-by-frame checks. All described on ${motionPath} — and the feasibility request has a dedicated "motion design" path.`
+      ]
+    },
+    {
+      id: 'threeD',
+      cues: ['3d','blender','wireframe','animation','modele','rendu','render','voiture','renault','baccara',
+              'logo 3d','volume','extrud','cycles','model-viewer','glb'],
+      fr: [
+        `L'animation 3D est l'un des trois services IA de NSY : animations pour vos vidéos, logos et objets de marque en volume (lettres extrudées, matières, gravures, calés au pixel sur votre logo), modèles 3D interactifs pour vos pages — Blender, rendus rejouables, fichiers légers. Deux démonstrations sur ${hobbiePath} : une animation 3D (YouTube) et un modèle en maillage d'une Renault R25 Baccara que vous pouvez faire pivoter. Chiffrage sur devis, après cadrage.`,
+        `Oui, NSY réalise des animations et des modèles 3D : du Blender pensé pour la vidéo comme pour le web (zéro ralentissement). Le maillage cyan de la Renault R25 sur ${hobbiePath} est interactif : cliquez-glissez pour le faire tourner. Un logo en volume, un objet, un modèle à intégrer à votre site : la demande de faisabilité a un parcours « animation 3D ».`
+      ],
+      en: [
+        `3D animation is one of NSY's three AI services: animations for your videos, logos and brand objects in volume (extruded letters, materials, engravings, pixel-aligned on your logo), interactive 3D models for your pages — Blender, replayable renders, lightweight files. Two live demos on ${hobbiePath}: a 3D animation (YouTube) and a wireframe model of a Renault R25 Baccara you can rotate. Quoted after scoping.`,
+        `Yes, NSY produces 3D animations and models: Blender built for video and for the web (no slowdown). The cyan Renault R25 wireframe on ${hobbiePath} is interactive: click and drag to spin it. A logo in volume, an object, a model to embed in your site: the feasibility request has a "3D animation" path.`
       ]
     },
     {
@@ -696,12 +717,12 @@
       cues: ['service','offre','offrez','prestation','proposez','propose','faites','what do you do',
               'what do you offer','offering','help with'],
       fr: [
-        `Deux offres : <b>(1) Conseil technique senior</b> pour la finance et l'assurance — architecture, audit, migration, conformité, expertise IA en mission. <b>(2) Création web propulsée par l'IA</b> — sites, plateformes SaaS, intégration de LLM. En bonus : animations et modèles 3D pour le web. Sur quel axe puis-je préciser ?`,
-        `NSY couvre deux choses : du conseil technique senior (finance/assurance, systèmes critiques) et de la création web avec l'IA (sites, SaaS, chatbots, recherche sémantique). Plus une touche 3D. Dites-moi votre besoin et je vous oriente.`
+        `Deux offres : <b>(1) Conseil technique senior</b> pour la finance et l'assurance — architecture, audit, migration, conformité, expertise IA en mission. <b>(2) Services IA</b> — réalisation de sites internet (création ou refonte, LLM intégré), motion design pour YouTube (intros, génériques, vidéos de marque) et animation 3D (logos en volume, modèles interactifs). Sur quel axe puis-je préciser ?`,
+        `NSY couvre deux choses : du conseil technique senior (finance/assurance, systèmes critiques) et des services IA — sites internet, motion design pour YouTube, animation 3D. Dites-moi votre besoin et je vous oriente.`
       ],
       en: [
-        `Two offerings: <b>(1) Senior technical consulting</b> for finance & insurance — architecture, audit, migration, compliance, on-mission AI expertise. <b>(2) AI-powered web creation</b> — sites, SaaS platforms, LLM integration. Bonus: 3D animations and models for the web. Which one should I expand on?`,
-        `NSY does two things: senior technical consulting (finance/insurance, critical systems) and AI-powered web creation (sites, SaaS, chatbots, semantic search). Plus a 3D touch. Tell me your need and I'll point you the right way.`
+        `Two offerings: <b>(1) Senior technical consulting</b> for finance & insurance — architecture, audit, migration, compliance, on-mission AI expertise. <b>(2) AI services</b> — website creation (new build or redesign, LLM built in), motion design for YouTube (intros, idents, brand films) and 3D animation (logos in volume, interactive models). Which one should I expand on?`,
+        `NSY does two things: senior technical consulting (finance/insurance, critical systems) and AI services — websites, motion design for YouTube, 3D animation. Tell me your need and I'll point you the right way.`
       ]
     },
     {
@@ -763,11 +784,11 @@
       cues: ['reference','client','clientele','portfolio','realisation','exemple','case study','case',
               'temoignage','testimonial','who have you worked'],
       fr: [
-        `Les missions se déroulent au sein de grandes institutions financières et d'assurance, le plus souvent sous accord de confidentialité — donc pas de noms publics ici. Les démonstrateurs visibles, eux, sont ce site (multilingue, chatbot, 3D) et la section Conception 3D.`,
+        `Les missions se déroulent au sein de grandes institutions financières et d'assurance, le plus souvent sous accord de confidentialité — donc pas de noms publics ici. Les démonstrateurs visibles, eux, sont ce site (multilingue, chatbot, 3D) et la section Animation 3D.`,
         `La plupart des références sont sous NDA (finance/assurance), donc difficiles à citer nommément. En revanche, ce site lui-même illustre le savoir-faire web + IA + 3D — c'est un portfolio vivant.`
       ],
       en: [
-        `Engagements take place inside large financial and insurance institutions, usually under NDA — so no public names here. The visible showcases are this site (multilingual, chatbot, 3D) and the 3D Design section.`,
+        `Engagements take place inside large financial and insurance institutions, usually under NDA — so no public names here. The visible showcases are this site (multilingual, chatbot, 3D) and the 3D animation section.`,
         `Most references are under NDA (finance/insurance), so hard to name directly. This site itself, though, demonstrates the web + AI + 3D know-how — a living portfolio.`
       ]
     },
@@ -1187,6 +1208,8 @@
   // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
   // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
   const SLUG_FR_TO_EN = {
+    'forum-base-de-connaissances-reseaux-sociaux.html': 'forum-knowledge-base-social-media.html',
+    'reunir-site-forum-boutique-compte-unique.html': 'one-site-forum-shop-single-account.html',
     'superviser-production-teraoctets-megaoctet.html': 'production-monitoring-terabytes-megabyte.html',
     'site-ia-en-un-week-end.html': 'ai-website-in-a-weekend.html',
     'index.html': 'index-en.html',
@@ -1202,6 +1225,7 @@
     'conformite-dora.html': 'dora-compliance.html',
     'integration-claude-entreprise.html': 'claude-integration.html',
     'creation-site-ia.html': 'ai-website-creation.html',
+    'motion-design-youtube.html': 'youtube-motion-design.html',
     'glossaire-ia-web.html': 'ai-web-glossary.html',
     'blog.html': 'blog-en.html',
     'seo-geo-etre-cite-par-les-ia.html': 'seo-geo-getting-cited-by-ai.html',
@@ -1209,6 +1233,11 @@
     'consultant-technique-paris.html': 'technical-consultant-paris.html',
     'creation-site-internet-loiret.html': 'website-creation-loiret.html',
     'creation-site-internet-orleans.html': 'website-creation-orleans.html',
+    'creation-site-internet-tours.html': 'website-creation-tours.html',
+    'creation-site-internet-paris.html': 'website-creation-paris.html',
+    'creation-site-internet-lyon.html': 'website-creation-lyon.html',
+    'creation-site-internet-bordeaux.html': 'website-creation-bordeaux.html',
+    'refonte-site-internet.html': 'website-redesign.html',
     'pourquoi-nsy.html': 'why-nsy.html',
     'services.html': 'services-en.html',
     'a-propos.html': 'about.html',
@@ -1226,19 +1255,29 @@
       // Persist preference for 1 year so the auto-detect on / does not override
       document.cookie = `nsy_lang=${lang}; path=/; max-age=31536000; SameSite=Lax`;
 
-      // Derive the target URL from the current pathname
+      // Cible : 1) le lien RÉEL du drapeau (écrit par sync-partials depuis le
+      // hreflang de la page — source unique, toujours à jour) ; 2) sinon le
+      // <link rel="alternate" hreflang> de la page ; 3) sinon la table ci-dessus.
+      // Vécu 05/10/2026 : la table seule ignorait les deux derniers articles,
+      // quatre pages villes et la page refonte — le drapeau laissait sur place.
       const path = window.location.pathname;
       const file = path.split('/').pop() || 'index.html';
       const hash = window.location.hash || '';
+      const hrefAttr = flag.getAttribute('href');
+      const alt = document.querySelector(`link[rel="alternate"][hreflang="${lang}"]`);
       let target;
-      if (lang === 'en') {
+      if (hrefAttr && hrefAttr !== '#') {
+        target = hrefAttr;
+      } else if (alt && alt.getAttribute('href')) {
+        target = alt.getAttribute('href');
+      } else if (lang === 'en') {
         // FR → EN: look up, or stay on the same page if already EN
         target = SLUG_FR_TO_EN[file] || file;
       } else {
         // EN → FR: reverse lookup, or stay on the same page if already FR
         target = SLUG_EN_TO_FR[file] || file;
       }
-      window.location.href = target + hash;
+      window.location.href = target + (target.includes('#') ? '' : hash);
     });
   });
 
@@ -1441,7 +1480,8 @@
         || v.id === 'chatbot-forum-video'
         || v.id === 'weekend-site-video'
         || v.id === 'supervision-video'
-        || v.id === 'compte-unique-video') return; // boomerang déjà sans couture
+        || v.id === 'compte-unique-video'
+        || v.id === 'forum-classe-video') return; // boomerang ou boucle continue déjà sans couture
     setupLoopFade(v);
   });
 

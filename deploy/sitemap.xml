@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -77,7 +77,7 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -110,7 +110,7 @@
   <!-- Pages du menu (structure multi-pages, juillet 2026) -->
   <url>
     <loc>https://www.nsy.fr/services.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
@@ -119,7 +119,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/services-en.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/services.html" />
@@ -164,7 +164,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/contact.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/contact.html" />
@@ -173,7 +173,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/contact-en.html</loc>
-    <lastmod>2026-08-01</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/contact.html" />
@@ -182,7 +182,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/conception-3d.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conception-3d.html" />
@@ -191,7 +191,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/3d-design.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/conception-3d.html" />
@@ -202,7 +202,7 @@
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/realisations.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -237,11 +237,23 @@
       <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/intro-prv-concept.jpg</image:loc>
+      <image:title>Intro YouTube « Le V à 90° » — motion design réalisé par NSY pour PRV Concept</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/intro-prv-concept.jpg</video:thumbnail_loc>
+      <video:title>Intro YouTube « Le V à 90° » — motion design NSY</video:title>
+      <video:description>Aperçu de l'intro de la chaîne YouTube de PRV Concept : logo de l'association en volume, orchestre, montée en régime d'un V6 — 14 secondes, 4K 60 i/s, réalisée par NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/intro-prv-concept.mp4</video:content_loc>
+      <video:duration>14</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -260,6 +272,18 @@
       <video:title>PRV Concept website preview — an NSY build</video:title>
       <video:description>Parcours du site www.prv-concept.com conçu par NSY : accueil, moteurs PRV, protos et bibliothèque d'atelier, avec l'assistant conversationnel de l'association.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/intro-prv-concept.jpg</image:loc>
+      <image:title>YouTube intro "Le V à 90°" — motion design by NSY for PRV Concept</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/intro-prv-concept.jpg</video:thumbnail_loc>
+      <video:title>YouTube intro "Le V à 90°" — NSY motion design</video:title>
+      <video:description>Preview of the PRV Concept YouTube channel intro: the association's logo in volume, orchestra, a V6 revving up — 14 seconds, 4K 60 fps, made by NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/intro-prv-concept.mp4</video:content_loc>
+      <video:duration>14</video:duration>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>
@@ -313,7 +337,7 @@
   <!-- FAQ — 50+ questions/réponses expertise & offres (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faq.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -324,7 +348,7 @@
 
   <url>
     <loc>https://www.nsy.fr/faq-en.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -461,8 +485,26 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/creation-site-ia.html" />
   </url>
   <url>
+    <loc>https://www.nsy.fr/motion-design-youtube.html</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/motion-design-youtube.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/youtube-motion-design.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/motion-design-youtube.html" />
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/youtube-motion-design.html</loc>
+    <lastmod>2026-10-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/motion-design-youtube.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/youtube-motion-design.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/motion-design-youtube.html" />
+  </url>
+  <url>
     <loc>https://www.nsy.fr/glossaire-ia-web.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -471,7 +513,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-web-glossary.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -482,7 +524,7 @@
   <!-- Questionnaire de faisabilité projet (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faisabilite.html</loc>
-    <lastmod>2026-09-07</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -493,7 +535,7 @@
 
   <url>
     <loc>https://www.nsy.fr/feasibility.html</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-10-13</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -506,7 +548,7 @@
   <!-- Journal + pages géo (ajout 2026-07-29) -->
   <url>
     <loc>https://www.nsy.fr/blog.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -548,16 +590,16 @@
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
     <video:video>
-      <video:thumbnail_loc>https://www.nsy.fr/public/compte-unique-illus-thumb.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://www.nsy.fr/public/compte-unique-anim-thumb.jpg</video:thumbnail_loc>
       <video:title>Un site, un forum, une boutique, un seul compte — illustration animée</video:title>
       <video:description>Illustration animée de l'article : trois façades sous le même habillage — une vitrine, un atelier, un comptoir de pièces — reliées par un fil de lumière à une seule carte-clé. La vignette du journal NSY.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/compte-unique-illus-thumb.mp4</video:content_loc>
+      <video:content_loc>https://www.nsy.fr/public/compte-unique-anim-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-10-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -576,6 +618,13 @@
       <video:content_loc>https://www.nsy.fr/public/seo-geo-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/forum-classe-thumb.jpg</video:thumbnail_loc>
+      <video:title>La même question, tous les trois mois — illustration animée</video:title>
+      <video:description>Illustration animée de l'article : un meuble de classement aux fiches lumineuses relié par un flux de lumière à un nuage de bulles de conversation — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/forum-classe-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
     <image:image>
       <image:loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</image:loc>
       <image:title>An AI chatbot wired into a forum — illustration</image:title>
@@ -589,8 +638,12 @@
       <image:title>From terabytes to megabytes — illustration</image:title>
     </image:image>
     <image:image>
-      <image:loc>https://www.nsy.fr/public/compte-unique-illus-thumb.jpg</image:loc>
+      <image:loc>https://www.nsy.fr/public/compte-unique-anim-thumb.jpg</image:loc>
       <image:title>Un site, un forum, une boutique, un seul compte — vignette</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/forum-classe-thumb.jpg</image:loc>
+      <image:title>La même question, tous les trois mois — vignette</image:title>
     </image:image>
   </url>
   <url>
@@ -658,6 +711,32 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/compte-unique-article-en.jpg</image:loc>
       <image:title>Infographic — One site, one forum, one shop, one account</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/forum-knowledge-base-social-media.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/forum-classe-article.jpg</image:loc>
+      <image:title>Infographie — La même question, tous les trois mois</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/forum-knowledge-base-social-media.html</loc>
+    <lastmod>2026-10-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/forum-knowledge-base-social-media.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/forum-classe-article-en.jpg</image:loc>
+      <image:title>Infographic — The same question, every three months</image:title>
     </image:image>
   </url>
   <url>
@@ -859,7 +938,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/creation-site-internet-tours.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-tours.html" />
@@ -868,7 +947,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/website-creation-tours.html</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-09-24</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/creation-site-internet-tours.html" />

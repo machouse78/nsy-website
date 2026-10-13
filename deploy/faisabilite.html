@@ -181,11 +181,13 @@
 
       <div class="qz-steps" id="qzSteps" aria-hidden="true">
         <div class="qz-step">Structure</div>
-        <div class="qz-step">Identité &amp; objectifs</div>
-        <div class="qz-step">Site &amp; contenu</div>
-        <div class="qz-step">Charte &amp; fonctionnalités</div>
-        <div class="qz-step">Réseaux &amp; technique</div>
-        <div class="qz-step">RGPD, SEO &amp; GEO</div>
+        <div class="qz-step" data-if="creation refonte">Identité &amp; objectifs</div>
+        <div class="qz-step" data-if="creation refonte">Site &amp; contenu</div>
+        <div class="qz-step" data-if="creation refonte">Charte &amp; fonctionnalités</div>
+        <div class="qz-step" data-if="creation refonte">Réseaux &amp; technique</div>
+        <div class="qz-step" data-if="creation refonte">RGPD, SEO &amp; GEO</div>
+        <div class="qz-step" data-if="motion">Votre vidéo</div>
+        <div class="qz-step" data-if="3d">Votre animation 3D</div>
         <div class="qz-step">Délais &amp; budget</div>
       </div>
       <div class="qz-progress"><div class="qz-progress-bar" id="qzBar"></div></div>
@@ -202,11 +204,13 @@
 
           <div class="qz-sublabel">Votre projet</div>
           <div class="qz-field">
-            <label class="qz-label">S'agit-il d'une création ou d'une refonte ? <span class="qz-req">*</span></label>
-            <p class="qz-hint">La suite du questionnaire s'adapte à votre réponse.</p>
+            <label class="qz-label">Quel est votre projet ? <span class="qz-req">*</span></label>
+            <p class="qz-hint">La suite du questionnaire s'adapte à votre réponse : sept étapes pour un site, un parcours court pour la vidéo et la 3D.</p>
             <div class="qz-radio-group" data-required>
               <label><input type="radio" name="projet_type" value="Création d'un nouveau site" data-mode="creation" /> Création d'un nouveau site</label>
               <label><input type="radio" name="projet_type" value="Refonte d'un site existant" data-mode="refonte" /> Refonte d'un site existant</label>
+              <label><input type="radio" name="projet_type" value="Motion design pour YouTube (intro, générique, vidéo)" data-mode="motion" /> Motion design pour YouTube — intro, générique, vidéo</label>
+              <label><input type="radio" name="projet_type" value="Animation 3D (logo, objet, modèle interactif)" data-mode="3d" /> Animation 3D — logo en volume, objet, modèle interactif</label>
             </div>
           </div>
 
@@ -240,7 +244,7 @@
         </section>
 
         <!-- ÉTAPE 2 -->
-        <section class="qz-section" data-step="2">
+        <section class="qz-section" data-step="2" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">02</span> Identité &amp; objectifs du site</div>
 
           <div class="qz-sublabel">Identité</div>
@@ -322,7 +326,7 @@
         </section>
 
         <!-- ÉTAPE 3 -->
-        <section class="qz-section" data-step="3">
+        <section class="qz-section" data-step="3" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">03</span> <span data-title data-title-creation="Contenu du futur site" data-title-refonte="Site existant &amp; contenu">Site existant &amp; contenu</span></div>
 
           <div class="qz-sublabel" data-if="refonte">Site existant</div>
@@ -418,7 +422,7 @@
         </section>
 
         <!-- ÉTAPE 4 -->
-        <section class="qz-section" data-step="4">
+        <section class="qz-section" data-step="4" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">04</span> Charte graphique &amp; fonctionnalités</div>
 
           <div class="qz-sublabel">Charte graphique</div>
@@ -492,7 +496,7 @@
         </section>
 
         <!-- ÉTAPE 5 -->
-        <section class="qz-section" data-step="5">
+        <section class="qz-section" data-step="5" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">05</span> Réseaux sociaux &amp; technique</div>
 
           <div class="qz-sublabel">Réseaux sociaux</div>
@@ -553,7 +557,7 @@
         </section>
 
         <!-- ÉTAPE 6 -->
-        <section class="qz-section" data-step="6">
+        <section class="qz-section" data-step="6" data-if="creation refonte">
           <div class="qz-section-title"><span class="qz-num">06</span> RGPD, SEO &amp; GEO</div>
 
           <div class="qz-sublabel">RGPD &amp; données</div>
@@ -613,10 +617,106 @@
         </section>
 
         <!-- ÉTAPE 7 -->
-        <section class="qz-section" data-step="7">
-          <div class="qz-section-title"><span class="qz-num">07</span> Délais &amp; budget</div>
+        <!-- ÉTAPE 7 — parcours MOTION DESIGN (seul affiché après l'étape 1 dans ce mode) -->
+        <section class="qz-section" data-step="7" data-if="motion">
+          <div class="qz-section-title"><span class="qz-num">07</span> Votre vidéo</div>
           <div class="qz-field">
-            <label class="qz-label">Avez-vous une date de mise en ligne souhaitée ?</label>
+            <label class="qz-label">Que souhaitez-vous réaliser ? <span class="qz-req">*</span></label>
+            <div class="qz-check-group" data-required>
+              <label><input type="checkbox" name="motion_type" value="Intro de chaîne" /> Intro de chaîne</label>
+              <label><input type="checkbox" name="motion_type" value="Générique ou fin de marque" /> Générique ou fin de marque</label>
+              <label><input type="checkbox" name="motion_type" value="Habillage : titres, bandeaux, cartons" /> Habillage : titres, bandeaux, cartons</label>
+              <label><input type="checkbox" name="motion_type" value="Vidéo de marque ou de présentation" /> Vidéo de marque ou de présentation</label>
+              <label><input type="checkbox" name="motion_type" value="Autre" /> Autre</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Votre chaîne YouTube ou vos réseaux</label>
+            <input type="text" name="motion_chaine" placeholder="https://" />
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Durée visée</label>
+            <div class="qz-radio-group">
+              <label><input type="radio" name="motion_duree" value="5 à 10 secondes" /> 5 à 10 secondes</label>
+              <label><input type="radio" name="motion_duree" value="10 à 20 secondes" /> 10 à 20 secondes</label>
+              <label><input type="radio" name="motion_duree" value="20 à 60 secondes" /> 20 à 60 secondes</label>
+              <label><input type="radio" name="motion_duree" value="1 à 5 minutes" /> 1 à 5 minutes</label>
+              <label><input type="radio" name="motion_duree" value="Plus de 5 minutes" /> Plus de 5 minutes</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Formats souhaités</label>
+            <div class="qz-check-group">
+              <label><input type="checkbox" name="motion_format" value="16:9 (YouTube)" /> 16:9 — YouTube</label>
+              <label><input type="checkbox" name="motion_format" value="9:16 (Shorts, Reels, stories)" /> 9:16 — Shorts, Reels, stories</label>
+              <label><input type="checkbox" name="motion_format" value="4K" /> 4K</label>
+              <label><input type="checkbox" name="motion_format" value="Version transparente (incrustation)" /> Version transparente pour l'incrustation</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Ce dont vous disposez déjà</label>
+            <div class="qz-check-group">
+              <label><input type="checkbox" name="motion_assets" value="Logo vectoriel (SVG, AI, PDF)" /> Logo vectoriel (SVG, AI, PDF)</label>
+              <label><input type="checkbox" name="motion_assets" value="Charte graphique" /> Charte graphique</label>
+              <label><input type="checkbox" name="motion_assets" value="Musique choisie ou composée" /> Musique choisie ou composée</label>
+              <label><input type="checkbox" name="motion_assets" value="Rushes ou vidéos" /> Rushes ou vidéos</label>
+              <label><input type="checkbox" name="motion_assets" value="Textes ou voix off" /> Textes ou voix off</label>
+              <label><input type="checkbox" name="motion_assets" value="Rien pour le moment" /> Rien pour le moment</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Décrivez le résultat attendu</label>
+            <p class="qz-hint">Ambiance, vidéos que vous aimez, ce qu'il faut éviter…</p>
+            <textarea name="motion_description" rows="4"></textarea>
+          </div>
+        </section>
+
+        <!-- ÉTAPE 8 — parcours ANIMATION 3D -->
+        <section class="qz-section" data-step="8" data-if="3d">
+          <div class="qz-section-title"><span class="qz-num">08</span> Votre animation 3D</div>
+          <div class="qz-field">
+            <label class="qz-label">Que souhaitez-vous réaliser ? <span class="qz-req">*</span></label>
+            <div class="qz-check-group" data-required>
+              <label><input type="checkbox" name="anim3d_type" value="Logo en volume" /> Logo en volume</label>
+              <label><input type="checkbox" name="anim3d_type" value="Animation d'un objet ou d'un produit" /> Animation d'un objet ou d'un produit</label>
+              <label><input type="checkbox" name="anim3d_type" value="Modèle 3D interactif pour une page web" /> Modèle 3D interactif pour une page web</label>
+              <label><input type="checkbox" name="anim3d_type" value="Rendus pour un film ou une vidéo" /> Rendus pour un film ou une vidéo</label>
+              <label><input type="checkbox" name="anim3d_type" value="Autre" /> Autre</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Où sera-t-elle diffusée ?</label>
+            <div class="qz-radio-group">
+              <label><input type="radio" name="anim3d_usage" value="Vidéo (YouTube, réseaux)" /> Vidéo — YouTube, réseaux</label>
+              <label><input type="radio" name="anim3d_usage" value="Page web (modèle interactif)" /> Page web — modèle interactif</label>
+              <label><input type="radio" name="anim3d_usage" value="Les deux" /> Les deux</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Ce dont vous disposez déjà</label>
+            <div class="qz-check-group">
+              <label><input type="checkbox" name="anim3d_assets" value="Logo vectoriel (SVG, AI, PDF)" /> Logo vectoriel (SVG, AI, PDF)</label>
+              <label><input type="checkbox" name="anim3d_assets" value="Plans, photos ou fichiers 3D de l'objet (STEP, OBJ, FBX, GLB)" /> Plans, photos ou fichiers 3D de l'objet (STEP, OBJ, FBX, GLB)</label>
+              <label><input type="checkbox" name="anim3d_assets" value="Charte graphique" /> Charte graphique</label>
+              <label><input type="checkbox" name="anim3d_assets" value="Rien pour le moment" /> Rien pour le moment</label>
+            </div>
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Durée ou nombre de plans envisagés</label>
+            <input type="text" name="anim3d_duree" placeholder="Ex : 8 secondes, ou 3 plans" />
+          </div>
+          <div class="qz-field">
+            <label class="qz-label">Décrivez le résultat attendu</label>
+            <p class="qz-hint">Matières (métal brossé, verre, peinture…), ambiance, références…</p>
+            <textarea name="anim3d_description" rows="4"></textarea>
+          </div>
+        </section>
+
+        <!-- ÉTAPE 9 — commune à tous les parcours -->
+        <section class="qz-section" data-step="9">
+          <div class="qz-section-title"><span class="qz-num">09</span> Délais &amp; budget</div>
+          <div class="qz-field">
+            <label class="qz-label">Avez-vous une date de mise en ligne ou de publication souhaitée ?</label>
             <input type="text" name="date_mise_en_ligne" placeholder="Ex : fin septembre 2026" />
           </div>
           <div class="qz-field">
@@ -645,7 +745,7 @@
               <label><input type="radio" name="budget" value="Je ne sais pas encore — je souhaite d'abord recevoir un estimatif" /> Je ne sais pas encore — je souhaite d'abord recevoir un estimatif</label>
             </div>
           </div>
-          <div class="qz-field">
+          <div class="qz-field" data-if="creation refonte">
             <label class="qz-label">Souhaitez-vous la livraison d'un mémento récapitulatif du site ?</label>
             <p class="qz-hint">Le mémento reprend les grandes lignes : arborescence, charte graphique, fonctionnalités, accès back-office…</p>
             <div class="qz-radio-group">
@@ -694,7 +794,7 @@
           </div>
         </div>
         <p style="margin-top: 20px; max-width: 320px; font-size: 14px;">
-          Cabinet de conseil technique indépendant. Architecture, expertise et création web propulsée par l'IA.
+          Cabinet de conseil technique indépendant. Architecture, expertise et services IA : sites internet, motion design, animation 3D.
         </p>
       </div>
       <div class="foot-col">
@@ -704,7 +804,7 @@
         <a href="realisations.html">Réalisations</a>
         <a href="a-propos.html">À propos</a>
         <a href="pourquoi-nsy.html">Pourquoi NSY ?</a>
-        <a href="conception-3d.html">Conception 3D</a>
+        <a href="conception-3d.html">Animation 3D</a>
         <a href="faq.html">FAQ</a>
         <a href="blog.html">Journal</a>
         <a href="contact.html">Contact</a>
@@ -717,8 +817,9 @@
         <a href="expertise-kafka-messagerie.html">Kafka · Messagerie</a>
         <a href="conformite-dora.html">Conformité DORA</a>
         <a href="integration-claude-entreprise.html">Intégration Claude</a>
-        <a href="creation-site-ia.html">Création de site IA</a>
+        <a href="creation-site-ia.html">Site internet IA</a>
         <a href="refonte-site-internet.html">Refonte de site</a>
+        <a href="motion-design-youtube.html">Motion design YouTube</a>
         <a href="glossaire-ia-web.html">Glossaire IA & web</a>
       </div>
       <div class="foot-col">

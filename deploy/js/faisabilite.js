@@ -30,7 +30,11 @@
   };
 
   const sections = [...form.querySelectorAll('.qz-section')];
-  const TOTAL = sections.length;
+  // Quatre parcours depuis le 13/10/2026 (création · refonte · motion · 3d) : une
+  // section porteuse de data-if ne compte que dans ses modes. « current » est
+  // l'index (1-based) dans la liste des sections VISIBLES, jamais data-step.
+  const visible = () => sections.filter((s) => !s.hidden);
+  let TOTAL = sections.length;
   let current = 1;
 
   const bar = document.getElementById('qzBar');
@@ -70,7 +74,7 @@
     if (!isError) setTimeout(() => toast.classList.add('hidden'), 4500);
   };
 
-  const activeSection = () => sections.find((s) => +s.dataset.step === current);
+  const activeSection = () => visible()[current - 1];
 
   // ───── Création ou refonte : le questionnaire s'adapte au choix ─────
   // Les blocs porteurs de data-if="refonte" (ou "creation") ne s'affichent que
@@ -80,10 +84,25 @@
   const hiddenNode = (el) => !!el.closest('[data-if][hidden]');
   const modeInputs = [...form.querySelectorAll('input[name="projet_type"]')];
   const mode = () => (modeInputs.find((i) => i.checked) || {}).dataset?.mode || '';
+  // ?projet=creation|refonte|motion|3d (liens des pages d'offre) préselectionne le parcours.
+  const wanted = new URLSearchParams(window.location.search).get('projet');
+  if (wanted) { const r = modeInputs.find((i) => i.dataset.mode === wanted); if (r) r.checked = true; }
+  // data-if accepte une liste de modes (« creation refonte »).
+  const allows = (el, m) => el.dataset.if.split(/\s+/).includes(m);
 
   function applyMode() {
     const m = mode();
-    form.querySelectorAll('[data-if]').forEach((el) => { el.hidden = el.dataset.if !== m; });
+    // Tant qu'aucun parcours n'est choisi, les ÉTAPES du parcours web restent comptées
+    // (sept étapes affichées, comme avant) ; les sous-blocs (ex. refonte) restent masqués.
+    const mSteps = m || 'creation';
+    form.querySelectorAll('[data-if]').forEach((el) => {
+      el.hidden = !allows(el, el.classList.contains('qz-section') ? mSteps : m);
+    });
+    document.querySelectorAll('#qzSteps .qz-step[data-if]').forEach((el) => { el.hidden = !allows(el, mSteps); });
+    // Numéros d'étape recalculés sur les sections visibles (01, 02, …).
+    visible().forEach((s, i) => { const n = s.querySelector('.qz-num'); if (n) n.textContent = String(i + 1).padStart(2, '0'); });
+    TOTAL = visible().length;
+    if (current > TOTAL) current = TOTAL;
     form.querySelectorAll('[data-title]').forEach((el) => {
       const t = el.dataset['title' + (m === 'refonte' ? 'Refonte' : 'Creation')];
       if (t) el.textContent = t;
@@ -94,13 +113,14 @@
     const dst = form.querySelector('input[name="url_actuel"]');
     if (m === 'refonte' && src && dst && !dst.value.trim()) dst.value = src.value.trim();
   }
-  modeInputs.forEach((i) => i.addEventListener('change', applyMode));
+  modeInputs.forEach((i) => i.addEventListener('change', () => { applyMode(); update(); }));
   applyMode();
 
   function update() {
-    sections.forEach((s) => s.classList.toggle('active', +s.dataset.step === current));
-    // Stepper labels above the bar: mark past steps "done", the current "active".
-    document.querySelectorAll('#qzSteps .qz-step').forEach((el, i) => {
+    const vis = visible();
+    sections.forEach((s) => s.classList.toggle('active', vis[current - 1] === s));
+    // Stepper labels above the bar (visible ones only): past steps "done", the current "active".
+    [...document.querySelectorAll('#qzSteps .qz-step')].filter((el) => !el.hidden).forEach((el, i) => {
       el.classList.toggle('done', i + 1 < current);
       el.classList.toggle('active', i + 1 === current);
     });
@@ -161,6 +181,7 @@
   function collect() {
     const out = [];
     sections.forEach((sec) => {
+      if (sec.hidden) return; // section d'un autre parcours : rien de ses champs ne part
       const title = clean(sec.querySelector('.qz-section-title') ? sec.querySelector('.qz-section-title').textContent : '');
       const items = [];
       let sub = null;
