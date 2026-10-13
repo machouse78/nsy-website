@@ -113,8 +113,8 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   main faute d'API ouverte, avec les liens de sollicitation ; aucune donnée
   nominative : ni auteur ni texte, seulement des comptes), **rubriques Dépôt GitHub** (consultations, clones, pages et
   référents du code public) et **Chaîne YouTube** (vues, abonnés, vidéos —
-  l'API ne publiant que des cumuls, les gains sont calculés d'une collecte à
-  l'autre), toutes deux **facultatives** : sans clé, la rubrique et son onglet
+  l'API ne publiant que des cumuls, la courbe trace les vues et abonnés CUMULÉS
+  et les cartes le gain de la période, calculé d'une collecte à l'autre — 13/10/2026), toutes deux **facultatives** : sans clé, la rubrique et son onglet
   disparaissent. **Stories** Facebook et Instagram (04/09/2026) : une story ne vit que
   24 h dans l'API, le collecteur tient un carnet (`_secret/kpi-stories.json`, maximum
   des mesures) alimenté la nuit ET par le mode `?key=…&stories=1` à programmer toutes
