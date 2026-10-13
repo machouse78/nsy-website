@@ -648,12 +648,12 @@
       cues: ['disponib','dispo','quand','delai','commenc','demarr','libre','planning','agenda','prochaine',
               'available','availability','when','start','lead time','booked','timeline'],
       fr: [
-        `La disponibilité s'évalue au moment de la demande : NSY travaille avec <b>trois clients en parallèle maximum</b>, pour tenir un niveau d'exigence non négociable. Décrivez votre échéance via le formulaire — réponse sous 48 h ouvrées.`,
-        `Le créneau est volontairement limité (3 clients max en simultané). Si votre projet a une échéance, indiquez-la dans le formulaire : la faisabilité calendaire fait partie de la réponse.`
+        `La disponibilité s'évalue au moment de la demande : une mission n'est acceptée que si le planning permet de la tenir, pour garder un niveau d'exigence non négociable. Décrivez votre échéance via le formulaire — réponse sous 48 h ouvrées.`,
+        `Si votre projet a une échéance, indiquez-la dans le formulaire : la faisabilité calendaire fait partie de la réponse, sous 48 h ouvrées.`
       ],
       en: [
-        `Availability is assessed per request: NSY works with <b>three clients in parallel at most</b>, to hold a non-negotiable quality bar. Describe your timeline through the form — reply within 48 business hours.`,
-        `Capacity is deliberately limited (3 clients max at once). If your project has a deadline, mention it in the form: scheduling feasibility is part of the reply.`
+        `Availability is assessed per request: an engagement is only taken on when the schedule can hold it, to keep a non-negotiable quality bar. Describe your timeline through the form — reply within 48 business hours.`,
+        `If your project has a deadline, mention it in the form: scheduling feasibility is part of the reply, within 48 business hours.`
       ]
     },
     {
@@ -809,12 +809,12 @@
       cues: ['pourquoi','difference','differenc','avantage','valeur ajoutee','plutot que','vs','versus',
               'why nsy','why you','why choose','what makes'],
       fr: [
-        `Trois principes : <b>sans pyramide</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>trois clients max</b> — pour rester vraiment disponible. De l'ingénierie senior, en direct, sans surcouche commerciale.`,
-        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod (pas d'intermédiaire), une parole franche sur la faisabilité, et un nombre de clients volontairement limité. Vous parlez à celui qui construit, pas à un commercial.`
+        `Trois principes : <b>sans pyramide</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>disponibilité réelle</b> — une mission n'est acceptée que si le planning permet de la tenir. De l'ingénierie senior, en direct, sans surcouche commerciale.`,
+        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod (pas d'intermédiaire), une parole franche sur la faisabilité, et une disponibilité qui se vérifie à chaque demande. Vous parlez à celui qui construit, pas à un commercial.`
       ],
       en: [
-        `Three principles: <b>no pyramid</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>three clients max</b> — to stay genuinely available. Senior engineering, direct, with no commercial layer.`,
-        `What sets NSY apart: a single senior point of contact from scoping to production (no middleman), a straight word on feasibility, and a deliberately limited client count. You talk to the person who builds, not a salesperson.`
+        `Three principles: <b>no pyramid</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>real availability</b> — an engagement is only taken on when the schedule can hold it. Senior engineering, direct, with no commercial layer.`,
+        `What sets NSY apart: a single senior point of contact from scoping to production (no middleman), a straight word on feasibility, and availability checked at every request. You talk to the person who builds, not a salesperson.`
       ]
     },
     {

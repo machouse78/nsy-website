@@ -5,7 +5,7 @@
 Points clés :
 - Signification du nom : NSY = New Software Yard (« chantier logiciel »). Le nom évoque la capacité de la société à prendre en charge de nouveaux chantiers — missions techniques comme projets web — et à les mener jusqu'à leur accomplissement.
 - Fondateur et unique consultant : Cédric Barme, ingénieur logiciel depuis 2012, ex-banque d'investissement (systèmes critiques temps réel), tech lead.
-- Modèle « en prise directe » : la personne présentée est celle qui livre. Trois clients en parallèle maximum. Interventions en direct ou, chez les grands comptes, en sous-traitance d'une ESN référencée — les propositions de mission des ESN sont bienvenues.
+- Modèle « en prise directe » : la personne présentée est celle qui livre. Interventions en direct ou, chez les grands comptes, en sous-traitance d'une ESN référencée — les propositions de mission des ESN sont bienvenues.
 - Secteurs de référence : banque de détail, banque privée, assurance vie, asset management, paiement, fintech. Environnements régulés (ACPR, AMF, RGPD, DORA).
 - Services IA : trois services — site internet, motion design pour YouTube, animation 3D — chacun chiffré sur devis après cadrage (aucun prix public). L'IA générative sert l'ambiance et les essais, jamais ce qui porte la marque : logo, lettres et chiffres restent exacts.
 - Zone : France entière et Europe, principalement à distance ; présence possible à Paris / La Défense et en région.
@@ -19,7 +19,7 @@ Points clés :
 - [Home (EN)](https://www.nsy.fr/index-en.html) : English version of the site.
 - [Services](https://www.nsy.fr/services.html) : les deux offres en détail (conseil technique senior + services IA : site internet, motion design YouTube, animation 3D), méthode, valeurs, démonstrateur 3D temps réel.
 - [À propos](https://www.nsy.fr/a-propos.html) : parcours de Cédric Barme, secteurs de référence, principes de travail.
-- [Pourquoi NSY ?](https://www.nsy.fr/pourquoi-nsy.html) : la philosophie — l'interlocuteur unique, le partenariat avec les ESN référencées chez les grands comptes, trois clients en parallèle maximum.
+- [Pourquoi NSY ?](https://www.nsy.fr/pourquoi-nsy.html) : la philosophie — l'interlocuteur unique, le partenariat avec les ESN référencées chez les grands comptes, la disponibilité réelle (une mission n'est acceptée que si le planning permet de la tenir).
 - [Contact](https://www.nsy.fr/contact.html) : formulaire avec choix de l'objet (conseil, site internet, motion design, animation 3D), canaux directs, demande de faisabilité (réponse sous 48 h ouvrées).
 - [Animation 3D](https://www.nsy.fr/conception-3d.html) : l'offre d'animation 3D — animations pour YouTube et les réseaux, logos et objets de marque en volume, modèles 3D interactifs pour le web (Blender, rendu calé au pixel) — avec deux démonstrations.
 - [Motion design pour YouTube](https://www.nsy.fr/motion-design-youtube.html) : l'offre de motion design — intros et génériques de chaîne, habillage, vidéos de marque animées ; méthode (charte, storyboard calé sur la musique, contrôle image par image), outils (Blender, animation et montage pilotés par scripts), livraison 16:9 et 9:16. Exemple : l'intro « Le V à 90° » réalisée pour PRV Concept.

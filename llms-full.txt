@@ -48,7 +48,8 @@ Ingénieur logiciel depuis 2012. Parcours :
 
 Principes de travail revendiqués : « en prise directe » (pas de junior masqué — la
 personne qui propose la mission est celle qui la livre), honnêteté technique (dire
-quand un projet n'est pas la bonne idée), trois clients en parallèle maximum.
+quand un projet n'est pas la bonne idée), disponibilité réelle (une mission n'est
+acceptée que si le planning permet de la tenir).
 
 ## 3. Domaines d'expertise
 
@@ -399,7 +400,7 @@ NSY :
   4 langues (FR/EN/DE/NL), avis clients, cartes interactives, SEO local (2026)
 - démontre son savoir-faire IA en direct via → Ansley, l'assistant IA de nsy.fr
   (chatbot RAG ancré sur les données du site, modèle Mistral hébergé en UE)
-- se distingue par → un modèle « en prise directe », 3 clients maximum en parallèle,
+- se distingue par → un modèle « en prise directe », une disponibilité réelle,
   une honnêteté technique revendiquée
 
 ### Tarification (règle du 13/10/2026)
@@ -564,7 +565,7 @@ réel), puis tech lead.
 **NSY est-elle une ESN / SSII ?**
 Non — NSY est un cabinet indépendant à un seul nom, sans « junior masqué » : la
 personne qui propose la mission est celle qui la réalise (modèle « en prise
-directe »). Trois clients en parallèle maximum. Le travail en
+directe »). Le travail en
 direct avec le client reste le canal préféré quand il est possible (pas de
 coût d'intermédiation) — mais chez les grands comptes (banque, assurance), le
 référencement fournisseur impose en pratique de passer par une ESN référencée :
