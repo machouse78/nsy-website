@@ -75,7 +75,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 - **Language switch**: 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. The target is the **flag's real link** (written by `scripts/sync-partials.mjs` from each page's hreflang), then the page's `<link rel="alternate" hreflang>`, and only as a last resort the slug table in `js/app.js` (05/10/2026: the table alone was missing seven pairs and the flag stayed put).
 - **Auto-detection** : on `/` (no cookie), `.htaccess` reads `Accept-Language` and 302-redirects to `/index-en.html` if the browser is in English. The user's choice (cookie) then takes precedence.
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 64 pages, self-referencing canonicals.
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 70 pages, self-referencing canonicals.
 - **`nsy_lang` cookie** : the only functional cookie, set on explicit action (flag click) — consent-exempt (CNIL deliberation 2020-091). Documented on the legal pages.
 
 > ⚠️ **A language change applies to the WHOLE site, at every layer** — not just the visible text. Remember: the visible HTML (FR + EN), the **JS-injected UI strings** (form button states and toasts in `js/app.js`, driven by `pageLang`), the **server responses + the email** (`contact.php`, driven by the hidden `lang` field), the **hidden `lang` field on every form**, the meta/OG/JSON-LD, the legal pages, the sitemap and the chatbot. The contact form is bilingual end to end (front + server errors + auto-reply email).
@@ -110,13 +110,13 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 - **Hero video** : `nsy-hero.mp4` with `object-fit: cover`, masked inside the **large outer circle**, floating ASCII terminals — animated NSY monogram at the heart of an energy orb (cyan finance network + orange AI mesh)
 - **Service cards** : on hover, the PNG image cross-fades to an MP4 video; back to `currentTime = 0` on mouseleave
 - **CTA banner** : 2 radial gradients (cyan + orange) that follow the mouse via `--mx` / `--my`, easing back (550 ms) thanks to `@property`
-- **3D Design** — dedicated page `conception-3d.html` / `3d-design.html` (section `#creations`), plus a **model preview** at the bottom of the Services page:
+- **3D animation** — offer page `conception-3d.html` / `3d-design.html` (historic URL kept; section `#creations`): what NSY delivers (animations for YouTube, logos and objects in volume, interactive models), then two demos; plus a **model preview** at the bottom of the Services page:
   - **YouTube video** from NSY's channel, embedded via `youtube-nocookie.com` (no cookie before playback)
   - **Interactive wireframe model** of a 1992 Renault R25 Baccara (`<model-viewer>`) — neon cyan wireframe render, auto-rotate + mouse/touch drag; **×2 supersampling on non-Retina screens** (crisp lines at DPR 1) and a "Drag to rotate" pill auto-hidden after the first interaction
-  - Dedicated page in **2 columns** on desktop (enlarged video left, wireframe right), **stacked** on mobile (≤ 920 px); the Services preview shows only the model (`loading="lazy"`) with an "Explore 3D Design" link
+  - Dedicated page in **2 columns** on desktop (enlarged video left, wireframe right), **stacked** on mobile (≤ 920 px); the Services preview shows only the model (`loading="lazy"`) with an "Explore 3D animation" link
 - **Conversational AI assistant** — free Mistral LLM (EU) grounded in the site's content (RAG), API-less local fallback (see below)
-- **Contact form** : service choice, start horizon, free-text message → handled by `contact.php` (real send + auto-reply)
-- **Feasibility questionnaire** (`faisabilite.html` / `feasibility.html`) : a **7-step** wizard (~80 fields) in the site's theme, reachable from the Contact section. Submission mirrors the contact form → `faisabilite.php` (same SMTP / Turnstile / anti-bot, admin email + auto-reply in the same style). Labels live in the HTML (FR/EN); the JS serialises them into a structured payload rendered generically by PHP, so FR / EN / email never drift
+- **Contact form** : subject of the request (`<select name="service">`: consulting · website · motion design · 3D animation · other, preselectable with `?service=`), start horizon, free-text message → handled by `contact.php` (real send + auto-reply, FR/EN labels)
+- **Feasibility questionnaire** (`faisabilite.html` / `feasibility.html`) : a **four-path** wizard (new build · redesign · motion design · 3D animation: seven steps for a website, three for video and 3D; sections flagged with `data-if`, visible steps renumbered by `js/faisabilite.js`, `?projet=` preselects) in the site's theme, reachable from the Contact section. Submission mirrors the contact form → `faisabilite.php` (same SMTP / Turnstile / anti-bot, admin email + auto-reply in the same style). Labels live in the HTML (FR/EN); the JS serialises them into a structured payload rendered generically by PHP, so FR / EN / email never drift
 
 ### AI assistant — free LLM + RAG, local fallback
 
@@ -185,9 +185,9 @@ A "cyber" site with videos, real-time 3D and animations can heat up the CPU/GPU 
 - **Videos** : a `<video loop>` re-decodes every frame continuously (there is no "decoded frame cache"). An `IntersectionObserver` (`js/app.js`) **pauses each looping video when it leaves the screen** and resumes it on return; a `visibilitychange` listener **pauses everything when the tab is hidden**. On load, only visible videos decode.
 - **Hero video** (`nsy-hero.mp4`) : AI-generated (Higgsfield, image-to-video from the NSY logo), square **960×960**, **no audio track**, recompressed to **0.60 MB**. **Fade-to-transparent loop**: the element opacity is animated from `currentTime` (`js/app.js`) — fade-in at the start, fade-out at the end — so at the seam the video dissolves into the blue disc behind (no alpha-channel video). Paused off-screen like the other videos.
 - **Portrait (About)**: a **still image** (`photo-profil.jpg`, 4K-upscaled then brought back down to 1600×1200 — it doubles as the JSON-LD image). An AI-generated animated background replaced it for a month in the summer of 2026; it was **removed** — a looping video behind a portrait costs continuous decoding for a debatable gain, and the result did not convince. The profile card is a plain `<img>`.
-- **Overlays pinned to their own GPU layer**: `.nav`, the greeter bubble, the FAB and the chat panel carry `will-change: transform`. On pages that embed a YouTube player (Work, 3D Design), the iframe is a surface composited by **another process**; as it slid under those overlays while scrolling, Chrome kept re-deciding layer promotion and let **one frame in thirty** through with no painted background — the bar and the assistant appeared to blink together. Diagnosed frame by frame from a video of the screen (automated screenshots do not reproduce the artefact).
+- **Overlays pinned to their own GPU layer**: `.nav`, the greeter bubble, the FAB and the chat panel carry `will-change: transform`. On pages that embed a YouTube player (Work, 3D animation), the iframe is a surface composited by **another process**; as it slid under those overlays while scrolling, Chrome kept re-deciding layer promotion and let **one frame in thirty** through with no painted background — the bar and the assistant appeared to blink together. Diagnosed frame by frame from a video of the screen (automated screenshots do not reproduce the artefact).
 - **CSS animations** : the `.anim-paused` class, placed on a section via `IntersectionObserver` when it leaves the viewport, freezes all its animations (`animation-play-state: paused`, pseudo-elements included); removed when the section comes back.
-- **3D model** : `<model-viewer>` already pauses WebGL rendering off-screen; we additionally stop `auto-rotate` when the 3D Design section isn't visible. The ×2 supersampling (sharpness) only applies to DPR 1 screens, so it costs nothing on mobile/Retina.
+- **3D model** : `<model-viewer>` already pauses WebGL rendering off-screen; we additionally stop `auto-rotate` when the 3D animation section isn't visible. The ×2 supersampling (sharpness) only applies to DPR 1 screens, so it costs nothing on mobile/Retina.
 - **JS animations** (hero parallax, counters, reading gauge) : `requestAnimationFrame` loops that **stop by themselves at rest** (converged lerp, finished counter) — no infinite loops; all cut by `prefers-reduced-motion`.
 - **Cache** : `.htaccess` sets `Cache-Control: max-age` (1 month for media) — avoids **re-downloading** (but not re-decoding, hence the pausing above).
 
@@ -198,14 +198,15 @@ Measured effect: steady-state video decoding at load drops from about **94 → 1
 ```
 nsy-website/
 ├── index.html / index-en.html          # Home (landing) FR / EN
-├── services.html / services-en.html     # Services: 2 offerings + method + 3D preview FR / EN
+├── services.html / services-en.html     # Services: consulting + AI services (3 linked offers) + method + 3D preview FR / EN
 ├── a-propos.html / about.html           # About: Cédric Barme's profile FR / EN
 ├── pourquoi-nsy.html / why-nsy.html     # Why NSY?: the philosophy (single contact, ESN partnerships) FR / EN
 ├── contact.html / contact-en.html       # Contact: PHP form + direct channels FR / EN
-├── conception-3d.html / 3d-design.html  # 3D Design: wireframe model + YouTube animation FR / EN
+├── conception-3d.html / 3d-design.html  # 3D animation offer: what NSY delivers + demos (wireframe, Short) FR / EN
+├── motion-design-youtube.html / youtube-motion-design.html  # Motion design for YouTube offer FR / EN
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
-├── faisabilite.html / feasibility.html  # Feasibility questionnaire (7-step wizard) FR / EN
+├── faisabilite.html / feasibility.html  # Feasibility questionnaire (4 paths) FR / EN
 ├── realisations.html / portfolio.html   # Client work (animated previews)
 ├── blog.html / blog-en.html             # Journal / Insights: article index FR / EN
 ├── seo-geo-etre-cite-par-les-ia.html    # 1st article: SEO vs GEO (EN: seo-geo-getting-cited-by-ai.html)
@@ -236,7 +237,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Top menu ({{P}} token = anchor base path)
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
-│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 64 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 71 pages (npm run partials)
 │   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
 │   ├── indexnow-ping.mjs                # IndexNow ping after deploys
 │   ├── partage-page.py                  # ⭐ Builds /stats/partage.html — every article × group registry
@@ -370,8 +371,8 @@ until you run it.
 
 ## SEO, GEO & social sharing
 
-- **Sitemap** : 64 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, journal illustration), with `xhtml:link` hreflang
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 64 pages
+- **Sitemap** : 70 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, YouTube players of the intros as `player_loc`, journal illustration), with `xhtml:link` hreflang
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 70 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
 - **Structured-data compliance** (3 Search Console alerts resolved in Aug 2026): every **required** field of a rich-result type carries the **inlined typed node** (same `@id`) — `ProfilePage.mainEntity`, but also `author` and `publisher` on articles, dates (`dateModified`, `datePublished`) are **full ISO 8601 with timezone**, and every `<video>` has a `poster=` plus its `video:video` block under **every** page that displays it. Causes, fixes and audit method: `seo-geo-llmo` skill §5

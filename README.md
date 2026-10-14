@@ -75,7 +75,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. La cible est le **lien réel du drapeau** (écrit par `scripts/sync-partials.mjs` depuis le hreflang de chaque page), sinon le `<link rel="alternate" hreflang>`, et en dernier recours la table de slugs de `js/app.js` (vécu 05/10/2026 : la table seule oubliait sept paires, le drapeau laissait sur place).
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 66 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 70 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -145,13 +145,13 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 - **Vidéo hero** : `nsy-hero.mp4` en `object-fit: cover`, masquée dans le **grand cercle** extérieur, terminaux ASCII flottants — monogramme NSY animé au cœur d'un orbe énergétique (réseau finance cyan + maillage IA orange)
 - **Cards services** : au survol, l'image PNG cross-fade vers une vidéo MP4 ; retour à `currentTime = 0` au mouseleave
 - **CTA banner** : 2 dégradés radiaux (cyan + orange) qui suivent la souris via `--mx` / `--my`, retour en douceur (550 ms) grâce à `@property`
-- **Conception 3D** — page dédiée `conception-3d.html` / `3d-design.html` (section `#creations`), plus un **aperçu du modèle** en bas de la page Services :
+- **Animation 3D** — page d'offre `conception-3d.html` / `3d-design.html` (adresse historique conservée ; section `#creations`) : ce que NSY réalise (animations pour YouTube, logos et objets en volume, modèles interactifs), puis deux démonstrations ; plus un **aperçu du modèle** en bas de la page Services :
   - **Vidéo YouTube** de la chaîne NSY, intégrée via `youtube-nocookie.com` (aucun cookie avant lecture)
   - **Modèle wireframe interactif** d'une Renault R25 Baccara 1992 (`<model-viewer>`) — rendu filaire cyan néon, rotation auto + drag souris/tactile ; **supersampling ×2 sur écrans non-Retina** (lignes lisses en DPR 1) et pastille « Faites pivoter » auto-masquée après la première manipulation
-  - Page dédiée en **2 colonnes** desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px) ; l'aperçu Services ne montre que le modèle (`loading="lazy"`) avec un lien « Découvrir la Conception 3D »
+  - Page dédiée en **2 colonnes** desktop (vidéo agrandie à gauche, wireframe à droite), **empilée** sur mobile (≤ 920 px) ; l'aperçu Services ne montre que le modèle (`loading="lazy"`) avec un lien « Découvrir l'animation 3D »
 - **Assistant IA conversationnel** — LLM Mistral (gratuit, UE) ancré dans les contenus du site (RAG), repli local sans API (voir ci-dessous)
-- **Formulaire contact** : choix du service, horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse)
-- **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard **7 étapes** (~80 champs) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
+- **Formulaire contact** : objet de la demande (`<select name="service">` : conseil · site internet · motion design · animation 3D · autre, préselectionnable par `?service=`), horizon de démarrage, message libre → traité par `contact.php` (envoi réel + auto-réponse, libellés FR/EN)
+- **Questionnaire de faisabilité** (`faisabilite.html` / `feasibility.html`) : wizard à **quatre parcours** (création · refonte · motion design · animation 3D : sept étapes pour un site, trois pour la vidéo et la 3D ; sections marquées `data-if`, étapes visibles renumérotées par `js/faisabilite.js`, `?projet=` préselectionne) au thème du site, accessible depuis la section Contact. Soumission identique au formulaire de contact → `faisabilite.php` (mêmes SMTP / Turnstile / anti-bot, email admin + auto-réponse au même style). Les libellés vivent dans le HTML (FR/EN) ; le JS les sérialise en un payload structuré rendu génériquement par le PHP, donc FR / EN / email ne divergent jamais
 
 ### Assistant IA « Ansley » — LLM gratuit + RAG, repli local
 
@@ -250,9 +250,9 @@ Un site « cyber » avec vidéos, 3D temps réel et animations peut vite faire c
 - **Vidéos** : une `<video loop>` re-décode chaque image en continu (aucun « cache de frames décodées »). Un `IntersectionObserver` (`js/app.js`) met chaque vidéo en boucle **en pause quand elle quitte l'écran** et la relance à son retour ; un écouteur `visibilitychange` met **tout en pause quand l'onglet est masqué**. Au chargement, seules les vidéos visibles décodent.
 - **Vidéo hero** (`nsy-hero.mp4`) : générée via IA (Higgsfield, image→vidéo à partir du logo NSY), carrée **960×960**, **sans piste audio**, recompressée à **0,60 Mo**. **Boucle en fondu vers transparent** : l'opacité est animée selon `currentTime` (`js/app.js`) — fade-in au début, fade-out en fin — donc au raccord la vidéo se dissout vers le disque bleu derrière (pas de vidéo à canal alpha). Mise en pause hors-écran comme les autres vidéos.
 - **Portrait (À propos)** : une **image fixe** (`photo-profil.jpg`, upscalée en 4K puis redescendue à 1600×1200 — elle sert aussi d'image au JSON-LD). Un fond animé généré par IA l'a remplacée un mois durant l'été 2026 ; il a été **retiré** — une vidéo en boucle derrière un portrait coûte du décodage permanent pour un gain discutable, et le rendu ne convainquait pas. La carte profil est donc un simple `<img>`.
-- **Overlays épinglés en couche GPU** : `.nav`, la bulle d'accueil, le FAB et le panneau du chat portent `will-change: transform`. Sur les pages qui intègrent un lecteur YouTube (Réalisations, Conception 3D), l'iframe est une surface composée par un **autre processus** ; quand elle glissait sous ces overlays au défilement, Chrome recalculait sans cesse la promotion des couches et laissait passer **une image sur trente sans fond peint** — la barre et l'assistant semblaient clignoter ensemble. Diagnostic établi image par image sur une vidéo de l'écran (les captures automatisées, elles, ne reproduisent pas l'artefact).
+- **Overlays épinglés en couche GPU** : `.nav`, la bulle d'accueil, le FAB et le panneau du chat portent `will-change: transform`. Sur les pages qui intègrent un lecteur YouTube (Réalisations, Animation 3D), l'iframe est une surface composée par un **autre processus** ; quand elle glissait sous ces overlays au défilement, Chrome recalculait sans cesse la promotion des couches et laissait passer **une image sur trente sans fond peint** — la barre et l'assistant semblaient clignoter ensemble. Diagnostic établi image par image sur une vidéo de l'écran (les captures automatisées, elles, ne reproduisent pas l'artefact).
 - **Animations CSS** : la classe `.anim-paused`, posée sur une section via `IntersectionObserver` quand elle sort du champ, fige toutes ses animations (`animation-play-state: paused`, pseudo-éléments compris) ; retirée quand la section revient.
-- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Conception 3D n'est pas visible. Le supersampling ×2 (netteté) ne s'applique qu'aux écrans DPR 1 et ne coûte donc rien sur mobile/Retina.
+- **Modèle 3D** : `<model-viewer>` met déjà en pause le rendu WebGL hors écran ; on coupe en plus l'`auto-rotate` quand la section Animation 3D n'est pas visible. Le supersampling ×2 (netteté) ne s'applique qu'aux écrans DPR 1 et ne coûte donc rien sur mobile/Retina.
 - **Animations JS** (parallaxe hero, compteurs, jauge de lecture) : boucles `requestAnimationFrame` qui **s'arrêtent d'elles-mêmes au repos** (lerp convergé, compteur fini) — aucune boucle infinie ; tout est coupé par `prefers-reduced-motion`.
 - **Cache** : `.htaccess` pose `Cache-Control: max-age` (1 mois médias) — évite le **re-téléchargement** (mais pas le re-décodage, d'où la mise en pause ci-dessus).
 
@@ -267,14 +267,15 @@ Effet mesuré : le décodage vidéo en régime permanent au chargement passe d'e
 ```
 nsy-website/
 ├── index.html / index-en.html          # Accueil (landing) FR / EN
-├── services.html / services-en.html     # Services : 2 offres + méthode + aperçu 3D FR / EN
+├── services.html / services-en.html     # Services : conseil + services IA (3 offres liées) + méthode + aperçu 3D FR / EN
 ├── a-propos.html / about.html           # À propos : profil de Cédric Barme FR / EN
 ├── pourquoi-nsy.html / why-nsy.html     # Pourquoi NSY ? : la philosophie (interlocuteur unique, partenariat ESN) FR / EN
 ├── contact.html / contact-en.html       # Contact : formulaire PHP + canaux directs FR / EN
-├── conception-3d.html / 3d-design.html  # Conception 3D : modèle wireframe + animation YouTube FR / EN
+├── conception-3d.html / 3d-design.html  # Offre Animation 3D : ce que NSY réalise + démos (maillage, Short) FR / EN
+├── motion-design-youtube.html / youtube-motion-design.html  # Offre Motion design pour YouTube FR / EN
 ├── mentions-legales.html / legal-notice.html
 ├── confidentialite.html / privacy.html
-├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (wizard 7 étapes) FR / EN
+├── faisabilite.html / feasibility.html  # Questionnaire de faisabilité (4 parcours) FR / EN
 ├── realisations.html / portfolio.html   # Réalisations clients (vignettes auto-capturées)
 ├── faq.html / faq-en.html               # FAQ GEO/LLMO : 52 Q/R bilingues + FAQPage JSON-LD
 ├── (8 paires de pages piliers GEO)      # Une expertise par URL, FR ↔ EN (cf. table des slugs) :
@@ -528,8 +529,8 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 66 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, illustration du journal), avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 66 pages
+- **Sitemap** : 70 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, lecteurs YouTube des intros en `player_loc`, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 70 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Conformité des données structurées** (3 alertes Search Console résolues en août 2026) : tout champ **requis** d'un type à résultat enrichi contient le **nœud typé inliné** (avec le même `@id`) — `ProfilePage.mainEntity`, mais aussi `author` et `publisher` des articles, les dates (`dateModified`, `datePublished`) sont en **ISO 8601 complet avec fuseau**, et chaque `<video>` porte un `poster=` avec son bloc `video:video` sous **chaque** page qui l'affiche. Détail des causes, correctifs et méthode d'audit : skill `seo-geo-llmo` §5
