@@ -842,7 +842,11 @@ function graphGet(string $path, string $token, array $params = [], int $essais =
     for ($i = 1; $i <= $essais; $i++) {
         $faits = $i;
         $ch = curl_init($url);
-        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5]);
+        /* HTTP/1.1 imposé (14/10/2026) : depuis l'hébergement, graph.facebook.com coupe par
+           intermittence ses flux HTTP/2 (« HTTP/2 stream 0 was not closed cleanly: INTERNAL_ERROR »,
+           relevé sur le pont forum ↔ réseaux de PRV Concept) — une réponse vide, donc un relevé Meta perdu. */
+        curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_TIMEOUT => 15, CURLOPT_CONNECTTIMEOUT => 5,
+                                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1]);
         $raw = curl_exec($ch);
         $curlErr = (string) curl_error($ch);
         $http = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
