@@ -202,7 +202,7 @@
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/realisations.html</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -249,11 +249,23 @@
       <video:duration>14</video:duration>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/intro-zick-family.jpg</image:loc>
+      <image:title>Intro YouTube Zick'Family en camping-car — motion design réalisé par NSY</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/intro-zick-family.jpg</video:thumbnail_loc>
+      <video:title>Intro YouTube Zick'Family en camping-car — motion design NSY</video:title>
+      <video:description>Aperçu de l'intro de la chaîne Zick'Family en camping-car : un camping-car dessiné au trait, pièce par pièce, prend la route en montagne et se pose dans le logo — 14 secondes, réalisée par NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/intro-zick-family.mp4</video:content_loc>
+      <video:duration>14</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
   </url>
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-10-13</lastmod>
+    <lastmod>2026-10-14</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -283,6 +295,18 @@
       <video:title>YouTube intro "Le V à 90°" — NSY motion design</video:title>
       <video:description>Preview of the PRV Concept YouTube channel intro: the association's logo in volume, orchestra, a V6 revving up — 14 seconds, 4K 60 fps, made by NSY.</video:description>
       <video:content_loc>https://www.nsy.fr/public/intro-prv-concept.mp4</video:content_loc>
+      <video:duration>14</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/intro-zick-family.jpg</image:loc>
+      <image:title>YouTube intro Zick'Family en camping-car — motion design by NSY</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/intro-zick-family.jpg</video:thumbnail_loc>
+      <video:title>YouTube intro Zick'Family en camping-car — NSY motion design</video:title>
+      <video:description>Preview of the Zick'Family en camping-car channel intro: a line-drawn motorhome, built piece by piece, takes a mountain road and settles into the logo — 14 seconds, made by NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/intro-zick-family.mp4</video:content_loc>
       <video:duration>14</video:duration>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>

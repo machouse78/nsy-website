@@ -228,6 +228,8 @@ cp public/forum-classe-article-en.jpg   deploy/public/   # infographie EN articl
 cp public/forum-classe-video.mp4        deploy/public/   # video pleine res article forum classé (publication Facebook, boucle continue + piste silencieuse)
 cp public/intro-prv-concept.mp4         deploy/public/   # Réalisations « Vidéo & 3D » : aperçu 768 px de l'intro PRV « Le V à 90° » (13/10/2026)
 cp public/intro-prv-concept.jpg         deploy/public/   # poster de l'aperçu (+ vignette sitemap vidéo)
+cp public/intro-zick-family.mp4         deploy/public/   # aperçu 768 px de l'intro Zick'Family en camping-car (client, 14/10/2026)
+cp public/intro-zick-family.jpg         deploy/public/   # poster + vignette sitemap vidéo
 cp public/prv-concept-deux-articles-video.mp4 deploy/public/   # video des deux articles PRV Concept (publication Facebook, 11/09/2026)
 cp public/ansley.mp4                    deploy/public/   # avatar chatbot (Ansley visage, boomerang)
 cp public/ansley.png                    deploy/public/   # poster Ansley visage (avatars messages)

@@ -54,6 +54,7 @@ Allow: /public/forum-classe-thumb.jpg
 Allow: /public/forum-classe-article.jpg
 Allow: /public/forum-classe-article-en.jpg
 Allow: /public/intro-prv-concept.jpg
+Allow: /public/intro-zick-family.jpg
 Allow: /public/cropped-NSY-logo-32x32.png
 Allow: /public/cropped-NSY-logo-180x180.png
 Allow: /public/cropped-NSY-logo-192x192.png
@@ -71,6 +72,7 @@ Allow: /public/supervision-thumb.mp4
 Allow: /public/compte-unique-anim-thumb.mp4
 Allow: /public/forum-classe-thumb.mp4
 Allow: /public/intro-prv-concept.mp4
+Allow: /public/intro-zick-family.mp4
 # Modèles 3D — ils ne servent pas le SEO texte
 Disallow: /public/*.glb
 Disallow: /public/*.gltf

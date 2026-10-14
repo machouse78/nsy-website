@@ -691,11 +691,11 @@
       cues: ['motion','motion design','intro','generique','habillage','video','vidéo','reel','reels','short','shorts',
               'ident','lower third','brand video','animated video'],
       fr: [
-        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, vidéos de marque animées — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender pour la 3D, animation pilotée par scripts. Un exemple sur la page Réalisations : l'intro « Le V à 90° ». Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
+        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, vidéos de marque animées — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender pour la 3D, animation pilotée par scripts. Deux exemples sur la page Réalisations : l'intro « Le V à 90° » de PRV Concept et l'intro dessinée au trait de la chaîne Zick'Family en camping-car. Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
         `Oui : NSY réalise des intros, génériques et vidéos de marque animées pour YouTube. La méthode : charte, musique décidée avant l'animation, storyboard-partition, contrôle image par image. Tout est décrit sur ${motionPath} — et la demande de faisabilité a un parcours dédié « motion design ».`
       ],
       en: [
-        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, animated brand videos — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender for 3D, script-driven animation. One example on the Work page: the "Le V à 90°" intro. Details: ${motionPath}. Quoted after scoping.`,
+        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, animated brand videos — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender for 3D, script-driven animation. Two examples on the Work page: the "Le V à 90°" intro for PRV Concept and the line-drawn intro of the Zick'Family en camping-car channel. Details: ${motionPath}. Quoted after scoping.`,
         `Yes: NSY produces intros, idents and animated brand videos for YouTube. The method: brand guidelines, music decided before the animation, storyboard as a score, frame-by-frame checks. All described on ${motionPath} — and the feasibility request has a dedicated "motion design" path.`
       ]
     },
