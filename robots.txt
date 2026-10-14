@@ -71,8 +71,6 @@ Allow: /public/weekend-site-thumb.mp4
 Allow: /public/supervision-thumb.mp4
 Allow: /public/compte-unique-anim-thumb.mp4
 Allow: /public/forum-classe-thumb.mp4
-Allow: /public/intro-prv-concept.mp4
-Allow: /public/intro-zick-family.mp4
 # Modèles 3D — ils ne servent pas le SEO texte
 Disallow: /public/*.glb
 Disallow: /public/*.gltf
