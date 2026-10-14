@@ -488,6 +488,9 @@ function nsy_sanitize_reply(string $reply): string
         'https://github.com/machouse78',
         'https://youtube.com/@new-software-yard',
         'https://www.youtube.com/@new-software-yard',
+        // Vidéos de la chaîne NSY citées dans les FAITS (intros motion design, 14/10/2026)
+        'https://youtu.be/gx5f6gl17n0',
+        'https://youtu.be/puqdx5ukuey',
         // Publications sociales officielles des articles du journal (préfixes
         // en MINUSCULES — la comparaison lowercase l'exige) :
         'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%c3%a9-sur-google-0znee',
