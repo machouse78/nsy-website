@@ -482,6 +482,7 @@
       'https://github.com/machouse78',
       'https://youtube.com/@new-software-yard',
       'https://www.youtube.com/@new-software-yard',
+      'https://youtu.be/gx5f6gl17n0', 'https://youtu.be/puqdx5ukuey',
       'https://www.linkedin.com/pulse/seo-vs-geo-votre-site-est-bien-class%c3%a9-sur-google-0znee',
       'https://www.facebook.com/share/17vylqjake',
       'https://www.linkedin.com/pulse/votre-forum-est-une-mine-dor-pour-lia-%25c3%25a0-condition-1icee',
@@ -648,12 +649,12 @@
       cues: ['disponib','dispo','quand','delai','commenc','demarr','libre','planning','agenda','prochaine',
               'available','availability','when','start','lead time','booked','timeline'],
       fr: [
-        `La disponibilité s'évalue au moment de la demande : NSY travaille avec <b>trois clients en parallèle maximum</b>, pour tenir un niveau d'exigence non négociable. Décrivez votre échéance via le formulaire — réponse sous 48 h ouvrées.`,
-        `Le créneau est volontairement limité (3 clients max en simultané). Si votre projet a une échéance, indiquez-la dans le formulaire : la faisabilité calendaire fait partie de la réponse.`
+        `La disponibilité s'évalue au moment de la demande : une mission n'est acceptée que si le planning permet de la tenir, pour garder un niveau d'exigence non négociable. Décrivez votre échéance via le formulaire — réponse sous 48 h ouvrées.`,
+        `Si votre projet a une échéance, indiquez-la dans le formulaire : la faisabilité calendaire fait partie de la réponse, sous 48 h ouvrées.`
       ],
       en: [
-        `Availability is assessed per request: NSY works with <b>three clients in parallel at most</b>, to hold a non-negotiable quality bar. Describe your timeline through the form — reply within 48 business hours.`,
-        `Capacity is deliberately limited (3 clients max at once). If your project has a deadline, mention it in the form: scheduling feasibility is part of the reply.`
+        `Availability is assessed per request: an engagement is only taken on when the schedule can hold it, to keep a non-negotiable quality bar. Describe your timeline through the form — reply within 48 business hours.`,
+        `If your project has a deadline, mention it in the form: scheduling feasibility is part of the reply, within 48 business hours.`
       ]
     },
     {
@@ -691,11 +692,11 @@
       cues: ['motion','motion design','intro','generique','habillage','video','vidéo','reel','reels','short','shorts',
               'ident','lower third','brand video','animated video'],
       fr: [
-        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, vidéos de marque animées — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender pour la 3D, animation pilotée par scripts. Un exemple sur la page Réalisations : l'intro « Le V à 90° ». Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
+        `Le motion design pour YouTube est l'un des trois services IA de NSY : intro et générique de chaîne, habillage de vos vidéos, vidéos de marque animées — storyboard calé sur la musique, logo exact (jamais redessiné par une IA), livraison 16:9 et 9:16. Outils : Blender pour la 3D, animation pilotée par scripts. Deux exemples sur la page Réalisations : l'intro « Le V à 90° » de PRV Concept et l'intro dessinée au trait de la chaîne Zick'Family en camping-car. Détail : ${motionPath}. Chiffrage sur devis, après cadrage.`,
         `Oui : NSY réalise des intros, génériques et vidéos de marque animées pour YouTube. La méthode : charte, musique décidée avant l'animation, storyboard-partition, contrôle image par image. Tout est décrit sur ${motionPath} — et la demande de faisabilité a un parcours dédié « motion design ».`
       ],
       en: [
-        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, animated brand videos — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender for 3D, script-driven animation. One example on the Work page: the "Le V à 90°" intro. Details: ${motionPath}. Quoted after scoping.`,
+        `Motion design for YouTube is one of NSY's three AI services: channel intro and ident, lower thirds, animated brand videos — storyboard cut to the music, exact logo (never redrawn by an AI), 16:9 and 9:16 delivery. Tools: Blender for 3D, script-driven animation. Two examples on the Work page: the "Le V à 90°" intro for PRV Concept and the line-drawn intro of the Zick'Family en camping-car channel. Details: ${motionPath}. Quoted after scoping.`,
         `Yes: NSY produces intros, idents and animated brand videos for YouTube. The method: brand guidelines, music decided before the animation, storyboard as a score, frame-by-frame checks. All described on ${motionPath} — and the feasibility request has a dedicated "motion design" path.`
       ]
     },
@@ -757,11 +758,11 @@
               'deroulement','how it works','how does it work','next step','onboarding'],
       fr: [
         `Le déroulé : (1) un premier échange pour comprendre le contexte, (2) un cadrage honnête — faisabilité, ordre de grandeur, prochain pas concret, (3) une proposition si le projet s'y prête, (4) la réalisation, du cadrage à la mise en production. Première réponse sous 48 h ouvrées.`,
-        `En pratique : vous décrivez le besoin → retour sous 48 h ouvrées avec une lecture franche (faisabilité + ordre de grandeur) → proposition → réalisation livrée par la même personne qui l'a proposée, jusqu'à la prod. Pas de pyramide, pas d'intermédiaire.`
+        `En pratique : vous décrivez le besoin → retour sous 48 h ouvrées avec une lecture franche (faisabilité + ordre de grandeur) → proposition → réalisation livrée par la même personne qui l'a proposée, jusqu'à la prod. Un seul interlocuteur, en prise directe.`
       ],
       en: [
         `The flow: (1) a first conversation to understand the context, (2) an honest scoping — feasibility, ballpark, concrete next step, (3) a proposal if the project fits, (4) delivery, from scoping to production. First reply within 48 business hours.`,
-        `In practice: you describe the need → reply within 48 business hours with a straight read (feasibility + ballpark) → proposal → delivery by the same person who pitched it, all the way to production. No pyramid, no middleman.`
+        `In practice: you describe the need → reply within 48 business hours with a straight read (feasibility + ballpark) → proposal → delivery by the same person who pitched it, all the way to production. One point of contact, direct accountability.`
       ]
     },
     {
@@ -809,12 +810,12 @@
       cues: ['pourquoi','difference','differenc','avantage','valeur ajoutee','plutot que','vs','versus',
               'why nsy','why you','why choose','what makes'],
       fr: [
-        `Trois principes : <b>sans pyramide</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>trois clients max</b> — pour rester vraiment disponible. De l'ingénierie senior, en direct, sans surcouche commerciale.`,
-        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod (pas d'intermédiaire), une parole franche sur la faisabilité, et un nombre de clients volontairement limité. Vous parlez à celui qui construit, pas à un commercial.`
+        `Trois principes : <b>en prise directe</b> — la personne qui propose la mission est celle qui la livre, pas de junior masqué ; <b>honnêteté technique</b> — je dis quand une idée n'est pas la bonne ; <b>disponibilité réelle</b> — une mission n'est acceptée que si le planning permet de la tenir. De l'ingénierie senior, en prise directe — en direct ou via votre ESN référencée.`,
+        `Ce qui distingue NSY : un seul interlocuteur senior du cadrage à la prod, une parole franche sur la faisabilité, et une disponibilité qui se vérifie à chaque demande. Vous parlez à celui qui construit, pas à un commercial.`
       ],
       en: [
-        `Three principles: <b>no pyramid</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>three clients max</b> — to stay genuinely available. Senior engineering, direct, with no commercial layer.`,
-        `What sets NSY apart: a single senior point of contact from scoping to production (no middleman), a straight word on feasibility, and a deliberately limited client count. You talk to the person who builds, not a salesperson.`
+        `Three principles: <b>direct accountability</b> — the person who pitches the mission delivers it, no hidden junior; <b>technical honesty</b> — I'll say when an idea is wrong; <b>real availability</b> — an engagement is only taken on when the schedule can hold it. Senior engineering, with direct accountability — directly or through your referenced IT services partner.`,
+        `What sets NSY apart: a single senior point of contact from scoping to production, a straight word on feasibility, and availability checked at every request. You talk to the person who builds, not a salesperson.`
       ]
     },
     {

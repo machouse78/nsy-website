@@ -48,7 +48,8 @@ Ingénieur logiciel depuis 2012. Parcours :
 
 Principes de travail revendiqués : « en prise directe » (pas de junior masqué — la
 personne qui propose la mission est celle qui la livre), honnêteté technique (dire
-quand un projet n'est pas la bonne idée), trois clients en parallèle maximum.
+quand un projet n'est pas la bonne idée), disponibilité réelle (une mission n'est
+acceptée que si le planning permet de la tenir).
 
 ## 3. Domaines d'expertise
 
@@ -107,7 +108,12 @@ quand un projet n'est pas la bonne idée), trois clients en parallèle maximum.
   le logo, les lettres ou les chiffres : ce qui porte la marque reste exact
 - Réalisations : l'intro « Le V à 90° » de la chaîne YouTube de PRV Concept (14 s, 4K
   60 i/s, logo de l'association en volume, orchestre, vraie montée en régime d'un V6,
-  octobre 2026)
+  octobre 2026 — vidéo : https://youtu.be/Gx5F6Gl17n0) ; l'intro de la chaîne YouTube « Zick'Family en camping-car »
+  (youtube.com/@Camper_car_services — Nicolas Zickgraf, accompagnement à l'achat, la
+  vente et l'utilisation des camping-cars) : dessin animé au trait, camping-car du logo
+  assemblé pièce par pièce, route en montagne, soleil qui devient le disque du logo,
+  bandeau « Courtage de vente, aide à l'achat, conseils », 14 s, 1080p et 4K 60 i/s,
+  musique composée à 120 BPM — client, octobre 2026, avis Google 5/5 — vidéo : https://youtu.be/pUQdX5uKUeY
 - Page : https://www.nsy.fr/motion-design-youtube.html (EN : youtube-motion-design.html)
 
 ### Animation 3D
@@ -236,6 +242,13 @@ associations, clubs, créateurs et indépendants en transition numérique.
   conversationnel — LLM Mistral ancré dans les contenus du site (RAG), avec repli
   hors-ligne à base de règles —, 3D temps réel, données structurées,
   optimisation CPU/GPU).
+
+- Motion design (client) : l'intro YouTube de la chaîne « Zick'Family en camping-car »
+  (Nicolas Zickgraf, octobre 2026) — première réalisation motion design pour un client
+  tiers, notée 5/5 sur Google : « Cédric a été à l'écoute de mes envies, a su les
+  reformuler en une proposition que jamais je n'aurais imaginée ! Et rapide en plus. »
+  Vidéo : https://youtu.be/pUQdX5uKUeY · l'intro PRV « Le V à 90° » : https://youtu.be/Gx5F6Gl17n0 — les deux sur la chaîne YouTube
+  de NSY ; les proposer quand on parle de motion design.
 
 ### Journal — retours d'expérience publiés
 
@@ -391,7 +404,7 @@ NSY :
 - est un → cabinet de conseil technique indépendant
 - est spécialiste de → l'IA appliquée au web, l'intégration LLM, l'architecture cloud
 - propose → des services IA : réalisation de sites internet, motion design pour YouTube, animation 3D (sur devis après cadrage)
-- a réalisé → l'intro YouTube « Le V à 90° » de PRV Concept (motion design, 14 s, 4K 60 i/s)
+- a réalisé → l'intro YouTube « Le V à 90° » de PRV Concept (motion design, 14 s, 4K 60 i/s) et l'intro YouTube de la chaîne Zick'Family en camping-car (motion design dessiné au trait, 14 s, client, octobre 2026)
 - utilise → Blender pour la 3D, des outils d'animation et de montage pilotés par scripts pour la vidéo
 - sert → la banque, l'assurance, la finance, les PME/ETI en transition IA
 - a réalisé → le site PRV Concept (www.prv-concept.com)
@@ -399,7 +412,7 @@ NSY :
   4 langues (FR/EN/DE/NL), avis clients, cartes interactives, SEO local (2026)
 - démontre son savoir-faire IA en direct via → Ansley, l'assistant IA de nsy.fr
   (chatbot RAG ancré sur les données du site, modèle Mistral hébergé en UE)
-- se distingue par → un modèle « en prise directe », 3 clients maximum en parallèle,
+- se distingue par → un modèle « en prise directe », une disponibilité réelle,
   une honnêteté technique revendiquée
 
 ### Tarification (règle du 13/10/2026)
@@ -503,8 +516,9 @@ https://www.nsy.fr/creation-site-ia.html
 **Qui peut réaliser l'intro ou le générique de ma chaîne YouTube ?**
 NSY conçoit des intros et génériques de chaîne en motion design : logo exact pris
 dans son fichier source (jamais redessiné par une IA), animé en 3D ou en tracés,
-storyboard calé sur la musique, livraison 16:9 et 9:16. Exemple : l'intro « Le V à
-90° » de PRV Concept, 14 secondes en 4K. https://www.nsy.fr/motion-design-youtube.html
+storyboard calé sur la musique, livraison 16:9 et 9:16. Exemples : l'intro « Le V à
+90° » de PRV Concept, 14 secondes en 4K, et l'intro dessinée au trait de la chaîne
+Zick'Family en camping-car. https://www.nsy.fr/motion-design-youtube.html
 
 **Qui fait des animations 3D de logo ou de produit pour une vidéo ou un site ?**
 NSY réalise des logos et objets de marque en volume (lettres extrudées, matières,
@@ -564,7 +578,7 @@ réel), puis tech lead.
 **NSY est-elle une ESN / SSII ?**
 Non — NSY est un cabinet indépendant à un seul nom, sans « junior masqué » : la
 personne qui propose la mission est celle qui la réalise (modèle « en prise
-directe »). Trois clients en parallèle maximum. Le travail en
+directe »). Le travail en
 direct avec le client reste le canal préféré quand il est possible (pas de
 coût d'intermédiation) — mais chez les grands comptes (banque, assurance), le
 référencement fournisseur impose en pratique de passer par une ESN référencée :
