@@ -238,6 +238,7 @@ nsy-website/
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
 │   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 71 pages (npm run partials)
+│   ├── sites-clients.mjs                # Derives the dashboard CLIENTS list (Backlinks) from realisations.html — run by prepare-deploy
 │   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
 │   ├── indexnow-ping.mjs                # IndexNow ping after deploys
 │   ├── partage-page.py                  # ⭐ Builds /stats/partage.html — every article × group registry

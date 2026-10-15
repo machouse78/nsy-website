@@ -325,6 +325,7 @@ nsy-website/
 │   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
 │   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 67 pages, 404 comprise (npm run partials)
+│   ├── sites-clients.mjs                # Déduit la liste CLIENTS du dashboard (Backlinks) de realisations.html — lancé par prepare-deploy
 │   ├── jsonld-entities.mjs   # entités JSON-LD partagées + FAQPage depuis le HTML (build)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
 │   ├── indexnow-ping.mjs                # Ping IndexNow après deploy (Bing → ChatGPT Search/Copilot)

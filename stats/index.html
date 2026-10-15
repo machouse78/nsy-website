@@ -761,14 +761,18 @@
   // agent, contenu, parcours). Sans cette distinction, choisir « Boutique »
   // affichait quand même Facebook, les articles du Journal et les parcours —
   // en laissant croire à un filtrage qui n'existait pas (owner, 18/08/2026).
-  // Sites livrés qui portent un lien de retour vers nsy.fr. Ajouter un client
-  // ici suffit : la rubrique « Backlinks clients » se met à jour seule, y
-  // compris sur l'historique déjà collecté (elle lit `ref_hosts`).
-  // `hote` est cherché en SOUS-CHAÎNE : couvre www. et les sous-domaines.
+  // Sites livrés qui portent un lien de retour vers nsy.fr — `hote` est cherché en
+  // SOUS-CHAÎNE (couvre www. et les sous-domaines).
+  // @sites-clients:debut
+  // Généré par scripts/sites-clients.mjs depuis realisations.html — NE PAS ÉDITER :
+  // ajouter un client = sa carte sur la page Réalisations, avec son domaine dans
+  // `.realisation-url`. La rubrique « Backlinks clients » lit `ref_hosts`, donc la
+  // ligne vaut aussi pour l'historique déjà collecté.
   const CLIENTS = [
+    { nom: 'Le Cerf Thym', hote: 'lecerfthym.fr', url: 'https://www.lecerfthym.fr' },
     { nom: 'PRV Concept',  hote: 'prv-concept.com', url: 'https://www.prv-concept.com' },
-    { nom: 'Le Cerf Thym', hote: 'lecerfthym.fr',   url: 'https://www.lecerfthym.fr' },
   ];
+  // @sites-clients:fin
 
   const RUBRIQUES = {
     siteScope: ['r-site'],
