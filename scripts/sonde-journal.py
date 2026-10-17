@@ -69,6 +69,14 @@ L'option tolère les motifs ci-dessous, validés un à un par le owner, pas un d
     PROPRE page d'erreur (relevé sur prv-concept.com : la 400 servie à un robot qui demandait
     « /../../assets/favicon… »). Seuls les documents d'erreur d'Apache sont tolérés, sous
     /usr/share/apache2/error/.
+  - AH01797 [access_compat:error] « client denied by server configuration » sur
+    boutique/wp-content/uploads/woocommerce_uploads/ (owner, 17/10/2026 : « tolère les deux
+    motifs », vécu sur prv-concept.com) — le fichier d'un produit téléchargeable, protégé par
+    le .htaccess de WooCommerce : le refus EST le fonctionnement voulu. Seul ce dossier est
+    toléré ; un AH01797 ailleurs reste grave. Motif commun aux deux sites (listes identiques).
+  - AH01071 [proxy_fcgi:error] du module MCP de la boutique, et de lui SEUL (même jour) :
+    « Permission denied for MCP API access. User ID 0 … », répété, rien d'autre dans la ligne —
+    un appel ANONYME refusé. Toute autre erreur PHP sous AH01071 reste grave.
 Elle affiche le décompte par motif et les cibles visées — à parcourir d'un
 œil : une cible qui serait un fichier À NOUS n'est pas forcément un scanner.
 Un refus ModSecurity visant un fichier que `deploy/` livre est tout de même
@@ -163,6 +171,9 @@ CIBLES_MAX = 12                              # cibles affichées par motif tolé
 _DEBUT = r"^\S+ \[[^\]]+\] \[%s\] \[pid [^\]]+\] \[client [^\]]+\] "
 _ENTETE = _DEBUT + "%s: "
 INDEX_DEFAUT = ("index.html", "index.php")
+# La fin du refus anonyme du module MCP de la boutique, telle qu'elle s'écrit (17/10/2026).
+_MCP_SUITE = (r'\. User ID 0 does not have capability "read" \| Context: '
+              r'\["HttpTransport::check_permission"\] \| User ID: 0')
 SCANNERS = (
     ("AH01276 autoindex (répertoire sans index, listage refusé)",
      re.compile(_ENTETE % ("autoindex:error", "AH01276")
@@ -204,6 +215,21 @@ SCANNERS = (
     ("AH00690 negotiation (page d'erreur d'Apache sans variante acceptable)",
      re.compile(_ENTETE % ("negotiation:error", "AH00690")
                 + r"no acceptable variant: (?P<cible>/usr/share/apache2/error/[\w.-]+\.html\.var)$"), None),
+    # Fichiers de produits téléchargeables de WooCommerce : son .htaccess (Deny from all)
+    # les refuse au téléchargement direct — le refus EST le fonctionnement voulu (17/10/2026).
+    ("AH01797 access_compat (fichier de produit WooCommerce protégé, téléchargement direct refusé)",
+     re.compile(_ENTETE % ("access_compat:error", "AH01797")
+                + r"client denied by server configuration: "
+                  r"(?P<cible>/home/clients/[^/]+/web/boutique/wp-content/uploads/woocommerce_uploads/[^,\s]+)"
+                  r"(?:, referer:? .*)?$"), None),
+    # Le module MCP de la boutique refuse un appel ANONYME (User ID 0) et l'écrit en erreur
+    # PHP : seul ce message, répété, est toléré — toute autre erreur PHP reste grave (17/10/2026).
+    ("AH01071 MCP (module MCP de la boutique, appel anonyme refusé)",
+     re.compile(_ENTETE % ("proxy_fcgi:error", "AH01071")
+                + r"Got error 'PHP message: \[ERROR\] (?P<cible>Permission denied for MCP API access)"
+                + _MCP_SUITE
+                + r"(?:; PHP message: \[ERROR\] Permission denied for MCP API access" + _MCP_SUITE + r")*'$"),
+     None),
     ("AH02032 ssl (nom d'hôte à POINT FINAL, refusé par la politique TLS)",
      re.compile(_ENTETE % ("ssl:error", "AH02032")
                 + r"Hostname (?P<cible>\S+\.) provided via SNI and hostname \S+ "

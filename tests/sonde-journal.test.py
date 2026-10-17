@@ -89,6 +89,21 @@ def sans_variante(doc="HTTP_BAD_REQUEST", chemin="/usr/share/apache2/error/"):
     # format relevé le 13/10/2026 sur prv-concept.com
     return H + "[negotiation:error] " + P + f"AH00690: no acceptable variant: {chemin}{doc}.html.var"
 
+def fichier_woo(chemin="/boutique/wp-content/uploads/woocommerce_uploads/2013/06/Guide_durites.pdf"):
+    # format relevé le 17/10/2026 sur prv-concept.com (robots qui passent par wp-json/wp/v2/media)
+    return (H + "[access_compat:error] " + P + f"AH01797: client denied by server configuration: {WEB}{chemin}, "
+            "referer https://www.prv-concept.com/boutique/en/wp-json/wp/v2/media?parent=323")
+
+
+MCP_REFUS = ('PHP message: [ERROR] Permission denied for MCP API access. User ID 0 does not have capability "read"'
+             ' | Context: ["HttpTransport::check_permission"] | User ID: 0')
+
+
+def mcp(n=4, autre=None):
+    # format relevé le 17/10/2026 : le même refus anonyme répété, séparé par « ; »
+    messages = [MCP_REFUS] * n + ([autre] if autre else [])
+    return H + "[proxy_fcgi:error] " + P + "AH01071: Got error '" + "; ".join(messages) + "'"
+
 
 LONG = "/blog/OnFriday,itwasofftothesouthoftheisland" + "x" * 300
 
@@ -192,6 +207,25 @@ t("--tolere-scanners : AH00690 sur une page d'erreur d'Apache est toléré et d�
    "AH00690 × 2", "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
 c, s, _ = joue([], {LOG: sans_variante()})
 t("sans l'option, AH00690 ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+
+c, s, _ = joue(S, {LOG: SCAN + "\n" + fichier_woo() + "\n" + fichier_woo()})
+t("--tolere-scanners : AH01797 sur un fichier protégé de WooCommerce est toléré et décompté", c, 0, s,
+  ["AH01797 access_compat (fichier de produit WooCommerce protégé, téléchargement direct refusé) : 2 ligne(s)",
+   "AH01797 × 2", "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: fichier_woo("/boutique/wp-content/uploads/2026/10/photo.jpg")})
+t("AH01797 HORS de woocommerce_uploads ARRÊTE, même avec l'option", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue([], {LOG: fichier_woo()})
+t("sans l'option, AH01797 ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: SCAN + "\n" + mcp() + "\n" + mcp(1)})
+t("--tolere-scanners : AH01071 du module MCP (appel anonyme refusé) est toléré et décompté", c, 0, s,
+  ["AH01071 MCP (module MCP de la boutique, appel anonyme refusé) : 2 ligne(s)",
+   "AH01071 × 2", "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: mcp(2, "PHP message: PHP Warning:  Undefined variable $x in /web/boutique/x.php on line 3")})
+t("AH01071 MCP suivi d'une VRAIE erreur PHP ARRÊTE, même avec l'option", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: mcp(1).replace("User ID 0", "User ID 7", 1)})
+t("AH01071 MCP pour un compte CONNECTÉ (User ID 7) ARRÊTE", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue([], {LOG: mcp()})
+t("sans l'option, AH01071 MCP ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
 
 # --bref : une seule ligne, et SURTOUT le code de sortie intact. C'est l'option qui rend
 # « sonde && envoi » sûr — sans elle on pipe, et « && » lit le code de `tail` (vécu
