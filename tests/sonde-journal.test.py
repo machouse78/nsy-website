@@ -227,6 +227,27 @@ t("AH01071 MCP pour un compte CONNECTÉ (User ID 7) ARRÊTE", c, 2, s, ["NON VIE
 c, s, _ = joue([], {LOG: mcp()})
 t("sans l'option, AH01071 MCP ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
 
+# AH01075 : délai expiré pendant la LECTURE de la requête du client (format relevé le 19/10/2026,
+# robot Baidu sur une fiche produit) — toléré sous cette forme seule (owner, 19/10/2026).
+def lecture_expiree(errno="(70007)The timeout specified has expired", fin="(reading input brigade)"):
+    return (H + "[proxy_fcgi:error] [pid 1234:tid 140000000000000] " + errno + ": [client 116.179.33.12:0] "
+            "AH01075: Error dispatching request to : " + fin
+            + ", referer https://www.prv-concept.com/boutique/en/product/durites-vase-ldr-r25-v6-turbo/")
+
+
+c, s, _ = joue(S, {LOG: SCAN + "\n" + lecture_expiree() + "\n" + lecture_expiree()})
+t("--tolere-scanners : AH01075 lecture expirée de la requête du client est tolérée et décomptée", c, 0, s,
+  ["AH01075 proxy_fcgi (requête du client lue trop lentement, délai expiré avant PHP) : 2 ligne(s)",
+   "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: lecture_expiree(errno="(104)Connection reset by peer")})
+t("AH01075 sur une connexion coupée (104) ARRÊTE, même avec l'option", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: lecture_expiree(fin="")})
+t("AH01075 sans « reading input brigade » ARRÊTE, même avec l'option", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: FCGI_2})
+t("AH01075 (coupure FastCGI ordinaire) ARRÊTE toujours", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue([], {LOG: lecture_expiree()})
+t("sans l'option, AH01075 lecture expirée ARRÊTE quand même", c, 2, s, ["NON VIERGE"])
+
 # --bref : une seule ligne, et SURTOUT le code de sortie intact. C'est l'option qui rend
 # « sonde && envoi » sûr — sans elle on pipe, et « && » lit le code de `tail` (vécu
 # deux fois : 22/09 vers nsy.fr, 24/09 vers prv-concept.com).
