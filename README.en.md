@@ -91,7 +91,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
   assistant's answer, one curve per assistant, a dual-axis "bot readings →
   human visits" funnel, the pages the assistants actually cite, and how those
   visitors behave compared with the site average) — **ELK-like** time navigation (quick/absolute ranges,
-  day/week/month buckets, prior-period comparison, the current period dashed and projected from the days collected so far) + **filters** (clickable
+  day/week/month buckets, prior-period comparison, incomplete first and last periods dashed and projected from the days collected) + **filters** (clickable
   pills, query bar `bot:` `page:` `referral:` `ia:`, metric selector,
   split series). Collected daily at D-1 by `stats-collector.php` (Infomaniak
   scheduled task) from access logs and the Graph API, **unlimited** JSON history, **logs only** (never AWStats exports: bots

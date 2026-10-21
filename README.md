@@ -95,7 +95,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   d'assistant, courbe par assistant, entonnoir « lectures des robots → visites
   humaines » à double axe, pages réellement citées par les IA, et comportement
   de ces visiteurs comparé à la moyenne du site) — navigation temporelle **façon ELK** (périodes rapides/absolues,
-  buckets jour/semaine/mois, comparaison N-1, période en cours en pointillé et projetée au prorata des jours relevés) + **filtres** (pills cliquables,
+  buckets jour/semaine/mois, comparaison N-1, périodes incomplètes, la première et la dernière, en pointillé et projetées au prorata des jours relevés) + **filtres** (pills cliquables,
   barre de requête `bot:` `page:` `referral:` `ia:`, métrique au choix, séries
   superposées), **rubrique Formulaires** (envois reçus, tentatives bloquées par
   famille — robots, spam, champs invalides, cadence —, erreurs d'envoi, et
