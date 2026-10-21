@@ -1004,35 +1004,43 @@
       if (!map.has(k)) { map.set(k, []); keys.push(k); }
       map.get(k).push(d);
     }
-    // Période EN COURS (owner, 20/10/2026) : la dernière semaine ou le dernier
-    // mois n'est pas terminé tant que le collecteur n'a pas relevé son dernier
-    // jour. Ses SOMMES se projettent sur la durée complète au prorata des jours
-    // RELEVÉS de l'historique (un jour qu'un filtre écarte reste un jour écoulé),
-    // et drawChart() la trace en pointillé.
-    let partiel = null;
+    // Périodes INCOMPLÈTES (owner, 20/10/2026), en vue semaine ou mois, aux DEUX
+    // bords de la plage : la dernière n'est pas terminée tant que le collecteur
+    // n'a pas relevé son dernier jour (« en cours »), ou la plage s'arrête avant ;
+    // la première commence avant la plage ou avant l'historique (le 16/07/2026
+    // tombe un jeudi : la semaine du 13/07 n'a que 4 jours). Leurs SOMMES se
+    // projettent sur la durée complète au prorata des jours RELEVÉS dans la plage
+    // (un jour qu'un filtre écarte reste un jour écoulé), et drawChart() les trace
+    // en pointillé.
+    const partiels = {};
     if (mode !== 'jour' && keys.length) {
-      const k = keys.at(-1);
-      const debut = mode === 'mois' ? k + '-01' : k;
-      const total = mode === 'mois' ? new Date(+k.slice(0, 4), +k.slice(5, 7), 0).getDate() : 7;
-      if (shiftISO(debut, total - 1) > lastDay) {
-        const faits = allDays.filter((d) => d >= debut && d <= lastDay).length;
-        if (faits > 0 && faits < total) partiel = { i: keys.length - 1, faits, total };
-      }
+      const [wa, wb] = currentWindow();
+      const bord = (i) => {
+        const k = keys[i];
+        const debut = mode === 'mois' ? k + '-01' : k;
+        const total = mode === 'mois' ? new Date(+k.slice(0, 4), +k.slice(5, 7), 0).getDate() : 7;
+        const fin = shiftISO(debut, total - 1);
+        const faits = allDays.filter((d) => d >= debut && d <= fin && d >= wa && d <= wb).length;
+        if (faits > 0 && faits < total) partiels[i] = { faits, total, enCours: fin > lastDay };
+      };
+      bord(0);
+      if (keys.length > 1) bord(keys.length - 1);
     }
-    return { mode, keys, map, partiel };
+    return { mode, keys, map, partiels };
   }
 
   function drawChart(svgId, bk, series) {
     const svg = $(svgId);
     const n = bk.keys.length;
-    // Période en cours : chaque SOMME est projetée sur la durée complète
-    // (valeur relevée × jours de la période / jours relevés) ; la valeur relevée
-    // reste dans `brut` pour l'infobulle.
-    const P = bk.partiel;
+    // Périodes incomplètes (premier et dernier point) : chaque SOMME est projetée
+    // sur la durée complète (valeur relevée × jours de la période / jours relevés) ;
+    // la valeur relevée reste dans `brut` pour l'infobulle.
+    const PA = bk.partiels || {};
+    const aProjeter = Object.keys(PA).length > 0;
     series = series.map((s) => {
-      if (!P || !s.pts.somme) return s;
+      if (!aProjeter || !s.pts.somme) return s;
       const pts = s.pts.slice();
-      pts[P.i] = Math.round(s.pts[P.i] * P.total / P.faits);
+      for (const [i, p] of Object.entries(PA)) pts[i] = Math.round(s.pts[i] * p.total / p.faits);
       return { ...s, pts, brut: s.pts };
     });
     // Une série peut demander un axe DROIT (ordre de grandeur différent : des
@@ -1058,7 +1066,7 @@
     const xIdx = [];
     for (let k = cand.length - 1; k >= 0; k--) {
       const i = cand[k];
-      if (!xIdx.length || x(xIdx.at(-1)) - x(i) >= minGap + (P && xIdx.length === 1 ? 70 : 0)) xIdx.push(i);
+      if (!xIdx.length || x(xIdx.at(-1)) - x(i) >= minGap + (PA[n - 1] && xIdx.length === 1 ? 70 : 0) + (PA[0] && i === 0 ? 70 : 0)) xIdx.push(i);
     }
     xIdx.reverse();
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -1071,7 +1079,7 @@
         (hasR ? `<text x="${W - PR + 8}" y="${(yPos(f) + 4).toFixed(1)}" fill="${rSer[0].color}" font-size="11" font-family="JetBrains Mono" text-anchor="start">${fmt(Math.round(maxR * f))}</text>` : '')).join('')}
       ${xIdx.map((i) => {
         const anchor = i === 0 ? 'start' : i === n - 1 ? 'end' : 'middle';
-        return `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="${anchor}">${xLabel(bk.keys[i], bk.mode)}${P && i === P.i ? ` · ${P.faits}/${P.total} j` : ''}</text>`;
+        return `<text x="${x(i).toFixed(1)}" y="${H - 10}" fill="#8993AF" font-size="11" font-family="JetBrains Mono" text-anchor="${anchor}">${xLabel(bk.keys[i], bk.mode)}${PA[i] ? ` · ${PA[i].faits}/${PA[i].total} j` : ''}</text>`;
       }).join('')}
       <line id="cross-${svgId}" x1="0" y1="${PT}" x2="0" y2="${H - PB}" stroke="#8993AF" stroke-width="1" stroke-dasharray="3 4" opacity="0"/>
       ${series.map((s) => {
@@ -1080,11 +1088,16 @@
         const path = trace(s.pts);
         const area = series.length === 1
           ? `<path d="${path} L${x(n - 1).toFixed(1)},${H - PB} L${x(0).toFixed(1)},${H - PB} Z" fill="url(#g-${svgId})"/>` : '';
-        const plein = P ? (n > 1 ? trace(s.pts.slice(0, -1)) : '') : path;
-        const tire = P && n > 1
-          ? `<path d="M${pt(s.pts[n - 2], n - 2)} L${pt(s.pts[n - 1], n - 1)}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-dasharray="6 5" stroke-linecap="round"/>` : '';
+        // Trait plein entre les bords complets, pointillé vers un bord incomplet.
+        const a0 = PA[0] && n > 1 ? 1 : 0, b0 = PA[n - 1] && n > 1 ? n - 2 : n - 1;
+        let plein = '';
+        for (let i = a0; i <= b0 && b0 > a0; i++) plein += `${i > a0 ? ' L' : 'M'}${pt(s.pts[i], i)}`;
+        const segs = new Set();
+        if (PA[0] && n > 1) segs.add(0);
+        if (PA[n - 1] && n > 1) segs.add(n - 2);
+        const tire = [...segs].map((j) => `<path d="M${pt(s.pts[j], j)} L${pt(s.pts[j + 1], j + 1)}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-dasharray="6 5" stroke-linecap="round"/>`).join('');
         return `${area}${plein ? `<path d="${plein}" fill="none" stroke="${s.color}" stroke-width="2.5" stroke-linejoin="round"/>` : ''}${tire}
-          ${s.pts.map((v, i) => P && i === P.i
+          ${s.pts.map((v, i) => PA[i]
             ? `<circle class="pt" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(v, s.axis).toFixed(1)}" r="${n > 120 ? 2.5 : 3.4}" fill="none" stroke="${s.color}" stroke-width="2"/>`
             : `<circle class="pt" data-i="${i}" cx="${x(i).toFixed(1)}" cy="${y(v, s.axis).toFixed(1)}" r="${n > 120 ? 1.5 : 2.8}" fill="${s.color}"/>`).join('')}`;
       }).join('')}
@@ -1106,10 +1119,11 @@
           ? 'semaine du ' + new Date(bk.keys[i] + 'T12:00:00').toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
           : new Date(bk.keys[i] + '-01T12:00:00').toLocaleDateString('fr-FR', { month: 'long', year: 'numeric' });
       const jours = bk.map.get(bk.keys[i]).length;
-      const enCours = P && i === P.i;
-      tip.innerHTML = `<div class="d">${label}${enCours ? ` · en cours, ${P.faits} j relevé${P.faits > 1 ? 's' : ''} sur ${P.total}` : bk.mode !== 'jour' ? ` · ${jours} j` : ''}</div>` +
-        series.map((s) => `<div class="r"><span><i style="background:${s.color}"></i>${s.label}</span> <b>${enCours && s.brut ? `≈ ${fmt(s.pts[i])}` : fmt(s.pts[i])}</b></div>` +
-          (enCours && s.brut ? `<div class="src">${fmt(s.brut[i])} sur ${P.faits} j, projeté sur ${P.total} j</div>` : '')).join('') +
+      const p = PA[i];
+      const etat = p ? ` · ${p.enCours ? 'en cours' : 'incomplète'}, ${p.faits} j relevé${p.faits > 1 ? 's' : ''} sur ${p.total}` : '';
+      tip.innerHTML = `<div class="d">${label}${p ? etat : bk.mode !== 'jour' ? ` · ${jours} j` : ''}</div>` +
+        series.map((s) => `<div class="r"><span><i style="background:${s.color}"></i>${s.label}</span> <b>${p && s.brut ? `≈ ${fmt(s.pts[i])}` : fmt(s.pts[i])}</b></div>` +
+          (p && s.brut ? `<div class="src">${fmt(s.brut[i])} sur ${p.faits} j, projeté sur ${p.total} j</div>` : '')).join('') +
         '';
       tip.style.display = 'block';
       const r = tip.getBoundingClientRect();
