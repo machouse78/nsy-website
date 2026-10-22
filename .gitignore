@@ -148,3 +148,6 @@ deploy/_secret/*
 # Rien de tout cela n'a de sens pour un autre poste — et un « git add . »
 # distrait y embarquerait le dépôt entier.
 .claude/
+
+# banc de rotation de la sonde : dossier de travail jetable (Docker ne voit pas /var/folders)
+tests/.sonde-rot-*

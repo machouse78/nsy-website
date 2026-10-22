@@ -286,10 +286,17 @@ foreach ($cibles as $f) {
     }
     $cle = str_replace($home, '~', $f);
     $t = filesize($f);
-    $e = ['taille' => $t];
+    $ino = (int) @fileinode($f);
+    $e = ['taille' => $t, 'inode' => $ino];
     if (array_key_exists($cle, $depuis) && substr($f, -3) !== '.gz') {
-        $d = (int)$depuis[$cle];
-        if ($t < $d) {          // le journal a tourné (minuit) : on relit tout
+        // Ancien format : la taille seule ; nouveau : {taille, inode}.
+        $prec = $depuis[$cle];
+        $d = (int) (is_array($prec) ? ($prec['taille'] ?? 0) : $prec);
+        $inoPrec = is_array($prec) ? (int) ($prec['inode'] ?? 0) : 0;
+        // Le journal a tourné (minuit) : PLUS PETIT qu'à la dernière lecture, OU un autre fichier
+        // (inode changé) — vécu le 22/10/2026 : le journal du jour avait déjà dépassé l'ancien
+        // décalage, la lecture repartait au milieu d'une ligne et sautait le début de la journée.
+        if ($t < $d || ($inoPrec > 0 && $ino > 0 && $ino !== $inoPrec)) {
             $e['rotation'] = true;
             $d = 0;
         }
@@ -447,7 +454,7 @@ def main() -> int:
             etat = json.load(fh)
 
     try:
-        out = interroge({k: v["taille"] for k, v in etat.items()})
+        out = interroge({k: {"taille": v["taille"], "inode": v.get("inode", 0)} for k, v in etat.items()})
     except (*all_errors, urllib.error.URLError, OSError, ValueError) as err:
         print(f"❌ sonde en échec : {err}")
         return 1
