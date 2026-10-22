@@ -237,10 +237,12 @@ def lecture_expiree(errno="(70007)The timeout specified has expired", fin="(read
 
 c, s, _ = joue(S, {LOG: SCAN + "\n" + lecture_expiree() + "\n" + lecture_expiree()})
 t("--tolere-scanners : AH01075 lecture expirée de la requête du client est tolérée et décomptée", c, 0, s,
-  ["AH01075 proxy_fcgi (requête du client lue trop lentement, délai expiré avant PHP) : 2 ligne(s)",
+  ["AH01075 proxy_fcgi (lecture de la requête du client interrompue, avant PHP) : 2 ligne(s)",
    "AUCUNE ERREUR À NOUS"], ["NON VIERGE"])
-c, s, _ = joue(S, {LOG: lecture_expiree(errno="(104)Connection reset by peer")})
-t("AH01075 sur une connexion coupée (104) ARRÊTE, même avec l'option", c, 2, s, ["NON VIERGE"])
+c, s, _ = joue(S, {LOG: lecture_expiree(errno="(104)Connection reset by peer") + "\n"
+                        + lecture_expiree(errno="(70008)Partial results are valid but processing is incomplete")})
+t("--tolere-scanners : la même lecture coupée (104) ou partielle (70008) est tolérée aussi (22/10/2026)", c, 0, s,
+  ["AH01075 proxy_fcgi (lecture de la requête du client interrompue, avant PHP) : 2 ligne(s)"], ["NON VIERGE"])
 c, s, _ = joue(S, {LOG: lecture_expiree(fin="")})
 t("AH01075 sans « reading input brigade » ARRÊTE, même avec l'option", c, 2, s, ["NON VIERGE"])
 c, s, _ = joue(S, {LOG: FCGI_2})

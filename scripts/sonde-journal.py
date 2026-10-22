@@ -77,11 +77,12 @@ L'option tolère les motifs ci-dessous, validés un à un par le owner, pas un d
   - AH01071 [proxy_fcgi:error] du module MCP de la boutique, et de lui SEUL (même jour) :
     « Permission denied for MCP API access. User ID 0 … », répété, rien d'autre dans la ligne —
     un appel ANONYME refusé. Toute autre erreur PHP sous AH01071 reste grave.
-  - AH01075 [proxy_fcgi:error] « (70007)The timeout specified has expired … Error
-    dispatching request to : (reading input brigade) », et cette forme SEULE (owner,
-    19/10/2026 : « tolérer et déployer ») — le délai a expiré pendant qu'Apache LISAIT la
-    requête du client, avant tout PHP (vécu : le robot Baidu, 116.179.33.x, sur une fiche
-    produit de la boutique). La cible décomptée est l'adresse du client.
+  - AH01075 [proxy_fcgi:error] « Error dispatching request to : (reading input brigade) »,
+    QUEL QUE SOIT l'errno — la LECTURE de la requête du client a échoué, avant tout PHP :
+    70007 délai expiré (owner, 19/10/2026, robot Baidu sur la boutique), 70008 résultat
+    partiel et 104 connexion fermée (owner, 22/10/2026 : « tolérer toute la famille » — un
+    visiteur dont chaque nouveau clic coupait le téléversement). La cible décomptée est
+    l'adresse du client.
 Elle affiche le décompte par motif et les cibles visées — à parcourir d'un
 œil : une cible qui serait un fichier À NOUS n'est pas forcément un scanner.
 Un refus ModSecurity visant un fichier que `deploy/` livre est tout de même
@@ -90,8 +91,8 @@ toléré (nos pages réelles sont aussi la cible des scanners), mais SIGNALÉ d'
 Restent bloquants, avec ou sans l'option :
   - toute autre ligne — PHP Warning/Deprecated/Fatal en tête. Ce qui n'est pas
     reconnu ARRÊTE ;
-  - [proxy_fcgi:error] AH01067, et AH01075 sous toute autre forme que la lecture
-    expirée de la requête du client (coupure FastCGI) : même venue d'une
+  - [proxy_fcgi:error] AH01067, et AH01075 sans « reading input brigade »
+    (coupure FastCGI) : même venue d'une
     IP interne de l'hébergeur, elle peut être le fait d'un de NOS scripts. Ne
     pas l'ajouter aux motifs sans l'accord du owner ;
   - un AH01276 sur un répertoire dont `deploy/` livre l'index : ce n'est pas
@@ -169,7 +170,7 @@ CIBLES_MAX = 12                              # cibles affichées par motif tolé
 # tout script. Le motif est ANCRÉ sur l'en-tête de la ligne (hôte, [date],
 # [module], [pid], [client], code) : un texte glissé dans un message PHP ne s'y
 # fait pas passer pour une ligne d'Apache. Le champ [date] est sauté tel quel —
-# ce n'est PAS un filtre par date. proxy_fcgi (AH01067, AH01075 hors lecture expirée) n'y figure pas,
+# ce n'est PAS un filtre par date. proxy_fcgi (AH01067, AH01075 hors lecture de la requête) n'y figure pas,
 # volontairement : voir la docstring.
 # Troisième champ = ce que vaut une cible que `deploy/` livre : "index" → la
 # ligne REDEVIENT grave (notre index manque en ligne) ; "fichier" → tolérée,
@@ -236,11 +237,13 @@ SCANNERS = (
                 + _MCP_SUITE
                 + r"(?:; PHP message: \[ERROR\] Permission denied for MCP API access" + _MCP_SUITE + r")*'$"),
      None),
-    # Le délai a expiré pendant la LECTURE de la requête du client (« input brigade ») :
-    # Apache n'a jamais passé la main à PHP. L'errno se glisse avant [client …], comme pour
-    # AH00036 ; seule la forme (70007) + « reading input brigade » passe (19/10/2026).
-    ("AH01075 proxy_fcgi (requête du client lue trop lentement, délai expiré avant PHP)",
-     re.compile(r"^\S+ \[[^\]]+\] \[proxy_fcgi:error\] \[pid [^\]]+\] \(70007\)The timeout specified has expired: "
+    # La LECTURE de la requête du client (« input brigade ») a échoué : Apache n'a jamais passé
+    # la main à PHP. L'errno se glisse avant [client …], comme pour AH00036. Toute la famille
+    # passe, QUEL QUE SOIT l'errno — 70007 délai expiré (19/10/2026), 70008 résultat partiel et
+    # 104 connexion fermée (22/10/2026 : un visiteur dont chaque nouveau clic coupait le
+    # téléversement) ; sans « reading input brigade », un AH01075 reste grave.
+    ("AH01075 proxy_fcgi (lecture de la requête du client interrompue, avant PHP)",
+     re.compile(r"^\S+ \[[^\]]+\] \[proxy_fcgi:error\] \[pid [^\]]+\] \(\d+\)[^\[]*?: "
                 r"\[client (?P<cible>[^\]]+)\] AH01075: Error dispatching request to : \(reading input brigade\)"
                 r"(?:, referer:? .*)?$"), None),
     ("AH02032 ssl (nom d'hôte à POINT FINAL, refusé par la politique TLS)",
