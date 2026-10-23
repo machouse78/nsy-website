@@ -56,5 +56,10 @@ t('mode lecture seule ?seul=youtube, AVANT la garde run=1',
 t('jamais de rattrapage : la chaîne n\'est relue que pour une date récente', str_contains($src, '$youtube = $ytRecent ? collecteYoutube($cfg) : null;'));
 t('l\'état de la lecture est historisé', str_contains($src, "\$youtube['collab_lecture'] = \$lus === 2 ? 'ok'"));
 
+echo "Autres chaînes suivies\n";
+t('une fonction par chaîne, appelée pour la chaîne du site ET pour chaque autre', substr_count($src, 'ytChaine($ytGet, ') === 2);
+t('les autres chaînes vont dans youtube.autres, jamais dans les totaux', str_contains($src, "\$youtube['autres'][] = \$autre;"));
+t('jamais la chaîne du site en double', str_contains($src, "\$id !== \$youtube['id']"));
+
 echo $ko ? "❌ $ko échec(s)\n" : "✅ stats-youtube-collab : tout passe\n";
 exit($ko ? 1 : 0);

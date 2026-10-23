@@ -1214,7 +1214,6 @@ function collecteYoutube(array $cfg): ?array
     if ($ytKey === '' || str_starts_with($ytKey, 'CHANGE_ME')) {
         return null;
     }
-    $youtube = null;
     $ytGet = static function (string $ressource, array $params) use ($ytKey) {
         $params['key'] = $ytKey;
         $ch = curl_init('https://www.googleapis.com/youtube/v3/' . $ressource . '?' . http_build_query($params));
@@ -1231,6 +1230,33 @@ function collecteYoutube(array $cfg): ?array
         $r = $ytGet('channels', ['part' => 'id', 'forHandle' => '@' . $ytHandle]);
         $ytId = (string) ($r['items'][0]['id'] ?? '');
     }
+    $youtube = $ytId !== '' ? ytChaine($ytGet, $ytId, $ytHandle) : null;
+    /* AUTRES CHAÎNES suivies (owner, 23/10/2026 : « je mettrais bien aussi les stats de ma chaîne
+       @machouse78 »). `youtube_autres` dans _secret/kpi.php : ['@handle' => 'UC…'] (l'identifiant
+       évite de repayer sa résolution) ou ['@handle']. Chacune relevée À PART, avec ses vidéos et
+       ses collaborations, dans `youtube.autres` — jamais additionnée à la chaîne du site. */
+    if ($youtube !== null) {
+        foreach ((array) ($cfg['youtube_autres'] ?? []) as $cle => $val) {
+            $h = ltrim((string) (is_int($cle) ? $val : $cle), '@');
+            $id = is_int($cle) ? '' : (string) $val;
+            if ($id === '' && $h !== '') {
+                $r = $ytGet('channels', ['part' => 'id', 'forHandle' => '@' . $h]);
+                $id = (string) ($r['items'][0]['id'] ?? '');
+            }
+            $autre = ($id !== '' && $id !== $youtube['id']) ? ytChaine($ytGet, $id, $h) : null;
+            if ($autre !== null) {
+                $youtube['autres'][] = $autre;
+            }
+        }
+    }
+    return $youtube;
+}
+
+/** Une chaîne : totaux, dix dernières vidéos, collaborations publiées par d'autres chaînes.
+    null si l'API ne la rend pas. */
+function ytChaine(callable $ytGet, string $ytId, string $ytHandle): ?array
+{
+    $youtube = null;
     if ($ytId !== '') {
         $ch = $ytGet('channels', ['part' => 'snippet,statistics,contentDetails', 'id' => $ytId]);
         $it = $ch['items'][0] ?? null;

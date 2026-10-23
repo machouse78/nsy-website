@@ -447,6 +447,7 @@
       <div class="note" id="yt-collab-note"></div>
     </div>
   </div>
+  <div id="yt-autres" hidden></div>
 
   <!-- ═══ Newsletter du journal (owner, 22/09/2026 : « le nombre d'inscrits et les adresses ») :
        lue dans stats/newsletter.php, qui ne laisse jamais sortir le jeton d'un abonné. ═══ -->
@@ -1983,7 +1984,7 @@
     {
       const jrs = allDays.filter((d) => D[d].youtube);
       const dispo = jrs.length > 0;
-      ['r-youtube', 'yt-cards', 'yt-head', 'yt-chart', 'yt-note', 'yt-cols'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
+      ['r-youtube', 'yt-cards', 'yt-head', 'yt-chart', 'yt-note', 'yt-cols', 'yt-autres'].forEach((id) => { if ($(id)) $(id).hidden = !dispo; });
       if (dispo) {
         const gains = {};
         let pv = null, pa = null;
@@ -2047,7 +2048,7 @@
         $('yt-note').textContent = `YouTube ne publie que des totaux cumulés : la courbe lit le total à la dernière collecte de chaque ${bk.mode}, et un jour sans collecte garde la dernière valeur connue (relevés depuis le ${dFmt(jrs[0])}). Les cartes donnent le gain sur la période ; les vues des vidéos ci-dessous sont des cumuls depuis leur mise en ligne.`;
 
         document.querySelector('#t-ytvideos tbody').innerHTML = (etat.derniers || []).length
-          ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 45)}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
+          ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${[...(x.titre || '')].slice(0, 45).join('')}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
           : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
 
         // Collaborations (23/10/2026) : vidéos d'AUTRES chaînes qui nous ont invités, lues sur nos
@@ -2055,13 +2056,48 @@
         const collabs = etat.collaborations || [];
         const lecture = etat.collab_lecture;
         document.querySelector('#t-ytcollab tbody').innerHTML = collabs.length
-          ? collabs.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)} <span class="flat">· ${x.chaine || ''}</span></td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
+          ? collabs.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${[...(x.titre || '')].slice(0, 40).join('')} <span class="flat">· ${x.chaine || ''}</span></td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
           : `<tr><td colspan="4" class="mono">${lecture === undefined ? 'pas encore relevé (suivi ajouté le 23/10/2026)'
               : lecture === 'onglets illisibles' ? '⚠️ onglets de la chaîne illisibles à la dernière collecte : détection en panne'
               : 'aucune pour l\'instant'}</td></tr>`;
         $('yt-collab-note').textContent = lecture === 'partielle'
           ? '⚠️ un des deux onglets (Vidéos, Shorts) n\'a pas pu être lu à la dernière collecte.'
           : 'Vidéos publiées par une autre chaîne qui nous a ajoutés comme collaborateurs : vues cumulées depuis leur mise en ligne, jamais ajoutées aux totaux de la chaîne.';
+
+        // Autres chaînes suivies (owner, 23/10/2026 : « je mettrais bien aussi les stats de ma chaîne
+        // @machouse78 ») : chacune à part — cartes, vidéos, collaborations —, jamais additionnée.
+        const escY = (t) => String(t ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+        const ligneY = (x, chaine) => `<tr><td><a href="${escY(x.url)}" target="_blank" rel="noopener">${escY(x.date)}</a> ${escY([...(x.titre || '')].slice(0, chaine ? 40 : 45).join(''))}${chaine ? ` <span class="flat">· ${escY(x.chaine)}</span>` : ''}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`;
+        const autres = etat.autres || [];
+        $('yt-autres').hidden = !autres.length;
+        $('yt-autres').innerHTML = autres.map((c) => {
+          const g = {};
+          let av = null, aa = null;
+          for (const d of jrs) {
+            const y = (D[d].youtube.autres || []).find((x) => x.id === c.id);
+            if (!y) continue;
+            g[d] = { vues: av == null ? 0 : Math.max(0, (y.vues ?? 0) - av), abonnes: (aa == null || y.abonnes == null) ? 0 : y.abonnes - aa };
+            if (y.vues != null) av = y.vues;
+            if (y.abonnes != null) aa = y.abonnes;
+          }
+          const premier = Object.keys(g).length < 2;
+          const gain = (cle) => sel.reduce((a, d) => a + (g[d]?.[cle] ?? 0), 0);
+          const sg = (n) => premier ? 'premier relevé' : ((n > 0 ? '+' : '') + fmt(n) + ' sur la période');
+          const cartes = [
+            ['Vues de la chaîne', fmt(c.vues), `<span class="flat">${sg(gain('vues'))}</span>`],
+            ['Abonnés', c.abonnes == null ? '—' : fmt(c.abonnes), `<span class="flat">${c.abonnes == null ? 'compteur masqué' : sg(gain('abonnes'))}</span>`],
+            ['Vidéos publiées', fmt(c.videos), `<span class="flat"><a href="${escY(c.url)}" target="_blank" rel="noopener">${escY(c.nom || 'la chaîne')}</a></span>`],
+          ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
+          const vids = (c.derniers || []).length ? c.derniers.map((x) => ligneY(x, false)).join('') : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
+          const cols = (c.collaborations || []).length ? c.collaborations.map((x) => ligneY(x, true)).join('')
+            : `<tr><td colspan="4" class="mono">${c.collab_lecture === 'onglets illisibles' ? '⚠️ onglets de la chaîne illisibles à la dernière collecte : détection en panne' : 'aucune pour l\'instant'}</td></tr>`;
+          const tete = '<thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead>';
+          return `<div class="chart-head" style="margin-top:22px"><h2>Chaîne suivie aussi : <a href="${escY(c.url)}" target="_blank" rel="noopener">${escY(c.nom)}</a></h2></div>`
+            + `<div class="grid">${cartes}</div>`
+            + `<div class="cols"><div><h3>Vidéos de la chaîne</h3><table>${tete}<tbody>${vids}</tbody></table></div>`
+            + `<div><h3>Collaborations publiées par d'autres chaînes</h3><table>${tete}<tbody>${cols}</tbody></table></div></div>`
+            + '<div class="note">Relevée à part : ses vues et ses abonnés ne sont jamais ajoutés à ceux de la chaîne ci-dessus.</div>';
+        }).join('');
       }
     }
 
