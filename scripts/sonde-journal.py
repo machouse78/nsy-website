@@ -306,8 +306,31 @@ foreach ($cibles as $f) {
         if ($t > $d) {
             $h = fopen($f, 'rb');
             fseek($h, $d);
-            $e['nouveau'] = fread($h, min($t - $d, __PLAFOND__));
+            $lu = (string) fread($h, min($t - $d, __PLAFOND__));
             fclose($h);
+            // LIGNES ENTIÈRES SEULEMENT (23/10/2026) : une ligne en cours d'écriture (ou coupée par
+            // le plafond) n'est ni relue ni comptée — l'état s'arrête à la dernière fin de ligne, et
+            // la ligne entière revient au passage suivant. Vécu sur nsy.fr : un état posé à 10 h 32,
+            // pendant qu'Apache écrivait une ligne de scanner, a fait relire « hz_core:error] … »
+            // au passage suivant — un fragment que rien ne reconnaît, donc « NON VIERGE ».
+            $fin = strrpos($lu, "\n");
+            $lu = $fin === false ? '' : substr($lu, 0, $fin + 1);
+            $e['taille'] = $d + strlen($lu);
+            $e['taille_fichier'] = $t;
+            if ($lu !== '') {
+                $e['nouveau'] = $lu;
+            }
+        }
+    } elseif ($t > 0 && substr($f, -3) !== '.gz') {
+        // Première lecture (référence) : posée elle aussi sur une fin de ligne.
+        $h = fopen($f, 'rb');
+        $deb = max(0, $t - 65536);
+        fseek($h, $deb);
+        $fin = strrpos((string) fread($h, $t - $deb), "\n");
+        fclose($h);
+        if ($fin !== false) {
+            $e['taille'] = $deb + $fin + 1;
+            $e['taille_fichier'] = $t;
         }
     }
     $out['fichiers'][$cle] = $e;
@@ -484,12 +507,19 @@ def main() -> int:
         a_lire += len(alertes)
         # Une lecture PARTIELLE ne tolère rien : la fin du delta n'a pas été vue.
         # L'état s'arrête à ce qui a été lu — l'appel suivant montrera la suite.
+        # Le serveur arrête `taille` à la dernière fin de ligne lue et donne la vraie taille du
+        # fichier dans `taille_fichier` (23/10/2026) ; une réponse sans elle (ancien PHP, bancs)
+        # garde l'ancien calcul.
         depart = 0 if v.get("rotation") else etat[f]["taille"]
-        tronque = v["taille"] - depart > PLAFOND
+        fin_fichier = v.get("taille_fichier", v["taille"])
+        tronque = fin_fichier - depart > PLAFOND
         if tronque:
-            notes.append(f"⛔ delta de {v['taille'] - depart} o, plafond de relecture {PLAFOND} o : "
-                         f"{v['taille'] - depart - PLAFOND} o NON RELUS — relancer la sonde pour la suite")
-            v["taille"] = depart + PLAFOND
+            if "taille_fichier" not in v:
+                v["taille"] = depart + PLAFOND
+            notes.append(f"⛔ delta de {fin_fichier - depart} o, plafond de relecture {PLAFOND} o : "
+                         f"{fin_fichier - v['taille']} o NON RELUS — relancer la sonde pour la suite")
+        elif fin_fichier > v["taille"]:
+            notes.append(f"{fin_fichier - v['taille']} o d'une ligne en cours d'écriture : relus au prochain passage")
         vierge = vierge and not graves and not tronque
         if graves:
             print("  ----- NOUVEAU -----")

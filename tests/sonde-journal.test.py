@@ -134,9 +134,11 @@ def joue(args, fichiers, etat=None, rotation=False):
     etat = etat or {LOG: {"taille": 1000}, CHAT: {"taille": 1000}}
     rep = {"ok": True, "php": "8.5.9", "fichiers": {k: {"taille": v["taille"]} for k, v in etat.items()}}
     for k, v in fichiers.items():
-        texte, taille = v if isinstance(v, tuple) else (v, None)
+        texte, taille, *fichier = v if isinstance(v, tuple) else (v, None)
         rep["fichiers"][k] = {"nouveau": texte + "\n",
                               "taille": taille if taille is not None else etat[k]["taille"] + len(texte.encode()) + 1}
+        if fichier:                       # NOUVEAU format (23/10/2026) : la vraie taille du fichier à part
+            rep["fichiers"][k]["taille_fichier"] = fichier[0]
         if rotation:
             rep["fichiers"][k]["rotation"] = True
     with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
@@ -315,6 +317,17 @@ gros = "\n".join([refuse("/.git")] * 400)[:sonde.PLAFOND - 1]
 c, s, e = joue(S, {LOG: (gros, 1000 + sonde.PLAFOND + 4321)})
 t("delta plus gros que le plafond : rien n'est toléré, l'état s'arrête à ce qui a été LU", c, 2, s,
   ["4321 o NON RELUS"], vrai=e[LOG]["taille"] == 1000 + sonde.PLAFOND)
+
+# Le serveur arrête `taille` à la dernière fin de ligne et rend `taille_fichier` (23/10/2026).
+fin_ligne = 1000 + len(refuse("/.git").encode()) + 1
+c, s, e = joue(S, {LOG: (refuse("/.git"), fin_ligne, fin_ligne + 37)})
+t("ligne en cours d'écriture : dite, pas « non relue », l'état à la fin de ligne", c, 0, s,
+  ["37 o d'une ligne en cours d'écriture : relus au prochain passage", "AUCUNE ERREUR À NOUS"], ["NON RELUS"],
+  vrai=e[LOG]["taille"] == fin_ligne)
+fin_gros = 1000 + len(gros.encode()) + 1
+c, s, e = joue(S, {LOG: (gros, fin_gros, 1000 + sonde.PLAFOND + 4321)})
+t("plafond, nouveau format : l'état reste sur la fin de ligne rendue par le serveur", c, 2, s,
+  [f"{1000 + sonde.PLAFOND + 4321 - fin_gros} o NON RELUS"], vrai=e[LOG]["taille"] == fin_gros)
 
 c, s, _ = joue(S, {LOG: (SCAN, 500)}, etat={LOG: {"taille": 90000}, CHAT: {"taille": 1000}}, rotation=True)
 t("rotation du journal : relu depuis 0, pas de faux « non relus »", c, 0, s,

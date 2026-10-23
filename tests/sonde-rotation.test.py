@@ -60,6 +60,36 @@ t("rotation, nouveau journal PLUS GRAND : vue par l'inode, relu depuis 0, lignes
 f = appel({"~/ik-logs/error.log": {"taille": 10 ** 6, "inode": f["inode"]}})
 t("rotation, nouveau journal PLUS PETIT : vue par la taille, comme avant", f.get("rotation") is True, f)
 
+# LIGNES ENTIÈRES (23/10/2026) : une ligne en cours d'écriture n'est ni relue ni comptée ; l'état
+# s'arrête à la dernière fin de ligne et la ligne revient ENTIÈRE au passage suivant. Vécu sur
+# nsy.fr : un état posé pendant qu'Apache écrivait a fait relire « hz_core:error] … » — NON VIERGE.
+coupee = L % 7
+open(journal, "w").write(L % 1 + L % 2)
+f = appel({})
+ref, ino = f["taille"], f["inode"]
+t("référence sur un journal complet : la taille du fichier", ref == len((L % 1 + L % 2).encode()), f)
+open(journal, "a").write(L % 3 + coupee[:44])
+f = appel({"~/ik-logs/error.log": {"taille": ref, "inode": ino}})
+t("ligne en cours d'écriture : seules les lignes ENTIÈRES sont relues", f.get("nouveau") == L % 3, f)
+t("… l'état s'arrête à la dernière fin de ligne, la taille du fichier est rendue à part",
+  f["taille"] == ref + len((L % 3).encode()) and f.get("taille_fichier") == f["taille"] + 44, f)
+avant = f["taille"]
+open(journal, "a").write(coupee[44:])
+f = appel({"~/ik-logs/error.log": {"taille": avant, "inode": ino}})
+t("au passage suivant, la ligne revient ENTIÈRE (jamais un fragment)", f.get("nouveau") == coupee and f["taille"] == f["taille_fichier"], f)
+open(journal, "a").write("prv-concept.com [Thu")
+g = appel({"~/ik-logs/error.log": {"taille": f["taille"], "inode": ino}})
+t("delta sans aucune fin de ligne : rien de relu, état inchangé", "nouveau" not in g and g["taille"] == f["taille"], g)
+h = appel({})
+t("référence posée pendant l'écriture : sur la dernière fin de ligne",
+  h["taille"] == f["taille"] and h.get("taille_fichier") == f["taille"] + len("prv-concept.com [Thu"), h)
+# plafond de relecture plus court qu'un delta : coupé, lui aussi, sur une fin de ligne
+open(os.path.join(racine, "web/s.php"), "w").write(sonde.PHP.replace("__CLE__", "k").replace("__PLAFOND__", str(len(L % 1) + 10)))
+open(journal, "w").write(L % 1 + L % 2 + L % 3)
+p = appel({"~/ik-logs/error.log": {"taille": 0, "inode": ino}})
+t("plafond atteint au milieu d'une ligne : une ligne entière lue, l'état à sa fin",
+  p.get("nouveau") == L % 1 and p["taille"] == len((L % 1).encode()) and p["taille_fichier"] == 3 * len((L % 1).encode()), p)
+
 shutil.rmtree(racine, ignore_errors=True)
-print("✅ sonde, rotation côté serveur : tout passe" if not ko else f"❌ {ko} échec(s)")
+print("✅ sonde côté serveur (rotation, lignes entières) : tout passe" if not ko else f"❌ {ko} échec(s)")
 sys.exit(1 if ko else 0)
