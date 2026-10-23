@@ -29,6 +29,8 @@ echo "── Newsletter : envoi en dry-run, abonnés factices (scripts/newslette
 python3 -B tests/newsletter-envoi.test.py
 echo "── Déploiement FTP : envois atomiques, faux serveur sans réseau (ftp_atomique.py + ftp-deploy.py, code réel) ──"
 python3 -B tests/ftp-atomique.test.py
+echo "── Statistiques : collaborations YouTube (stats-collector.php, sans réseau) ──"
+docker run --rm -v "$PWD:/app" php:8.5-cli-alpine php /app/tests/stats-youtube-collab.test.php
 echo "── Ansley : agrandir / réduire le panneau (navigateur réel) ──"
 node tests/ansley-plein-ecran.test.mjs
 echo "✅ SUITE COMPLÈTE OK"

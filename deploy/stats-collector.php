@@ -95,6 +95,14 @@ if (($_GET['stories'] ?? '') === '1') {
                       'instagram_aujourdhui' => count(storiesDuJour($carnetS, 'instagram', $auj))], JSON_UNESCAPED_UNICODE);
     exit;
 }
+/* ── Mode YOUTUBE, lecture seule : ?key=…&seul=youtube (23/10/2026). Relit la chaîne et ses
+   COLLABORATIONS sans rien écrire — l'essai par le point d'entrée réel, et rien d'autre. */
+if (($_GET['seul'] ?? '') === 'youtube') {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['ok' => true, 'mode' => 'seul=youtube', 'youtube' => collecteYoutube($cfg)],
+                     JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    exit;
+}
 if (($_GET['run'] ?? '') !== '1') {
     http_response_code(400);
     echo json_encode(['ok' => false, 'error' => 'run=1 attendu']);
@@ -1193,11 +1201,20 @@ if ($ghTok !== '' && !str_starts_with($ghTok, 'CHANGE_ME') && $ghRepo !== '') {
 // écraserait toutes les variations. D'où le garde-fou ci-dessous.
 // Le vrai journalier existe (API YouTube Analytics) mais impose un parcours
 // OAuth avec jeton à rafraîchir : disproportionné pour ces quelques chiffres.
-// Coût : 3 unités par collecte sur un quota gratuit de 10 000 par jour.
-$youtube = null;
-$ytKey = (string) ($cfg['youtube_key'] ?? '');
+// Coût : 4 unités par collecte sur un quota gratuit de 10 000 par jour (la 4e pour les
+// collaborations), plus deux lectures des onglets publics de la chaîne.
 $ytRecent = $target >= date('Y-m-d', strtotime('-2 days'));
-if ($ytKey !== '' && !str_starts_with($ytKey, 'CHANGE_ME') && $ytRecent) {
+$youtube = $ytRecent ? collecteYoutube($cfg) : null;
+
+/** La chaîne, ses dix dernières vidéos et les COLLABORATIONS publiées par d'autres chaînes.
+    null si la clé manque ou si la chaîne est introuvable. */
+function collecteYoutube(array $cfg): ?array
+{
+    $ytKey = (string) ($cfg['youtube_key'] ?? '');
+    if ($ytKey === '' || str_starts_with($ytKey, 'CHANGE_ME')) {
+        return null;
+    }
+    $youtube = null;
     $ytGet = static function (string $ressource, array $params) use ($ytKey) {
         $params['key'] = $ytKey;
         $ch = curl_init('https://www.googleapis.com/youtube/v3/' . $ressource . '?' . http_build_query($params));
@@ -1257,6 +1274,86 @@ if ($ytKey !== '' && !str_starts_with($ytKey, 'CHANGE_ME') && $ytRecent) {
             }
         }
     }
+    if ($youtube !== null) {
+        /* COLLABORATIONS (owner, 23/10/2026 : « oui automatise »). Une vidéo publiée par une AUTRE
+           chaîne qui nous invite comme collaborateur s'affiche sur nos onglets publics mais n'est
+           pas dans nos envois — et l'API Data n'a aucun champ « collaborateurs ». On lit donc les
+           onglets « Vidéos » et « Shorts », on garde les vidéos dont la chaîne n'est pas la nôtre
+           (videos.list : 1 unité) et on les range À PART : jamais ajoutées aux totaux de la chaîne.
+           Point fragile : la page publique peut changer ou être refusée au serveur — l'état de la
+           lecture est donc historisé (`collab_lecture`) et affiché, jamais un faux « aucune ». */
+        $vus = [];
+        $lus = 0;
+        foreach (['videos', 'shorts'] as $onglet) {
+            $ids = ytCollabIds(ytPage('https://www.youtube.com/channel/' . rawurlencode($youtube['id']) . '/' . $onglet), $youtube['id']);
+            if ($ids !== null) {
+                $lus++;
+                array_push($vus, ...$ids);
+            }
+        }
+        $youtube['collab_lecture'] = $lus === 2 ? 'ok' : ($lus === 1 ? 'partielle' : 'onglets illisibles');
+        $youtube['collaborations'] = [];
+        $vus = array_slice(array_values(array_unique($vus)), 0, 50);
+        if ($vus) {
+            $vd = $ytGet('videos', ['part' => 'snippet,statistics', 'id' => implode(',', $vus)]);
+            $youtube['collaborations'] = ytCollabGarde($vd['items'] ?? [], $youtube['id']);
+        }
+    }
+    return $youtube;
+}
+
+/** Un onglet public de la chaîne ; '' si la réponse n'est pas un 200 SUR CET onglet (page de
+    consentement, redirection vers l'accueil d'une chaîne sans Shorts, refus, délai). */
+function ytPage(string $url): string
+{
+    $ch = curl_init($url);
+    curl_setopt_array($ch, [CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => true, CURLOPT_MAXREDIRS => 3,
+        CURLOPT_TIMEOUT => 12, CURLOPT_CONNECTTIMEOUT => 5,
+        CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36',
+        // SOCS=CAI : le choix « refuser » de la page de consentement — sinon redirection vers consent.youtube.com.
+        CURLOPT_HTTPHEADER => ['Accept-Language: fr-FR,fr;q=0.9', 'Cookie: SOCS=CAI; CONSENT=YES+1']]);
+    $html = curl_exec($ch);
+    $code = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+    $fin = (string) curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
+    $onglet = substr($url, (int) strrpos($url, '/'));
+    return is_string($html) && $code === 200 && str_ends_with(rtrim((string) parse_url($fin, PHP_URL_PATH), '/'), $onglet)
+        ? $html : '';
+}
+
+/** Identifiants vidéo d'un onglet ; null si la page n'est pas celle de la chaîne (elle ne
+    porte pas son identifiant) — une page illisible n'est jamais « aucune vidéo ». */
+function ytCollabIds(string $html, string $chaineId): ?array
+{
+    if ($chaineId === '' || !str_contains($html, '"' . $chaineId . '"')) {
+        return null;
+    }
+    preg_match_all('/"videoId":"([A-Za-z0-9_-]{11})"/', $html, $m);
+    return array_values(array_unique($m[1]));
+}
+
+/** Les vidéos d'une AUTRE chaîne parmi celles des onglets : nos collaborations, les plus récentes d'abord. */
+function ytCollabGarde(array $items, string $chaineId): array
+{
+    $out = [];
+    foreach ($items as $v) {
+        $sn = $v['snippet'] ?? [];
+        if ((string) ($sn['channelId'] ?? '') === '' || (string) $sn['channelId'] === $chaineId) {
+            continue;
+        }
+        $vs = $v['statistics'] ?? [];
+        $out[] = [
+            'id'           => (string) ($v['id'] ?? ''),
+            'date'         => substr((string) ($sn['publishedAt'] ?? ''), 0, 10),
+            'titre'        => mb_substr(trim((string) ($sn['title'] ?? '')), 0, 70),
+            'chaine'       => mb_substr(trim((string) ($sn['channelTitle'] ?? '')), 0, 40),
+            'url'          => 'https://www.youtube.com/watch?v=' . ($v['id'] ?? ''),
+            'vues'         => (int) ($vs['viewCount'] ?? 0),
+            'likes'        => (int) ($vs['likeCount'] ?? 0),
+            'commentaires' => (int) ($vs['commentCount'] ?? 0),
+        ];
+    }
+    usort($out, static fn (array $a, array $b): int => strcmp($b['date'], $a['date']));
+    return $out;
 }
 
 // ── 3 quinquies. Favicons — contrôle QUOTIDIEN (skill `favicons`) ────────────

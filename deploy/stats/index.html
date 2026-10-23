@@ -441,7 +441,11 @@
       <h3>Vidéos de la chaîne</h3>
       <table id="t-ytvideos"><thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead><tbody></tbody></table>
     </div>
-    <div></div>
+    <div>
+      <h3>Collaborations publiées par d'autres chaînes</h3>
+      <table id="t-ytcollab"><thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead><tbody></tbody></table>
+      <div class="note" id="yt-collab-note"></div>
+    </div>
   </div>
 
   <!-- ═══ Newsletter du journal (owner, 22/09/2026 : « le nombre d'inscrits et les adresses ») :
@@ -2045,6 +2049,19 @@
         document.querySelector('#t-ytvideos tbody').innerHTML = (etat.derniers || []).length
           ? etat.derniers.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 45)}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
           : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
+
+        // Collaborations (23/10/2026) : vidéos d'AUTRES chaînes qui nous ont invités, lues sur nos
+        // onglets publics. Rangées à part, jamais dans les totaux. Une lecture ratée se dit.
+        const collabs = etat.collaborations || [];
+        const lecture = etat.collab_lecture;
+        document.querySelector('#t-ytcollab tbody').innerHTML = collabs.length
+          ? collabs.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${(x.titre || '').slice(0, 40)} <span class="flat">· ${x.chaine || ''}</span></td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
+          : `<tr><td colspan="4" class="mono">${lecture === undefined ? 'pas encore relevé (suivi ajouté le 23/10/2026)'
+              : lecture === 'onglets illisibles' ? '⚠️ onglets de la chaîne illisibles à la dernière collecte : détection en panne'
+              : 'aucune pour l\'instant'}</td></tr>`;
+        $('yt-collab-note').textContent = lecture === 'partielle'
+          ? '⚠️ un des deux onglets (Vidéos, Shorts) n\'a pas pu être lu à la dernière collecte.'
+          : 'Vidéos publiées par une autre chaîne qui nous a ajoutés comme collaborateurs : vues cumulées depuis leur mise en ligne, jamais ajoutées aux totaux de la chaîne.';
       }
     }
 
