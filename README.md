@@ -116,7 +116,9 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
   l'API ne publiant que des cumuls, la courbe trace les vues et abonnés CUMULÉS
   et les cartes le gain de la période, calculé d'une collecte à l'autre — 13/10/2026 ; les
   collaborations publiées par d'AUTRES chaînes sont lues sur les onglets publics de la chaîne et
-  listées à part, jamais dans les totaux — 23/10/2026, essai sans écriture `?seul=youtube`), toutes deux **facultatives** : sans clé, la rubrique et son onglet
+  listées à part, jamais dans les totaux — 23/10/2026, essai sans écriture `?seul=youtube` ; d'autres
+  chaînes peuvent être suivies à part par `youtube_autres` dans `_secret/kpi.php` — aucune sur nsy.fr,
+  @machouse78 sur prv-concept.com), toutes deux **facultatives** : sans clé, la rubrique et son onglet
   disparaissent. **Stories** Facebook et Instagram (04/09/2026) : une story ne vit que
   24 h dans l'API, le collecteur tient un carnet (`_secret/kpi-stories.json`, maximum
   des mesures) alimenté la nuit ET par le mode `?key=…&stories=1` à programmer toutes
