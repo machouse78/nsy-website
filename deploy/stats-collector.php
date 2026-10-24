@@ -1302,24 +1302,19 @@ function ytChaine(callable $ytGet, string $ytId, string $ytHandle): ?array
     }
     if ($youtube !== null) {
         /* COLLABORATIONS (owner, 23/10/2026 : « oui automatise »). Une vidéo publiée par une AUTRE
-           chaîne qui nous invite comme collaborateur s'affiche sur nos onglets publics mais n'est
-           pas dans nos envois — et l'API Data n'a aucun champ « collaborateurs ». On lit donc les
-           onglets « Vidéos » et « Shorts », on garde les vidéos dont la chaîne n'est pas la nôtre
+           chaîne qui nous invite comme collaborateur n'est pas dans nos envois — et l'API Data n'a
+           aucun champ « collaborateurs ». YouTube la range dans l'étagère « Collaborations » de la
+           page ACCUEIL de la chaîne invitée, PAS dans l'onglet « Vidéos » (vécu le 24/10/2026 : la
+           vidéo de Nicolas « Renault 25 : Comment sauver l'électronique… », où @machouse78 est
+           collaborateur, manquait — la première version lisait Vidéos et Shorts). On lit donc
+           l'Accueil, on garde les vidéos de cette étagère dont la chaîne n'est pas la nôtre
            (videos.list : 1 unité) et on les range À PART : jamais ajoutées aux totaux de la chaîne.
            Point fragile : la page publique peut changer ou être refusée au serveur — l'état de la
            lecture est donc historisé (`collab_lecture`) et affiché, jamais un faux « aucune ». */
-        $vus = [];
-        $lus = 0;
-        foreach (['videos', 'shorts'] as $onglet) {
-            $ids = ytCollabIds(ytPage('https://www.youtube.com/channel/' . rawurlencode($youtube['id']) . '/' . $onglet), $youtube['id']);
-            if ($ids !== null) {
-                $lus++;
-                array_push($vus, ...$ids);
-            }
-        }
-        $youtube['collab_lecture'] = $lus === 2 ? 'ok' : ($lus === 1 ? 'partielle' : 'onglets illisibles');
+        $vus = ytCollabIds(ytPage('https://www.youtube.com/channel/' . rawurlencode($youtube['id']) . '/featured'), $youtube['id']);
+        $youtube['collab_lecture'] = $vus === null ? 'accueil illisible' : 'ok';
         $youtube['collaborations'] = [];
-        $vus = array_slice(array_values(array_unique($vus)), 0, 50);
+        $vus = array_slice(array_values(array_unique($vus ?? [])), 0, 50);
         if ($vus) {
             $vd = $ytGet('videos', ['part' => 'snippet,statistics', 'id' => implode(',', $vus)]);
             $youtube['collaborations'] = ytCollabGarde($vd['items'] ?? [], $youtube['id']);
@@ -1346,15 +1341,42 @@ function ytPage(string $url): string
         ? $html : '';
 }
 
-/** Identifiants vidéo d'un onglet ; null si la page n'est pas celle de la chaîne (elle ne
-    porte pas son identifiant) — une page illisible n'est jamais « aucune vidéo ». */
+/** Identifiants des vidéos de l'étagère « Collaborations » de la page Accueil ; null si la page
+    n'est pas celle de la chaîne (elle ne porte pas son identifiant) ou si ses données sont
+    illisibles — une page illisible n'est jamais « aucune collaboration ». Les autres étagères
+    (Vidéos, Shorts, chaînes ou playlists mises en avant) ne sont jamais lues. */
 function ytCollabIds(string $html, string $chaineId): ?array
 {
-    if ($chaineId === '' || !str_contains($html, '"' . $chaineId . '"')) {
+    // Repérage par strpos, pas par expression régulière : la page pèse plus d'un mégaoctet.
+    $deb = strpos($html, 'var ytInitialData = ');
+    $fin = $deb === false ? false : strpos($html, ';</script>', $deb);
+    if ($chaineId === '' || !str_contains($html, '"' . $chaineId . '"') || $deb === false || $fin === false) {
         return null;
     }
-    preg_match_all('/"videoId":"([A-Za-z0-9_-]{11})"/', $html, $m);
-    return array_values(array_unique($m[1]));
+    $data = json_decode(substr($html, $deb + 20, $fin - $deb - 20), true);
+    if (!is_array($data)) {
+        return null;
+    }
+    $ids = [];
+    $pile = [$data];
+    while ($pile) {
+        $noeud = array_pop($pile);
+        foreach ($noeud as $cle => $val) {
+            if (!is_array($val)) {
+                continue;
+            }
+            if (in_array($cle, ['shelfRenderer', 'richShelfRenderer', 'reelShelfRenderer'], true)) {
+                $t = $val['title']['simpleText'] ?? implode('', array_column($val['title']['runs'] ?? [], 'text'));
+                if (mb_stripos((string) $t, 'collab') !== false) {
+                    preg_match_all('/"videoId":"([A-Za-z0-9_-]{11})"/', (string) json_encode($val), $v);
+                    array_push($ids, ...$v[1]);
+                }
+                continue;
+            }
+            $pile[] = $val;
+        }
+    }
+    return array_values(array_unique($ids));
 }
 
 /** Les vidéos d'une AUTRE chaîne parmi celles des onglets : nos collaborations, les plus récentes d'abord. */

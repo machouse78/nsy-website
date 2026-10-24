@@ -3,7 +3,7 @@
  * Banc hors ligne — collaborations YouTube du collecteur (stats-collector.php, 23/10/2026).
  * Une vidéo publiée par une AUTRE chaîne qui nous invite comme collaborateur s'affiche sur nos
  * onglets publics sans être dans nos envois (l'API Data n'a aucun champ « collaborateurs ») :
- * ytCollabIds() lit l'onglet, ytCollabGarde() ne garde que les vidéos d'une autre chaîne.
+ * ytCollabIds() lit l'étagère « Collaborations » de la page Accueil (24/10/2026), ytCollabGarde() ne garde que les vidéos d'une autre chaîne.
  * Une page qui n'est pas celle de la chaîne (consentement, refus) est ILLISIBLE, jamais « aucune ».
  *
  *   docker run --rm -v "$PWD":/app -w /app php:8.5-cli-alpine php tests/stats-youtube-collab.test.php
@@ -20,17 +20,24 @@ $ko = 0;
 function t(string $nom, bool $ok, $info = null): void { global $ko; echo ($ok ? '  ✓ ' : '  ✗ ÉCHEC ') . $nom . ($ok || $info === null ? '' : ' — ' . json_encode($info, JSON_UNESCAPED_UNICODE)) . "\n"; if (!$ok) { $ko++; } }
 
 $nous = 'UCWiOufpZiUdXj1m-28mp1FQ';   // @new-software-yard
-$onglet = '<script>var ytInitialData = {"metadata":{"channelMetadataRenderer":{"externalId":"' . $nous . '"}},'
-        . '"contents":[{"videoId":"AAAAAAAAAAA"},{"videoId":"BBBBBBBBBBB"},{"videoId":"AAAAAAAAAAA"},{"videoId":"Cc-_123abcd"}]};</script>';
+$etagere = static fn (string $titre, array $ids): array => ['richItemRenderer' => ['content' => ['richShelfRenderer' => [
+    'title' => ['runs' => [['text' => $titre]]], 'contents' => array_map(static fn (string $i): array => ['videoId' => $i], $ids)]]]];
+$accueil = static fn (array $etageres, string $chaine): string => '<html><script>var ytInitialData = '
+    . json_encode(['metadata' => ['channelMetadataRenderer' => ['externalId' => $chaine]],
+                   'contents' => ['tabs' => [['tabRenderer' => ['title' => 'Accueil', 'selected' => true, 'content' => $etageres]]]]])
+    . ';</script><script>var autre = 1;</script></html>';
+$page = $accueil([$etagere('Vidéos', ['AAAAAAAAAAA', 'BBBBBBBBBBB']), $etagere('Collaborations', ['Cc-_123abcd', 'DDDDDDDDDDD', 'Cc-_123abcd']),
+                  ['shelfRenderer' => ['title' => ['simpleText' => 'Chaînes en vedette'], 'content' => ['videoId' => 'EEEEEEEEEEE']]]], $nous);
 
-echo "Lecture d'un onglet\n";
-t('les identifiants, sans doublon, dans l\'ordre', ytCollabIds($onglet, $nous) === ['AAAAAAAAAAA', 'BBBBBBBBBBB', 'Cc-_123abcd']);
+echo "Lecture de la page Accueil\n";
+t('seule l\'étagère « Collaborations » est lue, sans doublon', ytCollabIds($page, $nous) === ['Cc-_123abcd', 'DDDDDDDDDDD'], ytCollabIds($page, $nous));
+t('titre en simpleText ou en runs, casse indifférente', ytCollabIds($accueil([['shelfRenderer' => ['title' => ['simpleText' => 'COLLABORATIONS'], 'x' => ['videoId' => 'FFFFFFFFFFF']]]], $nous), $nous) === ['FFFFFFFFFFF']);
+t('sans étagère Collaborations : aucune, pas illisible', ytCollabIds($accueil([$etagere('Vidéos', ['AAAAAAAAAAA'])], $nous), $nous) === []);
 t('page de consentement (sans l\'identifiant de la chaîne) : illisible', ytCollabIds('<form action="https://consent.youtube.com/save">"videoId":"AAAAAAAAAAA"', $nous) === null);
-t('page d\'une AUTRE chaîne : illisible', ytCollabIds($onglet, 'UCxxxxxxxxxxxxxxxxxxxxxx') === null);
+t('page d\'une AUTRE chaîne : illisible', ytCollabIds($page, 'UCxxxxxxxxxxxxxxxxxxxxxx') === null);
 t('réponse vide (délai, refus) : illisible', ytCollabIds('', $nous) === null);
-t('identifiant de chaîne inconnu : illisible', ytCollabIds($onglet, '') === null);
-t('onglet lisible mais vide : aucune vidéo, pas illisible', ytCollabIds('{"externalId":"' . $nous . '"}', $nous) === []);
-t('un identifiant tronqué n\'est pas pris', ytCollabIds('"' . $nous . '" "videoId":"court"', $nous) === []);
+t('identifiant de chaîne inconnu : illisible', ytCollabIds($page, '') === null);
+t('données de page tronquées : illisible', ytCollabIds('"' . $nous . '" var ytInitialData = {"contents":[;</script>', $nous) === null);
 
 echo "Tri des collaborations\n";
 $v = static fn (string $id, string $chaine, string $nom, string $date, int $vues = 10): array => ['id' => $id,
@@ -54,7 +61,8 @@ echo "Le collecteur\n";
 t('mode lecture seule ?seul=youtube, AVANT la garde run=1',
   ($p = strpos($src, "=== 'youtube'")) !== false && $p < strpos($src, "if ((\$_GET['run'] ?? '') !== '1')"));
 t('jamais de rattrapage : la chaîne n\'est relue que pour une date récente', str_contains($src, '$youtube = $ytRecent ? collecteYoutube($cfg) : null;'));
-t('l\'état de la lecture est historisé', str_contains($src, "\$youtube['collab_lecture'] = \$lus === 2 ? 'ok'"));
+t('l\'état de la lecture est historisé', str_contains($src, "\$youtube['collab_lecture'] = \$vus === null ? 'accueil illisible' : 'ok';"));
+t('c\'est la page ACCUEIL qui est lue (l\'étagère Collaborations n\'est pas dans l\'onglet Vidéos)', str_contains($src, "rawurlencode(\$youtube['id']) . '/featured'"));
 
 echo "Autres chaînes suivies\n";
 t('une fonction par chaîne, appelée pour la chaîne du site ET pour chaque autre', substr_count($src, 'ytChaine($ytGet, ') === 2);

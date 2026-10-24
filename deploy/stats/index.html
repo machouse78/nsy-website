@@ -2058,11 +2058,9 @@
         document.querySelector('#t-ytcollab tbody').innerHTML = collabs.length
           ? collabs.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${[...(x.titre || '')].slice(0, 40).join('')} <span class="flat">· ${x.chaine || ''}</span></td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
           : `<tr><td colspan="4" class="mono">${lecture === undefined ? 'pas encore relevé (suivi ajouté le 23/10/2026)'
-              : lecture === 'onglets illisibles' ? '⚠️ onglets de la chaîne illisibles à la dernière collecte : détection en panne'
+              : (lecture === 'onglets illisibles' || lecture === 'accueil illisible') ? '⚠️ page d\'accueil de la chaîne illisible à la dernière collecte : détection en panne'
               : 'aucune pour l\'instant'}</td></tr>`;
-        $('yt-collab-note').textContent = lecture === 'partielle'
-          ? '⚠️ un des deux onglets (Vidéos, Shorts) n\'a pas pu être lu à la dernière collecte.'
-          : 'Vidéos publiées par une autre chaîne qui nous a ajoutés comme collaborateurs : vues cumulées depuis leur mise en ligne, jamais ajoutées aux totaux de la chaîne.';
+        $('yt-collab-note').textContent = 'Vidéos publiées par une autre chaîne qui nous a ajoutés comme collaborateurs (étagère « Collaborations » de la page d\'accueil de la chaîne) : vues cumulées depuis leur mise en ligne, jamais ajoutées aux totaux de la chaîne.';
 
         // Autres chaînes suivies (owner, 23/10/2026 : « je mettrais bien aussi les stats de ma chaîne
         // @machouse78 ») : chacune à part — cartes, vidéos, collaborations —, jamais additionnée.
@@ -2090,7 +2088,7 @@
           ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
           const vids = (c.derniers || []).length ? c.derniers.map((x) => ligneY(x, false)).join('') : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
           const cols = (c.collaborations || []).length ? c.collaborations.map((x) => ligneY(x, true)).join('')
-            : `<tr><td colspan="4" class="mono">${c.collab_lecture === 'onglets illisibles' ? '⚠️ onglets de la chaîne illisibles à la dernière collecte : détection en panne' : 'aucune pour l\'instant'}</td></tr>`;
+            : `<tr><td colspan="4" class="mono">${['onglets illisibles', 'accueil illisible'].includes(c.collab_lecture) ? '⚠️ page d\'accueil de la chaîne illisible à la dernière collecte : détection en panne' : 'aucune pour l\'instant'}</td></tr>`;
           const tete = '<thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead>';
           return `<div class="chart-head" style="margin-top:22px"><h2>Chaîne suivie aussi : <a href="${escY(c.url)}" target="_blank" rel="noopener">${escY(c.nom)}</a></h2></div>`
             + `<div class="grid">${cartes}</div>`
