@@ -283,6 +283,19 @@ $depuis = json_decode((string)($_SERVER['HTTP_X_DEPUIS'] ?? '{}'), true) ?: [];
 $cibles = glob($home . '/ik-logs/error.log*') ?: [];
 $cibles[] = __DIR__ . '/_secret/chat-errors.log';
 $out = ['ok' => true, 'php' => PHP_VERSION, 'fichiers' => []];
+// La TÊTE d'un journal (empreinte de sa première ligne complète) le reconnaît quel que soit le
+// mode de rotation (24/10/2026) : l'hébergeur COPIE le journal vers error.log-AAAAMMJJ puis VIDE
+// l'original, qui garde son inode. Une fois le journal du jour plus long que l'ancien décalage,
+// ni la taille ni l'inode ne voyaient la rotation : relecture au milieu d'une ligne (faux « NON
+// VIERGE » sur nsy.fr), début de la journée jamais lu, et la fin de la veille non plus — la copie
+// arrivait comme un fichier neuf. Désormais : tête changée = rotation (relu depuis 0) ; fichier
+// neuf dont la tête est celle d'un fichier suivi = sa copie tournée, relue depuis l'ancien décalage.
+$tetes = [];
+foreach ($depuis as $p) {
+    if (is_array($p) && !empty($p['tete'])) {
+        $tetes[(string) $p['tete']] = (int) ($p['taille'] ?? 0);
+    }
+}
 foreach ($cibles as $f) {
     if (!is_file($f)) {
         continue;
@@ -290,19 +303,33 @@ foreach ($cibles as $f) {
     $cle = str_replace($home, '~', $f);
     $t = filesize($f);
     $ino = (int) @fileinode($f);
-    $e = ['taille' => $t, 'inode' => $ino];
-    if (array_key_exists($cle, $depuis) && substr($f, -3) !== '.gz') {
-        // Ancien format : la taille seule ; nouveau : {taille, inode}.
-        $prec = $depuis[$cle];
+    $tete = '';
+    if ($t > 0 && substr($f, -3) !== '.gz') {
+        $h = fopen($f, 'rb');
+        $l = (string) fgets($h, 4096);
+        fclose($h);
+        $tete = str_ends_with($l, "\n") ? md5($l) : '';
+    }
+    $e = ['taille' => $t, 'inode' => $ino, 'tete' => $tete];
+    $prec = $depuis[$cle] ?? null;
+    if ($prec === null && $tete !== '' && isset($tetes[$tete])) {
+        $prec = ['taille' => $tetes[$tete], 'inode' => 0, 'tete' => $tete];
+        $e['suite_de'] = true;
+    }
+    if ($prec !== null && substr($f, -3) !== '.gz') {
+        // Ancien format : la taille seule ; puis {taille, inode} ; maintenant {taille, inode, tete}.
         $d = (int) (is_array($prec) ? ($prec['taille'] ?? 0) : $prec);
         $inoPrec = is_array($prec) ? (int) ($prec['inode'] ?? 0) : 0;
+        $tetePrec = is_array($prec) ? (string) ($prec['tete'] ?? '') : '';
         // Le journal a tourné (minuit) : PLUS PETIT qu'à la dernière lecture, OU un autre fichier
         // (inode changé) — vécu le 22/10/2026 : le journal du jour avait déjà dépassé l'ancien
         // décalage, la lecture repartait au milieu d'une ligne et sautait le début de la journée.
-        if ($t < $d || ($inoPrec > 0 && $ino > 0 && $ino !== $inoPrec)) {
+        if ($t < $d || ($inoPrec > 0 && $ino > 0 && $ino !== $inoPrec)
+            || ($tetePrec !== '' && $tete !== '' && $tete !== $tetePrec)) {
             $e['rotation'] = true;
             $d = 0;
         }
+        $e['depuis'] = $d;
         if ($t > $d) {
             $h = fopen($f, 'rb');
             fseek($h, $d);
@@ -480,7 +507,8 @@ def main() -> int:
             etat = json.load(fh)
 
     try:
-        out = interroge({k: {"taille": v["taille"], "inode": v.get("inode", 0)} for k, v in etat.items()})
+        out = interroge({k: {"taille": v["taille"], "inode": v.get("inode", 0), "tete": v.get("tete", "")}
+                         for k, v in etat.items()})
     except (*all_errors, urllib.error.URLError, OSError, ValueError) as err:
         print(f"❌ sonde en échec : {err}")
         return 1
@@ -490,12 +518,16 @@ def main() -> int:
     toleres = Counter()                      # bruit de scanners, par motif, tous fichiers
     a_lire = 0                               # refus ModSecurity visant un fichier à nous
     for f, v in sorted(out["fichiers"].items()):
-        if f not in etat:
+        if f not in etat and not v.get("suite_de"):
             print(f"  {f} : {v['taille']} o (référence)")
             continue
-        delta = v["taille"] - etat[f]["taille"]
-        print(f"  {f} : {etat[f]['taille']} -> {v['taille']} o (delta {delta:+d})"
-              f"{' ROTATION' if v.get('rotation') else ''}")
+        # Copie du journal tourné (24/10/2026) : nouvelle pour l'état, mais c'est la suite d'un
+        # fichier suivi — relue depuis l'ancien décalage que le serveur rend dans `depuis`.
+        prec = etat[f]["taille"] if f in etat else v.get("depuis", 0)
+        delta = v["taille"] - prec
+        print(f"  {f} : {prec} -> {v['taille']} o (delta {delta:+d})"
+              f"{' ROTATION' if v.get('rotation') else ''}"
+              f"{' — SUITE du journal tourné à minuit' if v.get('suite_de') else ''}")
         if not v.get("nouveau"):
             continue
         lignes = [l for l in v["nouveau"].splitlines() if l.strip()]
@@ -510,7 +542,7 @@ def main() -> int:
         # Le serveur arrête `taille` à la dernière fin de ligne lue et donne la vraie taille du
         # fichier dans `taille_fichier` (23/10/2026) ; une réponse sans elle (ancien PHP, bancs)
         # garde l'ancien calcul.
-        depart = 0 if v.get("rotation") else etat[f]["taille"]
+        depart = v["depuis"] if "depuis" in v else (0 if v.get("rotation") else etat[f]["taille"])
         fin_fichier = v.get("taille_fichier", v["taille"])
         tronque = fin_fichier - depart > PLAFOND
         if tronque:

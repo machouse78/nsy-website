@@ -90,6 +90,45 @@ p = appel({"~/ik-logs/error.log": {"taille": 0, "inode": ino}})
 t("plafond atteint au milieu d'une ligne : une ligne entière lue, l'état à sa fin",
   p.get("nouveau") == L % 1 and p["taille"] == len((L % 1).encode()) and p["taille_fichier"] == 3 * len((L % 1).encode()), p)
 
+# COPIE PUIS VIDAGE (24/10/2026) : l'hébergeur copie le journal vers error.log-AAAAMMJJ et VIDE
+# l'original, qui garde son inode. Le journal du jour, déjà plus long que l'ancien décalage, passait
+# inaperçu ; la tête (première ligne) le trahit, et la copie est relue depuis l'ancien décalage.
+def appel_tout(depuis):
+    prep = os.path.join(racine, "web/prep.php")
+    open(prep, "w").write("<?php $_SERVER['HTTP_X_SONDE']='k'; $_SERVER['HTTP_X_DEPUIS']=" + repr(json.dumps(depuis)) + ";")
+    r = subprocess.run(["docker", "run", "--rm", "-e", "HOME=/r/home", "-v", racine + ":/r", "php:8.5-cli-alpine",
+                        "php", "-d", "auto_prepend_file=/r/web/prep.php", "/r/web/s.php"], capture_output=True, text=True)
+    if not r.stdout.strip():
+        sys.exit("PHP muet : " + r.stderr[:500])
+    return json.loads(r.stdout)["fichiers"]
+open(os.path.join(racine, "web/s.php"), "w").write(sonde.PHP.replace("__CLE__", "k").replace("__PLAFOND__", "100000"))
+for vieux in os.listdir(os.path.join(racine, "home/ik-logs")):
+    os.remove(os.path.join(racine, "home/ik-logs", vieux))
+JL = "~/ik-logs/error.log"; COPIE = "~/ik-logs/error.log-20261023"
+open(journal, "w").write("".join(L % i for i in range(30, 33)))
+ref = appel_tout({})[JL]
+t("la tête (empreinte de la première ligne) est rendue", len(ref.get("tete", "")) == 32, ref)
+open(journal, "a").write(L % 33)
+lu = appel_tout({JL: ref})[JL]
+t("même journal, même tête : la suite seulement", lu.get("nouveau") == L % 33 and not lu.get("rotation"), lu)
+open(journal, "a").write(L % 34 + L % 35)                       # la soirée, jamais relue avant minuit
+shutil.copy(journal, os.path.join(racine, "home/ik-logs/error.log-20261023"))
+with open(journal, "r+") as fh:                                 # vidé sur place : MÊME inode
+    fh.truncate(0)
+open(journal, "a").write("".join(L % i for i in range(40, 50)))  # déjà plus long que l'ancien décalage
+r = appel_tout({JL: {"taille": lu["taille"], "inode": lu["inode"], "tete": lu["tete"]}})
+t("copie puis vidage : même inode, journal plus long que l'ancien décalage",
+  r[JL]["inode"] == lu["inode"] and r[JL]["taille_fichier"] > lu["taille"], r[JL])
+t("… la tête a changé : rotation vue, journal du jour relu depuis 0, lignes entières",
+  r[JL].get("rotation") is True and r[JL].get("nouveau") == "".join(L % i for i in range(40, 50)), r[JL])
+t("… la copie d'hier est la SUITE du journal suivi : relue depuis l'ancien décalage",
+  r.get(COPIE, {}).get("suite_de") is True and r[COPIE].get("depuis") == lu["taille"]
+  and r[COPIE].get("nouveau") == L % 34 + L % 35, r.get(COPIE))
+r2 = appel_tout({JL: {"taille": r[JL]["taille"], "inode": r[JL]["inode"], "tete": r[JL]["tete"]},
+                 COPIE: {"taille": r[COPIE]["taille"], "inode": r[COPIE]["inode"], "tete": r[COPIE]["tete"]}})
+t("passage suivant : plus rien à relire, ni rotation ni suite",
+  "nouveau" not in r2[JL] and "nouveau" not in r2[COPIE] and not r2[JL].get("rotation") and not r2[COPIE].get("suite_de"), r2)
+
 shutil.rmtree(racine, ignore_errors=True)
 print("✅ sonde côté serveur (rotation, lignes entières) : tout passe" if not ko else f"❌ {ko} échec(s)")
 sys.exit(1 if ko else 0)

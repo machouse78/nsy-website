@@ -329,6 +329,33 @@ c, s, e = joue(S, {LOG: (gros, fin_gros, 1000 + sonde.PLAFOND + 4321)})
 t("plafond, nouveau format : l'état reste sur la fin de ligne rendue par le serveur", c, 2, s,
   [f"{1000 + sonde.PLAFOND + 4321 - fin_gros} o NON RELUS"], vrai=e[LOG]["taille"] == fin_gros)
 
+# Copie du journal tourné (24/10/2026) : nouvelle pour l'état, mais SUITE d'un fichier suivi.
+def joue_rep(args, rep, etat):
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=False) as fh:
+        json.dump(etat, fh)
+    sonde.interroge = lambda depuis: json.loads(json.dumps(rep))
+    sys.argv = ["sonde-journal.py", "--etat", fh.name] + args
+    tampon = io.StringIO()
+    with contextlib.redirect_stdout(tampon):
+        code = sonde.main()
+    with open(fh.name, encoding="utf-8") as lu:
+        ecrit = json.load(lu)
+    os.unlink(fh.name)
+    return code, tampon.getvalue(), ecrit
+COPIE = "~/ik-logs/error.log-20261023"
+def rep_copie(texte_copie):
+    return {"ok": True, "php": "8.5.12", "fichiers": {
+        LOG: {"taille": 600, "inode": 7, "tete": "a" * 32, "rotation": True, "depuis": 0, "taille_fichier": 600, "nouveau": refuse("/.git") + "\n"},
+        COPIE: {"taille": 1000 + len(texte_copie.encode()) + 1, "inode": 8, "tete": "b" * 32, "suite_de": True, "depuis": 1000,
+                "nouveau": texte_copie + "\n"},
+        CHAT: {"taille": 1000}}}
+etat_copie = {LOG: {"taille": 1000, "inode": 7, "tete": "b" * 32}, CHAT: {"taille": 1000}}
+c, s, e = joue_rep(S, rep_copie(PHP_FATAL), etat_copie)
+t("copie tournée : sa fin est RELUE (une erreur PHP de la soirée arrête), pas posée en « référence »", c, 2, s,
+  ["SUITE du journal tourné à minuit", "PHP Fatal error", "NON VIERGE"], ["(référence)"], vrai=e[COPIE]["taille"] > 1000)
+c, s, _ = joue_rep(S, rep_copie(refuse("/.env")), etat_copie)
+t("copie tournée, bruit de scanners seulement : toléré", c, 0, s, ["1000 -> ", "AUCUNE ERREUR À NOUS"], ["(référence)"])
+
 c, s, _ = joue(S, {LOG: (SCAN, 500)}, etat={LOG: {"taille": 90000}, CHAT: {"taille": 1000}}, rotation=True)
 t("rotation du journal : relu depuis 0, pas de faux « non relus »", c, 0, s,
   ["ROTATION", "AUCUNE ERREUR À NOUS"], ["NON RELUS"])
