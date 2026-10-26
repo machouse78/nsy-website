@@ -2075,7 +2075,7 @@
         const ligneY = (x, chaine) => `<tr><td><a href="${escY(x.url)}" target="_blank" rel="noopener">${escY(x.date)}</a> ${escY([...(x.titre || '')].slice(0, chaine ? 40 : 45).join(''))}${chaine ? ` <span class="flat">· ${escY(x.chaine)}</span>` : ''}</td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`;
         const autres = etat.autres || [];
         $('yt-autres').hidden = !autres.length;
-        $('yt-autres').innerHTML = autres.map((c) => {
+        $('yt-autres').innerHTML = autres.map((c, ia) => {
           const g = {};
           let av = null, aa = null;
           for (const d of jrs) {
@@ -2102,10 +2102,37 @@
           const tete = '<thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead>';
           return `<div class="chart-head" style="margin-top:22px"><h2>Chaîne suivie aussi : <a href="${escY(c.url)}" target="_blank" rel="noopener">${escY(c.nom)}</a></h2></div>`
             + `<div class="grid">${cartes}</div>`
+            + `<div class="chart-head"><h2>Vues et abonnés de la chaîne — cumul par ${bk.mode}</h2></div>`
+            + `<div class="chart"><div class="legend" id="yt-legend-a${ia}"></div><svg id="c-yt-a${ia}"></svg></div>`
+            + `<div class="note" id="yt-note-a${ia}"></div>`
             + `<div class="cols"><div><h3>Vidéos de la chaîne</h3><table>${tete}<tbody>${vids}</tbody></table></div>`
             + `<div><h3>Collaborations publiées par d'autres chaînes</h3><table>${tete}<tbody>${cols}</tbody></table></div></div>`
             + '<div class="note">Relevée à part : ses vues et ses abonnés ne sont jamais ajoutés à ceux de la chaîne ci-dessus.</div>';
         }).join('');
+        // Le graphe de chaque chaîne suivie, comme celui de la chaîne du site (owner, 26/10/2026 : « il manque le graphe
+        // vues versus abonnés comme pour PRV Concept ») : mêmes cumuls, même règle — un jour sans relevé garde la
+        // dernière valeur connue, avant le premier relevé la courbe part de ce premier relevé (jamais de zéro).
+        autres.forEach((c, ia) => {
+          const lire = (d) => (D[d]?.youtube?.autres || []).find((x) => x.id === c.id);
+          const jc = jrs.filter((d) => lire(d));
+          const cumulDe = (cle, monotone) => {
+            const debut = bk.map.get(bk.keys[0])?.[0];
+            const garde = (v, der) => v != null && (!monotone || der == null || v >= der);
+            let der = null;
+            for (const d of jc) { if (d >= debut) break; const v = lire(d)[cle]; if (garde(v, der)) der = v; }
+            const pts = bk.keys.map((k) => { for (const d of bk.map.get(k)) { const v = lire(d)?.[cle]; if (garde(v, der)) der = v; } return der; });
+            const p0 = pts.find((v) => v != null) ?? 0;
+            return pts.map((v) => v ?? p0);
+          };
+          const ysA = [
+            { label: 'Vues (cumul)', color: COLORS[0], pts: cumulDe('vues', true) },
+            { label: 'Abonnés (cumul, axe droit)', color: COLORS[1], axis: 'right', pts: cumulDe('abonnes', false) },
+          ];
+          $(`yt-legend-a${ia}`).innerHTML = ysA.map((x) => `<span><i style="background:${x.color}"></i>${x.label}</span>`).join('');
+          drawChart(`c-yt-a${ia}`, bk, ysA);
+          $(`yt-note-a${ia}`).textContent = jc.length
+            ? `Relevés de cette chaîne depuis le ${dFmt(jc[0])} : avant, la courbe reprend ce premier relevé.` : '';
+        });
       }
     }
 
