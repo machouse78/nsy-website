@@ -2053,12 +2053,19 @@
 
         // Collaborations (23/10/2026) : vidéos d'AUTRES chaînes qui nous ont invités, lues sur nos
         // onglets publics. Rangées à part, jamais dans les totaux. Une lecture ratée se dit.
-        const collabs = etat.collaborations || [];
         const lecture = etat.collab_lecture;
+        const illisible = (l) => l === 'onglets illisibles' || l === 'accueil illisible';
+        // Lecture ratée à la dernière collecte (YouTube sert parfois une autre page au serveur, vécu le
+        // 26/10/2026) : le DERNIER relevé lisible, daté, plutôt qu'un tableau vide.
+        const repli = (lire) => { for (const d of [...jrs].reverse()) { const y = lire(D[d].youtube); if (y && y.collab_lecture === 'ok') return { d, liste: y.collaborations || [] }; } return null; };
+        const noteRepli = (d) => `<tr><td colspan="4" class="mono">⚠️ dernière collecte illisible : relevé lisible du ${dFmt(d)}</td></tr>`;
+        const r0 = illisible(lecture) ? repli((y) => y) : null;
+        const collabs = r0 ? r0.liste : (etat.collaborations || []);
         document.querySelector('#t-ytcollab tbody').innerHTML = collabs.length
-          ? collabs.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${[...(x.titre || '')].slice(0, 40).join('')} <span class="flat">· ${x.chaine || ''}</span></td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
+          ? (r0 ? noteRepli(r0.d) : '') + collabs.map((x) => `<tr><td><a href="${x.url}" target="_blank" rel="noopener">${x.date}</a> ${[...(x.titre || '')].slice(0, 40).join('')} <span class="flat">· ${x.chaine || ''}</span></td><td class="num">${fmt(x.vues)}</td><td class="num">${fmt(x.likes)}</td><td class="num">${fmt(x.commentaires)}</td></tr>`).join('')
           : `<tr><td colspan="4" class="mono">${lecture === undefined ? 'pas encore relevé (suivi ajouté le 23/10/2026)'
-              : (lecture === 'onglets illisibles' || lecture === 'accueil illisible') ? '⚠️ page d\'accueil de la chaîne illisible à la dernière collecte : détection en panne'
+              : r0 ? `aucune au dernier relevé lisible (${dFmt(r0.d)}) — la dernière collecte n'a pas pu lire la page`
+              : illisible(lecture) ? '⚠️ page d\'accueil de la chaîne illisible à la dernière collecte : détection en panne'
               : 'aucune pour l\'instant'}</td></tr>`;
         $('yt-collab-note').textContent = 'Vidéos publiées par une autre chaîne qui nous a ajoutés comme collaborateurs (étagère « Collaborations » de la page d\'accueil de la chaîne) : vues cumulées depuis leur mise en ligne, jamais ajoutées aux totaux de la chaîne.';
 
@@ -2087,8 +2094,11 @@
             ['Vidéos publiées', fmt(c.videos), `<span class="flat"><a href="${escY(c.url)}" target="_blank" rel="noopener">${escY(c.nom || 'la chaîne')}</a></span>`],
           ].map(([t, v, d]) => `<div class="card"><div class="mono">${t}</div><div class="v">${v}</div><div class="d">${d}</div></div>`).join('');
           const vids = (c.derniers || []).length ? c.derniers.map((x) => ligneY(x, false)).join('') : '<tr><td colspan="4" class="mono">aucune vidéo</td></tr>';
-          const cols = (c.collaborations || []).length ? c.collaborations.map((x) => ligneY(x, true)).join('')
-            : `<tr><td colspan="4" class="mono">${['onglets illisibles', 'accueil illisible'].includes(c.collab_lecture) ? '⚠️ page d\'accueil de la chaîne illisible à la dernière collecte : détection en panne' : 'aucune pour l\'instant'}</td></tr>`;
+          const rc = illisible(c.collab_lecture) ? repli((y) => (y?.autres || []).find((x) => x.id === c.id)) : null;
+          const lc = rc ? rc.liste : (c.collaborations || []);
+          const cols = lc.length ? (rc ? noteRepli(rc.d) : '') + lc.map((x) => ligneY(x, true)).join('')
+            : `<tr><td colspan="4" class="mono">${rc ? `aucune au dernier relevé lisible (${dFmt(rc.d)})`
+              : illisible(c.collab_lecture) ? '⚠️ page d\'accueil de la chaîne illisible à la dernière collecte : détection en panne' : 'aucune pour l\'instant'}</td></tr>`;
           const tete = '<thead><tr><th>Vidéo</th><th class="num">Vues</th><th class="num">👍</th><th class="num">💬</th></tr></thead>';
           return `<div class="chart-head" style="margin-top:22px"><h2>Chaîne suivie aussi : <a href="${escY(c.url)}" target="_blank" rel="noopener">${escY(c.nom)}</a></h2></div>`
             + `<div class="grid">${cartes}</div>`

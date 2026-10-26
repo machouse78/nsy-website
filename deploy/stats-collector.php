@@ -1311,8 +1311,17 @@ function ytChaine(callable $ytGet, string $ytId, string $ytHandle): ?array
            (videos.list : 1 unité) et on les range À PART : jamais ajoutées aux totaux de la chaîne.
            Point fragile : la page publique peut changer ou être refusée au serveur — l'état de la
            lecture est donc historisé (`collab_lecture`) et affiché, jamais un faux « aucune ». */
-        $vus = ytCollabIds(ytPage('https://www.youtube.com/channel/' . rawurlencode($youtube['id']) . '/featured'), $youtube['id']);
+        // Trois essais espacés : YouTube sert parfois une autre page au serveur (vécu le 26/10/2026 à 05:16 —
+        // l'accueil de PRV Concept illisible, celui de @machouse78 lu quelques secondes plus tard).
+        $vus = null;
+        for ($essai = 1; $essai <= 3 && $vus === null; $essai++) {
+            if ($essai > 1) {
+                sleep(4);
+            }
+            $vus = ytCollabIds(ytPage('https://www.youtube.com/channel/' . rawurlencode($youtube['id']) . '/featured'), $youtube['id']);
+        }
         $youtube['collab_lecture'] = $vus === null ? 'accueil illisible' : 'ok';
+        $youtube['collab_essais'] = $essai - 1;
         $youtube['collaborations'] = [];
         $vus = array_slice(array_values(array_unique($vus ?? [])), 0, 50);
         if ($vus) {
