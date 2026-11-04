@@ -182,7 +182,8 @@ class _Extracteur(HTMLParser):
         if tag == "article":
             self._dans_article -= 1
         if self._capture and tag == self._balise:
-            self.textes[self._capture] = re.sub(r"\s+", " ", "".join(self._tampon)).strip()
+            # espaces ORDINAIRES seulement : en Python, \s attrape aussi l'insécable (« 2 664 » coupé, 04/11/2026)
+            self.textes[self._capture] = re.sub(r"[ \t\r\n\f\v]+", " ", "".join(self._tampon)).strip(" \t\r\n")
             self._capture = None
 
     def handle_data(self, data):
