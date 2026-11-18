@@ -180,11 +180,11 @@ associations, clubs, créateurs et indépendants en transition numérique.
   site de l'association de référence du moteur V6 PRV (Peugeot · Renault · Volvo) :
   vitrine, forum phpBB et boutique WooCommerce réunis en UN seul site. La vitrine :
   site STATIQUE HTML/CSS/JS sans framework, responsive et léger, hébergement
-  mutualisé. Design sur mesure ; 8 rubriques + 25 fiches moteurs/véhicules/protos,
+  mutualisé. Design sur mesure ; 8 rubriques + 47 fiches moteurs/véhicules/protos,
   toutes bilingues FR/EN (pages anglaises générées par un pipeline maison) ;
   bibliothèque de documents d'époque consultable en ligne (lecteur PDF intégré),
   chaque document avec son sujet de discussion sur le forum ;
-  FAQ de 702 questions, alimentée par le dépouillement des manuels de réparation
+  FAQ de 738 questions, alimentée par le dépouillement des manuels de réparation
   et plaquettes d'époque de la bibliothèque. Le forum et la boutique portent le
   même design que la vitrine (style enfant phpBB et thème enfant WordPress dessinés
   sur mesure, sans toucher au cœur des applications) : même en-tête, même menu,
@@ -200,7 +200,7 @@ associations, clubs, créateurs et indépendants en transition numérique.
   tutoriels et de restaurations documentées — sont hébergées sur le serveur
   de l'association, les messages pointant vers elles, sans dépendre d'un
   hébergeur d'images tiers. Mentions légales et politique de
-  confidentialité publiées en FR et EN. Journal de neuf articles de fond
+  confidentialité publiées en FR et EN. Journal de dix-huit articles de fond
   bilingues, chacun avec son sujet de discussion sur le forum et ses
   publications Facebook et Instagram ; newsletter à double confirmation — un
   e-mail à chaque nouvel article, désinscription en un clic, aucune adresse IP
