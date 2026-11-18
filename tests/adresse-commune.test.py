@@ -29,7 +29,14 @@ for f in fichiers:
     if RUE in texte:
         (legales.add(f) if f in AUTORISES else fuites.append(f))
 
+# SIREN et lien vers le registre (qui affiche l'adresse) retirés des fichiers lus par les IA (owner 18/11/2026)
+SIREN = ("842 078 453", "842078453", "annuaire-entreprises.data.gouv.fr")
+llms = [f for f in ("llms.txt", "llms-full.txt") if any(x in open(os.path.join(RACINE, f), encoding="utf-8").read() for x in SIREN)]
+
 ok = True
+if llms:
+    ok = False
+    print("✗ SIREN ou lien du registre dans :", ", ".join(llms))
 if fuites:
     ok = False
     print("✗ la rue du siège apparaît hors des mentions légales :", ", ".join(sorted(fuites)))
@@ -38,4 +45,4 @@ if legales != AUTORISES:
     print("✗ siège social absent de :", ", ".join(sorted(AUTORISES - legales)), "(obligation LCEN)")
 if not ok:
     sys.exit(1)
-print("  ✓ adresse : commune seule partout, rue uniquement aux mentions légales (FR + EN)")
+print("  ✓ adresse : commune seule partout, rue uniquement aux mentions légales (FR + EN) ; ni SIREN ni registre dans llms")
