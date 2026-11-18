@@ -313,6 +313,7 @@ nsy-website/
 │   └── newsletter.fr.html / .en.html    #    Bloc d'inscription (articles + pages Journal)
 ├── tests/                               # Tests sur le code réel (chatbot + formulaires)
 │   ├── run-tests.sh                     # ⭐ Suite complète — à lancer avant tout commit chat.php / app.js / formulaires
+│   ├── adresse-commune.test.py          # Rue du siège UNIQUEMENT aux mentions légales (LCEN), la commune partout ailleurs — pages, JSON-LD, llms (owner 18/11/2026) ; aussi lancé par prepare-deploy.sh, qui s'arrête
 │   ├── sonde-journal.test.py            # scripts/sonde-journal.py hors ligne : ce qui est toléré, et tout ce qui doit continuer d'ARRÊTER
 │   ├── journal-hebergeur.test.php       # AUCUN error_log() sans destination dans les PHP servis (tokenizer) — le journal de l'hébergement bloque le site quand il déborde
 │   ├── chat-sanitize.test.php           # nsy_sanitize_reply() de chat.php (whitelist, linkmap, purge…)
