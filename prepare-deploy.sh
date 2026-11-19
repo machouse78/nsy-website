@@ -178,9 +178,9 @@ mkdir -p deploy/public
 # Images
 cp public/nsy-logo.png                  deploy/public/
 cp public/nsy-og.jpg                    deploy/public/
-cp public/nsy-hero-poster.jpg           deploy/public/   # vignette OPAQUE du hero (GSC refuse l'alpha)
-cp public/nsy-hero-poster-640.webp       deploy/public/   # poster LCP du héros, WebP responsive
-cp public/nsy-hero-poster-960.webp       deploy/public/
+cp public/nsy-hero-forge-poster.jpg     deploy/public/   # vignette OPAQUE du hero (GSC refuse l'alpha)
+cp public/nsy-hero-forge-poster-640.webp deploy/public/  # poster LCP du héros = 1re image de la boucle
+cp public/nsy-hero-forge-poster-960.webp deploy/public/
 cp public/photo-profil.jpg              deploy/public/
 cp public/finance-assurance.png         deploy/public/
 cp public/finance-assurance.webp        deploy/public/   # version allégée (-90%) chargée par les pages
@@ -196,7 +196,7 @@ cp public/newsletter/linkedin.png       deploy/public/newsletter/   # icônes de
 cp public/newsletter/facebook.png       deploy/public/newsletter/   # de l'article, sous « Lire l'article » (22/09/2026)
 
 # Vidéos
-cp public/nsy-hero.mp4                  deploy/public/
+cp public/nsy-hero-forge.mp4            deploy/public/   # boucle « forge » refermée au pixel (19/11/2026)
 cp public/finance-assurance.mp4         deploy/public/
 cp public/web-ia.mp4                    deploy/public/
 cp public/prv-concept.mp4               deploy/public/   # apercu anime PRV Concept (page realisations)
@@ -327,7 +327,7 @@ required=(
   "deploy/public/cropped-NSY-logo-180x180.png"
   "deploy/public/cropped-NSY-logo-192x192.png"
   "deploy/public/cropped-NSY-logo-270x270.png"
-  "deploy/public/nsy-hero.mp4"
+  "deploy/public/nsy-hero-forge.mp4"
   "deploy/public/finance-assurance.mp4"
   "deploy/public/web-ia.mp4"
   "deploy/public/renault-wireframe.glb"

@@ -48,10 +48,10 @@
 
     <!-- Vidéo hero -->
     <video:video>
-      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-hero-poster.jpg</video:thumbnail_loc>
+      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-hero-forge-poster.jpg</video:thumbnail_loc>
       <video:title>NSY — double compétence conseil technique &amp; IA</video:title>
-      <video:description>Animation du logo NSY au cœur d'un orbe énergétique : conseil technique finance/assurance et création web propulsée par l'IA.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/nsy-hero.mp4</video:content_loc>
+      <video:description>Le logo NSY forgé dans le métal sur une carte électronique : le courant parcourt le circuit du N, le réseau de neurones du Y s'anime, le cerveau de l'IA veille — conseil technique finance/assurance et services IA.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/nsy-hero-forge.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
 
@@ -85,10 +85,10 @@
     <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/index-en.html" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/" />
     <video:video>
-      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-logo.png</video:thumbnail_loc>
+      <video:thumbnail_loc>https://www.nsy.fr/public/nsy-hero-forge-poster.jpg</video:thumbnail_loc>
       <video:title>NSY — dual expertise: technical consulting &amp; AI</video:title>
-      <video:description>The NSY logo animated inside an energy orb: finance/insurance technical consulting and AI-powered web creation.</video:description>
-      <video:content_loc>https://www.nsy.fr/public/nsy-hero.mp4</video:content_loc>
+      <video:description>The NSY logo forged in metal on a circuit board: current runs through the N's circuit, the Y's neural network comes alive, the AI brain keeps watch — finance/insurance technical consulting and AI services.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/nsy-hero-forge.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
     <video:video>

@@ -1333,6 +1333,9 @@
     // Le rAF ne tourne QUE pendant la lecture — la vidéo est mise en pause
     // hors-écran, donc l'animation s'arrête d'elle-même (philosophie perf).
     const FADE = 0.6; // secondes de fondu à chaque extrémité
+    // Boucle « forge » (19/11/2026) : la dernière image s'enchaîne sur la première au pixel près,
+    // aucun fondu — il ferait clignoter le logo vers le disque toutes les 7,5 s.
+    const SANS_FONDU = glyphVideo.hasAttribute('data-boucle-continue');
     let fadeRAF = null;
     let firstLoop = true; // pas de fondu d'ENTRÉE au tout premier départ : le
                           // poster est déjà peint, l'image doit rester visible (LCP)
@@ -1349,7 +1352,7 @@
       }
       fadeRAF = requestAnimationFrame(fadeTick);
     };
-    const startFade = () => { if (fadeRAF == null) fadeRAF = requestAnimationFrame(fadeTick); };
+    const startFade = () => { if (SANS_FONDU) return; if (fadeRAF == null) fadeRAF = requestAnimationFrame(fadeTick); };
     const stopFade = () => { if (fadeRAF != null) { cancelAnimationFrame(fadeRAF); fadeRAF = null; } };
     glyphVideo.addEventListener('play', startFade);
     glyphVideo.addEventListener('pause', stopFade);

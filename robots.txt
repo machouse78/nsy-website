@@ -26,8 +26,9 @@ Disallow: /newsletter.php
 # Assets visuels explicitement autorisés (images d'articles, logos, OG)
 Allow: /public/nsy-logo.png
 Allow: /public/nsy-og.jpg
-Allow: /public/nsy-hero-poster-640.webp
-Allow: /public/nsy-hero-poster-960.webp
+Allow: /public/nsy-hero-forge-poster-640.webp
+Allow: /public/nsy-hero-forge-poster-960.webp
+Allow: /public/nsy-hero-forge-poster.jpg
 Allow: /public/photo-profil.jpg
 Allow: /public/finance-assurance.png
 Allow: /public/finance-assurance.webp
@@ -62,7 +63,7 @@ Allow: /public/cropped-NSY-logo-270x270.png
 # Vidéos : bloquées du crawl général, SAUF celles du sitemap vidéo
 # (la règle la plus longue l'emporte : un Allow précis bat le Disallow générique)
 Disallow: /public/*.mp4
-Allow: /public/nsy-hero.mp4
+Allow: /public/nsy-hero-forge.mp4
 Allow: /public/finance-assurance.mp4
 Allow: /public/web-ia.mp4
 Allow: /public/seo-geo-thumb.mp4
