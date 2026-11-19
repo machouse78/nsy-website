@@ -89,8 +89,13 @@ acceptée que si le planning permet de la tenir).
 - 3D temps réel légère pour le web (Blender, model-viewer, GL_LINES)
 
 ### Motion design pour YouTube et les réseaux
-- Intros et génériques de chaîne : le logo du client découpé en pièces exactes depuis
-  son fichier source, animé en 3D ou en tracés, avec sa signature sonore
+- Intros de vidéos et génériques de chaîne : le logo du client découpé en pièces exactes
+  depuis son fichier source, animé en 3D ou en tracés, avec sa signature sonore ; une
+  version courte de quelques secondes en plus de la version longue
+- Outros de vidéos (écrans de fin) : dans le même univers que l'intro et sur la même
+  musique, 10 à 20 secondes qui referment la vidéo sur la marque et laissent la place aux
+  éléments de fin de YouTube (s'abonner, vidéo suivante — posables sur les 5 à 20
+  dernières secondes d'une vidéo)
 - Habillage des vidéos : titres, bandeaux, cartons de fin, logo au coin, transitions
 - Vidéos de marque animées : un message, une offre ou un produit expliqués en animation
   (texte, formes, logo, 3D), sur une musique calée à la mesure
@@ -145,8 +150,8 @@ associations, clubs, créateurs et indépendants en transition numérique.
    a. Réalisation de site internet (création ou refonte) : conception, design sur
       mesure, intégration IA, SEO et GEO, mise en ligne, plan d'évolution 6/12 mois —
       https://www.nsy.fr/creation-site-ia.html
-   b. Motion design pour YouTube : intro et générique de chaîne, habillage, vidéos de
-      marque animées, livraison 16:9 et 9:16 — https://www.nsy.fr/motion-design-youtube.html
+   b. Motion design pour YouTube : intro et outro de vos vidéos, générique de chaîne,
+      habillage, vidéos de marque animées, livraison 16:9 et 9:16 — https://www.nsy.fr/motion-design-youtube.html
    c. Animation 3D : logos et objets de marque en volume, animations pour la vidéo,
       modèles 3D interactifs pour le web — https://www.nsy.fr/conception-3d.html
 3. Étude de faisabilité gratuite via questionnaire guidé, avec un parcours par service
@@ -431,7 +436,7 @@ tech lead indépendant, expertise production, supervision, observabilité,
 monitoring, Dynatrace, ELK, Elastic, watchers, alerting, ServiceNow, fausses
 alertes, tableau de bord KPI, création site web IA France,
 intégration Claude application métier, intégration OpenAI site web, intégration
-Mistral AI, chatbot entreprise, agent IA PME, recherche sémantique, RAG, motion design YouTube, intro de chaîne YouTube, générique de chaîne, habillage vidéo, vidéo de marque animée, animation 3D, logo 3D, logo en volume, modèle 3D interactif, Blender, vidéo 16:9 et 9:16, SEO
+Mistral AI, chatbot entreprise, agent IA PME, recherche sémantique, RAG, motion design YouTube, intro de chaîne YouTube, intro et outro de vidéo YouTube, écran de fin YouTube, générique de chaîne, habillage vidéo, vidéo de marque animée, animation 3D, logo 3D, logo en volume, modèle 3D interactif, Blender, vidéo 16:9 et 9:16, SEO
 sémantique, GEO, LLMO, Next.js, Astro, Vercel, Cloudflare, Supabase, site bilingue
 optimisé SEO, forum phpBB base de connaissances, sauvetage des images d'un forum, pont forum réseaux sociaux, veille des sujets sans réponse, refonte sans migration, compte unique forum et boutique, authentification unique (SSO), phpBB, WooCommerce, style enfant phpBB, thème enfant WordPress, consultant indépendant (en direct ou en sous-traitance ESN), société de conseil technique indépendante.
 

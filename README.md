@@ -41,7 +41,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 | **Pourquoi NSY ?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | La philosophie : interlocuteur unique, modèle « en prise directe », partenariat ESN (grands comptes), disponibilité réelle — FAQPage JSON-LD, liée depuis le footer et À propos |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Formulaire (PHP) + canaux directs + demande de faisabilité |
 | **Animation 3D** (offre) | `conception-3d.html` ↔ `3d-design.html` | Page d'offre « Animation 3D » (adresse historique conservée) : ce que NSY réalise + deux démonstrations — modèle wireframe Renault interactif et Short YouTube |
-| **Motion design YouTube** (offre) | `motion-design-youtube.html` ↔ `youtube-motion-design.html` | Page d'offre : intros, génériques, habillage, vidéos de marque animées ; méthode, outils, livrables, un exemple |
+| **Motion design YouTube** (offre) | `motion-design-youtube.html` ↔ `youtube-motion-design.html` | Page d'offre : intros et outros de vidéos, génériques, habillage, vidéos de marque animées ; méthode, outils, livrables, un exemple |
 
 Le formulaire de contact est servi par `contact.php` ; il porte depuis le 13/10/2026 un **objet de la demande** (`<select name="service">` : conseil · site internet · motion design · animation 3D · autre, préselectionnable par `?service=`), repris en sujet du courriel et dans l'accusé de réception. La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Animation 3D, Motion design et FAQ sont accessibles depuis le footer.
 

@@ -41,7 +41,7 @@
 | **Why NSY?** | `pourquoi-nsy.html` ↔ `why-nsy.html` | The philosophy: single point of contact, direct-accountability model, ESN partnerships (large accounts), real availability — FAQPage JSON-LD, linked from the footer and About |
 | **Contact** | `contact.html` ↔ `contact-en.html` | Form (PHP) + direct channels + feasibility request |
 | **3D animation** (offer) | `conception-3d.html` ↔ `3d-design.html` | "3D animation" offer page (historic URL kept): what NSY delivers + two demos — interactive Renault wireframe model and YouTube Short |
-| **YouTube motion design** (offer) | `motion-design-youtube.html` ↔ `youtube-motion-design.html` | Offer page: intros, idents, lower thirds, animated brand videos; method, tools, deliverables, one example |
+| **YouTube motion design** (offer) | `motion-design-youtube.html` ↔ `youtube-motion-design.html` | Offer page: video intros and outros, idents, lower thirds, animated brand videos; method, tools, deliverables, one example |
 
 The contact form is served by `contact.php`; since 13/10/2026 it carries a **subject** (`<select name="service">`: consulting · website · motion design · 3D animation · other, preselectable with `?service=`), echoed in the e-mail subject and the auto-reply. The top nav has **6 links** (Home, Insights, Services, Work, About, Contact); 3D animation, motion design and the FAQ are reachable from the footer.
 
