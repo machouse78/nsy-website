@@ -240,6 +240,7 @@ cp public/services-ia-culasse-trop-serre.jpg       deploy/public/
 cp public/services-ia-culasse-came.jpg             deploy/public/
 cp public/services-ia-vilebrequin.jpg              deploy/public/
 cp public/services-ia-r25-fil-de-fer.jpg           deploy/public/
+cp public/services-ia-video.mp4         deploy/public/   # « La forge » 1080p60 avec sa musique — publication Facebook de l'article 7 (20/11/2026)
 cp public/forum-classe-video.mp4        deploy/public/   # video pleine res article forum classé (publication Facebook, boucle continue + piste silencieuse)
 cp public/intro-nsy-la-forge.jpg        deploy/public/   # vignette sitemap vidéo de l'intro NSY « La forge » (lecteur YouTube sur la page)
 cp public/intro-prv-concept.jpg         deploy/public/   # vignette sitemap vidéo de l'intro PRV « Le V à 90° » (lecteur YouTube sur la page)
