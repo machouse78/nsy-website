@@ -54,6 +54,7 @@ Allow: /public/compte-unique-article-en.jpg
 Allow: /public/forum-classe-thumb.jpg
 Allow: /public/forum-classe-article.jpg
 Allow: /public/forum-classe-article-en.jpg
+Allow: /public/intro-nsy-la-forge.jpg
 Allow: /public/intro-prv-concept.jpg
 Allow: /public/intro-zick-family.jpg
 Allow: /public/cropped-NSY-logo-32x32.png

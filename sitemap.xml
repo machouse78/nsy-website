@@ -202,7 +202,7 @@
   <!-- Réalisations / portfolio clients (page dédiée FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/realisations.html</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -238,6 +238,18 @@
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
     <image:image>
+      <image:loc>https://www.nsy.fr/public/intro-nsy-la-forge.jpg</image:loc>
+      <image:title>Intro YouTube « La forge » — le logo NSY forgé par la foudre, motion design 3D réalisé par NSY</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/intro-nsy-la-forge.jpg</video:thumbnail_loc>
+      <video:title>Intro YouTube « La forge » — motion design NSY</video:title>
+      <video:description>L'intro de la chaîne YouTube de NSY : un cerveau fait de neurones foudroie une carte électronique en relief, et le logo remonte du métal fondu, lettre par lettre, puis se sculpte — 12 secondes d'un seul plan-séquence, 4K 60 i/s.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/q2XRMF5QX8s</video:player_loc>
+      <video:duration>12</video:duration>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <image:image>
       <image:loc>https://www.nsy.fr/public/intro-prv-concept.jpg</image:loc>
       <image:title>Intro YouTube « Le V à 90° » — motion design réalisé par NSY pour PRV Concept</image:title>
     </image:image>
@@ -265,7 +277,7 @@
 
   <url>
     <loc>https://www.nsy.fr/portfolio.html</loc>
-    <lastmod>2026-11-18</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
 
@@ -284,6 +296,18 @@
       <video:title>PRV Concept website preview — an NSY build</video:title>
       <video:description>Parcours du site www.prv-concept.com conçu par NSY : accueil, moteurs PRV, protos et bibliothèque d'atelier, avec l'assistant conversationnel de l'association.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/Jm9sE9nU340</video:player_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/intro-nsy-la-forge.jpg</image:loc>
+      <image:title>YouTube intro "La forge" — the NSY logo forged by lightning, 3D motion design by NSY</image:title>
+    </image:image>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/intro-nsy-la-forge.jpg</video:thumbnail_loc>
+      <video:title>YouTube intro "La forge" — NSY motion design</video:title>
+      <video:description>NSY's YouTube channel intro: a brain made of neurons strikes a raised circuit board with lightning, and the logo rises from the molten metal, letter by letter, then is sculpted — 12 seconds in a single continuous shot, 4K 60 fps.</video:description>
+      <video:player_loc>https://www.youtube-nocookie.com/embed/q2XRMF5QX8s</video:player_loc>
+      <video:duration>12</video:duration>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
     <image:image>
