@@ -256,7 +256,7 @@
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/intro-prv-concept.jpg</video:thumbnail_loc>
       <video:title>Intro YouTube « Le V à 90° » — motion design NSY</video:title>
-      <video:description>Aperçu de l'intro de la chaîne YouTube de PRV Concept : logo de l'association en volume, orchestre, montée en régime d'un V6 — 14 secondes, 4K 60 i/s, réalisée par NSY.</video:description>
+      <video:description>Aperçu de l'intro de la chaîne YouTube de PRV Concept : un vilebrequin de V6 PRV modélisé en 3D qui devient le disque du logo, orchestre, montée en régime d'un V6 — 14 secondes, 4K 60 i/s, réalisée par NSY.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/Gx5F6Gl17n0</video:player_loc>
       <video:duration>14</video:duration>
       <video:family_friendly>yes</video:family_friendly>
@@ -317,7 +317,7 @@
     <video:video>
       <video:thumbnail_loc>https://www.nsy.fr/public/intro-prv-concept.jpg</video:thumbnail_loc>
       <video:title>YouTube intro "Le V à 90°" — NSY motion design</video:title>
-      <video:description>Preview of the PRV Concept YouTube channel intro: the association's logo in volume, orchestra, a V6 revving up — 14 seconds, 4K 60 fps, made by NSY.</video:description>
+      <video:description>Preview of the PRV Concept YouTube channel intro: a PRV V6 crankshaft modelled in 3D that becomes the disc of the logo, orchestra, a V6 revving up — 14 seconds, 4K 60 fps, made by NSY.</video:description>
       <video:player_loc>https://www.youtube-nocookie.com/embed/Gx5F6Gl17n0</video:player_loc>
       <video:duration>14</video:duration>
       <video:family_friendly>yes</video:family_friendly>
@@ -534,7 +534,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/motion-design-youtube.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/motion-design-youtube.html" />
@@ -543,7 +543,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/youtube-motion-design.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/motion-design-youtube.html" />
