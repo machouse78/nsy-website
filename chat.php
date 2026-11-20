@@ -507,6 +507,8 @@ function nsy_sanitize_reply(string $reply): string
         'https://www.facebook.com/reel/1392916158966415',
         'https://www.facebook.com/reel/1422266333377597',
         'https://www.linkedin.com/pulse/la-m%25c3%25aame-question-tous-les-trois-mois-pourquoi-un-ytvne',
+        'https://www.facebook.com/reel/1979522909951721',
+        'https://www.linkedin.com/pulse/pas-seulement-des-sites-ce-que-lia-fabrique-chez-huoxe',
     ];
     $isNsy = static function (?string $url) use ($nsyHosts, $ownHosts, $officialPrefixes): bool {
         $u = mb_strtolower((string)$url);
@@ -563,6 +565,11 @@ function nsy_sanitize_reply(string $reply): string
         'forum-base-de-connaissances-reseaux-sociaux.html' => [
             'linkedin' => 'https://www.linkedin.com/pulse/la-m%25C3%25AAme-question-tous-les-trois-mois-pourquoi-un-ytvne',
             'facebook' => 'https://www.facebook.com/reel/1422266333377597/',
+        ],
+        // Article 7 (20/11/2026) : Facebook (« La forge » en vidéo) et LinkedIn publiés le même jour.
+        'pas-seulement-des-sites-video-3d-ia.html' => [
+            'linkedin' => 'https://www.linkedin.com/pulse/pas-seulement-des-sites-ce-que-lia-fabrique-chez-huoxe/',
+            'facebook' => 'https://www.facebook.com/reel/1979522909951721/',
         ],
     ];
     if (!replyIsEnglish($reply)) {

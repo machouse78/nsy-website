@@ -495,6 +495,8 @@
       'https://www.facebook.com/reel/1392916158966415',
       'https://www.facebook.com/reel/1422266333377597',
       'https://www.linkedin.com/pulse/la-m%25c3%25aame-question-tous-les-trois-mois-pourquoi-un-ytvne',
+      'https://www.facebook.com/reel/1979522909951721',
+      'https://www.linkedin.com/pulse/pas-seulement-des-sites-ce-que-lia-fabrique-chez-huoxe',
     ];
     const extOk = (u) => { const l = u.toLowerCase(); return EXT_OK.some((p) => l.startsWith(p)); };
     return esc

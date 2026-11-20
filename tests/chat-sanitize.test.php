@@ -40,6 +40,8 @@ $officials = [
     'https://www.facebook.com/reel/1392916158966415/',
     'https://www.facebook.com/reel/1422266333377597/',
     'https://www.linkedin.com/pulse/la-m%25C3%25AAme-question-tous-les-trois-mois-pourquoi-un-ytvne',
+    'https://www.facebook.com/reel/1979522909951721/',
+    'https://www.linkedin.com/pulse/pas-seulement-des-sites-ce-que-lia-fabrique-chez-huoxe/',
 ];
 foreach ($officials as $u) {
     t("officiel conservé (markdown) : $u", str_contains(nsy_sanitize_reply("Voir [lien]($u) ici et voilà."), $u));
@@ -97,6 +99,11 @@ t('article 6 cité sans socials → LinkedIn + réel Facebook ajoutés',
   str_contains($r, 'linkedin.com/pulse/la-m%25C3%25AAme-question') && str_contains($r, 'facebook.com/reel/1422266333377597'));
 $r = nsy_sanitize_reply("Voir notre [article](forum-base-de-connaissances-reseaux-sociaux.html) et son [réel](https://www.facebook.com/reel/1422266333377597/) et voilà.");
 t('article 6 cité AVEC son réel → rien d\'ajouté', substr_count($r, '1422266333377597') === 1);
+$r = nsy_sanitize_reply("Voir notre [article](pas-seulement-des-sites-video-3d-ia.html) sur les intros et la 3D.");
+t('article 7 cité sans socials → LinkedIn + réel Facebook ajoutés',
+  str_contains($r, 'linkedin.com/pulse/pas-seulement-des-sites-ce-que-lia-fabrique-chez-huoxe') && str_contains($r, 'facebook.com/reel/1979522909951721'));
+$r = nsy_sanitize_reply("Voir notre [article](pas-seulement-des-sites-video-3d-ia.html) et sa [vidéo](https://www.facebook.com/reel/1979522909951721/) et voilà.");
+t('article 7 cité AVEC son réel → rien d\'ajouté', substr_count($r, '1979522909951721') === 1);
 
 // ── Formulations bannies (positionnement ESN) → réécrites côté serveur ──
 t('« sans intermédiaire » → « en prise directe »',
