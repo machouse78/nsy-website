@@ -45,7 +45,7 @@
 
 The contact form is served by `contact.php`; since 13/10/2026 it carries a **subject** (`<select name="service">`: consulting · website · motion design · 3D animation · other, preselectable with `?service=`), echoed in the e-mail subject and the auto-reply. The top nav has **6 links** (Home, Insights, Services, Work, About, Contact); 3D animation, motion design and the FAQ are reachable from the footer.
 
-Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (6: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend », « From terabytes to a megabyte », « One site, one forum, one shop, one account », « The same question, every three months » — animated thumbnails), **5 city pages** as FR/EN pairs (Orléans · Tours · Paris · Lyon · Bordeaux) + **Paris technical consultant**, **redesign offering** `refonte-site-internet.html` / `website-redesign.html`, **motion design offer** `motion-design-youtube.html` / `youtube-motion-design.html`, **feasibility questionnaire** `faisabilite.html` / `feasibility.html` (**four paths**: new build · redesign · motion design · 3D animation — sections carry `data-if="creation refonte"`, `"motion"` or `"3d"`, `js/faisabilite.js` only counts visible steps and renumbers them; `?projet=motion` preselects), legal pages — **70 pages** in total.
+Ancillary pages: **FAQ** `faq.html` / `faq-en.html`, **8 pairs of pillar pages** (expertise & offerings, GEO wave 2), **journal articles** (7: « SEO vs GEO », « Wiring an AI chatbot into a forum », « Building your website with AI in a weekend », « From terabytes to a megabyte », « One site, one forum, one shop, one account », « The same question, every three months », « Not just websites » — in-body figures: YouTube players, side-by-side images, loop; animated thumbnails), **5 city pages** as FR/EN pairs (Orléans · Tours · Paris · Lyon · Bordeaux) + **Paris technical consultant**, **redesign offering** `refonte-site-internet.html` / `website-redesign.html`, **motion design offer** `motion-design-youtube.html` / `youtube-motion-design.html`, **feasibility questionnaire** `faisabilite.html` / `feasibility.html` (**four paths**: new build · redesign · motion design · 3D animation — sections carry `data-if="creation refonte"`, `"motion"` or `"3d"`, `js/faisabilite.js` only counts visible steps and renumbers them; `?projet=motion` preselects), legal pages — **72 pages** in total.
 
 ## Bilingual (FR / EN)
 
@@ -75,7 +75,7 @@ One HTML page per language (no build, clean SEO), with **truly translated** slug
 
 - **Language switch**: 🇫🇷 / 🇬🇧 flags in the nav → set an `nsy_lang` cookie (1 year, `SameSite=Lax`) and redirect to the counterpart. The target is the **flag's real link** (written by `scripts/sync-partials.mjs` from each page's hreflang), then the page's `<link rel="alternate" hreflang>`, and only as a last resort the slug table in `js/app.js` (05/10/2026: the table alone was missing seven pairs and the flag stayed put).
 - **Auto-detection** : on `/` (no cookie), `.htaccess` reads `Accept-Language` and 302-redirects to `/index-en.html` if the browser is in English. The user's choice (cookie) then takes precedence.
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 70 pages, self-referencing canonicals.
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 72 pages, self-referencing canonicals.
 - **`nsy_lang` cookie** : the only functional cookie, set on explicit action (flag click) — consent-exempt (CNIL deliberation 2020-091). Documented on the legal pages.
 
 > ⚠️ **A language change applies to the WHOLE site, at every layer** — not just the visible text. Remember: the visible HTML (FR + EN), the **JS-injected UI strings** (form button states and toasts in `js/app.js`, driven by `pageLang`), the **server responses + the email** (`contact.php`, driven by the hidden `lang` field), the **hidden `lang` field on every form**, the meta/OG/JSON-LD, the legal pages, the sitemap and the chatbot. The contact form is bilingual end to end (front + server errors + auto-reply email).
@@ -237,7 +237,7 @@ nsy-website/
 │   ├── nav.fr.html / nav.en.html        #    Top menu ({{P}} token = anchor base path)
 │   └── footer.fr.html / footer.en.html  #    Footer
 ├── scripts/                             # Build tooling (3D + partials sync)
-│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 71 pages (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injects nav/footer/chatbot into all 73 pages (npm run partials)
 │   ├── sites-clients.mjs                # Derives the dashboard CLIENTS list (Backlinks) from realisations.html — run by prepare-deploy
 │   ├── record-realisation.mjs           # Animated Work preview (real-time screencast + encode)
 │   ├── indexnow-ping.mjs                # IndexNow ping after deploys
@@ -372,8 +372,8 @@ until you run it.
 
 ## SEO, GEO & social sharing
 
-- **Sitemap** : 70 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, YouTube players of the intros as `player_loc`, journal illustration), with `xhtml:link` hreflang
-- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 70 pages
+- **Sitemap** : 72 pages (real URLs, no more `#` anchors) + key images + videos (heroes, services, work previews, YouTube players of the intros as `player_loc`, journal illustration), with `xhtml:link` hreflang
+- **Reciprocal hreflang** `fr` / `en` / `x-default` on all 72 pages
 - **Consistent canonical** : everything points to `https://www.nsy.fr/` (uniform trailing slash), reinforced by the `.htaccess` redirect
 - **JSON-LD `@graph`** (FR/EN home pages) : Organization + ProfessionalService + LocalBusiness (region only) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nodes linked by `@id`, sameAs LinkedIn company + founder / GitHub / YouTube
 - **Structured-data compliance** (3 Search Console alerts resolved in Aug 2026): every **required** field of a rich-result type carries the **inlined typed node** (same `@id`) — `ProfilePage.mainEntity`, but also `author` and `publisher` on articles, dates (`dateModified`, `datePublished`) are **full ISO 8601 with timezone**, and every `<video>` has a `poster=` plus its `video:video` block under **every** page that displays it. Causes, fixes and audit method: `seo-geo-llmo` skill §5

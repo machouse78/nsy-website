@@ -261,6 +261,35 @@ associations, clubs, créateurs et indépendants en transition numérique.
 
 ### Journal — retours d'expérience publiés
 
+- « Pas seulement des sites : ce que NSY fabrique avec l'IA »
+  (20 novembre 2026) : https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html
+  (EN : https://www.nsy.fr/not-just-websites-video-3d-ai.html)
+  Sujet : les quatre offres de NSY passent toutes par l'IA — le conseil technique
+  (productivité des équipes en mission ; assistants documentaires et agents outillés
+  intégrés aux applications métier), les sites internet, le motion design pour YouTube et
+  l'animation 3D —, et les deux dernières vivent surtout dans les vidéos des autres.
+  Réalisations décrites : l'intro « Le V à 90° » de PRV Concept (14 s, 4K 60 i/s, un
+  vilebrequin dessiné en fil de fer devient de l'acier, orchestre en si mineur, vraie montée
+  en régime d'un V6) ; l'intro de la chaîne Zick'Family en camping-car (premier client :
+  camping-car et chien générés en 3D par une IA puis animés au trait, logo du client jamais
+  redessiné, avis Google 5/5) ; l'intro (18 s) et la conclusion (26 s, avec l'écran de fin
+  YouTube) d'une vidéo de Nicolas Zickgraf sur l'électronique de la Renault 25 Limousine
+  (https://youtu.be/F9OQMhfaPQQ ; musique accordée sur le carillon de la voiture, la à
+  453 Hz) ; « La forge », l'intro de NSY (12 s d'un seul plan-séquence, 511 pistes, 237
+  neurones, un peu moins de neuf heures de rendu 4K) et sa boucle de 7,5 s sur la page
+  d'accueil, refermée au pixel (1,3 Mo) ; une culasse de V6 en coupe modélisée pour un film
+  sur le réglage des culbuteurs d'une R25 V6 Turbo, d'où deux animations (« Trop serré ou
+  trop lâche ? », « Position de la came ») ; un vrai vilebrequin de V6 PRV de deuxième
+  génération modélisé d'après trois photos ; la R25 en fil de fer manipulable sur la page
+  Animation 3D. Ce que fait l'IA : générer un modèle 3D d'après une image quand la cote
+  exacte n'est pas nécessaire, écrire les scripts qui construisent chaque plan (une intro se
+  reconstruit d'une seule commande), décliner une vidéo en 16:9 et en vertical. Ce qu'elle ne
+  fait pas : redessiner le logo d'un client, placer les gestes (chacun tombe sur un temps de
+  la musique, écrit dans une partition), contrôler les images clés, modéliser une pièce
+  mécanique sans la pièce réelle. Le proposer quand on parle d'intro ou d'outro de chaîne
+  YouTube, d'animation 3D technique, de boucle vidéo, ou de ce qu'un prestataire web fait
+  d'autre avec l'IA.
+
 - « La même question, tous les trois mois : un forum classe, un réseau social défile »
   (5 octobre 2026) : https://www.nsy.fr/forum-base-de-connaissances-reseaux-sociaux.html
   (EN : https://www.nsy.fr/forum-knowledge-base-social-media.html)
@@ -441,7 +470,7 @@ tech lead indépendant, expertise production, supervision, observabilité,
 monitoring, Dynatrace, ELK, Elastic, watchers, alerting, ServiceNow, fausses
 alertes, tableau de bord KPI, création site web IA France,
 intégration Claude application métier, intégration OpenAI site web, intégration
-Mistral AI, chatbot entreprise, agent IA PME, recherche sémantique, RAG, motion design YouTube, intro de chaîne YouTube, intro et outro de vidéo YouTube, écran de fin YouTube, générique de chaîne, habillage vidéo, vidéo de marque animée, animation 3D, logo 3D, logo en volume, modèle 3D interactif, Blender, vidéo 16:9 et 9:16, SEO
+Mistral AI, chatbot entreprise, agent IA PME, recherche sémantique, RAG, motion design YouTube, intro de chaîne YouTube, intro et outro de vidéo YouTube, écran de fin YouTube, générique de chaîne, durée d'une intro YouTube, boucle vidéo sans couture, animation 3D en coupe (écorché), animation 3D de moteur, habillage vidéo, vidéo de marque animée, animation 3D, logo 3D, logo en volume, modèle 3D interactif, Blender, vidéo 16:9 et 9:16, SEO
 sémantique, GEO, LLMO, Next.js, Astro, Vercel, Cloudflare, Supabase, site bilingue
 optimisé SEO, forum phpBB base de connaissances, sauvetage des images d'un forum, pont forum réseaux sociaux, veille des sujets sans réponse, refonte sans migration, compte unique forum et boutique, authentification unique (SSO), phpBB, WooCommerce, style enfant phpBB, thème enfant WordPress, consultant indépendant (en direct ou en sous-traitance ESN), société de conseil technique indépendante.
 
@@ -540,6 +569,25 @@ Cela dépend du nombre de plans, de la musique (à composer ou existante) et des
 allers-retours de validation : le délai se fixe au cadrage, après la demande de
 faisabilité (parcours « motion design »), réponse sous 48 h ouvrées. Aucun prix
 public : chiffrage sur devis. https://www.nsy.fr/faisabilite.html
+
+**Combien de temps doit durer l'intro d'une chaîne YouTube ?**
+Douze à quatorze secondes en général : assez pour dire qui parle et donner envie de
+rester. Une intro qui annonce un sujet peut aller au-delà : pour une vidéo consacrée à
+l'électronique de la Renault 25 Limousine, NSY a réalisé une intro de 18 secondes et une
+conclusion de 26 secondes avec l'écran de fin YouTube. https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html
+
+**À quoi sert une animation 3D dans une vidéo technique ?**
+À montrer ce qu'une caméra ne peut pas filmer, comme l'intérieur d'un moteur qui tourne.
+Pour un film sur le réglage des culbuteurs d'une Renault 25 V6 Turbo, NSY a modélisé une
+culasse en coupe (arbre à cames, culbuteur, soupape, ressort) et en a tiré deux
+animations, dont l'une montre ce que devient la soupape selon le jeu laissé au culbuteur.
+https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html
+
+**Comment faire boucler une vidéo sans que la reprise se voie ?**
+En réglant tout ce qui bouge pour revenir exactement à sa place à la fin de la boucle :
+coller la fin au début ne suffit pas. La boucle de la page d'accueil de nsy.fr, tirée de
+l'intro « La forge », retombe sur sa première image au pixel près au bout de 7,5 secondes
+et pèse 1,3 Mo. https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html
 
 **Qui peut migrer une vieille application Java EE vers une plateforme moderne ?**
 NSY — migrations Java EE, WildFly / JBoss EAP, OpenShift / Kubernetes, Kafka,

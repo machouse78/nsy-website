@@ -7,7 +7,7 @@
   <!-- Accueil FR (landing) — le détail vit sur des pages distinctes -->
   <url>
     <loc>https://www.nsy.fr/</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -77,7 +77,7 @@
   <!-- Page principale EN -->
   <url>
     <loc>https://www.nsy.fr/index-en.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
 
@@ -385,7 +385,7 @@
   <!-- FAQ — 50+ questions/réponses expertise & offres (FR / EN) -->
   <url>
     <loc>https://www.nsy.fr/faq.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -396,7 +396,7 @@
 
   <url>
     <loc>https://www.nsy.fr/faq-en.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
 
@@ -552,7 +552,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/glossaire-ia-web.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -561,7 +561,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/ai-web-glossary.html</loc>
-    <lastmod>2026-11-19</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/glossaire-ia-web.html" />
@@ -596,7 +596,7 @@
   <!-- Journal + pages géo (ajout 2026-07-29) -->
   <url>
     <loc>https://www.nsy.fr/blog.html</loc>
-    <lastmod>2026-10-05</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -647,7 +647,7 @@
   </url>
   <url>
     <loc>https://www.nsy.fr/blog-en.html</loc>
-    <lastmod>2026-10-05</lastmod>
+    <lastmod>2026-11-20</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
     <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/blog.html" />
@@ -673,6 +673,13 @@
       <video:content_loc>https://www.nsy.fr/public/forum-classe-thumb.mp4</video:content_loc>
       <video:family_friendly>yes</video:family_friendly>
     </video:video>
+    <video:video>
+      <video:thumbnail_loc>https://www.nsy.fr/public/services-ia-thumb.jpg</video:thumbnail_loc>
+      <video:title>Pas seulement des sites — illustration animée</video:title>
+      <video:description>Extrait de « La forge », l'intro de la chaîne YouTube de NSY : un cerveau de neurones foudroie une carte électronique et le métal en fusion remonte — la vignette du journal NSY.</video:description>
+      <video:content_loc>https://www.nsy.fr/public/services-ia-thumb.mp4</video:content_loc>
+      <video:family_friendly>yes</video:family_friendly>
+    </video:video>
     <image:image>
       <image:loc>https://www.nsy.fr/public/chatbot-forum-thumb.jpg</image:loc>
       <image:title>An AI chatbot wired into a forum — illustration</image:title>
@@ -692,6 +699,10 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/forum-classe-thumb.jpg</image:loc>
       <image:title>La même question, tous les trois mois — vignette</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-thumb.jpg</image:loc>
+      <image:title>Pas seulement des sites : ce que NSY fabrique avec l'IA — vignette</image:title>
     </image:image>
   </url>
   <url>
@@ -759,6 +770,80 @@
     <image:image>
       <image:loc>https://www.nsy.fr/public/compte-unique-article-en.jpg</image:loc>
       <image:title>Infographic — One site, one forum, one shop, one account</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/not-just-websites-video-3d-ai.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-infographie-fr.jpg</image:loc>
+      <image:title>Infographie — Ce que NSY fabrique avec l'IA</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-culasse-trop-serre.jpg</image:loc>
+      <image:title>Culasse de V6 en coupe — animation 3D « Trop serré ou trop lâche ? »</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-culasse-came.jpg</image:loc>
+      <image:title>Culasse de V6 en coupe — animation 3D « Position de la came »</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-vilebrequin.jpg</image:loc>
+      <image:title>Vilebrequin du V6 PRV modélisé d'après trois photos</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-r25-limousine-intro.jpg</image:loc>
+      <image:title>Intro animée d'une vidéo sur la Renault 25 Limousine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-r25-limousine-conclusion.jpg</image:loc>
+      <image:title>Conclusion animée d'une vidéo sur la Renault 25 Limousine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-r25-fil-de-fer.jpg</image:loc>
+      <image:title>Renault 25 en fil de fer — modèle 3D interactif</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://www.nsy.fr/not-just-websites-video-3d-ai.html</loc>
+    <lastmod>2026-11-20</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.nsy.fr/not-just-websites-video-3d-ai.html" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.nsy.fr/pas-seulement-des-sites-video-3d-ia.html" />
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-infographie-en.jpg</image:loc>
+      <image:title>Infographic — What NSY builds with AI</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-culasse-trop-serre.jpg</image:loc>
+      <image:title>Cutaway V6 cylinder head — 3D animation “Too tight or too loose?”</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-culasse-came.jpg</image:loc>
+      <image:title>Cutaway V6 cylinder head — 3D animation “Cam position”</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-vilebrequin.jpg</image:loc>
+      <image:title>PRV V6 crankshaft modelled from three photos</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-r25-limousine-intro.jpg</image:loc>
+      <image:title>Animated intro of a video about the Renault 25 Limousine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-r25-limousine-conclusion.jpg</image:loc>
+      <image:title>Animated conclusion of a video about the Renault 25 Limousine</image:title>
+    </image:image>
+    <image:image>
+      <image:loc>https://www.nsy.fr/public/services-ia-r25-fil-de-fer.jpg</image:loc>
+      <image:title>Renault 25 in wireframe — interactive 3D model</image:title>
     </image:image>
   </url>
   <url>

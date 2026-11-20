@@ -54,6 +54,15 @@ Allow: /public/compte-unique-article-en.jpg
 Allow: /public/forum-classe-thumb.jpg
 Allow: /public/forum-classe-article.jpg
 Allow: /public/forum-classe-article-en.jpg
+Allow: /public/services-ia-thumb.jpg
+Allow: /public/services-ia-infographie-fr.jpg
+Allow: /public/services-ia-infographie-en.jpg
+Allow: /public/services-ia-r25-limousine-intro.jpg
+Allow: /public/services-ia-r25-limousine-conclusion.jpg
+Allow: /public/services-ia-culasse-trop-serre.jpg
+Allow: /public/services-ia-culasse-came.jpg
+Allow: /public/services-ia-vilebrequin.jpg
+Allow: /public/services-ia-r25-fil-de-fer.jpg
 Allow: /public/intro-nsy-la-forge.jpg
 Allow: /public/intro-prv-concept.jpg
 Allow: /public/intro-zick-family.jpg
@@ -73,6 +82,7 @@ Allow: /public/weekend-site-thumb.mp4
 Allow: /public/supervision-thumb.mp4
 Allow: /public/compte-unique-anim-thumb.mp4
 Allow: /public/forum-classe-thumb.mp4
+Allow: /public/services-ia-thumb.mp4
 # Modèles 3D — ils ne servent pas le SEO texte
 Disallow: /public/*.glb
 Disallow: /public/*.gltf

@@ -104,6 +104,8 @@ cp reunir-site-forum-boutique-compte-unique.html deploy/
 cp one-site-forum-shop-single-account.html deploy/
 cp forum-base-de-connaissances-reseaux-sociaux.html deploy/
 cp forum-knowledge-base-social-media.html deploy/
+cp pas-seulement-des-sites-video-3d-ia.html deploy/
+cp not-just-websites-video-3d-ai.html deploy/
 cp site-ia-en-un-week-end.html deploy/
 cp ai-website-in-a-weekend.html deploy/
 cp stats-collector.php deploy/
@@ -228,6 +230,16 @@ cp public/forum-classe-thumb.jpg        deploy/public/   # poster vignette artic
 cp public/forum-classe-thumb.mp4        deploy/public/   # vignette ANIMEE article forum classé (boucle continue)
 cp public/forum-classe-article.jpg      deploy/public/   # infographie FR article forum classé (+ OG)
 cp public/forum-classe-article-en.jpg   deploy/public/   # infographie EN article forum classé (+ OG)
+cp public/services-ia-thumb.jpg         deploy/public/   # poster vignette article 7 « Pas seulement des sites » (20/11/2026)
+cp public/services-ia-thumb.mp4         deploy/public/   # vignette ANIMEE article 7 (extrait de « La forge », boomerang)
+cp public/services-ia-infographie-fr.jpg deploy/public/  # infographie FR article 7 (+ OG)
+cp public/services-ia-infographie-en.jpg deploy/public/  # infographie EN article 7 (+ OG)
+cp public/services-ia-r25-limousine-intro.jpg      deploy/public/   # figures de l'article 7 (images tirées des réalisations)
+cp public/services-ia-r25-limousine-conclusion.jpg deploy/public/
+cp public/services-ia-culasse-trop-serre.jpg       deploy/public/
+cp public/services-ia-culasse-came.jpg             deploy/public/
+cp public/services-ia-vilebrequin.jpg              deploy/public/
+cp public/services-ia-r25-fil-de-fer.jpg           deploy/public/
 cp public/forum-classe-video.mp4        deploy/public/   # video pleine res article forum classé (publication Facebook, boucle continue + piste silencieuse)
 cp public/intro-nsy-la-forge.jpg        deploy/public/   # vignette sitemap vidéo de l'intro NSY « La forge » (lecteur YouTube sur la page)
 cp public/intro-prv-concept.jpg         deploy/public/   # vignette sitemap vidéo de l'intro PRV « Le V à 90° » (lecteur YouTube sur la page)

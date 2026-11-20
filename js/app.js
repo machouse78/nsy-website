@@ -1209,6 +1209,7 @@
   // rather than -en.html suffixes, so we need an explicit FR ↔ EN map.
   // Exception: index.html stays "index.html" in EN as index-en.html (no good translation).
   const SLUG_FR_TO_EN = {
+    'pas-seulement-des-sites-video-3d-ia.html': 'not-just-websites-video-3d-ai.html',
     'forum-base-de-connaissances-reseaux-sociaux.html': 'forum-knowledge-base-social-media.html',
     'reunir-site-forum-boutique-compte-unique.html': 'one-site-forum-shop-single-account.html',
     'superviser-production-teraoctets-megaoctet.html': 'production-monitoring-terabytes-megabyte.html',
@@ -1485,7 +1486,9 @@
         || v.id === 'weekend-site-video'
         || v.id === 'supervision-video'
         || v.id === 'compte-unique-video'
-        || v.id === 'forum-classe-video') return; // boomerang ou boucle continue déjà sans couture
+        || v.id === 'forum-classe-video'
+        || v.id === 'services-ia-video'
+        || v.hasAttribute('data-boucle-continue')) return; // boomerang ou boucle continue déjà sans couture (figures d'article : data-boucle-continue)
     setupLoopFade(v);
   });
 

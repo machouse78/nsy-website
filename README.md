@@ -45,7 +45,7 @@ Site **multi-pages** (une page par rubrique du menu) — l'accueil est une **lan
 
 Le formulaire de contact est servi par `contact.php` ; il porte depuis le 13/10/2026 un **objet de la demande** (`<select name="service">` : conseil · site internet · motion design · animation 3D · autre, préselectionnable par `?service=`), repris en sujet du courriel et dans l'accusé de réception. La nav du haut a **6 liens** (Accueil, Journal, Services, Réalisations, À propos, Contact) ; Animation 3D, Motion design et FAQ sont accessibles depuis le footer.
 
-Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (6 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end », « Des téraoctets au mégaoctet », « Un site, un forum, une boutique, un seul compte », « La même question, tous les trois mois » — vignettes animées, toutes au logo NSY), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **offre motion design** `motion-design-youtube.html` / `youtube-motion-design.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (**quatre parcours** : création · refonte · motion design · animation 3D — les sections portent `data-if="creation refonte"`, `"motion"` ou `"3d"`, `js/faisabilite.js` ne compte que les étapes visibles et les renumérote ; `?projet=motion` préselectionne), pages légales — **70 pages** au total.
+Pages annexes : **FAQ** `faq.html` / `faq-en.html`, **8 paires de pages piliers** (expertises & offres, vague 2 GEO), **articles du journal** (7 : « SEO vs GEO », « Un chatbot IA branché sur un forum », « Créer son site avec l'IA en un week-end », « Des téraoctets au mégaoctet », « Un site, un forum, une boutique, un seul compte », « La même question, tous les trois mois », « Pas seulement des sites » — figures dans le corps : lecteurs YouTube, images côte à côte, boucle ; vignettes animées, toutes au logo NSY), **5 pages villes** en paires FR/EN (Orléans · Tours · Paris · Lyon · Bordeaux) + **consultant technique Paris**, **offre refonte** `refonte-site-internet.html` / `website-redesign.html`, **offre motion design** `motion-design-youtube.html` / `youtube-motion-design.html`, **questionnaire de faisabilité** `faisabilite.html` / `feasibility.html` (**quatre parcours** : création · refonte · motion design · animation 3D — les sections portent `data-if="creation refonte"`, `"motion"` ou `"3d"`, `js/faisabilite.js` ne compte que les étapes visibles et les renumérote ; `?projet=motion` préselectionne), pages légales — **72 pages** au total.
 
 ## Bilingue (FR / EN)
 
@@ -75,7 +75,7 @@ Une page HTML par langue (pas de build, SEO propre), avec slugs **réellement tr
 
 - **Switch de langue** : drapeaux 🇫🇷 / 🇬🇧 dans la nav → pose un cookie `nsy_lang` (1 an, `SameSite=Lax`) et redirige vers la variante. La cible est le **lien réel du drapeau** (écrit par `scripts/sync-partials.mjs` depuis le hreflang de chaque page), sinon le `<link rel="alternate" hreflang>`, et en dernier recours la table de slugs de `js/app.js` (vécu 05/10/2026 : la table seule oubliait sept paires, le drapeau laissait sur place).
 - **Auto-détection** : sur `/` (sans cookie), `.htaccess` lit `Accept-Language` et redirige en 302 vers `/index-en.html` si le navigateur est en anglais. Le choix utilisateur (cookie) prime ensuite.
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 70 pages, canoniques auto-référencées.
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 72 pages, canoniques auto-référencées.
 - **Cookie `nsy_lang`** : unique cookie fonctionnel, posé sur action explicite (clic drapeau) — exempté de consentement (délibération CNIL 2020-091). Documenté dans les pages légales.
 
 > ⚠️ **Une modif de langue s'applique à TOUT le site, à chaque couche** — pas seulement le texte visible. Penser à : le HTML visible (FR + EN), les **chaînes d'UI injectées en JS** (états du bouton et toasts du formulaire dans `js/app.js`, pilotés par `pageLang`), les **réponses serveur + l'email** (`contact.php`, pilotés par le champ caché `lang`), le **champ caché `lang` de chaque formulaire**, le meta/OG/JSON-LD, les pages légales, le sitemap et le chatbot. Le formulaire de contact est bilingue de bout en bout (front + erreurs serveur + email d'auto-réponse).
@@ -329,7 +329,7 @@ nsy-website/
 │   ├── ansley-plein-ecran.test.mjs      # Agrandir / réduire le panneau d'Ansley (Chrome headless)
 │   └── forms-live.sh                    # Smoke test PRODUCTION des formulaires (à la demande, n'envoie jamais d'email)
 ├── scripts/                             # Outillage build (3D, partials, SEO, aperçus)
-│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 67 pages, 404 comprise (npm run partials)
+│   ├── sync-partials.mjs                # ⭐ Injecte nav/footer/chatbot dans les 73 pages, 404 comprise (npm run partials)
 │   ├── sites-clients.mjs                # Déduit la liste CLIENTS du dashboard (Backlinks) de realisations.html — lancé par prepare-deploy
 │   ├── jsonld-entities.mjs   # entités JSON-LD partagées + FAQPage depuis le HTML (build)
 │   ├── record-realisation.mjs           # ⭐ Aperçu ANIMÉ d'une réalisation (Chrome + ffmpeg, option scrollPx)
@@ -535,8 +535,8 @@ tant qu'on ne la lance pas.
 
 ## SEO, GEO & partage social
 
-- **Sitemap** : 70 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, lecteurs YouTube des intros en `player_loc`, illustration du journal), avec `xhtml:link` hreflang
-- **hreflang réciproque** `fr` / `en` / `x-default` sur les 70 pages
+- **Sitemap** : 72 pages (URLs réelles, plus d'ancres `#`) + images clés + vidéos (héros, services, aperçus des réalisations, lecteurs YouTube des intros en `player_loc`, illustration du journal), avec `xhtml:link` hreflang
+- **hreflang réciproque** `fr` / `en` / `x-default` sur les 72 pages
 - **Canonique cohérente** : tout pointe vers `https://www.nsy.fr/` (slash final uniforme), renforcée par la redirection `.htaccess`
 - **JSON-LD `@graph`** (accueils FR/EN) : Organization + ProfessionalService + LocalBusiness (région seule) + Person (Cédric Barme, `knowsAbout`) + WebSite + 2 Service/Offer — nœuds reliés par `@id`, sameAs LinkedIn entreprise + fondateur / GitHub / YouTube
 - **Conformité des données structurées** (3 alertes Search Console résolues en août 2026) : tout champ **requis** d'un type à résultat enrichi contient le **nœud typé inliné** (avec le même `@id`) — `ProfilePage.mainEntity`, mais aussi `author` et `publisher` des articles, les dates (`dateModified`, `datePublished`) sont en **ISO 8601 complet avec fuseau**, et chaque `<video>` porte un `poster=` avec son bloc `video:video` sous **chaque** page qui l'affiche. Détail des causes, correctifs et méthode d'audit : skill `seo-geo-llmo` §5

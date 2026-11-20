@@ -297,6 +297,7 @@ PAGES (FR → EN) :
 - article chatbot & forum (cas PRV Concept) : chatbot-ia-forum-base-de-connaissances.html → ai-chatbot-forum-knowledge-base.html
 - article « des téraoctets au mégaoctet » (supervision à deux échelles) : superviser-production-teraoctets-megaoctet.html → production-monitoring-terabytes-megabyte.html
 - article « un site avec l'IA en un week-end » (10/90) : site-ia-en-un-week-end.html → ai-website-in-a-weekend.html
+- article « Pas seulement des sites » (intros YouTube, animation 3D, IA) : pas-seulement-des-sites-video-3d-ia.html → not-just-websites-video-3d-ai.html
 - consultant technique Paris : consultant-technique-paris.html → technical-consultant-paris.html
 - création de site Loiret (département) : creation-site-internet-loiret.html → website-creation-loiret.html
 - création de site Orléans : creation-site-internet-orleans.html → website-creation-orleans.html
@@ -461,6 +462,7 @@ function nsy_sanitize_reply(string $reply): string
         'chatbot-ia-forum-base-de-connaissances.html' => 'ai-chatbot-forum-knowledge-base.html',
         'superviser-production-teraoctets-megaoctet.html' => 'production-monitoring-terabytes-megabyte.html',
         'site-ia-en-un-week-end.html' => 'ai-website-in-a-weekend.html',
+        'pas-seulement-des-sites-video-3d-ia.html' => 'not-just-websites-video-3d-ai.html',
         'consultant-technique-paris.html'     => 'technical-consultant-paris.html',
         'creation-site-internet-loiret.html' => 'website-creation-loiret.html',
         'creation-site-internet-orleans.html' => 'website-creation-orleans.html',
